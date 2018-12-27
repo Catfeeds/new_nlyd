@@ -4433,7 +4433,7 @@ class Student_Ajax
         if($row['user_status']== 1){
             wp_send_json_error(array('info'=>'审核已通过,资料禁止修改'));
         }
-        if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
+        if(empty($_POST['type_id']) || empty($_POST['zone_match_type']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
         }
         if(empty($_POST['business_licence_url'])){
@@ -4443,6 +4443,7 @@ class Student_Ajax
         }else{
             $business_licence_url = $_POST['business_licence_url'];
         }
+        //print_r($_POST);die;
         if($_POST['type_id'] == 3 && $_POST['zone_type_alias'] == 'match'){    //赛区
             if(empty($_POST['chairman_id']) || empty($_POST['secretary_id'])){
                 wp_send_json_error(array('info'=>'组委会主席或者秘书长为必选项'));
@@ -4463,9 +4464,10 @@ class Student_Ajax
 
         $data = array(
             'id'=>$_POST['zone_num'],
-            'user_id'=>$current_user->ID,
+            'apply_id'=>$current_user->ID,
             'type_id'=>$_POST['type_id'],
             'zone_name'=>$_POST['zone_name'],
+            'zone_match_type'=>$_POST['zone_match_type'],
             'zone_address'=>$_POST['zone_address'],
             'business_licence_url'=>$business_licence_url,
             'legal_person'=>$_POST['legal_person'],
@@ -5109,6 +5111,13 @@ class Student_Ajax
             $list = $rows;
         }
         wp_send_json_success(array('info'=>$list));
+    }
+
+    /**
+     * 战队申请
+     */
+    public function team_apply(){
+
     }
 
     /*

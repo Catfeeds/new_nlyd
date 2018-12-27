@@ -168,6 +168,8 @@ function the_table_install () {
           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `user_id` int(20) NOT NULL,
           `type_id` int(20) DEFAULT NULL COMMENT '升级后用户类型',
+          `zone_match_type` tinyint(2) DEFAULT NULL COMMENT '赛区类型 1战队赛 2城市赛',
+          `zone_city` varchar(50) DEFAULT NULL COMMENT '机构城市',
           `zone_name` text DEFAULT NULL COMMENT '机构名字',
           `zone_address` varchar(255) DEFAULT NULL COMMENT '机构地址',
           `business_licence` varchar(255) DEFAULT NULL COMMENT '营业执照',
@@ -186,6 +188,7 @@ function the_table_install () {
           `role_id` varchar(50) DEFAULT NULL COMMENT '用户权限id集合 用,分割',
           `match_role_id` varchar(50) DEFAULT NULL COMMENT 'match_role_id 用,分割',
           `parent_id` int(20) unsigned DEFAULT 0 COMMENT '上级主体id',
+          `apply_id` int(20) unsigned DEFAULT 0 COMMENT '申请人id',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);

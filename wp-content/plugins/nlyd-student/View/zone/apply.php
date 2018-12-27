@@ -23,7 +23,7 @@
                             <div class="lable_row"><span class="c_black"><?=__($zone_type_name.'类型', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input type="hidden" id="zone_match_type" name="zone_match_type">
+                                <input type="hidden" id="zone_match_type" name="zone_match_type" value="<?=$row['zone_match_type']?>">
                                 <input 
                                  class="radius_input_row nl-foucs"
                                  type="text" 
@@ -32,7 +32,7 @@
                                  lay-verify="required" 
                                  autocomplete="off" 
                                  placeholder="<?=__('选择承办赛事类型', 'nlyd-student')?>" 
-                                 value="">
+                                 value="<?=$row['zone_match_type_cn']?>">
                             </div>
                         </div>
                         <div class="name_row dis_none">
@@ -52,7 +52,7 @@
                             <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
                             <div class="input_row img-zoos img-zoos1">
                                 <?php if(!empty(!empty($row['id']))){?>
-                                    <input type="hidden" name="business_licence_url" class="business_licence_url" value="<?=$row['business_licence']?>">
+                                    <input type="hidden" name="business_licence_url" class="business_licence_url" value="<?=$row['business_licence_url']?>">
                                     <div class="post-img no-dash">
                                         <div class="img-zoo img-box">
                                             <img src="<?=$row['business_licence_url']?>"/>
