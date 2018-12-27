@@ -1535,7 +1535,7 @@ class Organize{
         die;
         global $wpdb;
         $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_meta AS zm 
-        LEFT JOIN {$wpdb->prefix}user_stream_logs AS usl ON zm.user_id=usl.user_id AND usl.user_type=1
+        LEFT JOIN {$wpdb->prefix}user_stream_logs AS usl ON zm.user_id=usl.user_id
         ");
         $rows = [];
         ?>
@@ -1666,7 +1666,7 @@ class Organize{
         //成员数量
         $member_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}zone_join_coach WHERE zone_id='{$zone_meta['user_id']}'");
         //总收益
-        $stream_all = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$zone_meta['user_id']}' AND user_type=1");
+        $stream_all = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$zone_meta['user_id']}'");
         $rows = [];
         //获取数据
 

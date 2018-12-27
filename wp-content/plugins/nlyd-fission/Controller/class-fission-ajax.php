@@ -181,13 +181,11 @@ class Fission_Ajax
         $apply_date = get_time('mysql');
         $bool = $wpdb->query("UPDATE `{$wpdb->prefix}zone_meta` SET `user_status` = '{$user_status}',`audit_time` = '{$apply_date}' WHERE id IN({$id}) AND user_status=-1");
         if($bool) {
-//            $wpdb->query('COMMIT');
+            $wpdb->query('COMMIT');
             if(isset($sendMsgArr) && $sendMsgArr != []){
                 $ali = new AliSms();
                 foreach ($sendMsgArr as $smav){
-                    $result = $ali->sendSms($smav['user_mobile'], 6, array('type_name'=>$smav['type_name'], 'user_login' => $smav['user_login'], 'password' => $smav['password']));
-
-
+                    $ali->sendSms($smav['user_mobile'], 6, array('type_name'=>$smav['type_name'], 'user_login' => $smav['user_login'], 'password' => $smav['password']));
                 }
             }
             wp_send_json_success(['info' => '操作成功!']);
