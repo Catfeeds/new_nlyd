@@ -827,11 +827,13 @@ class Spread{
         if($searchStr != ''){
             $where .= "  AND (u.user_login LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%' OR zm.zone_name LIKE '%{$searchStr}%')";
         }
-        if(in_array($type_id,[1,2])){
-            $where .= " AND usl.user_type='{$type_id}'";
+        if($type_id === 1){
+            $where .= " AND zm.id != ''";
+        }elseif($type_id === 2){
+            $where .= " AND zm.id IS NULL";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
-                usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,usl.user_type,
+                usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,zm.id AS zone_id,
                 um.meta_value AS user_real_name 
                 FROM {$wpdb->prefix}user_stream_logs AS usl 
                 LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=usl.user_id 
@@ -918,7 +920,7 @@ class Spread{
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
                         <td class="role column-role" data-colname="角色">
-                            <?=$row['user_type'] == '1' ? '主体': '用户'?>
+                            <?=$row['zone_id'] > 0 ? '主体': '用户'?>
 
                         </td>
                         <td class="income_type column-income_type" data-colname="类型">

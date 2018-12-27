@@ -104,6 +104,11 @@ class AliSms
                 $template['title'] = '后台解除教学关系';
                 $template['text'] =  '尊敬的${user}您好，您的${cate}教练${coach}解除了与您的教学关系，您可登录系统查看';
                 break;
+            case 6:
+                $template['code'] =  'SMS_153886130';
+                $template['title'] = '申请主体审核通知';
+                $template['text'] =  '尊敬的用户您好，您的“${type_name}”申请资料审核已经完成，您可使用账号“${user_login}”密码“${password}”或使用您的个人账号登录个人中心进入控制台。';
+                break;
             case 99:
                 $template['code'] =  'SMS_144150453';
                 $template['title'] = '临时通知';
@@ -185,7 +190,6 @@ class AliSms
         // fixme 选填: 启用https
         // ,true
         );
-
         //var_dump($content);
         if($content->Message =='OK' && $content->Code == 'OK'){
 

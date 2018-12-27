@@ -84,18 +84,20 @@ class Fission_Ajax
         global $wpdb;
         $wpdb->query('START TRANSACTION');
         //查询原数据
-        $zone_meta = $wpdb->get_results("SELECT user_id,type_id,id FROM {$wpdb->prefix}zone_meta WHERE id IN({$id}) AND user_status=-1",ARRAY_A);
+        $zone_meta = $wpdb->get_results("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id IN({$id}) AND user_status=-1",ARRAY_A);
         if(!$zone_meta) wp_send_json_error(['info' => '未找到申请记录!']);
         if($type == 'agree'){//同意申请
             $user_status = 1;
+            $sendMsgArr = [];
             foreach ($zone_meta as $zmv){
                 //创建新账号
-                $user_email = 'iisc'.$zmv['申请人id'].rand(000,999).rand(000,999).'@gjnlyd.com';
-                $user_password = rand(000,999).rand(000,999);
+                $user_email = $zmv['apply_id'].rand(000,999).date('is', get_time()).'@gjnlyd.com';
+                $user_password = '123456';
                 $user_id = wp_create_user($user_email,$user_password,$user_email);
-                if(!$user_id) wp_send_json_error(['创建账号失败!']);
+                if(!$user_id) wp_send_json_error(['info' => '创建账号失败!']);
                 //更新新账号推荐人
-                $referee_id = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$zmv['申请人id']}'");
+                $apply_user = $wpdb->get_row("SELECT referee_id,user_mobile FROM {$wpdb->users} WHERE ID='{$zmv['apply_id']}'", ARRAY_A);
+                $referee_id = $apply_user['referee_id'];
                 if($referee_id > 0){
                     if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id],['ID' => $user_id])) wp_send_json_error(['info' => '更新主体推荐人失败!']);
                 }
@@ -104,8 +106,8 @@ class Fission_Ajax
 //                $wpdb->update($wpdb->users,['referee_id' => ])
 
                 //主体类型
-                $orgType = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'");
-                $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType}' AND spread_status=1", ARRAY_A);
+                $orgType = $wpdb->get_row("SELECT zone_type_alias,zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'", ARRAY_A);
+                $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType['zone_type_alias']}' AND spread_status=1", ARRAY_A);
                 if($spread_set){
                     //添加上级收益
                     //获取一级上级
@@ -165,9 +167,9 @@ class Fission_Ajax
                         }
                     }
                 }
+                //发送短信通知申请人并给出主体的账号密码
+                $sendMsgArr[] = ['user_mobile'=>$apply_user['user_mobile'],'type_name'=>$orgType['zone_type_name'],'user_login'=>$user_email,'password'=>$user_password];
             }
-
-
         }elseif ($type == 'refuse'){//拒绝申请
             $user_status = -2;
         }else{
@@ -180,6 +182,12 @@ class Fission_Ajax
         $bool = $wpdb->query("UPDATE `{$wpdb->prefix}zone_meta` SET `user_status` = '{$user_status}',`audit_time` = '{$apply_date}' WHERE id IN({$id}) AND user_status=-1");
         if($bool) {
             $wpdb->query('COMMIT');
+            if(isset($sendMsgArr) && $sendMsgArr != []){
+                $ali = new AliSms();
+                foreach ($sendMsgArr as $smav){
+                    $ali->sendSms($smav['user_mobile'], 6, array('type_name'=>$smav['type_name'], 'user_login' => $smav['user_login'], 'password' => $smav['password']));
+                }
+            }
             wp_send_json_success(['info' => '操作成功!']);
         }else{
             $wpdb->query('ROLLBACK');
