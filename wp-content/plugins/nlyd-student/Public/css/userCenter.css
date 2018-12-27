@@ -92,6 +92,10 @@
     width: 30px;
     background-position: -372px 3px;
 }
+.my-console{
+    width: 30px;
+    background-position: -404px 3px;
+}
 .userCenter-detail a:active{
     background: #e7ebf1;
     color: rgba(38, 38, 38, 0.4);

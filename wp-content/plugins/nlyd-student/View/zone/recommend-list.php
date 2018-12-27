@@ -114,15 +114,12 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'get_user_profit_logs',
+                        action:'get_my_offline',
                         page:profit_page,
+                        
                     }
-                    if(parseInt(id)==1){//全部
-                        postData['map']="all";
-                    }else if(parseInt(id)==3){//提现
-                        postData['map']="extract";
-                    }else{//收益
-                        postData['map']="profit";
+                    if(parseInt(id)==2){//机构
+                        postData['map']="zone";
                     }
                     var lis = [];
                     $.ajax({

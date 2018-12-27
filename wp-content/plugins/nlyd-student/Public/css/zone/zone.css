@@ -106,7 +106,7 @@
     background: linear-gradient(5deg,#68AAFE, #4394F9);
 }
 .scale{
-    transform: scale(0.8);
+    transform: scale(0.7 ,0.8);
     white-space: nowrap;
 }
 .zone_user_detail{
