@@ -5020,7 +5020,6 @@ class Student_Ajax
         //获取我推荐的机构
         if($_POST['map'] == 'zone'){
             $sql = "select SQL_CALC_FOUND_ROWS id , zone_name from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}  order by id desc limit $start,$pageSize ";
-            $rows = $wpdb->get_results($sql,ARRAY_A);
             //print_r($sql);die;
         }
         else{   //获取我推荐的用户
@@ -5060,7 +5059,7 @@ class Student_Ajax
                 if(!empty($rows1)){
                     $meta_value = array_column($rows1,'meta_value','meta_key');
                     $list[$k]['user_ID'] = $meta_value['user_ID'];
-                    $list[$k]['user_gender'] = $meta_value['user_gender'];
+                    $list[$k]['user_gender'] = empty($meta_value['user_gender']) ? $meta_value['user_gender'] : '-';
 
                 }
 
@@ -5092,7 +5091,7 @@ class Student_Ajax
                         if(!empty($rows1)){
                             $meta_value = array_column($rows1,'meta_value','meta_key');
                             $child[$key]['user_ID'] = $meta_value['user_ID'];
-                            $child[$key]['user_gender'] = $meta_value['user_gender'];
+                            $child[$key]['user_gender'] = empty($meta_value['user_gender']) ? $meta_value['user_gender'] : '-';
 
                         }
 
@@ -5106,7 +5105,10 @@ class Student_Ajax
             }
             //var_dump($list);
         }
-        wp_send_json_success(array('info'=>$rows));
+        else{
+            $list = $rows;
+        }
+        wp_send_json_success(array('info'=>$list));
     }
 
     /*
