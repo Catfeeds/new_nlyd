@@ -66,8 +66,33 @@ class Student_Zone extends Student_Home
      *个人用户控制台
      */
      public function indexUser(){
-        $view = student_view_path.CONTROLLER.'/index-user.php';
-        load_view_template($view);
+
+         global $wpdb,$current_user;
+         //获取推荐ID/推荐时间/今日收益
+         $sql = "select a.referee_id,a.referee_time,date_format(b.created_time,'%Y-%m-%d') date_time ,sum(b.user_income) total_income
+                  from {$wpdb->prefix}users a
+                  left join {$wpdb->prefix}user_stream_logs b on a.ID = b.user_id and date_format(b.created_time,'%Y-%m-%d') = curdate() and b.user_income > 0
+                  where a.ID = {$current_user->ID}
+                  group by date_time
+                  ";
+         //print_r($sql);
+         $row = $wpdb->get_row($sql,ARRAY_A);
+
+         //获取用户推广码
+         $ajax = new Student_Ajax();
+         $row['referee_code'] = $ajax->qrcode('user');
+
+         //获取所有的机构名
+         $sql_ = "select a.*,b.apply_id,b.user_status 
+                  from {$wpdb->prefix}zone_type a 
+                  left join {$wpdb->prefix}zone_meta b on a.id = b.type_id and user_status = -1 and apply_id = {$current_user->ID}
+                  where zone_type_status = 1";
+         //print_r($sql_);
+         $rows = $wpdb->get_results($sql_,ARRAY_A);
+         $row['list'] = $rows;
+
+         $view = student_view_path.CONTROLLER.'/index-user.php';
+         load_view_template($view,$row);
     }
     /**
      * 申请项目介绍页
@@ -474,8 +499,46 @@ class Student_Zone extends Student_Home
      * 推荐管理
      */
      public function recommend(){
-        $view = student_view_path.CONTROLLER.'/recommend-list.php';
-        load_view_template($view);
+
+         global $wpdb,$current_user;
+
+         //获取我推荐的用户
+         $sql = "select a.referee_id,a.ID child_id,b.id zone_id
+                 from {$wpdb->prefix}users a 
+                 left join {$wpdb->prefix}zone_meta b on a.ID = b.user_id 
+                 where a.referee_id = {$current_user->ID} and b.id is null ";
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         //print_r($sql);
+         if(!empty($rows)){
+             /*$parent_total = count($rows);
+             $child_total = 0;*/
+             $total = count($rows);
+             foreach ($rows as $v){
+                 //print_r($sql_);
+                 $total += $wpdb->get_var("select count(*)
+                                             from {$wpdb->prefix}users a 
+                                             left join {$wpdb->prefix}zone_meta b on a.ID = b.user_id 
+                                             where a.referee_id = {$v['child_id']} and b.id is null ");
+             }
+             $data['user_total'] = $total > 0 ? $total : 0;
+             //print_r($total);
+         }
+
+         //获取我推荐的机构
+         $sql_ = "select user_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}";
+         //print_r($sql_);
+         $rows_ = $wpdb->get_results($sql_,ARRAY_A);
+         if(!empty($rows_)){
+             $total_ = count($rows_);
+             foreach ($rows_ as $v_){
+                 $total_ += $wpdb->get_var("select count(*)  from {$wpdb->prefix}zone_meta where referee_id = {$v_['user_id']}");
+             }
+             //print_r($total_);
+             $data['zone_total'] = $total_ > 0 ? $total_ : 0;;
+         }
+
+         $view = student_view_path.CONTROLLER.'/recommend-list.php';
+         load_view_template($view,$data);
     }
     
     /**

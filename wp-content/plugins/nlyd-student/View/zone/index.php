@@ -9,14 +9,13 @@
     }
 }
 </style>
-<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
                 require_once leo_student_public_view.'leftMenu.php';
             
         ?>
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             
             <div class="layui-row nl-border nl-content">
                 <div class="zone_user width-padding layui-row layui-bg-white width-padding-pc">
@@ -162,7 +161,7 @@ jQuery(function($) {
                         ]
                     }
                     if(json['data'].length==0){
-                        $.alerts('<?=__('当前教练未上传证书', 'nlyd-student')?>')
+                        $.alerts("<?=__('当前教练未上传证书', 'nlyd-student')?>")
                     }else{
                         layer.photos({//图片预览
                             photos: json,

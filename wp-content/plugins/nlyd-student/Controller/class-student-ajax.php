@@ -4358,12 +4358,15 @@ class Student_Ajax
      * 用户推广码生成
      *
      */
-    public function qrcode(){
+    public function qrcode($type=''){
 
         global $current_user;
         $upload_dir = wp_upload_dir();
         $spread_qrcode = get_user_meta($current_user->ID,'referee_qrcode');
         if(!empty($spread_qrcode) && file_exists($upload_dir['basedir'].$spread_qrcode[0])){
+            if($type=='user'){
+                return $upload_dir['baseurl'].$spread_qrcode[0];
+            }
             wp_send_json_success($upload_dir['baseurl'].$spread_qrcode[0]);
         }else{
 
@@ -4415,6 +4418,9 @@ class Student_Ajax
             }
             imagejpeg ( $back_, $qrcode_path );//带Logo二维码的文件名*/
             update_user_meta($current_user->ID,'referee_qrcode',$dir.$filename);
+            if($type=='user'){
+                return $upload_dir['baseurl'].$spread_qrcode[0];
+            }
             wp_send_json_success($upload_dir['baseurl'].$dir.$filename);
         }
     }
@@ -5021,16 +5027,17 @@ class Student_Ajax
 
         //获取我推荐的机构
         if($_POST['map'] == 'zone'){
-            $sql = "select SQL_CALC_FOUND_ROWS id , zone_name from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}  order by id desc limit $start,$pageSize ";
+            $sql = "select SQL_CALC_FOUND_ROWS id , zone_name,user_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}  order by id desc limit $start,$pageSize ";
             //print_r($sql);die;
         }
         else{   //获取我推荐的用户
 
+
             $sql = "select SQL_CALC_FOUND_ROWS a.ID ,b.meta_value as user_real_name,referee_time 
-                    
                     from {$wpdb->prefix}users a 
                     left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                    where a.referee_id = {$current_user->ID}
+                    left join {$wpdb->prefix}zone_meta c on a.ID = c.user_id 
+                    where a.referee_id = {$current_user->ID} and c.id is null
                     order by a.ID desc limit $start,$pageSize 
                     ";
         }
@@ -5042,6 +5049,7 @@ class Student_Ajax
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
         //print_r($rows);
         //if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
+
         if($_POST['map'] != 'zone'){
             $list = array();
             foreach ($rows as $k => $v) {
@@ -5071,7 +5079,8 @@ class Student_Ajax
                 //获取二级推荐
                 $sql_ = "select a.ID ,b.meta_value as user_real_name from {$wpdb->prefix}users a 
                          left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                         where a.referee_id = {$v['ID']}
+                         left join {$wpdb->prefix}zone_meta c on a.ID = c.user_id 
+                         where a.referee_id = {$v['ID']} and c.id is null
                         ";
                 $childs = $wpdb->get_results($sql_,ARRAY_A);
                 //print_r($childs);
@@ -5108,6 +5117,15 @@ class Student_Ajax
             //var_dump($list);
         }
         else{
+            $child = array();
+            foreach ($rows as $k => $v) {
+                $sql1 = "select id,zone_name,user_id from {$wpdb->prefix}zone_meta where referee_id = {$v['user_id']}  order by id desc  ";
+                $rows1 = $wpdb->get_results($sql1,ARRAY_A);
+                if(!empty($rows1)){
+                    $child = $rows1;
+                }
+                $rows[$k]['child'] = $child;
+            }
             $list = $rows;
         }
         wp_send_json_success(array('info'=>$list));
