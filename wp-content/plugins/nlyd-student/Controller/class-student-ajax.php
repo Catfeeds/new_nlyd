@@ -1518,10 +1518,12 @@ class Student_Ajax
                 a.post_content,b.match_notice_url,
                 DATE_FORMAT(b.match_start_time,'%Y-%m-%d %H:%i') match_start_time,
                 if(b.match_address = '','--',b.match_address) match_address,
+                if(d.role_name = '','正式比赛',d.role_name) role_name,
                 b.match_cost,b.entry_end_time,b.match_status ,c.user_id
                 from {$wpdb->prefix}posts a
                 left join {$wpdb->prefix}match_meta_new b on a.ID = b.match_id
                 left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
+                left join {$wpdb->prefix}zone_match_role d on b.match_scene = d.id
                 where {$where} order by {$order} limit $start,$pageSize;
                 ";
         //print_r($sql);
@@ -4555,6 +4557,7 @@ class Student_Ajax
                     case income_type
                     when 'match' then '比赛收益'
                     when 'grading' then '考级收益'
+                    when 'subject' then '推荐补贴'
                     end income_type_title
                     from {$wpdb->prefix}income_logs 
                     where referee_id = {$current_user->ID} or indirect_referee_id = {$current_user->ID}
@@ -4575,6 +4578,7 @@ class Student_Ajax
                 when 'match' then '比赛收益'
                 when 'grading' then '考级收益'
                 when 'extract' then '比赛提现'
+                when 'subject' then '推荐补贴'
                 end income_type_title
                 from {$wpdb->prefix}user_stream_logs where {$where} order by created_time desc limit $start,$pageSize ";
         }
@@ -4890,7 +4894,7 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
-        $sql = "select a.match_id,b.post_title,a.match_status,entry_end_time,a.match_start_time,match_cost,a.match_address,count(c.id) entry_total,
+        $sql = "select a.match_id,a.match_scene,b.post_title,d.role_name,a.match_status,entry_end_time,a.match_start_time,match_cost,a.match_address,count(c.id) entry_total,
                 case a.match_status
                 when '-3' then '已结束'
                 when '-2' then '等待开赛'
@@ -4900,6 +4904,7 @@ class Student_Ajax
                 from {$wpdb->prefix}match_meta_new a 
                 left join {$wpdb->prefix}posts b on a.match_id = b.ID
                 left join {$wpdb->prefix}order c on a.match_id = c.match_id and c.pay_status in (2,3,4)
+                left join {$wpdb->prefix}zone_match_role d on a.match_scene = d.id
                 where {$where} 
                 group by a.match_id
                 order by a.match_start_time desc ,a.match_status desc
@@ -4998,6 +5003,110 @@ class Student_Ajax
             $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>_('提交失败')));
         }
+    }
+
+
+    /**
+     * 获取我的推荐
+     */
+    public function get_my_offline(){
+        global $wpdb,$current_user;
+
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+
+        //获取我推荐的机构
+        if($_POST['map'] == 'zone'){
+            $sql = "select SQL_CALC_FOUND_ROWS id , zone_name from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}  order by id desc limit $start,$pageSize ";
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+            //print_r($sql);die;
+        }
+        else{   //获取我推荐的用户
+
+            $sql = "select SQL_CALC_FOUND_ROWS a.ID ,b.meta_value as user_real_name,referee_time 
+                    
+                    from {$wpdb->prefix}users a 
+                    left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                    where a.referee_id = {$current_user->ID}
+                    order by a.ID desc limit $start,$pageSize 
+                    ";
+        }
+        //print_r($sql);
+
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        //print_r($rows);
+        //if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
+        if($_POST['map'] != 'zone'){
+            $list = array();
+            foreach ($rows as $k => $v) {
+                //print_r($v);
+                if(!empty($v['user_real_name'])){
+                    $user_real_name = unserialize($v['user_real_name']);
+                    $list[$k]['real_age'] = $user_real_name['real_age'];
+                    $list[$k]['real_name'] = $user_real_name['real_name'];
+                }
+                $list[$k]['referee_time'] = $v['referee_time'];
+
+                //获取学号/性别/是否购课
+                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta 
+                        where user_id = {$v['ID']} and meta_key in ('user_ID','user_gender')
+                         ";
+                $rows1 = $wpdb->get_results($sql1,ARRAY_A);
+                if(!empty($rows1)){
+                    $meta_value = array_column($rows1,'meta_value','meta_key');
+                    $list[$k]['user_ID'] = $meta_value['user_ID'];
+                    $list[$k]['user_gender'] = $meta_value['user_gender'];
+
+                }
+
+                $order_id = $wpdb->get_var("select id from {$wpdb->prefix}order b where user_id = {$current_user->ID} and order_type = 3 ");
+                $list[$k]['is_shop'] = $order_id > 0 ? 'y' : 'n';
+
+                //获取二级推荐
+                $sql_ = "select a.ID ,b.meta_value as user_real_name from {$wpdb->prefix}users a 
+                         left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                         where a.referee_id = {$v['ID']}
+                        ";
+                $childs = $wpdb->get_results($sql_,ARRAY_A);
+                //print_r($childs);
+                if(!empty($childs)){
+                    $child = array();
+                    foreach ($childs as $key => $value) {
+                        if(!empty($v['user_real_name'])){
+                            $user_real_name = unserialize($v['user_real_name']);
+                            $child[$key]['real_age'] = $user_real_name['real_age'];
+                            $child[$key]['real_name'] = $user_real_name['real_name'];
+                        }
+                        $child[$key]['referee_time'] = $v['referee_time'];
+
+                        //获取学号/性别/是否购课
+                        $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta 
+                                where user_id = {$v['ID']} and meta_key in ('user_ID','user_gender')
+                                 ";
+                        $rows1 = $wpdb->get_results($sql1,ARRAY_A);
+                        if(!empty($rows1)){
+                            $meta_value = array_column($rows1,'meta_value','meta_key');
+                            $child[$key]['user_ID'] = $meta_value['user_ID'];
+                            $child[$key]['user_gender'] = $meta_value['user_gender'];
+
+                        }
+
+                        $order_id = $wpdb->get_var("select id from {$wpdb->prefix}order b where user_id = {$current_user->ID} and order_type = 3 ");
+                        $child[$key]['is_shop'] = $order_id > 0 ? 'y' : 'n';
+
+                    }
+                    //print_r($child);
+                    $list[$k]['child'] = $child;
+                }
+            }
+            //var_dump($list);
+        }
+        wp_send_json_success(array('info'=>$rows));
     }
 
     /*

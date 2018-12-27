@@ -49,7 +49,7 @@
                             <div>
                                 <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
                                 <div class="input_row">
-                                    <input class="radius_input_row" disabled type="text" name="match_cost" value="<?=$match['entry_end_time']?>">
+                                    <input class="radius_input_row" disabled type="text" value="<?=$match['entry_end_time']?>">
                                 </div>
                             </div>
                         <?php endif;?>
