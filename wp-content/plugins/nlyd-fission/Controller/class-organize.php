@@ -23,11 +23,11 @@ class Organize{
             $role = 'add_organize_type';//权限名
             $wp_roles->add_cap('administrator', $role);
 
-            $role = 'organize_power';//权限名
-            $wp_roles->add_cap('administrator', $role);
+//            $role = 'organize_power';//权限名
+//            $wp_roles->add_cap('administrator', $role);
 
-            $role = 'add_organize_power';//权限名
-            $wp_roles->add_cap('administrator', $role);
+//            $role = 'add_organize_power';//权限名
+//            $wp_roles->add_cap('administrator', $role);
 
             $role = 'organize_coach';//权限名
             $wp_roles->add_cap('administrator', $role);
@@ -35,8 +35,11 @@ class Organize{
             $role = 'add_organize_coach';//权限名
             $wp_roles->add_cap('administrator', $role);
 
-            $role = 'organize_income_log';//权限名
+            $role = 'organize_statistics';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+//            $role = 'organize_income_log';//权限名
+//            $wp_roles->add_cap('administrator', $role);
         }
         add_submenu_page('fission','主体详情','主体详情','organize_detail','fission-organize-detail',array($this,'organizeDetails'));
         add_submenu_page('fission','主体类型','主体类型','organize_type','fission-organize-type',array($this,'organizeType'));
@@ -46,6 +49,7 @@ class Organize{
         add_submenu_page('fission','新增主体类型','新增主体类型','add_organize_type','fission-add-organize-type',array($this,'addOrganizeType'));
 //        add_submenu_page('fission','新增主体权限','新增主体权限','add_organize_power','fission-add-organize-power',array($this,'addOrganizePower'));
         add_submenu_page('fission','新增主体成员','新增主体成员','add_organize_coach','fission-add-organize-coach',array($this,'addOrganizeCoach'));
+        add_submenu_page('fission','主体统计信息','主体统计信息','organize_statistics','fission-organize-statistics',array($this,'organizeStatistics'));
 //        add_submenu_page('fission','主体收益记录','主体收益记录','organize_income_log','fission-organize-income-log',array($this,'organizeIncomeLog'));
     }
 
@@ -214,7 +218,8 @@ class Organize{
                             <?=$row['zone_name']?>
                            <br>
                            <div class="row-actions">
-                               <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize&id='.$row['id'])?>">编辑</a></span>
+                               <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize&id='.$row['id'])?>">编辑</a> | </span>
+                               <span class="edit"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$row['id'])?>">统计信息</a></span>
 <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
 <!--                               <span class="view"><a href="">资料</a></span>-->
                            </div>
@@ -1604,6 +1609,141 @@ class Organize{
                 </div>
 
                 <div class="tablenav-pages">
+                </div>
+                <br class="clear">
+            </div>
+
+            <br class="clear">
+        </div>
+        <?php
+    }
+
+    /**
+     * 主体统计信息
+     */
+    public function organizeStatistics(){
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        $type = isset($_GET['type']) ? intval($_GET['type']) : 1;
+        $id < 1 && exit('参数错误!');
+        global $wpdb;
+        //查询主体信息
+        $zone_meta = $wpdb->get_row("SELECT zone_name,user_id FROM {$wpdb->prefix}zone_meta WHERE id='{$id}'", ARRAY_A);
+        //各种数量
+        //比赛数量
+        $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$zone_meta['user_id']}'");
+        //考级数量
+        $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$zone_meta['user_id']}'");
+        //课程数量
+        $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE zone_id='{$zone_meta['user_id']}'");
+        //成员数量
+
+        //总收益
+        $stream_all = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$zone_meta['user_id']}' AND user_type=1");
+        $rows = [];
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline"><?=$zone_meta['zone_name']?>-统计信息</h1>
+            <hr class="wp-header-end">
+            <ul class="subsubsub">
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=1')?>" <?=$type===1?'class="current"':''?> aria-current="page">比赛<span class="count">（<?=$match_num > 0 ? $match_num : 0?>）</span></a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'type=2')?>" <?=$type===2?'class="current"':''?> aria-current="page">考级<span class="count">（<?=$grading_num > 0 ? $grading_num : 0?>）</span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=3')?>" <?=$type===3?'class="current"':''?> aria-current="page">课程<span class="count">（<?=$course_num > 0 ? $course_num : 0?>）</span></a></li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4')?>" <?=$type===4?'class="current"':''?> aria-current="page">成员<span class="count">（<?=$course_num > 0 ? $course_num : 0?>）</span></a></li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5')?>" <?=$type===5?'class="current"':''?> aria-current="page">收益<span class="count">（<?=$stream_all > 0 ? $stream_all : 0?>）</span></a></li>
+            </ul>
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+            <div class="tablenav top">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
+                    <select name="action" id="bulk-action-selector-top">
+                        <option value="-1">批量操作</option>
+                        <option value="delete">删除</option>
+                    </select>
+                    <input type="submit" id="doaction" class="button action" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                    <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
+                    <th scope="col" id="role_type" class="manage-column column-role_type">类型</th>
+                    <th scope="col" id="option1" class="manage-column column-option1">操作</th>
+                </tr>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+
+                <?php
+                foreach ($rows as $row){
+                    ?>
+                    <tr>
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text" for="cb-select-407">选择<?=$row['role_name']?></label>
+                            <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                            <div class="locked-indicator">
+                                <span class="locked-indicator-icon" aria-hidden="true"></span>
+                                <span class="screen-reader-text">“<?=$row['role_name']?>”已被锁定</span>
+                            </div>
+                        </th>
+                        <td class="name column-name has-row-actions column-primary" data-colname="名称">
+                            <?=$row['role_name']?>
+                            <br>
+
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="role_type column-role_type" data-colname="类型">
+                            <?php
+                            switch ($row['role_type']){
+                                case '1':
+                                    echo '赛事/考级';
+                                    break;
+                                case '2':
+                                    echo '课程权限';
+                                    break;
+
+                            }
+                            ?>
+                        </td>
+                        <td class="option1 column-option1" data-colname="状态">
+                            <a href="<?=admin_url('admin.php?page=fission-add-organize-power&id='.$row['id'])?>">编辑</a>
+                        </td>
+
+                    </tr>
+                    <?php
+                }
+                ?>
+                <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                    <th scope="col" class="manage-column column-name column-primary">名称</th>
+                    <th scope="col" class="manage-column column-role_type">类型</th>
+                    <th scope="col" class="manage-column column-option1">操作</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                    <select name="action2" id="bulk-action-selector-bottom">
+                        <option value="-1">批量操作</option>
+                        <option value="delete">删除</option>
+                    </select>
+                    <input type="submit" id="doaction2" class="button action" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
                 </div>
                 <br class="clear">
             </div>

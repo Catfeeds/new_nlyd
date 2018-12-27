@@ -22,10 +22,16 @@
                 <div class="zone_user width-padding layui-row layui-bg-white width-margin-pc">
                     <div class="img-box zone_user_img pull-left">
                         <img src="<?=$row['user_head']?>">
-                        <?php if($row['zone_type_alias'] == 'match'):?>
-                        <!-- 赛区展示 -->
-                        <div class="zone_tag c_white fs_12"><div class="scale"><?=__(date('Y').'脑力世界杯', 'nlyd-student')?></div></div>
-                        <?php endif;?>
+                        <div class="zone_tag c_white fs_12">
+                            <div class="scale">
+                                <?php if($row['zone_type_alias'] == 'match'){ ?>
+                                <!-- 赛区展示 -->
+                                    <?=__(date('Y').'脑力世界杯', 'nlyd-student')?>
+                                <?php }else{ ?>
+                                <?=__('IISC国际脑力运动', 'nlyd-student')?>
+                                <?php } ?>
+                            </div>
+                        </div>
                     </div>    
                     <div class="zone_user_detail pull-left">
                         <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
@@ -83,7 +89,7 @@
                             <div class="apply_list_line pull-left <?=$v['zone_type_class']?> ml"><i class="iconfont fs_20">&#xe650;</i></div>
                             <div class="apply_list_line center"><?=__('申请设立'.$v['zone_type_name'], 'nlyd-student')?></div>
                             <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                            <div class="apply_list_line pull-right c_orange mr_10"></div>
+                            <div class="apply_list_line pull-right c_orange mr_10"><?=__('审核中', 'nlyd-student')?></div>
                         </a>
                             <?php } ?>
                     <?php } ?>
@@ -117,6 +123,14 @@
                     </a>
                     <?php } ?>
                     <?php endif;?>
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/data');?>">
+                        <div class="apply_list_line pull-left">
+                            <div class="zone_bg bg_data"></div>
+                        </div>
+                        <div class="apply_list_line center">数据统计</div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                        <div class="apply_list_line pull-right c_orange mr_10"></div>
+                    </a>
             </div>
         </div>            
     </div>
