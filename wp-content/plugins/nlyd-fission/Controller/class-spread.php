@@ -832,13 +832,13 @@ class Spread{
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
                 usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,usl.user_type,
-                um.meta_value AS user_real_name,p.post_title 
+                um.meta_value AS user_real_name 
                 FROM {$wpdb->prefix}user_stream_logs AS usl 
                 LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=usl.user_id 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=usl.user_id AND um.meta_key='user_real_name' 
                 LEFT JOIN {$wpdb->users} AS u ON u.ID=usl.user_id 
-                LEFT JOIN {$wpdb->posts} AS p ON p.ID=usl.match_id 
                 {$where} 
+                ORDER BY usl.created_time DESC
                 LIMIT {$start},{$pageSize}",ARRAY_A);
 //        leo_dump($wpdb->last_query);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -886,7 +886,7 @@ class Spread{
                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/用户名(主体名称)</th>
                     <th scope="col" id="role" class="manage-column column-role">角色</th>
                     <th scope="col" id="income_type" class="manage-column column-income_type">类型</th>
-                    <th scope="col" id="match_id" class="manage-column column-match_id">项目</th>
+<!--                    <th scope="col" id="match_id" class="manage-column column-match_id">项目</th>-->
                     <th scope="col" id="user_income" class="manage-column column-user_income">数额</th>
                     <th scope="col" id="created_time" class="manage-column column-created_time">时间</th>
                 </tr>
@@ -933,10 +933,12 @@ class Spread{
                                 case 'extract':
                                     echo '提现';
                                     break;
+                                case 'subject':
+                                    echo '账号升级';
+                                    break;
                             }
                             ?>
                         </td>
-                        <td class="match_id column-match_id" data-colname="项目"><?=$row['post_title']?> </td>
                         <td class="user_income column-user_income" data-colname="数额">
                             <span style="<?=$row['user_income'] < 0 ? 'color:#c41d00;': ($row['user_income']>0?'color:#0087c4;':'')?>;"><?=$row['user_income']?></span>
 
@@ -953,7 +955,7 @@ class Spread{
                     <th scope="col" class="manage-column column-real_name column-primary">姓名/用户名(主体名称)</th>
                     <th scope="col" class="manage-column column-role">角色</th>
                     <th scope="col" class="manage-column column-income_type">类型</th>
-                    <th scope="col" class="manage-column column-match_id">项目</th>
+<!--                    <th scope="col" class="manage-column column-match_id">项目</th>-->
                     <th scope="col" class="manage-column column-user_income">数额</th>
                     <th scope="col" class="manage-column column-created_time">时间</th>
                 </tr>

@@ -96,12 +96,32 @@ class Fission_Ajax
                     //添加上级收益
                     //获取一级上级
                     $referee_id1 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$zmv['user_id']}'");
+                    $referee_id2 = 0;
+                    if($referee_id1 > 0) $referee_id2 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$referee_id1}'");
+                    //添加分成记录
+                    $insertData3 = [
+                        'income_type' => 'subject',
+                        'user_id' => $zmv['user_id'],
+                        'referee_id' => $referee_id1,
+                        'referee_income' => $spread_set['direct_superior'],
+                        'indirect_referee_id' => $referee_id2 > 0 ? $referee_id2 : 0,
+                        'indirect_referee_income' => $referee_id2 > 0 ? $spread_set['indirect_superior'] : 0,
+                        'income_status' => 2,
+                        'created_time' => get_time('mysql'),
+                    ];
+                    $bool = $wpdb->insert($wpdb->prefix.'user_income_logs',$insertData3);
+                    if(!$bool) {
+                        $wpdb->query('ROLLBACK');
+                        wp_send_json_error(['info' => '添加分成记录失败!']);
+                    }
+                    $user_income_logs_id = $wpdb->insert_id;
 
                     if($referee_id1 > 0){
                         //添加一级上级收益流水
                         $insertData1 = [
                             'user_id' => $referee_id1,
                             'user_type' => 2,
+                            'match_id' => $user_income_logs_id,
                             'income_type' => 'subject',
                             'user_income' => $spread_set['direct_superior'],
                             'created_time' => get_time('mysql'),
@@ -113,12 +133,12 @@ class Fission_Ajax
                         }
 
                         //获取二级上级
-                        $referee_id2 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$referee_id1}'");
                         if($referee_id2 > 0){
                             //添加二级上级收益流水
                             $insertData2 = [
                                 'user_id' => $referee_id2,
                                 'user_type' => 2,
+                                'match_id' => $user_income_logs_id,
                                 'income_type' => 'subject',
                                 'user_income' => $spread_set['indirect_superior'],
                                 'created_time' => get_time('mysql'),
@@ -128,23 +148,6 @@ class Fission_Ajax
                                 $wpdb->query('ROLLBACK');
                                 wp_send_json_error(['info' => '添加间接上级收益失败!']);
                             }
-                        }
-
-                        //添加分成记录
-                        $insertData3 = [
-                            'income_type' => 'subject',
-                            'user_id' => $zmv['user_id'],
-                            'referee_id' => $referee_id1,
-                            'referee_income' => $spread_set['direct_superior'],
-                            'indirect_referee_id' => $referee_id2 > 0 ? $referee_id2 : 0,
-                            'indirect_referee_income' => $referee_id2 > 0 ? $spread_set['indirect_superior'] : 0,
-                            'income_status' => 2,
-                            'created_time' => get_time('mysql'),
-                        ];
-                        $bool = $wpdb->insert($wpdb->prefix.'user_income_logs',$insertData3);
-                        if(!$bool) {
-                            $wpdb->query('ROLLBACK');
-                            wp_send_json_error(['info' => '添加收益领取记录失败!']);
                         }
                     }
                 }
@@ -157,7 +160,6 @@ class Fission_Ajax
             $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '参数错误!']);
         }
-
 
         //审核时间
         $apply_date = get_time('mysql');
@@ -317,7 +319,7 @@ class Fission_Ajax
         foreach ($rows as $row){
             $insertData3 = [
                 'income_type' => $row['income_type'],
-                'match_id' => $row['match_id'],
+                'match_id' => $row['id'],
                 'created_time' => get_time('mysql'),
             ];
             //直接上级
