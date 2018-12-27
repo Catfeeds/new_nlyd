@@ -500,7 +500,12 @@ class Student_Zone extends Student_Home
      */
     public function get_zone_row(){
         global $wpdb,$user_info;
-        $sql = "select a.*,b.zone_type_name,b.zone_type_alias,c.user_mobile from {$wpdb->prefix}zone_meta a 
+        $sql = "select a.*,
+                case a.zone_match_type
+                then 1 when '战队赛'
+                then 2 when '精英赛'
+                end zone_match_type_cn,
+                b.zone_type_name,b.zone_type_alias,c.user_mobile from {$wpdb->prefix}zone_meta a 
                 left join {$wpdb->prefix}zone_type b on a.type_id = b.id 
                 left join {$wpdb->prefix}users c on a.user_id = c.ID 
                 where a.user_id = '{$user_info['user_id']}' ";
