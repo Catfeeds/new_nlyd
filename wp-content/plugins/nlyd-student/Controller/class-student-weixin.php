@@ -203,9 +203,10 @@ class Student_Weixin
                         $auth['user_nicename'] = $res['nickname'];
 //                    $auth['display_name'] = $res['mobile'];
                         if($emailOrMobile == 'email'){
-                            $user_id = wp_create_user($res['mobile'],123456,$res['mobile'],'');
+                            $user_id = wp_create_user($res['mobile'],123456,$res['mobile']);
                         }else{
-                            $user_id = wp_create_user($res['mobile'],123456,'',$res['mobile']);
+                            $user_id = wp_create_user($res['mobile'],123456,'');
+                            $wpdb->update($wpdb->users,['user_mobile'=>$res['mobile']],['ID' => $user_id]);
                         }
 
                     }else{

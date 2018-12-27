@@ -255,7 +255,7 @@ class Spread{
         $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_match_role", ARRAY_A);
         $spreadCategory = getSpreadCategory();
         foreach ($organizeList as $olv){
-            $spreadCategory[$olv['zone_type_alias']] = '升级'.$olv['zone_type_name'];
+            $spreadCategory[$olv['zone_type_alias']] = '成为'.$olv['zone_type_name'];
         }
         foreach ($zoneMatchRoleList as $zmrlv){
             $spreadCategory[$zmrlv['role_alias']] = $zmrlv['role_name'];
@@ -934,7 +934,7 @@ class Spread{
                                     echo '提现';
                                     break;
                                 case 'subject':
-                                    echo '账号升级';
+                                    echo '成为主体';
                                     break;
                             }
                             ?>
