@@ -197,7 +197,7 @@ class Organize{
                    <?php
                    foreach ($rows as $row){
                         $usermeta = get_user_meta($row['user_id']);
-                        $user_real_name = isset($usermeta['user_real_name']) ? $usermeta['user_real_name'][0] : [];
+                        $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
                         $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
                         $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
                    ?>
@@ -400,6 +400,7 @@ class Organize{
             $error_msg = '';
             $zone_type_name = isset($_POST['zone_type_name']) ? trim($_POST['zone_type_name']) : '';
             $zone_type_alias = isset($_POST['zone_type_alias']) ? trim($_POST['zone_type_alias']) : '';
+            $zone_type_class = isset($_POST['zone_type_class']) ? trim($_POST['zone_type_class']) : '';
             $zone_type_status = isset($_POST['zone_type_status']) ? intval($_POST['zone_type_status']) : 0;
 //            $match_power = isset($_POST['match_power']) ? $_POST['match_power'] : [];
             $admin_power = isset($_POST['admin_power']) ? $_POST['admin_power'] : [];
@@ -415,6 +416,7 @@ class Organize{
                 $insertData = [
                     'zone_type_name' => $zone_type_name,
                     'zone_type_alias' => $zone_type_alias,
+                    'zone_type_class' => $zone_type_class,
                     'zone_type_status' => $zone_type_status,
                 ];
                 $wpdb->query('START TRANSACTION');
@@ -469,7 +471,7 @@ class Organize{
                 }
             }
         }
-        $oldPowerList = [];            //已有权限
+        $oldPowerLists = [];            //已有权限
         if($id > 0){
             $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}zone_type WHERE id='{$id}'", ARRAY_A);
             $oldPowerLists = $wpdb->get_results("SELECT role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$id}'", ARRAY_A);
@@ -501,7 +503,14 @@ class Organize{
                     <tr class="form-field form-required">
                         <th scope="row"><label for="zone_type_alias">类型别名 </label></th>
                         <td>
-                            <input name="zone_type_alias" type="text" id="zone_type_alias" value="<?=isset($row['zone_type_alias'])?$row['zone_type_alias']:''?>" maxlength="60">
+                            <?=isset($row['zone_type_alias'])?$row['zone_type_alias']:'<input name="zone_type_alias" type="text" id="zone_type_alias" value="" maxlength="60">'?>
+                        </td>
+                    </tr>
+
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="zone_type_class">样式类名 </label></th>
+                        <td>
+                            <?=isset($row['zone_type_class'])?$row['zone_type_class']:'<input name="zone_type_class" type="text" id="zone_type_class" value="" maxlength="60">'?>
                         </td>
                     </tr>
 
@@ -545,7 +554,7 @@ class Organize{
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS id,zone_type_name,zone_type_alias,
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS id,zone_type_name,zone_type_alias,zone_type_class,
                 CASE zone_type_status 
                 WHEN 1 THEN '<span style=\"color:#2ac40a;\">正常</span>' 
                 WHEN 2 THEN '<span style=\"color:#c44f09;\">关闭</span>' 
@@ -578,9 +587,9 @@ class Organize{
                     <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
                     <select name="action" id="bulk-action-selector-top">
                         <option value="-1">批量操作</option>
-                        <option value="delete">删除</option>
+                        <option value="delType">删除</option>
                     </select>
-                    <input type="submit" id="doaction" class="button action" value="应用">
+                    <input type="button" id="doaction" class="button action allOption" value="应用">
                 </div>
 
                 <div class="tablenav-pages">
@@ -595,6 +604,7 @@ class Organize{
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                     <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
                     <th scope="col" id="zone_type_alias" class="manage-column column-zone_type_alias">别名</th>
+                    <th scope="col" id="zone_type_class" class="manage-column column-zone_type_class">类名</th>
                     <th scope="col" id="status" class="manage-column column-status">状态</th>
                 </tr>
                 </thead>
@@ -604,10 +614,10 @@ class Organize{
                 <?php
                 foreach ($rows as $row){
                     ?>
-                    <tr>
+                    <tr data-id="<?=$row['id']?>">
                         <th scope="row" class="check-column">
                             <label class="screen-reader-text" for="cb-select-407">选择<?=$row['zone_type_name']?></label>
-                            <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                            <input id="cb-select-<?=$row['id']?>" class="check_v" type="checkbox" name="post[]" value="<?=$row['id']?>">
                             <div class="locked-indicator">
                                 <span class="locked-indicator-icon" aria-hidden="true"></span>
                                 <span class="screen-reader-text">“<?=$row['zone_type_name']?>”已被锁定</span>
@@ -617,14 +627,17 @@ class Organize{
                             <?=$row['zone_type_name']?>
                             <br>
                             <div class="row-actions">
-                                <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize-type&id='.$row['id'])?>">编辑</a> </span>
-                                <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
+                                <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize-type&id='.$row['id'])?>">编辑</a> | </span>
+                                <span class="delete"><a class="delType" href="javascript:;">删除</a></span>
                                 <!--                               <span class="view"><a href="">资料</a></span>-->
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
                         <td class="zone_type_alias column-zone_type_alias" data-colname="别名">
                             <?=$row['zone_type_alias']?>
+                        </td>
+                        <td class="zone_type_class column-zone_type_class" data-colname="类名">
+                            <?=$row['zone_type_class']?>
                         </td>
                         <td class="status column-status" data-colname="状态">
                             <?=$row['zone_type_status_name']?>
@@ -639,6 +652,7 @@ class Organize{
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                     <th scope="col" class="manage-column column-name column-primary">名称</th>
                     <th scope="col" class="manage-column column-zone_type_alias">别名</th>
+                    <th scope="col" class="manage-column column-zone_type_class">类名</th>
                     <th scope="col" class="manage-column column-status">状态</th>
                 </tr>
                 </tfoot>
@@ -650,9 +664,9 @@ class Organize{
                     <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
                     <select name="action2" id="bulk-action-selector-bottom">
                         <option value="-1">批量操作</option>
-                        <option value="delete">删除</option>
+                        <option value="delType">删除</option>
                     </select>
-                    <input type="submit" id="doaction2" class="button action" value="应用">
+                    <input type="button" id="doaction2" class="button action allOption" value="应用">
                 </div>
 
                 <div class="tablenav-pages">
@@ -663,6 +677,40 @@ class Organize{
             </div>
 
             <br class="clear">
+            <script>
+                jQuery(document).ready(function($) {
+                    $('.delType').on('click', function () {
+                        postAjax($(this).closest('tr').attr('data-id'));
+
+                    });
+                    $('.allOption').on('click', function () {
+                        var status = $(this).prev().val();
+                        if(status != 'delType') return false;
+                        var idArr = new Array();
+                        $.each($('#the-list').find('.check_v:checked'), function (i,v) {
+                            idArr.push($(v).val());
+                        });
+                        postAjax(idArr.join(','));
+                    });
+                    function postAjax(ids) {
+                        if(ids == '' || ids == undefined) return false;
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action':'delZoneType','id':ids},
+                            type : 'post',
+                            dataType : 'json',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            }, error : function () {
+                                alert('请求失败');
+                            }
+                        });
+                    }
+                });
+            </script>
         </div>
         <?php
     }
@@ -896,7 +944,7 @@ class Organize{
                     <tr class="">
                         <th scope="row"><label for="chairman_id">主席 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="chairman_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
+                            <select class="js-data-select-ajax" name="chairman_id" style="width: 50%" data-action="get_base_user_list" data-type="select">
                                 <option value="<?=$row['chairman_id']?>" selected="selected">
                                     <?=isset($row['chairman_real_name']) ? unserialize($row['chairman_real_name'])['real_name'] : ''?>
                                 </option>
@@ -906,7 +954,7 @@ class Organize{
                     <tr class="">
                         <th scope="row"><label for="secretary_id">秘书长 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="secretary_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
+                            <select class="js-data-select-ajax" name="secretary_id" style="width: 50%" data-action="get_base_user_list" data-type="select">
                                 <option value="<?=$row['secretary_id']?>" selected="selected">
                                     <?=isset($row['secretary_real_name']) ? unserialize($row['secretary_real_name'])['real_name'] : ''?>
                                 </option>

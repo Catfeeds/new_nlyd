@@ -293,8 +293,8 @@ class Student_Payment {
                 case 2://考级订单
                     $pay_status = 4;
                     break;
-                case 3://s商品订单
-                    $pay_status = 2;
+                case 3://课程订单
+                    $pay_status = 4;
                     break;
             }
             $updateData = [
@@ -737,8 +737,8 @@ class Student_Payment {
                     case 2://考级订单
                         $pay_status = 4;
                         break;
-                    case 3://商品订单
-                        $pay_status = 2;
+                    case 3://课程订单
+                        $pay_status = 4;
                         break;
                 }
                 $updateData = [
