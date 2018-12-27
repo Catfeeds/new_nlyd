@@ -178,7 +178,7 @@ class Organize{
                     <tr>
                         <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                         <th scope="col" id="zone_title" class="manage-column column-zone_title column-primary">主体名称</th>
-                        <th scope="col" id="real_name" class="manage-column column-real_name">负责人姓名</th>
+                        <th scope="col" id="user_login" class="manage-column column-user_login">账号</th>
                         <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
                         <th scope="col" id="legal_person" class="manage-column column-legal_person">法人</th>
                         <th scope="col" id="chairman_id" class="manage-column column-chairman_id">主席</th>
@@ -199,8 +199,8 @@ class Organize{
 
                    <?php
                    foreach ($rows as $row){
-                        $usermeta = get_user_meta($row['user_id']);
-                        $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
+//                        $usermeta = get_user_meta($row['user_id']);
+//                        $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
                         $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
                         $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
                    ?>
@@ -224,7 +224,7 @@ class Organize{
                            </div>
                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                        </td>
-                       <td class="real_name column-real_name" data-colname="负责人姓名"><?=isset($user_real_name['real_name'])?$user_real_name['real_name']:$row['user_login']?></td>
+                       <td class="user_login column-user_login" data-colname="账号"><?=$row['user_login']?></td>
                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
 
                        <td class="legal_person column-legal_person" data-colname="法人"><?=$row['legal_person']?></td>
@@ -276,7 +276,7 @@ class Organize{
                     <tr>
                         <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                         <th scope="col" class="manage-column column-zone_title column-primary">主体名称</th>
-                        <th scope="col" class="manage-column column-real_name">负责人姓名</th>
+                        <th scope="col" class="manage-column column-user_login">账号</th>
                         <th scope="col" class="manage-column column-referee_id">推荐人</th>
                         <th scope="col" class="manage-column column-legal_person">法人</th>
                         <th scope="col" class="manage-column column-chairman_id">主席</th>
@@ -341,7 +341,7 @@ class Organize{
                             var request_type = _this.attr('data-type');
                         }
                         if(user_id == false || user_id == '') return false;
-                        var data = {'action':action,'user_id':user_id,'request_type':request_type}
+                        var data = {'action':action,'id':user_id,'request_type':request_type}
                         $.ajax({
                             url:ajaxurl,
                             data : data,
@@ -505,14 +505,24 @@ class Organize{
                     <tr class="form-field form-required">
                         <th scope="row"><label for="zone_type_alias">类型别名 </label></th>
                         <td>
-                            <?=isset($row['zone_type_alias'])?$row['zone_type_alias']:'<input name="zone_type_alias" type="text" id="zone_type_alias" value="" maxlength="60">'?>
-                        </td>
+                            <?php if(isset($row['zone_type_alias'])) {?>
+                            <input name="zone_type_alias" type="hidden" id="zone_type_alias"  value="<?=$row['zone_type_alias']?>" maxlength="60">
+                                <?=$row['zone_type_alias']?>
+                            <?php }else { ?>
+                                <input name="zone_type_alias" type="text" id="zone_type_alias" value="" maxlength="60">
+                            <?php } ?>
+                         </td>
                     </tr>
 
                     <tr class="form-field form-required">
                         <th scope="row"><label for="zone_type_class">样式类名 </label></th>
                         <td>
-                            <?=isset($row['zone_type_class'])?$row['zone_type_class']:'<input name="zone_type_class" type="text" id="zone_type_class" value="" maxlength="60">'?>
+                            <?php if(isset($row['zone_type_class'])) {?>
+                                <input name="zone_type_class" type="hidden" id="zone_type_class"  value="<?=$row['zone_type_class']?>" maxlength="60">
+                                <?=$row['zone_type_class']?>
+                            <?php }else { ?>
+                                <input name="zone_type_class" type="text" id="zone_type_class" value="" maxlength="60">
+                            <?php } ?>
                         </td>
                     </tr>
 
@@ -731,6 +741,7 @@ class Organize{
             $referee_id = isset($_POST['referee_id']) ? intval($_POST['referee_id']) : 0;
             $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
             $zone_title = isset($_POST['zone_title']) ? trim($_POST['zone_title']) : '';
+            $zone_city = isset($_POST['zone_city']) ? trim($_POST['zone_city']) : '';
             $zone_address = isset($_POST['zone_address']) ? trim($_POST['zone_address']) : '';
             $business_licence = isset($_POST['business_licence']) ? trim($_POST['business_licence']) : '';
             $legal_person = isset($_POST['legal_person']) ? trim($_POST['legal_person']) : '';
@@ -740,6 +751,7 @@ class Organize{
             $chairman_id = isset($_POST['chairman_id']) && $_POST['chairman_id'] > 0 ? intval($_POST['chairman_id']) : $user_id;
             $secretary_id = isset($_POST['secretary_id']) ? intval($_POST['secretary_id']) : 0;
             $parent_id = isset($_POST['parent_id']) ? intval($_POST['parent_id']) : 0;
+            $zone_match_type = isset($_POST['zone_match_type']) ? intval($_POST['zone_match_type']) : 0;
             $match_power = isset($_POST['match_power']) ? $_POST['match_power'] : [];
             $admin_power = isset($_POST['admin_power']) ? $_POST['admin_power'] : [];
 
@@ -769,6 +781,7 @@ class Organize{
                     'user_status' => $user_status,
                     'zone_name' => $zone_title,
                     'zone_address' => $zone_address,
+                    'zone_city' => $zone_city,
                     'business_licence' => $business_licence,
                     'legal_person' => $legal_person,
                     'opening_bank' => $opening_bank,
@@ -779,6 +792,7 @@ class Organize{
                     'match_role_id' => join(',',$match_power),
                     'role_id' => join(',',$admin_power),
                     'parent_id' => $parent_id,
+                    'zone_match_type' => $zone_match_type,
                 ];
                 //图片
                 if(isset($_FILES['business_licence_url'])){
@@ -931,6 +945,21 @@ class Organize{
                                     <?=$row['parent_name']?>
                                 </option>
                             </select>
+                        </td>
+                    </tr>
+                    <tr class="form-field">
+                        <th scope="row"><label for="zone_match_type">赛区类型 </label></th>
+                        <td>
+                            <select name="zone_match_type" id="zone_match_type">
+                                <option <?=$row['zone_match_type']=='1'?'selected="selected"':''?> value="1">战队赛</option>
+                                <option <?=$row['zone_match_type']=='2'?'selected="selected"':''?> value="2">城市赛</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="zone_city">机构城市 </label></th>
+                        <td>
+                            <input type="text" name="zone_city" value="<?=$row['zone_city']?>">
                         </td>
                     </tr>
                     <tr class="form-field">
@@ -1621,6 +1650,7 @@ class Organize{
     public function organizeStatistics(){
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $type = isset($_GET['type']) ? intval($_GET['type']) : 1;
+
         $id < 1 && exit('参数错误!');
         global $wpdb;
         //查询主体信息
@@ -1628,6 +1658,7 @@ class Organize{
         //各种数量
         //比赛数量
         $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$zone_meta['user_id']}'");
+
         //考级数量
         $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$zone_meta['user_id']}'");
         //课程数量
@@ -1645,7 +1676,7 @@ class Organize{
             <hr class="wp-header-end">
             <ul class="subsubsub">
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=1')?>" <?=$type===1?'class="current"':''?> aria-current="page">比赛<span class="count">（<?=$match_num > 0 ? $match_num : 0?>）</span></a> | </li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'type=2')?>" <?=$type===2?'class="current"':''?> aria-current="page">考级<span class="count">（<?=$grading_num > 0 ? $grading_num : 0?>）</span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=2')?>" <?=$type===2?'class="current"':''?> aria-current="page">考级<span class="count">（<?=$grading_num > 0 ? $grading_num : 0?>）</span></a> |</li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=3')?>" <?=$type===3?'class="current"':''?> aria-current="page">课程<span class="count">（<?=$course_num > 0 ? $course_num : 0?>）</span></a></li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4')?>" <?=$type===4?'class="current"':''?> aria-current="page">成员<span class="count">（<?=$member_num > 0 ? $member_num : 0?>）</span></a></li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5')?>" <?=$type===5?'class="current"':''?> aria-current="page">收益<span class="count">（<?=$stream_all > 0 ? $stream_all : 0?>）</span></a></li>
@@ -1655,6 +1686,9 @@ class Organize{
             switch ($type){
                 case 1:
                     $this->getOrganizeStatisticsMatch($zone_meta['user_id']);
+                    break;
+                case 2:
+                    $this->getOrganizeStatisticsGrading($zone_meta['user_id']);
                     break;
             }
 
@@ -1670,10 +1704,27 @@ class Organize{
      */
     public function getOrganizeStatisticsMatch($user_id){
         global $wpdb;
-        $rows = $wpdb->get_results("SELECT p.post_title AS match_name,mmn.* FROM {$wpdb->prefix}match_meta_new AS mmn
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS p.post_title AS match_name,mmn.* FROM {$wpdb->prefix}match_meta_new AS mmn
                 LEFT JOIN {$wpdb->posts} AS p ON p.ID=mmn.match_id
-                WHERE mmn.created_id='{$user_id}'", ARRAY_A);
-        leo_dump($rows);
+                WHERE mmn.created_id='{$user_id}'
+                LIMIT {$start},{$pageSize}", ARRAY_A);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page,
+            'add_fragment' => '&s='.$searchStr,
+        ));
+//        leo_dump($rows);
         ?>
         <div class="tablenav top">
             <div class="tablenav-pages">
@@ -1687,9 +1738,9 @@ class Organize{
             <thead>
             <tr>
                 <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
-                <th scope="col" id="role_type" class="manage-column column-role_type">类型</th>
-                <th scope="col" id="option1" class="manage-column column-option1">操作</th>
+                <th scope="col" id="match_name" class="manage-column column-match_name column-primary">比赛名称</th>
+                <th scope="col" id="match_status" class="manage-column column-match_status">状态</th>
+                <th scope="col" id="date_time" class="manage-column column-date_time">时间</th>
             </tr>
             </thead>
 
@@ -1704,30 +1755,35 @@ class Organize{
                         <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                         <div class="locked-indicator">
                             <span class="locked-indicator-icon" aria-hidden="true"></span>
-                            <span class="screen-reader-text">“<?=$row['role_name']?>”已被锁定</span>
+                            <span class="screen-reader-text">“<?=$row['match_name']?>”已被锁定</span>
                         </div>
                     </th>
-                    <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                        <?=$row['role_name']?>
+                    <td class="match_name column-match_name has-row-actions column-primary" data-colname="比赛名称">
+                        <?=$row['match_name']?>
                         <br>
 
                         <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                     </td>
-                    <td class="role_type column-role_type" data-colname="类型">
+                    <td class="match_status column-match_status" data-colname="状态">
                         <?php
-                        switch ($row['role_type']){
+                        switch ($row['match_status']){
+                            case '-3':
+                                echo '已结束';
+                                break;
+                            case '-2':
+                                echo '等待开赛';
+                                break;
                             case '1':
-                                echo '赛事/考级';
+                                echo '报名中';
                                 break;
                             case '2':
-                                echo '课程权限';
+                                echo '进行中';
                                 break;
-
                         }
                         ?>
                     </td>
-                    <td class="option1 column-option1" data-colname="状态">
-                        <a href="<?=admin_url('admin.php?page=fission-add-organize-power&id='.$row['id'])?>">编辑</a>
+                    <td class="date_time column-date_time" data-colname="时间">
+                        <?=$row['match_start_time'].'<br >'.$row['match_end_time']?>
                     </td>
 
                 </tr>
@@ -1737,9 +1793,145 @@ class Organize{
             <tfoot>
             <tr>
                 <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                <th scope="col" class="manage-column column-name column-primary">名称</th>
-                <th scope="col" class="manage-column column-role_type">类型</th>
-                <th scope="col" class="manage-column column-option1">操作</th>
+                <th scope="col" class="manage-column column-match_name column-primary">比赛名称</th>
+                <th scope="col" class="manage-column column-match_status">状态</th>
+                <th scope="col" class="manage-column column-date_time">时间</th>
+            </tr>
+            </tfoot>
+
+        </table>
+        <div class="tablenav bottom">
+
+            <div class="alignleft actions bulkactions">
+                <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                <select name="action2" id="bulk-action-selector-bottom">
+                    <option value="-1">批量操作</option>
+                    <option value="delete">删除</option>
+                </select>
+                <input type="submit" id="doaction2" class="button action" value="应用">
+            </div>
+
+            <div class="tablenav-pages">
+                <span class="displaying-num"><?=$count['count']?>个项目</span>
+                <?=$pageHtml?>
+            </div>
+            <br class="clear">
+        </div>
+        <?php
+    }
+
+    /**
+     * 主体统计信息考级数据
+     */
+    public function getOrganizeStatisticsGrading($user_id){
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS p.post_title AS match_name,gm.* 
+                FROM {$wpdb->prefix}grading_meta AS gm
+                LEFT JOIN {$wpdb->posts} AS p ON p.ID=gm.grading_id
+                WHERE gm.created_person='{$user_id}'
+                LIMIT {$start},{$pageSize}", ARRAY_A);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page,
+            'add_fragment' => '&s='.$searchStr,
+        ));
+//        leo_dump($rows);
+        ?>
+        <div class="tablenav top">
+            <div class="tablenav-pages">
+                <span class="displaying-num"><?=$count['count']?>个项目</span>
+                <?=$pageHtml?>
+            </div>
+            <br class="clear">
+        </div>
+        <h2 class="screen-reader-text">统计信息</h2>
+        <table class="wp-list-table widefat fixed striped users">
+            <thead>
+            <tr>
+                <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                <th scope="col" id="match_name" class="manage-column column-match_name column-primary">比赛名称</th>
+                <th scope="col" id="scene" class="manage-column column-scene">考级场景</th>
+                <th scope="col" id="match_status" class="manage-column column-match_status">状态</th>
+                <th scope="col" id="date_time" class="manage-column column-date_time">时间</th>
+            </tr>
+            </thead>
+
+            <tbody id="the-list" data-wp-lists="list:user">
+
+            <?php
+            foreach ($rows as $row){
+                ?>
+                <tr>
+                    <th scope="row" class="check-column">
+                        <label class="screen-reader-text" for="cb-select-407">选择<?=$row['role_name']?></label>
+                        <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                        <div class="locked-indicator">
+                            <span class="locked-indicator-icon" aria-hidden="true"></span>
+                            <span class="screen-reader-text">“<?=$row['match_name']?>”已被锁定</span>
+                        </div>
+                    </th>
+                    <td class="match_name column-match_name has-row-actions column-primary" data-colname="比赛名称">
+                        <?=$row['match_name']?>
+                        <br>
+
+                        <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                    </td>
+                    <td class="scene column-scene" data-colname="考级场景">
+                        <?php
+                        switch ($row['scene']){
+                            case '1':
+                                echo '正式考级';
+                                break;
+                            case '2':
+                                echo '模拟考级';
+                                break;
+                        }
+                        ?>
+                    </td>
+                    <td class="match_status column-match_status" data-colname="状态">
+                        <?php
+                        switch ($row['status']){
+                            case '-3':
+                                echo '已结束';
+                                break;
+                            case '-2':
+                                echo '等待开赛';
+                                break;
+                            case '1':
+                                echo '报名中';
+                                break;
+                            case '2':
+                                echo '进行中';
+                                break;
+                        }
+                        ?>
+                    </td>
+                    <td class="date_time column-date_time" data-colname="时间">
+                        <?=$row['start_time'].'<br >'.$row['end_time']?>
+                    </td>
+
+                </tr>
+                <?php
+            }
+            ?>
+            <tfoot>
+            <tr>
+                <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                <th scope="col" class="manage-column column-match_name column-primary">比赛名称</th>
+                <th scope="col" class="manage-column column-scene">考级场景</th>
+                <th scope="col" class="manage-column column-match_status">状态</th>
+                <th scope="col" class="manage-column column-date_time">时间</th>
             </tr>
             </tfoot>
 
