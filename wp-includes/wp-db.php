@@ -2201,7 +2201,7 @@ class wpdb {
 		$conditions = implode( ' AND ', $conditions );
 
 		$sql = "UPDATE `$table` SET $fields WHERE $conditions";
-		/*if($table == 'wp_match_meta_new'){
+		/*if($table == 'wp_zone_meta'){
             print_r($this->prepare( $sql, $values ));die;
         }*/
         //print_r($this->prepare( $sql, $values ));die;
