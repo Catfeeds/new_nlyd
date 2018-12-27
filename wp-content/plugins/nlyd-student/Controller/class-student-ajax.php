@@ -4355,7 +4355,7 @@ class Student_Ajax
     }
 
     /**
-     * 用户推广二维码生成
+     * 用户推广码生成
      *
      */
     public function qrcode(){
@@ -4363,9 +4363,9 @@ class Student_Ajax
         global $current_user;
         $upload_dir = wp_upload_dir();
         $spread_qrcode = get_user_meta($current_user->ID,'referee_qrcode');
-        /*if(!empty($spread_qrcode)){
+        if(!empty($spread_qrcode) && file_exists($upload_dir['basedir'].$spread_qrcode[0])){
             wp_send_json_success($upload_dir['baseurl'].$spread_qrcode[0]);
-        }else{*/
+        }else{
 
             include_once leo_student_path."library/Vendor/phpqrcode/phpqrcode.php"; //引入PHP QR库文件
             $value=home_url('/logins/index/referee_id/'.$current_user->ID);
@@ -4416,7 +4416,7 @@ class Student_Ajax
             imagejpeg ( $back_, $qrcode_path );//带Logo二维码的文件名*/
             update_user_meta($current_user->ID,'referee_qrcode',$dir.$filename);
             wp_send_json_success($upload_dir['baseurl'].$dir.$filename);
-        //}
+        }
     }
 
 
