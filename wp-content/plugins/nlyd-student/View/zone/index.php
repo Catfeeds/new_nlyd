@@ -19,7 +19,7 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
             
             <div class="layui-row nl-border nl-content">
-                <div class="zone_user width-padding layui-row layui-bg-white width-margin-pc">
+                <div class="zone_user width-padding layui-row layui-bg-white width-padding-pc">
                     <div class="img-box zone_user_img pull-left">
                         <img src="<?=$row['user_head']?>">
                         <div class="zone_tag c_white fs_12">
@@ -37,14 +37,16 @@
                         <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
                         <!-- 审核通过 -->
                         <div class="<?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
-                            <span class="bold">
+                            <span class="bold fs_16">
                                 <?=!empty($row['legal_person']) ? $row['zone_name']:$row['user_real_name']?>
                             </span>
                         </div>
-                        <div class="c_black">
-                            <?=__('ID/编  号', 'nlyd-student')?>:<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?>
-                        </div>
-
+                        <?php if($row['user_status'] == 1){ ?>
+                            <div class="c_black">
+                                <?=__('ID/编  号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?> 
+                                <div class="img-box zone_pass"><img src="<?=student_css_url.'image/pass.png'?>" alt="<?=__('已认证', 'nlyd-student')?>"></div>
+                            </div>
+                        <?php } ?>        
                         <div class="c_black">
                             <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=empty($row['referee_user_ID'])? '无' : $row['referee_user_ID'];?></span>
                             <span class="pull-right">
@@ -52,7 +54,7 @@
                                     <a class=" c_blue" href="<?=home_url('zone/apply')?>"><?=__('更多资料', 'nlyd-student')?></a>
                                     <?php }
                                     elseif ($row['user_status'] == -1){ ?>
-                                    <span class=" c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
+                                    <span class=" c_orange mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
                                     <?php } ?>
                                     <?php if(!empty($row['id']) && $row['user_status'] == -2):?>
                                     <a class=" c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
@@ -61,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
+                <div class="apply width-padding layui-row layui-bg-white width-padding-pc">
                     <a class="apply_list c_black layui-row" href="<?=home_url('/zone/profit/');?>">
                         <div class="apply_list_line pull-left ">
                             <div class="zone_bg bg_money"></div>
@@ -80,7 +82,7 @@
                 </div>
                 <?php if(empty($row['legal_person'])){ ?>
                 <!-- 普通用户 (控制台)-->
-                <div class="apply have_title width-padding layui-row layui-bg-white width-margin-pc">
+                <div class="apply have_title width-padding layui-row layui-bg-white width-padding-pc">
                     <div class="bold ta_c c_black apply_title"><?=__('合作申请', 'nlyd-student')?></div>
                     <?php if(!empty($list)){?>
                         <?php foreach ($list as $v){ ?>
@@ -108,7 +110,7 @@
                 </div>
                 <?php } ?>
                 <!-- 训练中心(控制台)-->
-                <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
+                <div class="apply width-padding layui-row layui-bg-white width-padding-pc">
                     <?php if(!empty($role_list)):?>
                     <?php foreach ($role_list as $x){
                             //$thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');

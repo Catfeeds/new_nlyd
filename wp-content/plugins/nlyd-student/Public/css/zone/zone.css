@@ -798,3 +798,16 @@ input[type="text"].coach_form_input{
     border-left: 16px solid transparent;
     border-bottom: 3px solid white;
 }
+.zone_pass{
+    display: inline-block;
+    width: 56px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+.qr_code_img{
+    width: 150px;
+    height: 150px;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 7px;
+}
