@@ -97,7 +97,11 @@ jQuery(function($) {
                                     var num=(profit_page-1)*50+i+1;
                                     if(parseInt(id)==1){//个人
                                         var is_shop='-';
-                                       
+                                        var real_name=v.real_name ? v.real_name : "-";
+                                        var user_ID=v.user_ID ? v.user_ID : "-";
+                                        var real_age=v.real_age ? v.real_age : "-";
+                                        var user_gender=v.user_gender ? v.real_age : "-"; 
+                                        var referee_time=v.referee_time ? v.referee_time : "-"; 
                                         if(v.is_shop=='y'){
                                             is_shop='<div class="table_content c_green"><?=__("是", "nlyd-student")?></div>';
                                         }else if(v.is_shop=='n'){
@@ -105,19 +109,21 @@ jQuery(function($) {
                                         }
                                         dom='<tr>'+
                                                 '<td><div class="table_content">'+num+'</div></td>'+
-                                                '<td><div class="table_content"><div class="c_black ta_l">'+v.real_name+'</div><div class="ff_num fs_12 ta_l">'+v.user_ID+'</div></div></td>'+
-                                                '<td><div class="table_content">'+v.real_age+'</div></td>'+
-                                                '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
-                                                '<td><div class="table_content c_black">'+v.referee_time+'</div></td>'+
+                                                '<td><div class="table_content"><div class="c_black ta_l">'+real_name+'</div><div class="ff_num fs_12 ta_l">'+user_ID+'</div></div></td>'+
+                                                '<td><div class="table_content">'+real_age+'</div></td>'+
+                                                '<td><div class="table_content c_black">'+user_gender+'</div></td>'+
+                                                '<td><div class="table_content c_black">'+referee_time+'</div></td>'+
                                                 '<td>'+is_shop+'</td>'+
                                             '</tr>'
                                     }else if(parseInt(id)==2){//机构
+                                        var zone_name=v.zone_name ? v.zone_name : "-";
+                                        var referee_time=v.referee_time ? v.zone_name : "-";//时间
                                         dom='<tr>'+
                                                 '<td><div class="table_content">'+num+'</div></td>'+
                                                 '<td>'+
                                                     '<div class="table_content">'+
-                                                        '<div class="c_black ta_l">'+v.zone_name+'</div>'+
-                                                        '<div class="ff_num fs_12 ta_l">----</div>'+
+                                                        '<div class="c_black ta_l">'+zone_name+'</div>'+
+                                                        '<div class="ff_num fs_12 ta_l">'+referee_time+'</div>'+
                                                     '</div>'+
                                                 '</td>'+
                                                 '<td><div class="table_content"><a class="c_blue disabled_a">详 情</a></div></td>'+

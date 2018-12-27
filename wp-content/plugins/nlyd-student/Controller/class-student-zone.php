@@ -63,6 +63,13 @@ class Student_Zone extends Student_Home
 
     }
     /**
+     *个人用户控制台
+     */
+     public function indexUser(){
+        $view = student_view_path.CONTROLLER.'/index-user.php';
+        load_view_template($view);
+    }
+    /**
      * 申请项目介绍页
      */
      public function introduce(){
