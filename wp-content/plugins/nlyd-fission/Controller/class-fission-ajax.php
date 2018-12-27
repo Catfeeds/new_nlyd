@@ -77,31 +77,45 @@ class Fission_Ajax
      * 通过/拒绝主体账号申请
      */
     public function editOrganizeApply(){
-        $user_id = isset($_POST['user_id']) ? trim($_POST['user_id']) : '';
-        if($user_id == '') wp_send_json_error(['info' => '参数错误!']);
+        $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+        if($id == '') wp_send_json_error(['info' => '参数错误!']);
         $type = isset($_POST['request_type']) ? trim($_POST['request_type']) : '';
 
         global $wpdb;
         $wpdb->query('START TRANSACTION');
         //查询原数据
-        $zone_meta = $wpdb->get_results("SELECT user_id,type_id FROM {$wpdb->prefix}zone_meta WHERE user_id IN({$user_id}) AND user_status=-1",ARRAY_A);
+        $zone_meta = $wpdb->get_results("SELECT user_id,type_id,id FROM {$wpdb->prefix}zone_meta WHERE id IN({$id}) AND user_status=-1",ARRAY_A);
         if(!$zone_meta) wp_send_json_error(['info' => '未找到申请记录!']);
         if($type == 'agree'){//同意申请
             $user_status = 1;
             foreach ($zone_meta as $zmv){
+                //创建新账号
+                $user_email = 'iisc'.$zmv['申请人id'].rand(000,999).rand(000,999).'@gjnlyd.com';
+                $user_password = rand(000,999).rand(000,999);
+                $user_id = wp_create_user($user_email,$user_password,$user_email);
+                if(!$user_id) wp_send_json_error(['创建账号失败!']);
+                //更新新账号推荐人
+                $referee_id = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$zmv['申请人id']}'");
+                if($referee_id > 0){
+                    if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id],['ID' => $user_id])) wp_send_json_error(['info' => '更新主体推荐人失败!']);
+                }
+                //跟新主体所有者
+                if(!$wpdb->update($wpdb->prefix.'zone_meta',['user_id' => $user_id],['id'=>$zmv['id']])) wp_send_json_error(['info' => '更新主体所有者id失败!']);
+//                $wpdb->update($wpdb->users,['referee_id' => ])
+
                 //主体类型
                 $orgType = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'");
                 $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType}' AND spread_status=1", ARRAY_A);
                 if($spread_set){
                     //添加上级收益
                     //获取一级上级
-                    $referee_id1 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$zmv['user_id']}'");
+                    $referee_id1 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$user_id}'");
                     $referee_id2 = 0;
                     if($referee_id1 > 0) $referee_id2 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$referee_id1}'");
                     //添加分成记录
                     $insertData3 = [
                         'income_type' => 'subject',
-                        'user_id' => $zmv['user_id'],
+                        'user_id' => $user_id,
                         'referee_id' => $referee_id1,
                         'referee_income' => $spread_set['direct_superior'],
                         'indirect_referee_id' => $referee_id2 > 0 ? $referee_id2 : 0,
@@ -163,7 +177,7 @@ class Fission_Ajax
 
         //审核时间
         $apply_date = get_time('mysql');
-        $bool = $wpdb->query("UPDATE `{$wpdb->prefix}zone_meta` SET `user_status` = '{$user_status}',`audit_time` = '{$apply_date}' WHERE user_id IN({$user_id}) AND user_status=-1");
+        $bool = $wpdb->query("UPDATE `{$wpdb->prefix}zone_meta` SET `user_status` = '{$user_status}',`audit_time` = '{$apply_date}' WHERE id IN({$id}) AND user_status=-1");
         if($bool) {
             $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '操作成功!']);
@@ -177,8 +191,8 @@ class Fission_Ajax
      * 冻结/解冻主体账号
      */
     public function editOrganizeAble(){
-        $user_id = isset($_POST['user_id']) ? trim($_POST['user_id']) : '';
-        if($user_id == '') wp_send_json_error(['info' => '参数错误!']);
+        $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+        if($id == '') wp_send_json_error(['info' => '参数错误!']);
         $type = isset($_POST['request_type']) ? trim($_POST['request_type']) : '';
         if($type == 'frozen'){//冻结
             $is_able = 2;
@@ -189,9 +203,9 @@ class Fission_Ajax
         }
         //查询原数据
         global $wpdb;
-        $zone_meta_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE user_id IN({$user_id}) AND user_status=1");
+        $zone_meta_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id IN({$id}) AND user_status=1");
         if(!$zone_meta_id || $zone_meta_id == '') wp_send_json_error(['info' => '未找到可操作主体!']);
-        $bool = $wpdb->query("UPDATE `{$wpdb->prefix}zone_meta` SET `is_able` = '{$is_able}' WHERE user_id IN({$user_id}) AND user_status=1");
+        $bool = $wpdb->query("UPDATE `{$wpdb->prefix}zone_meta` SET `is_able` = '{$is_able}' WHERE id IN({$id}) AND user_status=1");
         if($bool) wp_send_json_success(['info' => '操作成功!']);
         else wp_send_json_error(['info' => '操作失败!']);
     }

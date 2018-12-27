@@ -27,7 +27,6 @@
                                     <table class="nl-table">
                                         <thead>
                                             <tr class='table-head'>
-                                                <td><?=__('序 号', 'nlyd-student')?></td>
                                                 <td><?=__('姓名/编号', 'nlyd-student')?></td>
                                                 <td><?=__('年 龄', 'nlyd-student')?></td>
                                                 <td><?=__('性 别', 'nlyd-student')?></td>
@@ -47,7 +46,6 @@
                                     <table class="nl-table">
                                         <thead>
                                             <tr class='table-head'>
-                                                <td><?=__('序 号', 'nlyd-student')?></td>
                                                 <td><?=__('名 字', 'nlyd-student')?></td>
                                                 <td><?=__('操 作', 'nlyd-student')?></td>
                                             </tr>
@@ -93,43 +91,70 @@ jQuery(function($) {
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    var dom=''
-                                    var num=(profit_page-1)*50+i+1;
+                                    var dom_1='';
                                     if(parseInt(id)==1){//个人
-                                        var is_shop='-';
-                                        var real_name=v.real_name ? v.real_name : "-";
-                                        var user_ID=v.user_ID ? v.user_ID : "-";
-                                        var real_age=v.real_age ? v.real_age : "-";
-                                        var user_gender=v.user_gender ? v.real_age : "-"; 
-                                        var referee_time=v.referee_time ? v.referee_time : "-"; 
+                                        var is_shop_1='-';
+
                                         if(v.is_shop=='y'){
-                                            is_shop='<div class="table_content c_green"><?=__("是", "nlyd-student")?></div>';
+                                            is_shop_1='<div class="table_content c_green"><?=__("是", "nlyd-student")?></div>';
                                         }else if(v.is_shop=='n'){
-                                            is_shop='<div class="table_content c_black"><?=__("否", "nlyd-student")?></div>';
+                                            is_shop_1='<div class="table_content c_black"><?=__("否", "nlyd-student")?></div>';
                                         }
-                                        dom='<tr>'+
-                                                '<td><div class="table_content">'+num+'</div></td>'+
-                                                '<td><div class="table_content"><div class="c_black ta_l">'+real_name+'</div><div class="ff_num fs_12 ta_l">'+user_ID+'</div></div></td>'+
-                                                '<td><div class="table_content">'+real_age+'</div></td>'+
-                                                '<td><div class="table_content c_black">'+user_gender+'</div></td>'+
-                                                '<td><div class="table_content c_black">'+referee_time+'</div></td>'+
-                                                '<td>'+is_shop+'</td>'+
+                                        dom_1='<tr>'+
+                                                '<td><div class="table_content"><div class="c_black ta_c">'+v.real_name+'</div><div class="ff_num fs_12 ta_c">'+v.user_ID+'</div></div></td>'+
+                                                '<td><div class="table_content">'+v.real_age+'</div></td>'+
+                                                '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
+                                                '<td><div class="table_content c_black">'+v.referee_time+'</div></td>'+
+                                                '<td>'+is_shop_1+'</td>'+
                                             '</tr>'
+                                        lis.push(dom_1)
+                                        if(v.child){
+                                            $.each(v.child,function(index,val){
+                                                var dom_2="";
+                                                var is_shop_2='-';
+                                                if(val.is_shop=='y'){
+                                                    is_shop_2='<div class="table_content c_green"><?=__("是", "nlyd-student")?></div>';
+                                                }else if(val.is_shop=='n'){
+                                                    is_shop_2='<div class="table_content c_black"><?=__("否", "nlyd-student")?></div>';
+                                                }
+                                                dom_2='<tr>'+
+                                                        '<td><div class="table_content"><div class="c_orange ta_c">'+val.real_name+'</div><div class="ff_num fs_12 ta_c">'+val.user_ID+'</div></div></td>'+
+                                                        '<td><div class="table_content">'+val.real_age+'</div></td>'+
+                                                        '<td><div class="table_content c_black">'+val.user_gender+'</div></td>'+
+                                                        '<td><div class="table_content c_black">'+val.referee_time+'</div></td>'+
+                                                        '<td>'+is_shop_2+'</td>'+
+                                                    '</tr>'
+                                                lis.push(dom_2)
+                                            })
+                                        }
                                     }else if(parseInt(id)==2){//机构
-                                        var zone_name=v.zone_name ? v.zone_name : "-";
-                                        var referee_time=v.referee_time ? v.zone_name : "-";//时间
-                                        dom='<tr>'+
-                                                '<td><div class="table_content">'+num+'</div></td>'+
+                                        dom_1='<tr>'+
                                                 '<td>'+
                                                     '<div class="table_content">'+
-                                                        '<div class="c_black ta_l">'+zone_name+'</div>'+
-                                                        '<div class="ff_num fs_12 ta_l">'+referee_time+'</div>'+
+                                                        '<div class="c_black ta_c">'+v.zone_name+'</div>'+
+                                                        '<div class="ff_num fs_12 ta_c">----</div>'+
                                                     '</div>'+
                                                 '</td>'+
                                                 '<td><div class="table_content"><a class="c_blue disabled_a">详 情</a></div></td>'+
                                             '</tr>'
+                                        lis.push(dom_1)
+                                        if(v.child){
+                                            $.each(v.child,function(index,val){
+                                                var dom_2="";
+                                                dom_2='<tr>'+
+                                                        '<td>'+
+                                                            '<div class="table_content">'+
+                                                                '<div class="c_orange ta_c">'+val.zone_name+'</div>'+
+                                                                '<div class="ff_num fs_12 ta_c">----</div>'+
+                                                            '</div>'+
+                                                        '</td>'+
+                                                        '<td><div class="table_content"><a class="c_blue disabled_a">详 情</a></div></td>'+
+                                                    '</tr>'
+                                                lis.push(dom_2)
+                                            })
+                                        }
                                     }
-                                    lis.push(dom) 
+
                                 })
                                 if (res.data.info.length<50) {
                                     next(lis.join(''),false) 
