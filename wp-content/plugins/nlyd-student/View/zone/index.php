@@ -169,20 +169,33 @@ jQuery(function($) {
             });
         }
     $('#loginOut').click(function(){//登出
-        $.ajax({
-            data: {action:'user_logout'},
-            success: function(data, textStatus, jqXHR){
-                $.alerts(data.data.info)
-                if(data.success){
-                    if(data.data.url){
-                        setTimeout(function(){
-                            window.location.href=data.data.url
-                        }, 1000);
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            $.ajax({
+                data: {action:'user_logout'},
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
+                success: function(res, textStatus, jqXHR){
+                    $.alerts(res.data.info)
+                    if(res.success){
+                        if(res.data.url){
+                            setTimeout(function(){
+                                window.location.href=res.data.url
+                            }, 1000);
+                        }
                     }
+                    return false;
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                    }
+                    _this.removeClass('disabled');
                 }
-                return false;
-            }
-        });
+            })
+        }
+        
     })
     $('.back_user').click(function(){
         var _this=$(this);
