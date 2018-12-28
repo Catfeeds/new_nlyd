@@ -915,6 +915,7 @@ function the_table_install () {
           `sub_center` varchar(32) DEFAULT NULL COMMENT '赛区/分中心/考级中心获取收益(元/百分比)',
           `mechanism` varchar(32) DEFAULT NULL COMMENT '参赛机构获取收益(元/百分比)',
           `spread_status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1正常,2禁用',
+          `spread_name` varchar(255) DEFAULT NULL COMMENT '',
           PRIMARY KEY (`id`),
           UNIQUE KEY `unique` (`spread_type`) USING BTREE
         ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;";

@@ -77,6 +77,7 @@ class Fission_Ajax
      * 通过/拒绝主体账号申请
      */
     public function editOrganizeApply(){
+        die;
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
         if($id == '') wp_send_json_error(['info' => '参数错误!']);
         $type = isset($_POST['request_type']) ? trim($_POST['request_type']) : '';
@@ -137,7 +138,7 @@ class Fission_Ajax
                         //添加一级上级收益流水
                         $insertData1 = [
                             'user_id' => $referee_id1,
-                            'user_type' => 2,
+//                            'user_type' => 2,
                             'match_id' => $user_income_logs_id,
                             'income_type' => 'subject',
                             'user_income' => $spread_set['direct_superior'],
@@ -154,7 +155,7 @@ class Fission_Ajax
                             //添加二级上级收益流水
                             $insertData2 = [
                                 'user_id' => $referee_id2,
-                                'user_type' => 2,
+//                                'user_type' => 2,
                                 'match_id' => $user_income_logs_id,
                                 'income_type' => 'subject',
                                 'user_income' => $spread_set['indirect_superior'],
