@@ -147,6 +147,11 @@
 
 <script>
 jQuery(function($) {
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        console.log(1)
+        history.pushState(null, null, document.URL);
+    });
     $('.back_user').click(function(){
         var _this=$(this);
         if(!_this.hasClass('disabled')){

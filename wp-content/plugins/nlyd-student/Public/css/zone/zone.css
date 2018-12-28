@@ -179,7 +179,6 @@
 .bg_setting{
     background-position: -324px 1px;
 }
-
 .select_box{
     position: absolute;
     width: 100%;
@@ -197,9 +196,6 @@
     color: #262626;
     border-top: 1px solid rgba(51,51,51,0.12);
 }
-
-
-
 .lable_row{
     padding: 10px 0;
 }
@@ -355,9 +351,6 @@ div .layui-row:last-child{
     width: -webkit-calc(100% - 165px);
     width: calc(100% - 165px);
 }
-
-
-
 .getCash_type{
     padding: 18px 0 0 0;
     letter-spacing:1px;
