@@ -114,15 +114,27 @@
 }
 .zone_user_detail{
     padding-left: 14px;
-    padding-right: 30px;
-    width: -webkit-calc(100% - 131px);
-    width: calc(100% - 131px);
+    /* padding-right: 30px; */
+    width: -webkit-calc(100% - 101px);
+    width: calc(100% - 101px);
     position: relative;
 }
+.zone_title_name,
 .qr_code{
-    position: absolute;
-    right: 0;
-    top:0;
+    display: inline-block;
+    
+}
+.zone_title_row{
+    font-size: 0;
+}
+.zone_title_name{
+    vertical-align: middle;
+    width: -webkit-calc(100% - 26px);
+    width: calc(100% - 26px);
+}
+.qr_code{
+    width: 26px;
+    vertical-align: top;
 }
 .zone_bg{
     width: 25px;
@@ -810,9 +822,10 @@ input[type="text"].coach_form_input{
 }
 .zone_pass{
     display: inline-block;
-    width: 77px;
+    width: 50px;
     margin-left: 10px;
     vertical-align: middle;
+    margin-top: -5px;
 }
 .qr_code_img{
     width: 150px;

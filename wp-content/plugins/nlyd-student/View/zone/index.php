@@ -28,16 +28,17 @@
                         <?php } ?>
                     </div>    
                     <div class="zone_user_detail pull-left">
-                        <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
+                        
                         <!-- 审核通过 -->
-                        <div class="<?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
-                            <span class="bold fs_16">
+                        <div class="zone_title_row <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
+                            <span class="bold fs_16 zone_title_name">
                                 <?=!empty($row['legal_person']) ? $row['zone_name']:$row['user_real_name']?>
                             </span>
+                            <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
                         </div>
 
                         <div class="c_black">
-                            <?=__('ID/编号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?>
+                            <?=__('编 号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?>
                             <?php if($row['user_status'] == 1){ ?>
                                 <div class="img-box zone_pass mr_10"><img src="<?=student_css_url.'image/pass.png'?>" alt="<?=__('已认证', 'nlyd-student')?>"></div>
                                 <a class=" c_blue" href="<?=home_url('/zone/apply')?>"><?=__('更多资料', 'nlyd-student')?></a>
@@ -47,22 +48,18 @@
                         <div class="c_black">
                             <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=empty($row['referee_user_ID'])? '无' : $row['referee_user_ID'];?></span>
                             <span class="pull-right">
-                                    <?php if($row['user_status'] == 1 && $_SESSION['manager_id'] > 0){ ?>
-                                    <!-- <a class="c_orange"><i class="iconfont">&#xe65a;</i> <?=__('返回到关联账号', 'nlyd-student')?></a> -->
-                                    <?php }
-                                    elseif ($row['user_status'] == -1){ ?>
+                                <?php if ($row['user_status'] == 1){ ?>
+                                    <a class="back_user c_orange"><?=__('返回到关联账号', 'nlyd-student')?></a>
+                                <?php } ?>
+                                <?php if ($row['user_status'] == -1){ ?>
                                     <span class=" c_orange mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
-                                    <?php } ?>
-                                    <?php if(!empty($row['id']) && $row['user_status'] == -2):?>
+                                <?php } ?>
+                                <?php if(!empty($row['id']) && $row['user_status'] == -2):?>
                                     <a class=" c_blue" href="<?=home_url('/zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
                                 <?php endif;?>
                             </span>
                         </div>
-                        <?php if($row['user_status'] == 1 && $_SESSION['manager_id'] > 0){ ?>
-                            <div class="c_black">
-                                <a class="c_orange"><i class="iconfont">&#xe65a;</i> <?=__('返回到关联账号', 'nlyd-student')?></a>
-                            </div>
-                        <?php }?>
+                       
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-padding-pc">
@@ -150,6 +147,35 @@
 
 <script>
 jQuery(function($) {
+    $('.back_user').click(function(){
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            var data={
+                action:'change_user'
+            }
+            $.ajax({
+                data: data,
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
+                success: function(res, textStatus, jqXHR){
+                    console.log(res)
+                    if(res.data.url){
+                        window.location.href=res.data.url
+                    }else{
+                        $.alerts("<?=__('返回失败', 'nlyd-student')?>")
+                    }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                    }
+                    _this.removeClass('disabled');
+                }
+            })
+        }
+        return false;
+    })
     layui.use(['flow','layer','element'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
 
