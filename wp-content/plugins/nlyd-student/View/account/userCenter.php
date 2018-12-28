@@ -67,7 +67,9 @@
                     <?php if(is_user_logged_in()): ?>
                     <!-- 用户标签 -->
                     <div class="userCenter-describe layui-row  layui-hide-lg">
-                        <span class="userCenter-item">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : '';?></span>
+
+                        <span class="userCenter-item">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : $user_info['user_id'];?></span>
+
                         <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
                             <a class="userCenter-item c_black6" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
                                 <?=$my_team['my_team']?>

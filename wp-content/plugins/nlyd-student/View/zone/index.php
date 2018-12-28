@@ -52,7 +52,7 @@
                         <div class="c_black">
                             <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=empty($row['referee_user_ID'])? '无' : $row['referee_user_ID'];?></span>
                             <span class="pull-right">
-                                    <?php if($row['user_status'] == 1){ ?>
+                                    <?php if($row['user_status'] == 1 && $_SESSION['manager_id'] > 0){ ?>
                                     <a class="c_orange"><i class="iconfont">&#xe65a;</i> <?=__('返回到关联账号', 'nlyd-student')?></a>
                                     <?php }
                                     elseif ($row['user_status'] == -1){ ?>

@@ -595,7 +595,6 @@ class Student_Zone extends Student_Home
         //print_r($sql);
         $row = $wpdb->get_row($sql,ARRAY_A);
         $row['user_head'] = $user_info['user_head'];
-        $row['user_real_name'] = $user_info['user_real_name']['real_name'];
         $row['user_ID'] = $user_info['user_ID'];
 
         //获取推荐人

@@ -31,9 +31,9 @@ class Student_Ajax
      */
     public function get_24_result(){
 
-        if(empty($_POST['numbers'])) wp_send_json_error(array('info'=>__('参数不能为空', 'nlyd-student')));
-        if(!is_array($_POST['numbers'])) wp_send_json_error(array('info'=>__('参数必须是数组', 'nlyd-student')));
-        if(empty($_POST['match_more']) || empty($_POST['project_alias'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['numbers'])) wp_send_json_error(array('info'=>_('参数不能为空', 'nlyd-student')));
+        if(!is_array($_POST['numbers'])) wp_send_json_error(array('info'=>_('参数必须是数组', 'nlyd-student')));
+        if(empty($_POST['match_more']) || empty($_POST['project_alias'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
 
         if(empty($_POST['my_answer'])){
 
@@ -114,7 +114,7 @@ class Student_Ajax
         if($_POST['type'] == 'project'){
 
             if(empty($_GET['project_id']) || empty($_GET['match_more'])){
-                wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
             }
             $sql = "select user_id,my_score from {$wpdb->prefix}match_questions where match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$_GET['match_more']} order by my_score desc,surplus_time desc limit {$start},{$pageSize} ";
             //print_r($sql);
@@ -187,9 +187,9 @@ class Student_Ajax
         $remainder = $total%$pageSize;
         $maxPage = ceil($total/$pageSize);
 
-        if($_POST['page'] > $maxPage && $total != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无列表信息', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无列表信息', 'nlyd-student')));
 
         $list = array();
         foreach ($rows as $k => $val){
@@ -273,7 +273,7 @@ class Student_Ajax
 
         unset($_SESSION['match_post_id']);
 
-        if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) ) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) ) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
 
         $_SESSION['match_data'] = $_POST;
 
@@ -286,7 +286,7 @@ class Student_Ajax
                 ";
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
-        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
+        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>_('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
 
         //计算成绩
 
@@ -353,7 +353,7 @@ class Student_Ajax
                 break;
             case 'wzsd':
                 //print_r($_POST);die;
-                if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+                if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
                 //print_r($_POST);die;
                 $questions_answer = $_POST['questions_answer'];
                 $len = count($questions_answer);
@@ -435,7 +435,7 @@ class Student_Ajax
 
             }
 
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id.'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
+            wp_send_json_success(array('info'=>_('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id.'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
         }else {
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));
         }
@@ -450,12 +450,12 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
 
         global $wpdb,$current_user;
         $arr = array('answer_status'=>-1);
         if( $_POST['type']=='pkjl' || $_POST['type']=='szzb'){
-            if(empty($_POST['match_questions'])) wp_send_json_error(array('info'=>__('题目记忆失败,请联系管理员', 'nlyd-student')));
+            if(empty($_POST['match_questions'])) wp_send_json_error(array('info'=>_('题目记忆失败,请联系管理员', 'nlyd-student')));
             $arr['match_questions'] = json_encode($_POST['match_questions']);
             $arr['questions_answer'] = json_encode($_POST['match_questions']);
         }
@@ -469,9 +469,9 @@ class Student_Ajax
             if(isset($_POST['questions_id']) && !empty($_POST['questions_id'])){
                 $url .= '&questions_id='.$_POST['questions_id'];
             }
-            wp_send_json_success(array('info'=>__('即将跳转', 'nlyd-student'),'url'=>$url));
+            wp_send_json_success(array('info'=>_('即将跳转', 'nlyd-student'),'url'=>$url));
         }else{
-            wp_send_json_error(array('info'=>__('记忆失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('记忆失败', 'nlyd-student')));
         }
     }
 
@@ -485,15 +485,15 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['match_id']) || !isset($_POST['cost'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['match_id']) || !isset($_POST['cost'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
 
         global $wpdb,$current_user;
         if($current_user->ID < 1 || !$current_user->ID){
-            wp_send_json_error(array('info'=>__('请登录', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('请登录', 'nlyd-student')));
         }
 
         if(empty(get_user_meta($current_user->ID,'user_real_name'))){
-            wp_send_json_error(array('info'=>__('请先实名认证', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('请先实名认证', 'nlyd-student')));
         }
 
         //if(count($_POST['project_id']) != count($_POST['major_coach'])) wp_send_json_error(array('info'=>'主训教练未设置齐全'));
@@ -505,27 +505,27 @@ class Student_Ajax
 
             $sql = "select grading_id,status from {$wpdb->prefix}grading_meta where grading_id = {$_POST['match_id']} ";
             $match_meta = $wpdb->get_row($sql,ARRAY_A);
-            if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
-            if($match_meta['status'] != 1) wp_send_json_error(array('info'=>__('当前比赛已禁止报名', 'nlyd-student')));
+            if(empty($match_meta)) wp_send_json_error(array('info'=>_('比赛信息错误', 'nlyd-student')));
+            if($match_meta['status'] != 1) wp_send_json_error(array('info'=>_('当前比赛已禁止报名', 'nlyd-student')));
 
         }else{
 
             $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ";
             $match_meta = $wpdb->get_row($sql,ARRAY_A);
-            if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
-            if($match_meta['match_status'] != 1) wp_send_json_error(array('info'=>__('当前比赛已禁止报名', 'nlyd-student')));
+            if(empty($match_meta)) wp_send_json_error(array('info'=>_('比赛信息错误', 'nlyd-student')));
+            if($match_meta['match_status'] != 1) wp_send_json_error(array('info'=>_('当前比赛已禁止报名', 'nlyd-student')));
             $total = $wpdb->get_var("select count(id) total from {$wpdb->prefix}order where match_id = {$_POST['match_id']} ");
             if($match_meta['match_max_number'] > 0){
 
                 if(!empty($total)){
-                    if($total >= $match_meta['match_max_number']) wp_send_json_error(array('info'=>__('已达到最大报名数,请联系管理员', 'nlyd-student')));
+                    if($total >= $match_meta['match_max_number']) wp_send_json_error(array('info'=>_('已达到最大报名数,请联系管理员', 'nlyd-student')));
                 }
             }
         }
 
         if(isset($_POST['memory_lv'])){
             if($_POST['memory_lv'] < 1){
-                wp_send_json_error(array('info'=>__('请选择考级等级', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('请选择考级等级', 'nlyd-student')));
             }
         }
 
@@ -533,7 +533,7 @@ class Student_Ajax
 
         if(!empty($row)) {
             if($row->pay_status == 2 || $row->pay_status==3 || $row->pay_status==4){
-                wp_send_json_error(array('info'=>__('你已报名该比赛', 'nlyd-student'),'url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
+                wp_send_json_error(array('info'=>_('你已报名该比赛', 'nlyd-student'),'url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
             }else{
                 //如果是未支付订单删除订单重新下单
                 $wpdb->delete($wpdb->prefix.'order', ['id' => $row->id]);
@@ -582,7 +582,7 @@ class Student_Ajax
         }else{
 
             $wpdb->query('ROLLBACK');
-            wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('提交失败', 'nlyd-student')));
         }
     }
 
@@ -612,9 +612,9 @@ class Student_Ajax
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无列表信息', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无列表信息', 'nlyd-student')));
 
         if(!empty($rows)){
             foreach ($rows as $k => $v){
@@ -652,10 +652,10 @@ class Student_Ajax
         }*/
 
         //$_POST['team_id'] = 407;
-        if(empty($_POST['team_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['team_id'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
         global $wpdb,$current_user;
         //判断是否登录
-        if($current_user->ID < 1) wp_send_json_error(array('info'=>__('未登录', 'nlyd-student')));
+        if($current_user->ID < 1) wp_send_json_error(array('info'=>_('未登录', 'nlyd-student')));
         //判断是否有战队
         $sql = "select id,team_id,user_id,status from {$wpdb->prefix}match_team where user_id = {$current_user->ID} ";
         //开启事务,发送短信失败回滚
@@ -694,7 +694,7 @@ class Student_Ajax
             $row = $wpdb->get_row($sql);
             if(empty($row)){
                 $wpdb->query('ROLLBACK');
-                wp_send_json_error(array('info'=>__('你还没有加入任何战队', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('你还没有加入任何战队', 'nlyd-student')));
             }
 
             $result = $wpdb->update($wpdb->prefix.'match_team',array('status'=>-1),array('user_id'=>$current_user->ID,'team_id'=>$_POST['team_id']));
@@ -722,10 +722,10 @@ class Student_Ajax
 ////            print_r($director);die;
 //            $result = $ali->sendSms($director['user_mobile'], $msgTemplate, array('teams'=>str_replace(', ', '', $director['display_name']), 'user_id' => $userID));
             /***********end************/
-            wp_send_json_success(array('info'=>__('操作成功,等待战队受理', 'nlyd-student')));
+            wp_send_json_success(array('info'=>_('操作成功,等待战队受理', 'nlyd-student')));
         }
         $wpdb->query('ROLLBACK');
-        wp_send_json_error(array('info'=>__('操作失败', 'nlyd-student')));
+        wp_send_json_error(array('info'=>_('操作失败', 'nlyd-student')));
 
     }
 
@@ -757,8 +757,8 @@ class Student_Ajax
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
 
-        if($_POST['page'] > $maxPage && $total['total'] != 0 ) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无列表信息', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0 ) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无列表信息', 'nlyd-student')));
 
         if(!empty($rows)){
             foreach ($rows as $k => $v){
@@ -819,9 +819,9 @@ class Student_Ajax
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无战队', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无战队', 'nlyd-student')));
         foreach ($rows as $k => $val ){
 
             //获取领队
@@ -867,7 +867,7 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['id'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
 
         $this->get_address(false);
 
@@ -879,11 +879,11 @@ class Student_Ajax
         if($a && $b){
             //提交事务
             $wpdb->query('COMMIT');
-            wp_send_json_success(array('info'=>__('设置成功', 'nlyd-student')));
+            wp_send_json_success(array('info'=>_('设置成功', 'nlyd-student')));
         }else{
             //事务回滚
             $wpdb->query('ROLLBACK');
-            wp_send_json_error(array('info'=>__('设置失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('设置失败', 'nlyd-student')));
         }
     }
 
@@ -899,13 +899,13 @@ class Student_Ajax
             }*/
         }
 
-        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['id'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
 
         global $wpdb,$current_user;
         $sql = "select id,fullname,telephone,country,province,city,area,address,is_default from {$wpdb->prefix}my_address where id = {$_POST['id']} and user_id = {$current_user->ID} ";
 
         $row = $wpdb->get_row($sql,ARRAY_A);
-        if(empty($row)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
+        if(empty($row)) wp_send_json_error(array('info'=>_('数据错误', 'nlyd-student')));
 
         if($json){
             wp_send_json_success(array('info'=>$row));
@@ -923,13 +923,13 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['id'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
         global $wpdb,$current_user;
         $result = $wpdb->delete($wpdb->prefix.'my_address',array('id'=>$_POST['id'],'user_id'=>$current_user->ID));
         if($result){
-            wp_send_json_success(array('info'=>__('删除成功', 'nlyd-student')));
+            wp_send_json_success(array('info'=>_('删除成功', 'nlyd-student')));
         }else{
-            wp_send_json_error(array('info'=>__('删除失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('删除失败', 'nlyd-student')));
         }
     }
 
@@ -948,13 +948,13 @@ class Student_Ajax
         if(mb_strlen($_POST['fullname']) < 1 || mb_strlen($_POST['fullname']) > 100) wp_send_json_error(array(__('收件人长度为1-100个字符', 'nlyd-student')));
         if(reg_match('m',$_POST['telephone'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
 
-        if(empty($_POST['province']) || empty($_POST['city']) || empty($_POST['area']) || empty($_POST['address'])) wp_send_json_error(array('info'=>__('请确认地址信息的完整性', 'nlyd-student')));
+        if(empty($_POST['province']) || empty($_POST['city']) || empty($_POST['area']) || empty($_POST['address'])) wp_send_json_error(array('info'=>_('请确认地址信息的完整性', 'nlyd-student')));
 
         $_POST['user_id'] = $current_user->ID;
 
         $total = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}my_address WHERE user_id = {$current_user->ID}");
         if(empty($_POST['id'])){
-            if($total == 10) wp_send_json_error(array('info'=>__('最多只能添加10个收货地址', 'nlyd-student')));
+            if($total == 10) wp_send_json_error(array('info'=>_('最多只能添加10个收货地址', 'nlyd-student')));
         }
         $wpdb->query('START TRANSACTION');
 
@@ -997,7 +997,7 @@ class Student_Ajax
             wp_send_json_success($data);
         }else{
             $wpdb->query('ROLLBACK');
-            wp_send_json_error(array('info'=>__('保存失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('保存失败', 'nlyd-student')));
         }
 
     }
@@ -1048,9 +1048,9 @@ class Student_Ajax
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无列表信息', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无列表信息', 'nlyd-student')));
 
         if(!empty($rows)){
             foreach ($rows as $k=>$val){
@@ -1183,19 +1183,19 @@ class Student_Ajax
 
         global $wpdb,$current_user;
         //判断是否登录
-        if($current_user->ID < 1) wp_send_json_error(array('info'=>__('未登录', 'nlyd-student')));
+        if($current_user->ID < 1) wp_send_json_error(array('info'=>_('未登录', 'nlyd-student')));
 
-        if(empty($_POST['category_id']) || empty($_POST['coach_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['category_id']) || empty($_POST['coach_id'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
         //不允许申请自己为教练
-        if($_POST['coach_id'] == $current_user->ID) wp_send_json_error(array('info'=>__('不能申请自己为教练', 'nlyd-student')));
+        if($_POST['coach_id'] == $current_user->ID) wp_send_json_error(array('info'=>_('不能申请自己为教练', 'nlyd-student')));
         //是否同时设置为主训教练
 //        $major = intval($_POST['major']) == 1 ? 1 : 0;
 //        var_dump($_POST['category_id']);die;
         //查询以前是否进行过申请
         $row = $wpdb->get_row("select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$_POST['category_id']} ",ARRAY_A);
         if(!empty($row)){
-            if($row['apply_status'] == 1) wp_send_json_error(array('info'=>__('此类下已有申请,等待审核', 'nlyd-student')));
-            if($row['apply_status'] == 2) wp_send_json_error(array('info'=>__('此类下已有教练,请先解除', 'nlyd-student')));
+            if($row['apply_status'] == 1) wp_send_json_error(array('info'=>_('此类下已有申请,等待审核', 'nlyd-student')));
+            if($row['apply_status'] == 2) wp_send_json_error(array('info'=>_('此类下已有教练,请先解除', 'nlyd-student')));
             $result = $wpdb->update($wpdb->prefix.'my_coach',array('apply_status'=>1),array('id'=>$row['id']));
         }else{
             $data = array('category_id'=>$_POST['category_id'],'coach_id'=>$_POST['coach_id'],'user_id'=>$current_user->ID,'apply_status'=>1);
@@ -1229,9 +1229,9 @@ class Student_Ajax
 //            $ali = new AliSms();
 //            $result = $ali->sendSms($coach['user_mobile'], 13, array('coach'=>str_replace(', ', '', $coach['display_name']), 'user' => $userID ,'cate' => $post_title));
             /******************end*******************/
-            wp_send_json_success(array('info'=>__('申请成功,请等待教练同意', 'nlyd-student')));
+            wp_send_json_success(array('info'=>_('申请成功,请等待教练同意', 'nlyd-student')));
         }
-        wp_send_json_error(array('info'=>__('申请失败', 'nlyd-student')));
+        wp_send_json_error(array('info'=>_('申请失败', 'nlyd-student')));
     }
 
 
@@ -1243,17 +1243,17 @@ class Student_Ajax
         /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_set_major_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
-        if( empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if( empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
 
         global $wpdb,$current_user;
         //判断是否登录
-        if($current_user->ID < 1) wp_send_json_error(array('info'=>__('未登录', 'nlyd-student')));
+        if($current_user->ID < 1) wp_send_json_error(array('info'=>_('未登录', 'nlyd-student')));
 
         //获取教练信息
         $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} and apply_status=2",ARRAY_A);
 
-        if(empty($row)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
-        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>__('该教练还不是你的教练', 'nlyd-student')));
+        if(empty($row)) wp_send_json_error(array('info'=>_('数据错误', 'nlyd-student')));
+        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>_('该教练还不是你的教练', 'nlyd-student')));
         $major = $row['major'] != 1 ? 1 : '';
 
 
@@ -1278,10 +1278,10 @@ class Student_Ajax
             else{
                 $url = '';
             }
-            wp_send_json_success(array('info'=>__('操作成功', 'nlyd-student'),'url'=>$url));
+            wp_send_json_success(array('info'=>_('操作成功', 'nlyd-student'),'url'=>$url));
         }else{
 
-            wp_send_json_error(array('info'=>__('操作失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('操作失败', 'nlyd-student')));
         }
     }
 
@@ -1296,12 +1296,12 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
 
         global $wpdb,$current_user;
         $sql = "select id from {$wpdb->prefix}order where user_id = {$current_user} and match_id = {$_POST['match_id']}";
         $row = $wpdb->get_row($sql);
-        if(!empty($row)) wp_send_json_error(array('info'=>__('你已报名该比赛,禁止重复报名', 'nlyd-student')));
+        if(!empty($row)) wp_send_json_error(array('info'=>_('你已报名该比赛,禁止重复报名', 'nlyd-student')));
         wp_send_json_success(array('info'=>home_url('matchs/confirm/match_id/'.$_POST['match_id'])));
     }
 
@@ -1335,8 +1335,8 @@ class Student_Ajax
         //print_r($orders);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
-        if(empty($orders)) wp_send_json_error(array('info'=>__('暂无选手报名', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
+        if(empty($orders)) wp_send_json_error(array('info'=>_('暂无选手报名', 'nlyd-student')));
         foreach ($orders as $k => $v){
             $user = get_user_meta($v['user_id']);
             $orders[$k]['user_gender'] = $user['user_gender'][0] ? __($user['user_gender'][0], 'nlyd-student') : '--' ;
@@ -1415,9 +1415,9 @@ class Student_Ajax
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无比赛', 'nlyd-student')));
 
         if(!empty($rows)){
             foreach ($rows as $k => $val){
@@ -1531,9 +1531,9 @@ class Student_Ajax
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无比赛', 'nlyd-student')));
         foreach ($rows as $k => $val){
 
             //获取参赛须知
@@ -1602,7 +1602,7 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['meta_key'])) wp_send_json_error(array('info'=>__('meta_key不能为空', 'nlyd-student')));
+        if(empty($_POST['meta_key'])) wp_send_json_error(array('info'=>_('meta_key不能为空', 'nlyd-student')));
         //if(empty($_POST['meta_val'])) wp_send_json_error(array('info'=>'值不能为空'));
 
         global $current_user,$wpdb;
@@ -1622,7 +1622,7 @@ class Student_Ajax
                     $this->get_sms_code($_POST['meta_val'],15,true,$_POST['verify_code']);
                     if($user){
                         if($current_user->data->ID != $user['ID']){
-                            wp_send_json_error(array('info'=>__('该手机号已存在', 'nlyd-student')));
+                            wp_send_json_error(array('info'=>_('该手机号已存在', 'nlyd-student')));
                         }
                     }
 
@@ -1633,25 +1633,25 @@ class Student_Ajax
                     $this->get_smtp_code($_POST['meta_val'],15,true,$_POST['verify_code']);
                     if($user){
                         if($current_user->data->ID != $user['ID']){
-                            wp_send_json_error(array('info'=>__('该邮箱号已存在', 'nlyd-student')));
+                            wp_send_json_error(array('info'=>_('该邮箱号已存在', 'nlyd-student')));
                         }
                     }
                     break;
                 case 'user_pass':
 
-                    if(empty($_POST['password'])) wp_send_json_error(array('info'=>__('新密码不能为空', 'nlyd-student')));
-                    if(!empty($_POST['password']) && $_POST['confirm_password'] !== $_POST['password']) wp_send_json_error(array('info'=>__('两次密码不一致', 'nlyd-student')));
+                    if(empty($_POST['password'])) wp_send_json_error(array('info'=>_('新密码不能为空', 'nlyd-student')));
+                    if(!empty($_POST['password']) && $_POST['confirm_password'] !== $_POST['password']) wp_send_json_error(array('info'=>_('两次密码不一致', 'nlyd-student')));
                     if(!empty($_POST['old_pass'])){
 
                         $check = wp_check_password($_POST['old_pass'],$current_user->data->user_pass);
-                        if(!$check) wp_send_json_error(array('info'=>__('密码错误', 'nlyd-student')));
+                        if(!$check) wp_send_json_error(array('info'=>_('密码错误', 'nlyd-student')));
 
                         $check_ = wp_check_password($_POST['password'],$current_user->data->user_pass);
-                        if($check_) wp_send_json_error(array('info'=>__('新密码不能和老密码一致', 'nlyd-student')));
+                        if($check_) wp_send_json_error(array('info'=>_('新密码不能和老密码一致', 'nlyd-student')));
 
                     }
                     if(!preg_match('/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/',$_POST['password'])){
-                        wp_send_json_error(array('info'=>__('6-16位字母+数字组合', 'nlyd-student')));
+                        wp_send_json_error(array('info'=>_('6-16位字母+数字组合', 'nlyd-student')));
                     }
 
                     $_POST['meta_val'] = wp_hash_password( $_POST['password'] );
@@ -1659,7 +1659,7 @@ class Student_Ajax
                     break;
                 case 'user_nicename':
 
-                    if(mb_strlen($_POST['meta_val'],'utf-8') > 24) wp_send_json_error(array('info'=>__('昵称不能超过24个字符', 'nlyd-student')));
+                    if(mb_strlen($_POST['meta_val'],'utf-8') > 24) wp_send_json_error(array('info'=>_('昵称不能超过24个字符', 'nlyd-student')));
                     update_user_meta($current_user->ID,'nickname',$_POST['meta_val']) ;
                     $user_nicename_update = true;
                     break;
@@ -1686,18 +1686,18 @@ class Student_Ajax
                         $_POST['meta_val'] = $upload_dir['baseurl'].$dir.$file;
                         $success['head_url'] = $upload_dir['baseurl'].$dir.$file;
                     }else{
-                        wp_send_json_error(array('info'=>__('上传失败', 'nlyd-student')));
+                        wp_send_json_error(array('info'=>_('上传失败', 'nlyd-student')));
                     }
                     break;
                 case 'user_real_name':
 
                     //验证格式
-                    if(empty($_POST['nationality']) || empty($_POST['nationality_pic'])) wp_send_json_error(array('info'=>__('国籍必选', 'nlyd-student')));
-                    if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>__('真实姓名不能为空', 'nlyd-student')));
-                    if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>__('证件号不能为空', 'nlyd-student')));
+                    if(empty($_POST['nationality']) || empty($_POST['nationality_pic'])) wp_send_json_error(array('info'=>_('国籍必选', 'nlyd-student')));
+                    if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>_('真实姓名不能为空', 'nlyd-student')));
+                    if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>_('证件号不能为空', 'nlyd-student')));
                     $user_id = $wpdb->get_var("select user_id from {$wpdb->prefix}usermeta where meta_value like '%{$_POST['meta_val']['real_ID']}%'");
                     if($user_id > 0 && $user_id != $current_user->ID){
-                        wp_send_json_error(array('info'=>__('该证件号已被使用', 'nlyd-student')));
+                        wp_send_json_error(array('info'=>_('该证件号已被使用', 'nlyd-student')));
                     }
 
                     update_user_meta($current_user->ID,'user_nationality',$_POST['nationality']);
@@ -1705,7 +1705,7 @@ class Student_Ajax
                     update_user_meta($current_user->ID,'user_nationality_short',$_POST['nationality_short']);
 
                     if($_POST['nationality'] != '中华人民共和国'){
-                        if(empty($_POST['birthday']))wp_send_json_error(array('info'=>__('生日必选', 'nlyd-student')));
+                        if(empty($_POST['birthday']))wp_send_json_error(array('info'=>_('生日必选', 'nlyd-student')));
                         update_user_meta($current_user->ID,'user_birthday',$_POST['birthday']);
 
                         $birthday_year= (int) substr($_POST['birthday'],0,4);
@@ -1715,10 +1715,10 @@ class Student_Ajax
                         $_POST['meta_val']['real_age'] = $age;
                     }
 
-                    if(empty($_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>__('请选择证件类型', 'nlyd-student')));
-                    //if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>__('真实姓名不能为空', 'nlyd-student')));
-                    //if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>__('证件号不能玩为空', 'nlyd-student')));
-                    if(!reg_match($_POST['meta_val']['real_ID'],$_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>__('证件号格式不正确', 'nlyd-student')));
+                    if(empty($_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>_('请选择证件类型', 'nlyd-student')));
+                    //if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>_('真实姓名不能为空', 'nlyd-student')));
+                    //if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>_('证件号不能玩为空', 'nlyd-student')));
+                    if(!reg_match($_POST['meta_val']['real_ID'],$_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>_('证件号格式不正确', 'nlyd-student')));
                     //if(!preg_match("/^[\x{4e00}-\x{9fa5}]+[·•]?[\x{4e00}-\x{9fa5}]+$/u", $_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'名字格式不正确,请输入你的中文名'));
 
                     //判断是否报名
@@ -1792,7 +1792,7 @@ class Student_Ajax
 
                     break;
                 case 'user_sign':
-                    if(mb_strlen($_POST['meta_val'],'utf-8') > 40) wp_send_json_error(array('info'=>__('昵称不能超过40个字符', 'nlyd-student')));
+                    if(mb_strlen($_POST['meta_val'],'utf-8') > 40) wp_send_json_error(array('info'=>_('昵称不能超过40个字符', 'nlyd-student')));
                     break;
                 default:
 
@@ -1809,10 +1809,10 @@ class Student_Ajax
 
                 if( $b){
 
-                    wp_send_json_success(array('info'=>__('签到成功', 'nlyd-student'),'url'=>home_url('signs/success/id/'.$_POST['sign_match'])));
+                    wp_send_json_success(array('info'=>_('签到成功', 'nlyd-student'),'url'=>home_url('signs/success/id/'.$_POST['sign_match'])));
                 }else{
 
-                    wp_send_json_error(array('info'=>__('签到失败', 'nlyd-student').'<br/>'.__('请联系管理员', 'nlyd-student')));
+                    wp_send_json_error(array('info'=>_('签到失败', 'nlyd-student').'<br/>'.__('请联系管理员', 'nlyd-student')));
                 }
             }
 
@@ -1822,7 +1822,7 @@ class Student_Ajax
             $success['url'] = $url;
             wp_send_json_success($success);
         }else{
-            wp_send_json_success(array('info'=>__('设置失败', 'nlyd-student')));
+            wp_send_json_success(array('info'=>_('设置失败', 'nlyd-student')));
         }
     }
 
@@ -1839,11 +1839,11 @@ class Student_Ajax
                 if(wp_check_password($_POST['old_pass'],$current_user->user_pass)){
 
                     if($_POST['new_pass'] != $_POST['confirm_pass'] ){
-                        wp_send_json_error(array('info'=>__('新密码两次输入不一致', 'nlyd-student')));
+                        wp_send_json_error(array('info'=>_('新密码两次输入不一致', 'nlyd-student')));
                     }
 
                     if(wp_check_password($_POST['confirm_pass'],$current_user->user_pass)){
-                        wp_send_json_error(array('info'=>__('新旧密码不能一致', 'nlyd-student')));
+                        wp_send_json_error(array('info'=>_('新旧密码不能一致', 'nlyd-student')));
                     }
 
                     $new_pass = wp_hash_password( $_POST['confirm_pass'] );
@@ -1851,31 +1851,31 @@ class Student_Ajax
                     $result = $wpdb->update($wpdb->prefix.'users',array('user_pass'=>$new_pass),array('ID'=>$current_user->ID));
 
                 }else{
-                    wp_send_json_error(array('info'=>__('老密码不正确', 'nlyd-student')));
+                    wp_send_json_error(array('info'=>_('老密码不正确', 'nlyd-student')));
                 }
                 break;
             case 'mobile':
 
-                if(!reg_match($_POST['user_mobile'],'m')) wp_send_json_error(array('info'=>__('手机格式有误', 'nlyd-student')));
+                if(!reg_match($_POST['user_mobile'],'m')) wp_send_json_error(array('info'=>_('手机格式有误', 'nlyd-student')));
 
                 if($_POST['step'] == 'one'){
                     $this->get_sms_code($_POST['user_mobile'],21,true,$_POST['verify_code']);
                     unset($_SESSION['sms']);
-                    wp_send_json_success(array('info'=>__('验证成功', 'nlyd-student'),'url'=>home_url('/safety/safetySetting/type/mobile/confirm/1')));
+                    wp_send_json_success(array('info'=>_('验证成功', 'nlyd-student'),'url'=>home_url('/safety/safetySetting/type/mobile/confirm/1')));
                 }else{
 
                     $this->get_sms_code($_POST['user_mobile'],16,true,$_POST['verify_code']);
                     $user  = get_user_by( 'mobile', $_POST['user_mobile'] );
-                    if(!empty($user)) wp_send_json_error(array('info'=>__('该手机号已被占用', 'nlyd-student')));
+                    if(!empty($user)) wp_send_json_error(array('info'=>_('该手机号已被占用', 'nlyd-student')));
                     $result = $wpdb->update($wpdb->prefix.'users',array('user_mobile'=>$_POST['user_mobile']),array('ID'=>$current_user->ID));
                 }
 
                 break;
             case 'email':
-                if(!reg_match($_POST['user_email'],'e')) wp_send_json_error(array('info'=>__('邮箱格式有误', 'nlyd-student')));
+                if(!reg_match($_POST['user_email'],'e')) wp_send_json_error(array('info'=>_('邮箱格式有误', 'nlyd-student')));
                 $this->get_smtp_code($_POST['user_email'],16,true,$_POST['verify_code']);
                 $user  = get_user_by( 'email', $_POST['user_email'] );
-                if(!empty($user)) wp_send_json_error(array('info'=>__('该邮箱号已被占用', 'nlyd-student')));
+                if(!empty($user)) wp_send_json_error(array('info'=>_('该邮箱号已被占用', 'nlyd-student')));
                 $result = $wpdb->update($wpdb->prefix.'users',array('user_email'=>$_POST['user_email']),array('ID'=>$current_user->ID));
                 break;
             case 'weChat':
@@ -1885,14 +1885,14 @@ class Student_Ajax
                 $result = update_user_meta($current_user->ID,'user_qq',$_POST['user_qq']);
                 break;
             default:
-                wp_send_json_error(array('info'=>__('未知的操作请求', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('未知的操作请求', 'nlyd-student')));
                 break;
         }
 
         if($result){
-            wp_send_json_success(array('info'=>__('更新成功', 'nlyd-student'),'url'=>home_url('account/secure/')));
+            wp_send_json_success(array('info'=>_('更新成功', 'nlyd-student'),'url'=>home_url('account/secure/')));
         }else{
-            wp_send_json_error(array('info'=>__('更新失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('更新失败', 'nlyd-student')));
         }
     }
 
@@ -1910,13 +1910,13 @@ class Student_Ajax
                 $result = $wpdb->update($wpdb->prefix.'users',array('qq_union_id'=>''),array('ID'=>$current_user->ID));
                 break;
             default:
-                wp_send_json_error(array('info'=>__('未知的操作请求', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('未知的操作请求', 'nlyd-student')));
                 break;
         }
         if($result){
-            wp_send_json_success(array('info'=>__('解绑成功', 'nlyd-student'),'url'=>home_url('account/secure/')));
+            wp_send_json_success(array('info'=>_('解绑成功', 'nlyd-student'),'url'=>home_url('account/secure/')));
         }else{
-            wp_send_json_error(array('info'=>__('解绑失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('解绑失败', 'nlyd-student')));
         }
     }
 
@@ -1925,9 +1925,9 @@ class Student_Ajax
      */
     public function reckon_age(){
         
-        if(empty($_POST['real_ID'])) wp_send_json_error(array('info'=>__('证件号不能为空', 'nlyd-student')));
+        if(empty($_POST['real_ID'])) wp_send_json_error(array('info'=>_('证件号不能为空', 'nlyd-student')));
         if(strlen($_POST['real_ID']) == 18){
-            if(!reg_match($_POST['real_ID'],'sf')) wp_send_json_error(array('info'=>__('证件号格式不正确', 'nlyd-student')));
+            if(!reg_match($_POST['real_ID'],'sf')) wp_send_json_error(array('info'=>_('证件号格式不正确', 'nlyd-student')));
             /*$sub_str = substr($_POST['real_ID'],6,4);
             $now = date_i18n("Y",get_time());
             $age = $now-$sub_str;
@@ -1935,10 +1935,10 @@ class Student_Ajax
             $age = birthday($_POST['real_ID']);
             
             if($age == -1){
-                wp_send_json_error(array('info'=>__('年龄不能低于1岁,请确认身份证信息', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('年龄不能低于1岁,请确认身份证信息', 'nlyd-student')));
             }
             if($age == -2){
-                wp_send_json_error(array('info'=>__('年龄超过150岁,请确认身份证信息', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('年龄超过150岁,请确认身份证信息', 'nlyd-student')));
             }
             wp_send_json_success(array('info'=>$age));
         }else{
@@ -1956,28 +1956,28 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['password'])) wp_send_json_error(array('info'=>__('新密码不能为空', 'nlyd-student')));
-        if(!empty($_POST['password']) && $_POST['confirm_password'] !== $_POST['password']) wp_send_json_error(array('info'=>__('两次密码不一致', 'nlyd-student')));
+        if(empty($_POST['password'])) wp_send_json_error(array('info'=>_('新密码不能为空', 'nlyd-student')));
+        if(!empty($_POST['password']) && $_POST['confirm_password'] !== $_POST['password']) wp_send_json_error(array('info'=>_('两次密码不一致', 'nlyd-student')));
         if(!empty($_POST['old_pass'])){
             global $current_user;
             $check = wp_check_password($_POST['old_pass'],$current_user->data->user_pass);
-            if(!$check) wp_send_json_error(array('info'=>__('密码错误', 'nlyd-student')));
+            if(!$check) wp_send_json_error(array('info'=>_('密码错误', 'nlyd-student')));
 
             $check_ = wp_check_password($_POST['password'],$current_user->data->user_pass);
-            if($check_) wp_send_json_error(array('info'=>__('新密码不能和老密码一致', 'nlyd-student')));
+            if($check_) wp_send_json_error(array('info'=>_('新密码不能和老密码一致', 'nlyd-student')));
 
         }
         if(!preg_match('/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/',$_POST['password'])){
-            wp_send_json_error(array('info'=>__('6-16位字母+数字组合', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('6-16位字母+数字组合', 'nlyd-student')));
         }
 
         global $wpdb;
         $result = $wpdb->update($wpdb->users,array('user_pass'=>wp_hash_password( $_POST['password'] )),array('ID'=>$current_user->ID));
         if($result){
 
-            wp_send_json_success(array('info'=>__('重置成功', 'nlyd-student'),'url'=>home_url('/logins')));
+            wp_send_json_success(array('info'=>_('重置成功', 'nlyd-student'),'url'=>home_url('/logins')));
         }else{
-            wp_send_json_error(array('info'=>__('重置失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('重置失败', 'nlyd-student')));
         }
 
     }
@@ -1995,30 +1995,30 @@ class Student_Ajax
             $mobile = $_POST['mobile'] ? $_POST['mobile'] : $_POST['user_login'];
             $template = $_POST['template'];
         }
-        if(empty($mobile)) wp_send_json_error(array('info'=>__('手机号不能为空', 'nlyd-student')));
-        if(!reg_match($mobile,'m')) wp_send_json_error(array('info'=>__('手机格式有误', 'nlyd-student')));
+        if(empty($mobile)) wp_send_json_error(array('info'=>_('手机号不能为空', 'nlyd-student')));
+        if(!reg_match($mobile,'m')) wp_send_json_error(array('info'=>_('手机格式有误', 'nlyd-student')));
 
         if($session_verify){
 
             if(isset($_SESSION['sms']) && !empty($_SESSION['sms'])){
                 $sms = $_SESSION['sms'];
-                if($sms['mobile'] != $mobile) wp_send_json_error(array('info'=>__('当前手机号与获取验证手机号不一致', 'nlyd-student')));
+                if($sms['mobile'] != $mobile) wp_send_json_error(array('info'=>_('当前手机号与获取验证手机号不一致', 'nlyd-student')));
                 if($sms['template'] != md5($template)){
                     unset($_SESSION['sms']);
-                    wp_send_json_error(array('info'=>__('请先获取验证码', 'nlyd-student')));
+                    wp_send_json_error(array('info'=>_('请先获取验证码', 'nlyd-student')));
                 }
                 if(get_time() > $sms['time']){
                     unset($_SESSION['sms']);
-                    wp_send_json_error(array('info'=>__('验证码已过期,请重新获取', 'nlyd-student')));
+                    wp_send_json_error(array('info'=>_('验证码已过期,请重新获取', 'nlyd-student')));
                 }
                 if(!empty($send_code)){
 
-                    if(md5($send_code) != $sms['code']) wp_send_json_error(array('info'=>__('验证码错误', 'nlyd-student')));
+                    if(md5($send_code) != $sms['code']) wp_send_json_error(array('info'=>_('验证码错误', 'nlyd-student')));
                 }else{
-                    wp_send_json_error(array('info'=>__('验证码不能为空', 'nlyd-student')));
+                    wp_send_json_error(array('info'=>_('验证码不能为空', 'nlyd-student')));
                 }
             }else{
-                wp_send_json_error(array('info'=>__('请先获取验证码', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('请先获取验证码', 'nlyd-student')));
             }
 
             return ;
@@ -2028,7 +2028,7 @@ class Student_Ajax
         if(!in_array($template,array(16,17,19,21))){
             $user  = get_user_by( 'mobile', $mobile );
 
-            if(empty($user)) wp_send_json_error(array('info'=>__('您不是平台用户,请先进行注册', 'nlyd-student')));
+            if(empty($user)) wp_send_json_error(array('info'=>_('您不是平台用户,请先进行注册', 'nlyd-student')));
         }
 
         $code = rand(1000, 9999);
@@ -2043,9 +2043,9 @@ class Student_Ajax
                 'template' => md5($template),
                 'time' => get_time()+300,
             );
-            wp_send_json_success(array('info'=>__('获取成功', 'nlyd-student')));
+            wp_send_json_success(array('info'=>_('获取成功', 'nlyd-student')));
         }else{
-            wp_send_json_error(array('info'=>__('获取失败,请稍后重试', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('获取失败,请稍后重试', 'nlyd-student')));
         }
     }
 
@@ -2062,30 +2062,30 @@ class Student_Ajax
             $email = $_POST['email'] ? $_POST['email'] : $_POST['user_login'];
             $template = $_POST['template'];
         }
-        if(empty($email)) wp_send_json_error(array('info'=>__('邮箱号不能为空', 'nlyd-student')));
-        if(!reg_match($email,'e')) wp_send_json_error(array('info'=>__('邮箱格式有误', 'nlyd-student')));
+        if(empty($email)) wp_send_json_error(array('info'=>_('邮箱号不能为空', 'nlyd-student')));
+        if(!reg_match($email,'e')) wp_send_json_error(array('info'=>_('邮箱格式有误', 'nlyd-student')));
 
         if($session_verify){
 
             if(isset($_SESSION['smtp']) && !empty($_SESSION['smtp'])){
                 $smtp = $_SESSION['smtp'];
-                if($smtp['email'] != $email) wp_send_json_error(array('info'=>__('当前邮箱号与获取验证邮箱号不一致', 'nlyd-student')));
+                if($smtp['email'] != $email) wp_send_json_error(array('info'=>_('当前邮箱号与获取验证邮箱号不一致', 'nlyd-student')));
                 if($smtp['template'] != md5($template)){
                     unset($_SESSION['smtp']);
-                    wp_send_json_error(array('info'=>__('请先获取验证码', 'nlyd-student')));
+                    wp_send_json_error(array('info'=>_('请先获取验证码', 'nlyd-student')));
                 }
                 if(get_time() > $smtp['time']){
                     unset($_SESSION['smtp']);
-                    wp_send_json_error(array('info'=>__('验证码已过期,请重新获取', 'nlyd-student')));
+                    wp_send_json_error(array('info'=>_('验证码已过期,请重新获取', 'nlyd-student')));
                 }
                 if(!empty($send_code)){
 
-                    if(md5($send_code) != $smtp['code']) wp_send_json_error(array('info'=>__('验证码错误', 'nlyd-student')));
+                    if(md5($send_code) != $smtp['code']) wp_send_json_error(array('info'=>_('验证码错误', 'nlyd-student')));
                 }else{
-                    wp_send_json_error(array('info'=>__('验证码不能为空', 'nlyd-student')));
+                    wp_send_json_error(array('info'=>_('验证码不能为空', 'nlyd-student')));
                 }
             }else{
-                wp_send_json_error(array('info'=>__('请先获取验证码', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('请先获取验证码', 'nlyd-student')));
             }
 
             return ;
@@ -2094,7 +2094,7 @@ class Student_Ajax
         //如果不是注册操作,判断是否为平台用户
         if(!in_array($template,array(16,17,19,21))){
             $user  = get_user_by( 'email', $email );
-            if(empty($user)) wp_send_json_error(array('info'=>__('您不是平台用户,请先进行注册', 'nlyd-student')));
+            if(empty($user)) wp_send_json_error(array('info'=>_('您不是平台用户,请先进行注册', 'nlyd-student')));
         }
 
         $code = rand(1000, 9999);
@@ -2108,9 +2108,9 @@ class Student_Ajax
                 'template' => md5($template),
                 'time' => get_time()+300,
             );
-            wp_send_json_success(array('info'=>__('获取成功', 'nlyd-student')));
+            wp_send_json_success(array('info'=>_('获取成功', 'nlyd-student')));
         }else{
-            wp_send_json_error(array('info'=>__('获取失败,请稍后重试', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('获取失败,请稍后重试', 'nlyd-student')));
         }
     }
 
@@ -2132,8 +2132,8 @@ class Student_Ajax
                 break;
             case 'pass';
 
-                if(empty($_POST['user_login'])) wp_send_json_error(array('info'=>__('用户名不能为空', 'nlyd-student')));
-                if(empty($_POST['password'])) wp_send_json_error(array('info'=>__('密码不能为空', 'nlyd-student')));
+                if(empty($_POST['user_login'])) wp_send_json_error(array('info'=>_('用户名不能为空', 'nlyd-student')));
+                if(empty($_POST['password'])) wp_send_json_error(array('info'=>_('密码不能为空', 'nlyd-student')));
 
                 break;
         }
@@ -2146,7 +2146,7 @@ class Student_Ajax
             if($_POST['login_type'] == 'pass'){
 
                 $check = wp_check_password($_POST['password'],$user->user_pass);
-                if(!$check) wp_send_json_error(array('info'=>__('密码错误', 'nlyd-student')));
+                if(!$check) wp_send_json_error(array('info'=>_('密码错误', 'nlyd-student')));
             }
 
             $this->setUserCookie($user->ID);
@@ -2166,14 +2166,14 @@ class Student_Ajax
                 }
             }
 
-            wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>$url));
+            wp_send_json_success( array('info'=>_('登录成功', 'nlyd-student'),'url'=>$url));
 
         }else{
 
             //注册用户
             if($_POST['login_type'] == 'mobile'){
 
-                if(!reg_match($_POST['user_login'],'m')) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
+                if(!reg_match($_POST['user_login'],'m')) wp_send_json_error(array('info'=>_('手机格式不正确', 'nlyd-student')));
                 $result = wp_create_user($_POST['user_login'],$_POST['password']);
                 //print_r($result);die;
                 if($result){
@@ -2195,13 +2195,13 @@ class Student_Ajax
                         $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id']),array('ID'=>$result));
                     }
 
-                    wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>$url));
+                    wp_send_json_success( array('info'=>_('登录成功', 'nlyd-student'),'url'=>$url));
                 }else{
-                    wp_send_json_error(array('info'=>__('登录失败', 'nlyd-student')));
+                    wp_send_json_error(array('info'=>_('登录失败', 'nlyd-student')));
                 }
             }else{
 
-                wp_send_json_error(array('info'=>__('不存在此用户,请先注册', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('不存在此用户,请先注册', 'nlyd-student')));
             }
 
         }
@@ -2216,14 +2216,14 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['user_login'])) wp_send_json_error(array('info'=>__('账号不能为空', 'nlyd-student')));
-        if(empty($_POST['verify_code'])) wp_send_json_error(array('info'=>__('验证码不能为空', 'nlyd-student')));
-        if(empty($_POST['password'])) wp_send_json_error(array('info'=>__('密码不能为空', 'nlyd-student')));
+        if(empty($_POST['user_login'])) wp_send_json_error(array('info'=>_('账号不能为空', 'nlyd-student')));
+        if(empty($_POST['verify_code'])) wp_send_json_error(array('info'=>_('验证码不能为空', 'nlyd-student')));
+        if(empty($_POST['password'])) wp_send_json_error(array('info'=>_('密码不能为空', 'nlyd-student')));
 
         global $wpdb;
         $sql = "SELECT * FROM $wpdb->users WHERE user_login = '{$_POST['user_login']}' or user_email = '{$_POST['user_login']}' or user_mobile = '{$_POST['user_login']}'";
         $user = $wpdb->get_row($sql);
-        if($user) wp_send_json_error(array('info'=>__('此用户已存在', 'nlyd-student')));
+        if($user) wp_send_json_error(array('info'=>_('此用户已存在', 'nlyd-student')));
 
         if(reg_match($_POST['user_login'],'m')){
 
@@ -2251,9 +2251,9 @@ class Student_Ajax
                 $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id']),array('ID'=>$result));
             }
 
-            wp_send_json_success(array('info'=>__('注册成功', 'nlyd-student'),'url'=>home_url('account')));
+            wp_send_json_success(array('info'=>_('注册成功', 'nlyd-student'),'url'=>home_url('account')));
         }else{
-            wp_send_json_error(array('info'=>__('注册失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('注册失败', 'nlyd-student')));
         }
 
     }
@@ -2267,16 +2267,16 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['user_login'])) wp_send_json_error(array('info'=>__('账号不能为空', 'nlyd-student')));
+        if(empty($_POST['user_login'])) wp_send_json_error(array('info'=>_('账号不能为空', 'nlyd-student')));
 
         global $wpdb;
         $sql = "SELECT * FROM $wpdb->users WHERE user_login = '{$_POST['user_login']}' or user_email = '{$_POST['user_login']}' or user_mobile = '{$_POST['user_login']}'";
         $user = $wpdb->get_row($sql);
 
-        if(!$user) wp_send_json_error(array('info'=>__('不存在此用户,请先注册', 'nlyd-student')));
+        if(!$user) wp_send_json_error(array('info'=>_('不存在此用户,请先注册', 'nlyd-student')));
 
         if(empty($_POST['password'])) wp_send_json_error(__('密码不能为空', 'nlyd-student'));
-        if(!empty($_POST['password']) && $_POST['confirm_password'] !== $_POST['password']) wp_send_json_error(array('info'=>__('两次密码不一致', 'nlyd-student')));
+        if(!empty($_POST['password']) && $_POST['confirm_password'] !== $_POST['password']) wp_send_json_error(array('info'=>_('两次密码不一致', 'nlyd-student')));
 
         if(reg_match($_POST['user_login'],'m')){
 
@@ -2290,9 +2290,9 @@ class Student_Ajax
         if($result){
             unset($_SESSION['sms']);
             unset($_SESSION['smtp']);
-            wp_send_json_success(array('info'=>__('重置成功', 'nlyd-student'),'url'=>home_url('/logins')));
+            wp_send_json_success(array('info'=>_('重置成功', 'nlyd-student'),'url'=>home_url('/logins')));
         }else{
-            wp_send_json_error(array('info'=>__('重置失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('重置失败', 'nlyd-student')));
         }
 
     }
@@ -2341,7 +2341,7 @@ class Student_Ajax
      */
     public function saveIosFile($filecontent,$upload_dir){
 
-        if(empty($filecontent)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
+        if(empty($filecontent)) wp_send_json_error(array('info'=>_('数据错误', 'nlyd-student')));
         //$base64 = htmlspecialchars($filecontent);
         //$fileName = iconv ( "UTF-8", "GB2312", $filecontent );
 
@@ -2381,7 +2381,7 @@ class Student_Ajax
         unset($_SESSION['login_time']);
         unset($_SESSION['user_info']);
         unset($_SESSION['user_openid']);
-        wp_send_json_success(array('info'=>__('退出成功', 'nlyd-student'),'url'=>home_url('logins/index/login_type/out')));
+        wp_send_json_success(array('info'=>_('退出成功', 'nlyd-student'),'url'=>home_url('logins/index/login_type/out')));
     }
 
     /**
@@ -2423,7 +2423,7 @@ class Student_Ajax
             ));
             wp_send_json_success(array('info'=>$row));
         } else{
-            wp_send_json_error(array('info'=>__('未找到数据', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('未找到数据', 'nlyd-student')));
         }
     }
 
@@ -2594,8 +2594,8 @@ class Student_Ajax
         $order = $wpdb->get_row(
             'SELECT id,serialnumber,match_id,user_id,fullname,telephone,address,pay_type,cost,pay_status,created_time,order_type FROM '
             .$wpdb->prefix.'order WHERE serialnumber='.$otderSn.' AND user_id='.$current_user->ID, ARRAY_A);
-        if(!$order)  wp_send_json_error(array('info'=>__('订单不存在', 'nlyd-student')));
-        if($order['pay_status'] != 1)  wp_send_json_error(array('info'=>__('此订单不是待支付订单', 'nlyd-student')));
+        if(!$order)  wp_send_json_error(array('info'=>_('订单不存在', 'nlyd-student')));
+        if($order['pay_status'] != 1)  wp_send_json_error(array('info'=>_('此订单不是待支付订单', 'nlyd-student')));
         require_once 'class-student-payment.php';
         switch ($payType){
             case 'wxh5pay':
@@ -2649,7 +2649,7 @@ class Student_Ajax
             }
         }else{
             //发起支付失败
-            wp_send_json_error(array('info'=>__('发起支付失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('发起支付失败', 'nlyd-student')));
         }
     }
 
@@ -2951,14 +2951,14 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
         global $wpdb,$current_user;
         //判断是否登录
-        if($current_user->ID < 1) wp_send_json_error(array('info'=>__('未登录', 'nlyd-student')));
+        if($current_user->ID < 1) wp_send_json_error(array('info'=>_('未登录', 'nlyd-student')));
 
         //判断当前是否是已申请的教练
         $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} and apply_status=2",ARRAY_A);
-        if(empty($row)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
+        if(empty($row)) wp_send_json_error(array('info'=>_('数据错误', 'nlyd-student')));
         if($row['apply_status'] != 2){
             $post_title = get_post($row['category_id'])->post_title;
             wp_send_json_error(array('info' => sprintf(__('该教练还不是你的%s教练', 'nlyd-student'), $post_title)));
@@ -2970,7 +2970,7 @@ class Student_Ajax
         $cancelRes = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET major=0 WHERE category_id='.$_POST['category_id'].' AND user_id='.$current_user->ID);
         if(!$cancelRes) {
             $wpdb->query('ROLLBACK');
-            wp_send_json_error(array('info'=>__('更换主训教练失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('更换主训教练失败', 'nlyd-student')));
         }
         //设着当前教练为主训
         $currentRes = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET major=1 WHERE id='.$row['id']);
@@ -2980,7 +2980,7 @@ class Student_Ajax
 
         }else{
             $wpdb->query('ROLLBACK');
-            wp_send_json_error(array('info'=>__('更换主训教练失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('更换主训教练失败', 'nlyd-student')));
         }
     }
 
@@ -2994,10 +2994,10 @@ class Student_Ajax
         }*/
         $categoryId = isset($_POST['category_id']) ? trim($_POST['category_id']) : '';
         $coach_id = isset($_POST['coach_id']) ? intval($_POST['coach_id']) : '';
-        if(empty($coach_id) ||  empty($categoryId)) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($coach_id) ||  empty($categoryId)) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
         global $wpdb,$current_user;
         //判断是否登录
-        if($current_user->ID < 1) wp_send_json_error(array('info'=>__('未登录', 'nlyd-student')));
+        if($current_user->ID < 1) wp_send_json_error(array('info'=>_('未登录', 'nlyd-student')));
 
         //判断当前是否是已申请的教练
         $rows = $wpdb->get_results("select mc.id,mc.apply_status,mc.major,u.user_mobile,u.user_email,p.post_title,u.ID as uid,mc.coach_id from {$wpdb->prefix}my_coach as mc 
@@ -3006,8 +3006,8 @@ class Student_Ajax
         where mc.coach_id = {$coach_id} and mc.user_id = $current_user->ID and mc.category_id IN({$categoryId}) and mc.apply_status=2",ARRAY_A);
 //        echo $wpdb->last_query;
 //        die;
-        if(empty($rows)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
-//        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>__('该教练还不是你的教练', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('数据错误', 'nlyd-student')));
+//        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>_('该教练还不是你的教练', 'nlyd-student')));
 
         //改变状态
         $update = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE user_id='.$current_user->ID.' AND coach_id='.$coach_id.' AND category_id IN('.$categoryId.')');
@@ -3029,7 +3029,7 @@ class Student_Ajax
 //            $result = $ali->sendSms($row['user_mobile'], 14, array('coach'=>str_replace(', ', '', $row['display_name']), 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
             wp_send_json_success(['info' => __('解除教学关系成功', 'nlyd-student')]);
         }
-        wp_send_json_error(array('info'=>__('解除教学关系失败', 'nlyd-student')));
+        wp_send_json_error(array('info'=>_('解除教学关系失败', 'nlyd-student')));
     }
 
     /**
@@ -3044,14 +3044,14 @@ class Student_Ajax
         $category_id = intval($_POST['category_id']);
         global $wpdb,$current_user;
         if($category_id < 1){
-            wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
         }
         $id = $wpdb->get_var('SELECT id FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$category_id.' AND user_id='.$current_user->ID.' AND  major=1 AND (apply_status=1 or apply_status=2)');
         //var_dump($id);die;
         if(!$id){
-            wp_send_json_success(array('info'=>__('当前无主训教练', 'nlyd-student')));
+            wp_send_json_success(array('info'=>_('当前无主训教练', 'nlyd-student')));
         }else{
-            wp_send_json_error(array('info'=>__('当前已存在主训教练', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('当前已存在主训教练', 'nlyd-student')));
         }
     }
 
@@ -3065,14 +3065,14 @@ class Student_Ajax
         }*/
 
         $bindType = $_POST['type'];
-        if($bindType != 'code' && $bindType != 'username') wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if($bindType != 'code' && $bindType != 'username') wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
 
         if(preg_match('/^1[3456789][0-9]{9}$/',$_POST['mobile'])) {
             $type = 'mobile';
         }elseif (is_email($_POST['mobile'])){
             $type = 'email';
         }else{
-            wp_send_json_error(array('info'=>__('手机或邮箱格式不正确', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('手机或邮箱格式不正确', 'nlyd-student')));
         }
 
 
@@ -3085,10 +3085,10 @@ class Student_Ajax
             //验证码绑定
             if($type == 'mobile'){
                 //判断当前手机是否已经存在
-                if($user)  wp_send_json_error(array('info'=>__('当前手机号码已绑定其它微信', 'nlyd-student')));
+                if($user)  wp_send_json_error(array('info'=>_('当前手机号码已绑定其它微信', 'nlyd-student')));
                 if($bindType == 'code') $this->get_sms_code($_POST['mobile'],17,true,$_POST['send_code']);
             }else{
-                if($user)  wp_send_json_error(array('info'=>__('当前邮箱已绑定其它微信', 'nlyd-student')));
+                if($user)  wp_send_json_error(array('info'=>_('当前邮箱已绑定其它微信', 'nlyd-student')));
                 if($bindType == 'code') $this->get_smtp_code($_POST['mobile'],17,true,$_POST['send_code']);
             }
             $user_id = $_POST['user_id'];
@@ -3099,9 +3099,9 @@ class Student_Ajax
             //判断用户是否存在
             if($user){
                 $check = wp_check_password($_POST['password'],$user->user_pass);
-                if(!$check) wp_send_json_error(array('info'=>__('密码错误', 'nlyd-student')));
+                if(!$check) wp_send_json_error(array('info'=>_('密码错误', 'nlyd-student')));
             }else{
-                wp_send_json_error(array('info'=>__('该用户不存在', 'nlyd-student')));
+                wp_send_json_error(array('info'=>_('该用户不存在', 'nlyd-student')));
             }
 
         //if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
@@ -3109,10 +3109,10 @@ class Student_Ajax
             $this->setUserCookie($user_id);
             //wp_send_json_success(['info' => '登录成功', 'url' => home_url('account')]);
             if(isset($_POST['loginType']) && $_POST['loginType'] == 'sign'){
-                wp_send_json_success(array('info'=>__('登录成功,即将跳转', 'nlyd-student'), 'url' => home_url('account/certification/type/sign/sign_match_id/'.$_POST['match_id'])));
+                wp_send_json_success(array('info'=>_('登录成功,即将跳转', 'nlyd-student'), 'url' => home_url('account/certification/type/sign/sign_match_id/'.$_POST['match_id'])));
             }else{
 
-                wp_send_json_success(array('info'=>__('登录成功', 'nlyd-student'), 'url' => home_url('account')));
+                wp_send_json_success(array('info'=>_('登录成功', 'nlyd-student'), 'url' => home_url('account')));
             }
         }
 
@@ -3131,14 +3131,14 @@ class Student_Ajax
                 $results = $wpdb->get_results($sql,ARRAY_A);
                 $index = array_search($user_id,array_column($results,'user_id')) + 1;
 
-                wp_send_json_success(array('info'=>__('账户绑定完成,即将跳转', 'nlyd-student'), 'url' => home_url('/account/info/type/sign/sign_match/'.$_POST['match_id'].'/order_index/'.$index)));
+                wp_send_json_success(array('info'=>_('账户绑定完成,即将跳转', 'nlyd-student'), 'url' => home_url('/account/info/type/sign/sign_match/'.$_POST['match_id'].'/order_index/'.$index)));
             }else{
 
-                wp_send_json_success(array('info'=>__('绑定成功', 'nlyd-student'), 'url' => home_url('account')));
+                wp_send_json_success(array('info'=>_('绑定成功', 'nlyd-student'), 'url' => home_url('account')));
             }
             //wp_send_json_success(array('info'=>'绑定成功', 'url' => home_url('account')));
         }else{
-            wp_send_json_error(array('info'=>__('绑定失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('绑定失败', 'nlyd-student')));
         }
     }
     /**
@@ -3147,7 +3147,7 @@ class Student_Ajax
     public function getDirectories(){
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
         $type = isset($_POST['type']) ? intval($_POST['type']) : 0;
-//        if($type < 1)  wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+//        if($type < 1)  wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
         $page < 1 && $page = 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
@@ -3177,7 +3177,7 @@ class Student_Ajax
         if($res)
             wp_send_json_success(array('info'=>$res));
         else
-            wp_send_json_error(array('info'=>__('没有数据', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('没有数据', 'nlyd-student')));
     }
 
     /**
@@ -3252,9 +3252,9 @@ class Student_Ajax
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无战队', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无战队', 'nlyd-student')));
         foreach ($rows as $k => $val ){
 
             //获取领队
@@ -3442,7 +3442,7 @@ class Student_Ajax
      */
     public function trains_submit(){
 
-        if(empty($_POST['genre_id']) || empty($_POST['project_type'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['genre_id']) || empty($_POST['project_type'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
         global $wpdb,$current_user;
 
         ini_set('post_max_size','20M');
@@ -3510,7 +3510,7 @@ class Student_Ajax
                 break;
             case 'wzsd':
                 //print_r($_POST);die;
-                if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+                if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
                 //print_r($_POST);die;
                 $questions_answer = $_POST['train_answer'];
                 $len = count($questions_answer);
@@ -3578,9 +3578,9 @@ class Student_Ajax
             }
             $match_more = isset($_POST['match_more']) ? $_POST['match_more'] : 1;
 
-            wp_send_json_success(array('info'=>__('提交成功', 'nlyd-student'),'url'=>home_url('trains/logs/id/'.$id.'/type/'.$_POST['project_type'].'/match_more/'.$match_more)));
+            wp_send_json_success(array('info'=>_('提交成功', 'nlyd-student'),'url'=>home_url('trains/logs/id/'.$id.'/type/'.$_POST['project_type'].'/match_more/'.$match_more)));
         }else{
-            wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
+            wp_send_json_error(array('info'=>_('提交失败', 'nlyd-student')));
         }
 
     }
@@ -3590,18 +3590,18 @@ class Student_Ajax
      */
     public function userUpdateLanguage(){
         $lang = trim($_POST['lang']);
-        if(!$lang) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(!$lang) wp_send_json_error(array('info'=>_('参数错误', 'nlyd-student')));
         global $current_user;
 
         $cookieBool = setcookie('user_language', $lang, time()+3600*24,'/');
-        if(!$cookieBool) wp_send_json_error(array('info'=>__('修改失败', 'nlyd-student')));
+        if(!$cookieBool) wp_send_json_error(array('info'=>_('修改失败', 'nlyd-student')));
 //        print_r($_COOKIE);
         $current_user->ID > 0 && update_user_meta($current_user->ID, 'locale', $lang);
-        wp_send_json_success(array('info'=>__('修改成功', 'nlyd-student')));
+        wp_send_json_success(array('info'=>_('修改成功', 'nlyd-student')));
 //        if($bool){
-//            wp_send_json_success(array('info'=>__('修改成功', 'nlyd-student')));
+//            wp_send_json_success(array('info'=>_('修改成功', 'nlyd-student')));
 //        }else{
-//            wp_send_json_error(array('info'=>__('修改失败', 'nlyd-student')));
+//            wp_send_json_error(array('info'=>_('修改失败', 'nlyd-student')));
 //        }
     }
 
@@ -3870,9 +3870,9 @@ class Student_Ajax
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无考级', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无考级', 'nlyd-student')));
         foreach ($rows as $k => $val){
 
             //获取参赛须知
@@ -4011,7 +4011,7 @@ class Student_Ajax
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
         $url = home_url('gradings/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$row['id'].'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type']);
-        if(!empty($row)) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>$url));
+        if(!empty($row)) wp_send_json_success(array('info'=>_('答案已提交', 'nlyd-student'),'url'=>$url));
 
         //数据处理
         $correct_rate = 0;  //准确率
@@ -4163,7 +4163,7 @@ class Student_Ajax
 
             }
 
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('gradings/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'])));
+            wp_send_json_success(array('info'=>_('提交完成', 'nlyd-student'),'url'=>home_url('gradings/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'])));
         }
         else{
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));
@@ -4197,7 +4197,7 @@ class Student_Ajax
         //print_r($sql1);
         $row_1 = $wpdb->get_row($sql1,ARRAY_A);
         $url = home_url('grade/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$row_1['id'].'/grad_type/'.$_POST['grad_type'].'/type/'.$_POST['questions_type']);
-        if(!empty($row_1)) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>$url));
+        if(!empty($row_1)) wp_send_json_success(array('info'=>_('答案已提交', 'nlyd-student'),'url'=>$url));
 
         //print_r($_POST);die;
         //数据处理
@@ -4346,7 +4346,7 @@ class Student_Ajax
 
             }
 
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/history_id/'.$_POST['history_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'].'/memory_lv/'.$_POST['memory_lv'])));
+            wp_send_json_success(array('info'=>_('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/history_id/'.$_POST['history_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'].'/memory_lv/'.$_POST['memory_lv'])));
         }
         else{
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));
@@ -4594,9 +4594,9 @@ class Student_Ajax
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无记录', 'nlyd-student')));
 
         wp_send_json_success(array('info'=>$rows));
     }
@@ -4922,9 +4922,9 @@ class Student_Ajax
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>_('暂无比赛', 'nlyd-student')));
         wp_send_json_success(array('info'=>$rows));
     }
 
@@ -5046,9 +5046,9 @@ class Student_Ajax
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>_('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        //if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
+        //if(empty($rows)) wp_send_json_error(array('info'=>_('暂无记录', 'nlyd-student')));
 
         if($_POST['map'] != 'zone'){
             $list = array();
@@ -5143,14 +5143,37 @@ class Student_Ajax
      * 管理员跳转登录
      */
     public function login_zone(){
-        if(empty($_POST['zone_id'])) wp_send_json_error(array('info'=>_('机构id必传')));
+
+        if(empty($_POST['zone_id'])){
+            wp_send_json_error(array('info'=>_('机构id必传','nlyd-student')));
+        }
         global $wpdb,$current_user;
         $sql_ = "select b.user_id
                 from {$wpdb->prefix}zone_manager a 
                 left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id 
-                where a.user_id = {$current_user['user_id']} and  b.id = {$_POST['zone_id']}";
+                where a.user_id = {$current_user->ID} and  b.id = {$_POST['zone_id']}";
+        //print_r($sql_);die;
         $zone_user_id = $wpdb->get_var($sql_);
-        print_r($sql_);die;
+        if(empty($zone_user_id)){
+            wp_send_json_error(array('info'=>_('未查询到关联机构','nlyd-student')));
+        }else{
+            $_SESSION['manager_id'] = $current_user->ID;
+            $this->setUserCookie($zone_user_id);
+            wp_send_json_success( array('info'=>_('登录成功', 'nlyd-student'),'url'=>home_url('/zone/')));
+        }
+    }
+
+    /**
+     * 切回管理员用户中心
+     */
+    public function change_user(){
+        if($_SESSION['manager_id'] > 0){
+            $this->setUserCookie($_SESSION['manager_id']);
+            unset($_SESSION['manager_id']);
+            wp_send_json_success( array('info'=>_('登录成功', 'nlyd-student'),'url'=>home_url('/account/')));
+        }else{
+            wp_send_json_error(array('info'=>_('未检测到管理员信息', 'nlyd-student')));
+        }
     }
 
     /*
