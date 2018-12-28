@@ -23,7 +23,11 @@
                 <div class="apply profit_title layui-row layui-bg-white">
                     <div class="ta_c c_black"><?=__('可提现金额(元)', 'nlyd-student')?></div>
                     <div class="ta_c c_green bold  fs_22 profit_money_">¥ <?=$balance?></div>
-                    <a class="bg_gradient_green tixian c_white ta_c dis_table" href="<?=home_url('zone/getCash');?>"><div class="dis_cell"><?=__('提 现', 'nlyd-student')?></div></a>
+                    <?php if($balance > 0){?>
+                        <a class="bg_gradient_green tixian c_white ta_c dis_table" href="<?=home_url('zone/getCash');?>"><div class="dis_cell"><?=__('提 现', 'nlyd-student')?></div></a>
+                    <?php }else{ ?>
+                        <a class="bg_gradient_grey tixian c_white ta_c dis_table"><div class="dis_cell"><?=__('提 现', 'nlyd-student')?></div></a>
+                    <?php } ?>
                     <div class="profit_footer flex-h">
                         <div class="flex1 ta_c">
                             <span class="c_black"><?=__('今日收益', 'nlyd-student')?>：</span>

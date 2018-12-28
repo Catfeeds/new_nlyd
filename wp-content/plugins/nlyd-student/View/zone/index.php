@@ -15,7 +15,7 @@
                 require_once leo_student_public_view.'leftMenu.php';
             
         ?>
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-bottom">
             
             <div class="layui-row nl-border nl-content">
                 <div class="zone_user width-padding layui-row layui-bg-white width-padding-pc">
@@ -141,6 +141,7 @@
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
             </div>
+            <a class="a-btn a-btn-table" id="loginOut"><div><?=__('退出登录', 'nlyd-student')?></div></a>
         </div>            
     </div>
 </div>
@@ -149,9 +150,53 @@
 jQuery(function($) {
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function () {
-        console.log(1)
         history.pushState(null, null, document.URL);
     });
+    sendloginAjax=function(url,formData){
+            $.ajax({
+                url: url,
+                success: function(data, textStatus, jqXHR){
+                    $.alerts(data.data.info)
+                    if(data.success){
+                        if(data.data.url){
+                            setTimeout(function(){
+                                window.location.href=data.data.url
+                            }, 1600);
+                        }
+                    }
+                    return false;
+                }
+            });
+        }
+    $('#loginOut').click(function(){//登出
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            $.ajax({
+                data: {action:'user_logout'},
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
+                success: function(res, textStatus, jqXHR){
+                    $.alerts(res.data.info)
+                    if(res.success){
+                        if(res.data.url){
+                            setTimeout(function(){
+                                window.location.href=res.data.url
+                            }, 1000);
+                        }
+                    }
+                    return false;
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                    }
+                    _this.removeClass('disabled');
+                }
+            })
+        }
+        
+    })
     $('.back_user').click(function(){
         var _this=$(this);
         if(!_this.hasClass('disabled')){
