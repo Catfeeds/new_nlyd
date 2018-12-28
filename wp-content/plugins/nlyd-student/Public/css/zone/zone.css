@@ -161,6 +161,10 @@
 .bg_data{
     background-position: -295px 1px;
 }
+.bg_setting{
+    background-position: -324px 1px;
+}
+
 .select_box{
     position: absolute;
     width: 100%;

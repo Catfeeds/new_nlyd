@@ -1690,6 +1690,9 @@ class Organize{
                 case 2:
                     $this->getOrganizeStatisticsGrading($zone_meta['user_id']);
                     break;
+                case 5:
+                    $this->getOrganizeStatisticsIncome($zone_meta['user_id']);
+                    break;
             }
 
             ?>
@@ -1882,6 +1885,143 @@ class Organize{
                         </div>
                     </th>
                     <td class="match_name column-match_name has-row-actions column-primary" data-colname="比赛名称">
+                        <?=$row['match_name']?>
+                        <br>
+
+                        <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                    </td>
+                    <td class="scene column-scene" data-colname="考级场景">
+                        <?php
+                        switch ($row['scene']){
+                            case '1':
+                                echo '正式考级';
+                                break;
+                            case '2':
+                                echo '模拟考级';
+                                break;
+                        }
+                        ?>
+                    </td>
+                    <td class="match_status column-match_status" data-colname="状态">
+                        <?php
+                        switch ($row['status']){
+                            case '-3':
+                                echo '已结束';
+                                break;
+                            case '-2':
+                                echo '等待开赛';
+                                break;
+                            case '1':
+                                echo '报名中';
+                                break;
+                            case '2':
+                                echo '进行中';
+                                break;
+                        }
+                        ?>
+                    </td>
+                    <td class="date_time column-date_time" data-colname="时间">
+                        <?=$row['start_time'].'<br >'.$row['end_time']?>
+                    </td>
+
+                </tr>
+                <?php
+            }
+            ?>
+            <tfoot>
+            <tr>
+                <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                <th scope="col" class="manage-column column-match_name column-primary">比赛名称</th>
+                <th scope="col" class="manage-column column-scene">考级场景</th>
+                <th scope="col" class="manage-column column-match_status">状态</th>
+                <th scope="col" class="manage-column column-date_time">时间</th>
+            </tr>
+            </tfoot>
+
+        </table>
+        <div class="tablenav bottom">
+
+            <div class="alignleft actions bulkactions">
+                <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                <select name="action2" id="bulk-action-selector-bottom">
+                    <option value="-1">批量操作</option>
+                    <option value="delete">删除</option>
+                </select>
+                <input type="submit" id="doaction2" class="button action" value="应用">
+            </div>
+
+            <div class="tablenav-pages">
+                <span class="displaying-num"><?=$count['count']?>个项目</span>
+                <?=$pageHtml?>
+            </div>
+            <br class="clear">
+        </div>
+        <?php
+    }
+
+
+    /**
+     * 主体统计信息收益数据
+     */
+    public function getOrganizeStatisticsIncome($user_id){
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS usl.*,uil.user_id AS pay_user_id 
+                FROM {$wpdb->prefix}user_stream_logs AS usl
+                LEFT JOIN {$wpdb->prefix}user_income_logs AS uil ON uil.id=usl.match_id
+                WHERE usl.user_id='{$user_id}'
+                LIMIT {$start},{$pageSize}", ARRAY_A);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page,
+            'add_fragment' => '&s='.$searchStr,
+        ));
+        leo_dump($rows);
+        ?>
+        <div class="tablenav top">
+            <div class="tablenav-pages">
+                <span class="displaying-num"><?=$count['count']?>个项目</span>
+                <?=$pageHtml?>
+            </div>
+            <br class="clear">
+        </div>
+        <h2 class="screen-reader-text">统计信息</h2>
+        <table class="wp-list-table widefat fixed striped users">
+            <thead>
+            <tr>
+                <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                <th scope="col" id="match_name" class="manage-column column-match_name column-primary">比赛名称</th>
+                <th scope="col" id="scene" class="manage-column column-scene">考级场景</th>
+                <th scope="col" id="match_status" class="manage-column column-match_status">状态</th>
+                <th scope="col" id="date_time" class="manage-column column-date_time">时间</th>
+            </tr>
+            </thead>
+
+            <tbody id="the-list" data-wp-lists="list:user">
+
+            <?php
+            foreach ($rows as $row){
+                ?>
+                <tr>
+                    <th scope="row" class="check-column">
+                        <label class="screen-reader-text" for="cb-select-407">选择<?=$row['role_name']?></label>
+                        <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                        <div class="locked-indicator">
+                            <span class="locked-indicator-icon" aria-hidden="true"></span>
+                            <span class="screen-reader-text">“<?=$row['match_name']?>”已被锁定</span>
+                        </div>
+                    </th>
+                    <td class="match_name column-match_name has-row-actions column-primary" data-colname="付款人">
                         <?=$row['match_name']?>
                         <br>
 
