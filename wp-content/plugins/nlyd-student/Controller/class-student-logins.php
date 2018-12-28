@@ -21,7 +21,7 @@ class Student_Logins
                     global $current_user,$wpdb;
                     if(empty($current_user->data->referee_id) && $_POST['referee_id'] != $current_user->ID ){
                         //添加推广人
-                        $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_GET['referee_id']),array('ID'=>$current_user->ID));
+                        $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_GET['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$current_user->ID));
                         //var_dump($a);die;
                     }
                 }

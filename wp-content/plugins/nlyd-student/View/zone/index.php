@@ -37,7 +37,7 @@
                         <!-- 审核通过 -->
                         <div class="<?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
                             <span class="bold fs_16">
-                                <?=!empty($row['legal_person']) ? $row['zone_name']:$row['user_real_name']?>
+                               <?= $row['zone_name'];?>
                             </span>
                         </div>
 
