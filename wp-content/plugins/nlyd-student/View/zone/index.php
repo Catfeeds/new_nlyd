@@ -28,11 +28,11 @@
                         <?php } ?>
                     </div>    
                     <div class="zone_user_detail pull-left">
-                        
+
                         <!-- 审核通过 -->
-                        <div class="zone_title_row <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
+                        <div class="<?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
                             <span class="bold fs_16 zone_title_name">
-                                <?=!empty($row['legal_person']) ? $row['zone_name']:$row['user_real_name']?>
+                               <?= $row['zone_name'];?>
                             </span>
                             <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
                         </div>
@@ -59,7 +59,7 @@
                                 <?php endif;?>
                             </span>
                         </div>
-                       
+
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-padding-pc">

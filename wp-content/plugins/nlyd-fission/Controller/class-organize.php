@@ -1,4 +1,5 @@
 <?php
+use library\AliSms;
 //组织主体控制器
 class Organize{
     public function __construct($is_list = false)
@@ -159,8 +160,6 @@ class Organize{
                     <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
                     <select name="action" id="bulk-action-selector-top">
                         <option value="-1">批量操作</option>
-                        <option value="agree">通过申请</option>
-                        <option value="refuse">拒绝申请</option>
                         <option value="frozen">冻结</option>
                         <option value="thaw">解冻</option>
                     </select>
@@ -250,10 +249,6 @@ class Organize{
                        <?php
                        //操作列表
                        $optionsArr = [];
-                       if($row['user_status'] == '-1'){
-                           array_push($optionsArr,"<a href='javascript:;' data-type='agree' class='edit-agree'>通过</a>");
-                           array_push($optionsArr,"<a href='javascript:;' data-type='refuse' class='edit-refuse'>拒绝</a>");
-                       }
                        if($row['user_status'] == '1'){
                            switch ($row['is_able']){
                                case 1:
@@ -300,8 +295,6 @@ class Organize{
                     <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
                     <select name="action2" id="bulk-action-selector-bottom">
                         <option value="-1">批量操作</option>
-                        <option value="agree">通过申请</option>
-                        <option value="refuse">拒绝申请</option>
                         <option value="frozen">冻结</option>
                         <option value="thaw">解冻</option>
                     </select>
@@ -754,6 +747,7 @@ class Organize{
             $zone_match_type = isset($_POST['zone_match_type']) ? intval($_POST['zone_match_type']) : 0;
             $match_power = isset($_POST['match_power']) ? $_POST['match_power'] : [];
             $admin_power = isset($_POST['admin_power']) ? $_POST['admin_power'] : [];
+            $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
 
             if($user_id < 0) $error_msg = '请选择负责人';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择主体类型':$error_msg.'<br >请选择主体类型';
@@ -767,7 +761,7 @@ class Organize{
             if($opening_bank == '') $error_msg = $error_msg==''?'请填写开户行':$error_msg.'<br >请填写开户行';
             if($opening_bank_address == '') $error_msg = $error_msg==''?'请填写开户行地址':$error_msg.'<br >请填写开户行地址';
             if($bank_card_num == '') $error_msg = $error_msg==''?'请填写银行卡号':$error_msg.'<br >请填写银行卡号';
-            if($chairman_id < 1) $error_msg = $error_msg==''?'请选择组委会主席':$error_msg.'<br >请选择组委会主席';
+//            if($chairman_id < 1) $error_msg = $error_msg==''?'请选择组委会主席':$error_msg.'<br >请选择组委会主席';
             if($parent_id > 0){
                 $old_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}'");
                 if($old_id == $parent_id) $error_msg = $error_msg==''?'上级不能是自身':$error_msg.'<br >上级不能是自身';
@@ -778,7 +772,6 @@ class Organize{
                     'type_id' => $zone_type,
                     'user_id' => $user_id,
                     'referee_id' => $referee_id,
-                    'user_status' => $user_status,
                     'zone_name' => $zone_title,
                     'zone_address' => $zone_address,
                     'zone_city' => $zone_city,
@@ -794,6 +787,7 @@ class Organize{
                     'parent_id' => $parent_id,
                     'zone_match_type' => $zone_match_type,
                 ];
+                if($user_status !== 0) $insertData['user_status'] = $user_status;
                 //图片
                 if(isset($_FILES['business_licence_url'])){
                     $upload_dir = wp_upload_dir();
@@ -804,7 +798,8 @@ class Organize{
                         $insertData['business_licence_url'] = $upload_dir['baseurl'].$dir.$file;
                     }
                 }
-
+                $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND user_status='-1'",ARRAY_A);
+                $wpdb->query('START TRANSACTION');
                 if($old_zm_id>0){
                     $bool = $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['id'=>$old_zm_id]);
                 }else{
@@ -813,11 +808,122 @@ class Organize{
                     $bool = $wpdb->insert($wpdb->prefix.'zone_meta',$insertData);
                 }
                 if(!$bool){
+                    $wpdb->query('COMMIT');
                     $error_msg = '操作失败!';
                     is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
                 }else{
-                    $success_msg = '操作成功';
+                    //收益和主体
+                    if($user_status === 1){
+                        if($zmv){
+                            //创建新账号
+                            $user_email = $zmv['apply_id'].rand(000,999).date('is', get_time()).'@gjnlyd.com';
+                            $user_password = '123456';
+                            $user_id = wp_create_user($user_email,$user_password,$user_email);
+                            if(!$user_id) {
+                                $error_msg = '操作失败!';
+                            }
+                            if($error_msg == '') {
+                                //更新新账号推荐人和推荐时间
+                                $apply_user = $wpdb->get_row("SELECT referee_id,user_mobile FROM {$wpdb->users} WHERE ID='{$zmv['apply_id']}'", ARRAY_A);
+                                $referee_id = $apply_user['referee_id'];
+                                //跟新主体所有者
+                                if (!$wpdb->update($wpdb->prefix . 'zone_meta', ['user_id' => $user_id], ['id' => $zmv['id']])) {
+                                    $error_msg = '更新主体所有者id失败!';
+                                }
+                            }
 
+                            if($error_msg == '') {
+                                //添加主体管理员
+                                if (!$wpdb->insert($wpdb->prefix . 'zone_manager', ['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) {
+                                    $error_msg = '添加管理员失败!';
+                                }
+                            }
+                            //============
+                            if($error_msg == ''){
+                                $orgType = $wpdb->get_row("SELECT zone_type_alias,zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'", ARRAY_A);
+                                $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType['zone_type_alias']}' AND spread_status=1", ARRAY_A);
+                                if($referee_id > 0){
+                                    if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id,'referee_time'=>get_time('mysql')],['ID' => $user_id])){
+                                        $error_msg = '更新主体推荐人失败!';
+                                    }
+
+                                     if($error_msg == ''){
+                                         //主体类型
+                                         if($spread_set){
+                                             //添加上级收益
+                                             //获取一级上级
+                                             $referee_id1 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$user_id}'");
+                                             $referee_id2 = 0;
+                                             if($referee_id1 > 0) $referee_id2 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$referee_id1}'");
+                                             //添加分成记录
+                                             $insertData3 = [
+                                                 'income_type' => 'subject',
+                                                 'user_id' => $zmv['apply_id'],
+                                                 'referee_id' => $referee_id1,
+                                                 'referee_income' => $spread_set['direct_superior'],
+                                                 'indirect_referee_id' => $referee_id2 > 0 ? $referee_id2 : 0,
+                                                 'indirect_referee_income' => $referee_id2 > 0 ? $spread_set['indirect_superior'] : 0,
+                                                 'income_status' => 2,
+                                                 'created_time' => get_time('mysql'),
+                                             ];
+                                             $bool = $wpdb->insert($wpdb->prefix.'user_income_logs',$insertData3);
+                                             if(!$bool) {
+                                                 $error_msg = '添加分成记录失败!';
+                                             }
+                                             if($error_msg == ''){
+                                                 $user_income_logs_id = $wpdb->insert_id;
+                                                 if($referee_id1 > 0){
+                                                     //添加一级上级收益流水
+                                                     $insertData1 = [
+                                                         'user_id' => $referee_id1,
+                                                         'match_id' => $user_income_logs_id,
+                                                         'income_type' => 'subject',
+                                                         'user_income' => $spread_set['direct_superior'],
+                                                         'created_time' => get_time('mysql'),
+                                                     ];
+                                                     $bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData1);
+                                                     if(!$bool) {
+                                                         $error_msg = '添加直接上级收益失败!';
+                                                     }
+                                                     if($error_msg == ''){
+                                                         //获取二级上级
+                                                         if($referee_id2 > 0){
+                                                             //添加二级上级收益流水
+                                                             $insertData2 = [
+                                                                 'user_id' => $referee_id2,
+                                                                 'match_id' => $user_income_logs_id,
+                                                                 'income_type' => 'subject',
+                                                                 'user_income' => $spread_set['indirect_superior'],
+                                                                 'created_time' => get_time('mysql'),
+                                                             ];
+                                                             $bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData2);
+                                                             if(!$bool) {
+                                                                 $error_msg = '添加间接上级收益失败!';
+                                                             }
+                                                         }
+                                                     }
+                                                 }
+                                             }
+                                         }
+                                     }
+
+                                }
+                            }
+                            if($error_msg == ''){
+                                $wpdb->query('COMMIT');
+                                $ali = new AliSms();
+                                $ali->sendSms($apply_user['user_mobile'], 6, array('type_name'=>$orgType['zone_type_name'], 'user_login' => $user_email, 'password' => $user_password));
+                                $success_msg = '操作成功';
+                            }else{
+                                $wpdb->query('ROLLBACK');
+                                is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
+                            }
+                        }
+
+                    }else{
+                        $wpdb->query('COMMIT');
+                        $success_msg = '操作成功';
+                    }
                 }
             }
         }
@@ -827,7 +933,7 @@ class Organize{
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
                    zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,um3.meta_value AS chairman_real_name,um4.meta_value AS secretary_real_name,
-                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id 
+                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city 
                    FROM {$wpdb->prefix}zone_meta AS zm 
                    LEFT JOIN {$wpdb->users} AS u ON u.ID=zm.user_id AND u.ID!='' 
                    LEFT JOIN {$wpdb->users} AS u2 ON u2.ID=zm.referee_id AND u2.ID!='' 
@@ -962,16 +1068,6 @@ class Organize{
                             <input type="text" name="zone_city" value="<?=$row['zone_city']?>">
                         </td>
                     </tr>
-                    <tr class="form-field">
-                        <th scope="row"><label for="user_status">状态 </label></th>
-                        <td>
-                            <select name="user_status" id="user_status">
-                                <option <?=$row['user_status']=='1'?'selected="selected"':''?> value="1">正常</option>
-                                <option <?=$row['user_status']=='-1'?'selected="selected"':''?> value="-1">正在审核</option>
-                                <option <?=$row['user_status']=='-2'?'selected="selected"':''?> value="-2">未通过</option>
-                            </select>
-                        </td>
-                    </tr>
                     <tr class="">
                         <th scope="row"><label for="chairman_id">主席 </label></th>
                         <td>
@@ -1035,6 +1131,27 @@ class Organize{
                             <input type="text" name="bank_card_num" value="<?=$row['bank_card_num']?>">
                         </td>
                     </tr>
+                    <tr class="">
+                        <th scope="row"><label for="">状态 </label></th>
+                        <td>
+                        <?php if($row['user_status'] == '-1'){
+                            ?>
+                            <label for="user_status"> <input type="checkbox" class="apply_ch" name="user_status" id="user_status" value="1" />通过审核 </label>
+                            <label for="user_status2"> <input type="checkbox" class="apply_ch" name="user_status" id="user_status2" value="-2" />拒绝申请 </label>
+                            <?php
+                        }else{
+                            switch ($row['user_status']){
+                                case '1':
+                                    echo '正常';
+                                    break;
+                                case '-2':
+                                    echo '未通过';
+                                    break;
+                            }
+                        } ?>
+
+                        </td>
+                    </tr>
 
 
                     </tbody>
@@ -1064,6 +1181,15 @@ class Organize{
                                 }
                             }
                         });
+                    });
+                    $('.apply_ch').on('change',function () {
+                        var val = $(this).val();
+                        var status = !$(this).prop('checked');
+                        if(val == '-2'){
+                            $('#user_status').prop('checked',status);
+                        }else if(val == '1'){
+                            $('#user_status2').prop('checked',status);
+                        }
                     });
                 });
             </script>

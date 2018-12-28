@@ -15,24 +15,26 @@
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__($zone_type_name.'编号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="<?=dispRepair(!empty($row['id']) ? $row['id'] : $zone_num,4,0)?>"></div>
-                        </div>
+                        <?php if(!empty($row['id'])):?>
+                            <div>
+                                <div class="lable_row"><span class="c_black"><?=__($zone_type_name.'编号', 'nlyd-student')?>：</span></div>
+                                <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="<?=dispRepair($row['id'],4,0)?>"></div>
+                            </div>
+                        <?php endif;?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__($zone_type_name.'类型', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
                                 <input type="hidden" id="zone_match_type" name="zone_match_type" value="<?=$row['zone_match_type']?>">
-                                <input 
-                                 class="radius_input_row nl-foucs"
-                                 type="text" 
-                                 readonly 
-                                 id="zone_match_type_val" 
-                                 lay-verify="required" 
-                                 autocomplete="off" 
-                                 placeholder="<?=__('选择承办赛事类型', 'nlyd-student')?>" 
-                                 value="<?=$row['zone_match_type_cn']?>">
+                                <input
+                                        class="radius_input_row nl-foucs"
+                                        type="text"
+                                        readonly
+                                        id="zone_match_type_val"
+                                        lay-verify="required"
+                                        autocomplete="off"
+                                        placeholder="<?=__('选择承办赛事类型', 'nlyd-student')?>"
+                                        value="<?=$row['zone_match_type_cn']?>">
                             </div>
                         </div>
                         <div class="name_row dis_none">
@@ -343,7 +345,7 @@
                 if(!_this.hasClass('disabled')){
                     var fd = new FormData();
                     fd.append('action','zone_apply_submit');
-                    fd.append('zone_num',data.field['zone_num']);
+                    // fd.append('zone_num',data.field['zone_num']);
                     fd.append('zone_address',data.field['zone_address']);
                     fd.append('legal_person',data.field['legal_person']);
                     fd.append('opening_bank',data.field['opening_bank']);
@@ -383,6 +385,9 @@
                     if(data.field['zone_match_type']==1){//战队赛
                         fd.append('zone_name',data.field['zone_name']);
                     }
+                    if(data.field['zone_num']){//战队赛
+                        fd.append('zone_num',data.field['zone_num']);
+                    }
                     $.ajax({
                         data: fd,
                         contentType : false,
@@ -395,7 +400,7 @@
                             $.alerts(res.data.info)
                             if(res.data.url){
                                 setTimeout(function() {
-                                     window.location.href=res.data.url
+                                    window.location.href=res.data.url
                                 }, 300);
                             }
                         },

@@ -530,6 +530,7 @@ class Student_Zone extends Student_Home
                  where a.referee_id = {$current_user->ID} and b.id is null ";
          $rows = $wpdb->get_results($sql,ARRAY_A);
          //print_r($sql);
+         $data['user_total'] = 0;
          if(!empty($rows)){
              /*$parent_total = count($rows);
              $child_total = 0;*/
@@ -541,7 +542,7 @@ class Student_Zone extends Student_Home
                                              left join {$wpdb->prefix}zone_meta b on a.ID = b.user_id 
                                              where a.referee_id = {$v['child_id']} and b.id is null ");
              }
-             $data['user_total'] = $total > 0 ? $total : 0;
+             $data['user_total'] = $total > 0 ? $total : '0';
              //print_r($total);
          }
 
@@ -549,13 +550,14 @@ class Student_Zone extends Student_Home
          $sql_ = "select user_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}";
          //print_r($sql_);
          $rows_ = $wpdb->get_results($sql_,ARRAY_A);
+         $data['zone_total'] = 0;
          if(!empty($rows_)){
              $total_ = count($rows_);
              foreach ($rows_ as $v_){
                  $total_ += $wpdb->get_var("select count(*)  from {$wpdb->prefix}zone_meta where referee_id = {$v_['user_id']}");
              }
              //print_r($total_);
-             $data['zone_total'] = $total_ > 0 ? $total_ : 0;;
+             $data['zone_total'] = $total_ > 0 ? $total_ : '0';
          }
 
          $view = student_view_path.CONTROLLER.'/recommend-list.php';
@@ -599,8 +601,8 @@ class Student_Zone extends Student_Home
         }
         $sql = "select a.*,
                 case a.zone_match_type
-                when 1 then '战队赛'
-                when 2 then '城市赛'
+                when 1 then '战队精英'
+                when 2 then '城市'
                 end zone_match_type_cn,
                 b.zone_type_name,b.zone_type_alias,c.user_mobile from {$wpdb->prefix}zone_meta a 
                 left join {$wpdb->prefix}zone_type b on a.type_id = b.id 
@@ -610,6 +612,9 @@ class Student_Zone extends Student_Home
         $row = $wpdb->get_row($sql,ARRAY_A);
         $row['user_head'] = $user_info['user_head'];
         $row['user_ID'] = $user_info['user_ID'];
+        $city = !empty($row['zone_city']) ? '（'.$row['zone_city'].'）' : '';
+        $row['zone_name'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'赛组委会';
+
 
         //获取推荐人
         //获取推荐人
@@ -644,13 +649,6 @@ class Student_Zone extends Student_Home
 
             $data['row'] = $row;
         }
-        //分中心编号
-        $total = $wpdb->get_var("select max(id) total from {$wpdb->prefix}zone_meta ");
-        if($total < 8){
-            $data['zone_num'] = 8;
-        }else{
-            $data['zone_num'] = $total+1;
-        }
 
         //获取机构类型
         $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
@@ -676,8 +674,12 @@ class Student_Zone extends Student_Home
      * 分支机构申请页面成功后提示页面
      */
      public function applySuccess(){
-        $view = student_view_path.CONTROLLER.'/apply-success.php';
-        load_view_template($view);
+         global $wpdb;
+         //获取分中心类型
+         $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
+         //print_r($data['zone_type_name']);
+         $view = student_view_path.CONTROLLER.'/apply-success.php';
+         load_view_template($view,$data);
 
     }
 
