@@ -85,7 +85,7 @@
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
                     ,content: '<div class="box-conent-wrapper"><?=__("是否确认解除与“", "nlyd-student")?>'+admin+'<?=__("” 的管理员关系?", "nlyd-student")?>？</div>'
-                    ,btn: ["<?=__('确 认', 'nlyd-student')?>" ]
+                    ,btn: ["<?=__('按错了', 'nlyd-student')?>","<?=__('确 认', 'nlyd-student')?>" ]
                     ,success: function(layero, index){
                     }
                     ,yes: function(index, layero){
