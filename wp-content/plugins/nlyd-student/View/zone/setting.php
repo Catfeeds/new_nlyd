@@ -14,24 +14,26 @@
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="layui-row">
-                    <form class="layui-form nl-page-form " lay-filter='layform'>
+                    <div class="layui-form nl-page-form " lay-filter='layform'>
                         <div class="form-inputs">
+                            <!-- 存在关联账号 -->
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('登录账号', 'nlyd-student')?></div></div>
-                                <input type="text" name="" value="" placeholder="<?=__('登录账号', 'nlyd-student')?>" lay-verify="required"  class="nl-input nl-foucs">
-                                <a class="form-input-right c_blue"><div><?=__('修改密码', 'nlyd-student')?></div></a>
+                                <input type="text" name="" readonly value="15695222@gjnlyd.com" placeholder="<?=__('登录账号', 'nlyd-student')?>" class="nl-input nl-foucs">
+                                <a class="form-input-right c_blue" href="<?=home_url('/zone/settingPsw/');?>"><div><?=__('修改密码', 'nlyd-student')?></div></a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('管理员', 'nlyd-student')?></div></div>
-                                <input type="text" name="" value="13982242710" class="nl-input nl-foucs" readonly>
+                                <input type="text" name="" readonly value="13982242710" class="nl-input nl-foucs">
                                 <a class="form-input-right c_blue clear"><div><?=__('解除关联', 'nlyd-student')?></div></a>
                             </div>
                             <div class="fs_12 ta_c mt_10">
                                 <?=__('*管理员必须是使用手机号在本平台注册并已完成实名认证的用户', 'nlyd-student')?>
                             </div>
                         </div>
-                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('添加关联账号', 'nlyd-student')?></div></a>
-                    </form>
+               
+                        <a class="a-btn a-btn-table"  href="<?=home_url('/zone/settingAdd/');?>"><div><?=__('添加关联账号', 'nlyd-student')?></div></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,42 +41,7 @@
 </div>
 <script>
     jQuery(function($) {
-        layui.use(['form'], function(){
-            var form = layui.form
-            form.render();
-            // 自定义验证规则
-            form.verify($.validationLayui.allRules);
-            // 监听提交
-            form.on('submit(layform)', function(data){//实名认证提交
-                var _this=$(this);
-                if(!_this.hasClass('disabled')){
-
-                    $.ajax({
-                        data: fd,
-                        contentType : false,
-                        processData : false,
-                        cache : false,
-                        beforeSend:function(XMLHttpRequest){
-                            _this.addClass('disabled')
-                        },
-                        success: function(res, textStatus, jqXHR){
-                            $.alerts(res.data.info)
-                            if(res.data.url){
-                                setTimeout(function() {
-                                     window.location.href=res.data.url
-                                }, 300);
-                            }
-                        },
-                        complete: function(jqXHR, textStatus){
-                            if(textStatus=='timeout'){
-                                $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                            }
-                            _this.removeClass('disabled');
-                        }
-                    })
-                }
-                return false;
-            });
+        layui.use(['layer'], function(){
             $('.clear').click(function(){
                 var _this=$(this);
                 var admin=_this.prev('input').val()

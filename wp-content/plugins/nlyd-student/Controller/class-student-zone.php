@@ -496,10 +496,24 @@ class Student_Zone extends Student_Home
         load_view_template($view);
     }
     /**
-     * 机构账号密码设置
+     * 机构账号设置首页
      */
      public function setting(){
         $view = student_view_path.CONTROLLER.'/setting.php';
+        load_view_template($view);
+    }
+    /**
+     * 机构账号添加关联账号
+     */
+     public function settingAdd(){
+        $view = student_view_path.CONTROLLER.'/setting-add.php';
+        load_view_template($view);
+    }
+    /**
+     * 机构账号密码设置
+     */
+     public function settingPsw(){
+        $view = student_view_path.CONTROLLER.'/setting-psw.php';
         load_view_template($view);
     }
     /**
@@ -704,7 +718,7 @@ class Student_Zone extends Student_Home
         // if(ACTION == 'index'){
         // }
 
-        if(ACTION == 'apply' || ACTION == 'courseBuild' || ACTION == 'kaojiBuild'){
+        if(ACTION == 'apply' || ACTION == 'courseBuild' || ACTION == 'kaojiBuild'  || ACTION == 'settingAdd'){
             wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'zone_select2_js' );
             wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
