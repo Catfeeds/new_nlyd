@@ -207,6 +207,7 @@
                         <div class="userCenter-detail-foot"><?=__('监赛中心', 'nlyd-student')?></div>
                     </a>
                     <?php endif;?>
+                    <?php if(!empty($zones)):?>
                     <a class="c_black8"  href="<?=home_url('/zone/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-console">
@@ -214,6 +215,8 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('控制台', 'nlyd-student')?></div>
                     </a>
+                    <?=$zones?>
+                    <?php endif;?>
                 </div>
                 <!-- <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
                     <div class="bold ta_c c_black apply_title"><?=__('合作申请', 'nlyd-student')?></div>
