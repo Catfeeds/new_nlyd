@@ -83,14 +83,14 @@ class Student_Zone extends Student_Home
          $row['referee_code'] = $ajax->qrcode('user');
 
          //获取所有的机构名
-         $sql_ = "select a.*,b.apply_id,b.user_status 
+         $sql_ = "select a.*,b.id zone_id,b.apply_id,b.user_status 
                   from {$wpdb->prefix}zone_type a 
-                  left join {$wpdb->prefix}zone_meta b on a.id = b.type_id and user_status = -1 and apply_id = {$current_user->ID}
+                  left join {$wpdb->prefix}zone_meta b on a.id = b.type_id  and apply_id = {$current_user->ID}
                   where zone_type_status = 1";
          //print_r($sql_);
          $rows = $wpdb->get_results($sql_,ARRAY_A);
          $row['list'] = $rows;
-
+         //print_r($rows);
          $view = student_view_path.CONTROLLER.'/index-user.php';
          load_view_template($view,$row);
     }
@@ -568,17 +568,23 @@ class Student_Zone extends Student_Home
     /**
      * 获取机构信息
      */
-    public function get_zone_row(){
+    public function get_zone_row($zone_id=''){
         global $wpdb,$user_info;
+
+        if(!empty($zone_id)){
+            $where = " a.id = {$zone_id} ";
+        }else{
+            $where = "a.user_id = '{$user_info['user_id']}'";
+        }
         $sql = "select a.*,
                 case a.zone_match_type
-                then 1 when '战队赛'
-                then 2 when '精英赛'
+                when 1 then '战队赛'
+                when 2 then '城市赛'
                 end zone_match_type_cn,
                 b.zone_type_name,b.zone_type_alias,c.user_mobile from {$wpdb->prefix}zone_meta a 
                 left join {$wpdb->prefix}zone_type b on a.type_id = b.id 
                 left join {$wpdb->prefix}users c on a.user_id = c.ID 
-                where a.user_id = '{$user_info['user_id']}' ";
+                where {$where} ";
         //print_r($sql);
         $row = $wpdb->get_row($sql,ARRAY_A);
         $row['user_head'] = $user_info['user_head'];
@@ -607,7 +613,9 @@ class Student_Zone extends Student_Home
     public function apply(){
 
         global $wpdb,$current_user,$user_info;
-        $row = $this->get_zone_row();
+
+        $row = $this->get_zone_row($_GET['zone_id']);
+        //print_r($row);
         if(!empty($row)){
             //获取主席
             $row['chairman_name'] = !empty($row['chairman_id']) ? get_user_meta($row['chairman_id'],'user_real_name')[0]['real_name'] : '';

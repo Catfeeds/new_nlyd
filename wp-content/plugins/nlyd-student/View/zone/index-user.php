@@ -58,13 +58,28 @@
                 <div class="apply have_title width-padding layui-row layui-bg-white width-padding-pc">
                     <div class="bold ta_c c_black apply_title"><?=__('合作申请', 'nlyd-student')?></div>
                     <?php if(!empty($list)){?>
-                        <?php foreach ($list as $v){ ?>
-                            <a class="apply_list c_black layui-row" href="<?= $v['user_status'] == -1 ? 'javascript:void(0)' : home_url('/zone/apply/type_id/'.$v['id'].'/zone_type_alias/'.$v['zone_type_alias']);?>">
+                        <?php foreach ($list as $v){
+                            if($v['user_status'] == -1){
+                                $title = '审核中';
+                                $url = '';
+                            }
+                            elseif ($v['user_status'] == -2){
+                                $title = '审核失败';
+                                $url = home_url('/zone/apply/zone_id/'.$v['zone_id'].'/type_id/'.$v['id'].'/zone_type_alias/'.$v['zone_type_alias']);
+                            }
+                            else{
+                                $title = '';
+                                $url = home_url('/zone/apply/type_id/'.$v['id'].'/zone_type_alias/'.$v['zone_type_alias']);
+                            }
+
+
+                        ?>
+                            <a class="apply_list c_black layui-row" href="<?= empty($url) ? 'javascript:void(0)' : $url ;?>">
                                 <div class="apply_list_line pull-left <?=$v['zone_type_class']?> ml"><i class="iconfont fs_20">&#xe650;</i></div>
                                 <div class="apply_list_line center"><?=__('申请设立'.$v['zone_type_name'], 'nlyd-student')?></div>
                                 <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                                <?php if($v['user_status'] == -1):?>
-                                <div class="apply_list_line pull-right c_orange mr_10"><?=__('审核中', 'nlyd-student')?></div>
+                                <?php if(!empty($title)):?>
+                                <div class="apply_list_line pull-right c_orange mr_10"><?=__($title, 'nlyd-student')?></div>
                                 <?php endif;?>
                             </a>
                         <?php } ?>

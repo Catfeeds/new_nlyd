@@ -51,7 +51,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
                             <div class="input_row img-zoos img-zoos1">
-                                <?php if(!empty(!empty($row['id']))){?>
+                                <?php if((!empty($row['business_licence_url']))){?>
                                     <input type="hidden" name="business_licence_url" class="business_licence_url" value="<?=$row['business_licence_url']?>">
                                     <div class="post-img no-dash">
                                         <div class="img-zoo img-box">
@@ -122,32 +122,32 @@
                                 </div>
                             </div>
                         <?php endif;?>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__($zone_type_name.'管理员', 'nlyd-student')?>：</span></div>
+                        <!--<div>
+                            <div class="lable_row"><span class="c_black"><?/*=__($zone_type_name.'管理员', 'nlyd-student')*/?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row" disabled type="text" value="<?=$director?>">
+                                <input class="radius_input_row" disabled type="text" value="<?/*=$director*/?>">
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('管理员电话', 'nlyd-student')?>：</span></div>
+                            <div class="lable_row"><span class="c_black"><?/*=__('管理员电话', 'nlyd-student')*/?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row" disabled type="text" value="<?=$contact?>">
+                                <input class="radius_input_row" disabled type="text" value="<?/*=$contact*/?>">
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('管理员证件', 'nlyd-student')?>：</span></div>
+                            <div class="lable_row"><span class="c_black"><?/*=__('管理员证件', 'nlyd-student')*/?>：</span></div>
                             <div class="input_row img-zoos img-zoos0">
-                                <?php if(!empty(!empty($user_ID_Card))):?>
-                                    <?php foreach ($user_ID_Card as $v){ ?>
+                                <?php /*if(!empty(!empty($user_ID_Card))):*/?>
+                                    <?php /*foreach ($user_ID_Card as $v){ */?>
                                         <div class="post-img no-dash">
                                             <div class="img-zoo img-box">
-                                                <img src="<?=$v?>"/>
+                                                <img src="<?/*=$v*/?>"/>
                                             </div>
                                         </div>
-                                    <?php } ?>
-                                <?php endif;?>
+                                    <?php /*} */?>
+                                <?php /*endif;*/?>
                             </div>
-                        </div>
+                        </div>-->
                         <?php if($row['user_status'] != 1):?>
                             <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
                         <?php endif;?>
@@ -395,7 +395,7 @@
                             $.alerts(res.data.info)
                             if(res.data.url){
                                 setTimeout(function() {
-                                    // window.location.href=res.data.url
+                                     window.location.href=res.data.url
                                 }, 300);
                             }
                         },

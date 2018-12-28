@@ -4432,7 +4432,7 @@ class Student_Ajax
     public function zone_apply_submit(){
         global $wpdb,$current_user;
 
-        $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}",ARRAY_A);
+        $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where id = {$_POST['zone_num']}",ARRAY_A);
         if($row['user_status']== -1){
             wp_send_json_error(array('info'=>'资料审核中,禁止修改'));
         }
@@ -4492,7 +4492,7 @@ class Student_Ajax
             //print_r($insert);die;
             $result = $wpdb->insert($wpdb->prefix.'zone_meta',$data);
         }else{
-            $result = $wpdb->update($wpdb->prefix.'zone_meta',$data,array('id'=>$row['id'],'user_id'=>$current_user->ID));
+            $result = $wpdb->update($wpdb->prefix.'zone_meta',$data,array('id'=>$row['id']));
         }
         if($result){
             wp_send_json_success(array('info'=>'提交成功,等待管理员审核','url'=>home_url('/zone/applySuccess/')));
@@ -5059,7 +5059,7 @@ class Student_Ajax
                     $list[$k]['real_age'] = $user_real_name['real_age'];
                     $list[$k]['real_name'] = $user_real_name['real_name'];
                 }
-                $list[$k]['referee_time'] = $v['referee_time'];
+                $list[$k]['referee_time'] = !empty($v['referee_time']) ? $v['referee_time'] : '-';
 
                 //获取学号/性别/是否购课
                 $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta 
@@ -5069,7 +5069,7 @@ class Student_Ajax
                 if(!empty($rows1)){
                     $meta_value = array_column($rows1,'meta_value','meta_key');
                     $list[$k]['user_ID'] = $meta_value['user_ID'];
-                    $list[$k]['user_gender'] = empty($meta_value['user_gender']) ? $meta_value['user_gender'] : '-';
+                    $list[$k]['user_gender'] = !empty($meta_value['user_gender']) ? $meta_value['user_gender'] : '-';
 
                 }
 
@@ -5088,11 +5088,11 @@ class Student_Ajax
                     $child = array();
                     foreach ($childs as $key => $value) {
                         if(!empty($v['user_real_name'])){
-                            $user_real_name = unserialize($v['user_real_name']);
+                            $user_real_name = unserialize($value['user_real_name']);
                             $child[$key]['real_age'] = $user_real_name['real_age'];
                             $child[$key]['real_name'] = $user_real_name['real_name'];
                         }
-                        $child[$key]['referee_time'] = $v['referee_time'];
+                        $child[$key]['referee_time'] = !empty($value['referee_time']) ? $value['referee_time'] : '-';
 
                         //获取学号/性别/是否购课
                         $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta 
@@ -5102,7 +5102,7 @@ class Student_Ajax
                         if(!empty($rows1)){
                             $meta_value = array_column($rows1,'meta_value','meta_key');
                             $child[$key]['user_ID'] = $meta_value['user_ID'];
-                            $child[$key]['user_gender'] = empty($meta_value['user_gender']) ? $meta_value['user_gender'] : '-';
+                            $child[$key]['user_gender'] = !empty($meta_value['user_gender']) ? $meta_value['user_gender'] : '-';
 
                         }
 
@@ -5135,6 +5135,14 @@ class Student_Ajax
      * 战队申请
      */
     public function team_apply(){
+
+    }
+
+
+    /**
+     * 申请人
+     */
+    public function login_zone(){
 
     }
 
