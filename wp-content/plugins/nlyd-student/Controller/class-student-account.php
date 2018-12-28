@@ -66,10 +66,17 @@ class Student_Account extends Student_Home
             if(!$brainpower) $brainpower = $wpdb->get_row("SELECT type_name,MAX(`level`) AS `level`,`range`,`category_name` FROM {$wpdb->prefix}directories WHERE `range`=1 AND user_id={$user_info['user_id']} GROUP BY user_id", ARRAY_A);
 
             //获取是否存在管理机构
-            $sql_ = "select b.id ,concat_ws('•',b.zone_city,b.zone_name) value from {$wpdb->prefix}zone_manager a left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id where a.user_id = {$user_info['user_id']} ";
+            $sql_ = "select b.id ,if(b.zone_match_type=1,'战队精英','城市') as match_type,b.zone_city,b.zone_name from {$wpdb->prefix}zone_manager a left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id where a.user_id = {$user_info['user_id']} ";
 
             $zones = $wpdb->get_results($sql_,ARRAY_A);
-            //print_r($zones);
+            if(!empty($zones)){
+                $arr = array();
+                foreach ($zones as $key => $value) {
+                    $city = !empty($value['zone_city']) ? '（'.$value['zone_city'].'）' : '';
+                    $arr[$key]['value'] = $value['zone_name'].$city.$value['match_type'].'赛组委会';
+                    $arr[$key]['id'] = $value['id'];
+                }
+            }
 
             //获取当前是否有比赛
             $saql = "select a.match_id from {$wpdb->prefix}match_meta_new a left join {$wpdb->prefix}order b on a.match_id = b.match_id where b.user_id = {$user_info['user_id']} and match_status = 2";
@@ -80,7 +87,7 @@ class Student_Account extends Student_Home
                 'message_total'=>$message_total->total,
                 'my_team'=>$my_team,
                 'my_skill'=>$my_skill,
-                'zones'=>!empty($zones) ? json_encode($zones) : '',
+                'zones'=>!empty($arr) ? json_encode($arr) : '',
                 'brainpower'=>$brainpower,
                 'waitting_url'=>!empty($match_id) ? home_url('matchs/matchWaitting/match_id/'.$match_id) : '',
             );
