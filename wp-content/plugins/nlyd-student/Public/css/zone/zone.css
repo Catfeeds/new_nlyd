@@ -196,15 +196,18 @@
     right: 10px;
     top: 8.5px;
 }
-.input_row input[type=text]
+.input_row input[type=text],
+.input_row input[type=password]
 {
     margin-bottom: 0;
 }
 input[type="text"]:disabled,
+input[type="password"]:disabled,
 input[type="tel"]:disabled{
     color: #262626;
     background-color: rgba(135, 135, 135, 0.1);
 }
+input[type="password"].radius_input_row,
 input[type="text"].radius_input_row,
 input[type="tel"].radius_input_row
 {
