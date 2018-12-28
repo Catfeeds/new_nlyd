@@ -40,19 +40,19 @@
                                 <?=!empty($row['legal_person']) ? $row['zone_name']:$row['user_real_name']?>
                             </span>
                         </div>
-                        
+
                         <div class="c_black">
-                            <?=__('ID/编 号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?> 
+                            <?=__('ID/编 号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?>
                             <?php if($row['user_status'] == 1){ ?>
                                 <div class="img-box zone_pass mr_10"><img src="<?=student_css_url.'image/pass.png'?>" alt="<?=__('已认证', 'nlyd-student')?>"></div>
                                 <a class=" c_blue" href="<?=home_url('/zone/apply')?>"><?=__('更多资料', 'nlyd-student')?></a>
-                            <?php } ?> 
+                            <?php } ?>
                         </div>
-                               
+
                         <div class="c_black">
                             <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=empty($row['referee_user_ID'])? '无' : $row['referee_user_ID'];?></span>
                             <span class="pull-right">
-                                    <?php if($row['user_status'] == 1){ ?>
+                                    <?php if($row['user_status'] == 1 && $_SESSION['manager_id'] > 0){ ?>
                                     <a class="c_orange"><i class="iconfont">&#xe65a;</i> <?=__('返回到关联账号', 'nlyd-student')?></a>
                                     <?php }
                                     elseif ($row['user_status'] == -1){ ?>
@@ -84,32 +84,32 @@
                 </div>
                 <?php if(empty($row['legal_person'])){ ?>
                 <!-- 普通用户 (控制台)-->
-                <!-- <div class="apply have_title width-padding layui-row layui-bg-white width-padding-pc">
-                    <div class="bold ta_c c_black apply_title"><?=__('合作申请', 'nlyd-student')?></div>
-                    <?php if(!empty($list)){?>
-                        <?php foreach ($list as $v){ ?>
+                <!--<div class="apply have_title width-padding layui-row layui-bg-white width-padding-pc">
+                    <div class="bold ta_c c_black apply_title"><?/*=__('合作申请', 'nlyd-student')*/?></div>
+                    <?php /*if(!empty($list)){*/?>
+                        <?php /*foreach ($list as $v){ */?>
 
-                        <a class="apply_list c_black layui-row" href="<?=home_url('/zone/apply/type_id/'.$v['id'].'/zone_type_alias/'.$v['zone_type_alias']);?>">
-                            <div class="apply_list_line pull-left <?=$v['zone_type_class']?> ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                            <div class="apply_list_line center"><?=__('申请设立'.$v['zone_type_name'], 'nlyd-student')?></div>
+                        <a class="apply_list c_black layui-row" href="<?/*=home_url('/zone/apply/type_id/'.$v['id'].'/zone_type_alias/'.$v['zone_type_alias']);*/?>">
+                            <div class="apply_list_line pull-left <?/*=$v['zone_type_class']*/?> ml"><i class="iconfont fs_20">&#xe650;</i></div>
+                            <div class="apply_list_line center"><?/*=__('申请设立'.$v['zone_type_name'], 'nlyd-student')*/?></div>
                             <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                            <div class="apply_list_line pull-right c_orange mr_10"><?=__('审核中', 'nlyd-student')?></div>
+                            <div class="apply_list_line pull-right c_orange mr_10"><?/*=__('审核中', 'nlyd-student')*/?></div>
                         </a>
-                            <?php } ?>
-                    <?php } ?>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/introduce');?>">
+                            <?php /*} */?>
+                    <?php /*} */?>
+                    <a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
                         <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?=__('赞助脑力比赛', 'nlyd-student')?></div>
+                        <div class="apply_list_line center"><?/*=__('赞助脑力比赛', 'nlyd-student')*/?></div>
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/introduce');?>">
+                    <a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
                         <div class="apply_list_line pull-left c_red ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?=__('申请代理赛事赞助', 'nlyd-student')?></div>
+                        <div class="apply_list_line center"><?/*=__('申请代理赛事赞助', 'nlyd-student')*/?></div>
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
-                </div> -->
+                </div>
                 <?php } ?>
                 <!-- 训练中心(控制台)-->
                 <div class="apply width-padding layui-row layui-bg-white width-padding-pc">
