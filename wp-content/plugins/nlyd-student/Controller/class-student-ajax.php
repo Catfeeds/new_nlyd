@@ -5028,7 +5028,10 @@ class Student_Ajax
 
         //获取我推荐的机构
         if($_POST['map'] == 'zone'){
-            $sql = "select SQL_CALC_FOUND_ROWS id , zone_name,user_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}  order by id desc limit $start,$pageSize ";
+            $sql = "select SQL_CALC_FOUND_ROWS id , case zone_match_type
+                when 1 then '战队精英'
+                when 2 then '城市'
+                end zone_match_type_cn,zone_city,zone_name,user_id,apply_id,date_format(audit_time,'%Y-%m-%d') as audit_time  from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}  order by id desc limit $start,$pageSize ";
             //print_r($sql);die;
         }
         else{   //获取我推荐的用户
@@ -5118,11 +5121,24 @@ class Student_Ajax
             //var_dump($list);
         }
         else{
+
             $child = array();
             foreach ($rows as $k => $v) {
-                $sql1 = "select id,zone_name,user_id from {$wpdb->prefix}zone_meta where referee_id = {$v['user_id']}  order by id desc  ";
+                $city = !empty($v['zone_city']) ? '（'.$v['zone_city'].'）' : '';
+                $rows[$k]['zone_name'] = $v['zone_name'].$city.$v['zone_match_type_cn'].'赛组委会';
+                //print_r($v);
+                $sql1 = "select id,case zone_match_type
+                when 1 then '战队精英'
+                when 2 then '城市'
+                end zone_match_type_cn,zone_city,zone_name,user_id,referee_id,date_format(audit_time,'%Y-%m-%d') as audit_time from {$wpdb->prefix}zone_meta where referee_id = {$v['apply_id']}  order by id desc  ";
+                //print_r($sql1);
                 $rows1 = $wpdb->get_results($sql1,ARRAY_A);
                 if(!empty($rows1)){
+                    foreach ($rows1 as $key1 => $value1) {
+                        $city1 = !empty($value1['zone_city']) ? '（'.$value1['zone_city'].'）' : '';
+                        $rows1[$key1]['zone_name'] = $value1['zone_name'].$city1.$value1['zone_match_type_cn'].'赛组委会';
+
+                    }
                     $child = $rows1;
                 }
                 $rows[$k]['child'] = $child;

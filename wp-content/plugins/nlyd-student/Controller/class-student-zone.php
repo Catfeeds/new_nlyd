@@ -547,17 +547,17 @@ class Student_Zone extends Student_Home
          }
 
          //获取我推荐的机构
-         $sql_ = "select user_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}";
+         $sql_ = "select apply_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}";
          //print_r($sql_);
          $rows_ = $wpdb->get_results($sql_,ARRAY_A);
          $data['zone_total'] = 0;
          if(!empty($rows_)){
              $total_ = count($rows_);
              foreach ($rows_ as $v_){
-                 $total_ += $wpdb->get_var("select count(*)  from {$wpdb->prefix}zone_meta where referee_id = {$v_['user_id']}");
+                 $total_ += $wpdb->get_var("select count(*)  from {$wpdb->prefix}zone_meta where referee_id = {$v_['apply_id']}");
              }
              //print_r($total_);
-             $data['zone_total'] = $total_ > 0 ? $total_ : '0';
+             $data['zone_total'] = $total_;
          }
 
          $view = student_view_path.CONTROLLER.'/recommend-list.php';
