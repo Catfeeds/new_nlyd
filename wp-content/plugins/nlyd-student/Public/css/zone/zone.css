@@ -89,9 +89,12 @@
 .zone_user_img{
     width: 85px;
     height: 85px;
-    border-radius: 5px;
-    border: 1px solid rgba(38, 38, 38, 0.1);
+    /* border-radius: 5px;
+    border: 1px solid rgba(38, 38, 38, 0.1); */
     position: relative;
+}
+.zone_user_img.img-box{
+    overflow: visible;
 }
 .zone_tag{
     position: absolute;
@@ -111,15 +114,27 @@
 }
 .zone_user_detail{
     padding-left: 14px;
-    padding-right: 30px;
-    width: -webkit-calc(100% - 131px);
-    width: calc(100% - 131px);
+    /* padding-right: 30px; */
+    width: -webkit-calc(100% - 101px);
+    width: calc(100% - 101px);
     position: relative;
 }
+.zone_title_name,
 .qr_code{
-    position: absolute;
-    right: 0;
-    top:0;
+    display: inline-block;
+    
+}
+.zone_title_row{
+    font-size: 0;
+}
+.zone_title_name{
+    vertical-align: middle;
+    width: -webkit-calc(100% - 26px);
+    width: calc(100% - 26px);
+}
+.qr_code{
+    width: 26px;
+    vertical-align: top;
 }
 .zone_bg{
     width: 25px;
@@ -161,6 +176,10 @@
 .bg_data{
     background-position: -295px 1px;
 }
+.bg_setting{
+    background-position: -324px 1px;
+}
+
 .select_box{
     position: absolute;
     width: 100%;
@@ -192,15 +211,18 @@
     right: 10px;
     top: 8.5px;
 }
-.input_row input[type=text]
+.input_row input[type=text],
+.input_row input[type=password]
 {
     margin-bottom: 0;
 }
 input[type="text"]:disabled,
+input[type="password"]:disabled,
 input[type="tel"]:disabled{
     color: #262626;
     background-color: rgba(135, 135, 135, 0.1);
 }
+input[type="password"].radius_input_row,
 input[type="text"].radius_input_row,
 input[type="tel"].radius_input_row
 {
@@ -800,9 +822,10 @@ input[type="text"].coach_form_input{
 }
 .zone_pass{
     display: inline-block;
-    width: 56px;
+    width: 50px;
     margin-left: 10px;
     vertical-align: middle;
+    margin-top: -5px;
 }
 .qr_code_img{
     width: 150px;

@@ -66,7 +66,7 @@ class Student_Account extends Student_Home
             if(!$brainpower) $brainpower = $wpdb->get_row("SELECT type_name,MAX(`level`) AS `level`,`range`,`category_name` FROM {$wpdb->prefix}directories WHERE `range`=1 AND user_id={$user_info['user_id']} GROUP BY user_id", ARRAY_A);
 
             //获取是否存在管理机构
-            $sql_ = "select b.user_id id ,concat_ws('•',b.zone_city,b.zone_name) value from {$wpdb->prefix}zone_manager a left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id where a.user_id = {$user_info['user_id']} ";
+            $sql_ = "select b.id ,concat_ws('•',b.zone_city,b.zone_name) value from {$wpdb->prefix}zone_manager a left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id where a.user_id = {$user_info['user_id']} ";
 
             $zones = $wpdb->get_results($sql_,ARRAY_A);
             //print_r($zones);

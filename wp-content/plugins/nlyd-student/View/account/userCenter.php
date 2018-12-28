@@ -67,7 +67,9 @@
                     <?php if(is_user_logged_in()): ?>
                     <!-- 用户标签 -->
                     <div class="userCenter-describe layui-row  layui-hide-lg">
-                        <span class="userCenter-item">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : '';?></span>
+
+                        <span class="userCenter-item">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : $user_info['user_id'];?></span>
+
                         <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
                             <a class="userCenter-item c_black6" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
                                 <?=$my_team['my_team']?>
@@ -208,44 +210,16 @@
                     </a>
                     <?php endif;?>
                     <?php if(!empty($zones)):?>
-                    <a class="c_black8"  href="<?=home_url('/zone/');?>">
+                    <a class="c_black8" id="console">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-console">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot"><?=__('控制台', 'nlyd-student')?></div>
                     </a>
-                    <?=$zones?>
+                    
                     <?php endif;?>
                 </div>
-                <!-- <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
-                    <div class="bold ta_c c_black apply_title"><?=__('合作申请', 'nlyd-student')?></div>
-                    <a class="apply_list c_black layui-row disabled_a">
-                        <div class="apply_list_line pull-left c_blue ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?=__('申请设立脑力训练中心', 'nlyd-student')?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                    </a>
-                    <a class="apply_list c_black layui-row disabled_a">
-                        <div class="apply_list_line pull-left c_green ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?=__('申请设立脑力水平测评中心', 'nlyd-student')?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                    </a>
-                    <a class="apply_list c_black layui-row disabled_a">
-                        <div class="apply_list_line pull-left c_orange ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?=__('申请承办赛事', 'nlyd-student')?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                    </a>
-                    <a class="apply_list c_black layui-row disabled_a">
-                        <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?=__('赞助脑力比赛', 'nlyd-student')?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                    </a>
-                    <a class="apply_list c_black layui-row disabled_a">
-                        <div class="apply_list_line pull-left c_red ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?=__('申请代理赛事赞助', 'nlyd-student')?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                    </a>
-                </div> -->
             </div>
 
             <?php
@@ -349,6 +323,44 @@ jQuery(document).ready(function($) {
             });
         }
     });
+
+if($("#console").length>0){
+    var consoleData=<?=empty($zones) ? [] : $zones;?>;
+    var mobileSelect1 = new MobileSelect({
+        trigger: '#console',
+        title: "<?=__('选择机构账户', 'nlyd-student')?>",
+        wheels: [
+            {data: consoleData}
+        ],
+        triggerDisplayData:false,
+        position:0, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        transitionEnd:function(indexArr, data){
+            // console.log(data);
+        },
+        callback:function(indexArr, data){
+            console.log(data)
+            var postData={
+                zone_id:data[0]['id'],
+                action:"login_zone",
+            }
+            $.ajax({
+                data: postData,
+                success: function(res, textStatus, jqXHR){
+                    if(res.data.url){
+                        window.location.href=res.data.url
+                    }else{
+                        $.alerts("<?=__('机构账户错误', 'nlyd-student')?>")
+                    }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                    }
+                }
+            })
+        }
+    });
+}
 layui.use('layer', function(){ //独立版的layer无需执行这一句
     <?php if(empty($user_info['user_real_name']) && get_time() < $_SESSION['login_time']){ ?>
     layer.open({

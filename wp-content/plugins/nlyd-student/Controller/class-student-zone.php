@@ -40,8 +40,8 @@ class Student_Zone extends Student_Home
         }
         if(empty($row['legal_person'])){
             //获取所有的机构名
-            $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1",ARRAY_A);
-            $data['list'] = $rows;
+            //$rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1",ARRAY_A);
+            //$data['list'] = $rows;
         }else{
             //获取机构权限
             if(empty($row['role_id'])){
@@ -496,6 +496,27 @@ class Student_Zone extends Student_Home
         load_view_template($view);
     }
     /**
+     * 机构账号设置首页
+     */
+     public function setting(){
+        $view = student_view_path.CONTROLLER.'/setting.php';
+        load_view_template($view);
+    }
+    /**
+     * 机构账号添加关联账号
+     */
+     public function settingAdd(){
+        $view = student_view_path.CONTROLLER.'/setting-add.php';
+        load_view_template($view);
+    }
+    /**
+     * 机构账号密码设置
+     */
+     public function settingPsw(){
+        $view = student_view_path.CONTROLLER.'/setting-psw.php';
+        load_view_template($view);
+    }
+    /**
      * 推荐管理
      */
      public function recommend(){
@@ -588,7 +609,6 @@ class Student_Zone extends Student_Home
         //print_r($sql);
         $row = $wpdb->get_row($sql,ARRAY_A);
         $row['user_head'] = $user_info['user_head'];
-        $row['user_real_name'] = $user_info['user_real_name']['real_name'];
         $row['user_ID'] = $user_info['user_ID'];
 
         //获取推荐人
@@ -696,7 +716,7 @@ class Student_Zone extends Student_Home
         // if(ACTION == 'index'){
         // }
 
-        if(ACTION == 'apply' || ACTION == 'courseBuild' || ACTION == 'kaojiBuild'){
+        if(ACTION == 'apply' || ACTION == 'courseBuild' || ACTION == 'kaojiBuild'  || ACTION == 'settingAdd'){
             wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'zone_select2_js' );
             wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
