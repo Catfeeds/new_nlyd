@@ -59,7 +59,7 @@ p.tips{
                     <a class="a-btn a-btn-table back" href="<?=$data['waiting_url']?>"><div><?=__('返回比赛等待', 'nlyd-student')?></div></a>
                     <?php endif;?>
                      <?php if(!empty($data['return_url'])):?>
-                         <a class="a-btn a-btn-table back" href="<?=$data['return_url']?>"><div><?=__('返回上一页', 'nlyd-student')?></div></a>
+                         <a class="a-btn a-btn-table back nl-goback" href="<?=$data['return_url']?>"><div><?=__('返回上一页', 'nlyd-student')?></div></a>
                      <?php endif;?>
                      <?php if(!empty($data['return_log_url'])):?>
                          <a class="a-btn a-btn-table back" href="<?=$data['return_log_url']?>"><div><?=__('查看答题记录', 'nlyd-student')?></div></a>
