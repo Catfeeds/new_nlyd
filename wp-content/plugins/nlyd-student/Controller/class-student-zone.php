@@ -40,8 +40,8 @@ class Student_Zone extends Student_Home
         }
         if(empty($row['legal_person'])){
             //获取所有的机构名
-            $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1",ARRAY_A);
-            $data['list'] = $rows;
+            //$rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1",ARRAY_A);
+            //$data['list'] = $rows;
         }else{
             //获取机构权限
             if(empty($row['role_id'])){

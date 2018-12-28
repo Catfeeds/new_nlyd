@@ -5140,10 +5140,17 @@ class Student_Ajax
 
 
     /**
-     * 申请人
+     * 管理员跳转登录
      */
     public function login_zone(){
-
+        if(empty($_POST['zone_id'])) wp_send_json_error(array('info'=>_('机构id必传')));
+        global $wpdb,$current_user;
+        $sql_ = "select b.user_id
+                from {$wpdb->prefix}zone_manager a 
+                left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id 
+                where a.user_id = {$current_user['user_id']} and  b.id = {$_POST['zone_id']}";
+        $zone_user_id = $wpdb->get_var($sql_);
+        print_r($sql_);die;
     }
 
     /*
