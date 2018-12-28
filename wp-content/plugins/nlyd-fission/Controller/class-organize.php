@@ -80,8 +80,8 @@ class Organize{
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
                 zm.zone_address,zm.business_licence_url,
-                zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,zm.id,
-                zm.chairman_id,zm.secretary_id,
+                zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,zm.id,zm.zone_match_type,
+                zm.chairman_id,zm.secretary_id,zm.zone_city,
                 CASE zm.user_status 
                 WHEN 1 THEN '正常' 
                 WHEN -1 THEN '正在审核' 
@@ -146,7 +146,11 @@ class Organize{
                 }
                 ?>
             </ul>
-
+            <style type="text/css">
+                .column-name{
+                    width: 230px;
+                }
+            </style>
 
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
@@ -176,10 +180,10 @@ class Organize{
                 <thead>
                     <tr>
                         <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                        <th scope="col" id="zone_title" class="manage-column column-zone_title column-primary">主体名称</th>
+                        <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
                         <th scope="col" id="user_login" class="manage-column column-user_login">账号</th>
                         <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
-                        <th scope="col" id="legal_person" class="manage-column column-legal_person">法人</th>
+                        <th scope="col" id="zone_title" class="manage-column column-zone_title">字号</th>
                         <th scope="col" id="chairman_id" class="manage-column column-chairman_id">主席</th>
                         <th scope="col" id="zone_address" class="manage-column column-zone_address">地址</th>
                         <th scope="col" id="business_licence" class="manage-column column-business_licence">营业执照</th>
@@ -205,15 +209,15 @@ class Organize{
                    ?>
                    <tr data-uid="<?=$row['user_id']?>" data-id="<?=$row['id']?>">
                        <th scope="row" class="check-column">
-                           <label class="screen-reader-text" for="cb-select-407">选择<?=$row['zone_name']?></label>
+                           <label class="screen-reader-text" for="cb-select-407">选择<?=$row['legal_person']?></label>
                            <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                            <div class="locked-indicator">
                                <span class="locked-indicator-icon" aria-hidden="true"></span>
-                               <span class="screen-reader-text">“<?=$row['zone_name']?>”已被锁定</span>
+                               <span class="screen-reader-text">“<?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市精英赛')?>”已被锁定</span>
                            </div>
                        </th>
-                       <td class="zone_title column-zone_title has-row-actions column-primary" data-colname="主体名称">
-                            <?=$row['zone_name']?>
+                       <td class="name column-name has-row-actions column-primary" data-colname="名称">
+                            <?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市精英赛')?>
                            <br>
                            <div class="row-actions">
                                <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize&id='.$row['id'])?>">编辑</a> | </span>
@@ -226,7 +230,7 @@ class Organize{
                        <td class="user_login column-user_login" data-colname="账号"><?=$row['user_login']?></td>
                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
 
-                       <td class="legal_person column-legal_person" data-colname="法人"><?=$row['legal_person']?></td>
+                       <td class="zone_title column-zone_title" data-colname="字号"><?=$row['zone_name']?></td>
                        <td class="chairman_id column-chairman_id" data-colname="主席"><?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?></td>
                        <td class="zone_address column-zone_address" data-colname="地址"><?=$row['zone_address']?></td>
                        <td class="business_licence column-business_licence" data-colname="营业执照" id="cardImg-<?=$row['id']?>">
@@ -270,10 +274,10 @@ class Organize{
                 <tfoot>
                     <tr>
                         <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                        <th scope="col" class="manage-column column-zone_title column-primary">主体名称</th>
+                        <th scope="col" class="manage-column column-name column-primary">名称</th>
                         <th scope="col" class="manage-column column-user_login">账号</th>
                         <th scope="col" class="manage-column column-referee_id">推荐人</th>
-                        <th scope="col" class="manage-column column-legal_person">法人</th>
+                        <th scope="col" class="manage-column column-zone_title">字号</th>
                         <th scope="col" class="manage-column column-chairman_id">主席</th>
                         <th scope="col" class="manage-column column-zone_address">地址</th>
                         <th scope="col" class="manage-column column-business_licence">营业执照</th>
@@ -733,9 +737,10 @@ class Organize{
             $zone_type = isset($_POST['zone_type']) ? intval($_POST['zone_type']) : 0;
             $referee_id = isset($_POST['referee_id']) ? intval($_POST['referee_id']) : 0;
             $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
-            $zone_title = isset($_POST['zone_title']) ? trim($_POST['zone_title']) : '';
+//            $zone_title = isset($_POST['zone_title']) ? trim($_POST['zone_title']) : '';
             $zone_city = isset($_POST['zone_city']) ? trim($_POST['zone_city']) : '';
             $zone_address = isset($_POST['zone_address']) ? trim($_POST['zone_address']) : '';
+            $zone_title = isset($_POST['zone_title']) ? trim($_POST['zone_title']) : '';
             $business_licence = isset($_POST['business_licence']) ? trim($_POST['business_licence']) : '';
             $legal_person = isset($_POST['legal_person']) ? trim($_POST['legal_person']) : '';
             $opening_bank = isset($_POST['opening_bank']) ? trim($_POST['opening_bank']) : '';
@@ -750,14 +755,16 @@ class Organize{
             $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
 
             if($user_id < 0) $error_msg = '请选择负责人';
+//            if($zone_match_type < 0) $error_msg = $error_msg==''?'请选择赛区类型':$error_msg.'<br >请选择赛区类型';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择主体类型':$error_msg.'<br >请选择主体类型';
             if($user_id == $referee_id) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
             if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($admin_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
-            if($zone_title == '') $error_msg = $error_msg==''?'请填写主体名称':$error_msg.'<br >请填写主体名称';
+//            if($zone_title == '') $error_msg = $error_msg==''?'请填写主体名称':$error_msg.'<br >请填写主体名称';
             if($zone_address == '') $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
 //            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
             if($legal_person == '') $error_msg = $error_msg==''?'请填写法人':$error_msg.'<br >请填写法人';
+            if($zone_city == '') $error_msg = $error_msg==''?'请填写机构城市':$error_msg.'<br >请填写机构城市';
             if($opening_bank == '') $error_msg = $error_msg==''?'请填写开户行':$error_msg.'<br >请填写开户行';
             if($opening_bank_address == '') $error_msg = $error_msg==''?'请填写开户行地址':$error_msg.'<br >请填写开户行地址';
             if($bank_card_num == '') $error_msg = $error_msg==''?'请填写银行卡号':$error_msg.'<br >请填写银行卡号';
@@ -766,7 +773,7 @@ class Organize{
                 $old_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}'");
                 if($old_id == $parent_id) $error_msg = $error_msg==''?'上级不能是自身':$error_msg.'<br >上级不能是自身';
             }
-
+            if($zone_match_type !== 1) $zone_title = '';
             if($error_msg == ''){
                 $insertData = [
                     'type_id' => $zone_type,
@@ -788,6 +795,7 @@ class Organize{
                     'zone_match_type' => $zone_match_type,
                 ];
                 if($user_status !== 0) $insertData['user_status'] = $user_status;
+                if($user_status === 1) $insertData['audit_time'] = get_time('mysql');//审核时间
                 //图片
                 if(isset($_FILES['business_licence_url'])){
                     $upload_dir = wp_upload_dir();
@@ -808,7 +816,7 @@ class Organize{
                     $bool = $wpdb->insert($wpdb->prefix.'zone_meta',$insertData);
                 }
                 if(!$bool){
-                    $wpdb->query('COMMIT');
+                    $wpdb->query('ROLLBACK');
                     $error_msg = '操作失败!';
                     is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
                 }else{
@@ -823,25 +831,25 @@ class Organize{
                                 $error_msg = '操作失败!';
                             }
                             if($error_msg == '') {
-                                //更新新账号推荐人和推荐时间
-                                $apply_user = $wpdb->get_row("SELECT referee_id,user_mobile FROM {$wpdb->users} WHERE ID='{$zmv['apply_id']}'", ARRAY_A);
-                                $referee_id = $apply_user['referee_id'];
-                                //跟新主体所有者
+                                //更新主体所有者id
                                 if (!$wpdb->update($wpdb->prefix . 'zone_meta', ['user_id' => $user_id], ['id' => $zmv['id']])) {
                                     $error_msg = '更新主体所有者id失败!';
                                 }
                             }
-
                             if($error_msg == '') {
                                 //添加主体管理员
                                 if (!$wpdb->insert($wpdb->prefix . 'zone_manager', ['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) {
                                     $error_msg = '添加管理员失败!';
                                 }
                             }
+
                             //============
                             if($error_msg == ''){
                                 $orgType = $wpdb->get_row("SELECT zone_type_alias,zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'", ARRAY_A);
                                 $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType['zone_type_alias']}' AND spread_status=1", ARRAY_A);
+                                //更新新账号推荐人和推荐时间
+                                $apply_user = $wpdb->get_row("SELECT referee_id,user_mobile FROM {$wpdb->users} WHERE ID='{$zmv['apply_id']}'", ARRAY_A);
+                                $referee_id = $apply_user['referee_id'];
                                 if($referee_id > 0){
                                     if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id,'referee_time'=>get_time('mysql')],['ID' => $user_id])){
                                         $error_msg = '更新主体推荐人失败!';
@@ -918,6 +926,9 @@ class Organize{
                                 $wpdb->query('ROLLBACK');
                                 is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
                             }
+                        }else{
+                            $wpdb->query('ROLLBACK');
+                            $error_msg = '操作失败!';
                         }
 
                     }else{
@@ -973,8 +984,9 @@ class Organize{
                 <input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php">
                 <table class="form-table">
                     <tbody>
-                    <tr class="">
-                        <th scope="row"><label for="zone_title">主体名称 </label></th>
+
+                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>" id="zone_title_tr">
+                        <th scope="row"><label for="zone_title">字号 </label></th>
                         <td>
                             <input type="text" name="zone_title" id="zone_title" value="<?=$row['zone_name']?>">
                         </td>
@@ -1057,8 +1069,8 @@ class Organize{
                         <th scope="row"><label for="zone_match_type">赛区类型 </label></th>
                         <td>
                             <select name="zone_match_type" id="zone_match_type">
-                                <option <?=$row['zone_match_type']=='1'?'selected="selected"':''?> value="1">战队赛</option>
-                                <option <?=$row['zone_match_type']=='2'?'selected="selected"':''?> value="2">城市赛</option>
+                                <option <?=$row['zone_match_type']=='1'?'selected="selected"':''?> value="1">战队精英赛</option>
+                                <option <?=$row['zone_match_type']=='2'?'selected="selected"':''?> value="2">城市精英赛</option>
                             </select>
                         </td>
                     </tr>
@@ -1189,6 +1201,14 @@ class Organize{
                             $('#user_status').prop('checked',status);
                         }else if(val == '1'){
                             $('#user_status2').prop('checked',status);
+                        }
+                    });
+                    $('#zone_match_type').on('change', function () {
+                        var val = $(this).val();
+                        if(val == '1'){
+                            $('#zone_title_tr').show();
+                        }else{
+                            $('#zone_title_tr').hide();
                         }
                     });
                 });
