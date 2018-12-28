@@ -496,6 +496,13 @@ class Student_Zone extends Student_Home
         load_view_template($view);
     }
     /**
+     * 机构账号密码设置
+     */
+     public function setting(){
+        $view = student_view_path.CONTROLLER.'/setting.php';
+        load_view_template($view);
+    }
+    /**
      * 推荐管理
      */
      public function recommend(){
