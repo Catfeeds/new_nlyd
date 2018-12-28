@@ -95,16 +95,17 @@ class Fission_Ajax
                 $user_password = '123456';
                 $user_id = wp_create_user($user_email,$user_password,$user_email);
                 if(!$user_id) wp_send_json_error(['info' => '创建账号失败!']);
-                //更新新账号推荐人
+                //更新新账号推荐人和推荐时间
                 $apply_user = $wpdb->get_row("SELECT referee_id,user_mobile FROM {$wpdb->users} WHERE ID='{$zmv['apply_id']}'", ARRAY_A);
                 $referee_id = $apply_user['referee_id'];
                 if($referee_id > 0){
-                    if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id],['ID' => $user_id])) wp_send_json_error(['info' => '更新主体推荐人失败!']);
+                    if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id,'referee_time'=>get_time('mysql')],['ID' => $user_id])) wp_send_json_error(['info' => '更新主体推荐人失败!']);
                 }
                 //跟新主体所有者
                 if(!$wpdb->update($wpdb->prefix.'zone_meta',['user_id' => $user_id],['id'=>$zmv['id']])) wp_send_json_error(['info' => '更新主体所有者id失败!']);
 //                $wpdb->update($wpdb->users,['referee_id' => ])
-
+                //添加主体管理员
+                if(!$wpdb->insert($wpdb->prefix.'zone_manager',['zone_id' => $zmv['id'], 'user_id' => $user_id])) wp_send_json_error(['info' => '添加管理员失败!']);
                 //主体类型
                 $orgType = $wpdb->get_row("SELECT zone_type_alias,zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'", ARRAY_A);
                 $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType['zone_type_alias']}' AND spread_status=1", ARRAY_A);
