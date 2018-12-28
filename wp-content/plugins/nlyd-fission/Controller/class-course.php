@@ -45,7 +45,7 @@ class Course{
                 zm.zone_name,um.meta_value AS coach_real_name  
                 FROM {$wpdb->prefix}course AS cou 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
-                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.id=cou.zone_id 
+                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=cou.zone_id 
                 {$where}
                 LIMIT {$start},{$pageSize}",ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -75,7 +75,7 @@ class Course{
             <br class="clear">
             <ul class="subsubsub">
                 <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=0')?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=1')?>" <?=$type===1?'class="current"':''?> aria-current="page">乐学乐<span class="count">（<?=$lxl_num?>）</span></a></li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=1')?>" <?=$type===1?'class="current"':''?> aria-current="page">乐学乐分享<span class="count">（<?=$lxl_num?>）</span></a></li>
 
             </ul>
 
@@ -104,7 +104,8 @@ class Course{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">主体列表</h2>
+            <table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -160,7 +161,7 @@ class Course{
                         <td class="open_quota column-open_quota" data-colname="开放名额"><?=$row['open_quota']?></td>
                         <td class="seize_quota column-seize_quota" data-colname="已抢占名额"><?=$row['seize_quota']?></td>
                         <td class="zone_user_id column-zone_user_id" data-colname="所属机构"><?=empty($row['zone_name']) ? '平台' :$row['zone_name']?></td>
-                        <td class="course_type column-course_type" data-colname="课程类型"><?=$row['course_type'] == '1' ? '乐学乐' :''?></td>
+                        <td class="course_type column-course_type" data-colname="课程类型"><?=$row['course_type'] == '1' ? '乐学乐分享' :''?></td>
                         <td class="is_enable column-is_enable" data-colname="状态"><?=$row['is_enable'] == '2' ? '<span style="color: #c42800;">禁用</span>':'正常'?></td>
                         <td class="created_time column-created_time" data-colname="创建时间"><?=$row['created_time']?></td>
                         <td class="options1 column-options1" data-colname="操作">
@@ -311,14 +312,14 @@ class Course{
             $course_category_id = isset($_POST['course_category_id']) ? intval($_POST['course_category_id']) : 0;
             $duration = isset($_POST['duration']) ? intval($_POST['duration']) : 0;
             $admin_mobile = isset($_POST['admin_mobile']) ? trim($_POST['admin_mobile']) : '';
-            if($course_title == '') $error_msg = '请填写课程名称';
-            if($coach_id < 1) $error_msg .= ($error_msg == '' ? '':'<br />').'请选择授课教练';
-            if($course_start_time == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择开课时间';
-            if($province == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择省份';
-            if($city == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择城市';
-            if($area == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择区县';
-            if($address == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请填写详细地址';
-            if($open_quota < 0) $error_msg .= ($error_msg == '' ? '':'<br />').'请填写开放名额';
+//            if($course_title == '') $error_msg = '请填写课程名称';
+//            if($coach_id < 1) $error_msg .= ($error_msg == '' ? '':'<br />').'请选择授课教练';
+//            if($course_start_time == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择开课时间';
+//            if($province == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择省份';
+//            if($city == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择城市';
+//            if($area == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择区县';
+//            if($address == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请填写详细地址';
+//            if($open_quota < 0) $error_msg .= ($error_msg == '' ? '':'<br />').'请填写开放名额';
             if($course_end_time == '0100-01-01 00:00:00') $course_end_time = '';
             if($error_msg == ''){
                 $insertData = [
@@ -343,7 +344,7 @@ class Course{
                 ];
 
                 //图片
-                if(isset($_FILES['course_img'])){
+                if(isset($_FILES['course_img']) && $_FILES['course_img']['size'] > 0){
                     $upload_dir = wp_upload_dir();
                     $dir = '/course/';
                     //print_r($upd);

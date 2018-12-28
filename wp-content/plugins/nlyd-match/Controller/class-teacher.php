@@ -115,7 +115,8 @@ class Teacher
                     </div>
                     <br class="clear">
                 </div>
-                <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
+                <h2 class="screen-reader-text">用户列表</h2>
+            <table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
                         <td id="cb" class="manage-column column-cb check-column">
