@@ -17,8 +17,8 @@
                 <div class="layui-row layui-bg-white">
                     <div class="profit-layui-tab recommend-5 layui-tab layui-tab-brief" lay-filter="profit" style="margin:0">
                         <ul style="margin:0;padding:0" class="layui-tab-title layui-row">
-                            <li class="layui-this dis_table" lay-id="1"><div class="dis_cell"><?=__('个人用户', 'nlyd-student')?></div></li>
-                            <li class="dis_table" lay-id="2"><div class="dis_cell"><?=__('机构用户', 'nlyd-student')?></div></li>
+                            <li class="layui-this dis_table" lay-id="1"><div class="dis_cell"><?=__('个人用户（'.$user_total.'）', 'nlyd-student')?></div></li>
+                            <li class="dis_table" lay-id="2"><div class="dis_cell"><?=__('机构用户（'.$zone_total.'）', 'nlyd-student')?></div></li>
                         </ul>
                         <div class="layui-tab-content">
                             <!-- 全部记录 -->
@@ -94,7 +94,7 @@ jQuery(function($) {
                                     var dom_1='';
                                     if(parseInt(id)==1){//个人
                                         var is_shop_1='-';
-                                       
+
                                         if(v.is_shop=='y'){
                                             is_shop_1='<div class="table_content c_green"><?=__("是", "nlyd-student")?></div>';
                                         }else if(v.is_shop=='n'){
@@ -107,7 +107,7 @@ jQuery(function($) {
                                                 '<td><div class="table_content c_black">'+v.referee_time+'</div></td>'+
                                                 '<td>'+is_shop_1+'</td>'+
                                             '</tr>'
-                                        lis.push(dom_1) 
+                                        lis.push(dom_1)
                                         if(v.child){
                                             $.each(v.child,function(index,val){
                                                 var dom_2="";
@@ -124,7 +124,7 @@ jQuery(function($) {
                                                         '<td><div class="table_content c_black">'+val.referee_time+'</div></td>'+
                                                         '<td>'+is_shop_2+'</td>'+
                                                     '</tr>'
-                                                lis.push(dom_2) 
+                                                lis.push(dom_2)
                                             })
                                         }
                                     }else if(parseInt(id)==2){//机构
@@ -137,7 +137,7 @@ jQuery(function($) {
                                                 '</td>'+
                                                 '<td><div class="table_content"><a class="c_blue disabled_a">详 情</a></div></td>'+
                                             '</tr>'
-                                        lis.push(dom_1) 
+                                        lis.push(dom_1)
                                         if(v.child){
                                             $.each(v.child,function(index,val){
                                                 var dom_2="";
@@ -150,11 +150,11 @@ jQuery(function($) {
                                                         '</td>'+
                                                         '<td><div class="table_content"><a class="c_blue disabled_a">详 情</a></div></td>'+
                                                     '</tr>'
-                                                lis.push(dom_2) 
+                                                lis.push(dom_2)
                                             })
                                         }
                                     }
-                                    
+
                                 })
                                 if (res.data.info.length<50) {
                                     next(lis.join(''),false) 

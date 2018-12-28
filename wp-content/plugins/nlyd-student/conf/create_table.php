@@ -31,6 +31,21 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "zone_manager";  //分中心管理员
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `zone_id` int(20) DEFAULT NULL COMMENT '分中心id meta主键id',
+          `user_id` varchar(50) DEFAULT NULL COMMENT '用户id',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
     $table_name = $wpdb->prefix . "zone_match_role";  //比赛发布权限表
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
