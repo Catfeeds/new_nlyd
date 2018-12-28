@@ -117,7 +117,7 @@ class Fission_Ajax
                     //添加分成记录
                     $insertData3 = [
                         'income_type' => 'subject',
-                        'user_id' => $user_id,
+                        'user_id' => $zmv['apply_id'],
                         'referee_id' => $referee_id1,
                         'referee_income' => $spread_set['direct_superior'],
                         'indirect_referee_id' => $referee_id2 > 0 ? $referee_id2 : 0,
