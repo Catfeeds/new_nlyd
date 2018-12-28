@@ -226,6 +226,7 @@ input[type="password"].radius_input_row,
 input[type="text"].radius_input_row,
 input[type="tel"].radius_input_row
 {
+    border-color: #e0e1e1;
     width: 100%;
     border-radius: 6px;
     height: 45px;
@@ -366,7 +367,7 @@ div .layui-row:last-child{
     border-bottom: 1px solid rgba(38, 38, 38, 0.1);
 }
 .getCash_type_row .layui-form-radio>i{
-    margin-right:27px;
+    margin-right:10px;
 }
 .getCash_type_row .layui-form-radio{
     margin: 0;

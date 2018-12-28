@@ -124,7 +124,7 @@
                     </a>
                     <?php } ?>
                     <?php endif;?>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/data');?>">
+                    <a class="apply_list c_black layui-row disabled_a" href="<?=home_url('/zone/data');?>">
                         <div class="apply_list_line pull-left">
                             <div class="zone_bg bg_data"></div>
                         </div>
@@ -132,7 +132,7 @@
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/setting');?>">
+                    <a class="apply_list c_black layui-row disabled_a" href="<?=home_url('/zone/setting');?>">
                         <div class="apply_list_line pull-left">
                             <div class="zone_bg bg_setting"></div>
                         </div>
