@@ -257,7 +257,7 @@ class Fission_Ajax
         $rows = [];
         if($searchStr != ''){
             global $wpdb;
-            $rows = $wpdb->get_results("SELECT id,zone_name AS text FROM {$wpdb->prefix}zone_meta WHERE zone_name LIKE '%{$searchStr}%'");
+            $rows = $wpdb->get_results("SELECT user_id AS id,zone_name AS text FROM {$wpdb->prefix}zone_meta WHERE zone_name LIKE '%{$searchStr}%'");
         }
         if($type == 'all_base'){
             $rows[] = ['id' => 0, 'text' => '平台'];
