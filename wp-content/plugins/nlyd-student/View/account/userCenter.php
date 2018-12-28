@@ -323,8 +323,9 @@ jQuery(document).ready(function($) {
             });
         }
     });
+
 if($("#console").length>0){
-    var consoleData=<?=$zones?>;
+    var consoleData=<?=empty($zones) ? [] : $zones;?>;
     var mobileSelect1 = new MobileSelect({
         trigger: '#console',
         title: "<?=__('选择机构账户', 'nlyd-student')?>",
@@ -345,13 +346,11 @@ if($("#console").length>0){
             $.ajax({
                 data: postData,
                 success: function(res, textStatus, jqXHR){
-                    console.log(res)
-                    // $.alerts(res.data.info)
-                    // if(res.data.url){
-                    //     setTimeout(function() {
-                    //             window.location.href=res.data.url
-                    //     }, 300);
-                    // }
+                    if(res.data.url){
+                        window.location.href=res.data.url
+                    }else{
+                        $.alerts("<?=__('机构账户错误', 'nlyd-student')?>")
+                    }
                 },
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){

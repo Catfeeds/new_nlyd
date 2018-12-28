@@ -89,9 +89,12 @@
 .zone_user_img{
     width: 85px;
     height: 85px;
-    border-radius: 5px;
-    border: 1px solid rgba(38, 38, 38, 0.1);
+    /* border-radius: 5px;
+    border: 1px solid rgba(38, 38, 38, 0.1); */
     position: relative;
+}
+.zone_user_img.img-box{
+    overflow: visible;
 }
 .zone_tag{
     position: absolute;
@@ -807,7 +810,7 @@ input[type="text"].coach_form_input{
 }
 .zone_pass{
     display: inline-block;
-    width: 56px;
+    width: 77px;
     margin-left: 10px;
     vertical-align: middle;
 }

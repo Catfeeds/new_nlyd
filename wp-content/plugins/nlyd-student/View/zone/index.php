@@ -20,17 +20,12 @@
             <div class="layui-row nl-border nl-content">
                 <div class="zone_user width-padding layui-row layui-bg-white width-padding-pc">
                     <div class="img-box zone_user_img pull-left">
-                        <img src="<?=$row['user_head']?>">
-                        <div class="zone_tag c_white fs_12">
-                            <div class="scale">
-                                <?php if($row['zone_type_alias'] == 'match'){ ?>
-                                <!-- 赛区展示 -->
-                                    <?=__(date('Y').'脑力世界杯', 'nlyd-student')?>
-                                <?php }else{ ?>
-                                <?=__('IISC国际脑力运动', 'nlyd-student')?>
-                                <?php } ?>
-                            </div>
-                        </div>
+                        <?php if($row['zone_type_alias'] == 'match'){ ?>
+                        <!-- 赛区展示 -->
+                            <img src="<?=student_css_url.'image/zone/match_head.png'?>">
+                        <?php }else{ ?>
+                            <img src="<?=student_css_url.'image/zone/head.png'?>">
+                        <?php } ?>
                     </div>    
                     <div class="zone_user_detail pull-left">
                         <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
@@ -42,7 +37,7 @@
                         </div>
 
                         <div class="c_black">
-                            <?=__('ID/编 号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?>
+                            <?=__('ID/编号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?>
                             <?php if($row['user_status'] == 1){ ?>
                                 <div class="img-box zone_pass mr_10"><img src="<?=student_css_url.'image/pass.png'?>" alt="<?=__('已认证', 'nlyd-student')?>"></div>
                                 <a class=" c_blue" href="<?=home_url('/zone/apply')?>"><?=__('更多资料', 'nlyd-student')?></a>
@@ -53,7 +48,7 @@
                             <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=empty($row['referee_user_ID'])? '无' : $row['referee_user_ID'];?></span>
                             <span class="pull-right">
                                     <?php if($row['user_status'] == 1 && $_SESSION['manager_id'] > 0){ ?>
-                                    <a class="c_orange"><i class="iconfont">&#xe65a;</i> <?=__('返回到关联账号', 'nlyd-student')?></a>
+                                    <!-- <a class="c_orange"><i class="iconfont">&#xe65a;</i> <?=__('返回到关联账号', 'nlyd-student')?></a> -->
                                     <?php }
                                     elseif ($row['user_status'] == -1){ ?>
                                     <span class=" c_orange mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
@@ -63,6 +58,11 @@
                                 <?php endif;?>
                             </span>
                         </div>
+                        <?php if($row['user_status'] == 1 && $_SESSION['manager_id'] > 0){ ?>
+                            <div class="c_black">
+                                <a class="c_orange"><i class="iconfont">&#xe65a;</i> <?=__('返回到关联账号', 'nlyd-student')?></a>
+                            </div>
+                        <?php }?>
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-padding-pc">
@@ -109,7 +109,7 @@
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
-                </div>
+                </div>-->
                 <?php } ?>
                 <!-- 训练中心(控制台)-->
                 <div class="apply width-padding layui-row layui-bg-white width-padding-pc">
