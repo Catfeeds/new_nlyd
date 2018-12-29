@@ -107,11 +107,12 @@ jQuery(function($) {
                                 var profit_url = "<?=home_url('zone/profitDetail/id/');?>"; //收益
                                 var extract_url = "<?=home_url('zone/getCashDetail/id/');?>";   //提现
                                 $.each(res.data.info,function(i,v){
-                                    var color=v.income_type_class=="bg_add" ? "c_green":"c_black3";
+                                    var color=v.income_type=="extract" ? "c_black":"c_green";
+                                    var income_type_class=v.income_type=="extract" ? "bg_reduce":"bg_add";
                                     var Detail_url = v.user_income > 0 ? profit_url+v.id : extract_url+v.id;
                                     var dom='<a class="profit_list c_black layui-row" href="'+Detail_url+'">'
                                                 +'<div class="profit_inline profit_icon">'
-                                                    +'<div class="zone_bg '+v.income_type_class+'"></div>'
+                                                    +'<div class="zone_bg '+income_type_class+'"></div>'
                                                 +'</div>'
                                                 +'<div class="profit_inline profit_time fs_14">'
                                                     +'<span>'+v.income_type_title+'</span><br>'
@@ -134,7 +135,7 @@ jQuery(function($) {
                         },
                         complete:function(XMLHttpRequest, textStatus){
 							if(textStatus=='timeout'){
-								$.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
+								$.alerts("<?=__('网络质量差,请重试', 'nlyd-student')?>")
 								next(lis.join(''),true)
 							}
                         }

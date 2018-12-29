@@ -223,15 +223,19 @@ var mobileSelect3 = new MobileSelect({
                             setTimeout(function() {
                                 window.location.href=res.data.url
                             }, 300);
+                        }else{
+                            _this.removeClass('disabled');
                         }
                     },
                     complete: function(jqXHR, textStatus){
                         if(textStatus=='timeout'){
                             $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                            _this.removeClass('disabled');
                 　　　　 }
-                        _this.removeClass('disabled');
                     }
                 })
+            }else{
+                $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
             }
             return false;
         });
