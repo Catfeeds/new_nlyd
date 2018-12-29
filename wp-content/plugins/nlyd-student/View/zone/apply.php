@@ -79,6 +79,10 @@
                             <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>" value="<?=!empty($row) ? $row['legal_person'] :''?>"></div>
                         </div>
                         <div>
+                            <div class="lable_row"><span class="c_black"><?=__('对公账户开户名称', 'nlyd-student')?>：</span></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户开户名称', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
+                        </div>
+                        <div>
                             <div class="lable_row"><span class="c_black"><?=__('选择对公账户开户行', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
@@ -86,8 +90,8 @@
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('银行卡号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户银行卡号', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
+                            <div class="lable_row"><span class="c_black"><?=__('对公账户银行卡号', 'nlyd-student')?>：</span></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="tel" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户银行卡号', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
@@ -202,7 +206,7 @@
             }
         }
         nameRowIsShow()
-        var match_type_data=[{id:1,value:"<?=__('战队赛', 'nlyd-student')?>"},{id:2,value:"<?=__('城市赛', 'nlyd-student')?>"}]
+        var match_type_data=[{id:1,value:"<?=__('战队精英赛', 'nlyd-student')?>"},{id:2,value:"<?=__('城市赛', 'nlyd-student')?>"}]
         var posiotion_match_type=[0];//初始化位置，高亮展示
         if($('#zone_match_type_val').length>0){
             if($('#zone_match_type_val').val() && $('#zone_match_type_val').val().length>0){
@@ -350,6 +354,8 @@
                     fd.append('opening_bank',data.field['opening_bank']);
                     fd.append('opening_bank_address',data.field['opening_bank_address']);
                     fd.append('bank_card_num',data.field['bank_card_num']);
+                    fd.append('bank_card_name',data.field['bank_card_name']);
+                    
                     if($('.business_licence_url').val()=='' || !$('.business_licence_url').val()){//修改具有初始图片
                         if(imgs1[0]){
                             fd.append('business_licence',imgs1[0]);
