@@ -31,7 +31,7 @@
                 <div class="width-padding layui-row width-padding-pc">
                     <div class="flex-h fs_12">
                         <div class="flex1">
-                            <span><?=__('您的推荐用户ID', 'nlyd-student')?>：</span>
+                            <span><?=__('您的推荐人ID', 'nlyd-student')?>：</span>
                             <span class="c_blue"><?=$referee_id > 0 ? $referee_id+10000000 : '无'?></span>
                         </div>
                         <div class="flex1">
