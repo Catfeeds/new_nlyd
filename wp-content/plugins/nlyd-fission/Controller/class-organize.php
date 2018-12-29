@@ -778,7 +778,7 @@ class Organize{
             if($user_id == $referee_id && $user_status !==1) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
             if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($admin_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
-            if(!in_array($user_status,[1,-2])) $error_msg = $error_msg==''?'审核状态错误':$error_msg.'<br >审核状态错误';
+            if($user_status !== 1 && $user_status !== -2) $error_msg = $error_msg==''?'审核状态错误':$error_msg.'<br >审核状态错误';
 //            if($zone_title == '') $error_msg = $error_msg==''?'请填写主体名称':$error_msg.'<br >请填写主体名称';
             if($zone_address == '' && !in_array($zone_match_type,[1,2])) $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
 //            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
