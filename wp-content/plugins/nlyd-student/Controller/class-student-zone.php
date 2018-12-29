@@ -179,11 +179,11 @@ class Student_Zone extends Student_Home
              $result = $row;
          }else{
              $result_ = $result[0];
-             print_r($result_);
+             //print_r($result_);
              if($result_['referee_id'] == $current_user->ID){
                  $row['profit_lv'] = '直接';
              }
-             elseif ($row['indirect_referee_id'] == $current_user->ID){
+             elseif ($result_['indirect_referee_id'] == $current_user->ID){
                  $row['profit_lv'] = '间接';
              }
              $referee_name = get_user_meta($result_['user_id'],'user_real_name')[0];

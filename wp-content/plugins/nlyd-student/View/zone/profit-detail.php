@@ -50,10 +50,10 @@
                         <div class="profit_detail_label"><?=__('收益状态', 'nlyd-student')?>：</div>
                         <div class="profit_detail_info c_green"><?=__('已到账', 'nlyd-student')?></div>
                     </div>
-                    <div class="profit_detail_row">
-                        <div class="profit_detail_label"><?=__('到账时间', 'nlyd-student')?>：</div>
+                    <!--<div class="profit_detail_row">
+                        <div class="profit_detail_label"><?/*=__('到账时间', 'nlyd-student')*/?>：</div>
                         <div class="profit_detail_info c_black">2018/12/12 13:18</div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>            
