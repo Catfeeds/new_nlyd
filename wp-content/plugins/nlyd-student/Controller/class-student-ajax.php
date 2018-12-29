@@ -5055,7 +5055,7 @@ class Student_Ajax
             $sql = "select SQL_CALC_FOUND_ROWS id , case zone_match_type
                 when 1 then '战队精英'
                 when 2 then '城市'
-                end zone_match_type_cn,zone_city,zone_name,user_id,apply_id,date_format(audit_time,'%Y-%m-%d') as audit_time  from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}  order by id desc limit $start,$pageSize ";
+                end zone_match_type_cn,zone_city,zone_name,user_id,apply_id,date_format(audit_time,'%Y-%m-%d') as audit_time  from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID} and user_id > 0 order by id desc limit $start,$pageSize ";
             //print_r($sql);die;
         }
         else{   //获取我推荐的用户
@@ -5150,16 +5150,16 @@ class Student_Ajax
 
             $sql__ = "select ID
                  from {$wpdb->prefix}users
-                 where referee_id = {$current_user->ID} ";
+                 where referee_id = {$current_user->ID} and user_id > 0 ";
             $rows__ = $wpdb->get_results($sql__,ARRAY_A);
             
             if(empty($rows)){
                 $rows = $rows__;
                 $map = "y";
             }
-            
-            $child = array();
+
             foreach ($rows as $k => $v) {
+                $child = array();
                 if($map ==  'y'){
                     $where = " referee_id = {$v['ID']} ";
                 }else{
@@ -5173,7 +5173,7 @@ class Student_Ajax
                 $sql1 = "select id,case zone_match_type
                 when 1 then '战队精英'
                 when 2 then '城市'
-                end zone_match_type_cn,zone_city,zone_name,user_id,referee_id,date_format(audit_time,'%Y-%m-%d') as audit_time from {$wpdb->prefix}zone_meta where {$where}  order by id desc  ";
+                end zone_match_type_cn,zone_city,zone_name,user_id,referee_id,date_format(audit_time,'%Y-%m-%d') as audit_time from {$wpdb->prefix}zone_meta where {$where} and user_id > 0 order by id desc  ";
                 //print_r($sql1);
                 $rows1 = $wpdb->get_results($sql1,ARRAY_A);
                 if(!empty($rows1)){
