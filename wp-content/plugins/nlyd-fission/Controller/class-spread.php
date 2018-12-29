@@ -214,7 +214,7 @@ class Spread{
             $mechanism = isset($_POST['mechanism']) ? trim($_POST['mechanism']) : '';
             $spread_status = isset($_POST['spread_status']) ? intval($_POST['spread_status']) : '';
             $pay_amount = isset($_POST['pay_amount']) ? intval($_POST['pay_amount']) : '';
-            $spread_arr = explode('_',$spread_type);
+            $spread_arr = explode('()',$spread_type);
             $spread_type = $spread_arr[0];
             $spread_name = $spread_arr[1];
             if($spread_status !== 1 && $spread_status !== 2) $error_msg = '请选择状态!';
@@ -263,7 +263,7 @@ class Spread{
         //=..去除已有类型
         $oldList = $wpdb->get_results("SELECT spread_type FROM {$wpdb->prefix}spread_set", ARRAY_A);
         foreach ($oldList as $oldv){
-            if(isset($spreadCategory[$oldv['spread_type']])) unset($spreadCategory[$oldv['spread_type']]);
+            if(isset($spreadCategory[$oldv['spread_type']]) && $row['spread_type'] != $oldv['spread_type']) unset($spreadCategory[$oldv['spread_type']]);
         }
 //        leo_dump($spreadCategory);die;
         ?>
@@ -284,7 +284,7 @@ class Spread{
                         <td>
                             <select name="spread_type" id="spread_type">
                                 <?php foreach ($spreadCategory as $sck => $scv){ ?>
-                                    <option <?=isset($row) && $row['spread_type'] == $sck?'selected="selected"':''?> value="<?=$sck.'_'.$scv?>"><?=$scv?></option>
+                                    <option <?=isset($row) && $row['spread_type'] == $sck?'selected="selected"':''?> value="<?=$sck.'()'.$scv?>"><?=$scv?></option>
                                 <?php } ?>
                             </select>
                         </td>

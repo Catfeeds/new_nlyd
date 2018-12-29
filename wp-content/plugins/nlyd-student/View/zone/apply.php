@@ -71,7 +71,7 @@
                                         <div class="vertical"></div>
                                     </div>
                                 </div>
-                                <span class="fs_12 c_black3 _tips"><?=__('原件影印件或盖有鲜章的复印件，文件不超过2m大小', 'nlyd-student')?></span>
+                                <span class="fs_12 c_black3 _tips"><?=__('原件影印件或盖有鲜章的复印件', 'nlyd-student')?></span>
                             </div>
                         </div>
                         <div>
@@ -90,8 +90,8 @@
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('对公账户银行卡号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="tel" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户银行卡号', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
+                            <div class="lable_row"><span class="c_black"><?=__('对公账户号码', 'nlyd-student')?>：</span></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="tel" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户号码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
@@ -111,7 +111,7 @@
                             <div>
                                 <div class="lable_row"><span class="c_black"><?=__('组委会秘书长', 'nlyd-student')?>：</span></div>
                                 <div class="input_row">
-                                    <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="选择组委会秘书长" >
+                                    <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="组委会秘书长" >
                                         <option value="<?=$row['secretary_id']?>" selected><?=$row['secretary_name']?></option>
                                     </select>
                                     <!-- <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>"> -->
@@ -276,12 +276,12 @@
 
         function changes(e,_this,array) {
             var file=e.target.files[0];
-            var fileSize=file.size;
-            var fSize=2;
-            if(fileSize > 1024*1024*fSize){
-                alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
-                return false;
-            }
+            // var fileSize=file.size;
+            // var fSize=2;
+            // if(fileSize > 1024*1024*fSize){
+            //     alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
+            //     return false;
+            // }
             array.unshift(file)
             console.log(array)
             var reader = new FileReader();

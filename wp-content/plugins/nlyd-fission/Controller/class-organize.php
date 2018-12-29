@@ -81,12 +81,7 @@ class Organize{
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
                 zm.zone_address,zm.business_licence_url,
                 zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,zm.id,zm.zone_match_type,
-                zm.chairman_id,zm.secretary_id,zm.zone_city,
-                CASE zm.user_status 
-                WHEN 1 THEN '正常' 
-                WHEN -1 THEN '正在审核' 
-                WHEN -2 THEN '未通过' 
-                END AS user_status_name,
+                zm.chairman_id,zm.secretary_id,zm.zone_city,zm.term_time,zm.user_status,
                 CASE zm.is_able 
                 WHEN 1 THEN '正常' 
                 WHEN 2 THEN '被冻结' 
@@ -182,20 +177,17 @@ class Organize{
                         <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                         <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
                         <th scope="col" id="zone_match_type" class="manage-column column-zone_match_type">办赛类型</th>
-                        <th scope="col" id="num" class="manage-column column-num">编号</th>
-                        <th scope="col" id="user_login" class="manage-column column-user_login">账号</th>
+                        <th scope="col" id="nums" class="manage-column column-nums">编号</th>
                         <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
-                        <th scope="col" id="zone_title" class="manage-column column-zone_title">字号</th>
+                        <th scope="col" id="person" class="manage-column column-person">负责人</th>
                         <th scope="col" id="chairman_id" class="manage-column column-chairman_id">主席</th>
-                        <th scope="col" id="zone_address" class="manage-column column-zone_address">地址</th>
-                        <th scope="col" id="business_licence" class="manage-column column-business_licence">营业执照</th>
-                        <th scope="col" id="bank_card_num" class="manage-column column-bank_card_num">银行卡</th>
-                        <th scope="col" id="zone_type" class="manage-column column-zone_type">主体类型</th>
+                        <th scope="col" id="secretary_id" class="manage-column column-secretary_id">秘书长</th>
+                        <th scope="col" id="term_time" class="manage-column column-term_time">有效期</th>
+                        <th scope="col" id="match_num" class="manage-column column-match_num">办赛次数</th>
+                        <th scope="col" id="match_member_num" class="manage-column column-match_member_num">参赛人次(累计)</th>
+                        <th scope="col" id="grading_num" class="manage-column column-grading_num">考级次数</th>
+                        <th scope="col" id="grading_member_num" class="manage-column column-grading_member_num">考级人次(累计)</th>
                         <th scope="col" id="zone_status" class="manage-column column-zone_status">申请状态</th>
-                        <th scope="col" id="able_status" class="manage-column column-able_status">冻结状态</th>
-                        <th scope="col" id="view_member" class="manage-column column-view_member">查看成员</th>
-                        <th scope="col" id="created_time" class="manage-column column-created_time">提交时间</th>
-                        <th scope="col" id="audit_time" class="manage-column column-audit_time">审核时间</th>
                         <th scope="col" id="options1" class="manage-column column-options1">操作</th>
                     </tr>
                  </thead>
@@ -208,6 +200,24 @@ class Organize{
 //                        $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
                         $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
                         $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
+                        $secretary_real_name = get_user_meta($row['secretary_id'],'user_real_name',true);
+                        //负责人
+                       $person = $wpdb->get_var("SELECT um.meta_value FROM {$wpdb->prefix}zone_manager AS zm 
+                                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'
+                                 WHERE zm.zone_id='{$row['id']}' AND um.meta_value != '' limit 1");
+                       //办赛次数
+                       $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
+                       //参赛人次
+                       $match_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}match_meta_new AS mmn 
+                                           LEFT JOIN {$wpdb->prefix}order AS o ON o.match_id=mmn.match_id
+                                           WHERE mmn.created_id='{$row['user_id']}' AND o.order_type=1 AND o.pay_status IN(2,3,4)");
+                       //考级次数
+                       $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$row['user_id']}'");
+                       //考级人次
+                       $grading_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}grading_meta AS gm 
+                                           LEFT JOIN {$wpdb->prefix}order AS o ON o.match_id=gm.grading_id
+                                           WHERE gm.created_person='{$row['user_id']}' AND o.order_type=2 AND o.pay_status IN(2,3,4)");
+//                       leo_dump($wpdb->last_query);die;
                    ?>
                    <tr data-uid="<?=$row['user_id']?>" data-id="<?=$row['id']?>">
                        <th scope="row" class="check-column">
@@ -230,33 +240,34 @@ class Organize{
                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                        </td>
                        <td class="zone_match_type column-zone_match_type" data-colname="办赛类型"><?=$row['zone_match_type']=='1'?'战队精英赛':'城市精英赛'?></td>
-                       <td class="num column-num" data-colname="编号"><?=sprintf("%04d",$row['id']);?></td>
-                       <td class="user_login column-user_login" data-colname="账号"><?=$row['user_login']?></td>
+                       <td class="nums column-nums" data-colname="编号"><?=sprintf("%04d",$row['id']);?></td>
                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
-
-                       <td class="zone_title column-zone_title" data-colname="字号"><?=$row['zone_name']?></td>
+                       <td class="person column-person" data-colname="负责人"><?=unserialize($person)['real_name']?></td>
                        <td class="chairman_id column-chairman_id" data-colname="主席"><?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?></td>
-                       <td class="zone_address column-zone_address" data-colname="地址"><?=$row['zone_address']?></td>
-                       <td class="business_licence column-business_licence" data-colname="营业执照" id="cardImg-<?=$row['id']?>">
-                           <img src="<?=$row['business_licence_url']?>" style="height: 60px;" alt="">
-                       </td>
-                       <td class="bank_card_num column-bank_card_num" data-colname="银行卡"><?=$row['bank_card_num']?>(<?=$row['opening_bank']?>)</td>
+                       <td class="secretary_id column-secretary_id" data-colname="秘书长"><?=isset($secretary_real_name['real_name'])?$secretary_real_name['real_name']:($row['secretary_id']>0?get_user_by('ID',$row['secretary_id'])->user_login:'')?></td>
 
-                       <td class="zone_type column-zone_type" data-colname="主体类型"><?=$row['zone_type_name']?></td>
+                       <td class="term_time column-term_time" data-colname="有效期"><?=$row['term_time']?$row['term_time']:'无'?></td>
+                       <td class="match_num column-match_num" data-colname="办赛次数"><?=$match_num?></td>
+                       <td class="match_member_num column-match_member_num" data-colname="参赛人次"><?=$match_member_num?></td>
+                       <td class="grading_num column-grading_num" data-colname="考级次数"><?=$grading_num?></td>
+                       <td class="grading_member_num column-grading_member_num" data-colname="考级人次"><?=$grading_member_num?></td>
                        <td class="zone_status column-zone_status" data-colname="申请状态">
-                           <span style="<?=$row['user_status'] == '-1'?'color:#00c415':''?>"><?=$row['user_status_name']?></span>
+                           <?php
+                           if($row['user_status'] == '-1'){
+                                echo '<span style="coz">待审核</span>';
+                           } elseif ($row['user_status'] == '1'){
+
+                           }elseif ($row['user_status'] == '-2'){
+
+                           }
+                           ?>
                        </td>
-                       <td class="able_status column-able_status" data-colname="冻结状态">
-                           <span style="<?=$row['is_able'] == '2'?'color:#c41800':''?>"><?=$row['able_name']?></span>
-                       </td>
-                       <td class="view_member column-view_member" data-colname="查看成员"><a href="<?=admin_url('admin.php?page=fission-organize-coach&user_id='.$row['user_id'])?>">查看成员</a></td>
-                       <td class="created_time column-created_time" data-colname="提交时间"><?=$row['created_time']?></td>
-                       <td class="audit_time column-audit_time" data-colname="审核时间"><?=$row['audit_time']?></td>
 
                        <td class="options1 column-options1" data-colname="操作">
+
                        <?php
                        //操作列表
-                       $optionsArr = [];
+                       $optionsArr = ["<a href='".admin_url('admin.php?page=fission-add-organize&id='.$row['id'])."' data-type='thaw' class=''>查看</a>"];
                        if($row['user_status'] == '1'){
                            switch ($row['is_able']){
                                case 1:
@@ -280,20 +291,17 @@ class Organize{
                         <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                         <th scope="col" class="manage-column column-name column-primary">名称</th>
                         <th scope="col" class="manage-column column-zone_match_type">办赛类型</th>
-                        <th scope="col" class="manage-column column-num">编号</th>
-                        <th scope="col" class="manage-column column-user_login">账号</th>
+                        <th scope="col" class="manage-column column-nums">编号</th>
                         <th scope="col" class="manage-column column-referee_id">推荐人</th>
-                        <th scope="col" class="manage-column column-zone_title">字号</th>
+                        <th scope="col" class="manage-column column-person">负责人</th>
                         <th scope="col" class="manage-column column-chairman_id">主席</th>
-                        <th scope="col" class="manage-column column-zone_address">地址</th>
-                        <th scope="col" class="manage-column column-business_licence">营业执照</th>
-                        <th scope="col" class="manage-column bank_card_num-referee_id">银行卡</th>
-                        <th scope="col" class="manage-column column-zone_type">主体类型</th>
+                        <th scope="col" class="manage-column column-secretary_id">秘书长</th>
+                        <th scope="col" class="manage-column column-term_time">有效期</th>
+                        <th scope="col" class="manage-column column-match_num">办赛次数</th>
+                        <th scope="col" class="manage-column column-match_member_num">参赛人次(累计)</th>
+                        <th scope="col" class="manage-column column-grading_num">考级次数</th>
+                        <th scope="col" class="manage-column column-grading_member_num">考级人次(累计)</th>
                         <th scope="col" class="manage-column column-zone_status">申请状态</th>
-                        <th scope="col" class="manage-column column-able_status">冻结状态</th>
-                        <th scope="col" class="manage-column column-view_member">查看成员</th>
-                        <th scope="col" class="manage-column column-created_time">提交时间</th>
-                        <th scope="col" class="manage-column column-audit_time">审核时间</th>
                         <th scope="col" class="manage-column column-options1">操作</th>
                     </tr>
                 </tfoot>
@@ -733,9 +741,14 @@ class Organize{
     /**
      * 新增/编辑主体
      */
-    public function addOrganize(){
+    public function addOrganize($user_id = 0){
         global $wpdb;
-        $old_zm_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        if($user_id > 0){
+            $old_zm_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_id}'");
+        }else{
+            $old_zm_id = 0;
+        }
+
         if(is_post()){
             $success_msg = '';
             $error_msg = '';
@@ -826,6 +839,7 @@ class Organize{
                 if(!$bool){
                     $wpdb->query('ROLLBACK');
                     $error_msg = '操作失败!';
+
                     is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
                 }else{
                     //收益和主体
@@ -894,6 +908,7 @@ class Organize{
                                                      //添加一级上级收益流水
                                                      $insertData1 = [
                                                          'user_id' => $referee_id1,
+                                                         'user_type' => $zone_type,
                                                          'match_id' => $user_income_logs_id,
                                                          'income_type' => 'subject',
                                                          'user_income' => $spread_set['direct_superior'],
@@ -909,6 +924,7 @@ class Organize{
                                                              //添加二级上级收益流水
                                                              $insertData2 = [
                                                                  'user_id' => $referee_id2,
+                                                                 'user_type' => $zone_type,
                                                                  'match_id' => $user_income_logs_id,
                                                                  'income_type' => 'subject',
                                                                  'user_income' => $spread_set['indirect_superior'],
@@ -981,7 +997,9 @@ class Organize{
         $allPowerList = $wpdb->get_results("SELECT id,role_name FROM {$wpdb->prefix}zone_type_role", ARRAY_A);
         ?>
         <div class="wrap">
-            <h1 id="add-new-user">添加/编辑主体</h1>
+            <?php
+            if($user_id == 0) echo '<h1 id="add-new-user">添加/编辑主体</h1>';
+            ?>
 
             <div id="ajax-response">
                 <span style="color: #2bc422"><?=$success_msg?></span>
@@ -1847,7 +1865,7 @@ class Organize{
      */
     public function organizeStatistics(){
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-        $type = isset($_GET['type']) ? intval($_GET['type']) : 1;
+        $type = isset($_GET['type']) ? intval($_GET['type']) : 6;
 
         $id < 1 && exit('参数错误!');
         global $wpdb;
@@ -1873,12 +1891,15 @@ class Organize{
             <h1 class="wp-heading-inline"><?=$zone_meta['zone_name']?>-统计信息</h1>
             <hr class="wp-header-end">
             <ul class="subsubsub">
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=6')?>" <?=$type===6?'class="current"':''?> aria-current="page">基础资料<span class="count"></span></a> | </li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=1')?>" <?=$type===1?'class="current"':''?> aria-current="page">比赛<span class="count">（<?=$match_num > 0 ? $match_num : 0?>）</span></a> | </li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=2')?>" <?=$type===2?'class="current"':''?> aria-current="page">考级<span class="count">（<?=$grading_num > 0 ? $grading_num : 0?>）</span></a> |</li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=3')?>" <?=$type===3?'class="current"':''?> aria-current="page">课程<span class="count">（<?=$course_num > 0 ? $course_num : 0?>）</span></a></li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4')?>" <?=$type===4?'class="current"':''?> aria-current="page">成员<span class="count">（<?=$member_num > 0 ? $member_num : 0?>）</span></a></li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5')?>" <?=$type===5?'class="current"':''?> aria-current="page">收益<span class="count">（<?=$stream_all > 0 ? $stream_all : 0?>）</span></a></li>
             </ul>
+
+            <br class="clear">
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <?php
             switch ($type){
@@ -1896,6 +1917,9 @@ class Organize{
                     break;
                 case 5:
                     $this->getOrganizeStatisticsIncome($zone_meta['user_id']);
+                    break;
+                case 6:
+                    $this->addOrganize($zone_meta['user_id']);
                     break;
             }
 
@@ -2581,10 +2605,12 @@ class Organize{
 
         switch ($_GET['page']){
             case 'fission-organize-statistics':
-                if(isset($_GET['type']) && intval($_GET['type']) === 3){
-                    wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
-                    wp_enqueue_script( 'admin_layui_js' );
-                }
+                wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
+                wp_enqueue_script( 'admin_layui_js' );
+                wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-languages' );
+                wp_localize_script('student-languages','verify_ZH',[
+                ]);
                 break;
             case 'fission':
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );

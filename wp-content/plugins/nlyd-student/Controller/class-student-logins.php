@@ -31,8 +31,12 @@ class Student_Logins
 
 
             if(is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out' && ($_SERVER['SERVER_NAME'] == 'ydbeta.gjnlyd.com')){
-
-                wp_redirect(home_url('weixin/webLogin'));
+                if($_GET['referee_id']){
+                    $_SESSION['referee_id_wx'] = $_GET['referee_id'];
+                    wp_redirect(home_url('weixin/webLogin/referee_id/'.$_GET['referee_id']));
+                }else{
+                    wp_redirect(home_url('weixin/webLogin'));
+                }
                 exit;
             }
             $this->action = $action;
