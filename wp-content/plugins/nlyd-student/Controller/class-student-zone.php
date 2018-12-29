@@ -21,7 +21,6 @@ class Student_Zone extends Student_Home
         add_shortcode('zone-home',array($this,$action));
     }
 
-
     /**
      * 机构主页
      */
@@ -82,7 +81,7 @@ class Student_Zone extends Student_Home
          $ajax = new Student_Ajax();
          $row['referee_code'] = $ajax->qrcode('user');
 
-         //获取所有的机构名
+         //获取所有机构列表
          $sql_ = "select a.*,b.id zone_id,b.apply_id,b.user_status 
                   from {$wpdb->prefix}zone_type a 
                   left join {$wpdb->prefix}zone_meta b on a.id = b.type_id  and apply_id = {$current_user->ID}
@@ -152,7 +151,15 @@ class Student_Zone extends Student_Home
 
          global $wpdb,$current_user;
 
-         $zone = $this->get_zone_meta();
+         $sql = "select b.*,a.user_income from {$wpdb->prefix}user_stream_logs a left join {$wpdb->prefix}user_income_logs b on a.match_id = b.id where a.id = {$_GET['id']} and a.user_id = {$current_user->ID}";
+
+         $row = $wpdb->get_row($sql,ARRAY_A);
+         print_r($row);
+         if(empty($row)){
+            $this->get_404(__('数据错误', 'nlyd-student'));
+            return;
+        }
+         /*$zone = $this->get_zone_meta();
 
          if(!empty($zone)){
              $sql = " select *,
@@ -220,8 +227,8 @@ class Student_Zone extends Student_Home
              $match = $wpdb->get_row($sql1,ARRAY_A);
              $data['match'] = $match;
              //print_r($match);
-         }
-         print_r($row);
+         }*/
+         
          $data['row'] = $row;
          $view = student_view_path.CONTROLLER.'/profit-detail.php';
          load_view_template($view,$data);
@@ -496,7 +503,7 @@ class Student_Zone extends Student_Home
         load_view_template($view);
     }
     /**
-     * 机构账号设置首页
+     * 机构账号密码设置
      */
      public function setting(){
         $view = student_view_path.CONTROLLER.'/setting.php';
@@ -623,9 +630,7 @@ class Student_Zone extends Student_Home
         $row['user_ID'] = $user_info['user_ID'];
         $city = !empty($row['zone_city']) ? '（'.$row['zone_city'].'）' : '';
         $row['zone_name'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'赛组委会';
-
-
-        //获取推荐人
+        
         //获取推荐人
         $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$user_info['referee_id']} and meta_key in ('user_real_name','user_ID') ";
         $meta_value = $wpdb->get_results($sql,ARRAY_A);
@@ -658,7 +663,7 @@ class Student_Zone extends Student_Home
 
             $data['row'] = $row;
         }
-
+       
         //获取机构类型
         $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
 
@@ -675,7 +680,7 @@ class Student_Zone extends Student_Home
             $data['user_ID_Card'] = $user_info['user_ID_Card'];
         }
 
-
+        //print_r($row);
         $view = student_view_path.CONTROLLER.'/apply.php';
         load_view_template($view,$data);
     }
@@ -683,12 +688,12 @@ class Student_Zone extends Student_Home
      * 分支机构申请页面成功后提示页面
      */
      public function applySuccess(){
-         global $wpdb;
-         //获取分中心类型
-         $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
-         //print_r($data['zone_type_name']);
-         $view = student_view_path.CONTROLLER.'/apply-success.php';
-         load_view_template($view,$data);
+        global $wpdb;
+        //获取分中心类型
+        $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
+        //print_r($data['zone_type_name']);
+        $view = student_view_path.CONTROLLER.'/apply-success.php';
+        load_view_template($view,$data);
 
     }
 

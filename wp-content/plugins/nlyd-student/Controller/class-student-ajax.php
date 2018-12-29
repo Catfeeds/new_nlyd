@@ -251,12 +251,12 @@ class Student_Ajax
             if($total < $pageSize){
                 $pageSize = $total;
             }else{
-
+                
                 $pageSize = $remainder < 1 ? $pageSize : $remainder;
             }
-            // $pageSize = $remainder;
-        }
-
+               // $pageSize = $remainder;
+        }  
+            
         $list2 = array_slice($list,$start,$pageSize);
 
         wp_send_json_success(array('info'=>$list2,'my_ranking'=>$my_ranking));
@@ -403,8 +403,8 @@ class Student_Ajax
             'is_true'=>!empty($prison_log_id) ? 2 : 1,
         );
 
-        /*print_r($insert);
-        die;*/
+         /*print_r($insert);
+         die;*/
         $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
 
         if($result){
@@ -772,8 +772,8 @@ class Student_Ajax
                     $rows[$k]['nickname'] = $user_real['real_name'];
                 }else{
                     $rows[$k]['nickname'] = $user_info['nickname'];
-                }
-
+                } 
+                
                 $rows[$k]['user_head'] = !empty($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
                 $rows[$k]['mental'] = __('待定', 'nlyd-student');
             }
@@ -1924,7 +1924,7 @@ class Student_Ajax
      * 通过身份证自动计算年龄
      */
     public function reckon_age(){
-
+        
         if(empty($_POST['real_ID'])) wp_send_json_error(array('info'=>__('证件号不能为空', 'nlyd-student')));
         if(strlen($_POST['real_ID']) == 18){
             if(!reg_match($_POST['real_ID'],'sf')) wp_send_json_error(array('info'=>__('证件号格式不正确', 'nlyd-student')));
@@ -1933,7 +1933,7 @@ class Student_Ajax
             $age = $now-$sub_str;
             $age = $age >0 ? $age : 1;*/
             $age = birthday($_POST['real_ID']);
-
+            
             if($age == -1){
                 wp_send_json_error(array('info'=>__('年龄不能低于1岁,请确认身份证信息', 'nlyd-student')));
             }
@@ -1944,7 +1944,7 @@ class Student_Ajax
         }else{
             wp_send_json_success(array('info'=>1));
         }
-
+        
     }
 
     /**
@@ -2373,7 +2373,7 @@ class Student_Ajax
     }
 
     /**
-     * 用户退出
+     * 用户退出 
      */
     public function user_logout(){
 
@@ -3013,18 +3013,18 @@ class Student_Ajax
         $update = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE user_id='.$current_user->ID.' AND coach_id='.$coach_id.' AND category_id IN('.$categoryId.')');
         if($update){
             //TODO 发送短信通知教练 ===================================
-            $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
+                $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
 //                $userContact = getMobileOrEmailAndRealname($row['coach_id'], $row['user_mobile'], $row['user_email']);
-            foreach ($rows as $v){
-                $coach_real_name = get_user_meta($v['coach_id'], 'user_real_name',true);
-                $coach_real_name = isset($coach_real_name['real_name']) ? $coach_real_name['real_name'] : $v['user_login'];
-                if($v['user_mobile']){
-                    $ali = new AliSms();
-                    $result = $ali->sendSms($v['user_mobile'], 14, array('coach'=>$coach_real_name, 'user_id' => $userID ,'cate' => $v['post_title']), '国际脑力运动');
-                }else{
-                    $result = send_mail($v['user_email'], 12, ['coach' => $coach_real_name, 'userID' => $userID, 'cate' => $v['post_title']]);
-                }
-            }
+               foreach ($rows as $v){
+                   $coach_real_name = get_user_meta($v['coach_id'], 'user_real_name',true);
+                   $coach_real_name = isset($coach_real_name['real_name']) ? $coach_real_name['real_name'] : $v['user_login'];
+                   if($v['user_mobile']){
+                       $ali = new AliSms();
+                       $result = $ali->sendSms($v['user_mobile'], 14, array('coach'=>$coach_real_name, 'user_id' => $userID ,'cate' => $v['post_title']), '国际脑力运动');
+                   }else{
+                       $result = send_mail($v['user_email'], 12, ['coach' => $coach_real_name, 'userID' => $userID, 'cate' => $v['post_title']]);
+                   }
+               }
 //            $ali = new AliSms();
 //            $result = $ali->sendSms($row['user_mobile'], 14, array('coach'=>str_replace(', ', '', $row['display_name']), 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
             wp_send_json_success(['info' => __('解除教学关系成功', 'nlyd-student')]);
@@ -3104,7 +3104,7 @@ class Student_Ajax
                 wp_send_json_error(array('info'=>__('该用户不存在', 'nlyd-student')));
             }
 
-            //if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
+        //if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
             $user_id = $user->ID;
             $this->setUserCookie($user_id);
             //wp_send_json_success(['info' => '登录成功', 'url' => home_url('account')]);
@@ -3297,7 +3297,7 @@ class Student_Ajax
         $redis = new Redis();
         $redis->connect('127.0.0.1',6379,1);
         $redis->auth('leo626');
-        // $redis->delete('team_ranking_'.$match_id);
+       // $redis->delete('team_ranking_'.$match_id);
 
         if(!$data = $redis->get('team_ranking_'.$match_id)){
             //获取参加比赛的成员
@@ -3340,17 +3340,17 @@ class Student_Ajax
                 // $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
                 // $tuV2['created_microtime'] = $row['created_microtime'] > 0 ? $row['created_microtime'] : 0;
                 // $totalRanking[] = $tuV2;
-
-
-                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
+                 
+                 
+             $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
                   (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime,mq.user_id FROM `{$wpdb->prefix}match_questions` AS mq 
                   LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
                   WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) AND mq.is_true = 1 
                   GROUP BY mq.project_id,mq.user_id) AS child  
                   GROUP BY user_id 
                   ORDER BY my_score DESC limit 0,5
-               ";
-                $rows = $wpdb->get_results($sql,ARRAY_A);
+               ";      
+                   $rows = $wpdb->get_results($sql,ARRAY_A);
 
                 $tuV2['my_score'] = 0;
                 $tuV2['surplus_time'] = 0;
@@ -3470,7 +3470,7 @@ class Student_Ajax
                     $my_score = 0;
                 }
 
-                break;
+            break;
             case 'kysm':
             case 'zxss':
             case 'nxss':
@@ -4432,13 +4432,15 @@ class Student_Ajax
      */
     public function zone_apply_submit(){
         global $wpdb,$current_user;
-
-        $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where id = {$_POST['zone_num']}",ARRAY_A);
-        if($row['user_status']== -1){
-            wp_send_json_error(array('info'=>'资料审核中,禁止修改'));
-        }
-        if($row['user_status']== 1){
-            wp_send_json_error(array('info'=>'审核已通过,资料禁止修改'));
+        //print_r($_POST);die;
+        if($_POST['zone_num'] > 0){
+            $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where id = {$_POST['zone_num']}",ARRAY_A);
+            if($row['user_status']== -1){
+                wp_send_json_error(array('info'=>'资料审核中,禁止修改'));
+            }
+            if($row['user_status']== 1){
+                wp_send_json_error(array('info'=>'审核已通过,资料禁止修改'));
+            }
         }
         if(empty($_POST['type_id']) || empty($_POST['zone_match_type']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
@@ -4470,7 +4472,6 @@ class Student_Ajax
         $role_id = arr2str(array_column($role,'role_id'));
 
         $data = array(
-            'id'=>$_POST['zone_num'],
             'apply_id'=>$current_user->ID,
             'type_id'=>$_POST['type_id'],
             'zone_name'=>$_POST['zone_name'],
@@ -4488,9 +4489,9 @@ class Student_Ajax
             'role_id'=>$role_id,
             'created_time'=>get_time('mysql'),
         );
-        //print_r($data);die;
+        
         if(empty($row)){
-            //print_r($insert);die;
+            //print_r($data);die;
             $result = $wpdb->insert($wpdb->prefix.'zone_meta',$data);
         }else{
             $result = $wpdb->update($wpdb->prefix.'zone_meta',$data,array('id'=>$row['id']));
@@ -4870,8 +4871,8 @@ class Student_Ajax
     }
 
     /**
-     * 轮数重新排序
-     */
+    * 轮数重新排序
+    */
     public function project_sort($match_id,$project_id){
         global $wpdb;
         $projects = $wpdb->get_results("select * from {$wpdb->prefix}match_project_more where match_id = {$match_id} and project_id = {$project_id} order by start_time asc",ARRAY_A);
@@ -5050,7 +5051,9 @@ class Student_Ajax
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if($_POST['map'] != 'zone' && empty($rows) ){
+            if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        }
         //print_r($rows);
         //if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
 
@@ -5122,27 +5125,50 @@ class Student_Ajax
         }
         else{
 
+            $sql__ = "select ID
+                 from {$wpdb->prefix}users
+                 where referee_id = {$current_user->ID} ";
+            $rows__ = $wpdb->get_results($sql__,ARRAY_A);
+            
+            if(empty($rows)){
+                $rows = $rows__;
+                $map = "y";
+            }
+            
             $child = array();
             foreach ($rows as $k => $v) {
-                $city = !empty($v['zone_city']) ? '（'.$v['zone_city'].'）' : '';
-                $rows[$k]['zone_name'] = $v['zone_name'].$city.$v['zone_match_type_cn'].'赛组委会';
+                if($map ==  'y'){
+                    $where = " referee_id = {$v['ID']} ";
+                }else{
+                    $city = !empty($v['zone_city']) ? '（'.$v['zone_city'].'）' : '';
+                    $rows[$k]['zone_name'] = $v['zone_name'].$city.$v['zone_match_type_cn'].'赛组委会';
+                    $where = " referee_id = {$v['ID']} ";
+                }
                 //print_r($v);
+                
+                $where = $map ==  'y' ? "referee_id = {$v['ID']}" : " referee_id = {$v['apply_id']} "; 
                 $sql1 = "select id,case zone_match_type
                 when 1 then '战队精英'
                 when 2 then '城市'
-                end zone_match_type_cn,zone_city,zone_name,user_id,referee_id,date_format(audit_time,'%Y-%m-%d') as audit_time from {$wpdb->prefix}zone_meta where referee_id = {$v['apply_id']}  order by id desc  ";
+                end zone_match_type_cn,zone_city,zone_name,user_id,referee_id,date_format(audit_time,'%Y-%m-%d') as audit_time from {$wpdb->prefix}zone_meta where {$where}  order by id desc  ";
                 //print_r($sql1);
                 $rows1 = $wpdb->get_results($sql1,ARRAY_A);
                 if(!empty($rows1)){
                     foreach ($rows1 as $key1 => $value1) {
                         $city1 = !empty($value1['zone_city']) ? '（'.$value1['zone_city'].'）' : '';
                         $rows1[$key1]['zone_name'] = $value1['zone_name'].$city1.$value1['zone_match_type_cn'].'赛组委会';
-
+                        
                     }
                     $child = $rows1;
                 }
-                $rows[$k]['child'] = $child;
+                if($map != 'y'){
+                    $rows[$k]['child'] = $child;
+                }
             }
+            if($map == 'y'){
+                    $rows = $child;
+                }
+
             $list = $rows;
         }
         wp_send_json_success(array('info'=>$list));
