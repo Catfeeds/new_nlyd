@@ -180,6 +180,7 @@ jQuery(function($) {
                         var _time=judgFailTime(start_time,use_time);
                         var end_time=_time.Format("yyyy/MM/dd hh:mm");
                         _this.parent('.add_lun_row').find('.end_time').text(end_time);
+                        _this.attr('start-time',start_time)
                         // _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',true);//选中时间后判断是否可选
                         $('.add_new_lun').attr('cantChoose',true)
                     }else{

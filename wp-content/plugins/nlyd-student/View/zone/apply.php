@@ -71,12 +71,16 @@
                                         <div class="vertical"></div>
                                     </div>
                                 </div>
-                                <span class="fs_12 c_black3 _tips"><?=__('原件影印件或盖有鲜章的复印件，文件不超过10m大小', 'nlyd-student')?></span>
+                                <span class="fs_12 c_black3 _tips"><?=__('原件影印件或盖有鲜章的复印件', 'nlyd-student')?></span>
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('法定代表人', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>" value="<?=!empty($row) ? $row['legal_person'] :''?>"></div>
+                        </div>
+                        <div>
+                            <div class="lable_row"><span class="c_black"><?=__('对公账户开户名称', 'nlyd-student')?>：</span></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户开户名称', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('选择对公账户开户行', 'nlyd-student')?>：</span></div>
@@ -86,8 +90,8 @@
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('银行卡号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户银行卡号', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
+                            <div class="lable_row"><span class="c_black"><?=__('对公账户号码', 'nlyd-student')?>：</span></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="tel" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户号码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
@@ -105,9 +109,9 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="lable_row"><span class="c_black"><?=__('组委会秘书', 'nlyd-student')?>：</span></div>
+                                <div class="lable_row"><span class="c_black"><?=__('组委会秘书长', 'nlyd-student')?>：</span></div>
                                 <div class="input_row">
-                                    <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="选择组委会秘书" >
+                                    <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="组委会秘书长" >
                                         <option value="<?=$row['secretary_id']?>" selected><?=$row['secretary_name']?></option>
                                     </select>
                                     <!-- <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>"> -->
@@ -202,7 +206,7 @@
             }
         }
         nameRowIsShow()
-        var match_type_data=[{id:1,value:"<?=__('战队赛', 'nlyd-student')?>"},{id:2,value:"<?=__('城市赛', 'nlyd-student')?>"}]
+        var match_type_data=[{id:1,value:"<?=__('战队精英赛', 'nlyd-student')?>"},{id:2,value:"<?=__('城市赛', 'nlyd-student')?>"}]
         var posiotion_match_type=[0];//初始化位置，高亮展示
         if($('#zone_match_type_val').length>0){
             if($('#zone_match_type_val').val() && $('#zone_match_type_val').val().length>0){
@@ -269,12 +273,12 @@
 
         function changes(e,_this,array) {
             var file=e.target.files[0];
-            var fileSize=file.size;
-            var fSize=10;
-            if(fileSize > 1024*1024*fSize){
-                alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
-                return false;
-            }
+            // var fileSize=file.size;
+            // var fSize=2;
+            // if(fileSize > 1024*1024*fSize){
+            //     alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
+            //     return false;
+            // }
             array.unshift(file)
             console.log(array)
             var reader = new FileReader();
@@ -350,6 +354,8 @@
                     fd.append('opening_bank',data.field['opening_bank']);
                     fd.append('opening_bank_address',data.field['opening_bank_address']);
                     fd.append('bank_card_num',data.field['bank_card_num']);
+                    fd.append('bank_card_name',data.field['bank_card_name']);
+                    
                     if($('.business_licence_url').val()=='' || !$('.business_licence_url').val()){//修改具有初始图片
                         if(imgs1[0]){
                             fd.append('business_licence',imgs1[0]);
@@ -401,15 +407,20 @@
                                 setTimeout(function() {
                                     window.location.href=res.data.url
                                 }, 300);
+                            }else{
+                                _this.removeClass('disabled');
                             }
                         },
                         complete: function(jqXHR, textStatus){
                             if(textStatus=='timeout'){
                                 $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                                _this.removeClass('disabled');
                             }
-                            _this.removeClass('disabled');
+                            
                         }
                     })
+                }else{
+                    $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
                 }
                 return false;
             });

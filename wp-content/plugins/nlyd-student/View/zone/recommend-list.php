@@ -47,6 +47,7 @@
                                         <thead>
                                             <tr class='table-head'>
                                                 <td><?=__('名 字', 'nlyd-student')?></td>
+                                                <td><?=__('时 间', 'nlyd-student')?></td>
                                                 <td><?=__('操 作', 'nlyd-student')?></td>
                                             </tr>
                                         </thead>
@@ -132,9 +133,10 @@ jQuery(function($) {
                                                 '<td>'+
                                                     '<div class="table_content">'+
                                                         '<div class="c_black ta_c">'+ v.zone_name+'</div>'+
-                                                        '<div class="ff_num fs_12 ta_c">'+v.audit_time+'</div>'+
+                                                        // '<div class="ff_num fs_12 ta_c">'+v.audit_time+'</div>'+
                                                     '</div>'+
                                                 '</td>'+
+                                                '<td><div class="ff_num fs_12 ta_c">'+v.audit_time+'</div></td>'+
                                                 '<td><div class="table_content"><a class="c_blue disabled_a">详 情</a></div></td>'+
                                             '</tr>'
                                         lis.push(dom_1)
@@ -145,9 +147,10 @@ jQuery(function($) {
                                                         '<td>'+
                                                             '<div class="table_content">'+
                                                                 '<div class="c_orange ta_c">'+val.zone_name+'</div>'+
-                                                                '<div class="ff_num fs_12 ta_c">'+val.audit_time+'</div>'+
+                                                                // '<div class="ff_num fs_12 ta_c">'+val.audit_time+'</div>'+
                                                             '</div>'+
                                                         '</td>'+
+                                                        '<td><div class="ff_num fs_12 ta_c">'+val.audit_time+'</div></td>'+
                                                         '<td><div class="table_content"><a class="c_blue disabled_a">详 情</a></div></td>'+
                                                     '</tr>'
                                                 lis.push(dom_2)

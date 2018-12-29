@@ -124,11 +124,7 @@ class Student_Weixin
         if(empty($users) || (!$users->user_mobile && !$users->user_email)){
             //TODO 显示绑定手机页面
             $users_id = $users->ID == true ? $users->ID : 0;
-            if($_GET['referee_id']){
-                wp_redirect(home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid.'/referee_id/'.$_GET['referee_id']));
-            }else{
-                wp_redirect(home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid));
-            }
+            wp_redirect(home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid));
             exit;
         }
         $this->getUserInfo($access_token,$openid, false,$users->ID);
