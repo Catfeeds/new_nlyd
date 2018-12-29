@@ -181,6 +181,8 @@ class Organize{
                     <tr>
                         <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                         <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
+                        <th scope="col" id="zone_match_type" class="manage-column column-zone_match_type">办赛类型</th>
+                        <th scope="col" id="num" class="manage-column column-num">编号</th>
                         <th scope="col" id="user_login" class="manage-column column-user_login">账号</th>
                         <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
                         <th scope="col" id="zone_title" class="manage-column column-zone_title">字号</th>
@@ -227,6 +229,8 @@ class Organize{
                            </div>
                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                        </td>
+                       <td class="zone_match_type column-zone_match_type" data-colname="办赛类型"><?=$row['zone_match_type']=='1'?'战队精英赛':'城市精英赛'?></td>
+                       <td class="num column-num" data-colname="编号"><?=sprintf("%04d",$row['id']);?></td>
                        <td class="user_login column-user_login" data-colname="账号"><?=$row['user_login']?></td>
                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
 
@@ -275,6 +279,8 @@ class Organize{
                     <tr>
                         <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                         <th scope="col" class="manage-column column-name column-primary">名称</th>
+                        <th scope="col" class="manage-column column-zone_match_type">办赛类型</th>
+                        <th scope="col" class="manage-column column-num">编号</th>
                         <th scope="col" class="manage-column column-user_login">账号</th>
                         <th scope="col" class="manage-column column-referee_id">推荐人</th>
                         <th scope="col" class="manage-column column-zone_title">字号</th>
@@ -736,7 +742,7 @@ class Organize{
             $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
             $zone_type = isset($_POST['zone_type']) ? intval($_POST['zone_type']) : 0;
             $referee_id = isset($_POST['referee_id']) ? intval($_POST['referee_id']) : 0;
-            $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
+//            $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
 //            $zone_title = isset($_POST['zone_title']) ? trim($_POST['zone_title']) : '';
             $zone_city = isset($_POST['zone_city']) ? trim($_POST['zone_city']) : '';
             $zone_address = isset($_POST['zone_address']) ? trim($_POST['zone_address']) : '';
@@ -753,15 +759,16 @@ class Organize{
             $match_power = isset($_POST['match_power']) ? $_POST['match_power'] : [];
             $admin_power = isset($_POST['admin_power']) ? $_POST['admin_power'] : [];
             $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
+            $term_time = isset($_POST['term_time']) ? trim($_POST['term_time']) : '';
 
             if($user_id < 0) $error_msg = '请选择负责人';
 //            if($zone_match_type < 0) $error_msg = $error_msg==''?'请选择赛区类型':$error_msg.'<br >请选择赛区类型';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择主体类型':$error_msg.'<br >请选择主体类型';
-            if($user_id == $referee_id) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
+            if($user_id == $referee_id && $user_status !==1) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
             if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($admin_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
 //            if($zone_title == '') $error_msg = $error_msg==''?'请填写主体名称':$error_msg.'<br >请填写主体名称';
-            if($zone_address == '') $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
+            if($zone_address == '' && !in_array($zone_match_type,[1,2])) $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
 //            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
             if($legal_person == '') $error_msg = $error_msg==''?'请填写法人':$error_msg.'<br >请填写法人';
             if($zone_city == '') $error_msg = $error_msg==''?'请填写机构城市':$error_msg.'<br >请填写机构城市';
@@ -789,6 +796,7 @@ class Organize{
                     'bank_card_num' => $bank_card_num,
                     'chairman_id' => $chairman_id,
                     'secretary_id' => $secretary_id,
+                    'term_time' => $term_time,
                     'match_role_id' => join(',',$match_power),
                     'role_id' => join(',',$admin_power),
                     'parent_id' => $parent_id,
@@ -854,7 +862,9 @@ class Organize{
                                     if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id,'referee_time'=>get_time('mysql')],['ID' => $user_id])){
                                         $error_msg = '更新主体推荐人失败!';
                                     }
-
+                                    if(!$spread_set){
+                                        $error_msg = '无收益设置!';
+                                    }
                                      if($error_msg == ''){
                                          //主体类型
                                          if($spread_set){
@@ -944,7 +954,7 @@ class Organize{
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
                    zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,um3.meta_value AS chairman_real_name,um4.meta_value AS secretary_real_name,
-                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city 
+                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city,zm.term_time 
                    FROM {$wpdb->prefix}zone_meta AS zm 
                    LEFT JOIN {$wpdb->users} AS u ON u.ID=zm.user_id AND u.ID!='' 
                    LEFT JOIN {$wpdb->users} AS u2 ON u2.ID=zm.referee_id AND u2.ID!='' 
@@ -985,12 +995,7 @@ class Organize{
                 <table class="form-table">
                     <tbody>
 
-                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>" id="zone_title_tr">
-                        <th scope="row"><label for="zone_title">字号 </label></th>
-                        <td>
-                            <input type="text" name="zone_title" id="zone_title" value="<?=$row['zone_name']?>">
-                        </td>
-                    </tr>
+
                     <tr class="form-field form-required">
                         <th scope="row"><label for="user_id">负责人 </label></th>
                         <td>
@@ -1074,6 +1079,12 @@ class Organize{
                             </select>
                         </td>
                     </tr>
+                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>" id="zone_title_tr">
+                        <th scope="row"><label for="zone_title">字号 </label></th>
+                        <td>
+                            <input type="text" name="zone_title" id="zone_title" value="<?=$row['zone_name']?>">
+                        </td>
+                    </tr>
                     <tr class="">
                         <th scope="row"><label for="zone_city">机构城市 </label></th>
                         <td>
@@ -1144,6 +1155,15 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="">
+                        <th scope="row"><label for="term_time">有效期 </label></th>
+                        <td>
+                            <label for="term_time_radio_1"><input id="term_time_radio_1" <?=isset($row['term_time']) && $row['term_time']? 'checked="checked"':''?> type="radio" value="1" name="term_time_radio" class="term_time_radio">有</label>
+                            <label for="term_time_radio_2"><input id="term_time_radio_2" <?=!isset($row['term_time']) || !$row['term_time'] ? 'checked="checked"':''?> type="radio" value="2" name="term_time_radio" class="term_time_radio">无</label>
+                             <input style="<?=!isset($row['term_time']) || !$row['term_time']? 'display:none;':''?>" type="text" style="max-width: 500px;" value="<?=isset($row['term_time']) ? $row['term_time'] : get_time('mysql')?>" name="term_time" class="layui-input date-picker y-m-d-h-m-s" readonly  id="term_time" placeholder="有效期">
+
+                        </td>
+                    </tr>
+                    <tr class="">
                         <th scope="row"><label for="">状态 </label></th>
                         <td>
                         <?php if($row['user_status'] == '-1'){
@@ -1174,6 +1194,29 @@ class Organize{
             </form>
             <script>
                 jQuery(document).ready(function($) {
+                    layui.use(['laydate',], function(){
+                        var laydate = layui.laydate;
+                        //日期时间选择器
+                        $('.date-picker').each(function(){
+                            var id=$(this).attr('id');
+                            var format='yyyy-MM-dd HH:mm';
+                            var type='datetime';
+                            if($(this).hasClass('y-m-d')){
+                                format='yyyy-MM-dd';
+                                type='date'
+                            }else if($(this).hasClass('y-m-d-h-m-s')){
+                                format='yyyy-MM-dd HH:mm:ss';
+                                type='datetime';
+                            }
+
+
+                            laydate.render({
+                                elem: '#'+id
+                                ,type: type
+                                ,format: format
+                            });
+                        })
+                    })
                     $('#zone_type').on('change', function () {
                         var val = $(this).val();
                         $.ajax({
@@ -1209,6 +1252,15 @@ class Organize{
                             $('#zone_title_tr').show();
                         }else{
                             $('#zone_title_tr').hide();
+                        }
+                    });
+                    $('.term_time_radio').on('click',function () {
+                        var val = $(this).val();
+                        if(val == '1'){
+                            $('input[name="term_time"]').show();
+                        }else{
+                            $('input[name="term_time"]').hide();
+                            $("#term_time").val('');
                         }
                     });
                 });
@@ -2537,6 +2589,14 @@ class Organize{
             case 'fission':
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'admin_layui_js' );
+                break;
+            case 'fission-add-organize':
+                wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
+                wp_enqueue_script( 'admin_layui_js' );
+                wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-languages' );
+                wp_localize_script('student-languages','verify_ZH',[
+                ]);
                 break;
         }
     }

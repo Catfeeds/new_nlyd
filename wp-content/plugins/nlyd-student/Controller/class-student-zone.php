@@ -151,84 +151,50 @@ class Student_Zone extends Student_Home
 
          global $wpdb,$current_user;
 
-         $sql = "select b.*,a.user_income from {$wpdb->prefix}user_stream_logs a left join {$wpdb->prefix}user_income_logs b on a.match_id = b.id where a.id = {$_GET['id']} and a.user_id = {$current_user->ID}";
-
-         $row = $wpdb->get_row($sql,ARRAY_A);
-         print_r($row);
+         //获取当前收益内容
+         $row = $wpdb->get_row("select match_id,income_type,user_type,user_income, 
+                                       case income_type
+                                        when 'match' then '比赛收益'
+                                        when 'grading' then '考级收益'
+                                        when 'subject' then '推荐奖励'
+                                        when 'extract' then '提现'
+                                        end income_type_title 
+                                      from {$wpdb->prefix}user_stream_logs 
+                                      where id = {$_GET['id']} and user_id = {$current_user->ID} ",ARRAY_A);
          if(empty($row)){
-            $this->get_404(__('数据错误', 'nlyd-student'));
-            return;
-        }
-         /*$zone = $this->get_zone_meta();
-
-         if(!empty($zone)){
-             $sql = " select *,
-                case income_type
-                when 'match' then '比赛收益'
-                when 'grading' then '考级收益'
-                when 'extract' then '比赛提现'
-                end income_type_title 
-                from {$wpdb->prefix}income_logs 
-                where id = {$_GET['id']} and (referee_id = {$current_user->ID} or indirect_referee_id = $current_user->ID) ";
-         }else{
-
-             $sql = "select *,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
-                if(income_type = 'extract','bg_reduce', 'bg_add') as income_type_class,
-                case income_type
-                when 'match' then '比赛收益'
-                when 'grading' then '考级收益'
-                when 'extract' then '比赛提现'
-                end income_type_title
-                from {$wpdb->prefix}user_stream_logs where id = {$_GET['id']} and user_id = {$current_user->ID} ";
-         }
-
-         $row = $wpdb->get_row($sql,ARRAY_A);
-         if(empty($row)){
-             $this->get_404(array('message'=>'数据错误','return_url'=>home_url('/zone/profit/')));
+             $this->get_404(__('数据错误', 'nlyd-student'));
              return;
          }
-         if(!empty($zone)){
-             if($row['referee_id'] == $current_user->ID){
-                 $row['user_income'] = $row['referee_income'];
-                 $row['profit_lv'] = '1级收益';
-                 $referee_name = get_user_meta($row['user_id'],'user_real_name')[0];
-                 $row['channel'] = $referee_name['real_name'];
-             }
-             elseif ($row['indirect_referee_id'] == $current_user->ID){
-                 $row['user_income'] = $row['indirect_referee_income'];
-                 $row['profit_lv'] = '2级收益';
-                 $indirect_referee = get_user_meta($row['indirect_referee_id'],'user_real_name')[0];
-                 $row['channel'] = $indirect_referee['real_name'];
-             }
-
+         if($row['income_type'] == 'subject'){  //裂变收益
+             $where = "id = {$row['match_id']}";
+             $row['income_channel'] = '中心裂变';
          }
-         if(in_array($row['income_type'],array('match','grading'))){
-             switch ($row['income_type']){
-                 case 'match':
-                     $table = $wpdb->prefix.'match_meta_new';
-                     $where = "a.match_id = {$row['match_id']}";
-                     $t = 'match_id';
-                     $scene = "match_scene";
-                     break;
-                 case 'grading':
-                     $table = $wpdb->prefix.'grading_meta';
-                     $where = "a.grading_id = {$row['match_id']}";
-                     $t = 'grading_id';
-                     $scene = "scene";
-                     break;
+         elseif ($row['income_type'] != 'extract'){ // 基础收益
+            $where = "match_id = {$row['match_id']}";
+             //print_r("select post_title form {$wpdb->prefix}posts where ID = {$row['match_id']} ");
+             $row['income_channel'] = $wpdb->get_var("select post_title from {$wpdb->prefix}posts where ID = {$row['match_id']} ");
+         }
+         $result = $wpdb->get_results("select * from {$wpdb->prefix}user_income_logs where {$where}",ARRAY_A);
+         if(count($result) > 1){
+             $result = $row;
+         }else{
+             $result_ = $result[0];
+             //print_r($result_);
+             if($result_['referee_id'] == $current_user->ID){
+                 $row['profit_lv'] = '直接';
              }
-             $sql1 = "select b.post_title as match_title,c.role_name
-                      from {$table} a
-                      left join {$wpdb->prefix}posts b on a.{$t} = b.ID
-                      left join {$wpdb->prefix}zone_match_role c on a.{$scene} = c.id
-                      where {$where}
-                      ";
-             //print_r($sql1);
-             $match = $wpdb->get_row($sql1,ARRAY_A);
-             $data['match'] = $match;
-             //print_r($match);
-         }*/
-         
+             elseif ($result_['indirect_referee_id'] == $current_user->ID){
+                 $row['profit_lv'] = '间接';
+             }
+             $referee_name = get_user_meta($result_['user_id'],'user_real_name')[0];
+             //var_dump($referee_name);
+             $row['channel'] = $referee_name['real_name'];
+             $row['channel_ID'] = $result_['user_id']+10000000;
+         }
+
+        //print_r($result);
+
+
          $data['row'] = $row;
          $view = student_view_path.CONTROLLER.'/profit-detail.php';
          load_view_template($view,$data);

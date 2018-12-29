@@ -204,6 +204,7 @@ function the_table_install () {
           `match_role_id` varchar(50) DEFAULT NULL COMMENT 'match_role_id 用,分割',
           `parent_id` int(20) unsigned DEFAULT 0 COMMENT '上级主体id',
           `apply_id` int(20) unsigned DEFAULT 0 COMMENT '申请人id',
+          `term_time` datetime DEFAULT NULL COMMENT '有效期',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
