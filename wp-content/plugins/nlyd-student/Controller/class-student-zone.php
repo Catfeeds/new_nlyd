@@ -519,49 +519,58 @@ class Student_Zone extends Student_Home
     /**
      * 推荐管理
      */
-     public function recommend(){
+    public function recommend(){
 
-         global $wpdb,$current_user;
+        global $wpdb,$current_user;
 
-         //获取我推荐的用户
-         $sql = "select a.referee_id,a.ID child_id,b.id zone_id
+        //获取我推荐的用户
+        $sql = "select a.referee_id,a.ID child_id,b.id zone_id
                  from {$wpdb->prefix}users a 
                  left join {$wpdb->prefix}zone_meta b on a.ID = b.user_id 
                  where a.referee_id = {$current_user->ID} and b.id is null ";
-         $rows = $wpdb->get_results($sql,ARRAY_A);
-         //print_r($sql);
-         $data['user_total'] = 0;
-         if(!empty($rows)){
-             /*$parent_total = count($rows);
-             $child_total = 0;*/
-             $total = count($rows);
-             foreach ($rows as $v){
-                 //print_r($sql_);
-                 $total += $wpdb->get_var("select count(*)
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($sql);
+        $data['user_total'] = 0;
+        if(!empty($rows)){
+            /*$parent_total = count($rows);
+            $child_total = 0;*/
+            $total = count($rows);
+            foreach ($rows as $v){
+                //print_r($sql_);
+                $total += $wpdb->get_var("select count(*)
                                              from {$wpdb->prefix}users a 
                                              left join {$wpdb->prefix}zone_meta b on a.ID = b.user_id 
                                              where a.referee_id = {$v['child_id']} and b.id is null ");
-             }
-             $data['user_total'] = $total > 0 ? $total : '0';
-             //print_r($total);
-         }
+            }
+            $data['user_total'] = $total;
+            //print_r($total);
+        }
 
-         //获取我推荐的机构
-         $sql_ = "select user_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}";
-         //print_r($sql_);
-         $rows_ = $wpdb->get_results($sql_,ARRAY_A);
-         $data['zone_total'] = 0;
-         if(!empty($rows_)){
-             $total_ = count($rows_);
-             foreach ($rows_ as $v_){
-                 $total_ += $wpdb->get_var("select count(*)  from {$wpdb->prefix}zone_meta where referee_id = {$v_['user_id']}");
-             }
-             //print_r($total_);
-             $data['zone_total'] = $total_ > 0 ? $total_ : '0';
-         }
+        //获取我推荐的机构
+        //1级推荐
+        $sql_ = "select apply_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}";
+        //print_r($sql_);
+        $rows_ = $wpdb->get_results($sql_,ARRAY_A);
+        $data['zone_total'] = 0;
+        $total_ = count($rows_);
+        //print_r($total_);
+        //2级推荐
+        $sql__ = "select ID
+                 from {$wpdb->prefix}users
+                 where referee_id = {$current_user->ID} ";
+        $rows__ = $wpdb->get_results($sql__,ARRAY_A);
+        if(!empty($rows__)){
 
-         $view = student_view_path.CONTROLLER.'/recommend-list.php';
-         load_view_template($view,$data);
+            foreach ($rows__ as $v_){
+                $total_ += $wpdb->get_var("select count(*)  from {$wpdb->prefix}zone_meta where referee_id = {$v_['ID']}");
+            }
+            //print_r($total_);
+            $data['zone_total'] = $total_;
+        }
+        //print_r($data);
+
+        $view = student_view_path.CONTROLLER.'/recommend-list.php';
+        load_view_template($view,$data);
     }
     
     /**
