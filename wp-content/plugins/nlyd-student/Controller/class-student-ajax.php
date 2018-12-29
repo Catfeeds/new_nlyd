@@ -4568,7 +4568,7 @@ class Student_Ajax
         }
 
         //获取收益列表
-        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,user_income,
+        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,user_income,income_type,
                   case income_type
                     when 'match' then '比赛收益'
                     when 'grading' then '考级收益'
