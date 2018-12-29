@@ -4442,7 +4442,7 @@ class Student_Ajax
                 wp_send_json_error(array('info'=>'审核已通过,资料禁止修改'));
             }
         }
-        if(empty($_POST['type_id']) || empty($_POST['zone_match_type']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
+        if(empty($_POST['type_id']) || empty($_POST['zone_match_type']) || empty($_POST['zone_type_alias']) || empty($_POST['bank_card_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
         }
         if(empty($_POST['business_licence_url'])){
@@ -4479,6 +4479,7 @@ class Student_Ajax
             'zone_address'=>$_POST['zone_address'],
             'business_licence_url'=>$business_licence_url,
             'legal_person'=>$_POST['legal_person'],
+            'bank_card_name'=>$_POST['bank_card_name'],
             'opening_bank'=>$_POST['opening_bank'],
             'opening_bank_address'=>$_POST['opening_bank_address'],
             'bank_card_num'=>$_POST['bank_card_num'],
@@ -5061,7 +5062,7 @@ class Student_Ajax
         else{   //获取我推荐的用户
 
 
-            $sql = "select SQL_CALC_FOUND_ROWS a.ID ,b.meta_value as user_real_name,referee_time 
+            $sql = "select SQL_CALC_FOUND_ROWS a.ID ,a.user_nicename,b.meta_value as user_real_name,referee_time 
                     from {$wpdb->prefix}users a 
                     left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                     left join {$wpdb->prefix}zone_meta c on a.ID = c.user_id 
@@ -5088,6 +5089,9 @@ class Student_Ajax
                     $user_real_name = unserialize($v['user_real_name']);
                     $list[$k]['real_age'] = $user_real_name['real_age'];
                     $list[$k]['real_name'] = $user_real_name['real_name'];
+                }else{
+                    $list[$k]['real_name'] = $v['user_nicename'];
+                    $list[$k]['real_age'] = '-';
                 }
                 $list[$k]['referee_time'] = !empty($v['referee_time']) ? $v['referee_time'] : '-';
 
@@ -5107,7 +5111,7 @@ class Student_Ajax
                 $list[$k]['is_shop'] = $order_id > 0 ? 'y' : 'n';
 
                 //获取二级推荐
-                $sql_ = "select a.ID ,b.meta_value as user_real_name from {$wpdb->prefix}users a 
+                $sql_ = "select a.ID ,a.user_nicename,b.meta_value as user_real_name from {$wpdb->prefix}users a 
                          left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                          left join {$wpdb->prefix}zone_meta c on a.ID = c.user_id 
                          where a.referee_id = {$v['ID']} and c.id is null
@@ -5121,6 +5125,9 @@ class Student_Ajax
                             $user_real_name = unserialize($value['user_real_name']);
                             $child[$key]['real_age'] = $user_real_name['real_age'];
                             $child[$key]['real_name'] = $user_real_name['real_name'];
+                        }else{
+                            $child[$key]['real_age'] = '-';
+                            $child[$key]['real_name'] = $value['user_nicename'];
                         }
                         $child[$key]['referee_time'] = !empty($value['referee_time']) ? $value['referee_time'] : '-';
 

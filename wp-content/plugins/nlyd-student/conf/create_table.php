@@ -190,6 +190,7 @@ function the_table_install () {
           `business_licence` varchar(255) DEFAULT NULL COMMENT '营业执照',
           `business_licence_url` varchar(255) DEFAULT NULL COMMENT '营业执照照片路径',
           `legal_person` varchar(255) DEFAULT NULL COMMENT '法人',
+          `bank_card_name` varchar(255) DEFAULT NULL COMMENT '开户名称',
           `opening_bank` varchar(255) DEFAULT NULL COMMENT '开户行',
           `opening_bank_address` varchar(255) DEFAULT NULL COMMENT '开户行地址',
           `bank_card_num` varchar(255) DEFAULT NULL COMMENT '银行卡号',
