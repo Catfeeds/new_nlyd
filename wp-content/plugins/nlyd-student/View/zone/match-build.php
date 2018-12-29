@@ -156,7 +156,6 @@ var mobileSelect2 = new MobileSelect({
     }
 });
 //---------------------------开赛日期------------------------------
-console.log(match_date_Data)
 if($('#match_date').length>0 && $('#match_date').attr('data-time').length>0){
     var timeValue=$('#match_date').attr('data-time').split('-');
     $.each(match_date_Data,function(index,value){

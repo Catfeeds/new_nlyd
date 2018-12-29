@@ -180,21 +180,21 @@
                 if(j<10){
                     j='0'+j;
                 }
-                var row={id:j,value:j}
+                var row={id:j,value:j,childs:minites}
                 hour.push(row)
             }
-var day1=[{id:1,value:1},{id:2,value:2},{id:3,value:3},{id:4,value:4},{id:5,value:5},{id:6,value:6},{id:7,value:7},{id:8,value:8},{id:9,value:9},{id:10,value:10},
-{id:11,value:11},{id:12,value:12},{id:13,value:13},{id:14,value:14},{id:15,value:15},{id:16,value:16},{id:17,value:17},{id:18,value:18},{id:19,value:19},{id:20,value:20},{id:21,value:21},
-{id:22,value:22},{id:23,value:23},{id:24,value:24},{id:25,value:25},{id:26,value:26},{id:27,value:27},{id:28,value:28},{id:29,value:29},{id:30,value:30},{id:31,value:31}]
-var day2=[{id:1,value:1},{id:2,value:2},{id:3,value:3},{id:4,value:4},{id:5,value:5},{id:6,value:6},{id:7,value:7},{id:8,value:8},{id:9,value:9},{id:10,value:10},
-{id:11,value:11},{id:12,value:12},{id:13,value:13},{id:14,value:14},{id:15,value:15},{id:16,value:16},{id:17,value:17},{id:18,value:18},{id:19,value:19},{id:20,value:20},{id:21,value:21},
-{id:22,value:22},{id:23,value:23},{id:24,value:24},{id:25,value:25},{id:26,value:26},{id:27,value:27},{id:28,value:28},{id:29,value:29},{id:30,value:30}]
-var day3=[{id:1,value:1},{id:2,value:2},{id:3,value:3},{id:4,value:4},{id:5,value:5},{id:6,value:6},{id:7,value:7},{id:8,value:8},{id:9,value:9},{id:10,value:10},
-{id:11,value:11},{id:12,value:12},{id:13,value:13},{id:14,value:14},{id:15,value:15},{id:16,value:16},{id:17,value:17},{id:18,value:18},{id:19,value:19},{id:20,value:20},{id:21,value:21},
-{id:22,value:22},{id:23,value:23},{id:24,value:24},{id:25,value:25},{id:26,value:26},{id:27,value:27},{id:28,value:28}]
-var day4=[{id:1,value:1},{id:2,value:2},{id:3,value:3},{id:4,value:4},{id:5,value:5},{id:6,value:6},{id:7,value:7},{id:8,value:8},{id:9,value:9},{id:10,value:10},
-{id:11,value:11},{id:12,value:12},{id:13,value:13},{id:14,value:14},{id:15,value:15},{id:16,value:16},{id:17,value:17},{id:18,value:18},{id:19,value:19},{id:20,value:20},{id:21,value:21},
-{id:22,value:22},{id:23,value:23},{id:24,value:24},{id:25,value:25},{id:26,value:26},{id:27,value:27},{id:28,value:28},{id:29,value:29}];
+var day1=[{id:1,value:1,childs:hour},{id:2,value:2,childs:hour},{id:3,value:3,childs:hour},{id:4,value:4,childs:hour},{id:5,value:5,childs:hour},{id:6,value:6,childs:hour},{id:7,value:7,childs:hour},{id:8,value:8,childs:hour},{id:9,value:9,childs:hour},{id:10,value:10,childs:hour},
+{id:11,value:11,childs:hour},{id:12,value:12,childs:hour},{id:13,value:13,childs:hour},{id:14,value:14,childs:hour},{id:15,value:15,childs:hour},{id:16,value:16,childs:hour},{id:17,value:17,childs:hour},{id:18,value:18,childs:hour},{id:19,value:19,childs:hour},{id:20,value:20,childs:hour},{id:21,value:21,childs:hour},
+{id:22,value:22,childs:hour},{id:23,value:23,childs:hour},{id:24,value:24,childs:hour},{id:25,value:25,childs:hour},{id:26,value:26,childs:hour},{id:27,value:27,childs:hour},{id:28,value:28,childs:hour},{id:29,value:29,childs:hour},{id:30,value:30,childs:hour},{id:31,value:31,childs:hour}]
+var day2=[{id:1,value:1,childs:hour},{id:2,value:2,childs:hour},{id:3,value:3,childs:hour},{id:4,value:4,childs:hour},{id:5,value:5,childs:hour},{id:6,value:6,childs:hour},{id:7,value:7,childs:hour},{id:8,value:8,childs:hour},{id:9,value:9,childs:hour},{id:10,value:10,childs:hour},
+{id:11,value:11,childs:hour},{id:12,value:12,childs:hour},{id:13,value:13,childs:hour},{id:14,value:14,childs:hour},{id:15,value:15,childs:hour},{id:16,value:16,childs:hour},{id:17,value:17,childs:hour},{id:18,value:18,childs:hour},{id:19,value:19,childs:hour},{id:20,value:20,childs:hour},{id:21,value:21,childs:hour},
+{id:22,value:22,childs:hour},{id:23,value:23,childs:hour},{id:24,value:24,childs:hour},{id:25,value:25,childs:hour},{id:26,value:26,childs:hour},{id:27,value:27,childs:hour},{id:28,value:28,childs:hour},{id:29,value:29,childs:hour},{id:30,value:30,childs:hour}]
+var day3=[{id:1,value:1,childs:hour},{id:2,value:2,childs:hour},{id:3,value:3,childs:hour},{id:4,value:4,childs:hour},{id:5,value:5,childs:hour},{id:6,value:6,childs:hour},{id:7,value:7,childs:hour},{id:8,value:8,childs:hour},{id:9,value:9,childs:hour},{id:10,value:10,childs:hour},
+{id:11,value:11,childs:hour},{id:12,value:12,childs:hour},{id:13,value:13,childs:hour},{id:14,value:14,childs:hour},{id:15,value:15,childs:hour},{id:16,value:16,childs:hour},{id:17,value:17,childs:hour},{id:18,value:18,childs:hour},{id:19,value:19,childs:hour},{id:20,value:20,childs:hour},{id:21,value:21,childs:hour},
+{id:22,value:22,childs:hour},{id:23,value:23,childs:hour},{id:24,value:24,childs:hour},{id:25,value:25,childs:hour},{id:26,value:26,childs:hour},{id:27,value:27,childs:hour},{id:28,value:28,childs:hour}]
+var day4=[{id:1,value:1,childs:hour},{id:2,value:2,childs:hour},{id:3,value:3,childs:hour},{id:4,value:4,childs:hour},{id:5,value:5,childs:hour},{id:6,value:6,childs:hour},{id:7,value:7,childs:hour},{id:8,value:8,childs:hour},{id:9,value:9,childs:hour},{id:10,value:10,childs:hour},
+{id:11,value:11,childs:hour},{id:12,value:12,childs:hour},{id:13,value:13,childs:hour},{id:14,value:14,childs:hour},{id:15,value:15,childs:hour},{id:16,value:16,childs:hour},{id:17,value:17,childs:hour},{id:18,value:18,childs:hour},{id:19,value:19,childs:hour},{id:20,value:20,childs:hour},{id:21,value:21,childs:hour},
+{id:22,value:22,childs:hour},{id:23,value:23,childs:hour},{id:24,value:24,childs:hour},{id:25,value:25,childs:hour},{id:26,value:26,childs:hour},{id:27,value:27,childs:hour},{id:28,value:28,childs:hour},{id:29,value:29,childs:hour}];
             for(var i=0;i<=showYear;i++){
                 var val=nowYear+i-1;
                 var YearRow={id:i,value:val,childs:[]}
@@ -238,7 +238,7 @@ var day4=[{id:1,value:1},{id:2,value:2},{id:3,value:3},{id:4,value:4},{id:5,valu
                 //                     var DayRow={id:k,value:k,childs:_hours}
                 //                     day.push(DayRow);
                 //                 }else{
-                //                     var DayRow={id:k,value:k}
+                //                     var DayRow={id:k,value:k,childs:hour}
                 //                     day.push(DayRow);
                 //                 }
                 //             }
@@ -279,7 +279,7 @@ var day4=[{id:1,value:1},{id:2,value:2},{id:3,value:3},{id:4,value:4},{id:5,valu
                 // }
                 year.push(YearRow)
          }
-         $.validationLayui.dates2=[{data:year},{data:hour},{data:minites},];
+         $.validationLayui.dates2=year;
     },
         area:function(){
           $.validationLayui.allArea={
