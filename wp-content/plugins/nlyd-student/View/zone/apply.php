@@ -43,7 +43,7 @@
                                 <span class="c_black3"><?=__('规则：IISC+“名字”+国际脑力训练中心+城市', 'nlyd-student')?></span>
                             </div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" type="text" name="zone_name" autocomplete="off" placeholder="<?=__('输入您的'.$zone_type_name.'名字', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_name'] :''?>">
+                                <input class="radius_input_row nl-foucs" type="text" name="zone_name" autocomplete="off" placeholder="<?=__('输入您的'.$zone_type_name.'名字', 'nlyd-student')?>" value="<?=!empty($row['id']) ? $row['zone_name'] :''?>">
                             </div>
                         </div>
                         <div>

@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-padding-pc">
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/profit/');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/profit/type/user');?>">
                         <div class="apply_list_line pull-left ">
                             <div class="zone_bg bg_money"></div>
                         </div>

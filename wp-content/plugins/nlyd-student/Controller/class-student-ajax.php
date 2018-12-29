@@ -4559,8 +4559,31 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
+        if($_POST['map'] == 'all'){ //全部
+            $where = "user_id = {$current_user->ID}";
+        }elseif ($_POST['map'] == 'extract'){ //提现
+            $where = " user_id = {$current_user->ID} and user_income < 0 ";
+        }else{  //收益
+            $where = "user_id = {$current_user->ID} and user_income > 0 ";
+        }
+
+        //获取收益列表
+        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,user_income,
+                  case income_type
+                    when 'match' then '比赛收益'
+                    when 'grading' then '考级收益'
+                    when 'subject' then '推荐奖励'
+                    when 'extract' then '提现'
+                  end income_type_title
+                  from {$wpdb->prefix}user_stream_logs 
+                  where {$where}
+                  order by created_time desc limit $start,$pageSize 
+                  ";
+
+//        /print_r($sql);
         //判断用户是否为机构单位
-        $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
+        /*$zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
+
         if($_POST['map'] == 'profit' && empty($zone_id)){
 
             $sql = "select id,if(referee_id > 0,referee_income,indirect_referee_income) user_income ,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
@@ -4591,7 +4614,7 @@ class Student_Ajax
                 when 'subject' then '推荐补贴'
                 end income_type_title
                 from {$wpdb->prefix}user_stream_logs where {$where} order by created_time desc limit $start,$pageSize ";
-        }
+        }*/
         //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
