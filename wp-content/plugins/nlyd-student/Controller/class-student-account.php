@@ -77,6 +77,7 @@ class Student_Account extends Student_Home
                     $arr[$key]['id'] = $value['id'];
                 }
             }
+            //print_r($arr);
 
             //获取当前是否有比赛
             $saql = "select a.match_id from {$wpdb->prefix}match_meta_new a left join {$wpdb->prefix}order b on a.match_id = b.match_id where b.user_id = {$user_info['user_id']} and match_status = 2";
