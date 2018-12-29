@@ -131,8 +131,8 @@ jQuery(function($) {
                                         dom_1='<tr>'+
                                                 '<td>'+
                                                     '<div class="table_content">'+
-                                                        '<div class="c_black ta_c">'+v.zone_name+'</div>'+
-                                                        '<div class="ff_num fs_12 ta_c">----</div>'+
+                                                        '<div class="c_black ta_c">'+ v.zone_name+'</div>'+
+                                                        '<div class="ff_num fs_12 ta_c">'+v.audit_time+'</div>'+
                                                     '</div>'+
                                                 '</td>'+
                                                 '<td><div class="table_content"><a class="c_blue disabled_a">详 情</a></div></td>'+
@@ -145,7 +145,7 @@ jQuery(function($) {
                                                         '<td>'+
                                                             '<div class="table_content">'+
                                                                 '<div class="c_orange ta_c">'+val.zone_name+'</div>'+
-                                                                '<div class="ff_num fs_12 ta_c">----</div>'+
+                                                                '<div class="ff_num fs_12 ta_c">'+val.audit_time+'</div>'+
                                                             '</div>'+
                                                         '</td>'+
                                                         '<td><div class="table_content"><a class="c_blue disabled_a">详 情</a></div></td>'+
