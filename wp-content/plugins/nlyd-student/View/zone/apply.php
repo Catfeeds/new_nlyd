@@ -153,7 +153,6 @@
                         <?php if($row['user_status'] != 1):?>
                             <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
                         <?php endif;?>
-                        <!-- <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a> -->
                     </form>
                 </div>
             </div>

@@ -21,7 +21,6 @@ class Student_Zone extends Student_Home
         add_shortcode('zone-home',array($this,$action));
     }
 
-
     /**
      * 机构主页
      */
@@ -82,7 +81,7 @@ class Student_Zone extends Student_Home
          $ajax = new Student_Ajax();
          $row['referee_code'] = $ajax->qrcode('user');
 
-         //获取所有的机构名
+         //获取所有机构列表
          $sql_ = "select a.*,b.id zone_id,b.apply_id,b.user_status 
                   from {$wpdb->prefix}zone_type a 
                   left join {$wpdb->prefix}zone_meta b on a.id = b.type_id  and apply_id = {$current_user->ID}
@@ -152,7 +151,15 @@ class Student_Zone extends Student_Home
 
          global $wpdb,$current_user;
 
-         $zone = $this->get_zone_meta();
+         $sql = "select b.*,a.user_income from {$wpdb->prefix}user_stream_logs a left join {$wpdb->prefix}user_income_logs b on a.match_id = b.id where a.id = {$_GET['id']} and a.user_id = {$current_user->ID}";
+
+         $row = $wpdb->get_row($sql,ARRAY_A);
+         print_r($row);
+         if(empty($row)){
+            $this->get_404(__('数据错误', 'nlyd-student'));
+            return;
+        }
+         /*$zone = $this->get_zone_meta();
 
          if(!empty($zone)){
              $sql = " select *,
@@ -220,8 +227,8 @@ class Student_Zone extends Student_Home
              $match = $wpdb->get_row($sql1,ARRAY_A);
              $data['match'] = $match;
              //print_r($match);
-         }
-         print_r($row);
+         }*/
+         
          $data['row'] = $row;
          $view = student_view_path.CONTROLLER.'/profit-detail.php';
          load_view_template($view,$data);
@@ -496,7 +503,7 @@ class Student_Zone extends Student_Home
         load_view_template($view);
     }
     /**
-     * 机构账号设置首页
+     * 机构账号密码设置
      */
      public function setting(){
         $view = student_view_path.CONTROLLER.'/setting.php';
@@ -519,49 +526,58 @@ class Student_Zone extends Student_Home
     /**
      * 推荐管理
      */
-     public function recommend(){
+    public function recommend(){
 
-         global $wpdb,$current_user;
+        global $wpdb,$current_user;
 
-         //获取我推荐的用户
-         $sql = "select a.referee_id,a.ID child_id,b.id zone_id
+        //获取我推荐的用户
+        $sql = "select a.referee_id,a.ID child_id,b.id zone_id
                  from {$wpdb->prefix}users a 
                  left join {$wpdb->prefix}zone_meta b on a.ID = b.user_id 
                  where a.referee_id = {$current_user->ID} and b.id is null ";
-         $rows = $wpdb->get_results($sql,ARRAY_A);
-         //print_r($sql);
-         $data['user_total'] = 0;
-         if(!empty($rows)){
-             /*$parent_total = count($rows);
-             $child_total = 0;*/
-             $total = count($rows);
-             foreach ($rows as $v){
-                 //print_r($sql_);
-                 $total += $wpdb->get_var("select count(*)
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($sql);
+        $data['user_total'] = 0;
+        if(!empty($rows)){
+            /*$parent_total = count($rows);
+            $child_total = 0;*/
+            $total = count($rows);
+            foreach ($rows as $v){
+                //print_r($sql_);
+                $total += $wpdb->get_var("select count(*)
                                              from {$wpdb->prefix}users a 
                                              left join {$wpdb->prefix}zone_meta b on a.ID = b.user_id 
                                              where a.referee_id = {$v['child_id']} and b.id is null ");
-             }
-             $data['user_total'] = $total > 0 ? $total : '0';
-             //print_r($total);
-         }
+            }
+            $data['user_total'] = $total;
+            //print_r($total);
+        }
 
-         //获取我推荐的机构
-         $sql_ = "select user_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}";
-         //print_r($sql_);
-         $rows_ = $wpdb->get_results($sql_,ARRAY_A);
-         $data['zone_total'] = 0;
-         if(!empty($rows_)){
-             $total_ = count($rows_);
-             foreach ($rows_ as $v_){
-                 $total_ += $wpdb->get_var("select count(*)  from {$wpdb->prefix}zone_meta where referee_id = {$v_['user_id']}");
-             }
-             //print_r($total_);
-             $data['zone_total'] = $total_ > 0 ? $total_ : '0';
-         }
+        //获取我推荐的机构
+        //1级推荐
+        $sql_ = "select apply_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}";
+        //print_r($sql_);
+        $rows_ = $wpdb->get_results($sql_,ARRAY_A);
+        $data['zone_total'] = 0;
+        $total_ = count($rows_);
+        //print_r($total_);
+        //2级推荐
+        $sql__ = "select ID
+                 from {$wpdb->prefix}users
+                 where referee_id = {$current_user->ID} ";
+        $rows__ = $wpdb->get_results($sql__,ARRAY_A);
+        if(!empty($rows__)){
 
-         $view = student_view_path.CONTROLLER.'/recommend-list.php';
-         load_view_template($view,$data);
+            foreach ($rows__ as $v_){
+                $total_ += $wpdb->get_var("select count(*)  from {$wpdb->prefix}zone_meta where referee_id = {$v_['ID']}");
+            }
+            //print_r($total_);
+            $data['zone_total'] = $total_;
+        }
+        //print_r($data);
+
+        $view = student_view_path.CONTROLLER.'/recommend-list.php';
+        load_view_template($view,$data);
     }
     
     /**
@@ -614,9 +630,7 @@ class Student_Zone extends Student_Home
         $row['user_ID'] = $user_info['user_ID'];
         $city = !empty($row['zone_city']) ? '（'.$row['zone_city'].'）' : '';
         $row['zone_name'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'赛组委会';
-
-
-        //获取推荐人
+        
         //获取推荐人
         $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$user_info['referee_id']} and meta_key in ('user_real_name','user_ID') ";
         $meta_value = $wpdb->get_results($sql,ARRAY_A);
@@ -649,7 +663,7 @@ class Student_Zone extends Student_Home
 
             $data['row'] = $row;
         }
-
+       
         //获取机构类型
         $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
 
@@ -666,7 +680,7 @@ class Student_Zone extends Student_Home
             $data['user_ID_Card'] = $user_info['user_ID_Card'];
         }
 
-
+        //print_r($row);
         $view = student_view_path.CONTROLLER.'/apply.php';
         load_view_template($view,$data);
     }
@@ -674,12 +688,12 @@ class Student_Zone extends Student_Home
      * 分支机构申请页面成功后提示页面
      */
      public function applySuccess(){
-         global $wpdb;
-         //获取分中心类型
-         $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
-         //print_r($data['zone_type_name']);
-         $view = student_view_path.CONTROLLER.'/apply-success.php';
-         load_view_template($view,$data);
+        global $wpdb;
+        //获取分中心类型
+        $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
+        //print_r($data['zone_type_name']);
+        $view = student_view_path.CONTROLLER.'/apply-success.php';
+        load_view_template($view,$data);
 
     }
 
