@@ -862,7 +862,9 @@ class Organize{
                                     if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id,'referee_time'=>get_time('mysql')],['ID' => $user_id])){
                                         $error_msg = '更新主体推荐人失败!';
                                     }
-
+                                    if(!$spread_set){
+                                        $error_msg = '无收益设置!';
+                                    }
                                      if($error_msg == ''){
                                          //主体类型
                                          if($spread_set){
