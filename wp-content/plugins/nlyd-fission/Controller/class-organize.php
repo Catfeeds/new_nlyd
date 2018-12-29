@@ -232,8 +232,6 @@ class Organize{
                             <?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市精英赛')?>
                            <br>
                            <div class="row-actions">
-                               <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize&id='.$row['id'])?>">编辑</a> | </span>
-                               <span class="edit"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$row['id'])?>">统计信息</a></span>
 <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
 <!--                               <span class="view"><a href="">资料</a></span>-->
                            </div>
@@ -267,7 +265,7 @@ class Organize{
 
                        <?php
                        //操作列表
-                       $optionsArr = ["<a href='".admin_url('admin.php?page=fission-add-organize&id='.$row['id'])."' data-type='thaw' class=''>查看</a>"];
+                       $optionsArr = ["<a href='".admin_url('admin.php?page=fission-organize-statistics&id='.$row['id'])."' data-type='thaw' class=''>查看</a>"];
                        if($row['user_status'] == '1'){
                            switch ($row['is_able']){
                                case 1:
@@ -780,6 +778,7 @@ class Organize{
             if($user_id == $referee_id && $user_status !==1) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
             if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($admin_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
+            if(!in_array($user_status,[1,-2])) $error_msg = $error_msg==''?'审核状态错误':$error_msg.'<br >审核状态错误';
 //            if($zone_title == '') $error_msg = $error_msg==''?'请填写主体名称':$error_msg.'<br >请填写主体名称';
             if($zone_address == '' && !in_array($zone_match_type,[1,2])) $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
 //            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
@@ -953,8 +952,14 @@ class Organize{
                                 is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
                             }
                         }else{
-                            $wpdb->query('ROLLBACK');
-                            $error_msg = '操作失败!';
+                            if($old_zm_id == 0){
+                                $wpdb->query('COMMIT');
+                                $success_msg = '操作成功!';
+                            }else{
+                                $wpdb->query('ROLLBACK');
+                                $error_msg = '操作失败!';
+                            }
+
                         }
 
                     }else{
@@ -1184,7 +1189,7 @@ class Organize{
                     <tr class="">
                         <th scope="row"><label for="">状态 </label></th>
                         <td>
-                        <?php if($row['user_status'] == '-1'){
+                        <?php if($row['user_status'] == '-1' || $old_zm_id == 0){
                             ?>
                             <label for="user_status"> <input type="checkbox" class="apply_ch" name="user_status" id="user_status" value="1" />通过审核 </label>
                             <label for="user_status2"> <input type="checkbox" class="apply_ch" name="user_status" id="user_status2" value="-2" />拒绝申请 </label>
