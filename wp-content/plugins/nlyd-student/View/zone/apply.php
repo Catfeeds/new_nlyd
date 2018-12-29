@@ -71,7 +71,7 @@
                                         <div class="vertical"></div>
                                     </div>
                                 </div>
-                                <span class="fs_12 c_black3 _tips"><?=__('原件影印件或盖有鲜章的复印件，文件不超过10m大小', 'nlyd-student')?></span>
+                                <span class="fs_12 c_black3 _tips"><?=__('原件影印件或盖有鲜章的复印件，文件不超过2m大小', 'nlyd-student')?></span>
                             </div>
                         </div>
                         <div>
@@ -270,7 +270,7 @@
         function changes(e,_this,array) {
             var file=e.target.files[0];
             var fileSize=file.size;
-            var fSize=10;
+            var fSize=2;
             if(fileSize > 1024*1024*fSize){
                 alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
                 return false;
