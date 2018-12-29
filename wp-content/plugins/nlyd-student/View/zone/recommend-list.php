@@ -132,7 +132,7 @@ jQuery(function($) {
                                         dom_1='<tr>'+
                                                 '<td>'+
                                                     '<div class="table_content">'+
-                                                        '<div class="c_black ta_c">'+ v.zone_name+'</div>'+
+                                                        '<div class="c_black ta_l pl_10">'+ v.zone_name+'</div>'+
                                                         // '<div class="ff_num fs_12 ta_c">'+v.audit_time+'</div>'+
                                                     '</div>'+
                                                 '</td>'+
@@ -146,7 +146,7 @@ jQuery(function($) {
                                                 dom_2='<tr>'+
                                                         '<td>'+
                                                             '<div class="table_content">'+
-                                                                '<div class="c_orange ta_c">'+val.zone_name+'</div>'+
+                                                                '<div class="c_orange ta_l pl_10">'+val.zone_name+'</div>'+
                                                                 // '<div class="ff_num fs_12 ta_c">'+val.audit_time+'</div>'+
                                                             '</div>'+
                                                         '</td>'+
