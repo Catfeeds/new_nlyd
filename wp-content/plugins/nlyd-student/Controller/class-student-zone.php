@@ -82,12 +82,35 @@ class Student_Zone extends Student_Home
          $row['referee_code'] = $ajax->qrcode('user');
 
          //获取所有机构列表
-         $sql_ = "select a.*,b.id zone_id,b.apply_id,b.user_status 
+         $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1",ARRAY_A);
+         if(!empty($rows)){
+             foreach ($rows as $k => $v){
+                 //获取是否有
+                 $result = $wpdb->get_results("select id,user_status from {$wpdb->prefix}zone_meta where apply_id = {$current_user->ID} and type_id = {$v['id']} and user_status in (-1,-2) ",ARRAY_A);
+                 if(!empty($result)){
+                     foreach ($result as $x){
+                         if($x['user_status'] == -1){
+                             $rows[$k]['user_status'] = $x['user_status'];
+                             $rows[$k]['zone_id'] = $x['id'];
+                             break;
+                         }
+                         if($x['user_status'] == -2){
+                             $rows[$k]['user_status'] = $x['user_status'];
+                             $rows[$k]['zone_id'] = $x['id'];
+                             continue;
+                         }
+                     }
+                 }
+                 //print_r($result);
+             }
+         }
+         //print_r($rows);
+         /*$sql_ = "select a.*,b.id zone_id,b.apply_id,b.user_status
                   from {$wpdb->prefix}zone_type a 
                   left join {$wpdb->prefix}zone_meta b on a.id = b.type_id  and apply_id = {$current_user->ID}
                   where zone_type_status = 1";
-         //print_r($sql_);
-         $rows = $wpdb->get_results($sql_,ARRAY_A);
+        // print_r($sql_);
+         $rows = $wpdb->get_results($sql_,ARRAY_A);*/
          $row['list'] = $rows;
          //print_r($rows);
          $view = student_view_path.CONTROLLER.'/index-user.php';
@@ -583,8 +606,8 @@ class Student_Zone extends Student_Home
         }
         $sql = "select a.*,
                 case a.zone_match_type
-                when 1 then '战队精英'
-                when 2 then '城市'
+                when 1 then '战队精英赛'
+                when 2 then '城市赛'
                 end zone_match_type_cn,
                 b.zone_type_name,b.zone_type_alias,c.user_mobile from {$wpdb->prefix}zone_meta a 
                 left join {$wpdb->prefix}zone_type b on a.type_id = b.id 
@@ -659,6 +682,9 @@ class Student_Zone extends Student_Home
         global $wpdb;
         //获取分中心类型
         $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
+        if($data['zone_type_name'] == '赛事'){
+            $data['zone_type_name'] = '赛区';
+        }
         //print_r($data['zone_type_name']);
         $view = student_view_path.CONTROLLER.'/apply-success.php';
         load_view_template($view,$data);
@@ -687,6 +713,9 @@ class Student_Zone extends Student_Home
      * 默认公用js/css引入
      */
     public function scripts_default(){
+        wp_enqueue_script('thickbox');
+        wp_enqueue_script('my-upload');
+        wp_enqueue_style('thickbox');
         wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
         wp_enqueue_script( 'student-mobileSelect' );
         wp_localize_script('student-mobileSelect','_mobileSelect',[

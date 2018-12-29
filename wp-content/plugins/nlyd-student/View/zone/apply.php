@@ -122,12 +122,13 @@
                         <?php endif;?>
                         <?php if(!empty($referee_name)):?>
                             <div>
-                                <div class="lable_row"><span class="c_black"><?=__('事业管理员', 'nlyd-student')?>：</span></div>
+                                <div class="lable_row"><span class="c_black"><?=__($_GET['zone_type_alias']=='trains'?'事业管理员':'推荐人', 'nlyd-student')?>：</span></div>
                                 <div class="input_row">
                                     <input class="radius_input_row" disabled type="text" value="<?=$referee_name?>">
                                 </div>
                             </div>
                         <?php endif;?>
+
                         <!--<div>
                             <div class="lable_row"><span class="c_black"><?/*=__($zone_type_name.'管理员', 'nlyd-student')*/?>：</span></div>
                             <div class="input_row">
@@ -167,6 +168,8 @@
 <input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
 <script>
     jQuery(function($) {
+
+
         var zone_type_alias=$.Request('zone_type_alias')
         var type_id=$.Request('type_id')
         var opening_bank_Data=$.validationLayui.back;

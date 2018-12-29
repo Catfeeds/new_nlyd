@@ -66,14 +66,14 @@ class Student_Account extends Student_Home
             if(!$brainpower) $brainpower = $wpdb->get_row("SELECT type_name,MAX(`level`) AS `level`,`range`,`category_name` FROM {$wpdb->prefix}directories WHERE `range`=1 AND user_id={$user_info['user_id']} GROUP BY user_id", ARRAY_A);
 
             //获取是否存在管理机构
-            $sql_ = "select b.id ,if(b.zone_match_type=1,'战队精英','城市') as match_type,b.zone_city,b.zone_name from {$wpdb->prefix}zone_manager a left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id where a.user_id = {$user_info['user_id']} ";
+            $sql_ = "select b.id ,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type,b.zone_city,b.zone_name from {$wpdb->prefix}zone_manager a left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id where a.user_id = {$user_info['user_id']} order by id desc";
 
             $zones = $wpdb->get_results($sql_,ARRAY_A);
             if(!empty($zones)){
                 $arr = array();
                 foreach ($zones as $key => $value) {
                     $city = !empty($value['zone_city']) ? '（'.$value['zone_city'].'）' : '';
-                    $arr[$key]['value'] = $value['zone_name'].$city.$value['match_type'].'赛组委会';
+                    $arr[$key]['value'] = $value['zone_name'].$city.$value['match_type'].'组委会';
                     $arr[$key]['id'] = $value['id'];
                 }
             }
