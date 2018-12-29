@@ -30,7 +30,7 @@
                     <div class="zone_user_detail pull-left">
 
                         <!-- 审核通过 -->
-                        <div class="<?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
+                        <div class="zone_title_row  <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
                             <span class="bold fs_16 zone_title_name">
                                <?= $row['zone_name'];?>
                             </span>
