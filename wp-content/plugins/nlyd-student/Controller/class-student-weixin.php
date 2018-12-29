@@ -248,8 +248,8 @@ class Student_Weixin
             }
 
             //添加推广人
-            if($_POST['referee_id'] > 0){
-                $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user_id));
+            if($_GET['referee_id'] > 0){
+                $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_GET['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user_id));
             }
 
             wp_redirect($url);//跳转到用户中心

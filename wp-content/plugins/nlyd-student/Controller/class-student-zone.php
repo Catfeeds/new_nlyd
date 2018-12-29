@@ -521,7 +521,7 @@ class Student_Zone extends Student_Home
 
         //获取我推荐的机构
         //1级推荐
-        $sql_ = "select apply_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID}";
+        $sql_ = "select apply_id from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID} and user_id > 0";
         //print_r($sql_);
         $rows_ = $wpdb->get_results($sql_,ARRAY_A);
         $data['zone_total'] = 0;
@@ -535,7 +535,7 @@ class Student_Zone extends Student_Home
         if(!empty($rows__)){
 
             foreach ($rows__ as $v_){
-                $total_ += $wpdb->get_var("select count(*)  from {$wpdb->prefix}zone_meta where referee_id = {$v_['ID']}");
+                $total_ += $wpdb->get_var("select count(*)  from {$wpdb->prefix}zone_meta where referee_id = {$v_['ID']} and user_id > 0 ");
             }
             //print_r($total_);
             $data['zone_total'] = $total_;
@@ -632,7 +632,9 @@ class Student_Zone extends Student_Home
        
         //获取机构类型
         $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
-
+        if($_GET['zone_type_alias'] == 'match'){
+            $data['zone_type_name'] = '赛区';
+        }
         //获取事业管理员
         $user_real_name = get_user_meta($current_user->data->referee_id,'user_real_name')[0];
         if(!empty($user_real_name)){
