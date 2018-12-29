@@ -128,7 +128,7 @@
                             <div class="menuImg-wrapper my-console">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot"><?=__('控制台', 'nlyd-student')?></div>
+                        <div class="userCenter-detail-foot"><?=__('机构管理', 'nlyd-student')?></div>
                     </a>
                     
                     <?php endif;?>
