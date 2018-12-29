@@ -183,10 +183,10 @@ class Organize{
                         <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
                         <th scope="col" id="zone_match_type" class="manage-column column-zone_match_type">办赛类型</th>
                         <th scope="col" id="num" class="manage-column column-num">编号</th>
-                        <th scope="col" id="user_login" class="manage-column column-user_login">账号</th>
                         <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
-                        <th scope="col" id="zone_title" class="manage-column column-zone_title">字号</th>
+                        <th scope="col" id="person" class="manage-column column-person">负责人</th>
                         <th scope="col" id="chairman_id" class="manage-column column-chairman_id">主席</th>
+                        <th scope="col" id="secretary_id" class="manage-column column-secretary_id">秘书长</th>
                         <th scope="col" id="zone_address" class="manage-column column-zone_address">地址</th>
                         <th scope="col" id="business_licence" class="manage-column column-business_licence">营业执照</th>
                         <th scope="col" id="bank_card_num" class="manage-column column-bank_card_num">银行卡</th>
@@ -208,6 +208,12 @@ class Organize{
 //                        $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
                         $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
                         $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
+                        //负责人
+                       $person = $wpdb->get_var("SELECT um.meta_value FROM {$wpdb->prefix}zone_manager AS zm 
+                                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'
+                                 WHERE zm.zone_id='{$row['id']}' AND um.meta_value != '' limit 1");
+
+//                       leo_dump($wpdb->last_query);die;
                    ?>
                    <tr data-uid="<?=$row['user_id']?>" data-id="<?=$row['id']?>">
                        <th scope="row" class="check-column">
@@ -231,10 +237,8 @@ class Organize{
                        </td>
                        <td class="zone_match_type column-zone_match_type" data-colname="办赛类型"><?=$row['zone_match_type']=='1'?'战队精英赛':'城市精英赛'?></td>
                        <td class="num column-num" data-colname="编号"><?=sprintf("%04d",$row['id']);?></td>
-                       <td class="user_login column-user_login" data-colname="账号"><?=$row['user_login']?></td>
                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
-
-                       <td class="zone_title column-zone_title" data-colname="字号"><?=$row['zone_name']?></td>
+                       <td class="person column-person" data-colname="负责人"><?=unserialize($person)['real_name']?></td>
                        <td class="chairman_id column-chairman_id" data-colname="主席"><?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?></td>
                        <td class="zone_address column-zone_address" data-colname="地址"><?=$row['zone_address']?></td>
                        <td class="business_licence column-business_licence" data-colname="营业执照" id="cardImg-<?=$row['id']?>">
@@ -281,10 +285,10 @@ class Organize{
                         <th scope="col" class="manage-column column-name column-primary">名称</th>
                         <th scope="col" class="manage-column column-zone_match_type">办赛类型</th>
                         <th scope="col" class="manage-column column-num">编号</th>
-                        <th scope="col" class="manage-column column-user_login">账号</th>
                         <th scope="col" class="manage-column column-referee_id">推荐人</th>
-                        <th scope="col" class="manage-column column-zone_title">字号</th>
+                        <th scope="col" class="manage-column column-person">负责人</th>
                         <th scope="col" class="manage-column column-chairman_id">主席</th>
+                        <th scope="col" class="manage-column column-secretary_id">秘书长</th>
                         <th scope="col" class="manage-column column-zone_address">地址</th>
                         <th scope="col" class="manage-column column-business_licence">营业执照</th>
                         <th scope="col" class="manage-column bank_card_num-referee_id">银行卡</th>

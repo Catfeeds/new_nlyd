@@ -124,7 +124,11 @@ class Student_Weixin
         if(empty($users) || (!$users->user_mobile && !$users->user_email)){
             //TODO 显示绑定手机页面
             $users_id = $users->ID == true ? $users->ID : 0;
-            wp_redirect(home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid));
+            if($_GET['referee_id']){
+                wp_redirect(home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid.'/referee_id/'.$_GET['referee_id']));
+            }else{
+                wp_redirect(home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid));
+            }
             exit;
         }
         $this->getUserInfo($access_token,$openid, false,$users->ID);
@@ -168,6 +172,7 @@ class Student_Weixin
         $me_name = $emailOrMobile == 'mobile' ? __('手机', 'nlyd-student') : __('邮箱', 'nlyd-student');
         global $wpdb;
         $userMetaType = false;
+        $wpdb->query('START TRANSACTION');
         if($bindType == 'username'){
             //使用账号绑定微信号
             $auth = array(
@@ -197,7 +202,7 @@ class Student_Weixin
                         'weChat_openid'        => $res['openid'],
                         'weChat_union_id'        => $res['unionid'],
                     );
-                    $wpdb->query('START TRANSACTION');
+
                     if(!$mobileUser){
                         $userMetaType = true;
                         $auth['user_nicename'] = $res['nickname'];
@@ -219,13 +224,26 @@ class Student_Weixin
                         $wpdb->query('ROLLBACK');
                         return false;
                     }
-                    $wpdb->query('COMMIT');
+
                 }else{
                     //已存在的微信用户绑定手机
                     $bool = $wpdb->update($wpdb->users,['user_'.$emailOrMobile => $res['mobile']],['ID' => $user_id]);
                     if(!$bool) return false;
                 }
             }
+        }
+        //添加推广人
+        if(isset($_SESSION['referee_id_wx']) && !(get_user_by('ID',$user_id)->referee_id)){
+            $bool = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_SESSION['referee_id_wx'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user_id));
+            unset($_SESSION['referee_id_wx']);
+            if($bool){
+                $wpdb->query('COMMIT');
+            }else{
+                $wpdb->query('ROLLBACK');
+                return false;
+            }
+        }else{
+            $wpdb->query('COMMIT');
         }
 
         $this->insertUsermeta($res,$user_id,$userMetaType);
@@ -237,7 +255,7 @@ class Student_Weixin
 
         if(get_user_meta($user_id, 'locale', true)) setcookie('user_language', get_user_meta($user_id, 'locale', true), time()+3600*24,'/');
         if($type == false) {
-            
+
             if($_SESSION['user_openid']) wp_redirect(home_url('account/certification/type/sign'));
 
             if(isset($_SESSION['redirect_url'])){
@@ -245,11 +263,6 @@ class Student_Weixin
                 unset($_SESSION['redirect_url']);
             }else{
                 $url = home_url('account');
-            }
-
-            //添加推广人
-            if($_POST['referee_id'] > 0){
-                $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user_id));
             }
 
             wp_redirect($url);//跳转到用户中心

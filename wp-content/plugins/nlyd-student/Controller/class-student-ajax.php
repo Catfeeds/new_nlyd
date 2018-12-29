@@ -3106,12 +3106,17 @@ class Student_Ajax
 
         //if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
             $user_id = $user->ID;
+            //添加推广人
+            if(isset($_SESSION['referee_id_wx']) && !(get_user_by('ID',$user_id)->referee_id)){
+                $bool = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_SESSION['referee_id_wx'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user_id));
+                unset($_SESSION['referee_id_wx']);
+                if(!$bool) wp_send_json_error(array('info'=>__('添加推荐人失败!', 'nlyd-student')));
+            }
             $this->setUserCookie($user_id);
             //wp_send_json_success(['info' => '登录成功', 'url' => home_url('account')]);
             if(isset($_POST['loginType']) && $_POST['loginType'] == 'sign'){
                 wp_send_json_success(array('info'=>__('登录成功,即将跳转', 'nlyd-student'), 'url' => home_url('account/certification/type/sign/sign_match_id/'.$_POST['match_id'])));
             }else{
-
                 wp_send_json_success(array('info'=>__('登录成功', 'nlyd-student'), 'url' => home_url('account')));
             }
         }
