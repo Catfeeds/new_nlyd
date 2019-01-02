@@ -564,6 +564,10 @@ class Student_Zone extends Student_Home
      * 填写战队资料
      */
      public function teamBuild(){
+
+         global $wpdb,$current_user;
+         //获取战队信息
+         $row = $wpdb->get_row("select from {$wpdb->prefix}team_meta where  ");
         $view = student_view_path.CONTROLLER.'/team-build.php';
         load_view_template($view);
     }

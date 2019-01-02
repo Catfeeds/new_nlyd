@@ -48,7 +48,7 @@
                         <div class="c_black">
                             <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=empty($row['referee_user_ID'])? '无' : $row['referee_user_ID'];?></span>
                             <span class="pull-right">
-                                <?php if ($row['user_status'] == 1){ ?>
+                                <?php if ($row['user_status'] == 1 && $_SESSION['manager_id'] > 0){ ?>
                                     <a class="back_user c_orange"><?=__('返回个人账号', 'nlyd-student')?></a>
                                 <?php } ?>
                                 <?php if ($row['user_status'] == -1){ ?>
@@ -112,7 +112,9 @@
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
             </div>
+            <?php if(empty($_SESSION['manager_id'])):?>
             <a class="a-btn a-btn-table" id="loginOut"><div><?=__('退出登录', 'nlyd-student')?></div></a>
+            <?php endif;?>
         </div>            
     </div>
 </div>
