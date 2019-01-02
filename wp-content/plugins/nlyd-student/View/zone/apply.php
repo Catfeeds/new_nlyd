@@ -80,7 +80,7 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('对公账户开户名称', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户开户名称', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户开户名称', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_name'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('选择对公账户开户行', 'nlyd-student')?>：</span></div>
