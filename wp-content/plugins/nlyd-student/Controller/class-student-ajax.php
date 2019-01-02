@@ -5050,7 +5050,7 @@ class Student_Ajax
      */
     public function get_my_profit_detail(){
         global $wpdb,$current_user;
-        $_POST['id'] = 148;
+        //$_POST['id'] = 148;
         //获取当前收益内容
         $row = $wpdb->get_row("select match_id,income_type,user_type,user_income, 
                                        case income_type
