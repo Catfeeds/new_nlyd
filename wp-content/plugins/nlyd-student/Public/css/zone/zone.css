@@ -262,7 +262,19 @@ textarea.radius_input_row{
 .img-zoos{
     padding: 0;
 }
-
+.img-zoos.upload_qr_code{
+    margin-top: 36px;
+}
+.img-zoos.upload_qr_code .post-img{
+    margin: auto;
+    float: none;
+    width: 160px; 
+    height: 160px;
+    border: none;
+}
+.img-zoos.upload_qr_code .img-zoo{
+    width: 160px; 
+}
 
 .nl-badge{
     display: inline-block;
