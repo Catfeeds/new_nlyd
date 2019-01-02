@@ -4520,7 +4520,7 @@ class Student_Ajax
             $map[] = " (b.meta_value like '%{$_GET['term']}%') ";
             $where = join( ' or ',$map);
         }else{
-            $where = " a.ID > 0 and b.meta_value != '' ";
+            $where = " a.ID > 0 and b.meta_value is not null ";
         }
         global $wpdb;
         $sql = "select b.user_id as id, 
@@ -5310,30 +5310,56 @@ class Student_Ajax
      * 战队申请
      */
     public function team_apply(){
-        if(empty($_POST['title']) || empty($_POST['team_director'])){
+        if(empty($_POST['post_title']) || empty($_POST['team_director'])){
             wp_send_json_error(array('info'=>__('战队名字/负责人必填')));
         }
+        //print_r($_POST);die;
         global $wpdb,$current_user;
+
+        //判断当前机构是否已有战队
+        $team = $wpdb->get_row("select * from {$wpdb->prefix}team_meta where user_id = {$current_user->ID}",ARRAY_A);
+        //print_r($team);die;
         //开启事务
         $wpdb->query('START TRANSACTION');
-        $a = wp_insert_post(
-                            array(
-                                'post_title' => $_POST['post_title'],
-                                'post_type'     => 'team',
-                                'post_status' => 'publish',
-                                'post_author' => $current_user->ID,
-                            )
+        if(!empty($team)){
+            $a = $wpdb->update($wpdb->prefix.'posts',array('post_title'=>$_POST['post_title'],'post_modified'=>get_time('mysql')),array('ID'=>$team['team_id']));
+            $b = $wpdb->update($wpdb->prefix.'team_meta',
+                                    array(
+                                        'team_world'=>!empty($_POST['team_world']) ? $_POST['team_world'] : '',
+                                        'team_slogan'=>!empty($_POST['team_slogan']) ? $_POST['team_slogan'] : '',
+                                        'team_director'=>!empty($_POST['team_director']) ? $_POST['team_director'] : '',
+                                        'max_number'=>!empty($_POST['max_number']) ? $_POST['max_number'] : '',
+                                        'team_leader'=>!empty($_POST['team_leader']) ? $_POST['team_leader'] : '',
+                                        'team_brief'=>!empty($_POST['team_brief']) ? $_POST['team_brief'] : '',
+                                        'created_time'=>get_time('mysql'),
+                                    ),
+                                    array('id'=>$team['id'])
                             );
-        $b = $wpdb->insert($wpdb->prefix.'team_meta',
-                            array(
-                                'team_id'=>$a,
-                                'team_world'=>!empty($_POST['team_world']) ? $_POST['team_world'] : '',
-                                'team_slogan'=>!empty($_POST['team_slogan']) ? $_POST['team_slogan'] : '',
-                                'team_director'=>!empty($_POST['team_director']) ? $_POST['team_director'] : '',
-                                'max_number'=>!empty($_POST['max_number']) ? $_POST['max_number'] : '',
-                                'team_leader'=>!empty($_POST['team_leader']) ? $_POST['team_leader'] : '',
-                            )
-                         );
+        }else{
+
+            $a = wp_insert_post(
+                array(
+                    'post_title' => $_POST['post_title'],
+                    'post_type'     => 'team',
+                    'post_status' => 'publish',
+                    'post_author' => $current_user->ID,
+                )
+            );
+            $b = $wpdb->insert($wpdb->prefix.'team_meta',
+                array(
+                    'user_id'=>$current_user->ID,
+                    'team_id'=>$a,
+                    'team_world'=>!empty($_POST['team_world']) ? $_POST['team_world'] : '',
+                    'team_slogan'=>!empty($_POST['team_slogan']) ? $_POST['team_slogan'] : '',
+                    'team_director'=>!empty($_POST['team_director']) ? $_POST['team_director'] : '',
+                    'max_number'=>!empty($_POST['max_number']) ? $_POST['max_number'] : '',
+                    'team_leader'=>!empty($_POST['team_leader']) ? $_POST['team_leader'] : '',
+                    'team_brief'=>!empty($_POST['team_brief']) ? $_POST['team_brief'] : '',
+                    'created_time'=>get_time('mysql'),
+                )
+            );
+        }
+        //print_r($a .'&&'. $b);
         if($a && $b){
             $wpdb->query('COMMIT');
             wp_send_json_success(array('info' => __('提交成功', 'nlyd-student')));

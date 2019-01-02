@@ -557,8 +557,13 @@ class Student_Zone extends Student_Home
      * 战队管理
      */
      public function team(){
-        $view = student_view_path.CONTROLLER.'/team.php';
-        load_view_template($view);
+         global $wpdb,$current_user;
+         $sql = "select a.id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
+                                      left join {$wpdb->prefix}posts b on a.team_id = b.ID
+                                      where user_id = {$current_user->ID} ";
+         $row = $wpdb->get_row($sql,ARRAY_A);
+         $view = student_view_path.CONTROLLER.'/team.php';
+         load_view_template($view,$row);
     }
     /**
      * 填写战队资料
@@ -567,9 +572,17 @@ class Student_Zone extends Student_Home
 
          global $wpdb,$current_user;
          //获取战队信息
-         $row = $wpdb->get_row("select from {$wpdb->prefix}team_meta where  ");
+         $sql = "select a.id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
+                                      left join {$wpdb->prefix}posts b on a.team_id = b.ID
+                                      where user_id = {$current_user->ID} ";
+         $row = $wpdb->get_row($sql,ARRAY_A);
+         if(!empty($row['team_director'])){
+             $user_real_name = get_user_meta($row['team_director'],'user_real_name')[0];
+             $row['real_name'] = $user_real_name['real_name'];
+         }
+         //print_r($row);
         $view = student_view_path.CONTROLLER.'/team-build.php';
-        load_view_template($view);
+        load_view_template($view,$row);
     }
     /**
      * 添加战队成员

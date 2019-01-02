@@ -15,7 +15,7 @@
             </h1>
         </header>
             <div class="layui-row nl-border nl-content">
-                <?php if(!$row){?>
+                <?php if(!empty($id)){?>
                     <style>
                         @media screen and (max-width: 1199px){
                             #page{
@@ -25,12 +25,12 @@
                     </style>
                     <div class="team_row width-padding layui-row layui-bg-white width-margin-pc" style="margin-top: 0;">
                         <div class="team_row_title">
-                            <span class="bold fs_16 c_black">2019脑力世界杯江西（赣州）战队 </span>
+                            <span class="bold fs_16 c_black"><?=$post_title?> </span>
                             <a class="fs_12 c_blue" href="<?=home_url('/zone/teamBuild/');?>"><?=__('编辑资料', 'nlyd-student')?></a>
                         </div>
-                        <div class="team_row_tag"><span class="c_yellow mr_10"><i class="iconfont">&#xe658;</i></span><?=__('璀璨赣州 智慧闪耀', 'nlyd-student')?></div>
+                        <div class="team_row_tag"><span class="c_yellow mr_10"><i class="iconfont">&#xe658;</i></span><?=__($team_slogan, 'nlyd-student')?></div>
                         <div class="c_black fs_14 ti_28 mt_10">
-                            <?=__('益贝教育是一家致力于提升孩子学习动力和学习能力的专业 训练机构。通过体验式和交互式的教学，全面提升孩子的专注力、 记忆力、想象力、创造力、自信心等学习能力，同时增强孩子的感 恩心、责任心等，让孩子学习更轻松，让亲子关系更和谐！', 'nlyd-student')?>
+                            <?=$team_brief?>
                         </div>
                     </div>
 
