@@ -56,7 +56,7 @@ jQuery(function($) {
             _this.select2({
                 placeholder : _placeholder,
                 ajax: {
-                    url: admin_ajax +'?action=set_team_director',
+                    url: admin_ajax +'?action=get_manage_user',
                     dataType: 'json',
                     delay: 600, //wait 250 milliseconds before triggering the request
                     processResults: function (res) {
