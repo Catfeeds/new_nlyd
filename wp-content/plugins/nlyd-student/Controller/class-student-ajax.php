@@ -5059,10 +5059,86 @@ class Student_Ajax
                                         when 'extract' then '提现'
                                         end income_type_title 
                                       from {$wpdb->prefix}user_stream_logs 
-                                      where id = {$_GET['id']} and user_id = {$current_user->ID} ",ARRAY_A);
+                                      where id = {$_POST['id']} and user_id = {$current_user->ID} ",ARRAY_A);
         if(empty($row)){
            wp_send_json_error(array('info'=>__('数据错误')));
         }
+
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        //判断是否为机构
+        $zone_id = $wpdb->get_var("select from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
+
+        //获取对应数据列表
+        $sql = "select SQL_CALC_FOUND_ROWS a.*, b.post_title,
+                      case a.income_type 
+                      when 'match' then '比赛收益'
+                      when 'grading' then '考级收益'
+                      when 'subject' then '推荐收益'
+                      else '----'
+                      end income_type_cn
+                      from {$wpdb->prefix}user_income_logs a 
+                      left join {$wpdb->prefix}posts b on a.match_id = b.ID where ";
+        if(empty($zone_id)){    //
+            $where = "a.match_id = {$row['match_id']} and 
+                      (
+                        a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID} 
+                        or a.indirect_referee_id = {$current_user->ID} or a.manager_id = {$current_user->ID}
+                        ) 
+                       ";
+
+        }else{
+            $where = "a.sponsor_id = {$current_user->ID} ";
+        }
+        $sql .= $where."order by id desc limit $start,$pageSize ";
+
+        //print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
+        //print_r($rows);
+        if(!empty($rows)){
+            $list = array();
+            foreach ($rows as $k => $v){
+                if($row['income_type'] == 'subject'){  //裂变收益
+                    //获取裂变机构类型
+                    $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
+                    $list['profit_channel'] = '推荐'.$zone_type_name;
+                }
+                if($v['referee_id'] == $current_user->ID){
+                    $list['profit_lv'] = '直接';
+                    $list['profit_income'] = $v['referee_income'];
+                }
+                elseif ($v['indirect_referee_id'] == $current_user->ID){
+                    $list['profit_lv'] = '间接';
+                    $list['profit_income'] = $v['indirect_referee_income'];
+                }
+                elseif ($v['person_liable_id'] == $current_user->ID){
+                    $list['profit_lv'] = $v['income_type'] == 'match' ? '责任教练' : '参赛机构';
+                    $list['profit_income'] = $v['person_liable_income'];
+                }
+                elseif ($v['sponsor_id'] == $current_user->ID){
+                    $list['profit_lv'] = '办赛机构';
+                    $list['profit_income'] = $v['sponsor_income'];
+                }
+
+                $referee_name = get_user_meta($v['user_id'],'user_real_name')[0];
+                //var_dump($referee_name);
+                $list['channel'] = $referee_name['real_name'];
+                $list['channel_ID'] = $v['user_id']+10000000;
+                $list['post_title'] = $v['post_title'];
+                $list['income_type_cn'] = $v['income_type_cn'];
+                $list['income_status_cn'] = $v['income_status_cn'];
+                $list['created_time'] = $v['created_time'];
+                $lists[] = $list;
+            }
+        }
+        wp_send_json_success(array('info'=>$lists));
+
     }
 
     /**

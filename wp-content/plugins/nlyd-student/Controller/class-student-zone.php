@@ -172,7 +172,7 @@ class Student_Zone extends Student_Home
      */
      public function profitDetail(){
 
-         global $wpdb,$current_user;
+         /*global $wpdb,$current_user;
 
          //获取当前收益内容
          $row = $wpdb->get_row("select match_id,income_type,user_type,user_income, 
@@ -199,12 +199,13 @@ class Student_Zone extends Student_Home
 
          //获取对应数据列表
          $sql = "select SQL_CALC_FOUND_ROWS a.*, b.post_title,
-                      case 'a.income_type' 
+                      case a.income_type 
                       when 'match' then '比赛收益'
                       when 'grading' then '考级收益'
                       when 'subject' then '推荐收益'
-                      else '----'
-                      end income_type_cn
+                      else '--'
+                      end income_type_cn,
+                      if(a.income_status=2,'已到账','已发放') income_status_cn
                       from {$wpdb->prefix}user_income_logs a 
                       left join {$wpdb->prefix}posts b on a.match_id = b.ID where ";
          if(empty($zone_id)){    //
@@ -220,8 +221,46 @@ class Student_Zone extends Student_Home
         }
         $sql .= $where."order by id desc limit $start,$pageSize ";
 
-         print_r($sql);
+        // print_r($sql);
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         //print_r($rows);
+         if(!empty($rows)){
+             $list = array();
+             foreach ($rows as $k => $v){
+                 if($row['income_type'] == 'subject'){  //裂变收益
+                     //获取裂变机构类型
+                     $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
+                     $list['profit_channel'] = '推荐'.$zone_type_name;
+                 }
+                 if($v['referee_id'] == $current_user->ID){
+                     $list['profit_lv'] = '直接';
+                     $list['profit_income'] = $v['referee_income'];
+                 }
+                 elseif ($v['indirect_referee_id'] == $current_user->ID){
+                     $list['profit_lv'] = '间接';
+                     $list['profit_income'] = $v['indirect_referee_income'];
+                 }
+                 elseif ($v['person_liable_id'] == $current_user->ID){
+                     $list['profit_lv'] = $v['income_type'] == 'match' ? '责任教练' : '参赛机构';
+                     $list['profit_income'] = $v['person_liable_income'];
+                 }
+                 elseif ($v['sponsor_id'] == $current_user->ID){
+                     $list['profit_lv'] = '办赛机构';
+                     $list['profit_income'] = $v['sponsor_income'];
+                 }
 
+                 $referee_name = get_user_meta($v['user_id'],'user_real_name')[0];
+                 //var_dump($referee_name);
+                 $list['channel'] = $referee_name['real_name'];
+                 $list['channel_ID'] = $v['user_id']+10000000;
+                 $list['post_title'] = $v['post_title'];
+                 $list['income_type_cn'] = $v['income_type_cn'];
+                 $list['income_status_cn'] = $v['income_status_cn'];
+                 $list['created_time'] = $v['created_time'];
+                 $lists[] = $list;
+             }
+         }
+         print_r($lists);
          if($row['income_type'] == 'subject'){  //裂变收益
              $where = "id = {$row['match_id']}";
              $row['income_channel'] = '中心裂变';
@@ -247,7 +286,7 @@ class Student_Zone extends Student_Home
              //var_dump($referee_name);
              $row['channel'] = $referee_name['real_name'];
              $row['channel_ID'] = $result_['user_id']+10000000;
-         }
+         }*/
 
         //print_r($result);
 
