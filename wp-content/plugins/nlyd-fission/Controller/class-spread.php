@@ -34,7 +34,7 @@ class Spread{
         add_submenu_page('fission','用户分成记录','用户分成记录','profit_log','fission-profit-log',array($this,'profitLog'));
         add_submenu_page('fission','赛事分成记录','赛事分成记录','profit_match_log','fission-profit-match-log',array($this,'profitMatchLog'));
         add_submenu_page('fission','用户收益流水','用户收益流水','profit_user_log','fission-profit-user-log',array($this,'profitUserLog'));
-//        add_submenu_page('fission','提现记录','提现记录','profit_extract_log','fission-profit-extract-log',array($this,'profitExtractLog'));
+        add_submenu_page('fission','提现记录','提现记录','profit_extract_log','fission-profit-extract-log',array($this,'profitExtractLog'));
     }
 
     /**
@@ -370,7 +370,7 @@ class Spread{
             $where .= " AND (p.post_title LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%')";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
-                il.income_type,il.match_id,p.post_title,il.referee_income,il.indirect_referee_income,il.person_liable_income,il.sponsor_income,il.manager_income,
+                il.income_type,il.match_id,il.referee_income,il.indirect_referee_income,il.person_liable_income,il.sponsor_income,il.manager_income,
                 il.user_id,il.referee_id,il.indirect_referee_id,il.person_liable_id,il.sponsor_id,il.manager_id,il.income_status,il.id,
                 um.meta_value AS user_real_name,  
                 um2.meta_value AS referee_real_name,  
@@ -385,7 +385,6 @@ class Spread{
                 LEFT JOIN `{$wpdb->usermeta}` AS um4 ON um4.user_id=il.person_liable_id AND um4.meta_key='user_real_name' 
                 LEFT JOIN `{$wpdb->prefix}zone_meta` AS zm ON zm.user_id=il.sponsor_id  
                 LEFT JOIN `{$wpdb->usermeta}` AS um6 ON um6.user_id=il.manager_id AND um6.meta_key='user_real_name' 
-                LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=il.match_id 
                 {$where} AND il.income_type NOT IN('match','grading')
                 LIMIT {$start},{$pageSize}",ARRAY_A);
 //        leo_dump($rows);
@@ -435,7 +434,7 @@ class Spread{
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                     <th scope="col" id="real_name" class="manage-column column-real_name column-primary">付款人</th>
-                    <th scope="col" id="project" class="manage-column column-project">付款项目</th>
+                    <th scope="col" id="project" class="manage-column column-project">类型</th>
                     <th scope="col" id="referee" class="manage-column column-referee">直接推广</th>
                     <th scope="col" id="indirect_referee" class="manage-column column-indirect_referee">间接推广</th>
                     <th scope="col" id="person_liable" class="manage-column column-person_liable">负责人</th>
@@ -475,8 +474,20 @@ class Spread{
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
-                        <td class="project column-project" data-colname="直接推广">
-                            <?=$row['post_title']?>
+                        <td class="project column-project" data-colname="类型">
+                            <?php
+                            switch ($row['income_type']){
+                                case 'subject':
+                                    echo '申请主体';
+                                    break;
+                                case 'match':
+                                    echo '比赛';
+                                    break;
+                                case 'grading':
+                                    echo '考级';
+                                    break;
+                            }
+                            ?>
 
                         </td>
                         <td class="referee column-referee" data-colname="直接推广">
@@ -514,7 +525,7 @@ class Spread{
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                     <th scope="col" class="manage-column column-real_name column-primary">付款人</th>
-                    <th scope="col" class="manage-column column-project">付款项目</th>
+                    <th scope="col" class="manage-column column-project">类型</th>
                     <th scope="col" class="manage-column column-referee">直接推广</th>
                     <th scope="col" class="manage-column column-indirect_referee">间接推广</th>
                     <th scope="col" class="manage-column column-person_liable">负责人</th>
@@ -628,8 +639,6 @@ class Spread{
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">赛事/考级分成列表</h1>
-
-
             <hr class="wp-header-end">
 
             <h2 class="screen-reader-text">过滤列表</h2>
@@ -999,16 +1008,16 @@ class Spread{
         if($searchStr != ''){
             $where = " WHERE u.user_login LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%' OR zm.zone_name LIKE '%{$searchStr}%'";
             $join = " LEFT JOIN {$wpdb->users} AS u ON u.ID=ue.extract_id 
-                      LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=ue.extract_id AND um2.meta_key='user_real_name'
-                      LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.id=ue.extract_id";
+                      LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=ue.extract_id AND um2.meta_key='user_real_name'";
         }
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS ue.*,um.meta_value AS censor_real_name 
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS ue.*,um.meta_value AS censor_real_name,zm.zone_name 
                 FROM {$wpdb->prefix}user_extract_logs AS ue 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=ue.censor_user_id AND um.meta_key='user_real_name'
+                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=ue.extract_id
                 {$join}
                 {$where} 
                 LIMIT {$start},{$pageSize}",ARRAY_A);
-//        leo_dump($wpdb->last_query);die;
+//        leo_dump($rows);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -1065,18 +1074,17 @@ class Spread{
 
                 <?php
                 foreach ($rows as $row){
-                    if($row['extract_user_type'] == 1){
+                    if($row['zone_name']){
+                        $real_name = $row['zone_name'];
+                        $extract_type_name = '主体提现';
+                    }else{
                         $user_real_name = get_user_meta($row['extract_id'], 'user_real_name', true);
                         if($user_real_name) {
                             $real_name = $user_real_name['real_name'];
                         }else{
                             $real_name = get_user_by('ID',$row['extract_id'])->user_login;
                         }
-
                         $extract_type_name = '用户提现';
-                    }else{
-                        $extract_type_name = '主体提现';
-                        $real_name = $wpdb->get_var("SELECT zone_name FROM {$wpdb->prefix}zone_meta WHERE id={$row['extract_id']}");
                     }
                     ?>
                     <tr data-id="<?=$row['id']?>">
@@ -1138,7 +1146,7 @@ class Spread{
                                     echo '<a href="javascript:;" class="option-a" data-status="2">改为已提现</a> | <a href="javascript:;" class="option-a" data-status="3">改为未通过</a>';
                                     break;
                                 case '2':
-                                    echo '<a href="javascript:;" class="option-a" data-status="1">改为审核中</a> | <a href="javascript:;" class="option-a" data-status="3">改为未通过</a>';
+//                                    echo '<a href="javascript:;" class="option-a" data-status="1">改为审核中</a> | <a href="javascript:;" class="option-a" data-status="3">改为未通过</a>';
                                     break;
                                 case '3':
                                     echo '<a href="javascript:;" class="option-a" data-status="1">改为审核中</a> | <a href="javascript:;" class="option-a" data-status="2">改为已提现</a>';

@@ -393,10 +393,19 @@ div .layui-row:last-child{
     background: linear-gradient(22deg,#89D25F,#53B239);
 }
 
-
+.flow-default .profit_detail_item{
+    border-top:1px solid #EEEEEE;
+    /* border-radius: 6px; */
+}
+.flow-default .profit_detail_item:first-child{
+    border-top:none;
+}
 .profit_detail_row{
     margin-top: 15px;
     font-size: 0;
+}
+.profit_detail_item .profit_detail_row:last-child{
+    margin-bottom:  15px;
 }
 .profit_detail_label,
 .profit_detail_info{
