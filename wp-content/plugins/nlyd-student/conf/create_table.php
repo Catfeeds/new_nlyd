@@ -672,12 +672,15 @@ function the_table_install () {
 
         $sql = "CREATE TABLE " . $table_name . " (
           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `user_id` int(20) NOT NULL COMMENT '机构账户id',
           `team_id` int(20) NOT NULL COMMENT '战队id',
           `team_world` varchar(255) DEFAULT NULL COMMENT '战队国籍',
           `team_slogan` text COMMENT '战队口号',
           `team_director` int(20) DEFAULT NULL COMMENT '战队负责人',
           `max_number` int(10) DEFAULT NULL COMMENT '最大人数',
-          `team_leader` int(20) DEFAULT NULL,
+          `team_leader` int(20) DEFAULT NULL COMMENT '领队',
+          `team_brief` varchar(255) DEFAULT NULL COMMENT '简介',
+          `created_time` datetime DEFAULT NULL COMMENT '时间',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
@@ -685,7 +688,7 @@ function the_table_install () {
 
     }
 
-    $table_name = $wpdb->prefix . "user_skill_rank";  //战队外键表    储存战队外键信息
+    $table_name = $wpdb->prefix . "user_skill_rank";  //技能外键表    储存技能外键信息
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
 

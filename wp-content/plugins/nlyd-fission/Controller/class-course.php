@@ -29,6 +29,7 @@ class Course{
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $type = isset($_GET['stype']) ? intval($_GET['stype']) : 0;
+        $coach_id = isset($_GET['coach_id']) ? intval($_GET['coach_id']) : 0;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
         $page < 1 && $page = 1;
         $pageSize = 20;
@@ -40,14 +41,18 @@ class Course{
         if($searchStr != ''){
             $where .= " AND (cou.course_title LIKE '%{$searchStr}%')";
         }
+        if($coach_id > 0){
+            $where .= " AND cou.coach_id='{$coach_id}'";
+        }
         $rows = $wpdb->get_results("SELECT cou.course_title,cou.course_img,cou.const,cou.const,cou.is_enable,cou.coach_id,cou.course_start_time,cou.course_end_time,
                 cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.id,
                 zm.zone_name,um.meta_value AS coach_real_name  
                 FROM {$wpdb->prefix}course AS cou 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
-                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=cou.zone_id 
+                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=cou.zone_id AND zm.user_id!=0
                 {$where}
                 LIMIT {$start},{$pageSize}",ARRAY_A);
+//        leo_dump($rows);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -74,8 +79,8 @@ class Course{
 
             <br class="clear">
             <ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=0')?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=1')?>" <?=$type===1?'class="current"':''?> aria-current="page">乐学乐分享<span class="count">（<?=$lxl_num?>）</span></a></li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=0&coach_id='.$coach_id)?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=1&coach_id='.$coach_id)?>" <?=$type===1?'class="current"':''?> aria-current="page">乐学乐分享<span class="count">（<?=$lxl_num?>）</span></a></li>
 
             </ul>
 
@@ -83,7 +88,7 @@ class Course{
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
                 <input type="search" id="search_val" name="search_val" placeholder="课程名称" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=course&stype='.$type.'&s=')?>'+document.getElementById('search_val').value" value="搜索课程">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=course&stype='.$type.'&coach_id='.$coach_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索课程">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">

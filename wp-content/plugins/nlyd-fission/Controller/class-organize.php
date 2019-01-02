@@ -1086,7 +1086,7 @@ class Organize{
                     <tr class="form-field">
                         <th scope="row"><label for="parent_id">上级主体 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="parent_id" style="width: 50%" data-action="get_base_zone_list" data-type="all">
+                            <select class="js-data-select-ajax" name="parent_id" style="width: 50%" data-action="get_base_zone_list" data-type="parent">
                                 <option value="<?=$row['parent_id']?>" selected="selected">
                                     <?=$row['parent_name']?>
                                 </option>

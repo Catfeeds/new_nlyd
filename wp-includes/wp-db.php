@@ -2091,7 +2091,7 @@ class wpdb {
 
 		$this->check_current_query = false;
 
-		/*if($table == 'wp_user_extract_logs'){
+		/*if($table == 'wp_team_meta'){
             print_r($this->prepare( $sql, $values ));die;
         }*/
 		return $this->query( $this->prepare( $sql, $values ) );
