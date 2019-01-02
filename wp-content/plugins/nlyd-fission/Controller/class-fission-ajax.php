@@ -258,11 +258,11 @@ class Fission_Ajax
         $rows = [];
         if($searchStr != ''){
             global $wpdb;
-            $rows = $wpdb->get_results("SELECT user_id AS id,zone_name AS text FROM {$wpdb->prefix}zone_meta WHERE zone_name LIKE '%{$searchStr}%'");
+            $rows = $wpdb->get_results("SELECT user_id AS id,zone_name AS text FROM {$wpdb->prefix}zone_meta WHERE zone_name LIKE '%{$searchStr}%' AND user_id!=''");
         }
         if($type == 'all_base'){
             $rows[] = ['id' => 0, 'text' => '平台'];
-        }else{
+        }elseif($type == 'parent'){
             $rows[] = ['id' => 0, 'text' => '无上级'];
         }
         wp_send_json_success($rows);

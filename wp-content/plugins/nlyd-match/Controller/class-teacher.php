@@ -66,10 +66,12 @@ class Teacher
 
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID 
+        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID,zm.zone_name 
                     FROM {$wpdb->prefix}coach_skill a 
                     LEFT JOIN {$wpdb->prefix}users b ON a.coach_id = b.ID 
                     LEFT JOIN {$wpdb->usermeta} AS um_id ON um_id.user_id = a.coach_id AND um_id.meta_key='user_ID' 
+                    LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id=a.coach_id 
+                    LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=zjc.zone_id 
                     {$join} 
                     WHERE a.coach_id > 0 AND b.ID !='' {$serachWhere} 
                     LIMIT {$start},{$pageSize}";
@@ -84,7 +86,7 @@ class Teacher
             'total' => $pageAll,
             'current' => $page
         ));
-
+//        leo_dump($rows);die;
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">教练</h1>
@@ -152,6 +154,8 @@ class Teacher
                          if($row['read']) $categoryArr[]='速读';
                          if($row['memory']) $categoryArr[]='记忆';
                          if($row['compute']) $categoryArr[]='心算';
+                         //课程数量
+                        $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE coach_id='{$row['coach_id']}'")
                         ?>
                         <tr>
                             <th scope="row" class="check-column">
@@ -192,10 +196,10 @@ class Teacher
                                 </a>
                             </td>
                             <td class="course_num column-course_num" data-colname="课程数量">
-                                待定
+                                <a href="<?=admin_url('admin.php?page=course&coach_id='.$row['coach_id'])?>"><?=$course_num?></a>
                             </td>
                             <td class="outfit column-outfit" data-colname="所属机构">
-                                待定
+                                <?=$row['zone_name']?>
                             </td>
                             <td class="option column-option" data-colname="操作">
                                 <a style="color: #00aff9" href="<?php echo '?page=teacher-datum&id='.$row['id'] ?>">编辑</a>
@@ -280,63 +284,85 @@ class Teacher
         global $wpdb;
         $id = $_GET['id'];
         if(is_post()){
-            //教学类别
-            $reading_value = 0;
-            $memory_value = 0;
-            $arithmetic_value = 0;
-            if(isset($_POST['categorys'])){
-                foreach ($_POST['categorys'] as $v){
-                    $category_v = explode('_',$v);
-                    switch ($category_v[1]){
-                        case 'reading':
-                            $reading_value = $category_v[0];
-                            break;
-                        case 'memory':
-                            $memory_value = $category_v[0];
-                            break;
-                        case 'arithmetic':
-                            $arithmetic_value = $category_v[0];
-                            break;
-                    }
-                }
-            }
-            //解除取消的类别下的学员
-            $categoryArr = getCategory();
-            $coach_id = $wpdb->get_var("SELECT coach_id FROM {$wpdb->prefix}coach_skill WHERE id='{$id}'");
-            $newCategoryArr = array_reduce($categoryArr,function(&$newArray,$v){
-                $newArray[$v['alis']] = $v;
-                return $newArray;
-            });
-            foreach (['reading'=>$reading_value,'memory'=>$memory_value,'arithmetic'=>$arithmetic_value] AS $cateK => $cateV){
-                if($cateV < 1){
-                    $bool = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}my_coach WHERE coach_id='{$coach_id}' AND category_id='{$newCategoryArr[$cateK]['ID']}' AND apply_status=2");
-                    if($bool){
-                        $cate_name = $cateK.'_value';
-                        $bool = $wpdb->update($wpdb->prefix.'my_coach',['apply_status'=>3],['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>2]);
-                        if(!$bool) {
-                            $$cate_name = $newCategoryArr[$cateK]['ID'];
-                            $err_msg .= '<br> 取消'.$newCategoryArr[$cateK]['post_title'].'教学资格失败!';
+            $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
+            if($zone_user_id < 1) $err_msg .= '请选择所属主体机构';
+            if($err_msg == ''){
+                //教学类别
+                $reading_value = 0;
+                $memory_value = 0;
+                $arithmetic_value = 0;
+                if(isset($_POST['categorys'])){
+                    foreach ($_POST['categorys'] as $v){
+                        $category_v = explode('_',$v);
+                        switch ($category_v[1]){
+                            case 'reading':
+                                $reading_value = $category_v[0];
+                                break;
+                            case 'memory':
+                                $memory_value = $category_v[0];
+                                break;
+                            case 'arithmetic':
+                                $arithmetic_value = $category_v[0];
+                                break;
                         }
                     }
-                    //删除申请
-                    $wpdb->delete($wpdb->prefix.'my_coach',['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>1]);
+                }
+                //解除取消的类别下的学员
+                $categoryArr = getCategory();
+                $coach_id = $wpdb->get_var("SELECT coach_id FROM {$wpdb->prefix}coach_skill WHERE id='{$id}'");
+                $newCategoryArr = array_reduce($categoryArr,function(&$newArray,$v){
+                    $newArray[$v['alis']] = $v;
+                    return $newArray;
+                });
+                $wpdb->query('START TRANSACTION');
+                foreach (['reading'=>$reading_value,'memory'=>$memory_value,'arithmetic'=>$arithmetic_value] AS $cateK => $cateV){
+                    if($cateV < 1){
+                        $bool = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}my_coach WHERE coach_id='{$coach_id}' AND category_id='{$newCategoryArr[$cateK]['ID']}' AND apply_status=2");
+                        if($bool){
+                            $cate_name = $cateK.'_value';
+                            $bool = $wpdb->update($wpdb->prefix.'my_coach',['apply_status'=>3],['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>2]);
+                            if(!$bool) {
+//                            $$cate_name = $newCategoryArr[$cateK]['ID'];
+                                $err_msg .= '<br> 取消'.$newCategoryArr[$cateK]['post_title'].'教学资格失败!';
+                            }
+                        }
+                        //删除申请
+                        $wpdb->delete($wpdb->prefix.'my_coach',['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>1]);
+                    }
+                }
+                $coach_skill_bool = $wpdb->update($wpdb->prefix.'coach_skill',['read'=>$reading_value,'memory'=>$memory_value,'compute'=>$arithmetic_value],['id'=>$id]);
+
+                //所属机构
+                $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
+//            leo_dump($zone_user_id);die;
+                //是否已有
+                $zone_id = $wpdb->get_var("SELECT zone_id FROM {$wpdb->prefix}zone_join_coach WHERE coach_id='{$coach_id}'");
+//                leo_dump($wpdb->last_query);die;
+                if($zone_id){
+                    $zone_bool = $wpdb->update("{$wpdb->prefix}zone_join_coach",['zone_id' => $zone_user_id],['coach_id' => $coach_id]);
+                }else{
+                    $zone_bool = $wpdb->insert("{$wpdb->prefix}zone_join_coach",['zone_id' => $zone_user_id,'coach_id' => $coach_id]);
+                }
+                if($zone_bool || $coach_skill_bool){
+                    $wpdb->query('COMMIT');
+                    $suc_msg = '更新成功';
+                }else{
+                    $wpdb->query('ROLLBACK');
+                    $err_msg = '更新失败';
                 }
             }
 
-            $bool = $wpdb->update($wpdb->prefix.'coach_skill',['read'=>$reading_value,'memory'=>$memory_value,'compute'=>$arithmetic_value],['id'=>$id]);
-            if($bool){
-                $suc_msg = '更新成功';
-            }else{
-                $err_msg = '更新失败';
-            }
 
         }
 
-        $sql = "SELECT b.user_mobile,b.ID AS user_id,a.read,a.memory,a.compute 
+        $sql = "SELECT b.user_mobile,b.ID AS user_id,a.read,a.memory,a.compute,zm.zone_name,zjc.zone_id
                     FROM {$wpdb->users} AS  b  
                     LEFT JOIN {$wpdb->prefix}coach_skill AS  a ON a.coach_id = b.ID 
+                    LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id = a.coach_id 
+                    LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zjc.zone_id = zm.user_id 
                     WHERE a.id={$id}";
         $row = $wpdb->get_row($sql, ARRAY_A);
+//        leo_dump($row);die;
         if(!$row) exit('未找到用户数据!');
         $postsRows = getCategory();
         $usermeta = get_user_meta($row['user_id']);
@@ -344,6 +370,9 @@ class Teacher
 //        leo_dump($postsRows);
         //学员数量
         $studentNumArr = $this->getStudentNum($row['user_id']);
+        //课程数量
+        $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE coach_id='{$row['user_id']}'");
+
         ?>
         <div id="wpbody" role="main">
 
@@ -435,12 +464,16 @@ class Teacher
                             </tr>
                             <tr class="user-last-name-wrap">
                                 <th><label for="surname">相关课程</label></th>
-                                <td><input type="text" name="surname" id="surname" value="<?=explode(', ',$row['display_name'])[0]?>" class="regular-text"></td>
+                                <td><?=$course_num?>个      <a style="color: #c4071c;text-decoration: none;font-weight: 600" href="<?=admin_url('admin.php?page=course&coach_id='.$row['user_id'])?>">(点击进入课程列表)</a></td>
                             </tr>
                             <tr class="user-last-name-wrap">
-                                <th><label for="surname">所属机构</label></th>
+                                <th><label for="zone_user_id">所属机构</label></th>
                                 <td>
-                                    <select name="" id=""></select>
+                                    <select class="js-data-select-ajax" name="zone_user_id" style="width: 50%" data-action="get_base_zone_list" data-type="teacher">
+                                        <option value="<?=$row['zone_id']?>" selected="selected">
+                                            <?=$row['zone_name']?>
+                                        </option>
+                                    </select>
                                 </td>
                             </tr>
 
@@ -750,9 +783,9 @@ class Teacher
         global $wpdb;
         if(is_post()){
             //教练类别
-            $read = isset($_POST['read']) ? intval($_POST['read']) : 0;
+            $read = isset($_POST['reading']) ? intval($_POST['reading']) : 0;
             $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
-            $compute = isset($_POST['compute']) ? intval($_POST['compute']) : 0;
+            $compute = isset($_POST['arithmetic']) ? intval($_POST['arithmetic']) : 0;
             $errStr = '';
             if(empty($_POST['pass1']) || $_POST['pass1'] != $_POST['pass2']) $errStr = '两次输入的密码不一样';
             if(!preg_match('/1[345678][0-9]{9}/', $_POST['user_mobile'])) $errStr = '手机格式错误';
@@ -778,6 +811,7 @@ class Teacher
                     //修改usermeta表姓氏和名字
                     update_user_meta($userId, 'last_name', $_POST['last_name']);
                     update_user_meta($userId, 'first_name', $_POST['first_name']);
+                    update_user_meta($userId, 'user_ID', 10000000*$userId);
                     //添加教练技能
                     $skillData = [
                         'coach_id' => $userId,
@@ -800,8 +834,9 @@ class Teacher
 
 
         }
-        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
-        $postsRows = $wpdb->get_results($sql,ARRAY_A);
+//        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
+        $postsRows = getCategory();
+//        leo_dump(getCategory());die;
         ?>
         <div class="wrap">
             <h1 id="add-new-user">添加教练</h1>
@@ -892,18 +927,8 @@ class Teacher
                        </th>
                         <td>
                             <?php foreach ($postsRows as $prow){?>
-
-                                <lable for="du"><?=$prow['post_title']?></lable>
-
-                                <?php if(preg_match('/算/', $prow['post_title'])){ ?>
-                                    <input id="compute" type="checkbox" <?=(isset($_POST['compute'])&&$_POST['compute'] == $prow['ID'])?'checked="checked"':''?> name="compute" value="<?=$prow['ID']?>">
-                                <?php }elseif(preg_match('/记/', $prow['post_title'])){ ?>
-                                    <input id="memory" type="checkbox" <?=(isset($_POST['memory'])&&$_POST['memory'] == $prow['ID'])?'checked="checked"':''?> name="memory" value="<?=$prow['ID']?>">
-                                <?php }elseif(preg_match('/读/', $prow['post_title'])){ ?>
-                                    <input id="read" type="checkbox" <?=(isset($_POST['read'])&&$_POST['read'] == $prow['ID'])?'checked="checked"':''?> name="read" value="<?=$prow['ID']?>">
-                                <?php } ?>
-
-
+                                <label for="cate_<?=$prow['ID']?>"><?=$prow['post_title']?><input id="cate_<?=$prow['ID']?>" type="checkbox" name="<?=$prow['alis']?>" value="<?=$prow['ID']?>"></label>
+                                &ensp;
                             <?php } ?>
                         </td>
                     </tr>
