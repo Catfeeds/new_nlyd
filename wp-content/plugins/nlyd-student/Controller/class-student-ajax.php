@@ -5369,6 +5369,29 @@ class Student_Ajax
         }
     }
 
+    /**
+     * 为战队添加成员
+     */
+    public function add_team_personnel(){
+        if(empty($_POST['user_id'])){
+           wp_send_json_error(array('info'=>__('请选择需要添加的用户')));
+        }
+
+        //查看当前用户是否已有战队
+        global $wpdb,$current_user;
+        $result = $wpdb->get_var("select id from {$wpdb->prefix}team_meta user_id = {$_POST['user_id']} and user_type = 1 and statsu > -2");
+        if($result > 0){
+            wp_send_json_error(array('info'=>__('该用户有战队,请核实')));
+        }
+
+        $res = $wpdb->insert($wpdb->prefix.'team_meta',array('team_id'=>$_POST['team_id'],'user_id'=>$_POST['user_id'],'user_type'=>1,'status'=>2,'created_time'=>get_time('mysql')));
+
+        if($res){
+            wp_send_json_success(array('info'=>__('添加成功')));
+        }else{
+            wp_send_json_error(array('info'=>__('添加失败')));
+        }
+    }
 
     /**
      * 管理员跳转登录

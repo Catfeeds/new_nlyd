@@ -588,8 +588,17 @@ class Student_Zone extends Student_Home
      * 添加战队成员
      */
      public function teamAddMember(){
+         global $wpdb,$current_user;
+         $sql = "select a.id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
+                                      left join {$wpdb->prefix}posts b on a.team_id = b.ID
+                                      where user_id = {$current_user->ID} ";
+         $row = $wpdb->get_row($sql,ARRAY_A);
+         if(empty($row)){
+             $this->get_404(array('message'=>__('请先创建战队', 'nlyd-student'),'return_url'=>home_url('/zone/teamBuild/')));
+             return;
+         }
         $view = student_view_path.CONTROLLER.'/team-addMember.php';
-        load_view_template($view);
+        load_view_template($view,$row);
     }
     /**
      * 战队申请管理

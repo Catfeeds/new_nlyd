@@ -688,7 +688,7 @@ function the_table_install () {
 
     }
 
-    $table_name = $wpdb->prefix . "user_skill_rank";  //战队外键表    储存战队外键信息
+    $table_name = $wpdb->prefix . "user_skill_rank";  //技能外键表    储存技能外键信息
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
 
