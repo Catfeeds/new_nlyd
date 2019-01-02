@@ -370,7 +370,7 @@ class Spread{
             $where .= " AND (p.post_title LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%')";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
-                il.income_type,il.match_id,p.post_title,il.referee_income,il.indirect_referee_income,il.person_liable_income,il.sponsor_income,il.manager_income,
+                il.income_type,il.match_id,il.referee_income,il.indirect_referee_income,il.person_liable_income,il.sponsor_income,il.manager_income,
                 il.user_id,il.referee_id,il.indirect_referee_id,il.person_liable_id,il.sponsor_id,il.manager_id,il.income_status,il.id,
                 um.meta_value AS user_real_name,  
                 um2.meta_value AS referee_real_name,  
@@ -385,7 +385,6 @@ class Spread{
                 LEFT JOIN `{$wpdb->usermeta}` AS um4 ON um4.user_id=il.person_liable_id AND um4.meta_key='user_real_name' 
                 LEFT JOIN `{$wpdb->prefix}zone_meta` AS zm ON zm.user_id=il.sponsor_id  
                 LEFT JOIN `{$wpdb->usermeta}` AS um6 ON um6.user_id=il.manager_id AND um6.meta_key='user_real_name' 
-                LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=il.match_id 
                 {$where} AND il.income_type NOT IN('match','grading')
                 LIMIT {$start},{$pageSize}",ARRAY_A);
 //        leo_dump($rows);
@@ -435,7 +434,7 @@ class Spread{
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                     <th scope="col" id="real_name" class="manage-column column-real_name column-primary">付款人</th>
-                    <th scope="col" id="project" class="manage-column column-project">付款项目</th>
+                    <th scope="col" id="project" class="manage-column column-project">类型</th>
                     <th scope="col" id="referee" class="manage-column column-referee">直接推广</th>
                     <th scope="col" id="indirect_referee" class="manage-column column-indirect_referee">间接推广</th>
                     <th scope="col" id="person_liable" class="manage-column column-person_liable">负责人</th>
@@ -475,8 +474,20 @@ class Spread{
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
-                        <td class="project column-project" data-colname="直接推广">
-                            <?=$row['post_title']?>
+                        <td class="project column-project" data-colname="类型">
+                            <?php
+                            switch ($row['income_type']){
+                                case 'subject':
+                                    echo '申请主体';
+                                    break;
+                                case 'match':
+                                    echo '比赛';
+                                    break;
+                                case 'grading':
+                                    echo '考级';
+                                    break;
+                            }
+                            ?>
 
                         </td>
                         <td class="referee column-referee" data-colname="直接推广">
@@ -514,7 +525,7 @@ class Spread{
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                     <th scope="col" class="manage-column column-real_name column-primary">付款人</th>
-                    <th scope="col" class="manage-column column-project">付款项目</th>
+                    <th scope="col" class="manage-column column-project">类型</th>
                     <th scope="col" class="manage-column column-referee">直接推广</th>
                     <th scope="col" class="manage-column column-indirect_referee">间接推广</th>
                     <th scope="col" class="manage-column column-person_liable">负责人</th>
