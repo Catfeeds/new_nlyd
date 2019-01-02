@@ -73,6 +73,7 @@ jQuery(function($) {
                     var postData={
                         action:'get_my_profit_detail',
                         page:profit_page,
+                        id:$.Request('id'),
                     }
                     var lis = [];
                     $.ajax({
