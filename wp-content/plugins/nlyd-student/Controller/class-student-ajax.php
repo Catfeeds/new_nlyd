@@ -5050,6 +5050,7 @@ class Student_Ajax
      */
     public function get_my_profit_detail(){
         global $wpdb,$current_user;
+        $_POST['id'] = 148;
         //获取当前收益内容
         $row = $wpdb->get_row("select match_id,income_type,user_type,user_income, 
                                        case income_type
@@ -5078,7 +5079,8 @@ class Student_Ajax
                       when 'grading' then '考级收益'
                       when 'subject' then '推荐收益'
                       else '----'
-                      end income_type_cn
+                      end income_type_cn,
+                      if(a.income_status=2,'已到账','已发放') income_status_cn
                       from {$wpdb->prefix}user_income_logs a 
                       left join {$wpdb->prefix}posts b on a.match_id = b.ID where ";
         if(empty($zone_id)){    //
