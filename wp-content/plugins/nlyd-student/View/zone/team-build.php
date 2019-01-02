@@ -18,17 +18,18 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('战队名称', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" type="text" lay-verify="required" value="战队名称" placeholder="<?=__('填写战队名称', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" type="text" lay-verify="required" value="" placeholder="<?=__('填写战队名称', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row">
-                                <span class="c_black"><?=__('战队负责人', 'nlyd-student')?>：</span>
-                            </div>
+                            <div class="lable_row"><span class="c_black"><?=__('战队负责人', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" type="text" disabled>
+                                <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="选择战队负责人" >
+                                    <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
+                                </select>
                             </div>
                         </div>
+                 
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('战队口号', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('填写战队口号', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
@@ -49,6 +50,23 @@
 </div>
 <script>
 jQuery(function($) { 
+    $('.js-data-select-ajax').each(function () {
+            var _this=$(this);
+            var _placeholder = _this.attr('data-placeholder');
+            _this.select2({
+                placeholder : _placeholder,
+                ajax: {
+                    url: admin_ajax +'?action=get_manage_user'  ,
+                    dataType: 'json',
+                    delay: 600, //wait 250 milliseconds before triggering the request
+                    processResults: function (res) {
+                        return {
+                            results: res.data
+                        };
+                    }
+                }
+            });
+        })
     layui.use(['form'], function(){
         var form = layui.form
         form.render();
