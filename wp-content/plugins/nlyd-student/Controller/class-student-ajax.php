@@ -5310,7 +5310,37 @@ class Student_Ajax
      * 战队申请
      */
     public function team_apply(){
-
+        if(empty($_POST['title']) || empty($_POST['team_director'])){
+            wp_send_json_error(array('info'=>__('战队名字/负责人必填')));
+        }
+        global $wpdb,$current_user;
+        //开启事务
+        $wpdb->query('START TRANSACTION');
+        $a = wp_insert_post(
+                            array(
+                                'post_title' => $_POST['post_title'],
+                                'post_type'     => 'team',
+                                'post_status' => 'publish',
+                                'post_author' => $current_user->ID,
+                            )
+                            );
+        $b = $wpdb->insert($wpdb->prefix.'team_meta',
+                            array(
+                                'team_id'=>$a,
+                                'team_world'=>!empty($_POST['team_world']) ? $_POST['team_world'] : '',
+                                'team_slogan'=>!empty($_POST['team_slogan']) ? $_POST['team_slogan'] : '',
+                                'team_director'=>!empty($_POST['team_director']) ? $_POST['team_director'] : '',
+                                'max_number'=>!empty($_POST['max_number']) ? $_POST['max_number'] : '',
+                                'team_leader'=>!empty($_POST['team_leader']) ? $_POST['team_leader'] : '',
+                            )
+                         );
+        if($a && $b){
+            $wpdb->query('COMMIT');
+            wp_send_json_success(array('info' => __('提交成功', 'nlyd-student')));
+        }else{
+            $wpdb->query('ROLLBACK');
+            wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
+        }
     }
 
 
