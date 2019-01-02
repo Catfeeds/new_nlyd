@@ -179,6 +179,18 @@
 .bg_setting{
     background-position: -324px 1px;
 }
+.bg_cash{
+    background-position: -351px 1px;
+}
+.bg_bankCard{
+    background-position: -378px 1px;
+}
+.bg_wechat_qr{
+    background-position: -405px 1px;
+}
+.bg_alipay_qr{
+    background-position: -428px 1px;
+}
 .select_box{
     position: absolute;
     width: 100%;

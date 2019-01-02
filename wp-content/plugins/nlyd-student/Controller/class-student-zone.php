@@ -603,6 +603,35 @@ class Student_Zone extends Student_Home
         load_view_template($view);
     }
     /**
+     * 提现设置
+     */
+     public function settingCash(){
+        $view = student_view_path.CONTROLLER.'/setting-cash.php';
+        load_view_template($view);
+    }
+
+    /**
+     * 银行卡提现设置
+     */
+     public function settingCashCard(){
+        $view = student_view_path.CONTROLLER.'/setting-cash-card.php';
+        load_view_template($view);
+    }
+    /**
+     * 微信提现设置
+     */
+     public function settingCashWechat(){
+        $view = student_view_path.CONTROLLER.'/setting-cash-wechat.php';
+        load_view_template($view);
+    }
+    /**
+     * 支付宝提现设置
+     */
+     public function settingCashAlipay(){
+        $view = student_view_path.CONTROLLER.'/setting-cash-alipay.php';
+        load_view_template($view);
+    }
+    /**
      * 推荐管理
      */
     public function recommend(){
