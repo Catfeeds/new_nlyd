@@ -32,7 +32,7 @@
                  
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('战队口号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('填写战队口号', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" autocomplete="off" placeholder="<?=__('填写战队口号', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('战队简介', 'nlyd-student')?>：</span></div>
@@ -56,7 +56,7 @@ jQuery(function($) {
             _this.select2({
                 placeholder : _placeholder,
                 ajax: {
-                    url: admin_ajax +'?action=get_manage_user'  ,
+                    url: admin_ajax +'?action=set_team_director',
                     dataType: 'json',
                     delay: 600, //wait 250 milliseconds before triggering the request
                     processResults: function (res) {
