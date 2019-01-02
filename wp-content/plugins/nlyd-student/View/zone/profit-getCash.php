@@ -32,7 +32,7 @@
                         </div>
                         <div class="enter_num">
                             <div class="danwei bold c_black fs_20">￥</div>
-                            <input class="radius_input_row nl-foucs" type="text" name="num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入金额，最多可提现'.$balance, 'nlyd-student')?>">
+                            <input class="radius_input_row nl-foucs" type="text" name="num" lay-verify="number" autocomplete="off" placeholder="<?=__('输入金额，最多可提现'.$balance, 'nlyd-student')?>">
                         </div>
                         <input type="hidden" name="action" value="user_extract_apply"/>
                         <a class="a-btn a-btn-table bg_gradient_green" lay-filter="layform" lay-submit=""><div><?=__('提 现', 'nlyd-student')?></div></a>
