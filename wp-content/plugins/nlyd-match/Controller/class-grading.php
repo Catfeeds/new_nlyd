@@ -74,6 +74,7 @@ class Grading
             'total' => $pageAll,
             'current' => $page
         ));
+//        leo_dump($rows);die;
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline"><?=get_post($gradingId)->post_title.'-'?>考级选手</h1>
@@ -112,6 +113,7 @@ class Grading
                         <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
                         <th scope="col" id="email" class="manage-column column-email">邮箱</th>
                         <th scope="col" id="adopt_level" class="manage-column column-adopt_level">考级状态</th>
+                        <th scope="col" id="grading_lv" class="manage-column column-grading_lv">考级等级</th>
                         <th scope="col" id="created_time" class="manage-column column-created_time">报名时间</th>
                     </tr>
                      </thead>
@@ -144,6 +146,9 @@ class Grading
                                 }
                              ?>
                         </td>
+                        <td class="grading_lv column-grading_lv" data-colname="考级等级">
+                         <?=$row['grading_lv']?>
+                        </td>
                         <td class="created_time column-created_time" data-colname="报名时间"><?=$row['created_time']?></td>
                     </tr>
                     <?php } ?>
@@ -159,6 +164,7 @@ class Grading
                         <th scope="col" class="manage-column column-mobile">手机</th>
                         <th scope="col" class="manage-column column-email">邮箱</th>
                         <th scope="col" class="manage-column column-adopt_level">考级状态</th>
+                        <th scope="col" class="manage-column column-grading_lv">考级等级</th>
                         <th scope="col" class="manage-column column-created_time">报名时间</th>
                     </tr>
                      </tfoot>
