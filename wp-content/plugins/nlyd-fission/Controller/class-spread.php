@@ -864,6 +864,7 @@ class Spread{
         ));
         ?>
         <div class="wrap">
+
             <h1 class="wp-heading-inline">用户收益流水</h1>
 
 
@@ -881,7 +882,7 @@ class Spread{
                 <ul class="subsubsub">
                     <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=0')?>" <?=$type_id===0?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
                     <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=1')?>" <?=$type_id===1?'class="current"':''?> aria-current="page">主体流水<span class="count"></span></a> |</li>
-                    <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=2')?>" <?=$type_id===2?'class="current"':''?> aria-current="page">用户流水<span class="count"></span></a> |</li>
+                    <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=2')?>" <?=$type_id===2?'class="current"':''?> aria-current="page">用户流水<span class="count"></span></a></li>
 
                 </ul>
 
@@ -999,6 +1000,7 @@ class Spread{
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+        $type = isset($_GET['ctype']) ? intval($_GET['ctype']) : 0;
 
         $page < 1 && $page = 1;
         $pageSize = 20;
@@ -1006,9 +1008,12 @@ class Spread{
         $where = "";
         $join = '';
         if($searchStr != ''){
-            $where = " WHERE u.user_login LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%' OR zm.zone_name LIKE '%{$searchStr}%'";
+            $where = " WHERE (u.user_login LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%' OR zm.zone_name LIKE '%{$searchStr}%')";
             $join = " LEFT JOIN {$wpdb->users} AS u ON u.ID=ue.extract_id 
                       LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=ue.extract_id AND um2.meta_key='user_real_name'";
+        }
+        if($type > 0){
+            $where .=  $where == '' ? " WHERE extract_status='{$type}'" : " AND extract_status='{$type}'";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS ue.*,um.meta_value AS censor_real_name,zm.zone_name 
                 FROM {$wpdb->prefix}user_extract_logs AS ue 
@@ -1028,9 +1033,16 @@ class Spread{
             'total' => $pageAll,
             'current' => $page
         ));
-
+        //各种数量
+        $sql = "SELECT COUNT(id) FROM {$wpdb->prefix}user_extract_logs";
+        $num_where = " WHERE extract_status=";
+        $all_num = $wpdb->query($sql);
+        $wait_num = $wpdb->query($sql.$num_where."'1'");
+        $agree_num = $wpdb->query($sql.$num_where."'2'");
+        $refuse_num = $wpdb->query($sql.$num_where."'3'");
         ?>
         <div class="wrap">
+
             <h1 class="wp-heading-inline">提现记录</h1>
 
 
@@ -1042,6 +1054,12 @@ class Spread{
                 <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/主体名" value="<?=$searchStr?>">
                 <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-extract-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
             </p>
+            <ul class="subsubsub">
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-extract-log&ctype=0')?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-extract-log&ctype=1')?>" <?=$type===1?'class="current"':''?> aria-current="page">待处理<span class="count">（<?=$wait_num?>）</span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-extract-log&ctype=2')?>" <?=$type===2?'class="current"':''?> aria-current="page">已通过<span class="count">（<?=$agree_num?>）</span></a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-extract-log&ctype=3')?>" <?=$type===3?'class="current"':''?> aria-current="page">未通过<span class="count">（<?=$refuse_num?>）</span></a></li>
+            </ul>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
 
