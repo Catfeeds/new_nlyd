@@ -361,13 +361,16 @@ class Spread{
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
-
+        $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $where = "WHERE 1=1";
         if($searchStr != ''){
             $where .= " AND (p.post_title LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%')";
+        }
+        if($user_id > 0){
+            $where = " WHERE il.user_id='{$user_id}'";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
                 il.income_type,il.match_id,il.referee_income,il.indirect_referee_income,il.person_liable_income,il.sponsor_income,il.manager_income,
@@ -828,7 +831,7 @@ class Spread{
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $type_id = isset($_GET['type_id']) ? intval($_GET['type_id']) : 0;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
-
+        $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
@@ -840,6 +843,9 @@ class Spread{
             $where .= " AND zm.id != ''";
         }elseif($type_id === 2){
             $where .= " AND zm.id IS NULL";
+        }
+        if($user_id > 0){
+            $where = "WHERE usl.user_id='{$user_id}'";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
                 usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,zm.id AS zone_id,
