@@ -46,7 +46,7 @@
                     <div class="layui-row layui-bg-white">
                         <div class="nl-table-wapper">
                             <table class="nl-table">
-                                <tbody>
+                                <thead>
                                     <tr class='table-head'>
                                         <td><?=__('序 号', 'nlyd-student')?></td>
                                         <td><?=__('姓名/编号', 'nlyd-student')?></td>
@@ -55,22 +55,9 @@
                                         <td><?=__('联系方式', 'nlyd-student')?></td>
                                         <td><?=__('操 作', 'nlyd-student')?></td>
                                     </tr>
-                                    <tr>
-                                        <td><div class="table_content">1</div></td>
-                                        <td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
-                                        <td><div class="table_content">18</div></td>
-                                        <td><div class="table_content c_black">男</div></td>
-                                        <td><div class="table_content c_black">刘亿亿</div></td>
-                                        <td><div class="table_content"><a class="c_blue" href="<?=home_url('/zone/studentDetail/');?>">详 情</a></div></td>
-                                    </tr>
-                                    <tr>
-                                        <td><div class="table_content">1</div></td>
-                                        <td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
-                                        <td><div class="table_content c_black">18</div></td>
-                                        <td><div class="table_content c_black">男</div></td>
-                                        <td><div class="table_content">刘亿亿</div></td>
-                                        <td><div class="table_content"><a class="c_blue" href="<?=home_url('/zone/studentDetail/');?>">详 情</a></div></td>
-                                    </tr>
+                                </thead>
+                                <tbody id="team_flow">
+                                   
                                 </tbody>
                             </table>
                         </div>    
@@ -90,7 +77,62 @@
 </div>
 
 <script>
-jQuery(function($) {     
+jQuery(function($) { 
+    layui.use(['element','flow'], function(){
+        var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+        var flow = layui.flow;//流加载
+        function pagation(id,team_page){
+            flow.load({
+                elem: '#'+id //流加载容器
+                ,isAuto: false
+                ,isLazyimg: true
+                ,done: function(page, next){ //加载下一页
+                    var postData={
+                        action:'get_team_personnel',
+                        page:team_page,
+                        team_id:$.Request('team_id'),
+                    }
+                    var lis = [];
+                    $.ajax({
+                        data: postData,
+                        success:function(res,ajaxStatu,xhr){
+                            console.log(res)
+                            team_page++
+                            if(res.success){
+                                $.each(res.data.info,function(i,v){
+                                    var dom= '<tr>'+
+                                                '<td><div class="table_content">1</div></td>'+
+                                                '<td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>'+
+                                                '<td><div class="table_content">18</div></td>'+
+                                                '<td><div class="table_content c_black">男</div></td>'+
+                                                '<td><div class="table_content c_black">刘亿亿</div></td>'+
+                                                '<td><div class="table_content"><a class="c_blue" href="">详 情</a></div></td>'+
+                                            '</tr>'
+                                    lis.push(dom) 
+                                })
+                                if (res.data.info.length<50) {
+                                    next(lis.join(''),false) 
+                                }else{
+                                    next(lis.join(''),true) 
+                                }
+                                
+                            }else{
+                                next(lis.join(''),false)
+                            }
+                        },
+                        complete:function(XMLHttpRequest, textStatus){
+							if(textStatus=='timeout'){
+								$.alerts("<?=__('网络质量差,请重试', 'nlyd-student')?>")
+								next(lis.join(''),true)
+							}
+                        }
+                    })       
+                }
+            });
+        }
+        pagation('team_flow',1)
 
+    });
 })
 </script>
+

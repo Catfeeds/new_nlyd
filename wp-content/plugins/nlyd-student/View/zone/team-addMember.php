@@ -9,7 +9,7 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback nl-goback">
+                <a class="mui-pull-left nl-goback nl-goback static" href="<?=home_url('/zone/team/');?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__('添加战队成员', 'nlyd-student')?></div></h1>
@@ -20,11 +20,10 @@
                         <div class="coach_add_row">
                             <div class="coach_add_input">
                                 <select class="js-data-select-ajax" name="user_id" style="width: 100%" data-action="get_manage_user" data-placeholder="输入战队成员注册手机号/邮箱/姓名" >
-                                    <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
                                 </select>
                             </div>
                             <input type="hidden" name="action" value="add_team_personnel">
-                            <input type="hidden" name="team_id" value="">
+                            <input type="hidden" name="team_id" value="<?=$id?>">
                             <div class="coach_add_btn c_blue" lay-filter='layform' lay-submit="" ><?=__('确 定', 'nlyd-student')?></div>
                         </div>
                     </form>
