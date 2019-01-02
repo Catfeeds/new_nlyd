@@ -211,6 +211,9 @@ class Student_Grade extends Student_Home
 
         if($_GET['grad_type'] == 'memory'){
             $memory_lv = isset($_GET['memory_lv']) ? $_GET['memory_lv'] : $_SESSION['memory_lv'];
+
+            $a = $wpdb->update($wpdb->prefix.'user_grade_log_history',array('grade_lv'=>$memory_lv),array('id'=>$_GET['history_id'],'user_id'=>$current_user->ID));
+
             $type = isset($_GET['type']) ? $_GET['type'] : 'sz';
             $project = $this->get_grading_parameter($memory_lv);
             if(empty($project)){
