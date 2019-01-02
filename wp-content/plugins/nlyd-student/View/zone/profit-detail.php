@@ -82,7 +82,7 @@ jQuery(function($) {
                             profit_page++
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    var dom1='<div class="layui-row width-margin width-margin-pc profit_detail_item">'+
+                                    var dom='<div class="layui-row width-margin width-margin-pc profit_detail_item">'+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益金额", "nlyd-student")?>：</div>'+
                                                     '<div class="profit_detail_info c_black">¥ </div>'+
@@ -110,28 +110,8 @@ jQuery(function($) {
                                                     '<div class="profit_detail_info c_green"></div>'+
                                                 '</div>'+
                                             '</div>'
-                                    var dom2='<div class="layui-row width-margin width-margin-pc profit_detail_item">'+
-                                                '<div class="profit_detail_row">'+
-                                                    '<div class="profit_detail_label"><?=__("提现金额", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_black">¥ </div>'+
-                                                '</div>'+
-                                                '<div class="profit_detail_row">'+
-                                                    '<div class="profit_detail_label"><?=__("提现路径", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_black">'+
-                                                        
-                                                    '</div>'+
-                                                '</div>'+
-                                                '<div class="profit_detail_row">'+
-                                                    '<div class="profit_detail_label"><?=__("发起时间", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_black"></div>'+
-                                                '</div>'+
-                                                '<div class="profit_detail_row">'+
-                                                    '<div class="profit_detail_label"><?=__("提现状态", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_green"></div>'+
-                                                '</div>'+
-                                            '</div>'
                                             console.log(dom)
-                                    lis.push(dom1) 
+                                    lis.push(dom) 
                                 })
                                 if (res.data.info.length<50) {
                                     next(lis.join(''),false) 
