@@ -4637,7 +4637,7 @@ class Student_Ajax
      */
     public function zone_create_match(){
 
-        if(empty($_POST['match_scene']) || empty($_POST['match_genre']) || empty($_POST['match_address']) || empty($_POST['match_cost']) || empty($_POST['match_start_time']) ){
+        if(empty($_POST['match_scene']) || empty($_POST['match_genre']) || empty($_POST['match_address']) || empty($_POST['match_start_time']) ){
             wp_send_json_error(array('info'=>'比赛场景/类型/名称/地点/费用/时间为必填项'));
         }
         global $wpdb,$current_user;
@@ -5024,7 +5024,7 @@ class Student_Ajax
             'stream_log_id'=>$id,
             'extract_id'=>$current_user->ID,
             'extract_amount'=>$_POST['num'],
-            'extract_type'=>-$_POST['extract_type'],
+            'extract_type'=>$_POST['extract_type'],
             'bank_name'=>!empty($opening_bank) ? $opening_bank : '' ,
             'bank_address'=>!empty($opening_bank_address) ? $opening_bank_address : '' ,
             'extract_account'=>!empty($bank_card_num) ? $bank_card_num : '' ,
@@ -5044,6 +5044,26 @@ class Student_Ajax
         }
     }
 
+
+    /**
+     * 获取我的详情
+     */
+    public function get_my_profit_detail(){
+        global $wpdb,$current_user;
+        //获取当前收益内容
+        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income, 
+                                       case income_type
+                                        when 'match' then '比赛收益'
+                                        when 'grading' then '考级收益'
+                                        when 'subject' then '推荐奖励'
+                                        when 'extract' then '提现'
+                                        end income_type_title 
+                                      from {$wpdb->prefix}user_stream_logs 
+                                      where id = {$_GET['id']} and user_id = {$current_user->ID} ",ARRAY_A);
+        if(empty($row)){
+           wp_send_json_error(array('info'=>__('数据错误')));
+        }
+    }
 
     /**
      * 获取我的推荐
@@ -5107,10 +5127,9 @@ class Student_Ajax
                 $rows1 = $wpdb->get_results($sql1,ARRAY_A);
                 if(!empty($rows1)){
                     $meta_value = array_column($rows1,'meta_value','meta_key');
-                    $list[$k]['user_ID'] = $meta_value['user_ID'];
-                    $list[$k]['user_gender'] = !empty($meta_value['user_gender']) ? $meta_value['user_gender'] : '-';
-
                 }
+                $list[$k]['user_ID'] = !empty($meta_value['user_ID']) ? $meta_value['user_ID'] : $v['ID'] + 10000000;
+                $list[$k]['user_gender'] = !empty($meta_value['user_gender']) ? $meta_value['user_gender'] : '-';
 
                 $order_id = $wpdb->get_var("select id from {$wpdb->prefix}order b where user_id = {$current_user->ID} and order_type = 3 ");
                 $list[$k]['is_shop'] = $order_id > 0 ? 'y' : 'n';
