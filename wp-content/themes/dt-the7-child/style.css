@@ -321,15 +321,20 @@ a.c_black3:hover{
 }
 @media screen and (max-width: 1199px){
     html{font-size:625%!important;}
-    input::-webkit-input-placeholder {
+    input::-webkit-input-placeholder,
+    textarea::-webkit-input-placeholder,
+     {
         color:#b8bcbe;font-size:0.12rem;
     }
+    textarea:-moz-placeholder,
     input:-moz-placeholder {
         color:#b8bcbe;font-size:0.12rem;
     }
+    textarea::-moz-placeholder,
     input::-moz-placeholder {
         color:#b8bcbe;font-size:0.12rem;
     }
+    textarea:-ms-input-placeholder,
     input:-ms-input-placeholder {
         color:#b8bcbe;font-size:0.12rem;
     }

@@ -32,19 +32,19 @@
 }
 input::-webkit-input-placeholder {
     color:#b8bcbe;
-    font-size:0.14rem;
+    font-size:0.12rem;
 }
 input:-moz-placeholder {
 color:#b8bcbe;
-font-size:0.14rem;
+font-size:0.12rem;
 }
 input::-moz-placeholder {
 color:#b8bcbe;
-font-size:0.14rem;
+font-size:0.12rem;
 }
 input:-ms-input-placeholder {
 color:#b8bcbe;
-font-size:0.14rem;
+font-size:0.12rem;
 }
 
 .noCopy{

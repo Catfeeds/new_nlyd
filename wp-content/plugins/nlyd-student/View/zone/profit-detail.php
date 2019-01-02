@@ -13,48 +13,7 @@
                 <h1 class="mui-title"><div><?=__('收益详情', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content flow-default"  id="profit_flow">
-                <div class="layui-row width-margin width-margin-pc profit_detail_item">
-                        <div class="profit_detail_row">
-                            <div class="profit_detail_label"><?=__('收益金额', 'nlyd-student')?>：</div>
-                            <div class="profit_detail_info c_black">¥ <?=$row['user_income']?></div>
-                        </div>
-                        <div class="profit_detail_row">
-                            <div class="profit_detail_label"><?=__('收益来源', 'nlyd-student')?>：</div>
-                            <div class="profit_detail_info c_black">
-                                <?=$row['profit_lv']?>
-                                <?=$row['channel']?>
-                                <?=__($row['income_type_title'], 'nlyd-student')?>
-                            </div>
-                        </div>
-                        <?php if(!empty($match)): ?>
-                        <div class="profit_detail_row">
-                            <div class="profit_detail_label"><?=__('比赛类型', 'nlyd-student')?>：</div>
-                            <div class="profit_detail_info c_black"><?=__($match['role_name'], 'nlyd-student')?></div>
-                        </div>
-                        <div class="profit_detail_row">
-                            <div class="profit_detail_label"><?=__('比赛详情', 'nlyd-student')?>：</div>
-                            <div class="profit_detail_info c_black"><?=__($match['match_title'], 'nlyd-student')?></div>
-                        </div>
-                        <?php endif;?>
-                        <!--<div class="profit_detail_row">
-                            <div class="profit_detail_label"><?/*=__('收益级别', 'nlyd-student')*/?>：</div>
-                            <div class="profit_detail_info c_black"><?/*=__($row['profit_lv'], 'nlyd-student')*/?></div>
-                        </div>-->
-                        <?php if(!empty($row['channel'])):?>
-                        <div class="profit_detail_row">
-                            <div class="profit_detail_label"><?=__('收益途径', 'nlyd-student')?>：</div>
-                            <div class="profit_detail_info c_black"><?=__($row['income_channel'], 'nlyd-student')?></div>
-                        </div>
-                        <?php endif;?>
-                        <div class="profit_detail_row">
-                            <div class="profit_detail_label"><?=__('收益状态', 'nlyd-student')?>：</div>
-                            <div class="profit_detail_info c_green"><?=__('已到账', 'nlyd-student')?></div>
-                        </div>
-                        <div class="profit_detail_row">
-                            <div class="profit_detail_label"><?=__('到账时间', 'nlyd-student')?>：</div>
-                            <div class="profit_detail_info c_black">2018/12/12 13:18</div>
-                        </div>
-                </div>
+         
             </div>
         </div>            
     </div>
@@ -86,12 +45,12 @@ jQuery(function($) {
                                     var dom='<div class="layui-row width-margin width-margin-pc profit_detail_item">'+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益金额", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_black">¥ </div>'+
+                                                    '<div class="profit_detail_info c_black">¥ '+v.profit_income+'</div>'+
                                                 '</div>'+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益来源", "nlyd-student")?>：</div>'+
                                                     '<div class="profit_detail_info c_black">'+
-                                                       
+                                                        v.income_type_cn+
                                                     '</div>'+
                                                 '</div>'+
                                                 '<div class="profit_detail_row">'+
@@ -100,18 +59,21 @@ jQuery(function($) {
                                                 '</div>'+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("比赛详情", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_black"></div>'+
+                                                    '<div class="profit_detail_info c_black">'+v.post_title+'</div>'+
                                                 '</div>'+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益途径", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_black"></div>'+
+                                                    '<div class="profit_detail_info c_black">'+v.channel+'</div>'+
                                                 '</div>'+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益状态", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_green"></div>'+
+                                                    '<div class="profit_detail_info c_green">'+v.income_status_cn+'</div>'+
+                                                '</div>'+
+                                                '<div class="profit_detail_row">'+
+                                                    '<div class="profit_detail_label"><?=__("到账时间", "nlyd-student")?>：</div>'+
+                                                    '<div class="profit_detail_info c_black">'+v.created_time+'</div>'+
                                                 '</div>'+
                                             '</div>'
-                                            console.log(dom)
                                     lis.push(dom) 
                                 })
                                 if (res.data.info.length<50) {

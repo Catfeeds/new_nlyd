@@ -366,7 +366,6 @@
                             fd.append('business_licence','');
                         }
                     }else{
-
                         if(data.field['business_licence_url']){
                             fd.append('business_licence_url',data.field['business_licence_url']);
                         }else{
