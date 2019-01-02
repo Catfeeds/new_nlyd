@@ -56,6 +56,13 @@
                         <div class="apply_list_line center"><?=__('我的推荐', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                     </a>
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/settingCash/');?>">
+                        <div class="apply_list_line pull-left">
+                            <div class="zone_bg bg_cash"></div>
+                        </div>
+                        <div class="apply_list_line center"><?=__('提现设置', 'nlyd-student')?></div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                    </a>
                 </div>
                 <!-- 普通用户 (控制台)-->
                 <div class="apply have_title width-padding layui-row layui-bg-white width-padding-pc">

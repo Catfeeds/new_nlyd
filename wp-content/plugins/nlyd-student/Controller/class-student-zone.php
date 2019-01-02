@@ -172,7 +172,7 @@ class Student_Zone extends Student_Home
      */
      public function profitDetail(){
 
-         global $wpdb,$current_user;
+         /*global $wpdb,$current_user;
 
          //获取当前收益内容
          $row = $wpdb->get_row("select match_id,income_type,user_type,user_income, 
@@ -188,6 +188,79 @@ class Student_Zone extends Student_Home
              $this->get_404(__('数据错误', 'nlyd-student'));
              return;
          }
+         //print_r($row);
+
+         $page = isset($_POST['page']) ? $_POST['page'] : 1;
+         $pageSize = 50;
+         $start = ($page-1)*$pageSize;
+
+         //判断是否为机构
+         $zone_id = $wpdb->get_var("select from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
+
+         //获取对应数据列表
+         $sql = "select SQL_CALC_FOUND_ROWS a.*, b.post_title,
+                      case a.income_type 
+                      when 'match' then '比赛收益'
+                      when 'grading' then '考级收益'
+                      when 'subject' then '推荐收益'
+                      else '--'
+                      end income_type_cn,
+                      if(a.income_status=2,'已到账','已发放') income_status_cn
+                      from {$wpdb->prefix}user_income_logs a 
+                      left join {$wpdb->prefix}posts b on a.match_id = b.ID where ";
+         if(empty($zone_id)){    //
+             $where = "a.match_id = {$row['match_id']} and 
+                      (
+                        a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID} 
+                        or a.indirect_referee_id = {$current_user->ID} or a.manager_id = {$current_user->ID}
+                        ) 
+                       ";
+
+        }else{
+            $where = "a.sponsor_id = {$current_user->ID} ";
+        }
+        $sql .= $where."order by id desc limit $start,$pageSize ";
+
+        // print_r($sql);
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         //print_r($rows);
+         if(!empty($rows)){
+             $list = array();
+             foreach ($rows as $k => $v){
+                 if($row['income_type'] == 'subject'){  //裂变收益
+                     //获取裂变机构类型
+                     $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
+                     $list['profit_channel'] = '推荐'.$zone_type_name;
+                 }
+                 if($v['referee_id'] == $current_user->ID){
+                     $list['profit_lv'] = '直接';
+                     $list['profit_income'] = $v['referee_income'];
+                 }
+                 elseif ($v['indirect_referee_id'] == $current_user->ID){
+                     $list['profit_lv'] = '间接';
+                     $list['profit_income'] = $v['indirect_referee_income'];
+                 }
+                 elseif ($v['person_liable_id'] == $current_user->ID){
+                     $list['profit_lv'] = $v['income_type'] == 'match' ? '责任教练' : '参赛机构';
+                     $list['profit_income'] = $v['person_liable_income'];
+                 }
+                 elseif ($v['sponsor_id'] == $current_user->ID){
+                     $list['profit_lv'] = '办赛机构';
+                     $list['profit_income'] = $v['sponsor_income'];
+                 }
+
+                 $referee_name = get_user_meta($v['user_id'],'user_real_name')[0];
+                 //var_dump($referee_name);
+                 $list['channel'] = $referee_name['real_name'];
+                 $list['channel_ID'] = $v['user_id']+10000000;
+                 $list['post_title'] = $v['post_title'];
+                 $list['income_type_cn'] = $v['income_type_cn'];
+                 $list['income_status_cn'] = $v['income_status_cn'];
+                 $list['created_time'] = $v['created_time'];
+                 $lists[] = $list;
+             }
+         }
+         print_r($lists);
          if($row['income_type'] == 'subject'){  //裂变收益
              $where = "id = {$row['match_id']}";
              $row['income_channel'] = '中心裂变';
@@ -213,7 +286,7 @@ class Student_Zone extends Student_Home
              //var_dump($referee_name);
              $row['channel'] = $referee_name['real_name'];
              $row['channel_ID'] = $result_['user_id']+10000000;
-         }
+         }*/
 
         //print_r($result);
 
@@ -227,13 +300,29 @@ class Student_Zone extends Student_Home
      */
      public function getCashDetail(){
 
-
-         $zone = $this->get_zone_meta();
-
-         print_r($zone);
+         global $wpdb,$current_user;
+         //获取提现信息
+         $row = $wpdb->get_row("select *, 
+                                      case 'extract_type'
+                                      when 'bank' then '提现至银行卡'
+                                      when 'weChat' then '提现至微信'
+                                      when 'aliPay' then '提现至支付宝'
+                                      else '提现至钱包'
+                                      end extract_type_cn,
+                                      case 'extract_status'
+                                      when 2 then '已到账'
+                                      when 3 then '提现失败'
+                                      else '提现中'
+                                      end extract_status_cn
+                                      from {$wpdb->prefix}user_extract_logs where stream_log_id = {$_GET['id']} and extract_id = $current_user->ID",ARRAY_A);
+         if(empty($row)){
+             $this->get_404(array('message'=>__('数据信息错误', 'nlyd-student'),'return_url'=>home_url('/zone/profit/')));
+             return;
+         }
+         //print_r($row);
 
         $view = student_view_path.CONTROLLER.'/profit-getCash-detail.php';
-        load_view_template($view);
+        load_view_template($view,$row);
     }
     /**
      * 比赛管理列表
@@ -242,6 +331,7 @@ class Student_Zone extends Student_Home
          global $wpdb,$current_user;
          //获取用户发布比赛的权限
          $match_role_id = $wpdb->get_var("select match_role_id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+         //print_r("select match_role_id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
          if(empty($match_role_id)){
              $this->get_404(array('message'=>__('你未拥有该权限,请联系管理员授权', 'nlyd-student'),'return_url'=>home_url('/zone/')));
              return;
@@ -510,6 +600,35 @@ class Student_Zone extends Student_Home
      */
      public function settingPsw(){
         $view = student_view_path.CONTROLLER.'/setting-psw.php';
+        load_view_template($view);
+    }
+    /**
+     * 提现设置
+     */
+     public function settingCash(){
+        $view = student_view_path.CONTROLLER.'/setting-cash.php';
+        load_view_template($view);
+    }
+
+    /**
+     * 银行卡提现设置
+     */
+     public function settingCashCard(){
+        $view = student_view_path.CONTROLLER.'/setting-cash-card.php';
+        load_view_template($view);
+    }
+    /**
+     * 微信提现设置
+     */
+     public function settingCashWechat(){
+        $view = student_view_path.CONTROLLER.'/setting-cash-wechat.php';
+        load_view_template($view);
+    }
+    /**
+     * 支付宝提现设置
+     */
+     public function settingCashAlipay(){
+        $view = student_view_path.CONTROLLER.'/setting-cash-alipay.php';
         load_view_template($view);
     }
     /**
