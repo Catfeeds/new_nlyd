@@ -567,10 +567,25 @@ class Student_Zone extends Student_Home
          $coach['coach_brief'] = !empty($user_info['coach_brief']) ? hideStar($user_info['coach_brief']) : '暂无';
 
          //获取教练技能
-         $sql_ = "select a.*,b.user_mobile from {$wpdb->prefix}coach_skill a 
+         $sql_ = "select a.*,
+                  b.user_mobile from {$wpdb->prefix}coach_skill a 
                   left join {$wpdb->prefix}users b on a.coach_id = b.ID
                   where a.coach_id = {$_GET['coach_id']} ";
          $row = $wpdb->get_row($sql_,ARRAY_A);
+         $skill = array();
+         if(!empty($row)){
+             if($row['read'] > 0){
+                 $skill[] = '速读';
+             }
+             if ($row['memory'] > 0){
+                 $skill[] = '记忆';
+             }
+             if ($row['compute'] > 0){
+                 $skill[] = '心算';
+             }
+         }
+         $coach['coach_skill'] = !empty($skill) ? arr2str($skill,'/') : '暂无';
+         //print_r($row);
          $coach['user_mobile'] = !empty($row['user_mobile']) ? hideStar($row['user_mobile']) : '-';
 
          //获取教练学员
