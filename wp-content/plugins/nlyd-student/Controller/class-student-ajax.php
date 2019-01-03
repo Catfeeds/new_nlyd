@@ -5412,11 +5412,12 @@ class Student_Ajax
             $list = array();
             foreach ($rows_ as $k => $v){
                 if($v['coach_id'] !== $_POST['coach_id']){
-                    $list[$k]['coach_id'] = $v['coach_id'];
-                    $list[$k]['real_name'] = unserialize($v['meta_value'])['real_name'];
+                    $arr['coach_id'] = $v['coach_id'];
+                    $arr['real_name'] = unserialize($v['meta_value'])['real_name'];
+                    $list[] = $arr;
                 }
             }
-            //print_r($list);die;
+            //print_r(json_encode($list));die;
             //$_POST['new_coach_id'] = 9;
             if(empty($_POST['new_coach_id'])){
                 wp_send_json_success(array('list'=>json_encode($list)));
