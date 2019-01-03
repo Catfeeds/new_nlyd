@@ -95,9 +95,9 @@ jQuery(function($) {
                 }
                 ,btn2: function(index, layero){
                     if(!_this.hasClass('disabled')){
-                        var id=_this.parent('.add_lun_row').find('.match_date').attr('data-id')
                         var data={
-                            action:'remove_match_time'
+                            action:'zone_coach_relieve',
+                            coach_id:$.Request('coach_id'),
                         }
                         $.ajax({
                             data: data,
@@ -105,10 +105,20 @@ jQuery(function($) {
                                 _this.addClass('disabled')
                             },
                             success: function(res, textStatus, jqXHR){
+                                console.log(res)
+
                                 if(res.success){
-                                    window.location.reload()
+                                    if(res.data.url){
+                                        setTimeout(function() {
+                                            window.location.href=res.data.url
+                                        }, 300);
+
+                                    }else{
+                                        _this.removeClass('disabled');
+                                    }
                                 }else{
                                     $.alerts(res.data.info,1200)
+                                    _this.removeClass('disabled');
                                 }
                             },
                             complete: function(jqXHR, textStatus){
