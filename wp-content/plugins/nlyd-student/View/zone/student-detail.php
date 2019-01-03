@@ -14,7 +14,7 @@
                 </a>
                 <h1 class="mui-title"><div><?=__('学员详情', 'nlyd-student')?></div></h1>
             </header>    
-            <div class="layui-row nl-border nl-content ">
+            <div class="layui-row nl-border nl-content">
                 <div class="nl-table-wapper student_detail">
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('学员姓名', 'nlyd-student')?>：</div>   
@@ -62,6 +62,7 @@
                          <div class="detail_detail c_black"><?=__('推某某', 'nlyd-student')?></div>   
                     </div>
                 </div>
+          
             </div>
         </div>           
     </div>
