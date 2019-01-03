@@ -14,7 +14,7 @@
                 </a>
                 <h1 class="mui-title"><div><?=__('教练详情', 'nlyd-student')?></div></h1>
             </header>    
-            <div class="layui-row nl-border nl-content ">
+            <div class="layui-row nl-border nl-content have-bottom">
                 <div class="_relative">
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('教练姓名', 'nlyd-student')?>：</div>   
@@ -69,6 +69,7 @@
                         </div>
                     </div>
                 </div>
+                <a class="a-btn a-btn-table coachClear"><div><?=__('解除关系', 'nlyd-student')?></div></a>
             </div>
         </div>           
     </div>
@@ -80,6 +81,60 @@ jQuery(function($) {
             photos: '.img-z',
             anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
         }) 
+        $('.coachClear').click(function(){
+            var _this=$(this);
+            layer.open({
+                type: 1
+                ,maxWidth:300
+                ,title: "<?=__('提示', 'nlyd-student')?>" //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: "<div class='box-conent-wrapper'><?=__('是否解除于leo的教练关系', 'nlyd-student')?>？</div>"
+                ,btn: [ "<?=__('按错了', 'nlyd-student')?>","<?=__('确认', 'nlyd-student')?>",]
+                ,success: function(layero, index){
+                },
+                cancel: function(index, layero){
+                    layer.closeAll();
+                }
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    if(!_this.hasClass('disabled')){
+                        var id=_this.parent('.add_lun_row').find('.match_date').attr('data-id')
+                        var data={
+                            action:'remove_match_time'
+                        }
+                        $.ajax({
+                            data: data,
+                            beforeSend:function(XMLHttpRequest){
+                                _this.addClass('disabled')
+                            },
+                            success: function(res, textStatus, jqXHR){
+                                if(res.success){
+                                    window.location.reload()
+                                }else{
+                                    $.alerts(res.data.info,1200)
+                                }
+                            },
+                            complete: function(jqXHR, textStatus){
+                                if(textStatus=='timeout'){
+                                    $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                        　　　　 }
+                                _this.removeClass('disabled');
+                            }
+                        })
+                    }else{
+                        $.alerts("<?=__('正在删除此轮比赛，请稍后再试', 'nlyd-student')?>",1200)
+                    }
+                    layer.closeAll();
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        })
     }) 
 })
 </script>
