@@ -136,12 +136,13 @@ jQuery(function($) {
                                     }
                                     if(res.data.list && typeof(res.data.list)=='object'){
                                         $.alerts("<?=__('当前教练下存在学员，请为学员绑定新的教练关系再进行解绑教练操作', 'nlyd-student')?>",3000)
-                                        mobileSelect4.updateWheel(0,res.data.list);
-                                        $('#coachList').click()
+                                        var arr=[];
+                                        $.each(res.data.list,function(i,v){
+                                            arr.push(v)
+                                        })
+                                        mobileSelect4.updateWheel(0,arr);
+                                        mobileSelect4.show();
                                     }
-                                    // setTimeout(function() {
-                                    //     window.location.href=window.home_url+"/zone/coach/"
-                                    // }, 3000);
                                 }else{
                                    
                                     _this.removeClass('disabled');
