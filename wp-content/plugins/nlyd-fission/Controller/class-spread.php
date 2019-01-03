@@ -213,7 +213,7 @@ class Spread{
             $sub_center = isset($_POST['sub_center']) ? trim($_POST['sub_center']) : '';
             $mechanism = isset($_POST['mechanism']) ? trim($_POST['mechanism']) : '';
             $spread_status = isset($_POST['spread_status']) ? intval($_POST['spread_status']) : '';
-            $pay_amount = isset($_POST['pay_amount']) ? intval($_POST['pay_amount']) : '';
+            $pay_amount = isset($_POST['pay_amount']) ? floatval($_POST['pay_amount']) : '';
             $spread_arr = explode('()',$spread_type);
             $spread_type = $spread_arr[0];
             $spread_name = $spread_arr[1];
@@ -252,7 +252,7 @@ class Spread{
         //获取机构类型
         $organizeList = $wpdb->get_results("SELECT zone_type_name,zone_type_alias FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
         //获取比赛权限类型
-        $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_match_role", ARRAY_A);
+        $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_match_role WHERE status=1", ARRAY_A);
         $spreadCategory = getSpreadCategory();
         foreach ($organizeList as $olv){
             $spreadCategory[$olv['zone_type_alias']] = '成为'.$olv['zone_type_name'];
