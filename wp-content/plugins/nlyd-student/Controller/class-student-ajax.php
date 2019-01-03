@@ -4762,6 +4762,27 @@ class Student_Ajax
         }
     }
 
+
+    /**
+     * 机构发布考级
+     */
+    public function zone_create_grading(){
+        if(empty($_POST['post_title']) || empty($_POST['match_genre']) || empty($_POST['match_address']) || empty($_POST['match_start_time']) ){
+            wp_send_json_error(array('info'=>'比赛场景/类型/名称/地点/费用/时间为必填项'));
+        }
+        global $wpdb,$current_user;
+
+        //print_r($_POST);die;
+        /***********************准备数据**********************************/
+        $arr = array(
+            'post_title' => $_POST['post_title'],
+            'post_type'     => 'grading',
+            'post_status' => 'publish',
+            'post_author' => $current_user->ID,
+        );
+        $new_page_id = wp_insert_post($arr);
+    }
+
     /**
      * 获取比赛费用
      * @return [type] [description]

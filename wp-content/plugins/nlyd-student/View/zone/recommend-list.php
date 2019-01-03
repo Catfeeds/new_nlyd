@@ -159,10 +159,14 @@ jQuery(function($) {
                                     }
 
                                 })
-                                if (res.data.info.length<50) {
-                                    next(lis.join(''),false) 
+                                if(res.data.info!== null){
+                                    if (res.data.info.length<50) {
+                                        next(lis.join(''),false) 
+                                    }else{
+                                        next(lis.join(''),true) 
+                                    }
                                 }else{
-                                    next(lis.join(''),true) 
+                                    next(lis.join(''),false) 
                                 }
                                 
                             }else{

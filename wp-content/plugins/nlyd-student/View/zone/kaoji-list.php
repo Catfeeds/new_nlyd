@@ -30,7 +30,7 @@
                         <div class="layui-tab-item layui-show">
                             <ul class="flow-default layui-row" id="1" style="margin:0">
                              
-                            
+                               
                             </ul>
                         </div>
                         <!-- 近期考级 -->
@@ -75,17 +75,6 @@
 <script>
     
 jQuery(function($) { 
-    $('body').on('click','.nl-match-button button',function(){
-        var _this=$(this);
-        var href=_this.attr('href');
-        if(href){
-            _this.addClass('opacity')
-            setTimeout(function(){
-                _this.removeClass('opacity')
-            }, 100);
-            window.location.href=href;
-        }
-    })
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
@@ -145,7 +134,7 @@ jQuery(function($) {
                                                 +'</div>'
                                                 +'<div class="match_footer ta_r">'
                                                     +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>'
-                                                    +'<a href="<?=home_url('/zone/kaojiBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>'
+                                                    +'<a href="'+window.home_url+'/zone/kaojiBuild/grading_id/'+v.ID+'/" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>'
                                                     +end_match
                                                 +'</div>'
                                             +'</li>'
@@ -160,21 +149,6 @@ jQuery(function($) {
                             }else{
                                 next(lis.join(''),false)
                             }
-                        
-                            $('.getTimes'+id).countdown(function(S, d){//倒计
-                                    var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
-                                    var h=d.hour<10 ? '0'+d.hour : d.hour;
-                                    var m=d.minute<10 ? '0'+d.minute : d.minute;
-                                    var s=d.second<10 ? '0'+d.second : d.second;
-                                    var time=D+h+':'+m+':'+s;
-                                    $(this).text(time);
-                                if(S==0){
-                                    $(this).text("<?=__('报名结束', 'nlyd-student')?>");
-                                    setTimeout(function() {
-                                        window.location.reload()  
-                                    }, 1000);
-                                }
-                            });
                         },
                         complete:function(XMLHttpRequest, textStatus){
 							if(textStatus=='timeout'){
