@@ -61,9 +61,9 @@ jQuery(function($) {
                                     var dom= '<tr>'+
                                                 '<td><div class="table_content">1</div></td>'+
                                                 '<td><div class="table_content"><div class="img-box coach_img"><img src="<?=student_css_url.'image/nlyd.png'?>"></div></div></td>'+
-                                                '<td><div class="table_content">18</div></td>'+
+                                                '<td><div class="table_content">刘亿亿<br>10001</div></td>'+
+                                                '<td><div class="table_content c_black">18</div></td>'+
                                                 '<td><div class="table_content c_black">男</div></td>'+
-                                                '<td><div class="table_content c_black">刘亿亿</div></td>'+
                                                 '<td><div class="table_content"><a class="c_blue" href="">详 情</a></div></td>'+
                                             '</tr>'
                                     lis.push(dom) 
