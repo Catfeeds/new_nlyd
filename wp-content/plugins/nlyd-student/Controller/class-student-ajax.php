@@ -5372,9 +5372,10 @@ class Student_Ajax
                 $user_info = array_column($res,'meta_value','meta_key');
                 //print_r($user_info);
                 $rows[$k]['user_ID'] = !empty($user_info['user_ID']) ? $user_info['user_ID'] : $v['coach_id']+10000000;
+                $rows[$k]['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-' ;
                 $user_real_name = unserialize($user_info['user_real_name']);
                 $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
-                $rows[$k]['user_gender'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
+                $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
             }
         }
         //print_r($rows);
