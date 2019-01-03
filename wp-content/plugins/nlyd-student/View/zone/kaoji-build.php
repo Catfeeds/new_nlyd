@@ -49,7 +49,7 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级费用', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="cost" value=""></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="cost" value="1"></div>
                         </div>
                         <div>
                             <div class="lable_row">
@@ -130,15 +130,15 @@ var mobileSelect2 = new MobileSelect({
 if($('#match_date').length>0 && $('#match_date').attr('data-time') && $('#match_date').attr('data-time').length>0){
     var timeValue=$('#match_date').attr('data-time').split(',');
     $.each(match_date_Data,function(index,value){
-        if(timeValue[0]==value.value){
+        if(parseInt(timeValue[0])==parseInt(value.value)){
             $.each(value.childs,function(i,v){
-                if(timeValue[1]==v.value){
+                if(parseInt(timeValue[1])==parseInt(v.value)){
                     $.each(v.childs,function(j,val){
-                        if(timeValue[2]==val.value){
+                        if(parseInt(timeValue[2])==parseInt(val.value)){
                             $.each(val.childs,function(k,b){
-                                if(timeValue[3]==b.value){
+                                if(parseInt(timeValue[3])==parseInt(b.value)){
                                     $.each(b.childs,function(l,c){
-                                        if(timeValue[4]==c.value){
+                                        if(parseInt(timeValue[4])==parseInt(c.value)){
                                             posiotion_match_date=[index,i,j,k,l];
                                         }
                                     })
