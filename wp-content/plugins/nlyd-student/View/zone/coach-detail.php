@@ -90,8 +90,34 @@ jQuery(function($) {
             // console.log(data);
         },
         callback:function(indexArr, data){
-            console.log(data)
-
+            // console.log(data)
+            var data={
+                action:'zone_coach_relieve',
+                coach_id:$.Request('coach_id'),
+                new_coach_id:data[0]['coach_id']
+            }
+            $.ajax({
+                data: data,
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
+                success: function(res, textStatus, jqXHR){
+                    console.log(res)
+                    if(res.success){
+                       
+                    }else{
+                        
+                        _this.removeClass('disabled');
+                    }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                        _this.removeClass('disabled');
+            　　　　 }
+                    
+                }
+            })
         }
     });
     layui.use(['layer'], function(){
@@ -132,27 +158,32 @@ jQuery(function($) {
                                 console.log(res)
                                 if(res.success){
                                     if(res.data.info){
-                                        $.alerts(res.data.info)
+                                        $.alerts(res.data.info);
+                                        setTimeout(function() {
+                                            window.location.href=window.home_url+'/zone/coach/'
+                                        }, 1000);
                                     }
                                     if(res.data.list && typeof(res.data.list)=='object'){
-                                        $.alerts("<?=__('当前教练下存在学员，请为学员绑定新的教练关系再进行解绑教练操作', 'nlyd-student')?>",3000)
-                                        var arr=[];
-                                        $.each(res.data.list,function(i,v){
-                                            arr.push(v)
-                                        })
-                                        mobileSelect4.updateWheel(0,arr);
+                                        $.alerts("<?=__('当前教练下存在学员，请为学员绑定新的教练关系并进行解绑教练操作', 'nlyd-student')?>",3000)
+                                        // var arr=[];
+                                        // $.each(res.data.list,function(i,v){
+                                        //     arr.push(v)
+                                        // })
+                                        mobileSelect4.updateWheel(0,res.data.list);
                                         mobileSelect4.show();
+                                       
                                     }
+                                    _this.removeClass('disabled');
                                 }else{
-                                   
                                     _this.removeClass('disabled');
                                 }
                             },
                             complete: function(jqXHR, textStatus){
                                 if(textStatus=='timeout'){
                                     $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                                    _this.removeClass('disabled');
                         　　　　 }
-                                _this.removeClass('disabled');
+                                
                             }
                         })
                     }else{
