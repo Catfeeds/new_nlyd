@@ -18,7 +18,7 @@
                 <div class="_relative">
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('教练姓名', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=$real_name?></div>
+                         <div class="detail_detail c_black coach_name"><?=$real_name?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('教练ID', 'nlyd-student')?>：</div>   
@@ -73,9 +73,27 @@
             </div>
         </div>           
     </div>
+    <div id="coachList" style="display:none"></div>
 </div>
 <script>
 jQuery(function($) { 
+    var mobileSelect4 = new MobileSelect({
+        trigger: '#coachList',
+        title: "<?=__('教练列表', 'nlyd-student')?>",
+        wheels: [
+            {data: [{coach_id:'coach_id', real_name:'real_name'}]}
+        ],
+        triggerDisplayData:false,
+        keyMap:{id:'coach_id', value:'real_name'},
+        position:[0], //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        transitionEnd:function(indexArr, data){
+            // console.log(data);
+        },
+        callback:function(indexArr, data){
+            console.log(data)
+
+        }
+    });
     layui.use(['layer'], function(){
         layer.photos({//图片预览
             photos: '.img-z',
@@ -89,7 +107,7 @@ jQuery(function($) {
                 ,title: "<?=__('提示', 'nlyd-student')?>" //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: "<div class='box-conent-wrapper'><?=__('是否解除于leo的教练关系', 'nlyd-student')?>？</div>"
+                ,content: "<div class='box-conent-wrapper'><?=__('是否解除', 'nlyd-student')?>"+$('.coach_name').text()+"<?=__('的教练关系', 'nlyd-student')?>？</div>"
                 ,btn: [ "<?=__('按错了', 'nlyd-student')?>","<?=__('确认', 'nlyd-student')?>",]
                 ,success: function(layero, index){
                 },
@@ -112,18 +130,20 @@ jQuery(function($) {
                             },
                             success: function(res, textStatus, jqXHR){
                                 console.log(res)
-
                                 if(res.success){
-                                    if(res.data.url){
-                                        setTimeout(function() {
-                                            window.location.href=res.data.url
-                                        }, 300);
-
-                                    }else{
-                                        _this.removeClass('disabled');
+                                    if(res.data.info){
+                                        $.alerts(res.data.info)
                                     }
+                                    if(res.data.list && typeof(res.data.list)=='object'){
+                                        $.alerts("<?=__('当前教练下存在学员，请为学员绑定新的教练关系再进行解绑教练操作', 'nlyd-student')?>",3000)
+                                        mobileSelect4.updateWheel(0,res.data.list);
+                                        $('#coachList').click()
+                                    }
+                                    // setTimeout(function() {
+                                    //     window.location.href=window.home_url+"/zone/coach/"
+                                    // }, 3000);
                                 }else{
-                                    $.alerts(res.data.info,1200)
+                                   
                                     _this.removeClass('disabled');
                                 }
                             },
