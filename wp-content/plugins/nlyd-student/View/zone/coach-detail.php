@@ -100,9 +100,11 @@ jQuery(function($) {
                 data: data,
                 success: function(res, textStatus, jqXHR){
                     console.log(res)
+                    $.alerts(res.data.info)
                     if(res.success){
-                       
-                    }else{
+                        setTimeout(function() {
+                            window.location.href=window.home_url+'/zone/coach/'
+                        }, 1000);
                     }
                 }
             })
@@ -151,18 +153,16 @@ jQuery(function($) {
                                             window.location.href=window.home_url+'/zone/coach/'
                                         }, 1000);
                                     }
-                                    if(res.data.list && typeof(res.data.list)=='object'){
+                                    if(res.data.list){
                                         $.alerts("<?=__('当前教练下存在学员，请为学员绑定新的教练关系并进行解绑教练操作', 'nlyd-student')?>",3000)
-                                        // var arr=[];
-                                        // $.each(res.data.list,function(i,v){
-                                        //     arr.push(v)
-                                        // })
-                                        mobileSelect4.updateWheel(0,res.data.list);
+                                        var arr=JSON.parse(res.data.list);
+                                        mobileSelect4.updateWheel(0,arr);
                                         mobileSelect4.show();
-                                       
+                                        _this.removeClass('disabled');
                                     }
-                                    _this.removeClass('disabled');
+                                    
                                 }else{
+                                    $.alerts(res.data.info);
                                     _this.removeClass('disabled');
                                 }
                             },
