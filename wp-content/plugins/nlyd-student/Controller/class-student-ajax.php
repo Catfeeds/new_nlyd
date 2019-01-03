@@ -5366,7 +5366,7 @@ class Student_Ajax
                 if(empty($coach_work_photo)){
                     $coach_work_photo = get_user_meta($v['coach_id'],'user_head')[0];
                 }
-                $rows[$k]['work_photo'] =  !empty($coach_work_photo) ? $coach_work_photo : '-' ;;
+                $rows[$k]['work_photo'] =  !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
                 $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender') and user_id = {$v['coach_id']}";
                 $res = $wpdb->get_results($sql_,ARRAY_A);
                 $user_info = array_column($res,'meta_value','meta_key');
