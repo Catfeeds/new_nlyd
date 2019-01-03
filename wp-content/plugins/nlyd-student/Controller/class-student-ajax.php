@@ -2159,6 +2159,12 @@ class Student_Ajax
                 $url = home_url('account');
             }
 
+            //判断是否为机构
+            $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$user->ID} ");
+            if($zone_id){
+                $url = home_url('/zone/');
+            }
+
             //添加推广人
             if($_POST['referee_id'] > 0){
                 if(empty($user->referee_id) && $_POST['referee_id'] != $user->ID){
@@ -4591,7 +4597,8 @@ class Student_Ajax
         }
 
         //获取收益列表
-        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,user_income,income_type,
+        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,
+                  if(user_income > 0 ,user_income ,'待到账') user_income,
                   case income_type
                     when 'match' then '比赛收益'
                     when 'grading' then '考级收益'
@@ -5405,14 +5412,15 @@ class Student_Ajax
             $list = array();
             foreach ($rows_ as $k => $v){
                 if($v['coach_id'] !== $_POST['coach_id']){
-                    $list[$k]['coach_id'] = $v['coach_id'];
-                    $list[$k]['real_name'] = unserialize($v['meta_value'])['real_name'];
+                    $arr['coach_id'] = $v['coach_id'];
+                    $arr['real_name'] = unserialize($v['meta_value'])['real_name'];
+                    $list[] = $arr;
                 }
             }
-            //print_r($list);die;
+            //print_r(json_encode($list));die;
             //$_POST['new_coach_id'] = 9;
             if(empty($_POST['new_coach_id'])){
-                wp_send_json_success(array('list'=>$list));
+                wp_send_json_success(array('list'=>json_encode($list)));
             }else{
                 $x = $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$_POST['new_coach_id']),array('coach_id'=>$_POST['coach_id']));
                 //print_r($x);die;

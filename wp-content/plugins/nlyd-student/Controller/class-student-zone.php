@@ -133,7 +133,7 @@ class Student_Zone extends Student_Home
          $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
          $data['stream'] = $wpdb->get_var($sql1);
 
-         //获取用户今日收益
+         //获取用户累计收益
          $sql2 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and user_income > 0 ";
          $data['stream_total'] = $wpdb->get_var($sql2);
 
