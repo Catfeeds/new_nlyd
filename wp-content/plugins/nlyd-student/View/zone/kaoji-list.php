@@ -30,7 +30,7 @@
                         <div class="layui-tab-item layui-show">
                             <ul class="flow-default layui-row" id="1" style="margin:0">
                              
-                            
+                               
                             </ul>
                         </div>
                         <!-- 近期考级 -->
@@ -145,7 +145,7 @@ jQuery(function($) {
                                                 +'</div>'
                                                 +'<div class="match_footer ta_r">'
                                                     +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>'
-                                                    +'<a href="<?=home_url('/zone/kaojiBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>'
+                                                    +'<a href="'+window.home_url+'/zone/kaojiBuild/grading_id/'+v.ID+'/" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>'
                                                     +end_match
                                                 +'</div>'
                                             +'</li>'
