@@ -513,7 +513,6 @@ jQuery(function($) {
                     }
                     ,btn2: function(index, layero){
                         layer.closeAll();
-                        submit(1);
                     }
                     ,closeBtn:2
                     ,btnAagn: 'c' //按钮居中
@@ -522,6 +521,44 @@ jQuery(function($) {
                 });
                 return false;
             })
+            // $('body').on('click','.go_grade',function(){
+            //     var _this=$(this);
+            //     var _that=$('.kaoji_list')
+            //     if(!_that.hasClass('disabled')){
+            //         var level=_this.attr('data-id');
+            //         var postData={
+            //             action:'set_memory_grade',
+            //             genre_id:$.Request('genre_id'),
+            //             grad_type:$.Request('grad_type'),
+            //             grade:level,
+            //         }
+            //         $.ajax({
+            //             data: postData,
+            //             beforeSend:function(XMLHttpRequest){
+            //                 _that.addClass('disabled')
+            //             },
+            //             success: function(res, textStatus, jqXHR){
+            //                 $.alerts(res.data.info)
+            //                 if(res.data.url){
+            //                     setTimeout(function() {
+            //                         window.location.href=res.data.url
+            //                     }, 300);
+            //                 }else{
+            //                     _that.removeClass('disabled');
+            //                 }
+            //             },
+            //             complete: function(jqXHR, textStatus){
+            //                 if(textStatus=='timeout'){
+            //                     $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+            //                     _that.removeClass('disabled');
+            //         　　　　}
+            //             }
+            //         })
+            //     }else{
+            //         $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+            //     }
+            //     return false;
+            // })
         }
               
     });

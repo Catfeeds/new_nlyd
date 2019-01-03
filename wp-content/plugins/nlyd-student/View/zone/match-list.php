@@ -41,27 +41,7 @@
                         <!-- 往期比赛 -->
                         <div class="layui-tab-item">
                             <ul class="flow-default layui-row" id="3" style="margin:0">
-                                <!-- <li class="match_row"> 
-                                     <div class="bold c_black f_16 mt_10">2018脑力世界杯大爱长青国际脑力战队精英赛</div>
-                                     <div class="match_body">
-                                         <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛日期：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">已结束</span></div>
-                                         </div>
-                                         <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛地点：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">四川省成都市武侯区航空路丰德万瑞25楼</div>
-                                         </div>
-                                         <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">18</div>
-                                         </div>
-                                     </div>  
-                                     <div class="match_footer ta_r">
-                                        <a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>
-                                        <a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>
-                                    </div>
-                                </li>     -->
+                            
                             </ul>
                         </div>
                     </div>

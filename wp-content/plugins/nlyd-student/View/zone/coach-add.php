@@ -19,10 +19,10 @@
                     <form class="layui-form">
                         <div class="coach_add_row">
                             <div class="coach_add_input">
-                                <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="输入教练注册手机号/邮箱/姓名" >
-                                    <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
+                                <select class="js-data-select-ajax" name="coach_id" style="width: 100%" data-action="get_manage_user" data-placeholder="输入教练注册手机号/邮箱/姓名" >
                                 </select>
                             </div>
+                            <input type="hidden" name="action" value="add_zone_coach">
                             <div class="coach_add_btn c_blue" lay-filter='layform' lay-submit="" ><?=__('确 定', 'nlyd-student')?></div>
                         </div>
                     </form>

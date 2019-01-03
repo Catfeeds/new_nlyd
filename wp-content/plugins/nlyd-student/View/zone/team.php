@@ -6,14 +6,14 @@
             
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12  detail-content-wrapper">
-        <header class="mui-bar mui-bar-nav">
-            <a class="mui-pull-left nl-goback">
-                <div><i class="iconfont">&#xe610;</i></div>
-            </a>
-            <h1 class="mui-title">
-            <div><?=__('战队管理', 'nlyd-student')?></div>
-            </h1>
-        </header>
+            <header class="mui-bar mui-bar-nav">
+                <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/');?>">
+                    <div><i class="iconfont">&#xe610;</i></div>
+                </a>
+                <h1 class="mui-title">
+                    <div><?=__('战队管理', 'nlyd-student')?></div>
+                </h1>
+            </header>
             <div class="layui-row nl-border nl-content">
                 <?php if(!empty($id)){?>
                     <style>
@@ -46,7 +46,8 @@
                     <div class="layui-row layui-bg-white">
                         <div class="nl-table-wapper">
                             <table class="nl-table">
-                                <thead>
+                           
+                                <tbody id="team_flow">
                                     <tr class='table-head'>
                                         <td><?=__('序 号', 'nlyd-student')?></td>
                                         <td><?=__('姓名/编号', 'nlyd-student')?></td>
@@ -55,9 +56,6 @@
                                         <td><?=__('联系方式', 'nlyd-student')?></td>
                                         <td><?=__('操 作', 'nlyd-student')?></td>
                                     </tr>
-                                </thead>
-                                <tbody id="team_flow">
-                                   
                                 </tbody>
                             </table>
                         </div>    
