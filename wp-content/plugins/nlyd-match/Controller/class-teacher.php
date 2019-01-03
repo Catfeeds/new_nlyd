@@ -66,7 +66,7 @@ class Teacher
 
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID,zm.zone_name 
+        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID,zm.zone_city,zm.zone_match_type 
                     FROM {$wpdb->prefix}coach_skill a 
                     LEFT JOIN {$wpdb->prefix}users b ON a.coach_id = b.ID 
                     LEFT JOIN {$wpdb->usermeta} AS um_id ON um_id.user_id = a.coach_id AND um_id.meta_key='user_ID' 
@@ -199,7 +199,7 @@ class Teacher
                                 <a href="<?=admin_url('admin.php?page=course&coach_id='.$row['coach_id'])?>"><?=$course_num?></a>
                             </td>
                             <td class="outfit column-outfit" data-colname="所属机构">
-                                <?=$row['zone_name']?>
+                                <?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市精英赛')?>
                             </td>
                             <td class="option column-option" data-colname="操作">
                                 <a style="color: #00aff9" href="<?php echo '?page=teacher-datum&id='.$row['id'] ?>">编辑</a>

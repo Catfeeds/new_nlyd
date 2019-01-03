@@ -910,8 +910,9 @@ if(is_admin()){
         $columns['mobile'] = '手机';
         $columns['email'] = '邮箱';
         $columns['role'] = '角色';
-        $columns['posts'] = '文章';
-        $columns['mycred_default'] = '积分';
+//        $columns['posts'] = '文章';
+//        $columns['mycred_default'] = '积分';
+        $columns['user_options'] = '操作';
         return $columns;
     }
     add_action('manage_users_custom_column',  'show_user_column_content', 20, 3);
@@ -954,6 +955,14 @@ if(is_admin()){
                 $team_name = $wpdb->get_var("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt 
                 LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.user_id={$user_id} AND mt.status=2");
                 return $team_name;
+                break;
+            case 'user_options':
+                $arrs = [
+                    '<a href="'.admin_url('admin.php?page=fission-profit-user-log&user_id='.$user_id).'">收益流水</a>',
+                    '<a href="'.admin_url('admin.php?page=fission-profit-extract-log&user_id='.$user_id).'">提现记录</a>',
+                    '<a href="'.admin_url('admin.php?page=fission-profit-log&user_id='.$user_id).'">分成记录</a>',
+                ];
+                return join(' | ',$arrs);
                 break;
         }
         return $value;

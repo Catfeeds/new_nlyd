@@ -409,11 +409,14 @@ class Spread{
             <hr class="wp-header-end">
 
             <h2 class="screen-reader-text">过滤用户分成列表</h2>
-            <p class="search-box">
-                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="付款人/项目" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-log&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
-            </p>
+
+            <?php if($user_id < 1){ ?>
+                <p class="search-box">
+                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                    <input type="search" id="search_val" name="search_val" placeholder="付款人/项目" value="<?=$searchStr?>">
+                    <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-log&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                </p>
+            <?php } ?>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
 
@@ -481,7 +484,8 @@ class Spread{
                             <?php
                             switch ($row['income_type']){
                                 case 'subject':
-                                    echo '申请机构';
+                                    $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['match_id']}'");
+                                    echo '申请'.$zone_type_name;
                                     break;
                                 case 'match':
                                     echo '比赛';
@@ -848,12 +852,12 @@ class Spread{
             $where .= " AND usl.user_id='{$user_id}'";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
-                usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,zm.id AS zone_id,
+                usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,zm.id AS zone_id,usl.user_type,
                 um.meta_value AS user_real_name 
                 FROM {$wpdb->prefix}user_stream_logs AS usl 
-                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=usl.user_id 
-                LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=usl.user_id AND um.meta_key='user_real_name' 
+                LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=usl.user_id AND um.meta_key='user_real_name' AND um.user_id!=''
                 LEFT JOIN {$wpdb->users} AS u ON u.ID=usl.user_id 
+                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=usl.user_id 
                 {$where} 
                 ORDER BY usl.created_time DESC
                 LIMIT {$start},{$pageSize}",ARRAY_A);
@@ -877,20 +881,35 @@ class Spread{
             <hr class="wp-header-end">
 
             <h2 class="screen-reader-text">过滤用户收益流水</h2>
-            <p class="search-box">
-                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/机构名" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-user-log&type_id='.$type_id.'&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
-            </p>
+
+            <?php
+            if($user_id < 1){
+
+                ?>
+                <p class="search-box">
+                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                    <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/机构名" value="<?=$searchStr?>">
+                    <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-user-log&type_id='.$type_id.'&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                </p>
+                <?php
+            }
+            ?>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
+                <?php
+                if($user_id < 1){
 
-                <ul class="subsubsub">
-                    <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=0&user_id='.$user_id)?>" <?=$type_id===0?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
-                    <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=1&user_id='.$user_id)?>" <?=$type_id===1?'class="current"':''?> aria-current="page">机构流水<span class="count"></span></a> |</li>
-                    <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=2&user_id='.$user_id)?>" <?=$type_id===2?'class="current"':''?> aria-current="page">用户流水<span class="count"></span></a></li>
+                    ?>
+                    <ul class="subsubsub">
+                        <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=0&user_id='.$user_id)?>" <?=$type_id===0?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
+                        <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=1&user_id='.$user_id)?>" <?=$type_id===1?'class="current"':''?> aria-current="page">机构流水<span class="count"></span></a> |</li>
+                        <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=2&user_id='.$user_id)?>" <?=$type_id===2?'class="current"':''?> aria-current="page">用户流水<span class="count"></span></a></li>
 
-                </ul>
+                    </ul>
+                    <?php
+                }
+                ?>
+
 
                 <div class="tablenav-pages">
                     <span class="displaying-num"><?=$count['count']?>个项目</span>
@@ -952,7 +971,8 @@ class Spread{
                                     echo '提现';
                                     break;
                                 case 'subject':
-                                    echo '成为机构';
+                                    $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['user_type']}'");
+                                    echo '申请'.$zone_type_name;
                                     break;
                             }
                             ?>
@@ -1058,17 +1078,24 @@ class Spread{
             <hr class="wp-header-end">
 
             <h2 class="screen-reader-text">过滤提现记录</h2>
-            <p class="search-box">
-                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/机构名" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-extract-log&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
-            </p>
-            <ul class="subsubsub">
+
+            <?php
+            if($user_id < 1){
+                ?>
+                <p class="search-box">
+                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                    <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/机构名" value="<?=$searchStr?>">
+                    <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-extract-log&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                </p>
+                  <ul class="subsubsub">
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-extract-log&ctype=0&user_id='.$user_id)?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> | </li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-extract-log&ctype=1&user_id='.$user_id)?>" <?=$type===1?'class="current"':''?> aria-current="page">待处理<span class="count">（<?=$wait_num?>）</span></a> |</li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-extract-log&ctype=2&user_id='.$user_id)?>" <?=$type===2?'class="current"':''?> aria-current="page">已通过<span class="count">（<?=$agree_num?>）</span></a> | </li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-extract-log&ctype=3&user_id='.$user_id)?>" <?=$type===3?'class="current"':''?> aria-current="page">未通过<span class="count">（<?=$refuse_num?>）</span></a></li>
-            </ul>
+                </ul>
+                <?php
+            }
+            ?>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
 
