@@ -191,6 +191,7 @@ var mobileSelect3 = new MobileSelect({
         // 监听提交
         form.on('submit(layform)', function(data){//实名认证提交
             var _this=$(this);
+            console.log(data.field)
             if(!_this.hasClass('disabled')){
                 $.ajax({
                     data: data.field,

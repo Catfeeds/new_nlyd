@@ -77,6 +77,18 @@
 </div>
 <script>
 jQuery(function($) { 
+    var mydata=[{
+        name:1,
+        age:1,
+    },{
+        name:2,
+        age:2,
+    }]
+    var arr=['男','女'];
+    for (var i=0;i<mydata.length;i++){
+        mydata[i].sex=arr[i]
+    }
+    console.log(mydata)
     var mobileSelect4 = new MobileSelect({
         trigger: '#coachList',
         title: "<?=__('教练列表', 'nlyd-student')?>",
