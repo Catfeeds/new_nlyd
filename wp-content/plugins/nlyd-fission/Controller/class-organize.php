@@ -76,7 +76,7 @@ class Organize{
 
         if($searchStr != ''){
             $leftJoin = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'";
-            $joinWhere = " AND (zm.zone_name LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR u.user_login LIKE '%{$searchStr}%')";
+            $joinWhere = " AND (um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR u.user_login LIKE '%{$searchStr}%')";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
                 zm.zone_address,zm.business_licence_url,
@@ -149,7 +149,7 @@ class Organize{
 
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="名称/负责人/手机/用户名" value="<?=$searchStr?>">
+                <input type="search" id="search_val" name="search_val" placeholder="负责人/手机/用户名" value="<?=$searchStr?>">
                 <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission&ctype='.$type.'&stype='.$status_type.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
@@ -744,9 +744,8 @@ class Organize{
         if($user_id > 0){
             $old_zm_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_id}'");
         }else{
-            $old_zm_id = 0;
+            $old_zm_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         }
-
         if(is_post()){
             $success_msg = '';
             $error_msg = '';
@@ -771,14 +770,13 @@ class Organize{
             $admin_power = isset($_POST['admin_power']) ? $_POST['admin_power'] : [];
             $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
             $term_time = isset($_POST['term_time']) ? trim($_POST['term_time']) : '';
-
             if($user_id < 0) $error_msg = '请选择负责人';
 //            if($zone_match_type < 0) $error_msg = $error_msg==''?'请选择赛区类型':$error_msg.'<br >请选择赛区类型';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择机构类型':$error_msg.'<br >请选择机构类型';
             if($user_id == $referee_id && $user_status !==1) $error_msg = $error_msg==''?'推荐人不能为机构账号':$error_msg.'<br >推荐人不能为机构账号';
             if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($admin_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
-            if($user_status !== 1 && $user_status !== -2) $error_msg = $error_msg==''?'审核状态错误':$error_msg.'<br >审核状态错误';
+            if($user_status !== 1 && $user_status !== -2 && $user_status !== 99) $error_msg = $error_msg==''?'审核状态错误':$error_msg.'<br >审核状态错误';
 //            if($zone_title == '') $error_msg = $error_msg==''?'请填写机构名称':$error_msg.'<br >请填写机构名称';
             if($zone_address == '' && !in_array($zone_match_type,[1,2])) $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
 //            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
@@ -814,7 +812,7 @@ class Organize{
                     'parent_id' => $parent_id,
                     'zone_match_type' => $zone_match_type,
                 ];
-                if($user_status !== 0) $insertData['user_status'] = $user_status;
+                if($user_status !== 0 && $user_status !== 99) $insertData['user_status'] = $user_status;
                 if($user_status === 1) $insertData['audit_time'] = get_time('mysql');//审核时间
                 //图片
                 if(isset($_FILES['business_licence_url'])){
@@ -826,7 +824,6 @@ class Organize{
                         $insertData['business_licence_url'] = $upload_dir['baseurl'].$dir.$file;
                     }
                 }
-                $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND user_status='-1'",ARRAY_A);
                 $wpdb->query('START TRANSACTION');
                 if($old_zm_id>0){
                     $bool = $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['id'=>$old_zm_id]);
@@ -843,6 +840,7 @@ class Organize{
                 }else{
                     //收益和机构
                     if($user_status === 1){
+                        $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND user_status='-1'",ARRAY_A);
                         if($zmv){
                             //创建新账号
                             $user_email = $zmv['apply_id'].rand(000,999).date('is', get_time()).'@gjnlyd.com';
@@ -1075,22 +1073,50 @@ class Organize{
                     <tr class="form-field">
                         <th scope="row"><label for="referee_id">推荐人 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="referee_id" style="width: 50%" data-action="get_base_user_list" data-type="all">
-                                <option value="<?=$row['referee_id']?>" selected="selected">
-                                    <?=isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']?>
-                                    <?=!empty($row['referee_mobile'])?'('.$row['referee_mobile'].')':''?>
-                                </option>
-                            </select>
+                            <?php
+                            if($old_zm_id > 0){
+                                ?>
+                                <input type="hidden" name="referee_id" value="<?=$row['referee_id']?>">
+                                <?=isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']?>
+                                <?=!empty($row['referee_mobile'])?'('.$row['referee_mobile'].')':''?>
+                                <?php
+                            }else{
+                                ?>
+                                <select class="js-data-select-ajax" name="referee_id" style="width: 50%" data-action="get_base_user_list" data-type="all">
+                                    <option value="<?=$row['referee_id']?>" selected="selected">
+                                        <?=isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']?>
+                                        <?=!empty($row['referee_mobile'])?'('.$row['referee_mobile'].')':''?>
+                                    </option>
+                                </select>
+                                <?php
+
+                            }
+                            ?>
+
+
                         </td>
                     </tr>
                     <tr class="form-field">
                         <th scope="row"><label for="parent_id">上级机构 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="parent_id" style="width: 50%" data-action="get_base_zone_list" data-type="parent">
-                                <option value="<?=$row['parent_id']?>" selected="selected">
-                                    <?=$row['parent_name']?>
-                                </option>
-                            </select>
+                            <?php
+                            if($old_zm_id > 0){
+                                ?>
+                                <input type="hidden" name="parent_id" value="<?=$row['parent_id']?>">
+                                <?=$row['parent_name']?>
+                                <?php
+                            }else{
+                                ?>
+                                <select class="js-data-select-ajax" name="parent_id" style="width: 50%" data-action="get_base_zone_list" data-type="parent">
+                                    <option value="<?=$row['parent_id']?>" selected="selected">
+                                        <?=$row['parent_name']?>
+                                    </option>
+                                </select>
+                                <?php
+
+                            }
+                            ?>
+
                         </td>
                     </tr>
                     <tr class="form-field">
@@ -1182,7 +1208,7 @@ class Organize{
                         <td>
                             <label for="term_time_radio_1"><input id="term_time_radio_1" <?=isset($row['term_time']) && $row['term_time']? 'checked="checked"':''?> type="radio" value="1" name="term_time_radio" class="term_time_radio">有</label>
                             <label for="term_time_radio_2"><input id="term_time_radio_2" <?=!isset($row['term_time']) || !$row['term_time'] ? 'checked="checked"':''?> type="radio" value="2" name="term_time_radio" class="term_time_radio">无</label>
-                             <input style="<?=!isset($row['term_time']) || !$row['term_time']? 'display:none;':''?>" type="text" style="max-width: 500px;" value="<?=isset($row['term_time']) ? $row['term_time'] : get_time('mysql')?>" name="term_time" class="layui-input date-picker y-m-d-h-m-s" readonly  id="term_time" placeholder="有效期">
+                             <input style="<?=!isset($row['term_time']) || !$row['term_time']? 'display:none;':''?>" type="text" style="max-width: 500px;" value="<?=isset($row['term_time']) ? $row['term_time'] : ''?>" name="term_time" class="layui-input date-picker y-m-d-h-m-s" readonly  id="term_time" placeholder="有效期">
 
                         </td>
                     </tr>
@@ -1203,6 +1229,7 @@ class Organize{
                                     echo '未通过';
                                     break;
                             }
+                            echo '<input type="hidden" class="" name="user_status" value="99" />';
                         } ?>
 
                         </td>
@@ -1875,7 +1902,7 @@ class Organize{
         $id < 1 && exit('参数错误!');
         global $wpdb;
         //查询机构信息
-        $zone_meta = $wpdb->get_row("SELECT zone_name,user_id FROM {$wpdb->prefix}zone_meta WHERE id='{$id}'", ARRAY_A);
+        $zone_meta = $wpdb->get_row("SELECT zone_name,user_id,zone_city,zone_match_type FROM {$wpdb->prefix}zone_meta WHERE id='{$id}'", ARRAY_A);
         //各种数量
         //比赛数量
         $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$zone_meta['user_id']}'");
@@ -1893,7 +1920,7 @@ class Organize{
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?=$zone_meta['zone_name']?>-统计信息</h1>
+            <h1 class="wp-heading-inline"><?=date('Y').'脑力世界杯'.$zone_meta['zone_city'].($zone_meta['zone_match_type']=='1'?'战队精英赛':'城市精英赛')?>-统计信息</h1>
             <hr class="wp-header-end">
             <ul class="subsubsub">
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=6')?>" <?=$type===6?'class="current"':''?> aria-current="page">基础资料<span class="count"></span></a> | </li>
@@ -1918,7 +1945,7 @@ class Organize{
                     $this->getOrganizeStatisticsCourse($zone_meta['user_id']);
                     break;
                 case 4:
-                    $this->getOrganizeStatisticsMember($zone_meta['user_id']);
+                    $this->getOrganizeStatisticsMember($zone_meta['user_id'],$id);
                     break;
                 case 5:
                     $this->getOrganizeStatisticsIncome($zone_meta['user_id'],$id);
@@ -2463,9 +2490,10 @@ class Organize{
     /**
      * 机构统计信息成员数据
      */
-    public function getOrganizeStatisticsMember($user_id){
+    public function getOrganizeStatisticsMember($user_id,$id){
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $mtype = isset($_GET['mtype']) ? intval($_GET['mtype']) : 1;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
         $page < 1 && $page = 1;
         $pageSize = 20;
@@ -2492,6 +2520,11 @@ class Organize{
         ));
 //        leo_dump($rows);
         ?>
+        <ul class="subsubsub">
+            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=1')?>" <?=$mtype===1?'class="current"':''?> aria-current="page">管理员<span class="count"></span></a> | </li>
+            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=2')?>" <?=$mtype===2?'class="current"':''?> aria-current="page">教练<span class="count"></span></a> | </li>
+            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=3')?>" <?=$mtype===3?'class="current"':''?> aria-current="page">学员<span class="count">（<?=$match_num > 0 ? $match_num : 0?>）</span></a> | </li>
+        </ul>
         <div class="tablenav top">
             <div class="tablenav-pages">
                 <span class="displaying-num"><?=$count['count']?>个项目</span>
