@@ -19,36 +19,36 @@
                             <div class="lable_row"><span class="c_black"><?=__('考级责任人', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                             <!-- <input class="radius_input_row" type="text" name="zone_num" value=""> -->
-                                <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="选择考级责任人" >
+                                <select class="js-data-select-ajax" name="person_liable" style="width: 100%" data-action="get_manage_user" data-placeholder="选择考级责任人" >
                                     <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
                                 </select>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="lable_row"><span class="c_black"><?=__('考级场景', 'nlyd-student')?>：</span></div>
+                            <div class="input_row">
+                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
+                                <input class="radius_input_row nl-foucs" type="text" id="match_type1" readonly name="scene" lay-verify="required" autocomplete="off" placeholder="<?=__('考级场景', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级类别', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" id="match_type1" readonly name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('考级类别', 'nlyd-student')?>">
-                            </div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__('考级类型', 'nlyd-student')?>：</span></div>
-                            <div class="input_row">
-                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" id="match_type2" readonly name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('考级类型', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" type="text" id="match_type2" readonly name="category_id" lay-verify="required" autocomplete="off" placeholder="<?=__('考级类别', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级名称', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级名称', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="post_title" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级名称', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级地点', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级地点', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="address" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级地点', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级费用', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value=""></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="cost" value=""></div>
                         </div>
                         <div>
                             <div class="lable_row">
@@ -56,7 +56,7 @@
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" value="" type="text" readonly name="zone_name" data-time="2019-10-11-11-11" id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级日期', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" value="" type="text" readonly name="start_time" data-time="2019-10-11-11-11" id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级日期', 'nlyd-student')?>">
                             </div>
                         </div>
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认发布/保存更新', 'nlyd-student')?></div></a>
@@ -68,8 +68,8 @@
 </div>
 <script>
 jQuery(function($) { 
-var match_type1_Data=[{id:1,value:"<?=__('正式考级', 'nlyd-student')?>"},{id:2,value:"<?=__('模拟考级', 'nlyd-student')?>"}];//考级类别
-var match_type2_Data=[{id:1,value:"速算"},{id:2,value:"速读"},{id:3,value:"速记"}];//考级类型
+var match_type1_Data=<?=!empty($scene_list) ? $scene_list : '[]';?>;//考级类别
+var match_type2_Data=<?=!empty($category_list) ? $category_list : '[]';?>;//考级类型
 var match_date_Data=$.validationLayui.dates2;//考级日期
 var posiotion_match_type1=[0];//初始化位置，高亮展示
 var posiotion_match_type2=[0];//初始化位置，高亮展示

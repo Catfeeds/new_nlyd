@@ -83,12 +83,12 @@ class Timer
                     }else{
                         //已结束
                         $save['match_status'] = -3;
-                        if($v['match_id'] == 56989){
+                        //if($v['match_id'] == 56989){
                             //获取当前考级是否已经进行了收益分配
                             $sql1 = "select a.match_id,a.match_scene,c.user_id,c.user_income
                                 from {$wpdb->prefix}match_meta_new a 
-                                left join {$wpdb->prefix}user_stream_logs c on a.created_id = c.user_id and user_type = 1
-                                where c.match_id = {$v['match_id']} ";
+                                left join {$wpdb->prefix}user_stream_logs c on a.match_id = c.match_id 
+                                where c.match_id = {$v['match_id']} AND c.user_income is null";
                             $row_ = $wpdb->get_row($sql1,ARRAY_A);
 
                             if(empty($row_['user_income'])){
@@ -119,7 +119,7 @@ class Timer
                                                 //处理每个考试用户流水
 
                                                 //直接收益
-                                                if(!empty($i['referee_id']) && !empty($i['referee_income']) ){
+                                                if(!empty($i['referee_id']) && $i['referee_income']>0 ){
 
                                                     $key1 = $i['referee_id'];
                                                     $money1 = $i['referee_income'];
@@ -132,7 +132,7 @@ class Timer
                                                 }
 
                                                 //间接收益
-                                                if(!empty($i['indirect_referee_id']) && !empty($i['indirect_referee_income']) ){
+                                                if(!empty($i['indirect_referee_id']) && $i['indirect_referee_income']>0 ){
 
                                                     $key2 = $i['indirect_referee_id'];
                                                     $money2 = $i['indirect_referee_income'];
@@ -145,7 +145,7 @@ class Timer
                                                 }
 
                                                 //责任教练/参赛机构
-                                                if(!empty($i['person_liable_id']) && !empty($i['person_liable_income']) ) {
+                                                if(!empty($i['person_liable_id']) && $i['person_liable_income']>0 ) {
 
                                                     $key3 = $i['person_liable_id'];
                                                     $money3 = $i['person_liable_income'];
@@ -158,25 +158,29 @@ class Timer
                                                 }
 
                                                 //比赛中心
-                                                if(!empty($i['sponsor_id']) && !empty($i['sponsor_income']) ) {
+                                                if(!empty($i['sponsor_id']) && $i['sponsor_income']>0 ) {
+
                                                     $money4 += $i['sponsor_income'];
                                                 }
                                             }
                                         }
-
-                                        if(!empty($user_stream)){
-                                            $str1 = '';
-                                            foreach ($user_stream as $k => $t){
-                                                $str1 .= "({$k}, 2,'match',{$v['match_id']}, {$t}, NOW()),";
-                                            }
-                                            $sql_ = "INSERT INTO `{$wpdb->prefix}user_stream_logs` ( `user_id`,`user_type`, `income_type`, `match_id`, `user_income`, `created_time`) VALUES ".rtrim($str1, ',');
-                                            //print_r($sql_);die;
-                                        }
-                                        if(!empty($str1)){
+                                        if($results[0]['income_status'] == 2){
 
                                             $wpdb->query('START TRANSACTION');
-                                            $x = $wpdb->query($sql_);
+                                            if(!empty($user_stream)){
+                                                $str1 = '';
+                                                foreach ($user_stream as $k => $t){
+                                                    $str1 .= "({$k}, 2,'match',{$v['match_id']}, {$t}, NOW()),";
+                                                }
+                                                $sql_ = "INSERT INTO `{$wpdb->prefix}user_stream_logs` ( `user_id`,`user_type`, `income_type`, `match_id`, `user_income`, `created_time`) VALUES ".rtrim($str1, ',');
+                                                //print_r($sql_);die;
+                                                $x = $wpdb->query($sql_);
+                                            }else{
+                                                $x = 1;
+                                            }
+
                                             $y = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$money4),array('user_id'=>$v['created_id'],'match_id'=>$v['match_id'],'income_type'=>'match','user_type'=>'1'));
+
                                             //print_r($x .'&&'. $y);die;
                                             if($x && $y){
                                                 $wpdb->query('COMMIT');
@@ -184,10 +188,12 @@ class Timer
                                                 $wpdb->query('ROLLBACK');
                                             }
                                         }
+
+
                                     }
                                 }
                             }
-                        }
+                        //}
                     }
                     //var_dump($v['match_id']);
                     //var_dump($save);
@@ -271,8 +277,8 @@ class Timer
                             //获取当前考级是否已经进行了收益分配
                             $sql1 = "select a.grading_id,a.scene,c.user_id,c.user_income
                                 from {$wpdb->prefix}grading_meta a 
-                                left join {$wpdb->prefix}user_stream_logs c on a.created_person = c.user_id and user_type = 1
-                                where c.match_id = {$v['grading_id']} ";
+                                left join {$wpdb->prefix}user_stream_logs c on a.grading_id = c.match_id
+                                where c.match_id = {$v['grading_id']} AND c.user_income is null";
                             $row_ = $wpdb->get_row($sql1,ARRAY_A);
                             //var_dump($row_['user_income']);
                             if(empty($row_['user_income'])){
@@ -306,7 +312,7 @@ class Timer
                                                 //处理每个考试用户流水
 
                                                 //直接收益
-                                                if(!empty($i['referee_id']) && !empty($i['referee_income']) ){
+                                                if(!empty($i['referee_id']) && $i['referee_income']>0 ){
 
                                                     $key1 = $i['referee_id'];
                                                     $money1 = $i['referee_income'];
@@ -319,7 +325,7 @@ class Timer
                                                 }
 
                                                 //间接收益
-                                                if(!empty($i['indirect_referee_id']) && !empty($i['indirect_referee_income']) ){
+                                                if(!empty($i['indirect_referee_id']) && $i['indirect_referee_income']>0 ){
 
                                                     $key2 = $i['indirect_referee_id'];
                                                     $money2 = $i['indirect_referee_income'];
@@ -332,7 +338,7 @@ class Timer
                                                 }
 
                                                 //责任教练/参赛机构
-                                                if(!empty($i['person_liable_id']) && !empty($i['person_liable_income']) ) {
+                                                if(!empty($i['person_liable_id']) && $i['person_liable_income']>0 ) {
 
                                                     $key3 = $i['person_liable_id'];
                                                     $money3 = $i['person_liable_income'];
@@ -345,25 +351,27 @@ class Timer
                                                 }
 
                                                 //比赛中心
-                                                if(!empty($i['sponsor_id']) && !empty($i['sponsor_income']) ) {
+                                                if(!empty($i['sponsor_id']) && $i['sponsor_income']>0 ) {
                                                     $money4 += $i['sponsor_income'];
                                                 }
                                             }
                                         }
-
-                                        if(!empty($user_stream)){
-                                            $str1 = '';
-                                            foreach ($user_stream as $k => $t){
-                                                $str1 .= "({$k}, 2,'grading',{$v['grading_id']}, {$t}, NOW()),";
-                                            }
-                                            $sql_ = "INSERT INTO `{$wpdb->prefix}user_stream_logs` ( `user_id`,`user_type`, `income_type`, `match_id`, `user_income`, `created_time`) VALUES ".rtrim($str1, ',');
-                                            //print_r($sql_);die;
-                                        }
-                                        if(!empty($str1)){
-
+                                        if($results[0]['income_status'] == 2){
                                             $wpdb->query('START TRANSACTION');
-                                            $x = $wpdb->query($sql_);
+                                            if(!empty($user_stream)){
+                                                $str1 = '';
+                                                foreach ($user_stream as $k => $t){
+                                                    $str1 .= "({$k}, 2,'grading',{$v['grading_id']}, {$t}, NOW()),";
+                                                }
+                                                $sql_ = "INSERT INTO `{$wpdb->prefix}user_stream_logs` ( `user_id`,`user_type`, `income_type`, `match_id`, `user_income`, `created_time`) VALUES ".rtrim($str1, ',');
+                                                //print_r($sql_);die;
+                                                $wpdb->query('START TRANSACTION');
+                                                $x = $wpdb->query($sql_);
+                                            }else{
+                                                $x = 1;
+                                            }
                                             $y = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$money4),array('user_id'=>$v['created_person'],'match_id'=>$v['grading_id'],'income_type'=>'grading','user_type'=>'1'));
+
                                             //print_r($x .'&&'. $y);die;
                                             if($x && $y){
                                                 $wpdb->query('COMMIT');
