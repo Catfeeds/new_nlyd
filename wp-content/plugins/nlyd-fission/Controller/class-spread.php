@@ -1,5 +1,5 @@
 <?php
-//组织主体控制器
+//组织机构控制器
 class Spread{
     public function __construct($is_list = false)
     {
@@ -57,7 +57,7 @@ class Spread{
 
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -249,7 +249,7 @@ class Spread{
         if($id > 0){
             $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE id='{$id}'", ARRAY_A);
         }
-        //获取主体类型
+        //获取机构类型
         $organizeList = $wpdb->get_results("SELECT zone_type_name,zone_type_alias FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
         //获取比赛权限类型
         $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_match_role", ARRAY_A);
@@ -432,7 +432,7 @@ class Spread{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -481,7 +481,7 @@ class Spread{
                             <?php
                             switch ($row['income_type']){
                                 case 'subject':
-                                    echo '申请主体';
+                                    echo '申请机构';
                                     break;
                                 case 'match':
                                     echo '比赛';
@@ -668,7 +668,7 @@ class Spread{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -879,7 +879,7 @@ class Spread{
             <h2 class="screen-reader-text">过滤用户收益流水</h2>
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/主体名" value="<?=$searchStr?>">
+                <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/机构名" value="<?=$searchStr?>">
                 <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-user-log&type_id='.$type_id.'&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
@@ -887,7 +887,7 @@ class Spread{
 
                 <ul class="subsubsub">
                     <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=0&user_id='.$user_id)?>" <?=$type_id===0?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
-                    <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=1&user_id='.$user_id)?>" <?=$type_id===1?'class="current"':''?> aria-current="page">主体流水<span class="count"></span></a> |</li>
+                    <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=1&user_id='.$user_id)?>" <?=$type_id===1?'class="current"':''?> aria-current="page">机构流水<span class="count"></span></a> |</li>
                     <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=2&user_id='.$user_id)?>" <?=$type_id===2?'class="current"':''?> aria-current="page">用户流水<span class="count"></span></a></li>
 
                 </ul>
@@ -898,10 +898,10 @@ class Spread{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
-                   <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/用户名(主体名称)</th>
+                   <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/用户名(机构名称)</th>
                     <th scope="col" id="role" class="manage-column column-role">角色</th>
                     <th scope="col" id="income_type" class="manage-column column-income_type">类型</th>
 <!--                    <th scope="col" id="match_id" class="manage-column column-match_id">项目</th>-->
@@ -925,7 +925,7 @@ class Spread{
                     ?>
                     <tr data-uid="<?=$row['id']?>">
 
-                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/用户名(主体名称)">
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/用户名(机构名称)">
                             <?=$real_name?>
                             <br>
                             <div class="row-actions">
@@ -936,7 +936,7 @@ class Spread{
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
                         <td class="role column-role" data-colname="角色">
-                            <?=$row['zone_id'] > 0 ? '主体': '用户'?>
+                            <?=$row['zone_id'] > 0 ? '机构': '用户'?>
 
                         </td>
                         <td class="income_type column-income_type" data-colname="类型">
@@ -952,7 +952,7 @@ class Spread{
                                     echo '提现';
                                     break;
                                 case 'subject':
-                                    echo '成为主体';
+                                    echo '成为机构';
                                     break;
                             }
                             ?>
@@ -970,7 +970,7 @@ class Spread{
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th scope="col" class="manage-column column-real_name column-primary">姓名/用户名(主体名称)</th>
+                    <th scope="col" class="manage-column column-real_name column-primary">姓名/用户名(机构名称)</th>
                     <th scope="col" class="manage-column column-role">角色</th>
                     <th scope="col" class="manage-column column-income_type">类型</th>
 <!--                    <th scope="col" class="manage-column column-match_id">项目</th>-->
@@ -1060,7 +1060,7 @@ class Spread{
             <h2 class="screen-reader-text">过滤提现记录</h2>
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/主体名" value="<?=$searchStr?>">
+                <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/机构名" value="<?=$searchStr?>">
                 <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-extract-log&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
             </p>
             <ul class="subsubsub">
@@ -1080,11 +1080,11 @@ class Spread{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/主体</th>
+                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/机构</th>
                     <th scope="col" id="extract_user_type" class="manage-column column-extract_user_type">提现类型</th>
                     <th scope="col" id="extract_amount" class="manage-column column-extract_amount">提现金额</th>
                     <th scope="col" id="extract_type" class="manage-column column-extract_type">收款类型</th>
@@ -1103,7 +1103,7 @@ class Spread{
                 foreach ($rows as $row){
                     if($row['zone_name']){
                         $real_name = $row['zone_name'];
-                        $extract_type_name = '主体提现';
+                        $extract_type_name = '机构提现';
                     }else{
                         $user_real_name = get_user_meta($row['extract_id'], 'user_real_name', true);
                         if($user_real_name) {
@@ -1192,7 +1192,7 @@ class Spread{
                 <tfoot>
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                    <th scope="col" class="manage-column column-real_name column-primary">姓名/主体</th>
+                    <th scope="col" class="manage-column column-real_name column-primary">姓名/机构</th>
                     <th scope="col" class="manage-column column-extract_user_type">提现类型</th>
                     <th scope="col" class="manage-column column-extract_amount">提现金额</th>
                     <th scope="col" class="manage-column column-extract_type">收款类型</th>

@@ -19,30 +19,6 @@
                         <?php
                         if (empty($list)){ ?>
                             <div class="ta_c"><?=__('暂无专项训练', 'nlyd-student')?></div>
-                            <!--<div class="lists_item_row">
-                                <div class="bold c_black fs_16"><?/*=__('速读考级水平(自测)', 'nlyd-student')*/?></div>
-                                <a class="item_row lists_row c_black6"  href="<?/*=home_url('trains/ready/type/reading/genre_id/755/id/1')*/?>" >
-                                    <div class="item_img"><img src=""></div>
-                                    <div class="name_wrapper dis_table"><div class="dis_cell"><?/*=__('速读', 'nlyd-student')*/?></div></div>
-                                    <div class="arrow_box"><img src="<?/*=student_css_url.'image/trains/arrow.png'*/?>"></div>
-                                </a>
-                            </div>
-                            <div class="lists_item_row">
-                                <div class="bold c_black fs_16"><?/*=__('速记考级水平(自测)', 'nlyd-student')*/?></div>
-                                <a class="item_row lists_row c_black6"  href="<?/*=home_url('trains/ready/type/memory/genre_id/755/id/1')*/?>" >
-                                    <div class="item_img"><img src=""></div>
-                                    <div class="name_wrapper dis_table"><div class="dis_cell"><?/*=__('速记', 'nlyd-student')*/?></div></div>
-                                    <div class="arrow_box"><img src="<?/*=student_css_url.'image/trains/arrow.png'*/?>"></div>
-                                </a>
-                            </div>
-                            <div class="lists_item_row">
-                                <div class="bold c_black fs_16"><?/*=__('速算考级水平(自测)', 'nlyd-student')*/?></div>
-                                <a class="item_row lists_row c_black6"  href="<?/*=home_url('trains/ready/type/arithmetic/genre_id/755/id/1')*/?>" >
-                                    <div class="item_img"><img src=""></div>
-                                    <div class="name_wrapper dis_table"><div class="dis_cell"><?/*=__('速算', 'nlyd-student')*/?></div></div>
-                                    <div class="arrow_box"><img src="<?/*=student_css_url.'image/trains/arrow.png'*/?>"></div>
-                                </a>
-                            </div>-->
                         <?php }else{
                                 if($project_alias == 'grading'){
                                     foreach ($list as $k =>$v){

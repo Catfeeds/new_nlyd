@@ -61,7 +61,7 @@ class Fission_Ajax
     }
 
     /**
-     * 删除主体成员
+     * 删除机构成员
      */
     public function deleteOrganizeMember(){
         $member_id = isset($_POST['member_id']) ? intval($_POST['member_id']) : 0;
@@ -74,7 +74,7 @@ class Fission_Ajax
     }
 
     /**
-     * 通过/拒绝主体账号申请
+     * 通过/拒绝机构账号申请
      */
     public function editOrganizeApply(){
         die;
@@ -100,14 +100,14 @@ class Fission_Ajax
                 $apply_user = $wpdb->get_row("SELECT referee_id,user_mobile FROM {$wpdb->users} WHERE ID='{$zmv['apply_id']}'", ARRAY_A);
                 $referee_id = $apply_user['referee_id'];
                 if($referee_id > 0){
-                    if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id,'referee_time'=>get_time('mysql')],['ID' => $user_id])) wp_send_json_error(['info' => '更新主体推荐人失败!']);
+                    if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id,'referee_time'=>get_time('mysql')],['ID' => $user_id])) wp_send_json_error(['info' => '更新机构推荐人失败!']);
                 }
-                //跟新主体所有者
-                if(!$wpdb->update($wpdb->prefix.'zone_meta',['user_id' => $user_id],['id'=>$zmv['id']])) wp_send_json_error(['info' => '更新主体所有者id失败!']);
+                //跟新机构所有者
+                if(!$wpdb->update($wpdb->prefix.'zone_meta',['user_id' => $user_id],['id'=>$zmv['id']])) wp_send_json_error(['info' => '更新机构所有者id失败!']);
 //                $wpdb->update($wpdb->users,['referee_id' => ])
-                //添加主体管理员
+                //添加机构管理员
                 if(!$wpdb->insert($wpdb->prefix.'zone_manager',['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) wp_send_json_error(['info' => '添加管理员失败!']);
-                //主体类型
+                //机构类型
                 $orgType = $wpdb->get_row("SELECT zone_type_alias,zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'", ARRAY_A);
                 $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType['zone_type_alias']}' AND spread_status=1", ARRAY_A);
                 if($spread_set){
@@ -169,7 +169,7 @@ class Fission_Ajax
                         }
                     }
                 }
-                //发送短信通知申请人并给出主体的账号密码
+                //发送短信通知申请人并给出机构的账号密码
                 $sendMsgArr[] = ['user_mobile'=>$apply_user['user_mobile'],'type_name'=>$orgType['zone_type_name'],'user_login'=>$user_email,'password'=>$user_password];
             }
         }elseif ($type == 'refuse'){//拒绝申请
@@ -198,7 +198,7 @@ class Fission_Ajax
 
     }
     /**
-     * 冻结/解冻主体账号
+     * 冻结/解冻机构账号
      */
     public function editOrganizeAble(){
         $id = isset($_POST['id']) ? trim($_POST['id']) : '';
@@ -214,7 +214,7 @@ class Fission_Ajax
         //查询原数据
         global $wpdb;
         $zone_meta_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id IN({$id}) AND user_status=1");
-        if(!$zone_meta_id || $zone_meta_id == '') wp_send_json_error(['info' => '未找到可操作主体!']);
+        if(!$zone_meta_id || $zone_meta_id == '') wp_send_json_error(['info' => '未找到可操作机构!']);
         $bool = $wpdb->query("UPDATE `{$wpdb->prefix}zone_meta` SET `is_able` = '{$is_able}' WHERE id IN({$id}) AND user_status=1");
         if($bool) wp_send_json_success(['info' => '操作成功!']);
         else wp_send_json_error(['info' => '操作失败!']);
@@ -250,7 +250,7 @@ class Fission_Ajax
     }
 
     /**
-     * 搜索主体列表
+     * 搜索机构列表
      */
     public function get_base_zone_list(){
         $searchStr = isset($_GET['term']) ? trim($_GET['term']) : '';
@@ -322,7 +322,7 @@ class Fission_Ajax
             $money = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$user_extract_logs['extract_id']}'");
             if($money < $user_extract_logs['extract_amount']) wp_send_json_error(['info' => '用户余额不足!']);
             //通过,增加收益记录
-            //查询主体
+            //查询机构
             $type_id = $wpdb->get_var("SELECT type_id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_extract_logs['extract_id']}'");
             $insertData = [
                 'user_id'=> $user_extract_logs['extract_id'],
@@ -455,7 +455,7 @@ class Fission_Ajax
     }
 
     /**
-     * 删除主体类型
+     * 删除机构类型
      */
     public function delZoneType(){
         $ids = isset($_POST['id']) ? trim($_POST['id']) : '';
@@ -464,9 +464,9 @@ class Fission_Ajax
         global $wpdb;
         $rows = $wpdb->get_row("SELECT id FROM {$wpdb->prefix}zone_type WHERE id IN({$ids})", ARRAY_A);
         if(!$rows) wp_send_json_error(['info' => '无可删除数据']);
-        //是否有主体,有主体的类型不可删除
+        //是否有机构,有机构的类型不可删除
         $organize = $wpdb->get_row("SELECT id FROM {$wpdb->prefix}zone_meta WHERE type_id IN({$ids})");
-        if($organize) wp_send_json_error(['info' => '当前选择的类型中已有主体存在! 不可删除']);
+        if($organize) wp_send_json_error(['info' => '当前选择的类型中已有机构存在! 不可删除']);
 
         //删除
         $bool = $wpdb->query("DELETE FROM {$wpdb->prefix}zone_type WHERE id IN({$ids})");
