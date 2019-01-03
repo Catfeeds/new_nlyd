@@ -1,6 +1,6 @@
 <?php
 use library\AliSms;
-//组织主体控制器
+//组织机构控制器
 class Organize{
     public function __construct($is_list = false)
     {
@@ -42,20 +42,20 @@ class Organize{
 //            $role = 'organize_income_log';//权限名
 //            $wp_roles->add_cap('administrator', $role);
         }
-        add_submenu_page('fission','主体详情','主体详情','organize_detail','fission-organize-detail',array($this,'organizeDetails'));
-        add_submenu_page('fission','主体类型','主体类型','organize_type','fission-organize-type',array($this,'organizeType'));
-//        add_submenu_page('fission','主体权限','主体权限','organize_power','fission-organize-power',array($this,'organizePower'));
-        add_submenu_page('fission','主体成员','主体成员','organize_coach','fission-organize-coach',array($this,'organizeCoach'));
-        add_submenu_page('fission','新增主体','新增主体','add_organize','fission-add-organize',array($this,'addOrganize'));
-        add_submenu_page('fission','新增主体类型','新增主体类型','add_organize_type','fission-add-organize-type',array($this,'addOrganizeType'));
-//        add_submenu_page('fission','新增主体权限','新增主体权限','add_organize_power','fission-add-organize-power',array($this,'addOrganizePower'));
-        add_submenu_page('fission','新增主体成员','新增主体成员','add_organize_coach','fission-add-organize-coach',array($this,'addOrganizeCoach'));
-        add_submenu_page('fission','主体统计信息','主体统计信息','organize_statistics','fission-organize-statistics',array($this,'organizeStatistics'));
-//        add_submenu_page('fission','主体收益记录','主体收益记录','organize_income_log','fission-organize-income-log',array($this,'organizeIncomeLog'));
+        add_submenu_page('fission','机构详情','机构详情','organize_detail','fission-organize-detail',array($this,'organizeDetails'));
+        add_submenu_page('fission','机构类型','机构类型','organize_type','fission-organize-type',array($this,'organizeType'));
+//        add_submenu_page('fission','机构权限','机构权限','organize_power','fission-organize-power',array($this,'organizePower'));
+        add_submenu_page('fission','机构成员','机构成员','organize_coach','fission-organize-coach',array($this,'organizeCoach'));
+        add_submenu_page('fission','新增机构','新增机构','add_organize','fission-add-organize',array($this,'addOrganize'));
+        add_submenu_page('fission','新增机构类型','新增机构类型','add_organize_type','fission-add-organize-type',array($this,'addOrganizeType'));
+//        add_submenu_page('fission','新增机构权限','新增机构权限','add_organize_power','fission-add-organize-power',array($this,'addOrganizePower'));
+        add_submenu_page('fission','新增机构成员','新增机构成员','add_organize_coach','fission-add-organize-coach',array($this,'addOrganizeCoach'));
+        add_submenu_page('fission','机构统计信息','机构统计信息','organize_statistics','fission-organize-statistics',array($this,'organizeStatistics'));
+//        add_submenu_page('fission','机构收益记录','机构收益记录','organize_income_log','fission-organize-income-log',array($this,'organizeIncomeLog'));
     }
 
     /**
-     *主体列表
+     *机构列表
      */
     public function organizeList(){
         global $wpdb;
@@ -117,13 +117,13 @@ class Organize{
         $typeListCount = count($typeList)-1;
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">主体列表</h1>
+            <h1 class="wp-heading-inline">机构列表</h1>
 
-            <a href="<?=admin_url('admin.php?page=fission-add-organize')?>" class="page-title-action">添加主体</a>
+            <a href="<?=admin_url('admin.php?page=fission-add-organize')?>" class="page-title-action">添加机构</a>
 
             <hr class="wp-header-end">
 
-            <h2 class="screen-reader-text">过滤主体列表</h2>
+            <h2 class="screen-reader-text">过滤机构列表</h2>
             <ul class="subsubsub">
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission&stype=1&ctype='.$type)?>" <?=$status_type===1?'class="current"':''?> aria-current="page">已通过<span class="count">（<?=$ok_num?>）</span></a> |</li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission&stype=-1&ctype='.$type)?>" <?=$status_type===-1?'class="current"':''?> aria-current="page">待审核<span class="count">（<?=$apply_num?>）</span></a> |</li>
@@ -171,7 +171,7 @@ class Organize{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                     <tr>
                         <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -401,7 +401,7 @@ class Organize{
     }
 
     /**
-     * 新增/编辑主体类型
+     * 新增/编辑机构类型
      */
     public function addOrganizeType(){
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -494,7 +494,7 @@ class Organize{
         $powerList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type_role", ARRAY_A);
         ?>
         <div class="wrap">
-            <h1 id="add-new-user">添加/编辑主体类型</h1>
+            <h1 id="add-new-user">添加/编辑机构类型</h1>
 
             <div id="ajax-response">
                 <span style="color: #2bc422"><?=$success_msg?></span>
@@ -566,7 +566,7 @@ class Organize{
     }
 
     /**
-     * 主体类型列表
+     * 机构类型列表
      */
     public function organizeType(){
         global $wpdb;
@@ -596,9 +596,9 @@ class Organize{
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">主体类型列表</h1>
+            <h1 class="wp-heading-inline">机构类型列表</h1>
 
-            <a href="<?=admin_url('admin.php?page=fission-add-organize-type')?>" class="page-title-action">添加主体类型</a>
+            <a href="<?=admin_url('admin.php?page=fission-add-organize-type')?>" class="page-title-action">添加机构类型</a>
 
             <hr class="wp-header-end">
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
@@ -619,7 +619,7 @@ class Organize{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -737,7 +737,7 @@ class Organize{
     }
 
     /**
-     * 新增/编辑主体
+     * 新增/编辑机构
      */
     public function addOrganize($user_id = 0){
         global $wpdb;
@@ -774,12 +774,12 @@ class Organize{
 
             if($user_id < 0) $error_msg = '请选择负责人';
 //            if($zone_match_type < 0) $error_msg = $error_msg==''?'请选择赛区类型':$error_msg.'<br >请选择赛区类型';
-            if($zone_type === 0) $error_msg = $error_msg==''?'请选择主体类型':$error_msg.'<br >请选择主体类型';
-            if($user_id == $referee_id && $user_status !==1) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
+            if($zone_type === 0) $error_msg = $error_msg==''?'请选择机构类型':$error_msg.'<br >请选择机构类型';
+            if($user_id == $referee_id && $user_status !==1) $error_msg = $error_msg==''?'推荐人不能为机构账号':$error_msg.'<br >推荐人不能为机构账号';
             if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($admin_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
             if($user_status !== 1 && $user_status !== -2) $error_msg = $error_msg==''?'审核状态错误':$error_msg.'<br >审核状态错误';
-//            if($zone_title == '') $error_msg = $error_msg==''?'请填写主体名称':$error_msg.'<br >请填写主体名称';
+//            if($zone_title == '') $error_msg = $error_msg==''?'请填写机构名称':$error_msg.'<br >请填写机构名称';
             if($zone_address == '' && !in_array($zone_match_type,[1,2])) $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
 //            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
             if($legal_person == '') $error_msg = $error_msg==''?'请填写法人':$error_msg.'<br >请填写法人';
@@ -841,7 +841,7 @@ class Organize{
 
                     is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
                 }else{
-                    //收益和主体
+                    //收益和机构
                     if($user_status === 1){
                         if($zmv){
                             //创建新账号
@@ -852,13 +852,13 @@ class Organize{
                                 $error_msg = '操作失败!';
                             }
                             if($error_msg == '') {
-                                //更新主体所有者id
+                                //更新机构所有者id
                                 if (!$wpdb->update($wpdb->prefix . 'zone_meta', ['user_id' => $user_id], ['id' => $zmv['id']])) {
-                                    $error_msg = '更新主体所有者id失败!';
+                                    $error_msg = '更新机构所有者id失败!';
                                 }
                             }
                             if($error_msg == '') {
-                                //添加主体管理员
+                                //添加机构管理员
                                 if (!$wpdb->insert($wpdb->prefix . 'zone_manager', ['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) {
                                     $error_msg = '添加管理员失败!';
                                 }
@@ -873,13 +873,13 @@ class Organize{
                                 $referee_id = $apply_user['referee_id'];
                                 if($referee_id > 0){
                                     if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id,'referee_time'=>get_time('mysql')],['ID' => $user_id])){
-                                        $error_msg = '更新主体推荐人失败!';
+                                        $error_msg = '更新机构推荐人失败!';
                                     }
                                     if(!$spread_set){
                                         $error_msg = '无收益设置!';
                                     }
                                      if($error_msg == ''){
-                                         //主体类型
+                                         //机构类型
                                          if($spread_set){
                                              //添加上级收益
                                              //获取一级上级
@@ -1003,7 +1003,7 @@ class Organize{
         ?>
         <div class="wrap">
             <?php
-            if($user_id == 0) echo '<h1 id="add-new-user">添加/编辑主体</h1>';
+            if($user_id == 0) echo '<h1 id="add-new-user">添加/编辑机构</h1>';
             ?>
 
             <div id="ajax-response">
@@ -1041,7 +1041,7 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="zone_type">主体类型</label></th>
+                        <th scope="row"><label for="zone_type">机构类型</label></th>
                         <td>
                             <select name="zone_type" <?=$old_zm_id < 1 ? 'id="zone_type"':''?>>
                                 <?php foreach ($typeList as $tlv){ ?>
@@ -1084,7 +1084,7 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="form-field">
-                        <th scope="row"><label for="parent_id">上级主体 </label></th>
+                        <th scope="row"><label for="parent_id">上级机构 </label></th>
                         <td>
                             <select class="js-data-select-ajax" name="parent_id" style="width: 50%" data-action="get_base_zone_list" data-type="parent">
                                 <option value="<?=$row['parent_id']?>" selected="selected">
@@ -1293,7 +1293,7 @@ class Organize{
     }
 
     /**
-     * 新增/编辑主体权限
+     * 新增/编辑机构权限
      */
     public function addOrganizePower(){
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -1337,7 +1337,7 @@ class Organize{
         }
         ?>
         <div class="wrap">
-            <h1 id="add-new-user">添加/编辑主体权限</h1>
+            <h1 id="add-new-user">添加/编辑机构权限</h1>
 
             <div id="ajax-response">
                 <span style="color: #2bc422"><?=$success_msg?></span>
@@ -1376,7 +1376,7 @@ class Organize{
     }
 
     /**
-     * 主体权限
+     * 机构权限
      */
     public function organizePower(){
         global $wpdb;
@@ -1412,9 +1412,9 @@ class Organize{
         $course_num = $wpdb->get_var($sql." WHERE role_type='2'");
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">主体权限列表</h1>
+            <h1 class="wp-heading-inline">机构权限列表</h1>
 
-            <a href="<?=admin_url('admin.php?page=fission-add-organize-power')?>" class="page-title-action">添加主体权限</a>
+            <a href="<?=admin_url('admin.php?page=fission-add-organize-power')?>" class="page-title-action">添加机构权限</a>
 
             <hr class="wp-header-end">
             <ul class="subsubsub">
@@ -1440,7 +1440,7 @@ class Organize{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -1525,7 +1525,7 @@ class Organize{
     }
 
     /**
-     * 主体成员
+     * 机构成员
      */
     public function organizeCoach(){
         global $wpdb;
@@ -1550,7 +1550,7 @@ class Organize{
             'total' => $pageAll,
             'current' => $page
         ));
-        //主体资料
+        //机构资料
         $zone_meta = $wpdb->get_row("SELECT zone_title FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_id}'",ARRAY_A);
         ?>
         <div class="wrap">
@@ -1578,7 +1578,7 @@ class Organize{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -1680,7 +1680,7 @@ class Organize{
     }
 
     /**
-     * 新增主体成员
+     * 新增机构成员
      */
     public function addOrganizeCoach(){
         global $wpdb;
@@ -1707,7 +1707,7 @@ class Organize{
             }
 
         }
-        //主体资料
+        //机构资料
         $zone_meta = $wpdb->get_row("SELECT zone_title FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_id}'",ARRAY_A);
         ?>
         <div class="wrap">
@@ -1723,7 +1723,7 @@ class Organize{
                 <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="5f6ea9ff44"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php"><table class="form-table">
                     <tbody>
                     <tr class="">
-                        <th scope="row"><label for="zone_title">主体名称 </label></th>
+                        <th scope="row"><label for="zone_title">机构名称 </label></th>
                         <td>
                             <?=$zone_meta['zone_title']?>
                         </td>
@@ -1750,7 +1750,7 @@ class Organize{
     }
 
     /**
-     * 主体收益提现记录
+     * 机构收益提现记录
      */
     public function organizeIncomeLog(){
         die;
@@ -1762,7 +1762,7 @@ class Organize{
         ?>
 
         <div class="wrap">
-            <h1 class="wp-heading-inline">主体收益记录</h1>
+            <h1 class="wp-heading-inline">机构收益记录</h1>
 
             <hr class="wp-header-end">
             <ul class="subsubsub">
@@ -1791,7 +1791,7 @@ class Organize{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -1866,7 +1866,7 @@ class Organize{
     }
 
     /**
-     * 主体统计信息
+     * 机构统计信息
      */
     public function organizeStatistics(){
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -1874,7 +1874,7 @@ class Organize{
 
         $id < 1 && exit('参数错误!');
         global $wpdb;
-        //查询主体信息
+        //查询机构信息
         $zone_meta = $wpdb->get_row("SELECT zone_name,user_id FROM {$wpdb->prefix}zone_meta WHERE id='{$id}'", ARRAY_A);
         //各种数量
         //比赛数量
@@ -1936,7 +1936,7 @@ class Organize{
     }
 
     /**
-     * 主体统计信息比赛数据
+     * 机构统计信息比赛数据
      */
     public function getOrganizeStatisticsMatch($user_id){
         global $wpdb;
@@ -2049,7 +2049,7 @@ class Organize{
     }
 
     /**
-     * 主体统计信息考级数据
+     * 机构统计信息考级数据
      */
     public function getOrganizeStatisticsGrading($user_id){
         global $wpdb;
@@ -2178,7 +2178,7 @@ class Organize{
 
 
     /**
-     * 主体统计信息收益数据
+     * 机构统计信息收益数据
      */
     public function getOrganizeStatisticsIncome($user_id,$id){
         global $wpdb;
@@ -2216,7 +2216,7 @@ class Organize{
         <ul class="subsubsub">
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=match')?>" <?=$itype==='match'?'class="current"':''?> aria-current="page">比赛<span class="count">（<?=$match_income != false ? $match_income : 0?>）</span></a> | </li>
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=grading')?>" <?=$itype==='grading'?'class="current"':''?> aria-current="page">考级<span class="count">（<?=$grading_income != false? $grading_income : 0?>）</span></a> | </li>
-            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=subject')?>" <?=$itype==='subject'?'class="current"':''?> aria-current="page">申请主体<span class="count">（<?=$subject_income != false ? $subject_income : 0?>）</span></a> | </li>
+            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=subject')?>" <?=$itype==='subject'?'class="current"':''?> aria-current="page">申请机构<span class="count">（<?=$subject_income != false ? $subject_income : 0?>）</span></a> | </li>
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=extract')?>" <?=$itype==='extract'?'class="current"':''?> aria-current="page">提现<span class="count">（<?=$extract_income != false ? $extract_income : 0?>）</span></a>  </li>
           </ul>
         <div class="tablenav top">
@@ -2276,7 +2276,7 @@ class Organize{
                                 echo '提现';
                                 break;
                             case 'subject':
-                                echo '申请主体';
+                                echo '申请机构';
                                 break;
                         }
                         ?>
@@ -2314,7 +2314,7 @@ class Organize{
     }
 
     /**
-     * 主体统计信息课程数据
+     * 机构统计信息课程数据
      */
     public function getOrganizeStatisticsCourse($user_id){
         global $wpdb;
@@ -2381,7 +2381,7 @@ class Organize{
                             <span class="screen-reader-text">“<?=$row['course_title']?>”已被锁定</span>
                         </div>
                     </th>
-                    <td class="course_title column-course_title has-row-actions column-primary" data-colname="主体名称">
+                    <td class="course_title column-course_title has-row-actions column-primary" data-colname="机构名称">
                         <?=$row['course_title']?>
                         <br>
                         <div class="row-actions">
@@ -2461,7 +2461,7 @@ class Organize{
 
 
     /**
-     * 主体统计信息成员数据
+     * 机构统计信息成员数据
      */
     public function getOrganizeStatisticsMember($user_id){
         global $wpdb;

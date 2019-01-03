@@ -3441,6 +3441,23 @@ class Student_Ajax
         wp_send_json_success(['info' => $data, 'my_team' => $my_team]);
     }
 
+    /**
+     * 设置记忆等级
+     */
+    /*public function set_memory_grade(){
+        if(empty($_POST['genre_id']) || empty($_POST['grad_type']) || empty($_POST['grade'])){
+            wp_send_json_error(array('info'=>__('参数错误')));
+        }
+        global $wpdb,$current_user;
+        $insert = array(
+            'user_id'=>$current_user->ID,
+            'genre_id'=>$_POST['genre_id'],
+            'grade_type'=>$_POST['grad_type'],
+            'created_time'=>get_time('mysql'),
+        );
+        print_r($insert);die;
+        $c = $wpdb->insert($wpdb->prefix.'user_grade_log_history',$insert);
+    }*/
 
     /**
      * 训练答案提交
@@ -5373,23 +5390,46 @@ class Student_Ajax
      * 为战队添加成员
      */
     public function add_team_personnel(){
-        if(empty($_POST['user_id'])){
+        if(empty($_POST['user_id']) || empty($_POST['team_id'])){
            wp_send_json_error(array('info'=>__('请选择需要添加的用户')));
         }
 
         //查看当前用户是否已有战队
         global $wpdb,$current_user;
-        $result = $wpdb->get_var("select id from {$wpdb->prefix}team_meta user_id = {$_POST['user_id']} and user_type = 1 and statsu > -2");
+        $result = $wpdb->get_var("select id from {$wpdb->prefix}match_team where user_id = {$_POST['user_id']} and user_type = 1 and status > -2");
         if($result > 0){
             wp_send_json_error(array('info'=>__('该用户有战队,请核实')));
         }
 
-        $res = $wpdb->insert($wpdb->prefix.'team_meta',array('team_id'=>$_POST['team_id'],'user_id'=>$_POST['user_id'],'user_type'=>1,'status'=>2,'created_time'=>get_time('mysql')));
+        $res = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id'],'user_id'=>$_POST['user_id'],'user_type'=>1,'status'=>2,'created_time'=>get_time('mysql')));
 
         if($res){
             wp_send_json_success(array('info'=>__('添加成功')));
         }else{
             wp_send_json_error(array('info'=>__('添加失败')));
+        }
+    }
+
+    /**
+     * 战队成员列表
+     */
+    public function get_team_personnel(){
+        if(empty($_POST['team_id'])){
+            wp_send_json_error(array('info'=>__('战队id必传')));
+        }
+        global $wpdb,$current_user;
+
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        $sql = "select * from {$wpdb->prefix}match_team where team_id = {$_POST['team_id']} order by id desc limit $start,$pageSize";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无成员', 'nlyd-student')));
+        foreach ($rows as $k => $v){
+
         }
     }
 

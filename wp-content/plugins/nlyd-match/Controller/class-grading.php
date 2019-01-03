@@ -74,7 +74,6 @@ class Grading
             'total' => $pageAll,
             'current' => $page
         ));
-//        leo_dump($rows);die;
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline"><?=get_post($gradingId)->post_title.'-'?>考级选手</h1>
@@ -129,7 +128,7 @@ class Grading
                             <strong><?=isset($use_real_name['real_name']) ? $use_real_name['real_name'] : ''?></strong>
                             <br>
                             <div class="row-actions">
-                                <span class="edit"><a href="<?=admin_url('edit.php?post_type=grading&page=grading-studentScore&grading_id='.$gradingId.'&user_id='.$row['user_id'])?>">答题记录</a>  </span>
+                                <span class="edit"><a href="<?=admin_url('edit.php?post_type=grading&page=grading-studentScore&grading_id='.$gradingId.'&user_id='.$row['user_id'].'&return_url='.urlencode(getHttp().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))?>">答题记录</a>  </span>
                                 <span class=""><a href="<?=admin_url('user-edit.php?user_id='.$row['user_id'])?>" aria-label="">编辑用户</a></span>
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
@@ -645,6 +644,7 @@ class Grading
 
                 <h2 class="screen-reader-text">答题记录</h2>
                 <br class="clear">
+                <a href="<?=urldecode($_GET['return_url'])?>" class="button">返回</a>
 <!--                <div><span>剩余时间:</span> <span> --><?//=$data['surplus_time']?><!--</span></div>-->
                 <table class="wp-list-table widefat fixed striped users">
                     <thead>

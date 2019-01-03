@@ -109,7 +109,7 @@ class Course{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2>
+            <h2 class="screen-reader-text">机构列表</h2>
             <table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
@@ -144,7 +144,7 @@ class Course{
                                 <span class="screen-reader-text">“<?=$row['course_title']?>”已被锁定</span>
                             </div>
                         </th>
-                        <td class="course_title column-course_title has-row-actions column-primary" data-colname="主体名称">
+                        <td class="course_title column-course_title has-row-actions column-primary" data-colname="机构名称">
                             <?=$row['course_title']?>
                             <br>
                             <div class="row-actions">
@@ -446,6 +446,16 @@ class Course{
                         </td>
                     </tr>
                     <tr class="">
+                        <th scope="row"><label for="zone_user_id">所属机构 </label></th>
+                        <td>
+                            <select class="js-data-select-ajax" name="zone_id" style="width: 50%" data-action="get_base_zone_list" data-type="all_base">
+                                <option value="<?=isset($row['zone_id']) ? $row['zone_id'] : 0?>" selected="selected">
+                                    <?=empty($row['zone_name']) ? '平台' :$row['zone_name']?>
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="">
                         <th scope="row"><label for="coach_id">授课教练 </label></th>
                         <td>
                             <select class="js-data-select-ajax" name="coach_id" style="width: 50%" data-action="get_base_coach_list" data-type="all">
@@ -507,16 +517,6 @@ class Course{
                         </td>
                     </tr>
 
-                    <tr class="">
-                        <th scope="row"><label for="zone_user_id">所属主体机构 </label></th>
-                        <td>
-                            <select class="js-data-select-ajax" name="zone_id" style="width: 50%" data-action="get_base_zone_list" data-type="all_base">
-                                <option value="<?=isset($row['zone_id']) ? $row['zone_id'] : 0?>" selected="selected">
-                                    <?=empty($row['zone_name']) ? '平台' :$row['zone_name']?>
-                                </option>
-                            </select>
-                        </td>
-                    </tr>
                     <tr class="">
                         <th scope="row"><label for="course_type">课程类型 </label></th>
                         <td>

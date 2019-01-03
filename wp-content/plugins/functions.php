@@ -514,3 +514,18 @@ if(!function_exists('getSpreadOption')){
         return $row;
     }
 }
+/**
+ * 获取当前网络协议
+ */
+if(!function_exists('getHttp')){
+    function getHttp() {
+        if ( !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
+            return 'https://';
+        } elseif ( isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
+            return 'https://';
+        } elseif ( !empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off') {
+            return 'https://';
+        }
+        return 'http://';
+    }
+}

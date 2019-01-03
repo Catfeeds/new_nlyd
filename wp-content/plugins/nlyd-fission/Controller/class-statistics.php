@@ -104,9 +104,9 @@ class Statistics{
         ?>
 
         <div class="wrap">
-            <h1 class="wp-heading-inline">主体类型列表</h1>
+            <h1 class="wp-heading-inline">机构类型列表</h1>
 
-            <a href="<?=admin_url('admin.php?page=fission-add-organize-type')?>" class="page-title-action">添加主体类型</a>
+            <a href="<?=admin_url('admin.php?page=fission-add-organize-type')?>" class="page-title-action">添加机构类型</a>
 
             <hr class="wp-header-end">
             <ul class="subsubsub">
@@ -135,7 +135,7 @@ class Statistics{
                 </div>
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -246,7 +246,7 @@ class Statistics{
         $all_profit = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs");
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">主体数据</h1>
+            <h1 class="wp-heading-inline">机构数据</h1>
 
 
             <hr class="wp-header-end">
@@ -271,12 +271,12 @@ class Statistics{
 
                 <br class="clear">
             </div>
-            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                    <th scope="col" id="zone_name" class="manage-column column-zone_name column-primary">主体名称</th>
-                    <th scope="col" id="zone_type_name" class="manage-column column-zone_type_name">主体类型</th>
+                    <th scope="col" id="zone_name" class="manage-column column-zone_name column-primary">机构名称</th>
+                    <th scope="col" id="zone_type_name" class="manage-column column-zone_type_name">机构类型</th>
                     <th scope="col" id="match_num" class="manage-column column-match_num">开赛数量</th>
                     <th scope="col" id="match_people_num" class="manage-column column-match_people_num">参赛人数</th>
                     <th scope="col" id="match_profit" class="manage-column column-match_profit">比赛收益</th>
@@ -305,7 +305,7 @@ class Statistics{
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
-                        <td class="zone_type_name column-zone_type_name" data-colname="主体类型"> <?=isset($row['zone_type_name']) ? $row['zone_type_name'] : ''?> </td>
+                        <td class="zone_type_name column-zone_type_name" data-colname="机构类型"> <?=isset($row['zone_type_name']) ? $row['zone_type_name'] : ''?> </td>
                         <td class="match_num column-match_num" data-colname="开赛数量"> <?=isset($row['match_num']) ? $row['match_num'] : 0?> </td>
                         <td class="match_people_num column-match_people_num" data-colname="参赛人数"> <?=isset($row['match_people_num']) ? $row['match_people_num'] : 0?> </td>
                         <td class="match_profit column-match_profit" data-colname="比赛收益"><?=isset($row['match_profit']) ? $row['match_profit'] : 0?> </td>
@@ -320,8 +320,8 @@ class Statistics{
                 <tfoot>
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                    <th scope="col" class="manage-column column-zone_name column-primary">主体名称</th>
-                    <th scope="col" class="manage-column column-zone_type_name">主体类型</th>
+                    <th scope="col" class="manage-column column-zone_name column-primary">机构名称</th>
+                    <th scope="col" class="manage-column column-zone_type_name">机构类型</th>
                     <th scope="col" class="manage-column column-match_num">开赛数量</th>
                     <th scope="col" class="manage-column column-match_people_num">参赛人数</th>
                     <th scope="col" class="manage-column column-match_profit">比赛收益</th>
