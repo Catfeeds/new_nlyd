@@ -5324,6 +5324,47 @@ class Student_Ajax
     }
 
     /**
+     * 机构添加教练
+     */
+    public function add_zone_coach(){
+        if(empty($_POST['user_id'])){
+            wp_send_json_error(array('info'=>__('请选择教练')));
+        }
+        global $wpdb,$current_user;
+        //判断该教练是否被占用
+        $id = $wpdb->get_var("select id from {$wpdb->prefix}zone_join_coach where coach_id = {$_POST['user_id']} ");
+        if(!empty($id)) wp_send_json_error(array('info'=>__('该教练已绑定,请核实信息')));
+        $result = $wpdb->insert($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$_POST['user_id']));
+        if($result){
+            wp_send_json_success(array('info'=>__('添加成功')));
+        }else{
+            wp_send_json_error(array('info'=>__('添加失败')));
+        }
+    }
+
+    /**
+     * 机构教练列表
+     */
+    public function zone_coach_list(){
+        global $wpdb,$current_user;
+
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        $sql = "select * from {$wpdb->prefix}zone_join_coach where zone_id = {$current_user->ID} order by id desc limit $start,$pageSize";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无教练', 'nlyd-student')));
+        if(!empty($rows)){
+            foreach ($rows as $k => $v){
+
+            }
+        }
+    }
+
+    /**
      * 战队申请
      */
     public function team_apply(){
