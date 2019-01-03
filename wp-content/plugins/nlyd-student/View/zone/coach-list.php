@@ -17,7 +17,7 @@
             <div class="layui-row nl-border nl-content have-bottom">
                 <div class="nl-table-wapper">
                     <table class="nl-table">
-                        <tbody id="team_flow">
+                        <tbody id="coach_flow">
                             <tr class='table-head'>
                                 <td><?=__('序 号', 'nlyd-student')?></td>
                                 <td><?=__('工作照', 'nlyd-student')?></td>
