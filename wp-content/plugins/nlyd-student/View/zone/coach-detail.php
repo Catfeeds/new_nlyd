@@ -98,24 +98,12 @@ jQuery(function($) {
             }
             $.ajax({
                 data: data,
-                beforeSend:function(XMLHttpRequest){
-                    _this.addClass('disabled')
-                },
                 success: function(res, textStatus, jqXHR){
                     console.log(res)
                     if(res.success){
                        
                     }else{
-                        
-                        _this.removeClass('disabled');
                     }
-                },
-                complete: function(jqXHR, textStatus){
-                    if(textStatus=='timeout'){
-                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                        _this.removeClass('disabled');
-            　　　　 }
-                    
                 }
             })
         }
