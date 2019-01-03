@@ -30,32 +30,7 @@
                         <div class="layui-tab-item layui-show">
                             <ul class="flow-default layui-row" id="1" style="margin:0">
                              
-                                <!-- <li class="match_row"> 
-                                     <div class="bold c_black f_16 mt_10">国际速读水平测试（南京）</div>
-                                     <div class="match_body">
-                                         <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('考级日期：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">考级中</span></div>
-                                         </div>
-                                         <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('考级地点：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">四川省成都市武侯区航空路丰德万瑞25楼</div>
-                                         </div>
-                                         <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('责任人', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">李四</div>
-                                         </div>
-                                         <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">18</div>
-                                         </div>
-                                     </div>  
-                                     <div class="match_footer ta_r">
-                                        <a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>
-                                        <a href="<?=home_url('/zone/kaojiBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>
-                                        <a class="end_match c_black6"><span class="c_orange"><i class="iconfont">&#xe6a1;</i></span><span class="ml_10">结束考级</span></a>
-                                    </div>
-                                </li>  -->
+                            
                             </ul>
                         </div>
                         <!-- 近期考级 -->
