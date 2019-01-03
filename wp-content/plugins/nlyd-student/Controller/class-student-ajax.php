@@ -2159,6 +2159,12 @@ class Student_Ajax
                 $url = home_url('account');
             }
 
+            //判断是否为机构
+            $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$user->ID} ");
+            if($zone_id){
+                $url = home_url('/zone/');
+            }
+
             //添加推广人
             if($_POST['referee_id'] > 0){
                 if(empty($user->referee_id) && $_POST['referee_id'] != $user->ID){
@@ -4591,7 +4597,8 @@ class Student_Ajax
         }
 
         //获取收益列表
-        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,user_income,income_type,
+        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,
+                  if(user_income > 0 ,user_income ,'待到账') user_income,
                   case income_type
                     when 'match' then '比赛收益'
                     when 'grading' then '考级收益'
@@ -5361,17 +5368,15 @@ class Student_Ajax
 
             foreach ($rows as $k => $v){
                 $rows[$k]['order'] =  $start+$k+1;
-                //获取工作照
-                $coach_work_photo = get_user_meta($v['coach_id'],'coach_work_photo')[0];
-                if(empty($coach_work_photo)){
-                    $coach_work_photo = get_user_meta($v['coach_id'],'user_head')[0];
-                }
-                $rows[$k]['work_photo'] =  !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png
-                ';
-                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender') and user_id = {$v['coach_id']}";
+
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','coach_work_photo','user_head') and user_id = {$v['coach_id']}";
                 $res = $wpdb->get_results($sql_,ARRAY_A);
                 $user_info = array_column($res,'meta_value','meta_key');
                 //print_r($user_info);
+                //获取工作照
+                $coach_work_photo = !empty($user_info['coach_work_photo']) ? $user_info['coach_work_photo'] : $user_info['user_head'] ;
+                $rows[$k]['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
+
                 $rows[$k]['user_ID'] = !empty($user_info['user_ID']) ? $user_info['user_ID'] : $v['coach_id']+10000000;
                 $rows[$k]['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-' ;
                 $user_real_name = unserialize($user_info['user_real_name']);
@@ -5382,6 +5387,54 @@ class Student_Ajax
         //print_r($rows);
         wp_send_json_success(array('info'=>$rows));
     }
+
+    /**
+     *解除机构教练
+     */
+    public function zone_coach_relieve(){
+        global $wpdb,$current_user;
+        if(empty($_POST['coach_id'])){
+            wp_send_json_error(array('info'=>__('教练id必传')));
+        }
+        $sql = "select a.zone_id,a.coach_id,b.user_id,b.id from {$wpdb->prefix}zone_join_coach a 
+                left join {$wpdb->prefix}my_coach b on a.coach_id = b.coach_id
+                where a.coach_id = {$_POST['coach_id']} ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($rows[0]['user_id'])){
+            //获取当前机构下所有教练
+            $sql_  = "select a.*,meta_key,b.meta_value from {$wpdb->prefix}zone_join_coach a 
+                      left join {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key = 'user_real_name' 
+                      where a.zone_id = {$current_user->ID}";
+            $rows_ = $wpdb->get_results($sql_,ARRAY_A);
+            if(count($rows_) == 1){
+                wp_send_json_error(array('info'=>__('该机构仅有一名教练,禁止解除')));
+            }
+            $list = array();
+            foreach ($rows_ as $k => $v){
+                if($v['coach_id'] !== $_POST['coach_id']){
+                    $arr['coach_id'] = $v['coach_id'];
+                    $arr['real_name'] = unserialize($v['meta_value'])['real_name'];
+                    $list[] = $arr;
+                }
+            }
+            //print_r(json_encode($list));die;
+            //$_POST['new_coach_id'] = 9;
+            if(empty($_POST['new_coach_id'])){
+                wp_send_json_success(array('list'=>json_encode($list)));
+            }else{
+                $x = $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$_POST['new_coach_id']),array('coach_id'=>$_POST['coach_id']));
+                //print_r($x);die;
+            }
+        }
+        //print_r($rows);die;
+        $result = $wpdb->delete($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$_POST['coach_id']));
+        if($result){
+            wp_send_json_success(array('info'=>__('解绑成功')));
+        }else{
+            wp_send_json_error(array('info'=>__('解绑失败')));
+        }
+    }
+
 
     /**
      * 战队申请

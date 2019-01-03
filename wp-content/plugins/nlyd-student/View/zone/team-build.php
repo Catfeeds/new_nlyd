@@ -39,9 +39,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('战队简介', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <textarea class="radius_input_row nl-foucs" type="text" name="team_brief" placeholder="<?=__('填写战队简介', 'nlyd-student')?>">
-                                    <?=$team_brief?>
-                                </textarea>
+                                <textarea class="radius_input_row nl-foucs" type="text" name="team_brief" placeholder="<?=__('填写战队简介', 'nlyd-student')?>"><?=$team_brief?></textarea>
                             </div>
                         </div>
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认申请', 'nlyd-student')?></div></a>

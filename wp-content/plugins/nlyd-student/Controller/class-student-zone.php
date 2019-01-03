@@ -133,7 +133,7 @@ class Student_Zone extends Student_Home
          $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
          $data['stream'] = $wpdb->get_var($sql1);
 
-         //获取用户今日收益
+         //获取用户累计收益
          $sql2 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and user_income > 0 ";
          $data['stream_total'] = $wpdb->get_var($sql2);
 
@@ -289,9 +289,7 @@ class Student_Zone extends Student_Home
          }*/
 
         //print_r($result);
-
-
-         $data['row'] = $row;
+         $data['row'] = $row='';
          $view = student_view_path.CONTROLLER.'/profit-detail.php';
          load_view_template($view,$data);
     }
@@ -548,8 +546,53 @@ class Student_Zone extends Student_Home
      * 教练详情
      */
      public function coachDetail(){
+         global $wpdb,$current_user;
+         //获取教练信息
+         $sql = "select b.meta_key,b.meta_value from {$wpdb->prefix}zone_join_coach a 
+                  left join  {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key in('user_real_name','coach_ID','user_ID','user_gender','user_head','coach_work_photo','real_ID','user_ID_Card','coach_brief') 
+                  where a.coach_id = {$_GET['coach_id']} and zone_id = $current_user->ID";
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         if(empty($rows)){
+             $this->get_404($this->get_404(array('message'=>__('数据错误', 'nlyd-student'),'return_url'=>home_url('/zone/coach/'))));
+             return;
+         }
+         $user_info = array_column($rows,'meta_value','meta_key');
+         $coach_work_photo = !empty($user_info['coach_work_photo']) ? $user_info['coach_work_photo'] : $user_info['user_head'] ;
+         $coach['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
+         $coach['real_name'] = unserialize($user_info['user_real_name'])['real_name'];
+         $coach['coach_ID'] = !empty($user_info['coach_ID']) ? $user_info['coach_ID'] : $user_info['user_ID'];
+         $coach['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-';
+         $coach['real_ID'] = !empty($user_info['real_ID']) ? hideStar($user_info['real_ID']) : '-';
+         $coach['user_ID_Card'] = unserialize($user_info['user_ID_Card']);
+         $coach['coach_brief'] = !empty($user_info['coach_brief']) ? hideStar($user_info['coach_brief']) : '暂无';
+
+         //获取教练技能
+         $sql_ = "select a.*,
+                  b.user_mobile from {$wpdb->prefix}coach_skill a 
+                  left join {$wpdb->prefix}users b on a.coach_id = b.ID
+                  where a.coach_id = {$_GET['coach_id']} ";
+         $row = $wpdb->get_row($sql_,ARRAY_A);
+         $skill = array();
+         if(!empty($row)){
+             if($row['read'] > 0){
+                 $skill[] = '速读';
+             }
+             if ($row['memory'] > 0){
+                 $skill[] = '记忆';
+             }
+             if ($row['compute'] > 0){
+                 $skill[] = '心算';
+             }
+         }
+         $coach['coach_skill'] = !empty($skill) ? arr2str($skill,'/') : '暂无';
+         //print_r($row);
+         $coach['user_mobile'] = !empty($row['user_mobile']) ? hideStar($row['user_mobile']) : '-';
+
+         //获取教练学员
+         $coach['total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}my_coach where coach_id = {$_GET['coach_id']} and apply_status = 2");
+         //print_r($coach['total']);
         $view = student_view_path.CONTROLLER.'/coach-detail.php';
-        load_view_template($view);
+        load_view_template($view,$coach);
     }
 
 
