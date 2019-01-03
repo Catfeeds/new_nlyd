@@ -893,6 +893,7 @@ class Organize{
                                                  'indirect_referee_id' => $referee_id2 > 0 ? $referee_id2 : 0,
                                                  'indirect_referee_income' => $referee_id2 > 0 ? $spread_set['indirect_superior'] : 0,
                                                  'income_status' => 2,
+                                                 'match_id' => $zone_type,
                                                  'created_time' => get_time('mysql'),
                                              ];
                                              $bool = $wpdb->insert($wpdb->prefix.'user_income_logs',$insertData3);
@@ -1911,8 +1912,7 @@ class Organize{
         $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$zone_meta['user_id']}'");
         //课程数量
         $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE zone_id='{$zone_meta['user_id']}'");
-        //成员数量
-        $member_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}zone_join_coach WHERE zone_id='{$zone_meta['user_id']}'");
+
         //总收益
         $stream_all = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$zone_meta['user_id']}'");
 //        $rows = [];
@@ -1925,9 +1925,9 @@ class Organize{
             <ul class="subsubsub">
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=6')?>" <?=$type===6?'class="current"':''?> aria-current="page">基础资料<span class="count"></span></a> | </li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=1')?>" <?=$type===1?'class="current"':''?> aria-current="page">比赛<span class="count">（<?=$match_num > 0 ? $match_num : 0?>）</span></a> | </li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=2')?>" <?=$type===2?'class="current"':''?> aria-current="page">考级<span class="count">（<?=$grading_num > 0 ? $grading_num : 0?>）</span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=3')?>" <?=$type===3?'class="current"':''?> aria-current="page">课程<span class="count">（<?=$course_num > 0 ? $course_num : 0?>）</span></a></li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4')?>" <?=$type===4?'class="current"':''?> aria-current="page">成员<span class="count">（<?=$member_num > 0 ? $member_num : 0?>）</span></a></li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=2')?>" <?=$type===2?'class="current"':''?> aria-current="page">考级<span class="count">（<?=$grading_num > 0 ? $grading_num : 0?>）</span></a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=3')?>" <?=$type===3?'class="current"':''?> aria-current="page">课程<span class="count">（<?=$course_num > 0 ? $course_num : 0?>）</span></a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4')?>" <?=$type===4?'class="current"':''?> aria-current="page">成员<span class="count"></span></a> | </li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5')?>" <?=$type===5?'class="current"':''?> aria-current="page">收益<span class="count">（<?=$stream_all > 0 ? $stream_all : 0?>）</span></a></li>
             </ul>
 
@@ -2499,14 +2499,36 @@ class Organize{
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
 
-        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID 
+        //管理员数量
+        $admin_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}zone_manager WHERE zone_id={$user_id}");
+        //教练数量
+        $coach_ids = $wpdb->get_var("SELECT GROUP_CONCAT(coach_id) FROM {$wpdb->prefix}zone_join_coach WHERE zone_id='{$user_id}'");
+        $coach_num = count(explode(',',$coach_ids));
+        //学员数量
+        $student_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}my_coach WHERE coach_id IN({$coach_ids}) AND apply_status=2");
+        switch ($mtype){
+            case 1:
+                $sql = "SELECT zm.user_id AS coach_id FROM {$wpdb->prefix}zone_manager AS zm 
+                LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'
+                WHERE zm.zone_id='{$user_id}'";
+                break;
+            case 2:
+                $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID 
                     FROM {$wpdb->prefix}coach_skill a 
                     LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON a.coach_id = zjc.coach_id 
                     LEFT JOIN {$wpdb->prefix}users b ON a.coach_id = b.ID 
                     LEFT JOIN {$wpdb->usermeta} AS um_id ON um_id.user_id = a.coach_id AND um_id.meta_key='user_ID'             
                     WHERE a.coach_id > 0 AND b.ID !='' AND zjc.zone_id='{$user_id}'
                     LIMIT {$start},{$pageSize}";
+                break;
+            case 3:
+                $sql = "SELECT zm.user_id AS coach_id FROM {$wpdb->prefix}my_coach AS zm 
+                LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'
+                WHERE zm.coach_id IN({$coach_ids}) AND zm.apply_status=2";
+                break;
+        }
         $rows = $wpdb->get_results($sql, ARRAY_A);
+//        leo_dump($wpdb->last_query);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -2519,11 +2541,12 @@ class Organize{
             'add_fragment' => '&s='.$searchStr,
         ));
 //        leo_dump($rows);
+
         ?>
         <ul class="subsubsub">
-            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=1')?>" <?=$mtype===1?'class="current"':''?> aria-current="page">管理员<span class="count"></span></a> | </li>
-            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=2')?>" <?=$mtype===2?'class="current"':''?> aria-current="page">教练<span class="count"></span></a> | </li>
-            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=3')?>" <?=$mtype===3?'class="current"':''?> aria-current="page">学员<span class="count">（<?=$match_num > 0 ? $match_num : 0?>）</span></a> | </li>
+            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=1')?>" <?=$mtype===1?'class="current"':''?> aria-current="page">管理员<span class="count">（<?=$admin_num > 0 ? $admin_num : 0?>）</span></a> | </li>
+            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=2')?>" <?=$mtype===2?'class="current"':''?> aria-current="page">教练<span class="count">（<?=$coach_num > 0 ? $coach_num : 0?>）</span></a> | </li>
+            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=3')?>" <?=$mtype===3?'class="current"':''?> aria-current="page">学员<span class="count">（<?=$student_num > 0 ? $student_num : 0?>）</span></a> </li>
         </ul>
         <div class="tablenav top">
             <div class="tablenav-pages">
@@ -2544,11 +2567,15 @@ class Organize{
                 <th scope="col" id="sex" class="manage-column column-sex">性别</th>
                 <th scope="col" id="age" class="manage-column column-age">年龄</th>
                 <th scope="col" id="student" class="manage-column column-mobile">手机</th>
-                <th scope="col" id="ID" class="manage-column column-ID">教练ID</th>
-                <th scope="col" id="image" class="manage-column column-image">教练照片</th>
+                <th scope="col" id="ID" class="manage-column column-ID">ID</th>
+               <?php
+               if($mtype === 2){
+                   echo ' <th scope="col" id="image" class="manage-column column-image">教练照片</th>
                 <th scope="col" id="category" class="manage-column column-category">教学类别 </th>
                 <th scope="col" id="student_num" class="manage-column column-student_num">学员数量 </th>
-                <th scope="col" id="course_num" class="manage-column column-course_num">课程数量 </th>
+                <th scope="col" id="course_num" class="manage-column column-course_num">课程数量 </th>';
+               }
+               ?>
             </tr>
             </thead>
 
@@ -2597,21 +2624,29 @@ class Organize{
                         <span aria-hidden="true"><?=$row['userID']?></span>
                         <span class="screen-reader-text">未知</span>
                     </td>
-                    <td class="image column-image" data-colname="教练照片" id="cardImg-<?=$row['coach_id']?>">
-                        <img src="<?=isset($usermeta['user_head'])?$usermeta['user_head'][0]:''?>" style="height: 60px;" alt="">
-                    </td>
-                    <td class="category column-category" data-colname="教学类别">
-                        <?=join('/',$categoryArr)?>
-                    </td>
-                    <td class="student_num column-student_num" data-colname="学员数量">
-                        <a href="<?php echo '?page=teacher-student&id='.$row['coach_id']?><?=$studentNumArr['apply']>0?'&type=1':''?>" aria-label="">
-                            <span style="color: #00aff9"><?=$studentNumArr['member']?></span>
-                            <?php if($studentNumArr['apply']>0) echo '<span style="color: #c42e00">+'.$studentNumArr['apply'].'</span>'; ?>
-                        </a>
-                    </td>
-                    <td class="course_num column-course_num" data-colname="课程数量">
-                        <?=$courseNum > 0 ? $courseNum :0 ?>
-                    </td>
+
+
+                    <?php
+                    if($mtype === 2){
+                        ?>
+                        <td class="image column-image" data-colname="教练照片" id="cardImg-<?=$row['coach_id']?>">
+                            <img src="<?=isset($usermeta['user_head'])?$usermeta['user_head'][0]:''?>" style="height: 60px;" alt="">
+                        </td>
+                        <td class="category column-category" data-colname="教学类别">
+                            <?=join('/',$categoryArr)?>
+                        </td>
+                        <td class="student_num column-student_num" data-colname="学员数量">
+                            <a href="<?php echo '?page=teacher-student&id='.$row['coach_id']?><?=$studentNumArr['apply']>0?'&type=1':''?>" aria-label="">
+                                <span style="color: #00aff9"><?=$studentNumArr['member']?></span>
+                                <?php if($studentNumArr['apply']>0) echo '<span style="color: #c42e00">+'.$studentNumArr['apply'].'</span>'; ?>
+                            </a>
+                        </td>
+                        <td class="course_num column-course_num" data-colname="课程数量">
+                            <?=$courseNum > 0 ? $courseNum :0 ?>
+                        </td>
+                        <?php
+                    }
+                    ?>
                 </tr>
             <?php } ?>
 
@@ -2628,11 +2663,16 @@ class Organize{
                 <th scope="col" class="manage-column column-sex"> 性别</th>
                 <th scope="col" class="manage-column column-age"> 年龄</th>
                 <th scope="col" class="manage-column column-mobile">手机</th>
-                <th scope="col" class="manage-column column-ID"> 教练ID</th>
-                <th scope="col" class="manage-column column-image"> 教练照片</th>
+                <th scope="col" class="manage-column column-ID"> ID</th>
+                <?php
+                if($mtype === 2){
+                    echo '      <th scope="col" class="manage-column column-image"> 教练照片</th>
                 <th scope="col" class="manage-column column-category">教学类别</th>
                 <th scope="col" class="manage-column column-student_num">学员数量 </th>
-                <th scope="col" class="manage-column column-course_num">课程数量 </th>
+                <th scope="col" class="manage-column column-course_num">课程数量 </th>';
+                }
+                ?>
+
             </tr>
             </tfoot>
 

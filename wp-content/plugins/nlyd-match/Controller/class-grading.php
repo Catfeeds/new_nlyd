@@ -486,7 +486,8 @@ class Grading
             <h1 class="wp-heading-inline"><?=$grading->post_title?>-<?=$category['post_title']?>-<?=unserialize($usermeta['user_real_name'][0])['real_name']?>-答题记录</h1>
 
             <hr class="wp-header-end">
-
+        <a href="<?=urldecode($_GET['return_url'])?>" class="button">返回</a>
+        <br class="clear">
             <h2 class="screen-reader-text"></h2>
         <style type="text/css">
 
@@ -497,6 +498,7 @@ class Grading
                 color: #02892e;
             }
         </style>
+
             <ul class="subsubsub">
                 <?php
 
@@ -506,7 +508,7 @@ class Grading
                        $p_name = $this->getProject($gav);
                        ?>
                     <li class="<?=$gav?>">
-                        <a href="<?=admin_url('edit.php?post_type=grading&page=grading-studentScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$gav)?>" <?=$g_type==$gav?'class="current"':''?> aria-current="page"><?=$p_name?>
+                        <a href="<?=admin_url('edit.php?post_type=grading&page=grading-studentScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$gav.'&return_url='.urlencode($_GET['return_url']))?>" <?=$g_type==$gav?'class="current"':''?> aria-current="page"><?=$p_name?>
                             <span class="count"></span>
                         </a>
                         <?=($k+1)<$counts?'|':''?>
@@ -518,7 +520,8 @@ class Grading
 
 <!--                <li class="editor"><a href="users.php?role=editor">人脉<span class="count">（5）</span></a></li>-->
             </ul>
-        <br class="clear">
+
+
             <ul class="subsubsub">
                 <?php
 
@@ -644,7 +647,7 @@ class Grading
 
                 <h2 class="screen-reader-text">答题记录</h2>
                 <br class="clear">
-                <a href="<?=urldecode($_GET['return_url'])?>" class="button">返回</a>
+
 <!--                <div><span>剩余时间:</span> <span> --><?//=$data['surplus_time']?><!--</span></div>-->
                 <table class="wp-list-table widefat fixed striped users">
                     <thead>

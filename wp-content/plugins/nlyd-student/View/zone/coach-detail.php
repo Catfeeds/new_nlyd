@@ -185,7 +185,7 @@ jQuery(function($) {
                         　　　　 }
                                 
                             }
-                        },'json')
+                        })
                     }else{
                         $.alerts("<?=__('正在删除此轮比赛，请稍后再试', 'nlyd-student')?>",1200)
                     }
