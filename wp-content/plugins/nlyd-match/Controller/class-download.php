@@ -1744,6 +1744,13 @@ class Download
         return;
 
     }
+
+    /**
+     * 公用导出方法
+     */
+    public function publicExport($data,$field,$title){
+
+    }
 }
 new Download();
 
