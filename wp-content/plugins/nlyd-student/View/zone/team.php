@@ -46,7 +46,8 @@
                     <div class="layui-row layui-bg-white">
                         <div class="nl-table-wapper">
                             <table class="nl-table">
-                                <thead>
+                           
+                                <tbody id="team_flow">
                                     <tr class='table-head'>
                                         <td><?=__('序 号', 'nlyd-student')?></td>
                                         <td><?=__('姓名/编号', 'nlyd-student')?></td>
@@ -55,9 +56,6 @@
                                         <td><?=__('联系方式', 'nlyd-student')?></td>
                                         <td><?=__('操 作', 'nlyd-student')?></td>
                                     </tr>
-                                </thead>
-                                <tbody id="team_flow">
-                                   
                                 </tbody>
                             </table>
                         </div>    
