@@ -549,16 +549,31 @@ class Student_Zone extends Student_Home
          global $wpdb,$current_user;
          //获取教练信息
          $sql = "select b.meta_key,b.meta_value from {$wpdb->prefix}zone_join_coach a 
-                  left join  {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key in('user_real_name','coach_ID','user_ID','user_gender','user_head','coach_work_photo','real_ID','user_ID_Card') 
+                  left join  {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key in('user_real_name','coach_ID','user_ID','user_gender','user_head','coach_work_photo','real_ID','user_ID_Card','coach_brief') 
                   where a.coach_id = {$_GET['coach_id']} and zone_id = $current_user->ID";
          $rows = $wpdb->get_results($sql,ARRAY_A);
+         if(empty($rows)){
+             $this->get_404();
+             return;
+         }
          $user_info = array_column($rows,'meta_value','meta_key');
          $coach['real_name'] = unserialize($user_info['user_real_name'])['real_name'];
          $coach['coach_ID'] = !empty($user_info['coach_ID']) ? $user_info['coach_ID'] : $user_info['user_ID'];
          $coach['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-';
          $coach['real_ID'] = !empty($user_info['real_ID']) ? hideStar($user_info['real_ID']) : '-';
          $coach['user_ID_Card'] = unserialize($user_info['user_ID_Card']);
-         print_r($user_info);
+         $coach['coach_brief'] = !empty($user_info['coach_brief']) ? hideStar($user_info['coach_brief']) : '暂无';
+
+         //获取教练技能
+         $sql_ = "select a.*,b.user_mobile from {$wpdb->prefix}coach_skill a 
+                  left join {$wpdb->prefix}users b on a.coach_id = b.ID
+                  where a.coach_id = {$_GET['coach_id']} ";
+         $row = $wpdb->get_row($sql_,ARRAY_A);
+         $coach['user_mobile'] = !empty($row['user_mobile']) ? hideStar($row['user_mobile']) : '-';
+
+         //获取教练学员
+         $coach['total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}my_coach where coach_id = {$_GET['coach_id']} and apply_status = 2");
+         //print_r($coach['total']);
         $view = student_view_path.CONTROLLER.'/coach-detail.php';
         load_view_template($view,$coach);
     }

@@ -53,15 +53,15 @@
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('联系方式', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('1588888888888', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$user_mobile?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('累计学员', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('88位', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$total?></div>
                     </div> 
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('教练简介', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('我是教练简介我是教练简介我是教练简介我是教练简介我是教练简介我是教练简介我是教练简介我是教练简介我是教练简介我是教练简介我是教练简介', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$coach_brief?></div>
                     </div>
                     <div class="coach_head_img img-z">
                         <div class="img-box">

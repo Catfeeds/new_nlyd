@@ -5382,6 +5382,21 @@ class Student_Ajax
     }
 
     /**
+     *解除机构教练
+     */
+    public function zone_coach_relieve(){
+        global $wpdb,$current_user;
+        if(empty($_POST['coach_id'])){
+            wp_send_json_error(array('info'=>__('教练id必传')));
+        }
+        $sql = "select a.zone_id,a.coach_id,b.user_id from {$wpdb->prefix}zone_join_coach a 
+                left join {$wpdb->prefix}my_coach
+                where a.coach_id = {$_POST['coach_id']} ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        print_r($sql);
+    }
+
+    /**
      * 战队申请
      */
     public function team_apply(){
