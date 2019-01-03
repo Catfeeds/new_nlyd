@@ -18,7 +18,6 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级责任人', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                            <!-- <input class="radius_input_row" type="text" name="zone_num" value=""> -->
                                 <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="选择考级责任人" >
                                     <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
                                 </select>
@@ -28,27 +27,29 @@
                             <div class="lable_row"><span class="c_black"><?=__('考级类别', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" id="match_type1" readonly name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('考级类别', 'nlyd-student')?>">
+                                <input type="hidden" name="" id="match_type1_id" value="">
+                                <input class="radius_input_row nl-foucs" type="text" id="match_type1" readonly lay-verify="required" autocomplete="off" placeholder="<?=__('考级类别', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级类型', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" id="match_type2" readonly name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('考级类型', 'nlyd-student')?>">
+                                <input type="hidden" name="" id="match_type2_id" value="">
+                                <input class="radius_input_row nl-foucs" type="text" id="match_type2" readonly lay-verify="required" autocomplete="off" placeholder="<?=__('考级类型', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级名称', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级名称', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="grading_name" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级名称', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级地点', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级地点', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="grading_address" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级地点', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级费用', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value=""></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" value=""></div>
                         </div>
                         <div>
                             <div class="lable_row">
@@ -59,6 +60,7 @@
                                 <input class="radius_input_row nl-foucs" value="" type="text" readonly name="zone_name" data-time="2019-10-11-11-11" id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级日期', 'nlyd-student')?>">
                             </div>
                         </div>
+                        <input type="hidden" name="action" value="zone_create_grading">
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认发布/保存更新', 'nlyd-student')?></div></a>
                     </form>
                 </div>
@@ -96,6 +98,7 @@ var mobileSelect1 = new MobileSelect({
     },
     callback:function(indexArr, data){
         $('#match_type1').val(data[0]['value']);
+        $('#match_type1_id').val(data[0]['id']);
        
     }
 });
@@ -120,7 +123,7 @@ var mobileSelect2 = new MobileSelect({
     },
     callback:function(indexArr, data){
         $('#match_type2').val(data[0]['value']);
-       
+        $('#match_type2_id').val(data[0]['id']);
     }
 });
 //---------------------------考级日期------------------------------
