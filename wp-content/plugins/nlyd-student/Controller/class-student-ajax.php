@@ -5389,12 +5389,44 @@ class Student_Ajax
         if(empty($_POST['coach_id'])){
             wp_send_json_error(array('info'=>__('教练id必传')));
         }
-        $sql = "select a.zone_id,a.coach_id,b.user_id from {$wpdb->prefix}zone_join_coach a 
-                left join {$wpdb->prefix}my_coach
+        $sql = "select a.zone_id,a.coach_id,b.user_id,b.id from {$wpdb->prefix}zone_join_coach a 
+                left join {$wpdb->prefix}my_coach b on a.coach_id = b.coach_id
                 where a.coach_id = {$_POST['coach_id']} ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
-        print_r($sql);
+        if(!empty($rows[0]['user_id'])){
+            //获取当前机构下所有教练
+            $sql_  = "select a.*,meta_key,b.meta_value from {$wpdb->prefix}zone_join_coach a 
+                      left join {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key = 'user_real_name' 
+                      where a.zone_id = {$current_user->ID}";
+            $rows_ = $wpdb->get_results($sql_,ARRAY_A);
+            if(count($rows_) == 1){
+                wp_send_json_error(array('info'=>__('该机构仅有一名教练,禁止解除')));
+            }
+            $list = array();
+            foreach ($rows_ as $k => $v){
+                if($v['coach_id'] !== $_POST['coach_id']){
+                    $list[$k]['coach_id'] = $v['coach_id'];
+                    $list[$k]['real_name'] = unserialize($v['meta_value'])['real_name'];
+                }
+            }
+            //print_r($list);die;
+            //$_POST['new_coach_id'] = 9;
+            if(empty($_POST['new_coach_id'])){
+                wp_send_json_success(array('list'=>$list));
+            }else{
+                $x = $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$_POST['new_coach_id']),array('coach_id'=>$_POST['coach_id']));
+                //print_r($x);die;
+            }
+        }
+        //print_r($rows);die;
+        $result = $wpdb->delete($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$_POST['coach_id']));
+        if($result){
+            wp_send_json_success(array('info'=>__('解绑成功')));
+        }else{
+            wp_send_json_error(array('info'=>__('解绑失败')));
+        }
     }
+
 
     /**
      * 战队申请

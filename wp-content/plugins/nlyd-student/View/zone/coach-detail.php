@@ -65,7 +65,7 @@
                     </div>
                     <div class="coach_head_img img-z">
                         <div class="img-box">
-                            <img src="<?=student_css_url.'image/nlyd.png'?>">
+                            <img src="<?=$work_photo?>">
                         </div>
                     </div>
                 </div>

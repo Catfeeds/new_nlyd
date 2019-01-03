@@ -553,10 +553,12 @@ class Student_Zone extends Student_Home
                   where a.coach_id = {$_GET['coach_id']} and zone_id = $current_user->ID";
          $rows = $wpdb->get_results($sql,ARRAY_A);
          if(empty($rows)){
-             $this->get_404();
+             $this->get_404($this->get_404(array('message'=>__('数据错误', 'nlyd-student'),'return_url'=>home_url('/zone/coach/'))));
              return;
          }
          $user_info = array_column($rows,'meta_value','meta_key');
+         $coach_work_photo = !empty($user_info['coach_work_photo']) ? $user_info['coach_work_photo'] : $user_info['user_head'] ;
+         $coach['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
          $coach['real_name'] = unserialize($user_info['user_real_name'])['real_name'];
          $coach['coach_ID'] = !empty($user_info['coach_ID']) ? $user_info['coach_ID'] : $user_info['user_ID'];
          $coach['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-';
