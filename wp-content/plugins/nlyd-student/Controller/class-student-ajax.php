@@ -5361,17 +5361,15 @@ class Student_Ajax
 
             foreach ($rows as $k => $v){
                 $rows[$k]['order'] =  $start+$k+1;
-                //获取工作照
-                $coach_work_photo = get_user_meta($v['coach_id'],'coach_work_photo')[0];
-                if(empty($coach_work_photo)){
-                    $coach_work_photo = get_user_meta($v['coach_id'],'user_head')[0];
-                }
-                $rows[$k]['work_photo'] =  !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png
-                ';
-                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender') and user_id = {$v['coach_id']}";
+
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','coach_work_photo','user_head') and user_id = {$v['coach_id']}";
                 $res = $wpdb->get_results($sql_,ARRAY_A);
                 $user_info = array_column($res,'meta_value','meta_key');
                 //print_r($user_info);
+                //获取工作照
+                $coach_work_photo = !empty($user_info['coach_work_photo']) ? $user_info['coach_work_photo'] : $user_info['user_head'] ;
+                $rows[$k]['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
+
                 $rows[$k]['user_ID'] = !empty($user_info['user_ID']) ? $user_info['user_ID'] : $v['coach_id']+10000000;
                 $rows[$k]['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-' ;
                 $user_real_name = unserialize($user_info['user_real_name']);

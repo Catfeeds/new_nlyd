@@ -289,9 +289,7 @@ class Student_Zone extends Student_Home
          }*/
 
         //print_r($result);
-
-
-         $data['row'] = $row;
+         $data['row'] = $row='';
          $view = student_view_path.CONTROLLER.'/profit-detail.php';
          load_view_template($view,$data);
     }
@@ -548,8 +546,21 @@ class Student_Zone extends Student_Home
      * 教练详情
      */
      public function coachDetail(){
+         global $wpdb,$current_user;
+         //获取教练信息
+         $sql = "select b.meta_key,b.meta_value from {$wpdb->prefix}zone_join_coach a 
+                  left join  {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key in('user_real_name','coach_ID','user_ID','user_gender','user_head','coach_work_photo','real_ID','user_ID_Card') 
+                  where a.coach_id = {$_GET['coach_id']} and zone_id = $current_user->ID";
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         $user_info = array_column($rows,'meta_value','meta_key');
+         $coach['real_name'] = unserialize($user_info['user_real_name'])['real_name'];
+         $coach['coach_ID'] = !empty($user_info['coach_ID']) ? $user_info['coach_ID'] : $user_info['user_ID'];
+         $coach['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-';
+         $coach['real_ID'] = !empty($user_info['real_ID']) ? hideStar($user_info['real_ID']) : '-';
+         $coach['user_ID_Card'] = unserialize($user_info['user_ID_Card']);
+         print_r($user_info);
         $view = student_view_path.CONTROLLER.'/coach-detail.php';
-        load_view_template($view);
+        load_view_template($view,$coach);
     }
 
 

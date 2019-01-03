@@ -18,11 +18,11 @@
                 <div class="_relative">
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('教练姓名', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('教练姓名', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$real_name?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('教练ID', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('1000898', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$coach_ID?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('教练职称', 'nlyd-student')?>：</div>   
@@ -34,16 +34,22 @@
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('教练性别', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('女', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=__($user_gender, 'nlyd-student')?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('身份证号', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('5111*******0307', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$real_ID?></div>
                     </div>
                     <div class="detail_table_row img-z">
-                         <div class="detail_label"><?=__('证件照片', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>"></div>  
-                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>"></div>   
+                         <div class="detail_label"><?=__('证件照片', 'nlyd-student')?>：</div>
+                         <?php if(!empty($user_ID_Card)){ ?>
+                         <?php foreach ($user_ID_Card as $v){ ?>
+                         <div class="detail_detail_img"><img src="<?=$v?>"></div>
+                         <?php } ?>
+                         <?php }else{ ?>
+                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>"></div>
+                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>"></div>
+                         <?php } ?>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('联系方式', 'nlyd-student')?>：</div>   
