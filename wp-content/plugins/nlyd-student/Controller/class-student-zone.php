@@ -449,8 +449,35 @@ class Student_Zone extends Student_Home
      * 发布考级
      */
      public function kaojiBuild(){
+
+         global $wpdb,$current_user;
+         //获取用户发布比赛的权限
+         $match_role_id = $wpdb->get_var("select match_role_id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+         $match_role = $wpdb->get_results("select *,role_name as value from {$wpdb->prefix}zone_match_role where id in($match_role_id) and status = 1",ARRAY_A);
+         if(empty($match_role_id) || empty($match_role)){
+             $this->get_404(array('message'=>__('你未拥有该权限,请联系管理员授权', 'nlyd-student'),'return_url'=>home_url('/zone/')));
+             return;
+         }
+         $match_role_list = array();
+         foreach ($match_role as $v){
+             if($v['role_type'] == 'grading'){
+                 $match_role_list[] = $v;
+             }
+         }
+
+         //考级场景
+         $data['scene_list'] = !empty($match_role_list) ? json_encode($match_role_list) : '';
+         //考级类别
+         $post_id = $wpdb->get_var("select post_id from {$wpdb->prefix}postmeta where meta_key = 'project_alias' and meta_value = 'mental_world_cup'");
+         $sql = "select ID id ,post_title value 
+                from {$wpdb->prefix}posts 
+                where post_parent = {$post_id} and post_status = 'publish'
+                " ;
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         $data['category_list'] = !empty($rows) ? json_encode($rows) : '';
+
         $view = student_view_path.CONTROLLER.'/kaoji-build.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     /**
      * 考级发布成功
