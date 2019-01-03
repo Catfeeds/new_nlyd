@@ -30,7 +30,7 @@
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('教学类别', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('记忆/速读/心算', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$coach_skill?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('教练性别', 'nlyd-student')?>：</div>   
