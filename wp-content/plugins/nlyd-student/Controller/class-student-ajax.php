@@ -5011,6 +5011,52 @@ class Student_Ajax
     }
 
     /**
+     * 获取机构发布的考级
+     */
+    public function get_zone_grading_list(){
+        global $wpdb,$current_user;
+
+        $map[] = " a.created_person = {$current_user->ID} ";
+        if($_POST['grading_type'] == 'history'){
+            $map[] = " a.status = -3 ";
+        }elseif ($_POST['grading_type'] == 'matching'){
+            $map[] = " a.status != -3 ";
+        }
+        $where = join("and",$map);
+
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        $sql = "select a.grading_id,a.scene,b.post_title,d.role_name,a.status,entry_end_time,a.start_time,cost,a.address,count(c.id) entry_total,
+                case a.status
+                when '-3' then '已结束'
+                when '-2' then '等待考级'
+                when '1' then '报名中'
+                when '2' then '进行中'
+                end grading_status_cn
+                from {$wpdb->prefix}grading_meta a 
+                left join {$wpdb->prefix}posts b on a.grading_id = b.ID
+                left join {$wpdb->prefix}order c on a.grading_id = c.match_id and c.pay_status in (2,3,4)
+                left join {$wpdb->prefix}zone_match_role d on a.scene = d.id
+                where {$where} 
+                group by a.grading_id
+                order by a.start_time desc ,a.status desc
+                limit $start,$pageSize
+               ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        //print_r($rows);
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
+        wp_send_json_success(array('info'=>$rows));
+    }
+
+
+    /**
      * 获取机构发布的比赛
      */
     public function get_zone_match_list(){
@@ -5055,7 +5101,7 @@ class Student_Ajax
         wp_send_json_success(array('info'=>$rows));
     }
 
-    /**add_match_time
+    /**
      * 对比比赛时间
      */
     public function contrast_time($data,$start_time,$end_time,$id=''){

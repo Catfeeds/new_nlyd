@@ -356,6 +356,7 @@ class Student_Zone extends Student_Home
                  $match_role_list[] = $v;
              }
          }
+         //print_r($match_role_list);
          $data['scene_list'] = !empty($match_role_list) ? json_encode($match_role_list) : '';
          //print_r($match_role);
          //print_r($match_role);
@@ -464,7 +465,7 @@ class Student_Zone extends Student_Home
                  $match_role_list[] = $v;
              }
          }
-
+         //print_r($match_role_list);
          //考级场景
          $data['scene_list'] = !empty($match_role_list) ? json_encode($match_role_list) : '';
          //考级类别
