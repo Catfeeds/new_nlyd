@@ -152,13 +152,13 @@
 
                                 <div class="layui-bg-white img-zoos img-zoos2">
                                     <p class="tps"><?=__('上传彩色1寸照', 'nlyd-student')?><span class="c_red fs_12">（*<?=__('考级用户和机构任职人员需上传', 'nlyd-student')?>）</span></p>
-                                        <?php if(!empty($user_info['user_ID_Card'])){ ?>
-                                        <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
+                                        <?php if(!empty($user_info['user_images_color'])){ ?>
+                                        <?php foreach ($user_info['user_images_color'] as $value){ ?>
                                         <div class="post-img no-dash">
                                             <div class="img-zoo img-box">
-                                                <img src="<?=$val?>"/>
+                                                <img src="<?=$value?>"/>
                                             </div>
-                                            <input type="hidden" name="user_ID_Card[]" value="<?=$val?>" />
+                                            <input type="hidden" name="user_ID_Card[]" value="<?=$value?>" />
                                             <div class="del">
                                                 <i class="iconfont">&#xe633;</i>
                                             </div>

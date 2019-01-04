@@ -1690,7 +1690,7 @@ class Student_Ajax
                     }
                     break;
                 case 'user_real_name':
-
+                    //print_r($_FILES);die;
                     //验证格式
                     if(empty($_POST['nationality']) || empty($_POST['nationality_pic'])) wp_send_json_error(array('info'=>__('国籍必选', 'nlyd-student')));
                     if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>__('真实姓名不能为空', 'nlyd-student')));
@@ -1753,6 +1753,24 @@ class Student_Ajax
                         unset($_POST['user_address']);
                     }
 
+                    //寸照
+                    if(!empty($_FILES['images_color'])){
+
+                        $upload_dir = wp_upload_dir();
+                        $dir = '/color/'.$current_user->ID.'/';
+                        $imagePathArr = [];
+                        $num = 0;
+                        foreach ($_FILES['images_color']['tmp_name'] as $va){
+                            $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
+
+                            if($file){
+                                $_POST['user_images_color'][] = $upload_dir['baseurl'].$dir.$file;
+                                ++$num;
+                            }
+                        }
+                        update_user_meta($current_user->ID,'user_images_color',$_POST['user_images_color']);
+                    }
+
                     //收钱码
                     if(!empty($_FILES['images_wechat'])){
 
@@ -1768,8 +1786,8 @@ class Student_Ajax
                                 ++$num;
                             }
                         }
+                        update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
                     }
-                    update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
 
 
                     if(!empty($_FILES['images'])){
@@ -1785,9 +1803,9 @@ class Student_Ajax
                                 ++$num;
                             }
                         }
+                        update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
                     }
 
-                    update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
                     $user_ID_Card_update = true;
 
                     break;
@@ -5487,12 +5505,12 @@ class Student_Ajax
             foreach ($rows as $k => $v){
                 $rows[$k]['order'] =  $start+$k+1;
 
-                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','coach_work_photo','user_head') and user_id = {$v['coach_id']}";
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','user_images_color','user_head') and user_id = {$v['coach_id']}";
                 $res = $wpdb->get_results($sql_,ARRAY_A);
                 $user_info = array_column($res,'meta_value','meta_key');
                 //print_r($user_info);
                 //获取工作照
-                $coach_work_photo = !empty($user_info['coach_work_photo']) ? $user_info['coach_work_photo'] : $user_info['user_head'] ;
+                $coach_work_photo = !empty($user_info['user_images_color']) ? unserialize($user_info['user_images_color'])[0] : $user_info['user_head'] ;
                 $rows[$k]['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
 
                 $rows[$k]['user_ID'] = !empty($user_info['user_ID']) ? $user_info['user_ID'] : $v['coach_id']+10000000;
@@ -5742,12 +5760,12 @@ class Student_Ajax
             foreach ($rows as $k => $v){
                 $rows[$k]['order'] =  $start+$k+1;
 
-                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','coach_work_photo','user_head') and user_id = {$v['user_id']}";
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','user_images_color','user_head') and user_id = {$v['user_id']}";
                 $res = $wpdb->get_results($sql_,ARRAY_A);
                 $user_info = array_column($res,'meta_value','meta_key');
                 //print_r($user_info);
                 //获取工作照
-                $coach_work_photo = !empty($user_info['coach_work_photo']) ? $user_info['coach_work_photo'] : $user_info['user_head'] ;
+                $coach_work_photo = !empty($user_info['user_images_color']) ? unserialize($user_info['user_images_color'])[0] : $user_info['user_head'] ;
                 $rows[$k]['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
 
                 $rows[$k]['user_ID'] = !empty($user_info['user_ID']) ? $user_info['user_ID'] : $v['coach_id']+10000000;
