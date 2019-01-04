@@ -49,7 +49,7 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级费用', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="cost" value="1"></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" id="cost" name="cost" value="1"></div>
                         </div>
                         <div>
                             <div class="lable_row">
@@ -98,7 +98,7 @@ if($('#match_type1').val().length>0 && $('#match_type1').val()){
 }
 var mobileSelect1 = new MobileSelect({
     trigger: '#match_type1',
-    title: '<?=__('考级类别', 'nlyd-student')?>',
+    title: "<?=__('考级类别', 'nlyd-student')?>",
     wheels: [
         {data: match_type1_Data}
     ],
@@ -123,7 +123,7 @@ if($('#match_type2').val().length>0 && $('#match_type2').val()){
 }
 var mobileSelect2 = new MobileSelect({
     trigger: '#match_type2',
-    title: '<?=__('考级类型', 'nlyd-student')?>',
+    title: "<?=__('考级类型', 'nlyd-student')?>",
     wheels: [
         {data: match_type2_Data}
     ],
@@ -132,8 +132,30 @@ var mobileSelect2 = new MobileSelect({
         // console.log(data);
     },
     callback:function(indexArr, data){
-        $('#match_type2').val(data[0]['value']);
-        $('#match_type2_id').val(data[0]['id']);
+        var old_val=$('#match_type2').val();
+        var new_val=data[0]['value'];
+        if(new_val!==old_val){
+                $('#match_type2').val(data[0]['value']);
+                $('#match_type2_id').val(data[0]['id']);
+                var post_data={
+                    action:'get_match_cost',
+                    type:data[0]['role_alias']
+                }
+                console.log(post_data)
+                $.ajax({
+                    data: post_data,
+                    success: function(res, textStatus, jqXHR){//获取比赛费用
+                        if(res.data){
+                            $('#cost').val(res.data)
+                        }
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('获取费用失败', 'nlyd-student')?>")
+                　　　　 }
+                    }
+                })
+        }
     }
 });
 //---------------------------考级结束日期------------------------------
