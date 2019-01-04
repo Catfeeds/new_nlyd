@@ -36,10 +36,10 @@
                          <div class="detail_label"><?=__('身份证号', 'nlyd-student')?>：</div>   
                          <div class="detail_detail c_black"><?=__('5111*******0307', 'nlyd-student')?></div>   
                     </div>
-                    <div class="detail_table_row img-zoos">
+                    <div class="detail_table_row">
                          <div class="detail_label"><?=__('证件照片', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>"></div>  
-                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>"></div>   
+                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/zone/upload_bg.png'?>"></div>  
+                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/zone/upload_bg.png'?>"></div>   
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('联系方式', 'nlyd-student')?>：</div>   
@@ -69,11 +69,11 @@
 </div>
 <script>
 jQuery(function($) { 
-    layui.use(['layer'], function(){
-        layer.photos({//图片预览
-            photos: '.img-zoos',
-            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-        }) 
-    }) 
+//     layui.use(['layer'], function(){
+//         layer.photos({//图片预览
+//             photos: '.img-zoos',
+//             anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+//         }) 
+//     }) 
 })
 </script>

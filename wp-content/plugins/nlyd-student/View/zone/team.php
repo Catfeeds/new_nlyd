@@ -27,7 +27,7 @@
                         <div class="team_row_title">
                             <span class="bold fs_16 c_black"><?=$post_title?> </span>
                             <a class="fs_12 c_blue" href="<?=home_url('/zone/teamBuild/');?>"><?=__('编辑资料', 'nlyd-student')?></a>
-                            <input type="hidden" name="team_id" value="<?=$team_id;?>"/>
+                            <input type="hidden" name="team_id" id="team_id" value="<?=$team_id;?>"/>
                         </div>
                         <div class="team_row_tag"><span class="c_yellow mr_10"><i class="iconfont">&#xe658;</i></span><?=__($team_slogan, 'nlyd-student')?></div>
                         <div class="c_black fs_14 ti_28 mt_10">
@@ -77,6 +77,7 @@
 
 <script>
 jQuery(function($) { 
+    var team_id=$('#team_id').val();
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
@@ -89,7 +90,7 @@ jQuery(function($) {
                     var postData={
                         action:'get_team_personnel',
                         page:team_page,
-                        team_id:$.Request('team_id'),
+                        team_id:team_id,
                     }
                     var lis = [];
                     $.ajax({
@@ -100,12 +101,12 @@ jQuery(function($) {
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var dom= '<tr>'+
-                                                '<td><div class="table_content">1</div></td>'+
-                                                '<td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>'+
-                                                '<td><div class="table_content">18</div></td>'+
-                                                '<td><div class="table_content c_black">男</div></td>'+
-                                                '<td><div class="table_content c_black">刘亿亿</div></td>'+
-                                                '<td><div class="table_content"><a class="c_blue" href="">详 情</a></div></td>'+
+                                                '<td><div class="table_content">'+v.order+'</div></td>'+
+                                                '<td><div class="table_content"><span class="c_black">'+v.real_name+'</span><br><span class="ff_num fs_12">'+v.user_ID+'</span></div></td>'+
+                                                '<td><div class="table_content">'+v.user_age+'</div></td>'+
+                                                '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
+                                                '<td><div class="table_content c_black">'+v.user_mobile+'</div></td>'+
+                                                '<td><div class="table_content"><a class="c_blue" href="'+window.home_url+'/zone/studentDetail/student_id/'+v.id+'/"><?=__("详 情", "nlyd-student")?></a></div></td>'+
                                             '</tr>'
                                     lis.push(dom) 
                                 })
