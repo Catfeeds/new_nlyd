@@ -85,16 +85,16 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'get_grading_logs',
+                        action:'get_zone_grading_list',
                         page:match_page,
-                        match_type:'',
+                        grading_type:'',
                     }
                     if(parseInt(id)==1){//报名
-                        postData['match_type']="all";
+                        postData['grading_type']="all";
                     }else if(parseInt(id)==2){//考级
-                        postData['match_type']="matching";
+                        postData['grading_type']="matching";
                     }else{//往期
-                        postData['match_type']="history";
+                        postData['grading_type']="history";
                     }
                     var lis = [];
                     $.ajax({
@@ -133,7 +133,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="match_footer ta_r">'
-                                                    +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>'
+                                                    // +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>'
                                                     +'<a href="'+window.home_url+'/zone/kaojiBuild/grading_id/'+v.ID+'/" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>'
                                                     +end_match
                                                 +'</div>'
