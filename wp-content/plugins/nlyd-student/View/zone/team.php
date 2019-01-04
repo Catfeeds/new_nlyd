@@ -27,6 +27,7 @@
                         <div class="team_row_title">
                             <span class="bold fs_16 c_black"><?=$post_title?> </span>
                             <a class="fs_12 c_blue" href="<?=home_url('/zone/teamBuild/');?>"><?=__('编辑资料', 'nlyd-student')?></a>
+                            <input type="hidden" name="team_id" value="<?=$team_id;?>"/>
                         </div>
                         <div class="team_row_tag"><span class="c_yellow mr_10"><i class="iconfont">&#xe658;</i></span><?=__($team_slogan, 'nlyd-student')?></div>
                         <div class="c_black fs_14 ti_28 mt_10">
