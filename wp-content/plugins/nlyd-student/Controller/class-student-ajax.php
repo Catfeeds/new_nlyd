@@ -5682,9 +5682,11 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         $sql = "select a.*,b.referee_id from {$wpdb->prefix}match_team a 
-                left join {$wpdb->prefix}users b on a.user_id = b.referee_id
-                where team_id = {$current_user->ID} order by id desc limit $start,$pageSize";
+                left join {$wpdb->prefix}users b on a.user_id = b.ID
+                where a.team_id = {$current_user->ID} and a.status = 2  
+                order by id desc limit $start,$pageSize";
         $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($sql);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
@@ -5694,7 +5696,7 @@ class Student_Ajax
             foreach ($rows as $k => $v){
                 $rows[$k]['order'] =  $start+$k+1;
 
-                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','coach_work_photo','user_head') and user_id = {$v['coach_id']}";
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','coach_work_photo','user_head') and user_id = {$v['user_id']}";
                 $res = $wpdb->get_results($sql_,ARRAY_A);
                 $user_info = array_column($res,'meta_value','meta_key');
                 //print_r($user_info);
