@@ -5586,7 +5586,7 @@ class Student_Ajax
             wp_send_json_error(array('info'=>__('该用户有战队,请核实')));
         }
 
-        $res = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id'],'user_id'=>$_POST['user_id'],'user_type'=>1,'status'=>-4,'created_time'=>get_time('mysql')));
+        $res = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$current_user->ID,'user_id'=>$_POST['user_id'],'user_type'=>1,'status'=>-4,'created_time'=>get_time('mysql')));
 
         if($res){
             wp_send_json_success(array('info'=>__('添加成功')));
@@ -5618,9 +5618,9 @@ class Student_Ajax
                 when 1 then '加入'
                 end status_cn
                 from {$wpdb->prefix}match_team a 
-                left join {$wpdb->prefix}team_meta b on a.team_id = b.id
+                left join {$wpdb->prefix}team_meta b on a.team_id = b.user_id
                 left join {$wpdb->prefix}users c on a.user_id = c.ID
-                where b.user_id = {$current_user->ID} {$where} 
+                where a.team_id = {$current_user->ID} {$where} 
                 order by id desc limit $start,$pageSize";
         //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -5669,6 +5669,51 @@ class Student_Ajax
             wp_send_json_error(array('info'=>__('操作失败')));
         }
     }
+
+
+    /**
+     * 机构学员列表
+     */
+    public function zone_student_list(){
+
+        global $wpdb,$current_user;
+
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        $sql = "select a.*,b.referee_id from {$wpdb->prefix}match_team a 
+                left join {$wpdb->prefix}users b on a.user_id = b.referee_id
+                where team_id = {$current_user->ID} order by id desc limit $start,$pageSize";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无学员', 'nlyd-student')));
+        if(!empty($rows)){
+
+            foreach ($rows as $k => $v){
+                $rows[$k]['order'] =  $start+$k+1;
+
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','coach_work_photo','user_head') and user_id = {$v['coach_id']}";
+                $res = $wpdb->get_results($sql_,ARRAY_A);
+                $user_info = array_column($res,'meta_value','meta_key');
+                //print_r($user_info);
+                //获取工作照
+                $coach_work_photo = !empty($user_info['coach_work_photo']) ? $user_info['coach_work_photo'] : $user_info['user_head'] ;
+                $rows[$k]['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
+
+                $rows[$k]['user_ID'] = !empty($user_info['user_ID']) ? $user_info['user_ID'] : $v['coach_id']+10000000;
+                $rows[$k]['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-' ;
+                $user_real_name = unserialize($user_info['user_real_name']);
+                $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
+                $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
+                $rows[$k]['referee_id'] = !empty($v['referee_id']) ? $v['referee_id']+10000000 : '-' ;
+            }
+        }
+        //print_r($rows);
+        wp_send_json_success(array('info'=>$rows));
+    }
+
 
     /**
      * 管理员跳转登录
