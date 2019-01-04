@@ -4791,13 +4791,6 @@ class Student_Ajax
         if(!empty($_POST['grading_id'])){
             $wpdb->update($wpdb->prefix.'posts',$arr,array('ID'=>$_POST['grading_id']));
             $new_page_id = $_POST['grading_id'];
-            //获取比赛开赛时间
-            $match_start_time = $wpdb->get_var("select match_start_time from {$wpdb->prefix}match_meta_new where match_id = {$_POST['grading_id']} ");
-            if($match_start_time != $_POST['match_start_time']){
-                $wpdb->delete($wpdb->prefix.'match_project_more',array('match_id'=>$_POST['grading_id']));
-            }else{
-                $b = true;
-            }
         }else{
             $new_page_id = wp_insert_post($arr);
         }
@@ -4806,7 +4799,7 @@ class Student_Ajax
             'scene'=>$_POST['scene'],
             'category_id'=>$_POST['category_id'],
             'address'=>$_POST['address'],
-            'cost'=>$_POST['match_cost'],
+            'cost'=>$_POST['cost'],
             'entry_end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-10 minute',strtotime($_POST['start_time']))),
             'start_time'=>$_POST['start_time'],
             'end_time'=>$_POST['end_time'],
@@ -4827,12 +4820,13 @@ class Student_Ajax
             //设置比赛开关
             update_post_meta($new_page_id,'default_match_switch','ON');
             $wpdb->query('COMMIT');
-            wp_send_json_success(array('info'=>$_POST['match_id'] > 0 ? '考级编辑成功' : '考级发布成功','url'=>home_url('/zone/zone/grading/')));
+            wp_send_json_success(array('info'=>$_POST['match_id'] > 0 ? '考级编辑成功' : '考级发布成功','url'=>home_url('/zone/grading/')));
         }else{
             $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>$_POST['match_id'] > 0 ? '考级编辑失败' : '考级发布失败'));
         }
     }
+
 
     /**
      * 获取比赛费用
@@ -5011,6 +5005,57 @@ class Student_Ajax
     }
 
     /**
+     * 获取机构发布的考级
+     */
+    public function get_zone_grading_list(){
+        global $wpdb,$current_user;
+
+        $map[] = " a.created_person = {$current_user->ID} ";
+        if($_POST['grading_type'] == 'history'){
+            $map[] = " a.status = -3 ";
+        }elseif ($_POST['grading_type'] == 'matching'){
+            $map[] = " a.status != -3 ";
+        }
+        $where = join("and",$map);
+
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        $sql = "select a.grading_id,a.scene,b.post_title,d.role_name,a.status,entry_end_time,a.start_time,a.person_liable,a.cost,a.address,count(c.id) entry_total,
+                case a.status
+                when '-3' then '已结束'
+                when '-2' then '等待考级'
+                when '1' then '报名中'
+                when '2' then '进行中'
+                end grading_status_cn
+                from {$wpdb->prefix}grading_meta a 
+                left join {$wpdb->prefix}posts b on a.grading_id = b.ID
+                left join {$wpdb->prefix}order c on a.grading_id = c.match_id and c.pay_status in (2,3,4)
+                left join {$wpdb->prefix}zone_match_role d on a.scene = d.id
+                where {$where} 
+                group by a.grading_id
+                order by a.start_time desc ,a.status desc
+                limit $start,$pageSize
+               ";
+        //print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        //print_r($rows);
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
+        foreach ($rows as $k => $v){
+            $user_real_name = get_user_meta($v['person_liable'],'user_real_name')[0];
+            $rows[$k]['person_liable'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
+        }
+        wp_send_json_success(array('info'=>$rows));
+    }
+
+
+    /**
      * 获取机构发布的比赛
      */
     public function get_zone_match_list(){
@@ -5055,7 +5100,7 @@ class Student_Ajax
         wp_send_json_success(array('info'=>$rows));
     }
 
-    /**add_match_time
+    /**
      * 对比比赛时间
      */
     public function contrast_time($data,$start_time,$end_time,$id=''){
@@ -5682,9 +5727,11 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         $sql = "select a.*,b.referee_id from {$wpdb->prefix}match_team a 
-                left join {$wpdb->prefix}users b on a.user_id = b.referee_id
-                where team_id = {$current_user->ID} order by id desc limit $start,$pageSize";
+                left join {$wpdb->prefix}users b on a.user_id = b.ID
+                where a.team_id = {$current_user->ID} and a.status = 2  
+                order by id desc limit $start,$pageSize";
         $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($sql);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
@@ -5694,7 +5741,7 @@ class Student_Ajax
             foreach ($rows as $k => $v){
                 $rows[$k]['order'] =  $start+$k+1;
 
-                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','coach_work_photo','user_head') and user_id = {$v['coach_id']}";
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','coach_work_photo','user_head') and user_id = {$v['user_id']}";
                 $res = $wpdb->get_results($sql_,ARRAY_A);
                 $user_info = array_column($res,'meta_value','meta_key');
                 //print_r($user_info);
