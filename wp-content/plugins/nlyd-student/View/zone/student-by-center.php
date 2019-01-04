@@ -26,7 +26,6 @@
                                 <td><?=__('推荐用户', 'nlyd-student')?></td>
                                 <td><?=__('操 作', 'nlyd-student')?></td>
                             </tr>
-                           
                         </tbody>
                     </table>
                 </div>
@@ -46,7 +45,7 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'zone_coach_list',
+                        action:'zone_student_list',
                         page:student_page,
                     }
                     var lis = [];
