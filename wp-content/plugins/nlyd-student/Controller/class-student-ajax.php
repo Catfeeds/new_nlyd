@@ -5607,11 +5607,21 @@ class Student_Ajax
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
+        $where = " and a.status = 2 ";
+        if(!empty($_POST['map'])){
+            $where = " and a.status in (-1,1) ";
+        }
 
-        $sql = "select a.*,c.user_mobile from {$wpdb->prefix}match_team a 
+        $sql = "select a.*,c.user_mobile,
+                case status
+                when -1 then '退出'
+                when 1 then '加入'
+                end status_cn
+                from {$wpdb->prefix}match_team a 
                 left join {$wpdb->prefix}team_meta b on a.team_id = b.id
                 left join {$wpdb->prefix}users c on a.user_id = c.ID
-                where b.user_id = {$current_user->ID} order by id desc limit $start,$pageSize";
+                where b.user_id = {$current_user->ID} {$where} 
+                order by id desc limit $start,$pageSize";
         //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);

@@ -38,8 +38,8 @@
                     <div class="team_row width-padding layui-row layui-bg-white width-margin-pc">
                         <div class="team_row_title">
                             <span>
-                                <span class="bold fs_16 c_black"><?=__('战队成员', 'nlyd-student')?>（1）</span>
-                                <a class="c_orange fs_12" href="<?=home_url('/zone/teamApply/');?>"><?=__('新的申请', 'nlyd-student')?>（1）</a>
+                                <span class="bold fs_16 c_black"><?=__('战队成员', 'nlyd-student')?>（<?=$total[2]?>）</span>
+                                <a class="c_orange fs_12" href="<?=home_url('/zone/teamApply/map/hide');?>"><?=__('新的申请', 'nlyd-student')?>（<?=$total[-1]+$total[1]?>）</a>
                             </span>
                             <a class="fs_12 c_blue" href="<?=home_url('/zone/teamAddMember/');?>"><?=__('添加成员', 'nlyd-student')?></a>
                         </div>
