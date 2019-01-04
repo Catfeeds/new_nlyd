@@ -258,7 +258,9 @@ class Fission_Ajax
         $rows = [];
         if($searchStr != ''){
             global $wpdb;
-            $rows = $wpdb->get_results("SELECT user_id AS id,zone_name AS text FROM {$wpdb->prefix}zone_meta WHERE zone_name LIKE '%{$searchStr}%' AND user_id!=''");
+            $rows = $wpdb->get_results("SELECT zm.user_id AS id,zm.zone_name AS text FROM {$wpdb->prefix}zone_meta AS zm
+                    LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.chairman_id AND um.meta_key='user_real_name'
+                    WHERE (zm.zone_name LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%') AND zm.user_id!='' AND zm.user_status=1");
         }
         if($type == 'all_base'){
             $rows[] = ['id' => 0, 'text' => '平台'];

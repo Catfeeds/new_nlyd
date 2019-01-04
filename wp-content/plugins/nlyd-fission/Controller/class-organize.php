@@ -852,7 +852,7 @@ class Organize{
                             if(!$user_id) {
                                 $error_msg = '操作失败!';
                             }
-
+                            update_user_meta($user_id, 'user_ID', 10000000*$user_id);
                             if($error_msg == '') {
                                 //更新机构所有者id
                                 if (!$wpdb->update($wpdb->prefix . 'zone_meta', ['user_id' => $user_id], ['id' => $zmv['id']])) {
