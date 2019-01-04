@@ -1206,6 +1206,7 @@ class Student_Ajax
 
 
         if($result){
+            wp_send_json_success(array('info'=>__('申请成功,请等待教练同意', 'nlyd-student')));
             /***********发送短信或邮件通知教练*************/
             //获取教练信息
             $coach = $wpdb->get_row('SELECT user_mobile,display_name,ID AS uid,user_email FROM '.$wpdb->users.' WHERE ID='.$_POST['coach_id'], ARRAY_A);
@@ -1229,7 +1230,6 @@ class Student_Ajax
 //            $ali = new AliSms();
 //            $result = $ali->sendSms($coach['user_mobile'], 13, array('coach'=>str_replace(', ', '', $coach['display_name']), 'user' => $userID ,'cate' => $post_title));
             /******************end*******************/
-            wp_send_json_success(array('info'=>__('申请成功,请等待教练同意', 'nlyd-student')));
         }
         wp_send_json_error(array('info'=>__('申请失败', 'nlyd-student')));
     }
