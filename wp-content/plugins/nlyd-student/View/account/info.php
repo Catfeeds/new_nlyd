@@ -149,7 +149,29 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
+                                <div class="layui-bg-white img-zoos img-zoos2">
+                                    <p class="tps"><?=__('上传彩色1寸照', 'nlyd-student')?><span class="c_red fs_12">（*<?=__('考级用户和机构任职人员需上传', 'nlyd-student')?>）</span></p>
+                                        <?php if(!empty($user_info['user_ID_Card'])){ ?>
+                                        <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
+                                        <div class="post-img no-dash">
+                                            <div class="img-zoo img-box">
+                                                <img src="<?=$val?>"/>
+                                            </div>
+                                            <input type="hidden" name="user_ID_Card[]" value="<?=$val?>" />
+                                            <div class="del">
+                                                <i class="iconfont">&#xe633;</i>
+                                            </div>
+                                        </div>
+                                        <?php } ?>
+                                        <?php } ?>
+                                    <div class="post-img dash">
+                                        <div class="add-zoo" data-file="img-zoos2">
+                                            <div class="transverse"></div>
+                                            <div class="vertical"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <a class="a-btn a-btn-table" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit=""><div><?=__('更新实名认证', 'nlyd-student')?></div></a>
                                 <input type="hidden" class="sbu_type" name="type" value="<?=$_GET['type']?>">
                             </div>
@@ -158,9 +180,9 @@
         </div>           
     </div>
 </div>
-<input style="display:none;" type="file" name="meta_val" id="img-zoos0" data-this="img-zoos0" value="" accept="image/*"/>
-<input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
-<input style="display:none;" type="file" name="meta_val" id="file" class="file" value="" accept="image/*"/>
+<input style="display:none;" type="file" id="img-zoos0" data-this="img-zoos0" value="" accept="image/*"/>
+<input style="display:none;" type="file" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
+<input style="display:none;" type="file" id="img-zoos2" data-this="img-zoos2" value="" accept="image/*"/>
 <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
 <script>
 jQuery(document).ready(function($) {
@@ -396,8 +418,9 @@ jQuery(document).ready(function($) {
             var id=$(this).attr('data-file')
             $('#'+id).click()
         })
-        var imgs=[]
-        var imgs1=[]
+        var imgs=[];//身份证
+        var imgs1=[];//收款账户
+        var imgs2=[];//寸照
         $('.img-zoos').each(function(){
             var _this=$(this);
             if(_this.hasClass('img-zoos1')){//微信
@@ -406,6 +429,10 @@ jQuery(document).ready(function($) {
                 }
             }else if(_this.hasClass('img-zoos0')){//身份证
                 if(_this.find('.post-img.no-dash').length>=3){
+                    _this.find('.post-img.dash').css('display','none')
+                }
+            }else if(_this.hasClass('img-zoos2')){//寸照
+                if(_this.find('.post-img.no-dash').length>=1){
                     _this.find('.post-img.dash').css('display','none')
                 }
             }
@@ -448,6 +475,11 @@ jQuery(document).ready(function($) {
                         $('.'+className+' .post-img.dash').css('display','none')
                     }
                 }
+                else if(className=="img-zoos2"){
+                    if($('.'+className+' .post-img.no-dash').length>=1){
+                        $('.'+className+' .post-img.dash').css('display','none')
+                    }
+                }
             }
             reader.readAsDataURL(file);
             $(e.target).val('')
@@ -459,6 +491,9 @@ jQuery(document).ready(function($) {
         $("#img-zoos1").change(function(e) {
             changes(e,$("#img-zoos1"),imgs1)
         });
+        $("#img-zoos2").change(function(e) {
+            changes(e,$("#img-zoos2"),imgs2)
+        });
         $('.img-zoos').on('click','.del',function(){//删除图片
             var _this=$(this);
             var index =_this.parents('.post-img').index();
@@ -468,11 +503,13 @@ jQuery(document).ready(function($) {
                 imgs.splice(index, 1);
             }else if(_this.parents('.img-zoos').hasClass('img-zoos1')){
                 imgs1.splice(index, 1);
+            }else if(_this.parents('.img-zoos').hasClass('img-zoos1')){
+                imgs2.splice(index, 1);
             }
             layer.photos({//图片预览
-                    photos: '.img-zoos',
-                    anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-                }) 
+                photos: '.img-zoos',
+                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            }) 
         })
         layui.use(['form'], function(){
             var form = layui.form
@@ -522,6 +559,9 @@ jQuery(document).ready(function($) {
                 })
                 $.each(imgs1, function (i, v) {
                     fd.append('images_wechat[]',v);
+                })
+                $.each(imgs2, function (i, v) {
+                    fd.append('images_color[]',v);
                 })
                 $('.post-img.no-dash input').each(function () {
                     var name=$(this).attr('name')
