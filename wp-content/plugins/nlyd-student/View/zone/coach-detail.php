@@ -40,15 +40,15 @@
                          <div class="detail_label"><?=__('身份证号', 'nlyd-student')?>：</div>   
                          <div class="detail_detail c_black"><?=$real_ID?></div>
                     </div>
-                    <div class="detail_table_row img-z">
+                    <div class="detail_table_row">
                          <div class="detail_label"><?=__('证件照片', 'nlyd-student')?>：</div>
                          <?php if(!empty($user_ID_Card)){ ?>
                          <?php foreach ($user_ID_Card as $v){ ?>
                          <div class="detail_detail_img"><img src="<?=$v?>"></div>
                          <?php } ?>
                          <?php }else{ ?>
-                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>"></div>
-                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>"></div>
+                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/zone/upload_bg.png'?>"></div>
+                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/zone/upload_bg.png'?>"></div>
                          <?php } ?>
                     </div>
                     <div class="detail_table_row">
@@ -77,18 +77,6 @@
 </div>
 <script>
 jQuery(function($) { 
-    var mydata=[{
-        name:1,
-        age:1,
-    },{
-        name:2,
-        age:2,
-    }]
-    var arr=['男','女'];
-    for (var i=0;i<mydata.length;i++){
-        mydata[i].sex=arr[i]
-    }
-    console.log(mydata)
     var mobileSelect4 = new MobileSelect({
         trigger: '#coachList',
         title: "<?=__('教练列表', 'nlyd-student')?>",
