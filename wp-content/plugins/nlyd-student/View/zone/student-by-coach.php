@@ -30,22 +30,7 @@
                                 <td><?=__('联系方式', 'nlyd-student')?></td>
                                 <td><?=__('操 作', 'nlyd-student')?></td>
                             </tr>
-                            <tr>
-                                <td><div class="table_content">1</div></td>
-                                <td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
-                                <td><div class="table_content">18</div></td>
-                                <td><div class="table_content c_black">男</div></td>
-                                <td><div class="table_content c_black">13883686337</div></td>
-                                <td><div class="table_content"><a class="c_blue" href="<?=home_url('/zone/studentDetail/');?>">详 情</a></div></td>
-                            </tr>
-                            <tr>
-                                <td><div class="table_content">1</div></td>
-                                <td><div class="table_content "><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
-                                <td><div class="table_content c_black">18</div></td>
-                                <td><div class="table_content c_black">男</div></td>
-                                <td><div class="table_content">13883686337</div></td>
-                                <td><div class="table_content"><a class="c_blue" href="<?=home_url('/zone/studentDetail/');?>">详 情</a></div></td>
-                            </tr>
+                           
                         </tbody>
                     </table>
                 </div>
