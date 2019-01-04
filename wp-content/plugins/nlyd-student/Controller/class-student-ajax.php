@@ -4806,7 +4806,7 @@ class Student_Ajax
             'scene'=>$_POST['scene'],
             'category_id'=>$_POST['category_id'],
             'address'=>$_POST['address'],
-            'cost'=>$_POST['match_cost'],
+            'cost'=>$_POST['cost'],
             'entry_end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-10 minute',strtotime($_POST['start_time']))),
             'start_time'=>$_POST['start_time'],
             'end_time'=>$_POST['end_time'],
@@ -4827,7 +4827,7 @@ class Student_Ajax
             //设置比赛开关
             update_post_meta($new_page_id,'default_match_switch','ON');
             $wpdb->query('COMMIT');
-            wp_send_json_success(array('info'=>$_POST['match_id'] > 0 ? '考级编辑成功' : '考级发布成功','url'=>home_url('/zone/zone/grading/')));
+            wp_send_json_success(array('info'=>$_POST['match_id'] > 0 ? '考级编辑成功' : '考级发布成功','url'=>home_url('/zone/grading/')));
         }else{
             $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>$_POST['match_id'] > 0 ? '考级编辑失败' : '考级发布失败'));
@@ -5029,7 +5029,7 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
-        $sql = "select a.grading_id,a.scene,b.post_title,d.role_name,a.status,entry_end_time,a.start_time,cost,a.address,count(c.id) entry_total,
+        $sql = "select a.grading_id,a.scene,b.post_title,d.role_name,a.status,entry_end_time,a.start_time,a.person_liable,a.cost,a.address,count(c.id) entry_total,
                 case a.status
                 when '-3' then '已结束'
                 when '-2' then '等待考级'
@@ -5045,6 +5045,7 @@ class Student_Ajax
                 order by a.start_time desc ,a.status desc
                 limit $start,$pageSize
                ";
+        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -5052,6 +5053,10 @@ class Student_Ajax
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
+        foreach ($rows as $k => $v){
+            $user_real_name = get_user_meta($v['person_liable'],'user_real_name')[0];
+            $rows[$k]['person_liable'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
+        }
         wp_send_json_success(array('info'=>$rows));
     }
 
