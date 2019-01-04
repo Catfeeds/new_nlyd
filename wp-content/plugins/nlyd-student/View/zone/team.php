@@ -106,7 +106,7 @@ jQuery(function($) {
                                                 '<td><div class="table_content">'+v.user_age+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_mobile+'</div></td>'+
-                                                '<td><div class="table_content"><a class="c_blue" href="'+window.home_url+'/zone/studentDetail/student_id/'+v.id+'/"><?=__("详 情", "nlyd-student")?></a></div></td>'+
+                                                '<td><div class="table_content"><a class="c_blue" href="'+window.home_url+'/zone/studentDetail/student_id/'+v.user_id+'/"><?=__("详 情", "nlyd-student")?></a></div></td>'+
                                             '</tr>'
                                     lis.push(dom) 
                                 })

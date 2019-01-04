@@ -482,14 +482,19 @@ class Student_Zone extends Student_Home
              $sql = "select a.post_title ,c.role_name as scene_title,d.post_title as genre_title, b.* from {$wpdb->prefix}posts a 
                       left join {$wpdb->prefix}grading_meta b on a.ID = b.grading_id 
                       left join {$wpdb->prefix}zone_match_role c on b.scene = c.id 
-                      left join {$wpdb->prefix}posts d on b.match_genre = d.ID 
-                      where a.ID = {$_GET['match_id']}
+                      left join {$wpdb->prefix}posts d on b.category_id = d.ID 
+                      where a.ID = {$_GET['grading_id']}
                       ";
              $match = $wpdb->get_row($sql,ARRAY_A);
              //print_r($match);
-             if(!empty($match['match_start_time'])){
-                 $match['data_time'] = preg_replace('/\s|:/','-',$match['match_start_time']);
+             if(!empty($match['start_time'])){
+                 $match['data_start_time'] = preg_replace('/\s|:/','-',$match['start_time']);
              }
+             if(!empty($match['end_time'])){
+                 $match['data_end_time'] = preg_replace('/\s|:/','-',$match['end_time']);
+             }
+             $person_liable = get_user_meta($match['person_liable'],'user_real_name')[0];
+             $match['person'] = !empty($person_liable['real_name']) ? $person_liable['real_name'] : '-';
              $data['match'] = $match;
              //print_r($match);
          }
@@ -572,9 +577,8 @@ class Student_Zone extends Student_Home
 
          global $wpdb,$current_user;
          //获取教练信息
-         $sql = "select b.meta_key,b.meta_value from {$wpdb->prefix}zone_join_coach a 
-                  left join  {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key in('user_real_name','user_ID','user_gender','user_head','real_ID','user_ID_Card','coach_brief') 
-                  where a.coach_id = {$_GET['student_id']} ";
+         $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$_GET['student_id']} and meta_key in('user_real_name','user_ID','user_gender','user_head','real_ID','user_ID_Card','coach_brief') 
+                  ";
          //print_r($sql);
          $rows = $wpdb->get_results($sql,ARRAY_A);
          if(empty($rows)){
@@ -610,8 +614,8 @@ class Student_Zone extends Student_Home
          $row = $wpdb->get_row("select user_mobile,referee_id from {$wpdb->prefix}users where ID = {$_GET['student_id']} ",ARRAY_A);
          $student['user_mobile'] = !empty($row['user_mobile']) ? hideStar($row['user_mobile']) : '-';
          $student['referee_id'] = !empty($row['referee_id']) ? $row['referee_id']+10000000 : '-';
-        $view = student_view_path.CONTROLLER.'/student-detail.php';
-        load_view_template($view,$student);
+         $view = student_view_path.CONTROLLER.'/student-detail.php';
+         load_view_template($view,$student);
     }
 
     /**

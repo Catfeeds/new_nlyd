@@ -53,15 +53,15 @@
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('记忆教练', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=$coach['memory']?></div>
+                         <div class="detail_detail c_black"><?=!empty($coach['memory']) ? $coach['memory'] : '暂无'?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('速读教练', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=$coach['reading']?></div>
+                         <div class="detail_detail c_black"><?=!empty($coach['reading']) ? $coach['reading'] : '暂无'?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('心算教练', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=$coach['arithmetic']?></div>
+                         <div class="detail_detail c_black"><?=!empty($coach['arithmetic']) ? $coach['arithmetic'] : '暂无'?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('推荐用户', 'nlyd-student')?>：</div>   

@@ -53,7 +53,7 @@ class Student_Home
 
         global $current_user,$wpdb,$user_info;
 
-        $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID} and meta_key in('nickname','user_head','user_address','user_real_name','real_ID','user_ID_Card','user_ID','user_gender','user_nationality','user_nationality_pic','user_nationality_short','user_birthday','user_coin_code') ",ARRAY_A);
+        $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID} and meta_key in('nickname','user_head','user_address','user_real_name','real_ID','user_ID_Card','user_ID','user_gender','user_nationality','user_nationality_pic','user_nationality_short','user_birthday','user_coin_code','user_images_color') ",ARRAY_A);
         $user_info = array_column($rows,'meta_value','meta_key');
         if(empty($user_info['user_ID'])){
             update_user_meta($current_user->ID,'user_ID',10000000+$current_user->ID);
@@ -99,6 +99,7 @@ class Student_Home
         $user_info['user_ID_Card'] = isset($user_info['user_ID_Card']) ? unserialize($user_info['user_ID_Card']) : '';
         $user_info['real_ID'] = isset($user_info['user_real_name']['real_ID']) ? hideStar($user_info['user_real_name']['real_ID']) : '';
         $user_info['user_coin_code'] = isset($user_info['user_coin_code']) ? unserialize($user_info['user_coin_code']) : '';
+        $user_info['user_images_color'] = isset($user_info['user_images_color']) ? unserialize($user_info['user_images_color']) : '';
 
         if(!empty($user_info['user_real_name']['real_type'])){
             switch ($user_info['user_real_name']['real_type']){
