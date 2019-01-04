@@ -81,6 +81,7 @@
 jQuery(function($) { 
 var match_type1_Data=<?=!empty($scene_list) ? $scene_list : '[]';?>;//考级类别
 var match_type2_Data=<?=!empty($category_list) ? $category_list : '[]';?>;//考级类型
+console.log(match_type1_Data)
 var match_date_Data=$.validationLayui.dates2;//考级日期
 var posiotion_match_type1=[0];//初始化位置，高亮展示
 var posiotion_match_type2=[0];//初始化位置，高亮展示
@@ -107,9 +108,29 @@ var mobileSelect1 = new MobileSelect({
         // console.log(data);
     },
     callback:function(indexArr, data){
-        $('#match_type1').val(data[0]['value']);
-        $('#match_type1_id').val(data[0]['id']);
-       
+        var old_val=$('#match_type1').val();
+        var new_val=data[0]['value'];
+        if(new_val!==old_val){
+                $('#match_type1').val(data[0]['value']);
+                $('#match_type1_id').val(data[0]['id']);
+                var post_data={
+                    action:'get_match_cost',
+                    type:data[0]['role_alias']
+                }
+                $.ajax({
+                    data: post_data,
+                    success: function(res, textStatus, jqXHR){//获取比赛费用
+                        if(res.data){
+                            $('#cost').val(res.data)
+                        }
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('获取费用失败', 'nlyd-student')?>")
+                　　　　 }
+                    }
+                })
+        }
     }
 });
 //---------------------------考级类型------------------------------
@@ -132,30 +153,8 @@ var mobileSelect2 = new MobileSelect({
         // console.log(data);
     },
     callback:function(indexArr, data){
-        var old_val=$('#match_type2').val();
-        var new_val=data[0]['value'];
-        if(new_val!==old_val){
-                $('#match_type2').val(data[0]['value']);
-                $('#match_type2_id').val(data[0]['id']);
-                var post_data={
-                    action:'get_match_cost',
-                    type:data[0]['role_alias']
-                }
-                console.log(post_data)
-                $.ajax({
-                    data: post_data,
-                    success: function(res, textStatus, jqXHR){//获取比赛费用
-                        if(res.data){
-                            $('#cost').val(res.data)
-                        }
-                    },
-                    complete: function(jqXHR, textStatus){
-                        if(textStatus=='timeout'){
-                            $.alerts("<?=__('获取费用失败', 'nlyd-student')?>")
-                　　　　 }
-                    }
-                })
-        }
+        $('#match_type2').val(data[0]['value']);
+        $('#match_type2_id').val(data[0]['id']);
     }
 });
 //---------------------------考级结束日期------------------------------
@@ -277,10 +276,11 @@ var mobileSelect4 = new MobileSelect({
                         _this.addClass('disabled')
                     },
                     success: function(res, textStatus, jqXHR){
+                        console.log(res)
                         $.alerts(res.data.info)
                         if(res.data.url){
                             setTimeout(function() {
-                                window.location.href=res.data.url
+                                window.location.href=res.data.url;
                             }, 300);
 
                         }else{
