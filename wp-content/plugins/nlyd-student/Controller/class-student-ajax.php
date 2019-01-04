@@ -5661,11 +5661,13 @@ class Student_Ajax
             wp_send_json_error(array('info'=>__('参数不全')));
         }
 
-        global $wpdb,$current_user;
-        if($_POST['status'] == -1){
-
+        global $wpdb;
+        $result = $wpdb->update($wpdb->prefix.'match_team',array('status'=>$_POST['status']),array('id'=>$_POST['id']));
+        if($result){
+            wp_send_json_success(array('info'=>__('操作成功')));
+        }else{
+            wp_send_json_error(array('info'=>__('操作失败')));
         }
-        $wpdb->update($wpdb->prefix.'match_team',array());
     }
 
     /**
