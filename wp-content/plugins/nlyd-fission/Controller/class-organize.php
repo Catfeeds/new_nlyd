@@ -773,7 +773,7 @@ class Organize{
             if($user_id < 0) $error_msg = '请选择负责人';
 //            if($zone_match_type < 0) $error_msg = $error_msg==''?'请选择赛区类型':$error_msg.'<br >请选择赛区类型';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择机构类型':$error_msg.'<br >请选择机构类型';
-            if($user_id == $referee_id && $user_status !==1) $error_msg = $error_msg==''?'推荐人不能为机构账号':$error_msg.'<br >推荐人不能为机构账号';
+            if($user_id == $referee_id && $user_status !==1 && $user_status !== -2) $error_msg = $error_msg==''?'推荐人不能为机构账号':$error_msg.'<br >推荐人不能为机构账号';
             if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($admin_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
             if($user_status !== 1 && $user_status !== -2 && $user_status !== 99) $error_msg = $error_msg==''?'审核状态错误':$error_msg.'<br >审核状态错误';
@@ -824,6 +824,8 @@ class Organize{
                         $insertData['business_licence_url'] = $upload_dir['baseurl'].$dir.$file;
                     }
                 }
+
+                $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND user_status='-1' OR user_status='-2'",ARRAY_A);
                 $wpdb->query('START TRANSACTION');
                 if($old_zm_id>0){
                     $bool = $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['id'=>$old_zm_id]);
@@ -840,9 +842,9 @@ class Organize{
                 }else{
                     //收益和机构
                     if($user_status === 1){
-                        $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND user_status='-1'",ARRAY_A);
+                        if($zmv && $zmv['user_id'] < 1){
+                            //不存在user_id,创建新用户和战队以及收益,如果已经存在user_Id,不再创建用户和收益战队
 
-                        if($zmv){
                             //创建新账号
                             $user_email = $zmv['apply_id'].rand(000,999).date('is', get_time()).'@gjnlyd.com';
                             $user_password = '123456';
@@ -850,8 +852,6 @@ class Organize{
                             if(!$user_id) {
                                 $error_msg = '操作失败!';
                             }
-                            //创建战队
-
 
                             if($error_msg == '') {
                                 //更新机构所有者id
@@ -864,6 +864,22 @@ class Organize{
                                 if (!$wpdb->insert($wpdb->prefix . 'zone_manager', ['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) {
                                     $error_msg = '添加管理员失败!';
                                 }
+                            }
+                            //创建战队
+                            $team_id = wp_insert_post(['post_title' => '','post_status' => 'publish', 'comment_status' => 'close', 'ping_status' => 'close','post_type' => 'team']);
+                            if($team_id > 0){
+                                $teamInsert = [
+                                    'user_id' => $user_id,
+                                    'team_id' => $team_id,
+                                    'team_director' => $user_id,
+                                    'team_status' => 2,
+                                    'created_time' => get_time('mysql'),
+                                ];
+                                if(!$wpdb->insert($wpdb->prefix.'team_meta',$teamInsert)){
+                                    $error_msg = '添加战队失败!';
+                                }
+                            }else{
+                                $error_msg = '添加战队失败!';
                             }
 
                             //============
@@ -955,7 +971,7 @@ class Organize{
                                 is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
                             }
                         }else{
-                            if($old_zm_id == 0){
+                            if($old_zm_id == 0 || (isset($zmv['user_id']) && $zmv['user_id'] > 0)){
                                 $wpdb->query('COMMIT');
                                 $success_msg = '操作成功!';
                             }else{
@@ -1220,10 +1236,10 @@ class Organize{
                     <tr class="">
                         <th scope="row"><label for="">状态 </label></th>
                         <td>
-                        <?php if($row['user_status'] == '-1' || $old_zm_id == 0){
+                        <?php if($row['user_status'] == '-1' || $old_zm_id == 0 || $row['user_status'] == '-2'){
                             ?>
                             <label for="user_status"> <input type="checkbox" class="apply_ch" name="user_status" id="user_status" value="1" />通过审核 </label>
-                            <label for="user_status2"> <input type="checkbox" class="apply_ch" name="user_status" id="user_status2" value="-2" />拒绝申请 </label>
+                            <label for="user_status2"> <input type="checkbox" <?=$row['user_status'] == '-2' ? 'checked="checked"':''?> class="apply_ch" name="user_status" id="user_status2" value="-2" />拒绝申请 </label>
                             <?php
                         }else{
                             switch ($row['user_status']){

@@ -56,6 +56,7 @@ jQuery(function($) {
                         var data={
                             action:'team_personnel_operation',
                             status:status,
+                            id:_id,
                         }
                         $.ajax({
                             data: data,
