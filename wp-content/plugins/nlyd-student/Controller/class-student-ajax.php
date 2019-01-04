@@ -5616,7 +5616,7 @@ class Student_Ajax
                 case status
                 when -1 then '退出'
                 when 1 then '加入'
-                end status_cn
+                end status_cn,
                 from {$wpdb->prefix}match_team a 
                 left join {$wpdb->prefix}team_meta b on a.team_id = b.id
                 left join {$wpdb->prefix}users c on a.user_id = c.ID
@@ -5641,6 +5641,13 @@ class Student_Ajax
             $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
             $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
             $rows[$k]['user_mobile'] = !empty($v['user_mobile']) ? $v['user_mobile'] : '-' ;
+            if($v['status'] == 1){
+                $rows[$k]['agree_status'] = 2;
+                $rows[$k]['refuse_status'] = -2;
+            }elseif ($v['status'] == -1){
+                $rows[$k]['agree_status'] = -2;
+                $rows[$k]['refuse_status'] = 2;
+            }
         }
         wp_send_json_success(array('info'=>$rows));
     }
@@ -5650,10 +5657,15 @@ class Student_Ajax
      */
     public function team_personnel_operation(){
 
-        if(empty($_POST['status'])){
-            wp_send_json_error(array('info'=>__('操作必传')));
+        if(empty($_POST['status']) || empty($_POST['id'])){
+            wp_send_json_error(array('info'=>__('参数不全')));
         }
 
+        global $wpdb,$current_user;
+        if($_POST['status'] == -1){
+
+        }
+        $wpdb->update($wpdb->prefix.'match_team',array());
     }
 
     /**
