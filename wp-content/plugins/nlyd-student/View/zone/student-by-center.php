@@ -62,7 +62,7 @@ jQuery(function($) {
                                                 '<td><div class="table_content c_black">'+v.user_age+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.referee_id+'</div></td>'+
-                                                '<td><div class="table_content"><a class="c_blue" href="'+window.home_url+'/zone/studentDetail/student_id/'+v.id+'/">详 情</a></div></td>'+
+                                                '<td><div class="table_content"><a class="c_blue" href="'+window.home_url+'/zone/studentDetail/student_id/'+v.user_id+'/">详 情</a></div></td>'+
                                             '</tr>'
                                     lis.push(dom) 
                                 })
