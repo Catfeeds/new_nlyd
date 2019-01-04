@@ -49,7 +49,7 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级费用', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" id="cost" name="cost" value="1"></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" id="cost" name="cost" value=""></div>
                         </div>
                         <div>
                             <div class="lable_row">
@@ -81,7 +81,6 @@
 jQuery(function($) { 
 var match_type1_Data=<?=!empty($scene_list) ? $scene_list : '[]';?>;//考级类别
 var match_type2_Data=<?=!empty($category_list) ? $category_list : '[]';?>;//考级类型
-console.log(match_type1_Data)
 var match_date_Data=$.validationLayui.dates2;//考级日期
 var posiotion_match_type1=[0];//初始化位置，高亮展示
 var posiotion_match_type2=[0];//初始化位置，高亮展示
