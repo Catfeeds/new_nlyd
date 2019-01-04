@@ -35,7 +35,7 @@
                                     ?>
                                     <img src="<?=$thumbnail_image_url[0]?>"> -->
                                 </div>
-                                <div class="train_name fs_16"><?=__($v->post_title, 'nlyd-student')?></div>
+                                <div class="train_name fs_16"><?=__($v->post_title.'专项训练', 'nlyd-student')?></div>
                                 
                                 <?php if($v->post_status !== 'draft'):?>
                                     <div class="arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>

@@ -652,7 +652,7 @@ class Student_Zone extends Student_Home
 
          //获取新的申请人数
          if(!empty($row)){
-            $result = $wpdb->get_results("select status,count(*) total from {$wpdb->prefix}match_team where team_id = {$row['id']} group by status",ARRAY_A);
+            $result = $wpdb->get_results("select status,count(*) total from {$wpdb->prefix}match_team where team_id = {$current_user->ID} group by status",ARRAY_A);
             if(!empty($result)){
                 $row['total'] = array_column($result,'total','status');
                 //print_r($row['total']);

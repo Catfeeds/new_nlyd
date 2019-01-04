@@ -594,10 +594,10 @@ function the_table_install () {
 
         $sql = "CREATE TABLE " . $table_name . " (
           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
-          `team_id` int(20) NOT NULL,
-          `user_id` int(20) NOT NULL,
+          `team_id` int(20) NOT NULL COMMENT '机构的用户id',
+          `user_id` int(20) NOT NULL COMMENT '学员id',
           `user_type` varchar(2) NOT NULL COMMENT '用户类型',
-          `status` tinyint(2) DEFAULT NULL COMMENT '战队状态 -3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队',
+          `status` tinyint(2) DEFAULT NULL COMMENT '战队状态 -4:战队邀请学员;-3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队',
           `created_time` datetime DEFAULT NULL,
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
