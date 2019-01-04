@@ -24,8 +24,8 @@
                         <span><?=__('教练', 'nlyd-student')?></span>
                     </div>
                     <div class="teamApply_row_btns fs_14 pull-right">
-                        <a class="c_blue mr_10"><?=__('同意', 'nlyd-student')?></a>
-                        <a class="c_black6"><?=__('拒绝', 'nlyd-student')?></a>
+                        <a class="_btn yes c_blue mr_10"><?=__('同意', 'nlyd-student')?></a>
+                        <a class="_btn no c_black6"><?=__('拒绝', 'nlyd-student')?></a>
                     </div>
                 </div>
 
@@ -37,8 +37,8 @@
                         <span><?=__('关系', 'nlyd-student')?></span>
                     </div>
                     <div class="teamApply_row_btns fs_14 pull-right">
-                        <a class="c_blue mr_10"><?=__('同意', 'nlyd-student')?></a>
-                        <a class="c_black6"><?=__('拒绝', 'nlyd-student')?></a>
+                        <a class="_btn yes c_blue mr_10"><?=__('同意', 'nlyd-student')?></a>
+                        <a class="_btn no c_black6"><?=__('拒绝', 'nlyd-student')?></a>
                     </div>
                 </div>
             </div>
