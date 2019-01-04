@@ -366,7 +366,7 @@ class Student_Zone extends Student_Home
 
          $data['match_genre'] = !empty($match_genre) ? json_encode($match_genre) : '';
 
-         //获取默认比赛用
+         //获取默认比赛费用
          $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = 'official-match' ";
          $match_cost = $wpdb->get_var($set_sql);
          $data['match_cost'] = !empty($match_cost)? $match_cost :number_format(0);
@@ -476,8 +476,25 @@ class Student_Zone extends Student_Home
          $rows = $wpdb->get_results($sql,ARRAY_A);
          $data['category_list'] = !empty($rows) ? json_encode($rows) : '';
 
-        $view = student_view_path.CONTROLLER.'/kaoji-build.php';
-        load_view_template($view,$data);
+         if(isset($_GET['grading_id'])){
+             //获取比赛信息
+             $sql = "select a.post_title ,c.role_name as scene_title,d.post_title as genre_title, b.* from {$wpdb->prefix}posts a 
+                      left join {$wpdb->prefix}grading_meta b on a.ID = b.grading_id 
+                      left join {$wpdb->prefix}zone_match_role c on b.scene = c.id 
+                      left join {$wpdb->prefix}posts d on b.match_genre = d.ID 
+                      where a.ID = {$_GET['match_id']}
+                      ";
+             $match = $wpdb->get_row($sql,ARRAY_A);
+             //print_r($match);
+             if(!empty($match['match_start_time'])){
+                 $match['data_time'] = preg_replace('/\s|:/','-',$match['match_start_time']);
+             }
+             $data['match'] = $match;
+             //print_r($match);
+         }
+
+         $view = student_view_path.CONTROLLER.'/kaoji-build.php';
+         load_view_template($view,$data);
     }
     /**
      * 考级发布成功
@@ -628,10 +645,11 @@ class Student_Zone extends Student_Home
      */
      public function team(){
          global $wpdb,$current_user;
-         $sql = "select a.id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
+         $sql = "select a.id,a.team_id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
                                       left join {$wpdb->prefix}posts b on a.team_id = b.ID
                                       where user_id = {$current_user->ID} ";
          $row = $wpdb->get_row($sql,ARRAY_A);
+         //print_r($row);
          $view = student_view_path.CONTROLLER.'/team.php';
          load_view_template($view,$row);
     }
