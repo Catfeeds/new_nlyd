@@ -116,25 +116,25 @@ jQuery(function($) {
                                                 +'<div class="bold c_black f_16 mt_10">'+v.post_title+'</div>'
                                                 +'<div class="match_body">'
                                                     +'<div class="match_body_row">'
-                                                        +'<div class="match_body_label"><?=__('考级日期：', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black">'+v.start_time+' <span class="c_blue ml_10">'+v.match_status_cn+'</span></div>'
+                                                        +'<div class="match_body_label"><?=__("考级日期：", "nlyd-student")?></div>'
+                                                        +'<div class="match_body_info c_black">'+v.start_time+' <span class="c_blue ml_10">'+v.grading_status_cn+'</span></div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
-                                                        +'<div class="match_body_label"><?=__('考级地点：', 'nlyd-student')?></div>'
+                                                        +'<div class="match_body_label"><?=__("考级地点：", "nlyd-student")?></div>'
                                                         +'<div class="match_body_info c_black">'+v.address+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
-                                                        +'<div class="match_body_label"><?=__('责任人', 'nlyd-student')?>：</div>'
-                                                        +'<div class="match_body_info c_black">'+'无字段'+'</div>'
+                                                        +'<div class="match_body_label"><?=__("责任人：", "nlyd-student")?>：</div>'
+                                                        +'<div class="match_body_info c_black">'+v.person_liable+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
-                                                        +'<div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>'
+                                                        +'<div class="match_body_label"><?=__("已报选手：", "nlyd-student")?></div>'
                                                         +'<div class="match_body_info c_black">'+v.entry_total+'</div>'
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="match_footer ta_r">'
                                                     // +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>'
-                                                    +'<a href="'+window.home_url+'/zone/kaojiBuild/grading_id/'+v.ID+'/" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>'
+                                                    +'<a href="'+window.home_url+'/zone/kaojiBuild/grading_id/'+v.grading_id+'/" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>'
                                                     +end_match
                                                 +'</div>'
                                             +'</li>'
@@ -152,7 +152,7 @@ jQuery(function($) {
                         },
                         complete:function(XMLHttpRequest, textStatus){
 							if(textStatus=='timeout'){
-								$.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
+								$.alerts("<?=__('网络质量差,请重试', 'nlyd-student')?>")
 								next(lis.join(''),true)
 							}
                         }
