@@ -19,7 +19,7 @@
                             <div class="lable_row"><span class="c_black"><?=__('考级责任人', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <select class="js-data-select-ajax" name="person_liable" style="width: 100%" data-action="get_manage_user" data-placeholder="选择考级责任人" >
-                                    <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
+                                    <option value="<?=$match['person_liable']?>" selected><?=$match['person']?></option>
                                 </select>
                             </div>
                         </div>
@@ -27,29 +27,29 @@
                             <div class="lable_row"><span class="c_black"><?=__('考级场景', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input type="hidden" name="scene" id="match_type1_id" value="">
-                                <input class="radius_input_row nl-foucs" type="text" id="match_type1" readonly lay-verify="required" autocomplete="off" placeholder="<?=__('考级场景', 'nlyd-student')?>">
+                                <input type="hidden" name="scene" id="match_type1_id" value="<?=$match['scene']?>">
+                                <input class="radius_input_row nl-foucs" type="text" id="match_type1" readonly value="<?=$match['scene_title']?>" lay-verify="required" autocomplete="off" placeholder="<?=__('考级场景', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级类别', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input type="hidden" name="category_id" id="match_type2_id" value="">
-                                <input class="radius_input_row nl-foucs" type="text" id="match_type2" readonly lay-verify="required" autocomplete="off" placeholder="<?=__('考级类别', 'nlyd-student')?>">
+                                <input type="hidden" name="category_id" id="match_type2_id" value="<?=$match['category_id']?>">
+                                <input class="radius_input_row nl-foucs" type="text" id="match_type2" readonly lay-verify="required" value="<?=$match['genre_title']?>" autocomplete="off" placeholder="<?=__('考级类别', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级名称', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="post_title" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级名称', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="post_title"  value="<?=$match['post_title']?>" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级名称', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级地点', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="address" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级地点', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="address" value="<?=$match['address']?>" lay-verify="required" autocomplete="off" placeholder="<?=__('填写本次考级地点', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级费用', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" id="cost" name="cost" value="1"></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" id="cost" name="cost" value="<?=$match['cost']?>" ></div>
                         </div>
                         <div>
                             <div class="lable_row">
@@ -57,7 +57,7 @@
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" value="" type="text" readonly name="start_time" data-time="2019,10,11,11,11" id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" value="<?=$match['start_time']?>" type="text" readonly name="start_time" data-time="2019,10,11,11,11" id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
@@ -66,7 +66,7 @@
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" value="" type="text" readonly name="end_time" data-time="2019,10,11,11,11" id="match_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级结束日期', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" value="<?=$match['end_time']?>" type="text" readonly name="end_time" data-time="2019,10,11,11,11" id="match_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级结束日期', 'nlyd-student')?>">
                             </div>
                         </div>
                         <input type="hidden" name="action" value="zone_create_grading">
