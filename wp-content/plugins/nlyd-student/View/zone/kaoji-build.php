@@ -70,6 +70,7 @@
                             </div>
                         </div>
                         <input type="hidden" name="action" value="zone_create_grading">
+                        <input type="hidden" name="grading_id" value="<?=$_GET['grading_id']?>">
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认发布/保存更新', 'nlyd-student')?></div></a>
                     </form>
                 </div>
