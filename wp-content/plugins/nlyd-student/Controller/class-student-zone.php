@@ -482,14 +482,19 @@ class Student_Zone extends Student_Home
              $sql = "select a.post_title ,c.role_name as scene_title,d.post_title as genre_title, b.* from {$wpdb->prefix}posts a 
                       left join {$wpdb->prefix}grading_meta b on a.ID = b.grading_id 
                       left join {$wpdb->prefix}zone_match_role c on b.scene = c.id 
-                      left join {$wpdb->prefix}posts d on b.match_genre = d.ID 
-                      where a.ID = {$_GET['match_id']}
+                      left join {$wpdb->prefix}posts d on b.category_id = d.ID 
+                      where a.ID = {$_GET['grading_id']}
                       ";
              $match = $wpdb->get_row($sql,ARRAY_A);
              //print_r($match);
-             if(!empty($match['match_start_time'])){
-                 $match['data_time'] = preg_replace('/\s|:/','-',$match['match_start_time']);
+             if(!empty($match['start_time'])){
+                 $match['data_time'] = preg_replace('/\s|:/','-',$match['start_time']);
              }
+             if(!empty($match['end_time'])){
+                 $match['data_time'] = preg_replace('/\s|:/','-',$match['end_time']);
+             }
+             $person_liable = get_user_meta($match['person_liable'],'user_real_name')[0];
+             $match['person'] = !empty($person_liable['real_name']) ? $person_liable['real_name'] : '-';
              $data['match'] = $match;
              //print_r($match);
          }

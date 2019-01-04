@@ -898,7 +898,7 @@ function the_table_install () {
           `open_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '开放名额',
           `seize_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '已抢占名额',
           `zone_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属主体机构user_id,0平台发布',
-          `course_type` tinyint(10) unsigned NOT NULL DEFAULT '1' COMMENT '1乐学乐',
+          `course_type` tinyint(10) unsigned NOT NULL DEFAULT '1' COMMENT '1高效记忆术,2提升应用课',
           `admin_mobile` varchar(11) DEFAULT NULL COMMENT '管理员电话',
           `duration` varchar(32) DEFAULT '0' COMMENT '时长',
           `course_category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教学类别id',

@@ -4767,9 +4767,10 @@ class Student_Ajax
      * 机构发布考级
      */
     public function zone_create_grading(){
-        if(empty($_POST['post_title']) || empty($_POST['scene']) || empty($_POST['category_id']) || empty($_POST['start_time']) ){
+        if(empty($_POST['post_title']) || empty($_POST['scene']) || empty($_POST['category_id']) || empty($_POST['start_time'])|| empty($_POST['end_time']) ){
             wp_send_json_error(array('info'=>'考级场景/类别/名称/时间为必填项'));
         }
+        if($_POST['start_time'] > $_POST['end_time'] )wp_send_json_error(array('info'=>'结束时间必须大于开始时间'));
         global $wpdb,$current_user;
 
         //print_r($_POST);die;
