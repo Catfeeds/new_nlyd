@@ -5586,7 +5586,7 @@ class Student_Ajax
             wp_send_json_error(array('info'=>__('该用户有战队,请核实')));
         }
 
-        $res = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id'],'user_id'=>$_POST['user_id'],'user_type'=>1,'status'=>2,'created_time'=>get_time('mysql')));
+        $res = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id'],'user_id'=>$_POST['user_id'],'user_type'=>1,'status'=>-4,'created_time'=>get_time('mysql')));
 
         if($res){
             wp_send_json_success(array('info'=>__('添加成功')));
@@ -5643,6 +5643,17 @@ class Student_Ajax
             $rows[$k]['user_mobile'] = !empty($v['user_mobile']) ? $v['user_mobile'] : '-' ;
         }
         wp_send_json_success(array('info'=>$rows));
+    }
+
+    /**
+     *战队成员审核操作
+     */
+    public function team_personnel_operation(){
+
+        if(empty($_POST['status'])){
+            wp_send_json_error(array('info'=>__('操作必传')));
+        }
+
     }
 
     /**
