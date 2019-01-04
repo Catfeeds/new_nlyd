@@ -649,6 +649,16 @@ class Student_Zone extends Student_Home
                                       left join {$wpdb->prefix}posts b on a.team_id = b.ID
                                       where user_id = {$current_user->ID} ";
          $row = $wpdb->get_row($sql,ARRAY_A);
+
+         //获取新的申请人数
+         if(!empty($row)){
+            $result = $wpdb->get_results("select status,count(*) total from {$wpdb->prefix}match_team where team_id = {$row['id']} group by status",ARRAY_A);
+            if(!empty($result)){
+                $row['total'] = array_column($result,'total','status');
+                //print_r($row['total']);
+            }
+         }
+
          //print_r($row);
          $view = student_view_path.CONTROLLER.'/team.php';
          load_view_template($view,$row);
