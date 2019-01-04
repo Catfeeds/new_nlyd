@@ -16,10 +16,18 @@ class Course{
             $role = 'course_add_course';//权限名
             $wp_roles->add_cap('administrator', $role);
 
+            $role = 'course_type';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'add_course_type';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
         }
 
         add_menu_page('课程管理', '课程管理', 'course', 'course',array($this,'index'),'dashicons-businessman',99);
         add_submenu_page('course','添加课程','添加课程','course_add_course','course-add-course',array($this,'addCourse'));
+        add_submenu_page('course','课程类型','课程类型','course_type','course-type',array($this,'courseType'));
+        add_submenu_page('course','添加课程类型','添加课程类型','add_course_type','add-course-type',array($this,'addCourseType'));
     }
 
     /**
@@ -64,9 +72,12 @@ class Course{
             'current' => $page
         ));
         //各种数量
-        $numSql = "SELECT count(id) FROM {$wpdb->prefix}course";
-        $lxl_num  = $wpdb->get_var($numSql.' WHERE course_type=1');
-        $all_num = $wpdb->get_var($numSql);
+//        $numSql = "SELECT count(id) FROM {$wpdb->prefix}course";
+//        $lxl_num  = $wpdb->get_var($numSql.' WHERE course_type=1');
+//        $promote_num  = $wpdb->get_var($numSql.' WHERE course_type=2');
+//        $all_num = $wpdb->get_var($numSql);
+        //课程类型
+        $courseTypeList = $this->getCourseType();
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">课程列表</h1>
@@ -79,8 +90,10 @@ class Course{
 
             <br class="clear">
             <ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=0&coach_id='.$coach_id)?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=1&coach_id='.$coach_id)?>" <?=$type===1?'class="current"':''?> aria-current="page">乐学乐分享<span class="count">（<?=$lxl_num?>）</span></a></li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=0&coach_id='.$coach_id)?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
+                <?php foreach ($courseTypeList as $ctlv){ ?>
+                    <li class="all"><a href="<?=admin_url('admin.php?page=course&stype='.$ctlv['id'].'&coach_id='.$coach_id)?>" <?=$type==$ctlv['id']?'class="current"':''?> aria-current="page"><?=$ctlv['type_name']?><span class="count"></span></a></li>
+                <?php } ?>
 
             </ul>
 
@@ -166,7 +179,7 @@ class Course{
                         <td class="open_quota column-open_quota" data-colname="开放名额"><?=$row['open_quota']?></td>
                         <td class="seize_quota column-seize_quota" data-colname="已抢占名额"><?=$row['seize_quota']?></td>
                         <td class="zone_user_id column-zone_user_id" data-colname="所属机构"><?=empty($row['zone_name']) ? '平台' :$row['zone_name']?></td>
-                        <td class="course_type column-course_type" data-colname="课程类型"><?=$row['course_type'] == '1' ? '乐学乐分享' :''?></td>
+                        <td class="course_type column-course_type" data-colname="课程类型"><?=$row['course_type'] == '1' ? '高效记忆术' :'提升应用课'?></td>
                         <td class="is_enable column-is_enable" data-colname="状态"><?=$row['is_enable'] == '2' ? '<span style="color: #c42800;">禁用</span>':'正常'?></td>
                         <td class="created_time column-created_time" data-colname="创建时间"><?=$row['created_time']?></td>
                         <td class="options1 column-options1" data-colname="操作">
@@ -290,6 +303,14 @@ class Course{
     }
 
     /**
+     * 获取课程类型
+     */
+    public function getCourseType(){
+        global $wpdb;
+         return $wpdb->get_results("SELECT * FROM {$wpdb->prefix}course_type", ARRAY_A);
+    }
+
+    /**
      * 添加/编辑课程
      */
     public function addCourse(){
@@ -390,6 +411,9 @@ class Course{
                 LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.id=cou.zone_id 
                 WHERE cou.id='{$id}'", ARRAY_A);
         }
+
+        //课程类型
+        $courseTypeList = $this->getCourseType();
         $categoryArr = getCategory();
 //        leo_dump($categoryArr);die;
         ?>
@@ -520,8 +544,11 @@ class Course{
                     <tr class="">
                         <th scope="row"><label for="course_type">课程类型 </label></th>
                         <td>
-                            <label for="course_type_1">乐学乐分享  <input type="radio" checked="checked" id="course_type_1" name="course_type" value="1"></label>
-
+                            <select name="course_type" id="course_type">
+                            <?php foreach ($courseTypeList as $ctlv){ ?>
+                                <option value="<?=$ctlv['id']?>" <?=isset($row['course_type']) && $row['course_type'] == $ctlv['id'] ? 'selected="selected"' : ''?>><?=$ctlv['type_name']?></option>
+                            <?php } ?>
+                            </select>
                         </td>
                     </tr>
                     <tr class="">
@@ -665,6 +692,173 @@ class Course{
         </div>
         <?php
     }
+
+    /**
+     * 课程类型
+     */
+    public function courseType(){
+        global $wpdb;
+        $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}course_type", ARRAY_A);
+
+
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">课程类型</h1>
+
+            <a href="<?=admin_url('admin.php?page=teacher-add')?>" class="page-title-action">添加课程类型</a>
+
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="31db78f456"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php?paged=1">
+            <div class="tablenav top">
+
+
+
+
+                <br class="clear">
+            </div>
+            <h2 class="screen-reader-text">用户列表</h2>
+            <table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column">
+                        <label class="screen-reader-text" for="cb-select-all-1">全选</label>
+                        <input id="cb-select-all-1" type="checkbox">
+                    </td>
+                    <th scope="col" id="type_name" class="manage-column column-type_name column-primary">名称</th>
+                    <th scope="col" id="type_alias" class="manage-column column-type_alias">别名</th>
+                </tr>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+                <?php
+                foreach ($rows as $row){
+
+                    ?>
+                    <tr>
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text" for="teacher_<?=$row['id']?>"></label>
+                            <input type="checkbox" name="users[]" id="teacher_<?=$row['id']?>" class="subscriber" value="<?=$row['id']?>">
+                        </th>
+
+                        <td class="type_name column-type_name column-primary" data-colname="名称">
+                            <span aria-hidden="true"><?=$row['type_name']?></span>
+                            <button type="button" class="toggle-row">
+                                <span class="screen-reader-text">显示详情</span>
+                            </button>
+                        </td>
+                        <td class="type_alias column-type_alias" data-colname="别名">
+                            <span aria-hidden="true"><?=$row['type_alias']?></span>
+                        </td>
+
+
+                    </tr>
+                <?php } ?>
+
+                </tbody>
+
+                <tfoot>
+
+                <tr>
+                    <td class="manage-column column-cb check-column">
+                        <label class="screen-reader-text" for="cb-select-all-2">全选</label>
+                        <input id="cb-select-all-2" type="checkbox">
+                    </td>
+                    <th scope="col" class="manage-column column-type_name column-primary">名称</th>
+                    <th scope="col" class="manage-column column-type_alias">别名</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+
+
+            </div>
+
+            <script type="text/javascript">
+
+
+            </script>
+        </div>
+        <?php
+    }
+
+    /**
+     * 添加/编辑课程类型
+     */
+    public function addCourseType(){
+        global $wpdb;
+        $err_msg = '';
+        $suc_msg = '';
+        if(is_post()){
+            $type_name = isset($_POST['type_name']) ? trim($_POST['type_name']) : '';
+            $type_alias = isset($_POST['type_alias']) ? trim($_POST['type_alias']) : '';
+            if($type_name == '') $err_msg .= '请填写类型名称';
+            if($type_alias == '') $err_msg .= '<br />请填写类型别名';
+
+            if($err_msg == ''){
+                $insertData = [
+                    'type_name' => $type_name,
+                    'type_alias' => $type_alias,
+                ];
+
+                $bool = $wpdb->insert($wpdb->prefix.'course_type',$insertData);
+
+                if($bool){
+                    $suc_msg = '操作成功!';
+                }else{
+                    $err_msg = '操作失败';
+                }
+            }
+        }
+        ?>
+        <div id="wpbody" role="main">
+
+            <div id="wpbody-content" aria-label="主内容" tabindex="0">
+
+                <div class="wrap" id="profile-page">
+                    <h1 class="wp-heading-inline">添加课程类型</h1>
+
+                    <form id="" action="" method="post" novalidate="novalidate">
+                        <input type="hidden" id="_wpnonce" name="_wpnonce" value="5fcd054cd3"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">	<input type="hidden" name="wp_http_referer" value="/nlyd/wp-admin/users.php">
+                        <p>
+                            <input type="hidden" name="from" value="profile">
+                            <input type="hidden" name="checkuser_id" value="1">
+                        </p>
+                        <table class="form-table">
+
+                        </table>
+                        <div id="err-box" style="color: #c42f18"><?=$err_msg?></div>
+                        <div id="suc-box" style="color: #0ec431"><?=$suc_msg?></div>
+
+
+                        <table class="form-table">
+                            <tbody>
+                            <tr class="user-user-login-wrap">
+                                <th><label for="type_name">名称</label></th>
+                                <td><input type="text" name="type_name" value="" placeholder=""></td>
+                            </tr>
+                            <tr class="user-user-login-wrap">
+                                <th><label for="type_alias">别名</label></th>
+                                <td><input type="text" name="type_alias" value=""></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="提交"></p>
+                    </form>
+                </div>
+                <script type="text/javascript">
+
+
+                </script>
+
+                <div class="clear"></div></div><!-- wpbody-content -->
+            <div class="clear">
+
+            </div>
+        </div>
+        <?php
+    }
+
     public function register_scripts(){
 
         switch ($_GET['page']){

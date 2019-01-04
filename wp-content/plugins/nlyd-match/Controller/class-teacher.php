@@ -879,8 +879,8 @@ class Teacher
                         <table class="form-table">
 
                         </table>
-                        <div id="err-box"><?=$err_msg?></div>
-                        <div id="suc-box"><?=$suc_msg?></div>
+                        <div id="err-box" style="color: #c42f18"><?=$err_msg?></div>
+                        <div id="suc-box" style="color: #0ec431"><?=$suc_msg?></div>
 
 
                         <table class="form-table">
@@ -1018,7 +1018,10 @@ class Teacher
                 </script>
 
                 <div class="clear"></div></div><!-- wpbody-content -->
-            <div class="clear"></div></div>
+            <div class="clear">
+
+            </div>
+        </div>
         <?php
 
     }

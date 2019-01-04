@@ -898,7 +898,7 @@ function the_table_install () {
           `open_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '开放名额',
           `seize_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '已抢占名额',
           `zone_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属主体机构user_id,0平台发布',
-          `course_type` tinyint(10) unsigned NOT NULL DEFAULT '1' COMMENT '1高效记忆术,2提升应用课',
+          `course_type` int(10) NOT NULL DEFAULT '0' COMMENT '课程类型id',
           `admin_mobile` varchar(11) DEFAULT NULL COMMENT '管理员电话',
           `duration` varchar(32) DEFAULT '0' COMMENT '时长',
           `course_category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教学类别id',
@@ -925,7 +925,7 @@ function the_table_install () {
           `spread_name` varchar(255) DEFAULT NULL COMMENT '',
           PRIMARY KEY (`id`),
           UNIQUE KEY `unique` (`spread_type`) USING BTREE
-        ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;";
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
         dbDelta($sql);
     }
 
@@ -948,7 +948,19 @@ function the_table_install () {
           `censor_user_id` int(10) unsigned DEFAULT NULL COMMENT '审核人user_id',
           PRIMARY KEY (`id`),
           KEY `index` (`extract_id`,`censor_user_id`) USING BTREE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
+        dbDelta($sql);
+    }
+
+    $table_name = $wpdb->prefix . "course_type";  //用户提现记录表
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //用户提现记录表
+        $sql = "CREATE TABLE `{$table_name}` (
+          `id` int(10) unsigned NOT NULL,
+          `type_name` varchar(255) NOT NULL COMMENT '课程类型名称',
+          `type_alias` varchar(64) DEFAULT NULL COMMENT '课程类型别名',
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
         dbDelta($sql);
     }
 }
