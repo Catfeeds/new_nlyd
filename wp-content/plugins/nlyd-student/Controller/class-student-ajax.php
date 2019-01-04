@@ -5616,7 +5616,7 @@ class Student_Ajax
                 case status
                 when -1 then '退出'
                 when 1 then '加入'
-                end status_cn,
+                end status_cn
                 from {$wpdb->prefix}match_team a 
                 left join {$wpdb->prefix}team_meta b on a.team_id = b.id
                 left join {$wpdb->prefix}users c on a.user_id = c.ID
