@@ -34,7 +34,8 @@ jQuery(function($) {
             var _id=_this.attr('data-id');
             var text=_this.parents('.teamApply_row').find('.teamApply_row_info').html();
             var isAgree_text=_this.text();
-            var status=_this.hasClass('yes') ? 'y' : 'n';
+            var map=_this.hasClass('yes') ? 'y' : 'n';
+            var status=_this.attr('data-status');
             layer.open({
                 type: 1
                 ,maxWidth:300
@@ -55,8 +56,9 @@ jQuery(function($) {
                     if(!_that.hasClass('disabled')){
                         var data={
                             action:'team_personnel_operation',
-                            status:status,
+                            map:map,
                             id:_id,
+                            status:status,
                         }
                         $.ajax({
                             data: data,
@@ -111,8 +113,8 @@ jQuery(function($) {
                                                     '<span class="c_blue">'+v.real_name+'</span><span><?=__("申请", "nlyd-student")?></span><span class="c_blue">'+v.status_cn+'</span><span><?=__("战队", "nlyd-student")?></span>'+
                                                 '</div>'+
                                                 '<div class="teamApply_row_btns fs_14 pull-right">'+
-                                                    '<a class="_btn yes c_blue mr_10" data-id="'+v.id+'"><?=__("同意", "nlyd-student")?></a>'+
-                                                    '<a class="_btn no c_black6" data-id="'+v.id+'"><?=__("拒绝", "nlyd-student")?></a>'+
+                                                    '<a class="_btn yes c_blue mr_10" data-id="'+v.id+'" data-status="'+v.status+'"><?=__("同意", "nlyd-student")?></a>'+
+                                                    '<a class="_btn no c_black6" data-id="'+v.id+'" data-status="'+v.status+'"><?=__("拒绝", "nlyd-student")?></a>'+
                                                 '</div>'+
                                             '</div>'
                                     lis.push(dom) 
