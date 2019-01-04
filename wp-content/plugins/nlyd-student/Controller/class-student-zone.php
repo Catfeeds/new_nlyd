@@ -568,8 +568,49 @@ class Student_Zone extends Student_Home
      * 课程学员
      */
      public function studentDetail(){
+
+         global $wpdb,$current_user;
+         //获取教练信息
+         $sql = "select b.meta_key,b.meta_value from {$wpdb->prefix}zone_join_coach a 
+                  left join  {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key in('user_real_name','user_ID','user_gender','user_head','real_ID','user_ID_Card','coach_brief') 
+                  where a.coach_id = {$_GET['student_id']} ";
+         //print_r($sql);
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         if(empty($rows)){
+             $this->get_404($this->get_404(array('message'=>__('数据错误', 'nlyd-student'),'return_url'=>home_url('/zone/student/'))));
+             return;
+         }
+         //print_r($rows);
+         $user_info = array_column($rows,'meta_value','meta_key');
+
+         $student['real_name'] = unserialize($user_info['user_real_name'])['real_name'];
+         $student['user_ID'] = !empty($user_info['user_ID']) ? $user_info['user_ID'] : '-';
+         $student['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-';
+         $student['user_age'] = unserialize($user_info['user_real_name'])['real_age'];
+         $student['real_ID'] = !empty($user_info['real_ID']) ? hideStar($user_info['real_ID']) : '-';
+         $student['user_ID_Card'] = unserialize($user_info['user_ID_Card']);
+         $student['coach_brief'] = !empty($user_info['coach_brief']) ? hideStar($user_info['coach_brief']) : '暂无';
+
+         //获取学员教练
+         $sql_ = "select a.*,b.meta_value from {$wpdb->prefix}my_coach a 
+                  left join {$wpdb->prefix}postmeta b on a.category_id = b.post_id and meta_key = 'project_alias'
+                  where a.user_id = {$_GET['student_id']} and a.apply_status = 2 ";
+         //print_r($sql_);
+         $rows_ = $wpdb->get_results($sql_,ARRAY_A);
+         //print_r($rows_);
+         if(!empty($rows_)){
+             foreach ($rows_ as $val){
+                 $user_real_name = get_user_meta($val['coach_id'],'user_real_name')[0];
+                 $coach[$val['meta_value']]  = !empty($user_real_name) ? $user_real_name['real_name'] : '-';
+             }
+             $student['coach'] = $coach;
+         }
+         //print_r($coach);
+         $row = $wpdb->get_row("select user_mobile,referee_id from {$wpdb->prefix}users where ID = {$_GET['student_id']} ",ARRAY_A);
+         $student['user_mobile'] = !empty($row['user_mobile']) ? hideStar($row['user_mobile']) : '-';
+         $student['referee_id'] = !empty($row['referee_id']) ? $row['referee_id']+10000000 : '-';
         $view = student_view_path.CONTROLLER.'/student-detail.php';
-        load_view_template($view);
+        load_view_template($view,$student);
     }
 
     /**

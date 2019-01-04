@@ -18,48 +18,54 @@
                 <div class="nl-table-wapper student_detail">
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('学员姓名', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('学员姓名', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$real_name?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('学员ID', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('1000898', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$user_ID?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('学员年龄', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('12岁', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$user_age?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('学员性别', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('女', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=__($user_gender, 'nlyd-student')?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('身份证号', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('5111*******0307', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$real_ID?></div>
                     </div>
                     <div class="detail_table_row">
-                         <div class="detail_label"><?=__('证件照片', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/zone/upload_bg.png'?>"></div>  
-                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/zone/upload_bg.png'?>"></div>   
+                         <div class="detail_label"><?=__('证件照片', 'nlyd-student')?>：</div>
+                         <?php if(!empty($user_ID_Card)){ ?>
+                         <?php foreach ($user_ID_Card as $v){?>
+                         <div class="detail_detail_img"><img src="<?=$v?>"></div>
+                         <?php } ?>
+                         <?php }else{ ?>
+                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/zone/upload_bg.png'?>"></div>
+                         <div class="detail_detail_img"><img src="<?=student_css_url.'image/zone/upload_bg.png'?>"></div>
+                         <?php } ?>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('联系方式', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('1588888888888', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$user_mobile?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('记忆教练', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('xxx', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$coach['memory']?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('速读教练', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('成 炜', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$coach['reading']?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('心算教练', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('无', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$coach['arithmetic']?></div>
                     </div>
                     <div class="detail_table_row">
                          <div class="detail_label"><?=__('推荐用户', 'nlyd-student')?>：</div>   
-                         <div class="detail_detail c_black"><?=__('推某某', 'nlyd-student')?></div>   
+                         <div class="detail_detail c_black"><?=$referee_id?></div>
                     </div>
                 </div>
           
