@@ -26,7 +26,6 @@
                                 <td><?=__('推荐用户', 'nlyd-student')?></td>
                                 <td><?=__('操 作', 'nlyd-student')?></td>
                             </tr>
-                           
                         </tbody>
                     </table>
                 </div>
@@ -46,7 +45,7 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'zone_coach_list',
+                        action:'zone_student_list',
                         page:student_page,
                     }
                     var lis = [];
@@ -62,8 +61,8 @@ jQuery(function($) {
                                                 '<td><div class="table_content"><div class="c_black ta_c">'+v.real_name+'</div><div class="ff_num fs_12 ta_c">'+v.user_ID+'</div></div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_age+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
-                                                '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
-                                                '<td><div class="table_content"><a class="c_blue" href="'+window.home_url+'/zone/studentDetail/student_id/'+v.coach_id+'/">详 情</a></div></td>'+
+                                                '<td><div class="table_content c_black">'+v.referee_id+'</div></td>'+
+                                                '<td><div class="table_content"><a class="c_blue" href="'+window.home_url+'/zone/studentDetail/student_id/'+v.id+'/">详 情</a></div></td>'+
                                             '</tr>'
                                     lis.push(dom) 
                                 })

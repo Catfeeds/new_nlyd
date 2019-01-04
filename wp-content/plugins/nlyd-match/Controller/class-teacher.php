@@ -437,21 +437,21 @@ class Teacher
                                     <?php } ?>
                                 </td>
                             </tr>
-                            <tr class="user-last-name-wrap">
-                                <th><label for="surname">教练职称</label></th>
-                                <td><input type="text" name="surname" id="surname" value="<?=explode(', ',$row['display_name'])[0]?>" class="regular-text"></td>
-                            </tr>
-                            <tr class="user-last-name-wrap">
-                                <th><label for="surname">教练证书</label></th>
-                                <td><input type="text" name="surname" id="surname" value="<?=explode(', ',$row['display_name'])[0]?>" class="regular-text"></td>
-                            </tr>
-
-                            <tr class="user-last-name-wrap">
-                                <th><label for="surname">教练简介</label></th>
-                                <td>
-                                    <textarea name="" id="" cols="30" rows="10"></textarea>
-                                </td>
-                            </tr>
+<!--                            <tr class="user-last-name-wrap">-->
+<!--                                <th><label for="surname">教练职称</label></th>-->
+<!--                                <td><input type="text" name="surname" id="surname" value="--><?//=explode(', ',$row['display_name'])[0]?><!--" class="regular-text"></td>-->
+<!--                            </tr>-->
+<!--                            <tr class="user-last-name-wrap">-->
+<!--                                <th><label for="surname">教练证书</label></th>-->
+<!--                                <td><input type="text" name="surname" id="surname" value="--><?//=explode(', ',$row['display_name'])[0]?><!--" class="regular-text"></td>-->
+<!--                            </tr>-->
+<!---->
+<!--                            <tr class="user-last-name-wrap">-->
+<!--                                <th><label for="surname">教练简介</label></th>-->
+<!--                                <td>-->
+<!--                                    <textarea name="" id="" cols="30" rows="10"></textarea>-->
+<!--                                </td>-->
+<!--                            </tr>-->
                             <tr class="user-last-name-wrap">
                                 <th><label for="surname">学员数量</label></th>
                                 <td>
@@ -780,166 +780,131 @@ class Teacher
      * 新增教练
      */
     public function newTeacher(){
+        $err_msg = '';
+        $suc_msg = '';
         global $wpdb;
         if(is_post()){
-            //教练类别
-            $read = isset($_POST['reading']) ? intval($_POST['reading']) : 0;
-            $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
-            $compute = isset($_POST['arithmetic']) ? intval($_POST['arithmetic']) : 0;
-            $errStr = '';
-            if(empty($_POST['pass1']) || $_POST['pass1'] != $_POST['pass2']) $errStr = '两次输入的密码不一样';
-            if(!preg_match('/1[345678][0-9]{9}/', $_POST['user_mobile'])) $errStr = '手机格式错误';
-            if($errStr == '') {
-                $wpdb->query('START TRANSACTION');
-                $insertData = [
-                    'user_login' => $_POST['user_login'],
-                    'user_pass' => $_POST['pass1'],
-                    'user_email' => $_POST['email'],
-                    'user_mobile' => $_POST['user_mobile'],
-                    'display_name' => $_POST['last_name'].', '.$_POST['first_name'],
-                    'role' => $_POST['role']
-                ];
-                $userId = wp_insert_user($insertData);
-                if(is_object($userId)){
-                    $wpdb->query('ROLLBACK');
-                    foreach ($userId->errors as $err){
-                        foreach ($err as $er){
-                            $errStr .= $er.'<br />';
-                        }
-                    }
-                }else{
-                    //修改usermeta表姓氏和名字
-                    update_user_meta($userId, 'last_name', $_POST['last_name']);
-                    update_user_meta($userId, 'first_name', $_POST['first_name']);
-                    update_user_meta($userId, 'user_ID', 10000000*$userId);
-                    //添加教练技能
-                    $skillData = [
-                        'coach_id' => $userId,
-                        'read' => $read,
-                        'memory' => $memory,
-                        'compute' => $compute,
-                    ];
-                    $skillRes = $wpdb->insert($wpdb->prefix.'coach_skill', $skillData);
-                    if(!$skillRes){
-                        $wpdb->query('ROLLBACK');
-                        $errStr = '<strong>添加失败</strong>';
-                    }
-                }
-                if($errStr == '') {
-                    $wpdb->query('COMMIT');
-                    echo '<script type="text/javascript">window.location.href="'.admin_url('admin.php?page=teacher').'"</script>';
-                    exit;
-                }
-            }
 
+            $user_login = isset($_POST['user_login']) ? trim($_POST['user_login']) : '';
+            $password = isset($_POST['password']) ? trim($_POST['password']) : '';
+            $real_name = isset($_POST['real_name']) ? trim($_POST['real_name']) : '';
+            $real_age = isset($_POST['real_age']) ? trim($_POST['real_age']) : '';
+            $user_mobile = isset($_POST['user_mobile']) ? trim($_POST['user_mobile']) : '';
+            $user_gender = isset($_POST['user_gender']) ? trim($_POST['user_gender']) : '';
+            $categorys = isset($_POST['categorys']) ? trim($_POST['categorys']) : '';
+            //判断账号格式
+            if(!preg_match('/^1[3456789][0-9]{9}$/',$user_login) && !preg_match('/^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$/',$user_login)) $err_msg = '账号格式不正确';
 
+            leo_dump($err_msg);
+            die;
         }
-//        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
         $postsRows = getCategory();
-//        leo_dump(getCategory());die;
         ?>
-        <div class="wrap">
-            <h1 id="add-new-user">添加教练</h1>
+        <div id="wpbody" role="main">
+
+            <div id="wpbody-content" aria-label="主内容" tabindex="0">
+
+                <div class="wrap" id="profile-page">
+                    <h1 class="wp-heading-inline">添加教练</h1>
+
+                    <form id="" action="" method="post" novalidate="novalidate">
+                        <input type="hidden" id="_wpnonce" name="_wpnonce" value="5fcd054cd3"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">	<input type="hidden" name="wp_http_referer" value="/nlyd/wp-admin/users.php">
+                        <p>
+                            <input type="hidden" name="from" value="profile">
+                            <input type="hidden" name="checkuser_id" value="1">
+                        </p>
+                        <table class="form-table">
+
+                        </table>
+                        <div id="err-box"><?=$err_msg?></div>
+                        <div id="suc-box"><?=$suc_msg?></div>
 
 
-            <div id="ajax-response"></div>
+                        <table class="form-table">
+                            <tbody>
+                            <tr class="user-user-login-wrap">
+                                <th><label for="user_login">账号</label></th>
+                                <td><input type="text" name="user_login" value="" placeholder="手机或邮箱格式"></td>
+                            </tr>
+                            <tr class="user-user-login-wrap">
+                                <th><label for="password">密码</label></th>
+                                <td><input type="text" name="password" value=""></td>
+                            </tr>
+                            <tr class="user-user-login-wrap">
+                                <th><label for="real_name">教练姓名</label></th>
+                                <td><input type="text" name="real_name" value=""></td>
+                            </tr>
 
-            <p>新建教练，并将教练加入此站点。</p>
-            <div style="color: #A90000;">
-                <?=isset($errStr) ? $errStr : '';?>
-            </div>
-            <form method="post" name="createuser" id="createuser" class="validate" novalidate="novalidate">
-                <input name="action" type="hidden" value="createuser">
-                <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="8e776847cc"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php"><table class="form-table">
-                    <tbody>
-                    <tr class="form-field form-required">
-                        <th scope="row"><label for="user_login">用户名 <span class="description">（必填）</span></label></th>
-                        <td><input placeholder="不可使用中文" name="user_login" type="text" id="user_login" value="<?=isset($_POST['user_login']) ? $_POST['user_login'] : ''?>" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60"></td>
-                    </tr>
-                    <tr class="form-field form-required">
-                        <th scope="row"><label for="user_mobile">手机号码 <span class="description">（必填）</span></label></th>
-                        <td><input name="user_mobile" type="text" id="user_mobile" value="<?=isset($_POST['user_mobile']) ? $_POST['user_mobile'] : ''?>"></td>
-                    </tr>
-                    <tr class="form-field form-required">
-                        <th scope="row"><label for="email">电子邮件 <span class="description">（必填）</span></label></th>
-                        <td><input name="email" type="email" id="email" value="<?=isset($_POST['email']) ? $_POST['email'] : ''?>"></td>
-                    </tr>
-                    <tr class="form-field">
-                        <th scope="row"><label for="first_name">名字 </label></th>
-                        <td><input name="first_name" type="text" id="first_name" value="<?=isset($_POST['first_name']) ? $_POST['first_name'] : ''?>"></td>
-                    </tr>
-                    <tr class="form-field">
-                        <th scope="row"><label for="last_name">姓氏 </label></th>
-                        <td><input name="last_name" type="text" id="last_name" value="<?=isset($_POST['last_name']) ? $_POST['last_name'] : ''?>"></td>
-                    </tr>
-<!--                    <tr class="form-field">-->
-<!--                        <th scope="row"><label for="url">站点</label></th>-->
-<!--                        <td><input name="url" type="url" id="url" class="code" value=""></td>-->
-<!--                    </tr>-->
-                    <tr class="form-field form-required user-pass1-wrap">
-                        <th scope="row">
-                            <label for="pass1-text">
-                                密码				<span class="description hide-if-js">（必填）</span>
-                            </label>
-                        </th>
-                        <td>
-                            <input class="hidden" value=" "><!-- #24364 workaround -->
-<!--                            <button type="button" class="button wp-generate-pw hide-if-no-js">显示密码</button>-->
+                            <tr class="user-first-name-wrap">
+                                <th><label for="dis_name">教练性别</label></th>
+                                <td>
+                                    <label for="sex1"><input type="radio" name="user_gender" value="男" id="sex1">男</label>
+                                    <label for="sex2"><input type="radio" name="user_gender" value="女" id="sex2">女</label>
+                                </td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">教练年龄</label></th>
+                                <td><input type="text" name="real_age" value=""></td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">手机号码</label></th>
+                                <td><input type="text" name="user_mobile" value=""></td>
+                            </tr>
 
-                            <div class="wp-pwd">
-								<span class="password-input-wrapper show-password">
-
-				</span>
-                                <input type="text" name="pass1" id="pass1" value="<?=isset($_POST['pass1']) ? $_POST['pass1'] : ''?>" class="regular-text strong" autocomplete="off" data-reveal="1" data-pw="#8LefUAX7w^Q!)9HJFy7muCG" aria-describedby="pass-strength-result">
-<!--                                <input type="text" id="pass1-text" name="pass1-text" autocomplete="off" class="regular-text strong" disabled="">-->
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="form-field form-required user-pass2-wrap">
-                        <th scope="row"><label for="pass2">重复密码 <span class="description">（必填）</span></label></th>
-                        <td>
-                            <input name="pass2" type="text" id="pass2" value="<?=isset($_POST['pass2']) ? $_POST['pass2'] : ''?>" autocomplete="off">
-                        </td>
-                    </tr>
+<!--                            <tr class="user-last-name-wrap">-->
+<!--                                <th><label for="surname">教练照片</label></th>-->
+<!--                                <td>-->
+<!--                                    <img src="" alt="">-->
+<!--                                    <input type="file">-->
+<!--                                </td>-->
+<!--                            </tr>-->
+                            <tr class="user-last-name-wrap">
+                                <th><label for="">教学类别</label></th>
+                                <td>
+                                    <?php foreach ($postsRows as $prv){ ?>
+                                        <label for="category_<?=$prv['ID']?>"><?=$prv['post_title']?></label>
+                                        <input name="categorys[]" type="checkbox" id="category_<?=$prv['ID']?>" value="<?=$prv['ID'].'_'.$prv['alis']?>">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+<!--                            <tr class="user-last-name-wrap">-->
+<!--                                <th><label for="surname">教练职称</label></th>-->
+<!--                                <td><input type="text" name="surname" id="surname" value="" class="regular-text"></td>-->
+<!--                            </tr>-->
+<!--                            <tr class="user-last-name-wrap">-->
+<!--                                <th><label for="surname">教练证书</label></th>-->
+<!--                                <td><input type="text" name="surname" id="surname" value="" class="regular-text"></td>-->
+<!--                            </tr>-->
 <!---->
-<!--                    <tr>-->
-<!--                        <th scope="row">发送用户通知</th>-->
-<!--                        <td>-->
-<!--                            <input type="checkbox" name="send_user_notification" id="send_user_notification" value="1" checked="checked">-->
-<!--                            <label for="send_user_notification">向新用户发送有关账户详情的电子邮件。</label>-->
-<!--                        </td>-->
-<!--                    </tr>-->
-<!--                    <tr class="form-field">-->
-<!--                        <th scope="row"><label for="role">角色</label></th>-->
-<!--                        <td>-->
-<!--                            <select name="role" id="role">-->
-<!--                                <option selected="selected" value="subscriber">学生</option>-->
-<!--                                <option value="contributor">投稿者</option>-->
-<!--                                <option value="author">作者</option>-->
-<!--                                <option value="editor">教练</option>-->
-<!--                                <option value="administrator">管理员</option>-->
-<!--                            </select>-->
-<!--                        </td>-->
-<!--                    </tr>-->
-                    <tr class="coach-category">
-                       <th>
-                           教练技能
-                       </th>
-                        <td>
-                            <?php foreach ($postsRows as $prow){?>
-                                <label for="cate_<?=$prow['ID']?>"><?=$prow['post_title']?><input id="cate_<?=$prow['ID']?>" type="checkbox" name="<?=$prow['alis']?>" value="<?=$prow['ID']?>"></label>
-                                &ensp;
-                            <?php } ?>
-                        </td>
-                    </tr>
-                    <input type="hidden" name="role" value="editor" />
-                    </tbody>
-                </table>
+<!--                            <tr class="user-last-name-wrap">-->
+<!--                                <th><label for="surname">教练简介</label></th>-->
+<!--                                <td>-->
+<!--                                    <textarea name="" id="" cols="30" rows="10"></textarea>-->
+<!--                                </td>-->
+<!--                            </tr>-->
 
+                            <tr class="user-last-name-wrap">
+                                <th><label for="zone_user_id">所属机构</label></th>
+                                <td>
+                                    <select class="js-data-select-ajax" name="zone_user_id" style="width: 50%" data-action="get_base_zone_list" data-type="all_base">
 
-                <p class="submit"><input type="submit" name="createuser" id="createusersub" class="button button-primary" value="添加用户"></p>
-            </form>
-        </div>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="添加教练"></p>
+                    </form>
+                </div>
+                <script type="text/javascript">
+                    if (window.location.hash == '#password') {
+                        document.getElementById('pass1').focus();
+                    }
+                </script>
+
+                <div class="clear"></div></div><!-- wpbody-content -->
+            <div class="clear"></div></div>
         <?php
 
     }
