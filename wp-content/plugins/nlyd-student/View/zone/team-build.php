@@ -85,10 +85,10 @@ jQuery(function($) {
                     },
                     success: function(res, textStatus, jqXHR){
                         $.alerts(res.data.info)
-                        if(res.data.url){
+                        if(res.success){
                             setTimeout(function() {
-                                window.location.href=res.data.url
-                            }, 300);
+                                window.location.href=window.home_url+'/zone/team/'
+                            }, 1200);
                         }else{
                             _this.removeClass('disabled');
                         }

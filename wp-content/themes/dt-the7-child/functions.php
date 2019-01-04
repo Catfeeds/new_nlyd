@@ -909,7 +909,7 @@ if(is_admin()){
         $columns['team'] = '战队';
         $columns['mobile'] = '手机';
         $columns['email'] = '邮箱';
-        $columns['role'] = '角色';
+        $columns['roles'] = '角色';
 //        $columns['posts'] = '文章';
 //        $columns['mycred_default'] = '积分';
         $columns['user_options'] = '操作';
@@ -952,9 +952,24 @@ if(is_admin()){
                 return $age;
                 break;
             case 'team':
-                $team_name = $wpdb->get_var("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt 
-                LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.user_id={$user_id} AND mt.status=2");
-                return $team_name;
+//                $team_name = $wpdb->get_var("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt
+//                LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.user_id={$user_id} AND mt.status=2");
+                if(get_user_by('ID',$user_id)->roles[0] == 'editor'){
+                    //教练
+                    $arr = $wpdb->get_row("SELECT zm.zone_city,zm.zone_match_type FROM {$wpdb->prefix}zone_join_coach AS zjc
+                           LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=zjc.zone_id
+                           WHERE zjc.coach_id='{$user_id}'", ARRAY_A);
+                }else{
+                    $arr = $wpdb->get_row("SELECT zm.zone_city,zm.zone_match_type FROM {$wpdb->prefix}my_coach AS my 
+                             LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id=my.coach_id
+                             LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=zjc.zone_id
+                             WHERE my.user_id='{$user_id}' AND my.apply_status=2", ARRAY_A);
+                }
+                if($arr){
+                    return date('Y').'脑力世界杯'.$arr['zone_city'].($arr['zone_match_type']=='1'?'战队精英赛':'城市精英赛');
+                }else{
+                    return '';
+                }
                 break;
             case 'user_options':
                 $arrs = [
@@ -963,6 +978,9 @@ if(is_admin()){
                     '<a href="'.admin_url('admin.php?page=fission-profit-log&user_id='.$user_id).'">分成记录</a>',
                 ];
                 return join(' | ',$arrs);
+                break;
+            case 'roles':
+                return translate_user_role(wp_roles()->get_names()[get_user_by('ID',$user_id)->roles[0]]);
                 break;
         }
         return $value;

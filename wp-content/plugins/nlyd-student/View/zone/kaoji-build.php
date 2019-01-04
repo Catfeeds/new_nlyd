@@ -49,15 +49,24 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级费用', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="cost" value=""></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="cost" value="1"></div>
                         </div>
                         <div>
                             <div class="lable_row">
-                                <span class="c_black"><?=__('考级日期', 'nlyd-student')?>：</span>
+                                <span class="c_black"><?=__('考级开始日期', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" value="" type="text" readonly name="start_time" data-time="2019,10,11,11,11" id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级日期', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" value="" type="text" readonly name="start_time" data-time="2019,10,11,11,11" id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="lable_row">
+                                <span class="c_black"><?=__('考级结束日期', 'nlyd-student')?>：</span>
+                            </div>
+                            <div class="input_row">
+                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
+                                <input class="radius_input_row nl-foucs" value="" type="text" readonly name="end_time" data-time="2019,10,11,11,11" id="match_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级结束日期', 'nlyd-student')?>">
                             </div>
                         </div>
                         <input type="hidden" name="action" value="zone_create_grading">
@@ -76,6 +85,7 @@ var match_date_Data=$.validationLayui.dates2;//考级日期
 var posiotion_match_type1=[0];//初始化位置，高亮展示
 var posiotion_match_type2=[0];//初始化位置，高亮展示
 var posiotion_match_date=[0,0,0,0,0];//初始化位置，高亮展示
+var posiotion_gradeEnd_date=[0,0,0,0,0];
 
 //---------------------------考级类别------------------------------
 if($('#match_type1').val().length>0 && $('#match_type1').val()){
@@ -126,19 +136,19 @@ var mobileSelect2 = new MobileSelect({
         $('#match_type2_id').val(data[0]['id']);
     }
 });
-//---------------------------考级日期------------------------------
+//---------------------------考级结束日期------------------------------
 if($('#match_date').length>0 && $('#match_date').attr('data-time') && $('#match_date').attr('data-time').length>0){
     var timeValue=$('#match_date').attr('data-time').split(',');
     $.each(match_date_Data,function(index,value){
-        if(timeValue[0]==value.value){
+        if(parseInt(timeValue[0])==parseInt(value.value)){
             $.each(value.childs,function(i,v){
-                if(timeValue[1]==v.value){
+                if(parseInt(timeValue[1])==parseInt(v.value)){
                     $.each(v.childs,function(j,val){
-                        if(timeValue[2]==val.value){
+                        if(parseInt(timeValue[2])==parseInt(val.value)){
                             $.each(val.childs,function(k,b){
-                                if(timeValue[3]==b.value){
+                                if(parseInt(timeValue[3])==parseInt(b.value)){
                                     $.each(b.childs,function(l,c){
-                                        if(timeValue[4]==c.value){
+                                        if(parseInt(timeValue[4])==parseInt(c.value)){
                                             posiotion_match_date=[index,i,j,k,l];
                                         }
                                     })
@@ -153,7 +163,7 @@ if($('#match_date').length>0 && $('#match_date').attr('data-time') && $('#match_
 }
 var mobileSelect3 = new MobileSelect({
     trigger: '#match_date',
-    title: "<?=__('考级日期', 'nlyd-student')?>",
+    title: "<?=__('结束日期', 'nlyd-student')?>",
     wheels: [
         {data: match_date_Data}
     ],
@@ -165,6 +175,49 @@ var mobileSelect3 = new MobileSelect({
     callback:function(indexArr, data){
         var text=data[0]['value']+'/'+data[1]['value']+'/'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
         $('#match_date').val(text);
+       
+    }
+});
+
+//---------------------------考级日期------------------------------
+if($('#match_end_date').length>0 && $('#match_end_date').attr('data-time') && $('#match_end_date').attr('data-time').length>0){
+    var timeValue=$('#match_end_date').attr('data-time').split(',');
+    $.each(match_date_Data,function(index,value){
+        if(parseInt(timeValue[0])==parseInt(value.value)){
+            $.each(value.childs,function(i,v){
+                if(parseInt(timeValue[1])==parseInt(v.value)){
+                    $.each(v.childs,function(j,val){
+                        if(parseInt(timeValue[2])==parseInt(val.value)){
+                            $.each(val.childs,function(k,b){
+                                if(parseInt(timeValue[3])==parseInt(b.value)){
+                                    $.each(b.childs,function(l,c){
+                                        if(parseInt(timeValue[4])==parseInt(c.value)){
+                                            posiotion_gradeEnd_date=[index,i,j,k,l];
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })
+}
+var mobileSelect4 = new MobileSelect({
+    trigger: '#match_end_date',
+    title: "<?=__('考级日期', 'nlyd-student')?>",
+    wheels: [
+        {data: match_date_Data}
+    ],
+    new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>","<?=__('时', 'nlyd-student')?>","<?=__('分', 'nlyd-student')?>"],
+    position:posiotion_gradeEnd_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+    transitionEnd:function(indexArr, data){
+        // console.log(data);
+    },
+    callback:function(indexArr, data){
+        var text=data[0]['value']+'/'+data[1]['value']+'/'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
+        $('#match_end_date').val(text);
        
     }
 });

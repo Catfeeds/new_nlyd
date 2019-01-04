@@ -841,6 +841,7 @@ class Organize{
                     //收益和机构
                     if($user_status === 1){
                         $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND user_status='-1'",ARRAY_A);
+
                         if($zmv){
                             //创建新账号
                             $user_email = $zmv['apply_id'].rand(000,999).date('is', get_time()).'@gjnlyd.com';
@@ -849,6 +850,9 @@ class Organize{
                             if(!$user_id) {
                                 $error_msg = '操作失败!';
                             }
+                            //创建战队
+
+
                             if($error_msg == '') {
                                 //更新机构所有者id
                                 if (!$wpdb->update($wpdb->prefix . 'zone_meta', ['user_id' => $user_id], ['id' => $zmv['id']])) {
