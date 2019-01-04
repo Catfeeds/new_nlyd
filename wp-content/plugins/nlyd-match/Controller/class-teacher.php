@@ -788,15 +788,78 @@ class Teacher
             $user_login = isset($_POST['user_login']) ? trim($_POST['user_login']) : '';
             $password = isset($_POST['password']) ? trim($_POST['password']) : '';
             $real_name = isset($_POST['real_name']) ? trim($_POST['real_name']) : '';
-            $real_age = isset($_POST['real_age']) ? trim($_POST['real_age']) : '';
+            $real_age = isset($_POST['real_age']) ? intval($_POST['real_age']) : 0;
             $user_mobile = isset($_POST['user_mobile']) ? trim($_POST['user_mobile']) : '';
             $user_gender = isset($_POST['user_gender']) ? trim($_POST['user_gender']) : '';
-            $categorys = isset($_POST['categorys']) ? trim($_POST['categorys']) : '';
+            $card_type = isset($_POST['card_type']) ? trim($_POST['card_type']) : '';
+            $card_num = isset($_POST['card_num']) ? trim($_POST['card_num']) : '';
+            $categorys = isset($_POST['categorys']) ? $_POST['categorys'] : '';
+            $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
+
             //判断账号格式
             if(!preg_match('/^1[3456789][0-9]{9}$/',$user_login) && !preg_match('/^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$/',$user_login)) $err_msg = '账号格式不正确';
+            if(strlen($password) < 6) $err_msg .= '<br />密码长度不够';
+            if($real_name == '') $err_msg .= '<br />请填写教练姓名';
+            if($real_age < 1) $err_msg .= '<br />请填写教练年龄';
+            if(!preg_match('/^1[3456789][0-9]{9}$/',$user_mobile)) $err_msg .= '<br />手机格式不正确';
+            if($user_gender == '') $err_msg .= '<br />请填写教练性别';
+            if($card_type == '') $err_msg .= '<br />请填写选择证件类型';
+            if($card_num == '') $err_msg .= '<br />请填证件号码';
+            $wpdb->query('START TRANSACTION');
+            //添加user先
+            $user_id = wp_create_user($user_login, $password, '');
+            if($user_id < 1) $err_msg = '创建用户失败!';
+            if($err_msg == ''){
+                $upBool = $wpdb->update($wpdb->users,['user_mobile' => $user_login], ['ID' => $user_id]);
+                if(!$upBool) $err_msg = '更新手机号码失败!';
+            }
+            //添加user_meta了
+            if($err_msg == ''){
+                $user_real_name = [
+                  'real_name' => $real_name,
+                  'real_age' => $real_age,
+                  'real_type' => $card_type,
+                  'real_ID' => $card_num,
+                ];
+                update_user_meta($user_id, 'user_real_name',$user_real_name);
+                update_user_meta($user_id, 'user_ID', 10000000*$user_id);
+                update_user_meta($user_id, 'user_gender', $user_gender);
+            }
 
-            leo_dump($err_msg);
-            die;
+            //现在整教练技能
+           if($err_msg == ''){
+               $reading_value = 0;
+               $memory_value = 0;
+               $arithmetic_value = 0;
+               if(is_array($categorys)){
+                   foreach ($categorys as $v){
+                       $category_v = explode('_',$v);
+                       switch ($category_v[1]){
+                           case 'reading':
+                               $reading_value = $category_v[0];
+                               break;
+                           case 'memory':
+                               $memory_value = $category_v[0];
+                               break;
+                           case 'arithmetic':
+                               $arithmetic_value = $category_v[0];
+                               break;
+                       }
+                   }
+               }
+               $coach_skill_bool = $wpdb->insert($wpdb->prefix.'coach_skill',['read'=>$reading_value,'memory'=>$memory_value,'compute'=>$arithmetic_value,'coach_id'=>$user_id]);
+               if(!$coach_skill_bool) $err_msg = '添加教练技能失败';
+           }
+
+           //还有所属机构哟
+            $zone_bool = $wpdb->insert("{$wpdb->prefix}zone_join_coach",['zone_id' => $zone_user_id,'coach_id' => $user_id]);
+            if(!$zone_bool) $err_msg = '添加所属机构失败';
+            if($err_msg == ''){
+                $wpdb->query('COMMIT');
+                $suc_msg = '添加成功!';
+            }else{
+                $wpdb->query('ROLLBACK');
+            }
         }
         $postsRows = getCategory();
         ?>
@@ -842,12 +905,28 @@ class Teacher
                                     <label for="sex2"><input type="radio" name="user_gender" value="女" id="sex2">女</label>
                                 </td>
                             </tr>
-                            <tr class="user-last-name-wrap">
-                                <th><label for="surname">教练年龄</label></th>
-                                <td><input type="text" name="real_age" value=""></td>
+                            <tr>
+                                <th><label for="card_type">认证证件</label></th>
+                                <td>
+                                    <select name="card_type" id="card_type">
+                                        <option value="sf">身份证</option>
+                                        <option value="jg">军官证</option>
+                                        <option value="hz">护照</option>
+                                        <option value="tb">台胞证</option>
+                                        <option value="ga">港澳证</option>
+                                    </select>
+                                </td>
+                            </tr
+                            <tr>
+                                <th><label for="card_num">证件号码</label></th>
+                                <td><input type="text" name="card_num" id="card_num" value="" class="regular-text"></td>
                             </tr>
                             <tr class="user-last-name-wrap">
-                                <th><label for="surname">手机号码</label></th>
+                                <th><label for="real_age">教练年龄</label></th>
+                                <td><input type="text" name="real_age" id="real_age" value=""></td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="user_mobile">手机号码</label></th>
                                 <td><input type="text" name="user_mobile" value=""></td>
                             </tr>
 
@@ -901,6 +980,41 @@ class Teacher
                     if (window.location.hash == '#password') {
                         document.getElementById('pass1').focus();
                     }
+                    jQuery(document).ready(function($) {
+                        $('#card_num').on('change',function () {
+                            var age = GetAge($(this).val());
+                            if(age > 0) $("#real_age").val(age);
+                        });
+                        function GetAge(identityCard) {
+                            var len = (identityCard + "").length;
+                            if (len == 0) {
+                                return 0;
+                            } else {
+                                if ((len != 15) && (len != 18))//身份证号码只能为15位或18位其它不合法
+                                {
+                                    return 0;
+                                }
+                            }
+                            var strBirthday = "";
+                            if (len == 18)//处理18位的身份证号码从号码中得到生日和性别代码
+                            {
+                                strBirthday = identityCard.substr(6, 4) + "/" + identityCard.substr(10, 2) + "/" + identityCard.substr(12, 2);
+                            }
+                            if (len == 15) {
+                                strBirthday = "19" + identityCard.substr(6, 2) + "/" + identityCard.substr(8, 2) + "/" + identityCard.substr(10, 2);
+                            }
+                            //时间字符串里，必须是“/”
+                            var birthDate = new Date(strBirthday);
+                            var nowDateTime = new Date();
+                            var age = nowDateTime.getFullYear() - birthDate.getFullYear();
+                            //再考虑月、天的因素;.getMonth()获取的是从0开始的，这里进行比较，不需要加1
+                            if (nowDateTime.getMonth() < birthDate.getMonth() || (nowDateTime.getMonth() == birthDate.getMonth() && nowDateTime.getDate() < birthDate.getDate())) {
+                                age--;
+                            }
+                            return age;
+                        }
+                    })
+
                 </script>
 
                 <div class="clear"></div></div><!-- wpbody-content -->
