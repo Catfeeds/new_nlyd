@@ -488,10 +488,10 @@ class Student_Zone extends Student_Home
              $match = $wpdb->get_row($sql,ARRAY_A);
              //print_r($match);
              if(!empty($match['start_time'])){
-                 $match['data_time'] = preg_replace('/\s|:/','-',$match['start_time']);
+                 $match['data_start_time'] = preg_replace('/\s|:/','-',$match['start_time']);
              }
              if(!empty($match['end_time'])){
-                 $match['data_time'] = preg_replace('/\s|:/','-',$match['end_time']);
+                 $match['data_end_time'] = preg_replace('/\s|:/','-',$match['end_time']);
              }
              $person_liable = get_user_meta($match['person_liable'],'user_real_name')[0];
              $match['person'] = !empty($person_liable['real_name']) ? $person_liable['real_name'] : '-';

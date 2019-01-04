@@ -10,7 +10,7 @@
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
-                <h1 class="mui-title"><div><?=__('发布考级', 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__(!empty($_GET['grading_id']) ? '编辑考级' : '发布考级', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content have-bottom">
                 <div class="width-padding layui-row width-margin-pc">
@@ -57,7 +57,7 @@
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" value="<?=$match['start_time']?>" type="text" readonly name="start_time" data-time="2019,10,11,11,11" id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" value="<?=$match['start_time']?>" type="text" readonly name="start_time" data-time="<?=$match['data_start_time']?>" id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
@@ -66,12 +66,12 @@
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" value="<?=$match['end_time']?>" type="text" readonly name="end_time" data-time="2019,10,11,11,11" id="match_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级结束日期', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" value="<?=$match['end_time']?>" type="text" readonly name="end_time" data-time="<?=$match['data_end_time']?>" id="match_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级结束日期', 'nlyd-student')?>">
                             </div>
                         </div>
                         <input type="hidden" name="action" value="zone_create_grading">
                         <input type="hidden" name="grading_id" value="<?=$_GET['grading_id']?>">
-                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认发布/保存更新', 'nlyd-student')?></div></a>
+                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__(!empty($_GET['grading_id']) ? '保存更新' :'确认发布', 'nlyd-student')?></div></a>
                     </form>
                 </div>
             </div>
@@ -160,7 +160,7 @@ var mobileSelect2 = new MobileSelect({
 });
 //---------------------------考级结束日期------------------------------
 if($('#match_date').length>0 && $('#match_date').attr('data-time') && $('#match_date').attr('data-time').length>0){
-    var timeValue=$('#match_date').attr('data-time').split(',');
+    var timeValue=$('#match_date').attr('data-time').split('-');
     $.each(match_date_Data,function(index,value){
         if(parseInt(timeValue[0])==parseInt(value.value)){
             $.each(value.childs,function(i,v){
@@ -203,7 +203,7 @@ var mobileSelect3 = new MobileSelect({
 
 //---------------------------考级日期------------------------------
 if($('#match_end_date').length>0 && $('#match_end_date').attr('data-time') && $('#match_end_date').attr('data-time').length>0){
-    var timeValue=$('#match_end_date').attr('data-time').split(',');
+    var timeValue=$('#match_end_date').attr('data-time').split('-');
     $.each(match_date_Data,function(index,value){
         if(parseInt(timeValue[0])==parseInt(value.value)){
             $.each(value.childs,function(i,v){

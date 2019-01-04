@@ -4810,7 +4810,7 @@ class Student_Ajax
 
             $match_meta['revise_id'] = $current_user->ID;
             $match_meta['revise_time'] = get_time('mysql');
-            $a = $wpdb->update($wpdb->prefix.'grading_meta',$match_meta,array('match_id'=>$_POST['match_id']));
+            $a = $wpdb->update($wpdb->prefix.'grading_meta',$match_meta,array('grading_id'=>$_POST['grading_id']));
         }else{
             $match_meta['created_person'] = $current_user->ID;
             $match_meta['created_time'] = get_time('mysql');
@@ -4821,10 +4821,10 @@ class Student_Ajax
             //设置比赛开关
             update_post_meta($new_page_id,'default_match_switch','ON');
             $wpdb->query('COMMIT');
-            wp_send_json_success(array('info'=>$_POST['match_id'] > 0 ? '考级编辑成功' : '考级发布成功','url'=>home_url('/zone/grading/')));
+            wp_send_json_success(array('info'=>$_POST['grading_id'] > 0 ? '考级编辑成功' : '考级发布成功','url'=>home_url('/zone/grading/')));
         }else{
             $wpdb->query('ROLLBACK');
-            wp_send_json_error(array('info'=>$_POST['match_id'] > 0 ? '考级编辑失败' : '考级发布失败'));
+            wp_send_json_error(array('info'=>$_POST['grading_id'] > 0 ? '考级编辑失败' : '考级发布失败'));
         }
     }
 
