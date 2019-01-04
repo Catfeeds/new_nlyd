@@ -4791,13 +4791,6 @@ class Student_Ajax
         if(!empty($_POST['grading_id'])){
             $wpdb->update($wpdb->prefix.'posts',$arr,array('ID'=>$_POST['grading_id']));
             $new_page_id = $_POST['grading_id'];
-            //获取比赛开赛时间
-            $match_start_time = $wpdb->get_var("select match_start_time from {$wpdb->prefix}match_meta_new where match_id = {$_POST['grading_id']} ");
-            if($match_start_time != $_POST['match_start_time']){
-                $wpdb->delete($wpdb->prefix.'match_project_more',array('match_id'=>$_POST['grading_id']));
-            }else{
-                $b = true;
-            }
         }else{
             $new_page_id = wp_insert_post($arr);
         }
@@ -4833,6 +4826,7 @@ class Student_Ajax
             wp_send_json_error(array('info'=>$_POST['match_id'] > 0 ? '考级编辑失败' : '考级发布失败'));
         }
     }
+
 
     /**
      * 获取比赛费用
