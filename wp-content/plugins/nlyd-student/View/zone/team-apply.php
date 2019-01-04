@@ -15,32 +15,8 @@
             <div><?=__('战队申请管理', 'nlyd-student')?></div>
             </h1>
         </header>
-            <div class="layui-row nl-border nl-content">
-                <div class="teamApply_row width-padding width-padding-pc" data-id="1">
-                    <div class="teamApply_row_info fs_14">
-                        <span class="c_blue"><?=__('詹冬梅', 'nlyd-student')?></span>
-                        <span><?=__('申请', 'nlyd-student')?></span>
-                        <span class="c_blue"><?=__('加入', 'nlyd-student')?></span>
-                        <span><?=__('战队', 'nlyd-student')?></span>
-                    </div>
-                    <div class="teamApply_row_btns fs_14 pull-right">
-                        <a class="_btn c_blue mr_10" data-id="true"><?=__('同意', 'nlyd-student')?></a>
-                        <a class="_btn c_black6" data-id="false"><?=__('拒绝', 'nlyd-student')?></a>
-                    </div>
-                </div>
-
-                <div class="teamApply_row width-padding width-padding-pc" data-id="2">
-                    <div class="teamApply_row_info fs_14">
-                        <span class="c_blue"><?=__('詹冬梅', 'nlyd-student')?></span>
-                        <span><?=__('申请', 'nlyd-student')?></span>
-                        <span class="c_blue"><?=__('退出', 'nlyd-student')?></span>
-                        <span><?=__('战队', 'nlyd-student')?></span>
-                    </div>
-                    <div class="teamApply_row_btns fs_14 pull-right">
-                        <a class="_btn c_blue mr_10" data-id="true"><?=__('同意', 'nlyd-student')?></a>
-                        <a class="_btn c_black6" data-id="false"><?=__('拒绝', 'nlyd-student')?></a>
-                    </div>
-                </div>
+            <div class="layui-row nl-border nl-content flow-default" id="teamApply_flow">
+               
             </div>
         </div>           
     </div>
@@ -48,19 +24,17 @@
 
 <script>
 jQuery(function($) {     
-    layui.use(['layer'], function(){
-        $('._btn').click(function(){
+    var _map=$.Request('map');
+    layui.use(['layer','element','flow'], function(){
+        var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+        var flow = layui.flow;//流加载
+        $('body').on('click','._btn',function(){//同意，拒绝
             var _this=$(this);
-            var isAgree=_this.attr('data-id');
-            var text=_this.parents('.teamApply_row').find('.teamApply_row_info').text();
+            var _that=_this.parent('.teamApply_row_btns')
+            var _id=_this.attr('data-id');
+            var text=_this.parents('.teamApply_row').find('.teamApply_row_info').html();
             var isAgree_text=_this.text();
-            // switch  (isAgree) {
-            //     case 'true':
-
-            //     break;
-            //     case 'false':
-            //     break;
-            // }
+            var status=_this.hasClass('yes') ? 'y' : 'n';
             layer.open({
                 type: 1
                 ,maxWidth:300
@@ -78,48 +52,30 @@ jQuery(function($) {
                     layer.closeAll();
                 }
                 ,btn2: function(index, layero){
-                    if(!_this.hasClass('disabled')){
+                    if(!_that.hasClass('disabled')){
                         var data={
-                            action:'zone_coach_relieve',
-                            coach_id:$.Request('coach_id'),
+                            action:'team_personnel_operation',
+                            status:status,
                         }
                         $.ajax({
                             data: data,
                             beforeSend:function(XMLHttpRequest){
-                                _this.addClass('disabled')
+                                _that.addClass('disabled')
                             },
                             success: function(res, textStatus, jqXHR){
                                 console.log(res)
-                                if(res.success){
-                                    if(res.data.info){
-                                        $.alerts(res.data.info);
-                                        setTimeout(function() {
-                                            window.location.href=window.home_url+'/zone/coach/'
-                                        }, 1000);
-                                    }
-                                    if(res.data.list){
-                                        $.alerts("<?=__('当前教练下存在学员，请为学员绑定新的教练关系并进行解绑教练操作', 'nlyd-student')?>",3000)
-                                        var arr=JSON.parse(res.data.list);
-                                        mobileSelect4.updateWheel(0,arr);
-                                        mobileSelect4.show();
-                                        _this.removeClass('disabled');
-                                    }
-                                    
-                                }else{
-                                    $.alerts(res.data.info);
-                                    _this.removeClass('disabled');
-                                }
+                                // _this.parents('.teamApply_row').remove()
                             },
                             complete: function(jqXHR, textStatus){
                                 if(textStatus=='timeout'){
                                     $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                                    _this.removeClass('disabled');
+                                    _that.removeClass('disabled');
                         　　　　 }
                                 
                             }
                         })
                     }else{
-                        $.alerts("<?=__('正在删除此轮比赛，请稍后再试', 'nlyd-student')?>",1200)
+                        $.alerts("<?=__('正在处理您的请求，请稍后再试', 'nlyd-student')?>",1200)
                     }
                     layer.closeAll();
                 }
@@ -129,6 +85,58 @@ jQuery(function($) {
                 ,isOutAnim:true//关闭动画
             });
         })
+//---------------------------------分页------------------------------------------
+        function pagation(id,team_page){
+            flow.load({
+                elem: '#'+id //流加载容器
+                ,isAuto: false
+                ,isLazyimg: true
+                ,done: function(page, next){ //加载下一页
+                    var postData={
+                        action:'get_team_personnel',
+                        page:team_page,
+                        map:_map,
+                    }
+                    var lis = [];
+                    $.ajax({
+                        data: postData,
+                        success:function(res,ajaxStatu,xhr){
+                            console.log(res)
+                            team_page++
+                            if(res.success){
+                                $.each(res.data.info,function(i,v){
+                                    var dom=  '<div class="teamApply_row width-padding width-padding-pc">'+
+                                                '<div class="teamApply_row_info fs_14">'+
+                                                    '<span class="c_blue">'+v.real_name+'</span><span><?=__("申请", "nlyd-student")?></span><span class="c_blue">'+v.status_cn+'</span><span><?=__("战队", "nlyd-student")?></span>'+
+                                                '</div>'+
+                                                '<div class="teamApply_row_btns fs_14 pull-right">'+
+                                                    '<a class="_btn yes c_blue mr_10" data-id="'+v.id+'"><?=__("同意", "nlyd-student")?></a>'+
+                                                    '<a class="_btn no c_black6" data-id="'+v.id+'"><?=__("拒绝", "nlyd-student")?></a>'+
+                                                '</div>'+
+                                            '</div>'
+                                    lis.push(dom) 
+                                })
+                                if (res.data.info.length<50) {
+                                    next(lis.join(''),false) 
+                                }else{
+                                    next(lis.join(''),true) 
+                                }
+                                
+                            }else{
+                                next(lis.join(''),false)
+                            }
+                        },
+                        complete:function(XMLHttpRequest, textStatus){
+							if(textStatus=='timeout'){
+								$.alerts("<?=__('网络质量差,请重试', 'nlyd-student')?>")
+								next(lis.join(''),true)
+							}
+                        }
+                    })       
+                }
+            });
+        }
+        pagation('teamApply_flow',1)
     }) 
 })
 </script>

@@ -789,7 +789,7 @@ input[type="text"].coach_form_input{
     padding-bottom: 13px;
     font-size: 0;
 }
-.teamApply_row:nth-child(even){
+.teamApply_row:nth-child(odd){
     background: rgba(243, 248, 255, 0.68);
 }
 .teamApply_row_info,
