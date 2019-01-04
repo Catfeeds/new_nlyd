@@ -56,7 +56,7 @@ jQuery(function($) {
                     if(!_that.hasClass('disabled')){
                         var data={
                             action:'team_personnel_operation',
-                            map:map,
+                            // map:map,
                             id:_id,
                             status:status,
                         }
@@ -68,6 +68,7 @@ jQuery(function($) {
                             success: function(res, textStatus, jqXHR){
                                 console.log(res)
                                 // _this.parents('.teamApply_row').remove()
+                                _that.removeClass('disabled');
                             },
                             complete: function(jqXHR, textStatus){
                                 if(textStatus=='timeout'){
