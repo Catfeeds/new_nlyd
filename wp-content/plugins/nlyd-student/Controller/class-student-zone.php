@@ -577,9 +577,8 @@ class Student_Zone extends Student_Home
 
          global $wpdb,$current_user;
          //获取教练信息
-         $sql = "select b.meta_key,b.meta_value from {$wpdb->prefix}zone_join_coach a 
-                  left join  {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key in('user_real_name','user_ID','user_gender','user_head','real_ID','user_ID_Card','coach_brief') 
-                  where a.coach_id = {$_GET['student_id']} ";
+         $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$_GET['student_id']} and meta_key in('user_real_name','user_ID','user_gender','user_head','real_ID','user_ID_Card','coach_brief') 
+                  ";
          //print_r($sql);
          $rows = $wpdb->get_results($sql,ARRAY_A);
          if(empty($rows)){
@@ -615,8 +614,8 @@ class Student_Zone extends Student_Home
          $row = $wpdb->get_row("select user_mobile,referee_id from {$wpdb->prefix}users where ID = {$_GET['student_id']} ",ARRAY_A);
          $student['user_mobile'] = !empty($row['user_mobile']) ? hideStar($row['user_mobile']) : '-';
          $student['referee_id'] = !empty($row['referee_id']) ? $row['referee_id']+10000000 : '-';
-        $view = student_view_path.CONTROLLER.'/student-detail.php';
-        load_view_template($view,$student);
+         $view = student_view_path.CONTROLLER.'/student-detail.php';
+         load_view_template($view,$student);
     }
 
     /**
