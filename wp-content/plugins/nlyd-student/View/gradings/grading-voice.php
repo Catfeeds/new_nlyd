@@ -209,20 +209,27 @@ jQuery(function($) {
                     }
                 },
             false);
-            if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
-                audio.currentTime = spriteData[questions_answer[_index]].start;
-            }else{
-                audio.addEventListener("canplay",function() {
-                        //设置播放时间
+            if('ontouchstart' in window){// 移动端
+                if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
                     audio.currentTime = spriteData[questions_answer[_index]].start;
-                });
+                    
+                }else{
+                    audio.addEventListener("canplay",function() {
+                        //设置播放时间
+                        audio.currentTime = spriteData[questions_answer[_index]].start;
+                    });
+                }
+            }else{
+                audio.currentTime = spriteData[questions_answer[_index]].start;
             }
             if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
-             
+            
             } else {
+                
                 //監聽客户端抛出事件"WeixinJSBridgeReady"
                 if (document.addEventListener) {
                     document.addEventListener("WeixinJSBridgeReady", function(){
+                        
                         if(!palying){
                             $(".voice_title").text("<?=__('点击页面播放语音', 'nlyd-student')?>");
                             $('body').addClass('canplay');

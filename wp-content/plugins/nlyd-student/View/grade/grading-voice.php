@@ -210,14 +210,18 @@ jQuery(function($) {
                 },
             false);
             // audio.load();
-            if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
-                
-                audio.currentTime = spriteData[questions_answer[_index]].start;
-              
-            }else{
-                audio.addEventListener("canplay",function() {
+            if('ontouchstart' in window){// 移动端
+                if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
                     audio.currentTime = spriteData[questions_answer[_index]].start;
-                });
+                    
+                }else{
+                    audio.addEventListener("canplay",function() {
+                        //设置播放时间
+                        audio.currentTime = spriteData[questions_answer[_index]].start;
+                    });
+                }
+            }else{
+                audio.currentTime = spriteData[questions_answer[_index]].start;
             }
             if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
                
