@@ -199,7 +199,7 @@ class Teacher
                                 <a href="<?=admin_url('admin.php?page=course&coach_id='.$row['coach_id'])?>"><?=$course_num?></a>
                             </td>
                             <td class="outfit column-outfit" data-colname="所属机构">
-                                <?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市精英赛')?>
+                                <?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>
                             </td>
                             <td class="option column-option" data-colname="操作">
                                 <a style="color: #00aff9" href="<?php echo '?page=teacher-datum&id='.$row['id'] ?>">编辑</a>

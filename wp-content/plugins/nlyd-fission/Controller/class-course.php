@@ -37,6 +37,7 @@ class Course{
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $type = isset($_GET['stype']) ? intval($_GET['stype']) : 0;
+        $ctype = isset($_GET['ctype']) ? intval($_GET['ctype']) : 1;
         $coach_id = isset($_GET['coach_id']) ? intval($_GET['coach_id']) : 0;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
         $page < 1 && $page = 1;
@@ -52,8 +53,11 @@ class Course{
         if($coach_id > 0){
             $where .= " AND cou.coach_id='{$coach_id}'";
         }
+        if($ctype === 2){
+            $where .= " AND cou.is_share=1";
+        }
         $rows = $wpdb->get_results("SELECT cou.course_title,cou.course_img,cou.const,cou.const,cou.is_enable,cou.coach_id,cou.course_start_time,cou.course_end_time,
-                cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.id,
+                cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.id,cou.is_share,
                 zm.zone_name,um.meta_value AS coach_real_name  
                 FROM {$wpdb->prefix}course AS cou 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
@@ -90,10 +94,22 @@ class Course{
 
             <br class="clear">
             <ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=0&coach_id='.$coach_id)?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
-                <?php foreach ($courseTypeList as $ctlv){ ?>
-                    <li class="all"><a href="<?=admin_url('admin.php?page=course&stype='.$ctlv['id'].'&coach_id='.$coach_id)?>" <?=$type==$ctlv['id']?'class="current"':''?> aria-current="page"><?=$ctlv['type_name']?><span class="count"></span></a></li>
-                <?php } ?>
+                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype='.$type.'&coach_id='.$coach_id.'&ctype=1')?>" <?=$ctype===1?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype='.$type.'&coach_id='.$coach_id.'&ctype=2')?>" <?=$ctype===2?'class="current"':''?> aria-current="page">乐学乐分享<span class="count"></span></a> |</li>
+            </ul>
+            <br class="clear">
+            <ul class="subsubsub">
+                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=0&coach_id='.$coach_id.'&cptye='.$ctype)?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
+                <?php
+                $subList = [];
+                foreach ($courseTypeList as $ctlv){
+                    $subList[] = '<li class="all"><a href="'.admin_url('admin.php?page=course&stype='.$ctlv['id'].'&coach_id='.$coach_id.'&cptye='.$ctype).'" '.($type==$ctlv['id']?'class="current"':"").' aria-current="page">'.$ctlv['type_name'].'<span class="count"></span></a></li>';
+                    ?>
+
+                <?php
+                }
+                echo join(' | ',$subList);
+                ?>
 
             </ul>
 
@@ -137,6 +153,7 @@ class Course{
                     <th scope="col" id="seize_quota" class="manage-column column-seize_quota">已抢占名额</th>
                     <th scope="col" id="zone_user_id" class="manage-column column-zone_user_id">所属机构</th>
                     <th scope="col" id="course_type" class="manage-column column-course_type">课程类型</th>
+                    <th scope="col" id="is_share" class="manage-column column-is_share">活动</th>
                     <th scope="col" id="is_enable" class="manage-column column-is_enable">状态</th>
                     <th scope="col" id="created_time" class="manage-column column-created_time">创建时间</th>
                     <th scope="col" id="options1" class="manage-column column-options1">操作</th>
@@ -180,6 +197,17 @@ class Course{
                         <td class="seize_quota column-seize_quota" data-colname="已抢占名额"><?=$row['seize_quota']?></td>
                         <td class="zone_user_id column-zone_user_id" data-colname="所属机构"><?=empty($row['zone_name']) ? '平台' :$row['zone_name']?></td>
                         <td class="course_type column-course_type" data-colname="课程类型"><?=$row['course_type'] == '1' ? '高效记忆术' :'提升应用课'?></td>
+                        <td class="is_share column-is_share" data-colname="活动">
+                        <?php
+                        switch ($row['is_share']){
+                            case '1':
+                                echo '<span style="color: #0a8406">乐学乐分享</span>';
+                                break;
+                            default:
+                                echo '-';
+                        }
+                        ?>
+                        </td>
                         <td class="is_enable column-is_enable" data-colname="状态"><?=$row['is_enable'] == '2' ? '<span style="color: #c42800;">禁用</span>':'正常'?></td>
                         <td class="created_time column-created_time" data-colname="创建时间"><?=$row['created_time']?></td>
                         <td class="options1 column-options1" data-colname="操作">
@@ -205,6 +233,7 @@ class Course{
                     <th scope="col" class="manage-column column-seize_quota">已抢占名额</th>
                     <th scope="col" class="manage-column column-zone_user_id">所属机构</th>
                     <th scope="col" class="manage-column column-course_type">课程类型</th>
+                    <th scope="col" class="manage-column column-is_share">活动</th>
                     <th scope="col" class="manage-column column-is_enable">状态</th>
                     <th scope="col" class="manage-column column-created_time">创建时间</th>
                     <th scope="col" class="manage-column column-options1">操作</th>
