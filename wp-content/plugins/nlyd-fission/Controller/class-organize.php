@@ -81,7 +81,7 @@ class Organize{
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
                 zm.zone_address,zm.business_licence_url,
                 zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,zm.id,zm.zone_match_type,
-                zm.chairman_id,zm.secretary_id,zm.zone_city,zm.term_time,zm.user_status,
+                zm.chairman_id,zm.secretary_id,zm.zone_city,zm.term_time,zm.user_status,zm.is_double,
                 CASE zm.is_able 
                 WHEN 1 THEN '正常' 
                 WHEN 2 THEN '被冻结' 
@@ -237,7 +237,16 @@ class Organize{
                            </div>
                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                        </td>
-                       <td class="zone_match_type column-zone_match_type" data-colname="办赛类型"><?=$row['zone_match_type']=='1'?'战队精英赛':'城市赛'?></td>
+                       <td class="zone_match_type column-zone_match_type" data-colname="办赛类型">
+
+                           <?php
+                           if($row['zone_match_type']=='1'){
+                               echo '战队精英赛';
+                           }else{
+                                echo ($row['is_double']=='1'?'双区县':'单区县').'城市赛';
+                           }
+                           ?>
+                       </td>
                        <td class="nums column-nums" data-colname="编号"><?=sprintf("%04d",$row['id']);?></td>
                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
                        <td class="person column-person" data-colname="负责人"><?=unserialize($person)['real_name']?></td>
@@ -252,11 +261,11 @@ class Organize{
                        <td class="zone_status column-zone_status" data-colname="申请状态">
                            <?php
                            if($row['user_status'] == '-1'){
-                                echo '<span style="coz">待审核</span>';
+                                echo '<span style="color: #c43800">待审核</span>';
                            } elseif ($row['user_status'] == '1'){
-
+                               echo '<span style="color: #0dc42b">已通过</span>';
                            }elseif ($row['user_status'] == '-2'){
-
+                               echo '<span style="">已拒绝</span>';
                            }
                            ?>
                        </td>
@@ -793,8 +802,14 @@ class Organize{
             }
             if($zone_match_type !== 1) {
                 $zone_title = '';
+            }else{
+//                if($zone_title == '') $error_msg .= '<br >请填写字号';
+            }
+            if($zone_match_type !== 2) {
                 $is_double = 0;
-            };
+            }else{
+                if($is_double < 1) $error_msg .= '<br >请填选择区县';
+            }
             if($error_msg == ''){
                 $insertData = [
                     'type_id' => $zone_type,
@@ -871,12 +886,17 @@ class Organize{
                                 }
                             }
                             //创建战队
-                            $team_id = wp_insert_post(['post_title' => '','post_status' => 'publish', 'comment_status' => 'close', 'ping_status' => 'close','post_type' => 'team']);
+
+                            $team_id = wp_insert_post(['post_title' => '暂未设置','post_status' => 'publish', 'comment_status' => 'close', 'ping_status' => 'close','post_type' => 'team']);
+
                             if($team_id > 0){
                                 $teamInsert = [
                                     'user_id' => $user_id,
                                     'team_id' => $team_id,
                                     'team_director' => $user_id,
+                                    'team_world' => '暂未设置',
+                                    'team_slogan' => '暂未设置',
+                                    'team_brief' => '暂未设置',
                                     'team_status' => 2,
                                     'created_time' => get_time('mysql'),
                                 ];
@@ -1160,7 +1180,7 @@ class Organize{
                             <input type="text" name="zone_title" id="zone_title" value="<?=$row['zone_name']?>">
                         </td>
                     </tr>
-                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>" id="is_double_tr">
+                    <tr class="" style="<?=$row['zone_match_type'] != '2' ? 'display: none':''?>" id="is_double_tr">
                         <th scope="row"><label for="is_double">区县 </label></th>
                         <td>
                             <label for="is_double_1"><input type="radio" <?=$row['is_double'] == '1' ? 'checked="checked"':''?> id="is_double_1" name="is_double" value="1">双区县</label>
@@ -1207,7 +1227,7 @@ class Organize{
                     </tr>-->
                     <tr class="">
                         <th scope="row"><label for="business_licence_url">营业执照照片 </label></th>
-                        <td>
+                        <td id="img-y">
                             <img src="<?=$row['business_licence_url']?>" alt="" style="height: 80px;">
                             <input type="file" name="business_licence_url" id="business_licence_url">
                         </td>
@@ -1241,7 +1261,7 @@ class Organize{
                         <td>
                             <label for="term_time_radio_1"><input id="term_time_radio_1" <?=isset($row['term_time']) && $row['term_time']? 'checked="checked"':''?> type="radio" value="1" name="term_time_radio" class="term_time_radio">有</label>
                             <label for="term_time_radio_2"><input id="term_time_radio_2" <?=!isset($row['term_time']) || !$row['term_time'] ? 'checked="checked"':''?> type="radio" value="2" name="term_time_radio" class="term_time_radio">无</label>
-                             <input style="<?=!isset($row['term_time']) || !$row['term_time']? 'display:none;':''?>" type="text" style="max-width: 500px;" value="<?=isset($row['term_time']) ? $row['term_time'] : ''?>" name="term_time" class="layui-input date-picker y-m-d-h-m-s" readonly  id="term_time" placeholder="有效期">
+                             <input style="<?=!isset($row['term_time']) || !$row['term_time']? 'display:none;':''?>" type="text" style="max-width: 500px;" value="<?=isset($row['term_time']) ? $row['term_time'] : date('Y-m-d H:i:s',strtotime('+1year', get_time()))?>" name="term_time" class="layui-input date-picker y-m-d-h-m-s" readonly  id="term_time" placeholder="有效期">
 
                         </td>
                     </tr>
@@ -1333,10 +1353,10 @@ class Organize{
                         var val = $(this).val();
                         if(val == '1'){
                             $('#zone_title_tr').show();
-                            $('#is_double_tr').show();
+                            $('#is_double_tr').hide();
                         }else{
                             $('#zone_title_tr').hide();
-                            $('#is_double_tr').hide();
+                            $('#is_double_tr').show();
                         }
                     });
                     $('.term_time_radio').on('click',function () {
@@ -1347,6 +1367,20 @@ class Organize{
                             $('input[name="term_time"]').hide();
                             $("#term_time").val('');
                         }
+                    });
+                });
+            </script>
+
+            <script>
+                jQuery(document).ready(function($) {
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        var _title = '';
+                        layer.photos({//图片预览
+                            photos: '#img-y',
+                            move : false,
+                            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                        })
                     });
                 });
             </script>
