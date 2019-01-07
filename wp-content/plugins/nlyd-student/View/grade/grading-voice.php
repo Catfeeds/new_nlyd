@@ -294,8 +294,8 @@ jQuery(function($) {
             $('body').click(function(){
                 if($(this).hasClass('canplay') && !palying){
                     palying=true;
-                    $(".voice_title").text("<?=__('正在播放语音中', 'nlyd-student')?>")
                     audio.play();
+                    $(".voice_title").text("<?=__('正在播放语音中', 'nlyd-student')?>")
                 }
             })
        }
