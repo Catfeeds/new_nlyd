@@ -225,11 +225,11 @@ class Organize{
                            <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                            <div class="locked-indicator">
                                <span class="locked-indicator-icon" aria-hidden="true"></span>
-                               <span class="screen-reader-text">“<?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市精英赛')?>”已被锁定</span>
+                               <span class="screen-reader-text">“<?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>”已被锁定</span>
                            </div>
                        </th>
                        <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                            <?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市精英赛')?>
+                            <?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>
                            <br>
                            <div class="row-actions">
 <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
@@ -237,7 +237,7 @@ class Organize{
                            </div>
                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                        </td>
-                       <td class="zone_match_type column-zone_match_type" data-colname="办赛类型"><?=$row['zone_match_type']=='1'?'战队精英赛':'城市精英赛'?></td>
+                       <td class="zone_match_type column-zone_match_type" data-colname="办赛类型"><?=$row['zone_match_type']=='1'?'战队精英赛':'城市赛'?></td>
                        <td class="nums column-nums" data-colname="编号"><?=sprintf("%04d",$row['id']);?></td>
                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
                        <td class="person column-person" data-colname="负责人"><?=unserialize($person)['real_name']?></td>
@@ -1150,7 +1150,7 @@ class Organize{
                         <td>
                             <select name="zone_match_type" id="zone_match_type">
                                 <option <?=$row['zone_match_type']=='1'?'selected="selected"':''?> value="1">战队精英赛</option>
-                                <option <?=$row['zone_match_type']=='2'?'selected="selected"':''?> value="2">城市精英赛</option>
+                                <option <?=$row['zone_match_type']=='2'?'selected="selected"':''?> value="2">城市赛</option>
                             </select>
                         </td>
                     </tr>
@@ -1954,7 +1954,7 @@ class Organize{
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?=date('Y').'脑力世界杯'.$zone_meta['zone_city'].($zone_meta['zone_match_type']=='1'?'战队精英赛':'城市精英赛')?>-统计信息</h1>
+            <h1 class="wp-heading-inline"><?=date('Y').'脑力世界杯'.$zone_meta['zone_city'].($zone_meta['zone_match_type']=='1'?'战队精英赛':'城市赛')?>-统计信息</h1>
             <hr class="wp-header-end">
             <ul class="subsubsub">
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=6')?>" <?=$type===6?'class="current"':''?> aria-current="page">基础资料<span class="count"></span></a> | </li>
