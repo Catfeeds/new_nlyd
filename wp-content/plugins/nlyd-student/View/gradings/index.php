@@ -178,7 +178,7 @@ jQuery(function($) {
                                                 +'</div>'
                                     }else if(v.match_status==-3){//已结束
                                         rightBtn='<div class="nl-match-button flex1 last-btn">'
-                                                    +'<button type="button" href="'+v.right_url+'"><?=__('考级结果', 'nlyd-student')?></button>'
+                                                    +'<button type="button" href="'+v.right_url+'"><?=__('查看成绩', 'nlyd-student')?></button>'
                                                 +'</div>';
                                     }else{
                                         if(v.right_url.length>0){
@@ -236,7 +236,7 @@ jQuery(function($) {
                                                         +'</div>'
                                                         +endTime
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label"><div><?=__('已报选手', 'nlyd-student')?>:</div></div>'
+                                                            +'<div class="nl-match-label"><div><?=__('已报人数', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.entry_total+'人</span>'
                                                                 +match_notice_url
