@@ -91,11 +91,11 @@
                         <!-- 选手信息 -->
                         <li class="nl-match">
                             <div class="nl-match-header ">
-                                <span class="fs_16 c_blue"><?=__('选手信息', 'nlyd-student')?></span>
+                                <span class="fs_16 c_blue"><?=__('比赛信息', 'nlyd-student')?></span>
                             </div>
                             <div class="nl-match-body ">
                                 <div class="nl-match-detail layui-row rz">
-                                    <div class="nl-match-label"><?=__('选手姓名', 'nlyd-student')?>:</div>
+                                    <div class="nl-match-label"><?=__('姓名', 'nlyd-student')?>:</div>
                                     <!-- <span >选手姓名:</span> -->
                                     <div class="nl-match-info">
                                         <?php if(!empty($player['real_name'])){?>
@@ -124,7 +124,7 @@
                                     </div>
                                 </div>
                                 <div class="nl-match-detail layui-row">
-                                    <div class="nl-match-label"><?=__('选手ID', 'nlyd-student')?>:</div>
+                                    <div class="nl-match-label"><?=__('ID', 'nlyd-student')?>:</div>
                                     <!-- <span >选手ID:</span> -->
                                     <div class="nl-match-info">
                                         <span class="c_black"><?=$player['user_ID']?></span>

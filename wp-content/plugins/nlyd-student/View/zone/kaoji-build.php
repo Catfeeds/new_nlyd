@@ -82,7 +82,6 @@
 jQuery(function($) { 
 var match_type1_Data=<?=!empty($scene_list) ? $scene_list : '[]';?>;//考级类别
 var match_type2_Data=<?=!empty($category_list) ? $category_list : '[]';?>;//考级类型
-console.log(match_type1_Data)
 var match_date_Data=$.validationLayui.dates2;//考级日期
 var posiotion_match_type1=[0];//初始化位置，高亮展示
 var posiotion_match_type2=[0];//初始化位置，高亮展示

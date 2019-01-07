@@ -24,11 +24,11 @@
                             <input type="hidden" name="match_id" value="<?=$list['match_id']?> lay-verify="required"  class="nl-input nl-foucs" id="trigger2">
                         </div>
                         <div class="form-input-row">
-                            <div class="form-input-label"><div><?=__('选手座位号', 'nlyd-student')?></div></div>
+                            <div class="form-input-label"><div><?=__('座位号', 'nlyd-student')?></div></div>
                             <input type="text" name="seat_number" value="<?=$list['seat_number']?>" lay-verify="required"  class="nl-input nl-foucs">
                         </div>
                         <div class="form-input-row student_name" style="display: none">
-                            <div class="form-input-label"><div><?=__('选手姓名', 'nlyd-student')?></div></div>
+                            <div class="form-input-label"><div><?=__('姓名', 'nlyd-student')?></div></div>
                             <input type="text" name="student_name" value="<?=$list['student_name']?>"  class="nl-input nl-foucs" disabled placeholder="<?=__('填写座位号自动获取姓名', 'nlyd-student')?>">
                         </div>
                         <!--<div class="form-input-row">

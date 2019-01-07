@@ -40,11 +40,11 @@
                 <div class="course_detail_row width-padding width-padding-pc">
                     <div class="detail_table_row"><span class="c_blue bold fs_16">学员信息</span></div>
                     <div class="detail_table_row">
-                        <div class="detail_label c_black6 fs_14"><?=__('选手姓名：', 'nlyd-student')?></div>
+                        <div class="detail_label c_black6 fs_14"><?=__('姓名：', 'nlyd-student')?></div>
                         <div class="detail_detail c_black fs_14">大大宝</div>
                     </div>
                     <div class="detail_table_row">
-                        <div class="detail_label c_black6 fs_14"><?=__('选手ID：', 'nlyd-student')?></div>
+                        <div class="detail_label c_black6 fs_14"><?=__('ID：', 'nlyd-student')?></div>
                         <div class="detail_detail c_black fs_14">
                             19875
                             <div class="nl-match-rz img-box"><img src="<?=student_css_url.'image/confirm/rz.png'?>"></div>

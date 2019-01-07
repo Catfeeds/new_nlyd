@@ -128,7 +128,7 @@ jQuery(function($) {
                                                         +'<div class="match_body_info c_black">'+v.person_liable+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
-                                                        +'<div class="match_body_label"><?=__("已报选手：", "nlyd-student")?></div>'
+                                                        +'<div class="match_body_label"><?=__("已报人数：", "nlyd-student")?></div>'
                                                         +'<div class="match_body_info c_black">'+v.entry_total+'</div>'
                                                     +'</div>'
                                                 +'</div>'

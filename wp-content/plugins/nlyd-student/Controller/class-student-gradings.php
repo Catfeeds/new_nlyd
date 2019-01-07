@@ -36,7 +36,7 @@ class Student_Gradings extends Student_Home
                 LEFT JOIN {$wpdb->prefix}postmeta c ON a.grading_id = c.post_id and meta_key = 'default_match_switch'
                 ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
-
+        //print_r($sql);
         if(!empty($rows)){
             $new_time = get_time('mysql');
             $entry_is_true = 0;
@@ -105,7 +105,12 @@ class Student_Gradings extends Student_Home
         if(strtotime($match['entry_end_time']) <= get_time() && get_time() < strtotime($match['start_time'])){
             $a = $wpdb->update($wpdb->prefix.'grading_meta',array('status'=>-2),array('id'=>$match['id'],'grading_id'=>$match['grading_id']));
             $match['status'] = -2;
-            $match['match_status_cn'] = __('等待开赛', 'nlyd-student');
+            $match['match_status_cn'] = __('等待考级', 'nlyd-student');
+        }
+        if(strtotime($match['start_time']) <= get_time() && get_time() < strtotime($match['end_time'])){
+            $a = $wpdb->update($wpdb->prefix.'grading_meta',array('status'=>2),array('id'=>$match['id'],'grading_id'=>$match['grading_id']));
+            $match['status'] = 2;
+            $match['match_status_cn'] = __('考级中', 'nlyd-student');
         }
         $match['down_time'] = strtotime($match['start_time'])-get_time();
         $match['match_url'] = home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id']);
@@ -382,6 +387,18 @@ class Student_Gradings extends Student_Home
             $row['match_questions'] = $match_questions;
             $row['redirect_url'] = home_url(CONTROLLER.'/answerMatch/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type'].'/post_id/'.$post_id);
             //print_r($row);
+        }
+        $id = $wpdb->get_var("select id from {$wpdb->prefix}grading_logs where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} ");
+        //var_dump($id);die;
+        if(empty($id)){
+            $insert = array(
+                'user_id'=>$current_user->ID,
+                'grading_id'=>$_GET['grad_id'],
+                'grading_result'=>2,
+                'grading_lv'=> $memory_lv > 0 ? $memory_lv : '',
+                'created_time'=>get_time('mysql'),
+            );
+            $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
         }
 
         $row['type_title'] = $this->get_memory_type_title($_GET['type']);
@@ -920,6 +937,12 @@ class Student_Gradings extends Student_Home
                         $wpdb->query('COMMIT');
                     }else{
                         $wpdb->query('ROLLBACK');
+                    }
+                }
+                else{
+                    if($grading_result == 1){
+
+                        $wpdb->update($wpdb->prefix.'grading_logs',array('grading_result'=>1),array('id'=>$id));
                     }
                 }
 
