@@ -249,26 +249,6 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                         $title = '轮';
                     }
                 ?>
-        // var endTimes=0;
-        // new AlloyFinger($('body')[0], {//部分手机因为用户触摸事件导致计时器失效
-        //     touchStart: function () {
-        //         var counts_down=$('.count_down').attr('data-seconds')
-        //         endTimes=$.GetEndTime(counts_down)
-        //     },
-        //     touchMove: function () {
-        //         // console.log(2)
-        //     },
-        //     touchEnd: function () {
-        //         var count_down=$('.count_down').attr('data-seconds')
-        //         var new_count=$.GetSecond(endTimes);
-        //         console.log(count_down,new_count)
-        //         if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
-        //             window.location.reload()
-        //         }
-        //     },
-        //     touchCancel: function () {
-        //     }
-        // })
         <?php endif;?>
          <?php if($project_alias == 'pkjl'): ?>
             initWidth=function() {
@@ -285,7 +265,11 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                 $('.second_wap.poker-wrapper').css('width',W1);
             }
             initWidth();
-            
+            if('ontouchstart' in window){// 移动端
+                
+            }else{
+                $('.porker-zoo').height(477)
+            }
         <?php endif;?>
 
     })

@@ -176,40 +176,6 @@ jQuery(function($) {
             $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
     }
-layui.use(['layer'], function(){
-
-
-//提交tap事件
-// mTouch('body').on('tap','#sumbit',function(e){
-    new AlloyFinger($('#sumbit')[0], {
-        tap:function(){
-            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-            layer.open({
-                type: 1
-                ,maxWidth:300
-                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
-                ,skin:'nl-box-skin'
-                ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                ,btn: [ '<?=__('按错了', 'nlyd-student')?>', '<?=__('提交', 'nlyd-student')?>',]
-                ,success: function(layero, index){
-                }
-                ,yes: function(index, layero){
-                    layer.closeAll();
-                }
-                ,btn2: function(index, layero){
-                    //按钮【按钮二】的回调
-                    layer.closeAll();
-                    submit(time)
-                }
-                ,closeBtn:2
-                ,btnAagn: 'c' //按钮居中
-                ,shade: 0.3 //遮罩
-                ,isOutAnim:true//关闭动画
-            });
-        }
-    });
-})
     //设置扑克窗口宽度
     initWidth=function() {
         //扑克展示区
@@ -254,90 +220,47 @@ layui.use(['layer'], function(){
         }
     }
     initWidth();//设置扑克窗口宽度
-    $('.choose-color').each(function(){
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            tap:function(e){
-                var id=_this.attr('id')
-                $('.porker-color .choose-color').removeClass('active');
-                _this.addClass('active');
-
-                $('.choose-wrapper').removeClass('active');
-                $('.choose-wrapper.'+id).addClass('active');
-            }
-        })
-    })
-    $('.poker-wrapper .poker').each(function(){
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            tap:function(e){
-                var active=$('.poker-wrapper .poker.active')
-                active.removeClass('active');
-                _this.addClass('active');
-            }
-        })
-    })
-$('.choose-poker').each(function(e){//扑克选择区tap事件
-    var _this=$(this);
-    new AlloyFinger(_this[0], {
-        tap:function(){
-            if(!_this.hasClass('active')){
-                // $('.choose-poker').addClass('disabled')
-                _this.addClass('active');
-                var text=_this.attr('data-text');
-                var color=_this.attr('data-color');
-                var i='';
-                if(color=='club'){
-                    i='<i class="iconfont">&#xe635;</i>'
-                }else if(color=='heart'){
-                    i='<i class="iconfont">&#xe638;</i>'
-                }else if(color=='spade'){
-                    i='<i class="iconfont">&#xe636;</i>'
-                }else if(color=='diamond'){
-                    i='<i class="iconfont">&#xe634;</i>'
+    layui.use('layer', function(){
+        function layOpen() {//提交
+            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+            layer.open({
+                type: 1
+                ,maxWidth:300
+                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
+                ,btn: [ '<?=__('按错了', 'nlyd-student')?>', '<?=__('提交', 'nlyd-student')?>',]
+                ,success: function(layero, index){
                 }
-                var poker='<div class="poker '+color+' active" data-color="'+color+'" data-text="'+text+'">'
-                            +'<div class="poker-detail poker-top">'
-                                +'<div class="poker-name">'+text+'</div>'
-                                +'<div class="poker-type">'+i+'</div>'
-                            +'</div>'
-                            +'<div class="poker-logo">'
-                                +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
-                            +'</div>'
-                            +'<div class="poker-detail poker-bottom">'
-                                +'<div class="poker-name">'+text+'</div>'
-                                +'<div class="poker-type">'+i+'</div>'
-                            +'</div>'
-                        +'</div>'
-                
-                if($('.poker-wrapper .poker.active').length>0){//绑定事件
-                    var active=$('.poker-wrapper .poker.active')
-                    active.after(poker);
-                    active.removeClass('active')
-                }else{
-                    $('.poker-wrapper .poker.active').removeClass('active')
-                    $('.poker-wrapper').append(poker)
+                ,yes: function(index, layero){
+                    layer.closeAll();
                 }
-
-                var newDom=$('.poker.active')
-                new AlloyFinger(newDom[0], {
-                    tap:function(){
-                        var active=$('.poker-wrapper .poker.active')
-                        active.removeClass('active');
-                        newDom.addClass('active');
-                    }
-                })
-                initWidth();
-                initScroll()
-                // $('.choose-poker').removeClass('disabled')
-            }
+                ,btn2: function(index, layero){
+                    //按钮【按钮二】的回调
+                    layer.closeAll();
+                    submit(time)
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
         }
-    });
-});
-    //删除tap事件
-    // mTouch('body').on('tap','#del',function(e){
-    new AlloyFinger($('#del')[0], {
-        tap:function(){
+       function chooseColor(_this){
+            var id=_this.attr('id')
+            $('.porker-color .choose-color').removeClass('active');
+            _this.addClass('active');
+
+            $('.choose-wrapper').removeClass('active');
+            $('.choose-wrapper.'+id).addClass('active');
+       }
+       function pokerTap(_this) {
+            var active=$('.poker-wrapper .poker.active')
+            active.removeClass('active');
+            _this.addClass('active');
+        }
+        function del() {
             if($('.poker-wrapper .poker.active').length>0){
                 var active=$('.poker-wrapper .poker.active');
                 var color=active.attr('data-color');
@@ -357,53 +280,203 @@ $('.choose-poker').each(function(e){//扑克选择区tap事件
                 initScroll()
             }
         }
-    });
-    //前移tap事件
-    // mTouch('body').on('tap','#prev',function(e){
-new AlloyFinger($('#prev')[0], {
-    tap:function(){
-        var active=$('.poker-wrapper .poker.active');
-        var htmlActive=$('.poker-wrapper .poker.active').html();
-        var colorActive=$('.poker-wrapper .poker.active').attr('data-color')
-        var textActive=$('.poker-wrapper .poker.active').attr('data-text')
-        if(active.prev('.poker').length>0){
-            var html=active.prev('.poker').html();
-            var color=active.prev('.poker').attr('data-color')
-            var text=active.prev('.poker').attr('data-text')
-            active.prev('.poker').addClass('active').html(htmlActive).attr('data-color',colorActive).attr('data-text',textActive)
-            active.removeClass('active').html(html).attr('data-color',color).attr('data-text',text)
-            if(colorActive!=color){
-                active.prev('.poker').removeClass(color).addClass(colorActive);
-                active.removeClass(colorActive).addClass(color);
+        function prev() {
+            var active=$('.poker-wrapper .poker.active');
+            var htmlActive=$('.poker-wrapper .poker.active').html();
+            var colorActive=$('.poker-wrapper .poker.active').attr('data-color')
+            var textActive=$('.poker-wrapper .poker.active').attr('data-text')
+            if(active.prev('.poker').length>0){
+                var html=active.prev('.poker').html();
+                var color=active.prev('.poker').attr('data-color')
+                var text=active.prev('.poker').attr('data-text')
+                active.prev('.poker').addClass('active').html(htmlActive).attr('data-color',colorActive).attr('data-text',textActive)
+                active.removeClass('active').html(html).attr('data-color',color).attr('data-text',text)
+                if(colorActive!=color){
+                    active.prev('.poker').removeClass(color).addClass(colorActive);
+                    active.removeClass(colorActive).addClass(color);
+                }
+                initScroll()
             }
-            initScroll()
         }
-    }
-});
-    //后移tap事件
-    // mTouch('body').on('tap','#next',function(e){
-new AlloyFinger($('#next')[0], {
-    tap:function(){
-        var active=$('.poker-wrapper .poker.active');
-        var htmlActive=$('.poker-wrapper .poker.active').html();
-        var colorActive=$('.poker-wrapper .poker.active').attr('data-color')
-        var textActive=$('.poker-wrapper .poker.active').attr('data-text')
-        if(active.next('.poker').length>0){
-            var html=active.next('.poker').html();
-            var color=active.next('.poker').attr('data-color')
-            var text=active.next('.poker').attr('data-text')
+        function next() {
+            var active=$('.poker-wrapper .poker.active');
+            var htmlActive=$('.poker-wrapper .poker.active').html();
+            var colorActive=$('.poker-wrapper .poker.active').attr('data-color')
+            var textActive=$('.poker-wrapper .poker.active').attr('data-text')
+            if(active.next('.poker').length>0){
+                var html=active.next('.poker').html();
+                var color=active.next('.poker').attr('data-color')
+                var text=active.next('.poker').attr('data-text')
 
-            active.next('.poker').addClass('active').html(htmlActive).attr('data-color',colorActive).attr('data-text',textActive)
-            active.removeClass('active').html(html).attr('data-color',color).attr('data-text',text)
-            if(colorActive!=color){
-                active.next('.poker').removeClass(color).addClass(colorActive);
-                active.removeClass(colorActive).addClass(color);
+                active.next('.poker').addClass('active').html(htmlActive).attr('data-color',colorActive).attr('data-text',textActive)
+                active.removeClass('active').html(html).attr('data-color',color).attr('data-text',text)
+                if(colorActive!=color){
+                    active.next('.poker').removeClass(color).addClass(colorActive);
+                    active.removeClass(colorActive).addClass(color);
+                }
+                initScroll()
             }
-            initScroll()
         }
-    }
-});
+        if('ontouchstart' in window){// 移动端
+            $('.choose-color').each(function(){
+                var _this=$(this);
+                new AlloyFinger(_this[0], {
+                    tap:function(e){
+                        chooseColor(_this)
+                    }
+                })
+            })
+            $('.poker-wrapper .poker').each(function(){//扑克点击
+                var _this=$(this);
+                new AlloyFinger(_this[0], {
+                    tap:function(e){
+                        pokerTap(_this)
+                    }
+                })
+            })
+            $('.choose-poker').each(function(e){//扑克选择区tap事件
+                var _this=$(this);
+                new AlloyFinger(_this[0], {
+                    tap:function(){
+                        if(!_this.hasClass('active')){
+                            _this.addClass('active');
+                            var text=_this.attr('data-text');
+                            var color=_this.attr('data-color');
+                            var i='';
+                            if(color=='club'){
+                                i='<i class="iconfont">&#xe635;</i>'
+                            }else if(color=='heart'){
+                                i='<i class="iconfont">&#xe638;</i>'
+                            }else if(color=='spade'){
+                                i='<i class="iconfont">&#xe636;</i>'
+                            }else if(color=='diamond'){
+                                i='<i class="iconfont">&#xe634;</i>'
+                            }
+                            var poker='<div class="poker '+color+' active" data-color="'+color+'" data-text="'+text+'">'
+                                        +'<div class="poker-detail poker-top">'
+                                            +'<div class="poker-name">'+text+'</div>'
+                                            +'<div class="poker-type">'+i+'</div>'
+                                        +'</div>'
+                                        +'<div class="poker-logo">'
+                                            +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
+                                        +'</div>'
+                                        +'<div class="poker-detail poker-bottom">'
+                                            +'<div class="poker-name">'+text+'</div>'
+                                            +'<div class="poker-type">'+i+'</div>'
+                                        +'</div>'
+                                    +'</div>'
+                            
+                            if($('.poker-wrapper .poker.active').length>0){//绑定事件
+                                var active=$('.poker-wrapper .poker.active')
+                                active.after(poker);
+                                active.removeClass('active')
+                            }else{
+                                $('.poker-wrapper .poker.active').removeClass('active')
+                                $('.poker-wrapper').append(poker)
+                            }
 
-    
+                            var newDom=$('.poker.active')
+                            new AlloyFinger(newDom[0], {
+                                tap:function(){
+                                    var active=$('.poker-wrapper .poker.active')
+                                    active.removeClass('active');
+                                    newDom.addClass('active');
+                                }
+                            })
+                            initWidth();
+                            initScroll()
+                        }
+                    }
+                });
+            });
+            //删除tap事件
+            new AlloyFinger($('#del')[0], {
+                tap:function(){
+                    del()
+                }
+            });
+            //前移tap事件
+            new AlloyFinger($('#prev')[0], {
+                tap:function(){
+                    prev()
+                }
+            });
+            //后移tap事件
+            new AlloyFinger($('#next')[0], {
+                tap:function(){
+                    next()
+                }
+            });
+            new AlloyFinger($('#sumbit')[0], {//提交
+                tap:function(){
+                    layOpen()
+                }
+            });
+        }else{
+            $('.choose-zoo').css('overflow','visible')
+            $('body').on('click','.choose-color',function(){
+                var _this=$(this);
+                chooseColor(_this)
+            })
+            $('body').on('click','.poker-wrapper .poker',function(){
+                var _this=$(this);
+                pokerTap(_this)
+            })
+            $('body').on('click','.choose-poker',function(){
+                var _this=$(this);
+                if(!_this.hasClass('active')){
+                    _this.addClass('active');
+                    var text=_this.attr('data-text');
+                    var color=_this.attr('data-color');
+                    var i='';
+                    if(color=='club'){
+                        i='<i class="iconfont">&#xe635;</i>'
+                    }else if(color=='heart'){
+                        i='<i class="iconfont">&#xe638;</i>'
+                    }else if(color=='spade'){
+                        i='<i class="iconfont">&#xe636;</i>'
+                    }else if(color=='diamond'){
+                        i='<i class="iconfont">&#xe634;</i>'
+                    }
+                    var poker='<div class="poker '+color+' active" data-color="'+color+'" data-text="'+text+'">'
+                                +'<div class="poker-detail poker-top">'
+                                    +'<div class="poker-name">'+text+'</div>'
+                                    +'<div class="poker-type">'+i+'</div>'
+                                +'</div>'
+                                +'<div class="poker-logo">'
+                                    +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
+                                +'</div>'
+                                +'<div class="poker-detail poker-bottom">'
+                                    +'<div class="poker-name">'+text+'</div>'
+                                    +'<div class="poker-type">'+i+'</div>'
+                                +'</div>'
+                            +'</div>'
+                    
+                    if($('.poker-wrapper .poker.active').length>0){//绑定事件
+                        var active=$('.poker-wrapper .poker.active')
+                        active.after(poker);
+                        active.removeClass('active')
+                    }else{
+                        $('.poker-wrapper .poker.active').removeClass('active')
+                        $('.poker-wrapper').append(poker)
+                    }
+                    initWidth();
+                    initScroll()
+                }
+            })
+            $('body').on('click','#del',function(){
+                del()
+            })
+            $('body').on('click','#prev',function(){
+                prev()
+            })
+            $('body').on('click','#next',function(){
+                next()
+            })
+            $('body').on('click','#sumbit',function(){//提交
+                layOpen()
+            })
+        }
+    }) 
 })
 </script>
