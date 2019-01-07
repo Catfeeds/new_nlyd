@@ -28,19 +28,162 @@
                             <div class="form-input-label"><div>ID</div></div>
                             <div class="nl-input"><div><?=isset($user_info['user_ID']) ? $user_info['user_ID'] : '';?></div></div>
                         </div>
-                        <!-- <div class="form-input-row">
-                            <div class="form-input-label"><div><?=__('账户昵称', 'nlyd-student')?></div></div>
-                            <input name='meta_val' value="<?=isset($user_info['nickname']) ? $user_info['nickname'] : '';?>" type="text" placeholder="<?=__('账户昵称', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="filterSqlStr">
-                            <input  type="hidden" name="action" value="student_saveInfo"/>
-                            <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
-                            <input  type="hidden" name="meta_key" value="user_nicename"/>
-                            <div class="form-input-right c_blue" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit=""><div><?=__('更新', 'nlyd-student')?></div></div>
+                        <div class="form-input-row">
+                            <div class="form-input-label"><div><?=__('用户姓名', 'nlyd-student')?></div></div>
+                            <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="<?=__('输入证件上的真实姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required|validate">
                         </div>
-                        <a class="form-input-row" href="<?=home_url('account/certification');?>" >
-                            <div class="form-input-label"><div><?=__('实名认证', 'nlyd-student')?></div></div>
-                            <div class="form-input-right c_blue"><div><?=__('修改实名认证', 'nlyd-student')?></div></div>
-                            <div class="nl-input"><div><?=$user_info['real_ID']?></div></div>
-                        </a> -->
+                        <div class="form-input-row">
+                            <div class="form-input-label"><div><?=__('性 别', 'nlyd-student')?></div></div>
+                            <input name='user_gender' data-value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' value='<?=isset($user_info['user_gender']) ? __($user_info['user_gender'],'nlyd-student') : '';?>' type="text" readonly id="trigger3" placeholder="<?=__('请选择您的性别', 'nlyd-student')?>" class="nl-input">
+                        </div>
+                        <div class="form-input-row" id="age" style="display:block">
+                            <div class="form-input-label"><div><?=__('年 龄', 'nlyd-student')?></div></div>
+                            <input type="text" name="meta_val[real_age]" readonly id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="<?=__('年龄', 'nlyd-student')?>"  class="nl-input nl-foucs">
+                        </div>
+                        <div class="form-input-row" id="birth" style="display:none">
+                            <div class="form-input-label"><div><?=__('生 日', 'nlyd-student')?></div></div>
+                            <input class="nl-input" name="birthday" value='<?=$user_info['user_birthday']?>' readonly  id="birthdaySelect" placeholder="<?=__('选择生日', 'nlyd-student')?>">
+                        </div>
+                        <div class="form-input-row">
+                            <div class="form-input-label"><div><?=__('证件类型', 'nlyd-student')?></div></div>
+                            <input value='<?= !empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type_c'] : '';?>' type="text" readonly id="trigger1" placeholder="<?=__('选择证件类型', 'nlyd-student')?>" class="nl-input" lay-verify="required">
+                            <input value='<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type'] : '';?>'  type="hidden" name="meta_val[real_type]" id="trigger2">
+                            <input  type="hidden" name="action" value="student_saveInfo"/>
+                            <input type="hidden" name="_wpnonce" id="student_saveInfo_code_nonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
+                            <input  type="hidden" name="meta_key" value="user_real_name"/>
+                        </div>
+                        <div class="form-input-row">
+                            <div class="form-input-label"><div><?=__('证件号码', 'nlyd-student')?></div></div>
+                            <input type="text" name="meta_val[real_ID]" id="meta_val[real_ID]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_ID'] : '';?>" placeholder="<?=__('输入证件上的真实证件号', 'nlyd-student')?>" lay-verify="required|filterSqlStr|validate"  class="nl-input nl-foucs">
+                        </div>
+
+                        <!-- <div class="layui-bg-white img-zoos img-zoos1">
+                            <p class="tps"><?=__('上传收款账户（不设金额的个人收款微信二维码）', 'nlyd-student')?></p>
+                                <?php if(!empty($user_info['user_coin_code'])){ ?>
+                                <?php foreach ($user_info['user_coin_code'] as $v){ ?>
+                                <div class="post-img no-dash">
+                                    <div class="img-zoo img-box">
+                                        <img src="<?=$v?>"/>
+                                    </div>
+                                    <input type="hidden" name="user_coin_code[]" value="<?=$v?>" />
+                                    <div class="del">
+                                        <i class="iconfont">&#xe633;</i>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                                <?php } ?>
+                            <div class="post-img dash">
+                                <div class="add-zoo" data-file="img-zoos1">
+                                    <div class="transverse"></div>
+                                    <div class="vertical"></div>
+                                </div>
+                            </div>
+                        </div>         -->
+                        <div class="form-input-row img-zoos img-zoos0" style="padding:0">
+                            <div class="form-input-label pull-left"><div><?=__('上传证件照片', 'nlyd-student')?></div></div>
+                            <?php if(!empty($user_info['user_ID_Card'])){ ?>
+                                <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
+                                <div class="post-img no-dash"  style="top:3px">
+                                    <div class="img-zoo img-box">
+                                        <img src="<?=$val?>"/>
+                                    </div>
+                                    <input type="hidden" name="user_ID_Card[]" value="<?=$val?>" />
+                                    <div class="del">
+                                        <i class="iconfont">&#xe633;</i>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                                <?php } ?>
+                            <div class="post-img dash"  style="top:3px">
+                                <div class="add-zoo" data-file="img-zoos0" >
+                                    <div class="transverse"></div>
+                                    <div class="vertical"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="layui-bg-white img-zoos img-zoos0">
+                            <p class="tps"><?=__('上传证件照片', 'nlyd-student')?></p>
+                                <?php if(!empty($user_info['user_ID_Card'])){ ?>
+                                <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
+                                <div class="post-img no-dash">
+                                    <div class="img-zoo img-box">
+                                        <img src="<?=$val?>"/>
+                                    </div>
+                                    <input type="hidden" name="user_ID_Card[]" value="<?=$val?>" />
+                                    <div class="del">
+                                        <i class="iconfont">&#xe633;</i>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                                <?php } ?>
+                            <div class="post-img dash">
+                                <div class="add-zoo" data-file="img-zoos0">
+                                    <div class="transverse"></div>
+                                    <div class="vertical"></div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="form-input-row img-zoos img-zoos2" style="padding:0">
+                            <div class="form-input-label pull-left"><div><?=__('上传彩色1寸照', 'nlyd-student')?></div></div>
+                            <?php if(!empty($user_info['user_images_color'])){ ?>
+                                <?php foreach ($user_info['user_images_color'] as $value){ ?>
+                                <div class="post-img no-dash"  style="top:3px">
+                                    <div class="img-zoo img-box">
+                                        <img src="<?=$value?>"/>
+                                    </div>
+                                    <input type="hidden" name="user_ID_Card[]" value="<?=$value?>" />
+                                    <div class="del">
+                                        <i class="iconfont">&#xe633;</i>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                                <?php } ?>
+                            <div class="post-img dash"  style="top:3px">
+                                <div class="add-zoo" data-file="img-zoos2">
+                                    <div class="transverse"></div>
+                                    <div class="vertical"></div>
+                                </div>
+                            </div>
+                            <span class="c_red fs_12">（*<?=__('考级用户和机构任职人员需上传', 'nlyd-student')?>）</span>
+                        </div>
+                        <!-- <div class="layui-bg-white img-zoos img-zoos2">
+                            <p class="tps"><?=__('上传彩色1寸照', 'nlyd-student')?><span class="c_red fs_12">（*<?=__('考级用户和机构任职人员需上传', 'nlyd-student')?>）</span></p>
+                                <?php if(!empty($user_info['user_images_color'])){ ?>
+                                <?php foreach ($user_info['user_images_color'] as $value){ ?>
+                                <div class="post-img no-dash">
+                                    <div class="img-zoo img-box">
+                                        <img src="<?=$value?>"/>
+                                    </div>
+                                    <input type="hidden" name="user_ID_Card[]" value="<?=$value?>" />
+                                    <div class="del">
+                                        <i class="iconfont">&#xe633;</i>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                                <?php } ?>
+                            <div class="post-img dash">
+                                <div class="add-zoo" data-file="img-zoos2">
+                                    <div class="transverse"></div>
+                                    <div class="vertical"></div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="form-input-row">
+                            <div class="form-input-label"><div><?=__('国家地区', 'nlyd-student')?></div></div>
+                            <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
+                            <input type="hidden" name="nationality_pic" value='<?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>'  id="src">
+                            <input type="hidden" name="nationality_short" value='<?=empty($user_info['user_nationality_short']) ? 'CHN' : $user_info['user_nationality_short']?>'  id="short">
+                            <span class="form-input-right" id="nationality_pic"><span class="fastbannerform__span f32 NOFLAG <?=empty($user_info['user_nationality_pic']) ? 'cn': $user_info['user_nationality_pic']?>"></span></span>
+                            <!-- <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=empty($user_info['user_nationality_pic']) ? student_css_url.'image/flags/cn.png': student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span> -->
+                            
+                        </div>
+                        <div class="form-input-row">
+                            <div class="form-input-label"><div><?=__('所在城市', 'nlyd-student')?></div></div>
+                            <input readonly id="areaSelect" type="text" placeholder="<?=__('所在城市', 'nlyd-student')?>" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'].$user_info['user_address']['city'].$user_info['user_address']['area'] : ''?>" class="nl-input" lay-verify="required">
+                            <input  type="hidden" id="province" name="user_address[province]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'] : ''?>"/>
+                            <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
+                            <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
+                        </div>
                         <a class="form-input-row a address-row layui-row" href="<?=home_url('/account/address');?>">
                             <div class="form-input-label"><div><?=__('收件地址', 'nlyd-student')?></div></div>
                             <div  class="nl-input">  
@@ -53,129 +196,12 @@
                                 <?php }?>
                                 </div>
                             </div>
-                            <div class="form-input-right c_blue"><div><?=__('修改收件地址', 'nlyd-student')?></div></div>
+                            <div class="form-input-right c_blue"><div><?=__('修改', 'nlyd-student')?></div></div>
                         </a>
-                    <!-- </div>
+                        <a class="a-btn a-btn-table" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit=""><div><?=__('更新实名认证', 'nlyd-student')?></div></a>
+                        <input type="hidden" class="sbu_type" name="type" value="<?=$_GET['type']?>">
+                    </div>
                 </form>
-
-                        <form class="layui-form nl-page-form width-margin-pc have-bottom">
-                            <div class="form-inputs"> -->
-                                <div class="form-input-row">
-                                    <div class="form-input-label"><div><?=__('国家&地区', 'nlyd-student')?></div></div>
-                                    <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
-                                    <input type="hidden" name="nationality_pic" value='<?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>'  id="src">
-                                    <input type="hidden" name="nationality_short" value='<?=empty($user_info['user_nationality_short']) ? 'CHN' : $user_info['user_nationality_short']?>'  id="short">
-                                    <span class="form-input-right" id="nationality_pic"><span class="fastbannerform__span f32 NOFLAG <?=empty($user_info['user_nationality_pic']) ? 'cn': $user_info['user_nationality_pic']?>"></span></span>
-                                    <!-- <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=empty($user_info['user_nationality_pic']) ? student_css_url.'image/flags/cn.png': student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span> -->
-                                    
-                                </div>
-                                <div class="form-input-row">
-                                    <div class="form-input-label"><div><?=__('证件类型', 'nlyd-student')?></div></div>
-                                    <input value='<?= !empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type_c'] : '';?>' type="text" readonly id="trigger1" placeholder="<?=__('选择证件类型', 'nlyd-student')?>" class="nl-input" lay-verify="required">
-                                    <input value='<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type'] : '';?>'  type="hidden" name="meta_val[real_type]" id="trigger2">
-                                    <input  type="hidden" name="action" value="student_saveInfo"/>
-                                    <input type="hidden" name="_wpnonce" id="student_saveInfo_code_nonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
-                                    <input  type="hidden" name="meta_key" value="user_real_name"/>
-                                </div>
-                                <div class="form-input-row">
-                                    <div class="form-input-label"><div><?=__('证件号码', 'nlyd-student')?></div></div>
-                                    <input type="text" name="meta_val[real_ID]" id="meta_val[real_ID]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_ID'] : '';?>" placeholder="<?=__('输入证件上的真实证件号', 'nlyd-student')?>" lay-verify="required|filterSqlStr|validate"  class="nl-input nl-foucs">
-                                </div>
-                                <div class="form-input-row">
-                                    <div class="form-input-label"><div><?=__('姓 名', 'nlyd-student')?></div></div>
-                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="<?=__('输入证件上的真实姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required|validate">
-                                </div>
-                                <div class="form-input-row">
-                                    <div class="form-input-label"><div><?=__('性 别', 'nlyd-student')?></div></div>
-                                    <input name='user_gender' data-value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' value='<?=isset($user_info['user_gender']) ? __($user_info['user_gender'],'nlyd-student') : '';?>' type="text" readonly id="trigger3" placeholder="<?=__('请选择您的性别', 'nlyd-student')?>" class="nl-input">
-                                </div>
-                                <div class="form-input-row" id="birth" style="display:none">
-                                    <div class="form-input-label"><div><?=__('生 日', 'nlyd-student')?></div></div>
-                                    <input class="nl-input" name="birthday" value='<?=$user_info['user_birthday']?>' readonly  id="birthdaySelect" placeholder="<?=__('选择生日', 'nlyd-student')?>">
-                                </div>
-                                <div class="form-input-row" id="age" style="display:block">
-                                    <div class="form-input-label"><div><?=__('年 龄', 'nlyd-student')?></div></div>
-                                    <input type="text" name="meta_val[real_age]" readonly id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="<?=__('年龄', 'nlyd-student')?>"  class="nl-input nl-foucs">
-                                </div>
-                                <div class="form-input-row">
-                                    <div class="form-input-label"><div><?=__('所在城市', 'nlyd-student')?></div></div>
-                                    <input readonly id="areaSelect" type="text" placeholder="<?=__('所在城市', 'nlyd-student')?>" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'].$user_info['user_address']['city'].$user_info['user_address']['area'] : ''?>" class="nl-input" lay-verify="required">
-                                    <input  type="hidden" id="province" name="user_address[province]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'] : ''?>"/>
-                                    <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
-                                    <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
-                                </div>
-                                <div class="layui-bg-white img-zoos img-zoos1">
-                                    <p class="tps"><?=__('上传收款账户（不设金额的个人收款微信二维码）', 'nlyd-student')?></p>
-                                        <?php if(!empty($user_info['user_coin_code'])){ ?>
-                                        <?php foreach ($user_info['user_coin_code'] as $v){ ?>
-                                        <div class="post-img no-dash">
-                                            <div class="img-zoo img-box">
-                                                <img src="<?=$v?>"/>
-                                            </div>
-                                            <input type="hidden" name="user_coin_code[]" value="<?=$v?>" />
-                                            <div class="del">
-                                                <i class="iconfont">&#xe633;</i>
-                                            </div>
-                                        </div>
-                                        <?php } ?>
-                                        <?php } ?>
-                                    <div class="post-img dash">
-                                        <div class="add-zoo" data-file="img-zoos1">
-                                            <div class="transverse"></div>
-                                            <div class="vertical"></div>
-                                        </div>
-                                    </div>
-                                </div>        
-
-                                <div class="layui-bg-white img-zoos img-zoos0">
-                                    <p class="tps"><?=__('上传身份证', 'nlyd-student')?></p>
-                                        <?php if(!empty($user_info['user_ID_Card'])){ ?>
-                                        <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
-                                        <div class="post-img no-dash">
-                                            <div class="img-zoo img-box">
-                                                <img src="<?=$val?>"/>
-                                            </div>
-                                            <input type="hidden" name="user_ID_Card[]" value="<?=$val?>" />
-                                            <div class="del">
-                                                <i class="iconfont">&#xe633;</i>
-                                            </div>
-                                        </div>
-                                        <?php } ?>
-                                        <?php } ?>
-                                    <div class="post-img dash">
-                                        <div class="add-zoo" data-file="img-zoos0">
-                                            <div class="transverse"></div>
-                                            <div class="vertical"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="layui-bg-white img-zoos img-zoos2">
-                                    <p class="tps"><?=__('上传彩色1寸照', 'nlyd-student')?><span class="c_red fs_12">（*<?=__('考级用户和机构任职人员需上传', 'nlyd-student')?>）</span></p>
-                                        <?php if(!empty($user_info['user_images_color'])){ ?>
-                                        <?php foreach ($user_info['user_images_color'] as $value){ ?>
-                                        <div class="post-img no-dash">
-                                            <div class="img-zoo img-box">
-                                                <img src="<?=$value?>"/>
-                                            </div>
-                                            <input type="hidden" name="user_ID_Card[]" value="<?=$value?>" />
-                                            <div class="del">
-                                                <i class="iconfont">&#xe633;</i>
-                                            </div>
-                                        </div>
-                                        <?php } ?>
-                                        <?php } ?>
-                                    <div class="post-img dash">
-                                        <div class="add-zoo" data-file="img-zoos2">
-                                            <div class="transverse"></div>
-                                            <div class="vertical"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a class="a-btn a-btn-table" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit=""><div><?=__('更新实名认证', 'nlyd-student')?></div></a>
-                                <input type="hidden" class="sbu_type" name="type" value="<?=$_GET['type']?>">
-                            </div>
-                        </form>
             </div>
         </div>           
     </div>
@@ -384,7 +410,6 @@ jQuery(document).ready(function($) {
                 $('#src').val(data[0]['src'])
                 $('#short').val(data[0]['short'])
                 $('#nationality_pic').empty().html(dom)
-                // $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
                 if(data[0]['value']=="中华人民共和国"){
                     $('#birth').css('display','none')
                     $('#age').css('display','block')
@@ -452,7 +477,7 @@ jQuery(document).ready(function($) {
             //读取File对象的数据
             reader.onload = function(evt){
                 //data:img base64 编码数据显示
-                var dom='<div class="post-img no-dash">'
+                var dom='<div class="post-img no-dash" style="top:3px">'
                         +'<div class="img-zoo img-box">'
                             +'<img src="'+evt.target.result+'"/>'
                         +'</div>'
@@ -461,7 +486,7 @@ jQuery(document).ready(function($) {
                         +'</div>'
                     +'</div>'
                 var className=_this.attr('data-this')
-                $('.'+className+' p').after(dom)
+                $('.'+className+' .form-input-label').after(dom)
                 layer.photos({//图片预览
                     photos: '.img-zoos',
                     anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
@@ -557,9 +582,9 @@ jQuery(document).ready(function($) {
                 $.each(imgs, function (i, v) {
                     fd.append('images[]',v);
                 })
-                $.each(imgs1, function (i, v) {
-                    fd.append('images_wechat[]',v);
-                })
+                // $.each(imgs1, function (i, v) {
+                //     fd.append('images_wechat[]',v);
+                // })
                 $.each(imgs2, function (i, v) {
                     fd.append('images_color[]',v);
                 })

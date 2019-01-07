@@ -3240,7 +3240,7 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         global $wpdb;
-        $rows = $wpdb->get_results("SELECT user_id,`{$cate_name}` AS skill_level FROM {$wpdb->prefix}user_skill_rank LIMIT {$start},{$pageSize}", ARRAY_A);
+        $rows = $wpdb->get_results("SELECT user_id,`{$cate_name}` AS skill_level FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 LIMIT {$start},{$pageSize}", ARRAY_A);
         if($rows){
             foreach ($rows as $k => &$row){
                 $user_meta = get_user_meta($row['user_id']);
@@ -3248,6 +3248,7 @@ class Student_Ajax
                 $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
                 $row['user_head'] = isset($user_meta['user_head']) ? $user_meta['user_head'][0] : '';
                 $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
+                if($row['real_name'] == '') unset($row);
             }
             wp_send_json_success(['info'=>'获取成功','data'=>$rows]);
         }else{

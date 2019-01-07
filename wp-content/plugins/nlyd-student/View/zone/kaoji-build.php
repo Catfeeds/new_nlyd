@@ -157,7 +157,7 @@ var mobileSelect2 = new MobileSelect({
         $('#match_type2_id').val(data[0]['id']);
     }
 });
-//---------------------------考级结束日期------------------------------
+//---------------------------考级开始日期------------------------------
 if($('#match_date').length>0 && $('#match_date').attr('data-time') && $('#match_date').attr('data-time').length>0){
     var timeValue=$('#match_date').attr('data-time').split('-');
     $.each(match_date_Data,function(index,value){
@@ -184,7 +184,7 @@ if($('#match_date').length>0 && $('#match_date').attr('data-time') && $('#match_
 }
 var mobileSelect3 = new MobileSelect({
     trigger: '#match_date',
-    title: "<?=__('结束日期', 'nlyd-student')?>",
+    title: "<?=__('开始日期', 'nlyd-student')?>",
     wheels: [
         {data: match_date_Data}
     ],
@@ -200,7 +200,7 @@ var mobileSelect3 = new MobileSelect({
     }
 });
 
-//---------------------------考级日期------------------------------
+//---------------------------考级结束日期------------------------------
 if($('#match_end_date').length>0 && $('#match_end_date').attr('data-time') && $('#match_end_date').attr('data-time').length>0){
     var timeValue=$('#match_end_date').attr('data-time').split('-');
     $.each(match_date_Data,function(index,value){
@@ -227,7 +227,7 @@ if($('#match_end_date').length>0 && $('#match_end_date').attr('data-time') && $(
 }
 var mobileSelect4 = new MobileSelect({
     trigger: '#match_end_date',
-    title: "<?=__('考级日期', 'nlyd-student')?>",
+    title: "<?=__('结束日期', 'nlyd-student')?>",
     wheels: [
         {data: match_date_Data}
     ],
