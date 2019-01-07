@@ -252,7 +252,7 @@ class Spread{
         //获取机构类型
         $organizeList = $wpdb->get_results("SELECT zone_type_name,zone_type_alias FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
         //获取比赛权限类型
-        $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_match_role WHERE status=1", ARRAY_A);
+        $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_match_role WHERE is_profit=1", ARRAY_A);
         $spreadCategory = getSpreadCategory();
         foreach ($organizeList as $olv){
             $spreadCategory[$olv['zone_type_alias']] = '成为'.$olv['zone_type_name'];
@@ -327,15 +327,15 @@ class Spread{
                         </td>
                     </tr>
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="sub_center">赛区/分中心/考级中心</label></th>
-                        <td>
-                            <input type="text" name="sub_center" value="<?=isset($row)?$row['sub_center']:''?>" id="sub_center" maxlength="60"><span>元/百分比</span>
-                        </td>
-                    </tr>
-                    <tr class="form-field form-required">
                         <th scope="row"><label for="mechanism">参赛机构</label></th>
                         <td>
                             <input type="text" name="mechanism" value="<?=isset($row)?$row['mechanism']:''?>" id="mechanism" maxlength="60"><span>元/百分比</span>
+                        </td>
+                    </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="sub_center">赛区/分中心/考级中心</label></th>
+                        <td>
+                            <input type="text" name="sub_center" value="<?=isset($row)?$row['sub_center']:''?>" id="sub_center" maxlength="60"><span>元/百分比</span>
                         </td>
                     </tr>
                     <tr class="">

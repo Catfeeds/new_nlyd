@@ -184,6 +184,7 @@ function the_table_install () {
           `user_id` int(20) NOT NULL,
           `type_id` int(20) DEFAULT NULL COMMENT '升级后用户类型',
           `zone_match_type` tinyint(2) DEFAULT NULL COMMENT '赛区类型 1战队赛 2城市赛',
+          `is_double` tinyint(2) DEFAULT NULL COMMENT '1:双区 2: 单区',
           `zone_city` varchar(50) DEFAULT NULL COMMENT '机构城市',
           `zone_name` text DEFAULT NULL COMMENT '机构名字',
           `zone_address` varchar(255) DEFAULT NULL COMMENT '机构地址',
@@ -899,6 +900,7 @@ function the_table_install () {
           `seize_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '已抢占名额',
           `zone_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属主体机构user_id,0平台发布',
           `course_type` int(10) NOT NULL DEFAULT '0' COMMENT '课程类型id',
+          `is_share` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1乐学乐分享,0默认普通课程',
           `admin_mobile` varchar(11) DEFAULT NULL COMMENT '管理员电话',
           `duration` varchar(32) DEFAULT '0' COMMENT '时长',
           `course_category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教学类别id',
@@ -956,7 +958,7 @@ function the_table_install () {
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //用户提现记录表
         $sql = "CREATE TABLE `{$table_name}` (
-          `id` int(10) unsigned NOT NULL,
+          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
           `type_name` varchar(255) NOT NULL COMMENT '课程类型名称',
           `type_alias` varchar(64) DEFAULT NULL COMMENT '课程类型别名',
           PRIMARY KEY (`id`)

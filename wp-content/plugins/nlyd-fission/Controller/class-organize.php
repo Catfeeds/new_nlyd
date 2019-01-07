@@ -769,6 +769,7 @@ class Organize{
             $match_power = isset($_POST['match_power']) ? $_POST['match_power'] : [];
             $admin_power = isset($_POST['admin_power']) ? $_POST['admin_power'] : [];
             $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
+            $is_double = isset($_POST['is_double']) ? intval($_POST['is_double']) : 0;
             $term_time = isset($_POST['term_time']) ? trim($_POST['term_time']) : '';
             if($user_id < 0) $error_msg = '请选择负责人';
 //            if($zone_match_type < 0) $error_msg = $error_msg==''?'请选择赛区类型':$error_msg.'<br >请选择赛区类型';
@@ -790,7 +791,10 @@ class Organize{
                 $old_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}'");
                 if($old_id == $parent_id) $error_msg = $error_msg==''?'上级不能是自身':$error_msg.'<br >上级不能是自身';
             }
-            if($zone_match_type !== 1) $zone_title = '';
+            if($zone_match_type !== 1) {
+                $zone_title = '';
+                $is_double = 0;
+            };
             if($error_msg == ''){
                 $insertData = [
                     'type_id' => $zone_type,
@@ -806,6 +810,7 @@ class Organize{
                     'bank_card_num' => $bank_card_num,
                     'chairman_id' => $chairman_id,
                     'secretary_id' => $secretary_id,
+                    'is_double' => $is_double,
                     'term_time' => $term_time,
                     'match_role_id' => join(',',$match_power),
                     'role_id' => join(',',$admin_power),
@@ -994,7 +999,7 @@ class Organize{
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
                    zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,um3.meta_value AS chairman_real_name,um4.meta_value AS secretary_real_name,
-                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city,zm.term_time 
+                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city,zm.term_time,zm.is_double 
                    FROM {$wpdb->prefix}zone_meta AS zm 
                    LEFT JOIN {$wpdb->users} AS u ON u.ID=zm.user_id AND u.ID!='' 
                    LEFT JOIN {$wpdb->users} AS u2 ON u2.ID=zm.referee_id AND u2.ID!='' 
@@ -1153,6 +1158,13 @@ class Organize{
                         <th scope="row"><label for="zone_title">字号 </label></th>
                         <td>
                             <input type="text" name="zone_title" id="zone_title" value="<?=$row['zone_name']?>">
+                        </td>
+                    </tr>
+                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>" id="is_double_tr">
+                        <th scope="row"><label for="is_double">区县 </label></th>
+                        <td>
+                            <label for="is_double_1"><input type="radio" <?=$row['is_double'] == '1' ? 'checked="checked"':''?> id="is_double_1" name="is_double" value="1">双区县</label>
+                            <label for="is_double_2"><input type="radio" <?=$row['is_double'] == '2' ? 'checked="checked"':''?> id="is_double_2" name="is_double" value="2">单区县</label>
                         </td>
                     </tr>
                     <tr class="">
@@ -1321,8 +1333,10 @@ class Organize{
                         var val = $(this).val();
                         if(val == '1'){
                             $('#zone_title_tr').show();
+                            $('#is_double_tr').show();
                         }else{
                             $('#zone_title_tr').hide();
+                            $('#is_double_tr').hide();
                         }
                     });
                     $('.term_time_radio').on('click',function () {
