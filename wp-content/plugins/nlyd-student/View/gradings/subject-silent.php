@@ -30,87 +30,100 @@
     if(how_ques<=1){
         $('.rights').addClass('disabled').removeClass('c_blue').addClass('c_grey');
     }
-    new AlloyFinger($('.lefts')[0], {
-        touchStart: function () {
-            var left=$('.lefts');
-            if(!left.hasClass('disabled')){
-                left.addClass("opacity");
-            }
-        },
-        touchMove: function () {
-            $('.lefts').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('.lefts').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('.lefts').removeClass("opacity");
-        },
-        tap:function(){
-            var left=$('.lefts');
-            var len=$('.answer-zoo').length-1;
-            if(!left.hasClass('disabled')){
-                if(n>0){
-                    n--
-                    $('#number').text(n+1)
-                    if(n==0){
-                        left.addClass('disabled').removeClass('c_blue').addClass('c_grey')
-                    }
-                    $('.rights').removeClass('disabled').removeClass('c_grey').addClass('c_blue')
-                    $('.answer-zoo').each(function(){
-                        $(this).removeClass('active')
-                        if($(this).attr('data-index')==n){
-                            $(this).addClass('active')
-                        }
-                    })
-                    
+    function left() {
+        var left=$('.lefts');
+        var len=$('.answer-zoo').length-1;
+        if(!left.hasClass('disabled')){
+            if(n>0){
+                n--
+                $('#number').text(n+1)
+                if(n==0){
+                    left.addClass('disabled').removeClass('c_blue').addClass('c_grey')
                 }
+                $('.rights').removeClass('disabled').removeClass('c_grey').addClass('c_blue')
+                $('.answer-zoo').each(function(){
+                    $(this).removeClass('active')
+                    if($(this).attr('data-index')==n){
+                        $(this).addClass('active')
+                    }
+                })
+                
+            }
 
-            }else{
-                return false;
-            }
+        }else{
+            return false;
         }
-    });
-    // mTouch('body').on('tap','.right',function(e){//下一题
-    new AlloyFinger($('.rights')[0], {
-        touchStart: function () {
-            var right=$('.rights');
-            if(!right.hasClass('disabled')){
-                $('.rights').addClass("opacity");
-            }
-        },
-        touchMove: function () {
-            $('.rights').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('.rights').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('.rights').removeClass("opacity");
-        },
-        tap:function(){
-            var right=$('.rights');
-            var len=$('.answer-zoo').length-1;
-            if(!right.hasClass('disabled')){
-                if(n<len){
-                    n++
-                    $('#number').text(n+1)
-                    if(n==len){
-                        right.addClass('disabled').removeClass('c_blue').addClass('c_grey')
-                    }
-                    $('.lefts').removeClass('disabled').removeClass('c_grey').addClass('c_blue')
-                    $('.answer-zoo').each(function(){
-                        $(this).removeClass('active')
-                        if($(this).attr('data-index')==n){
-                            $(this).addClass('active')
-                        }
-                    })
+    }
+    function right() {
+        var right=$('.rights');
+        var len=$('.answer-zoo').length-1;
+        if(!right.hasClass('disabled')){
+            if(n<len){
+                n++
+                $('#number').text(n+1)
+                if(n==len){
+                    right.addClass('disabled').removeClass('c_blue').addClass('c_grey')
                 }
-            }else{
-                return false;
+                $('.lefts').removeClass('disabled').removeClass('c_grey').addClass('c_blue')
+                $('.answer-zoo').each(function(){
+                    $(this).removeClass('active')
+                    if($(this).attr('data-index')==n){
+                        $(this).addClass('active')
+                    }
+                })
             }
+        }else{
+            return false;
         }
-    });
-    
+    }
+    if('ontouchstart' in window){// 移动端
+        new AlloyFinger($('.lefts')[0], {
+            touchStart: function () {
+                var left=$('.lefts');
+                if(!left.hasClass('disabled')){
+                    left.addClass("opacity");
+                }
+            },
+            touchMove: function () {
+                $('.lefts').removeClass("opacity");
+            },
+            touchEnd: function () {
+                $('.lefts').removeClass("opacity");
+            },
+            touchCancel: function () {
+                $('.lefts').removeClass("opacity");
+            },
+            tap:function(){
+                left()
+            }
+        });
+        new AlloyFinger($('.rights')[0], {
+            touchStart: function () {
+                var right=$('.rights');
+                if(!right.hasClass('disabled')){
+                    $('.rights').addClass("opacity");
+                }
+            },
+            touchMove: function () {
+                $('.rights').removeClass("opacity");
+            },
+            touchEnd: function () {
+                $('.rights').removeClass("opacity");
+            },
+            touchCancel: function () {
+                $('.rights').removeClass("opacity");
+            },
+            tap:function(){
+                right()
+            }
+        });
+    }else{
+        $('body').on('click','.lefts',function(){
+            left()
+        })
+        $('body').on('click','.rights',function(){
+            right()
+        })
+    }
 });
 </script>

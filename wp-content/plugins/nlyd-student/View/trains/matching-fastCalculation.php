@@ -389,132 +389,6 @@ jQuery(function($) {
         $('#total').text(ajaxData.length)
         $('#question div').text(ajaxData[ajaxData.length-1]['question']+'=?')
     }
-    $('.number').each(function(e){//数字键盘
-        var _this=$(this)
-        new AlloyFinger(_this[0], {
-                touchStart: function () {
-                    _this.addClass("opacity");
-                },
-                touchMove: function () {
-                    _this.removeClass("opacity");
-                },
-                touchEnd: function () {
-                    _this.removeClass("opacity");
-                },
-                touchCancel: function () {
-                    _this.removeClass("opacity");
-                },
-                tap: function () {
-                    var number=_this.attr('date-number');
-                    var text=$('#answer div').text()
-                    if(text.length<21){
-                        $('#answer div').text(text+number)
-                    }
-                }
-            })
-
-    })
-    // $('.number').on('tap',function(){
-    //     var _this=$(this)
-    //     var number=_this.attr('date-number');
-    //     var text=$('#answer div').text()
-    //     if(text.length<21){
-    //         $('#answer div').text(text+number)
-    //     }
-    // })
-    new AlloyFinger($('#del')[0], {//删除
-        touchStart: function () {
-            $('#del').addClass("opacity");
-        },
-        touchMove: function () {
-            $('#del').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('#del').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('#del').removeClass("opacity");
-        },
-        tap: function () {
-            var _this=$('#del');
-            var text=$('#answer div').text()
-            var len=text.length;
-            if(len>0){
-                var news=text.substring(0,len-1)
-                $('#answer div').text(news)
-            }
-        }
-    });
-    //下一题tap事件
-    // mTouch('body').on('tap','#next',function(e){
-    new AlloyFinger($('#next')[0], {
-        tap: function () {
-            var _this=$('#next')
-            if(!_this.hasClass('disabled')){
-                _this.addClass('disabled')
-                nextBtn_click++
-                if (type=='<?=__('乘除运算', 'nlyd-student')?>') {
-                    if(nextBtn_click%cx_interval_times==0){//难度控制
-                        level.symbol=1
-                        level.number++
-                        if(level.number>4){
-                            level.number=4
-                        }
-                    }
-                }else{
-                    if(nextBtn_click%add_interval_times==0){//难度控制，每点三次，数字长度加1
-                        level.symbol++
-                        if(level.symbol>4){
-                            level.number++
-                            if(level.number>4){
-                                level.symbol=4
-                            }else{
-                                level.symbol=1
-                            }
-                        }
-                    }
-                }
-                var thisAjaxRow=ajaxData[ajaxData.length-1]
-                var yours=$('#answer div').text()
-                var flag=true;
-                if(yours.length>0){
-                    for(var i=0;i< yours.length;i++){
-                        if(yours.charAt(i)=="-"){
-                            if(i!=0 || yours.length==1){//-是否出现在第一个或者出现-号长度为1
-                                flag=false;
-                                break;
-                            }
-                        }
-                    } 
-                    
-                }
-                thisAjaxRow['yours']=yours;
-                if(flag){//符合parseInt函数
-                    if(parseInt(yours)==thisAjaxRow['rights']){
-                        thisAjaxRow['isRight']=true;
-                        $('#answer').removeClass('answer').addClass('right-fast')
-                    }else{
-                        thisAjaxRow['isRight']=false;
-                        $('#answer').removeClass('answer').addClass('error-fast')
-                    }
-                }else{
-                    thisAjaxRow['isRight']=false;
-                    $('#answer').removeClass('answer').addClass('error-fast')
-                }
-                setTimeout(function() {
-                    $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer')
-                    $('#answer div').text('') 
-                    inItFastCalculation(level,type);
-                    nextQuestion()
-                    if($('.count_down').attr('data-seconds')>0){
-                        _this.removeClass('disabled')
-                    }
-                    
-                }, 300);
-            }
-        }
-        
-    });
     function submit(time){//提交答案
         if(!isSubmit){
             // $('#load').css({
@@ -608,19 +482,17 @@ jQuery(function($) {
             // }, 1000);
         }
     });  
-layui.use('layer', function(){
-    // mTouch('body').on('tap','#sumbit',function(e){
-    new AlloyFinger($('#sumbit')[0], {
-        tap:function(){
+    layui.use('layer', function(){
+        function layOpen() {//提交
             var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
             layer.open({
                 type: 1
                 ,maxWidth:300
-                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
+                ,title: '<?=__("提示", "nlyd-student")?>' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                ,btn: [ '<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>', ]
+                ,content: '<div class="box-conent-wrapper"><?=__("是否立即提交", "nlyd-student")?>？</div>'
+                ,btn: [ '<?=__("按错了", "nlyd-student")?>','<?=__("提交", "nlyd-student")?>', ]
                 ,success: function(layero, index){
                 }
                 ,yes: function(index, layero){
@@ -644,9 +516,153 @@ layui.use('layer', function(){
                 ,isOutAnim:true//关闭动画
             });
         }
-    });
-});
-
+        function numberPress(dom){//数字键盘
+            var number=dom.attr('date-number');
+            var text=$('#answer div').text()
+            if(text.length<21){
+                $('#answer div').text(text+number)
+            }
+        }
+        function del() {//删除
+            var text=$('#answer div').text()
+            var len=text.length;
+            if(len>0){
+                var news=text.substring(0,len-1)
+                $('#answer div').text(news)
+            }
+        }
+        function nextQues(dom) {//下一题
+            if(!dom.hasClass('disabled')){
+                dom.addClass('disabled')
+                nextBtn_click++
+                if (type=='<?=__("乘除运算", "nlyd-student")?>') {
+                    if(nextBtn_click%cx_interval_times==0){//难度控制
+                        level.symbol=1
+                        level.number++
+                        if(level.number>4){
+                            level.number=4
+                        }
+                    }
+                }else{
+                    if(nextBtn_click%add_interval_times==0){//难度控制，每点三次，数字长度加1
+                        level.symbol++
+                        if(level.symbol>4){
+                            level.number++
+                            if(level.number>4){
+                                level.symbol=4
+                            }else{
+                                level.symbol=1
+                            }
+                        }
+                    }
+                }
+                var thisAjaxRow=ajaxData[ajaxData.length-1]
+                var yours=$('#answer div').text()
+                var flag=true;
+                if(yours.length>0){
+                    for(var i=0;i< yours.length;i++){
+                        if(yours.charAt(i)=="-"){
+                            if(i!=0 || yours.length==1){//-是否出现在第一个或者出现-号长度为1
+                                flag=false;
+                                break;
+                            }
+                        }
+                    } 
+                    
+                }
+                thisAjaxRow['yours']=yours;
+                if(flag){//符合parseInt函数
+                    if(parseInt(yours)==thisAjaxRow['rights']){
+                        thisAjaxRow['isRight']=true;
+                        $('#answer').removeClass('answer').addClass('right-fast')
+                    }else{
+                        thisAjaxRow['isRight']=false;
+                        $('#answer').removeClass('answer').addClass('error-fast')
+                    }
+                }else{
+                    thisAjaxRow['isRight']=false;
+                    $('#answer').removeClass('answer').addClass('error-fast')
+                }
+                setTimeout(function() {
+                    $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer')
+                    $('#answer div').text('') 
+                    inItFastCalculation(level,type);
+                    nextQuestion()
+                    if($('.count_down').attr('data-seconds')>0){
+                        dom.removeClass('disabled')
+                    }
+                }, 300);
+            }
+        }
+            if('ontouchstart' in window){// 移动端
+                $('.number').each(function(e){//数字键盘
+                    var _this=$(this)
+                    new AlloyFinger(_this[0], {
+                        touchStart: function () {
+                            _this.addClass("opacity");
+                        },
+                        touchMove: function () {
+                            _this.removeClass("opacity");
+                        },
+                        touchEnd: function () {
+                            _this.removeClass("opacity");
+                        },
+                        touchCancel: function () {
+                            _this.removeClass("opacity");
+                        },
+                        tap: function () {
+                            numberPress(_this)
+                        }
+                    })
+                });
+    
+                new AlloyFinger($('#del')[0], {//删除
+                    touchStart: function () {
+                        $('#del').addClass("opacity");
+                    },
+                    touchMove: function () {
+                        $('#del').removeClass("opacity");
+                    },
+                    touchEnd: function () {
+                        $('#del').removeClass("opacity");
+                    },
+                    touchCancel: function () {
+                        $('#del').removeClass("opacity");
+                    },
+                    tap: function () {
+                        del()
+                    }
+                });
+                //下一题tap事件
+                new AlloyFinger($('#next')[0], {
+                    tap: function () {
+                        var _this=$('#next')
+                        nextQues(_this)
+                    }
+                    
+                });
+                new AlloyFinger($('#sumbit')[0], {
+                    tap:function(){
+                        layOpen()
+                    }
+                });
+        }else{
+            $('body').on('click','.number',function(){//数字键盘
+                var _this=$(this)
+                numberPress(_this)
+            })
+            $('body').on('click','#del',function(){//删除
+                del()
+            })
+            $('body').on('click','#next',function(){//下一题
+                var _this=$('#next')
+                nextQues(_this)
+            })
+            $('body').on('click','#sumbit',function(){//下一题
+                layOpen()
+            })
+        }
+    })
     
 })
 </script>

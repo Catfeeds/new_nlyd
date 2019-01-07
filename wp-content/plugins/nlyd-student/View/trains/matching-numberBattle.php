@@ -157,210 +157,9 @@ jQuery(function($) {
         }
         return false;
     }
-    $('.matching-number').each(function(){//填充区域
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            touchStart: function () {
-                _this.addClass("opacity");
-            },
-            touchMove: function () {
-                _this.removeClass("opacity");
-            },
-            touchEnd: function () {
-                _this.removeClass("opacity");
-            },
-            touchCancel: function () {
-                _this.removeClass("opacity");
-            },
-            tap:function(){
-                $('.matching-number').removeClass('active');
-                _this.addClass('active');
-            }
-        })
-    })
-    $('.number').each(function(){//数字键盘
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            touchStart: function () {
-                _this.addClass("opacity");
-            },
-            touchMove: function () {
-                _this.removeClass("opacity");
-            },
-            touchEnd: function () {
-                _this.removeClass("opacity");
-            },
-            touchCancel: function () {
-                _this.removeClass("opacity");
-            },
-            tap:function(){
-                var number=_this.attr('date-number');
-                var active=$('.matching-number.active');
-                var len=$('.matching-number').length;
-                if(!$('.matching-number').eq(len-1).hasClass('active')){
-                    active.text(number).removeClass('active').next('.matching-number').addClass('active');
-                }else{
-                    active.text(number);
-                }
-            }
-        })
-    })
-    //删除tap事件
-    // mTouch('body').on('tap','#del',function(e){
-    new AlloyFinger($('#del')[0], {//删除
-        touchStart: function () {
-            $('#del').addClass("opacity");
-        },
-        touchMove: function () {
-            $('#del').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('#del').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('#del').removeClass("opacity");
-        },
-        tap:function(){
-            var _this=$('#del')
-        // if(!_this.hasClass('opcity')){
-        //     _this.addClass('opcity')
-            var active=$('.matching-number.active');
-            if(active.text()==""){//已经为空
-                if(!$('.matching-number').eq(0).hasClass('active')){
-                    active.prev('.matching-number').addClass('active')
-                    
-                }else{
-                    active.next('.matching-number').addClass('active')
-                }
-                active.remove()
-                var dom='<div class="matching-number"></div>'
-                $('.matching-number-zoo').append(dom)
-                var len=$('.matching-number').length;
-                var newDom=$('.matching-number').eq(len-1)
-                // console.log($('.matching-number').eq(len-1))
-                new AlloyFinger(newDom[0], {
-                    touchStart: function () {
-                        newDom.addClass("opacity");
-                    },
-                    touchMove: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    touchEnd: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    touchCancel: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    tap:function(){
-                        $('.matching-number').removeClass('active');
-                        newDom.addClass('active');
-                    }
-                })
-            }else{
-                active.text('');
 
-            }
-        }
-    })
-    //前插tap事件
-    // mTouch('body').on('tap','#prev',function(e){
-    new AlloyFinger($('#prev')[0], {
-        touchStart: function () {
-            $('#prev').addClass("opacity");
-        },
-        touchMove: function () {
-            $('#prev').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('#prev').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('#prev').removeClass("opacity");
-        },
-        tap: function () {
-            var len=$('.matching-number').length;
-            var _this=$('#prev')
-            if(!$('.matching-number').eq(len-1).hasClass('active')){
-                var active=$('.matching-number.active');
-                var dom='<div class="matching-number active"></div>';
-                active.removeClass('active').before(dom);
-                $('.matching-number-zoo .matching-number').last().remove()
-                var newDom=$('.matching-number.active')
-                new AlloyFinger(newDom[0], {
-                    touchStart: function () {
-                        newDom.addClass("opacity");
-                    },
-                    touchMove: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    touchEnd: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    touchCancel: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    tap:function(){
-                        $('.matching-number').removeClass('active');
-                        newDom.addClass('active');
-                    }
-                })
-            }else{
-                $('.matching-number.active').text('')
-            }
-        }
-    });
-    //后插tap事件
-    // mTouch('body').on('tap','#next',function(e){
-    new AlloyFinger($('#next')[0], {
-        touchStart: function () {
-            $('#next').addClass("opacity");
-        },
-        touchMove: function () {
-            $('#next').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('#next').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('#next').removeClass("opacity");
-        },
-        tap: function () {
-            var _this=$('#next')
-            $('.matching-number').each(function(i){
-                if(i!=$('.matching-number').length-1){//如果不是最后一位
-                    if($(this).hasClass('active')){
-                        var dom='<div class="matching-number active"></div>'
-                        $(this).removeClass('active').after(dom);
-                        $('.matching-number-zoo .matching-number').last().remove()
-
-                        var newDom=$('.matching-number.active')
-                        new AlloyFinger(newDom[0], {
-                            touchStart: function () {
-                                newDom.addClass("opacity");
-                            },
-                            touchMove: function () {
-                                newDom.removeClass("opacity");
-                            },
-                            touchEnd: function () {
-                                newDom.removeClass("opacity");
-                            },
-                            touchCancel: function () {
-                                newDom.removeClass("opacity");
-                            },
-                            tap:function(){
-                                $('.matching-number').removeClass('active');
-                                newDom.addClass('active');
-                            }
-                        })
-                    }
-                }
-            })
-        }
-    });
-layui.use('layer', function(){
-    // mTouch('body').on('tap','#sumbit',function(e){
-    new AlloyFinger($('#sumbit')[0], {
-        tap:function(){
+    layui.use('layer', function(){
+        function layOpen() {//提交
             var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
             layer.open({
                     type: 1
@@ -384,11 +183,264 @@ layui.use('layer', function(){
                     ,shade: 0.3 //遮罩
                     ,isOutAnim:true//关闭动画
                 });
+        }
+        function zonePress(dom){//填充区域
+            $('.matching-number').removeClass('active');
+            dom.addClass('active');
+        }
+        function numberPress(dom){//数字键盘
+            var number=dom.attr('date-number');
+            var active=$('.matching-number.active');
+            var len=$('.matching-number').length;
+            if(!$('.matching-number').eq(len-1).hasClass('active')){
+                active.text(number).removeClass('active').next('.matching-number').addClass('active');
+            }else{
+                active.text(number);
             }
-            
-    });
-});
+        }
+        if('ontouchstart' in window){// 移动端
+      
+            new AlloyFinger($('#sumbit')[0], {//提交
+                tap:function(){
+                    layOpen()
+                }
+            });
+            $('.matching-number').each(function(){//填充区域
+                var _this=$(this);
+                new AlloyFinger(_this[0], {
+                    touchStart: function () {
+                        _this.addClass("opacity");
+                    },
+                    touchMove: function () {
+                        _this.removeClass("opacity");
+                    },
+                    touchEnd: function () {
+                        _this.removeClass("opacity");
+                    },
+                    touchCancel: function () {
+                        _this.removeClass("opacity");
+                    },
+                    tap:function(){
+                        zonePress(_this)
+                    }
+                })
+            })
+            $('.number').each(function(){//数字键盘
+                var _this=$(this);
+                new AlloyFinger(_this[0], {
+                    touchStart: function () {
+                        _this.addClass("opacity");
+                    },
+                    touchMove: function () {
+                        _this.removeClass("opacity");
+                    },
+                    touchEnd: function () {
+                        _this.removeClass("opacity");
+                    },
+                    touchCancel: function () {
+                        _this.removeClass("opacity");
+                    },
+                    tap:function(){
+                        numberPress(_this)
+                    }
+                })
+            })
+            //删除tap事件
+            new AlloyFinger($('#del')[0], {//删除
+                touchStart: function () {
+                    $('#del').addClass("opacity");
+                },
+                touchMove: function () {
+                    $('#del').removeClass("opacity");
+                },
+                touchEnd: function () {
+                    $('#del').removeClass("opacity");
+                },
+                touchCancel: function () {
+                    $('#del').removeClass("opacity");
+                },
+                tap:function(){
+                    var active=$('.matching-number.active');
+                    if(active.text()==""){//已经为空
+                        if(!$('.matching-number').eq(0).hasClass('active')){
+                            active.prev('.matching-number').addClass('active')
+                            
+                        }else{
+                            active.next('.matching-number').addClass('active')
+                        }
+                        active.remove()
+                        var dom='<div class="matching-number"></div>'
+                        $('.matching-number-zoo').append(dom)
+                        var len=$('.matching-number').length;
+                        var newDom=$('.matching-number').eq(len-1)
+                        // console.log($('.matching-number').eq(len-1))
+                        new AlloyFinger(newDom[0], {
+                            touchStart: function () {
+                                newDom.addClass("opacity");
+                            },
+                            touchMove: function () {
+                                newDom.removeClass("opacity");
+                            },
+                            touchEnd: function () {
+                                newDom.removeClass("opacity");
+                            },
+                            touchCancel: function () {
+                                newDom.removeClass("opacity");
+                            },
+                            tap:function(){
+                                $('.matching-number').removeClass('active');
+                                newDom.addClass('active');
+                            }
+                        })
+                    }else{
+                        active.text('');
 
+                    }
+                }
+            })
+            //前插tap事件
+            new AlloyFinger($('#prev')[0], {
+                touchStart: function () {
+                    $('#prev').addClass("opacity");
+                },
+                touchMove: function () {
+                    $('#prev').removeClass("opacity");
+                },
+                touchEnd: function () {
+                    $('#prev').removeClass("opacity");
+                },
+                touchCancel: function () {
+                    $('#prev').removeClass("opacity");
+                },
+                tap: function () {
+                    var len=$('.matching-number').length;
+                    if(!$('.matching-number').eq(len-1).hasClass('active')){
+                        var active=$('.matching-number.active');
+                        var dom='<div class="matching-number active"></div>';
+                        active.removeClass('active').before(dom);
+                        $('.matching-number-zoo .matching-number').last().remove()
+                        var newDom=$('.matching-number.active')
+                        new AlloyFinger(newDom[0], {
+                            touchStart: function () {
+                                newDom.addClass("opacity");
+                            },
+                            touchMove: function () {
+                                newDom.removeClass("opacity");
+                            },
+                            touchEnd: function () {
+                                newDom.removeClass("opacity");
+                            },
+                            touchCancel: function () {
+                                newDom.removeClass("opacity");
+                            },
+                            tap:function(){
+                                $('.matching-number').removeClass('active');
+                                newDom.addClass('active');
+                            }
+                        })
+                    }else{
+                        $('.matching-number.active').text('')
+                    }
+                }
+            });
+            //后插tap事件
+            new AlloyFinger($('#next')[0], {
+                touchStart: function () {
+                    $('#next').addClass("opacity");
+                },
+                touchMove: function () {
+                    $('#next').removeClass("opacity");
+                },
+                touchEnd: function () {
+                    $('#next').removeClass("opacity");
+                },
+                touchCancel: function () {
+                    $('#next').removeClass("opacity");
+                },
+                tap: function () {
+                    $('.matching-number').each(function(i){
+                        if(i!=$('.matching-number').length-1){//如果不是最后一位
+                            if($(this).hasClass('active')){
+                                var dom='<div class="matching-number active"></div>'
+                                $(this).removeClass('active').after(dom);
+                                $('.matching-number-zoo .matching-number').last().remove()
+
+                                var newDom=$('.matching-number.active')
+                                new AlloyFinger(newDom[0], {
+                                    touchStart: function () {
+                                        newDom.addClass("opacity");
+                                    },
+                                    touchMove: function () {
+                                        newDom.removeClass("opacity");
+                                    },
+                                    touchEnd: function () {
+                                        newDom.removeClass("opacity");
+                                    },
+                                    touchCancel: function () {
+                                        newDom.removeClass("opacity");
+                                    },
+                                    tap:function(){
+                                        $('.matching-number').removeClass('active');
+                                        newDom.addClass('active');
+                                    }
+                                })
+                            }
+                        }
+                    })
+                }
+            });
+        }else{
+            $('body').on('click','.matching-number',function(){
+                var _this=$(this)
+                zonePress(_this)
+            })
+            $('body').on('click','.number',function(){
+                var _this=$(this)
+                numberPress(_this)
+            })
+            $('body').on('click','#del',function(){
+                var active=$('.matching-number.active');
+                if(active.text()==""){//已经为空
+                    if(!$('.matching-number').eq(0).hasClass('active')){
+                        active.prev('.matching-number').addClass('active')
+                        
+                    }else{
+                        active.next('.matching-number').addClass('active')
+                    }
+                    active.remove()
+                    var dom='<div class="matching-number"></div>'
+                    $('.matching-number-zoo').append(dom)
+                }else{
+                    active.text('');
+                }
+            })
+            $('body').on('click','#prev',function(){
+                var len=$('.matching-number').length;
+                if(!$('.matching-number').eq(len-1).hasClass('active')){
+                    var active=$('.matching-number.active');
+                    var dom='<div class="matching-number active"></div>';
+                    active.removeClass('active').before(dom);
+                    $('.matching-number-zoo .matching-number').last().remove()
+                }else{
+                    $('.matching-number.active').text('')
+                }
+            })
+            $('body').on('click','#next',function(){
+                $('.matching-number').each(function(i){
+                    if(i!=$('.matching-number').length-1){//如果不是最后一位
+                        if($(this).hasClass('active')){
+                            var dom='<div class="matching-number active"></div>'
+                            $(this).removeClass('active').after(dom);
+                            $('.matching-number-zoo .matching-number').last().remove()
+                        }
+                    }
+                })
+            })
+            $('body').on('click','#sumbit',function(){//提交
+                layOpen()
+            })
+        }
+    })
     
 })
 </script>
