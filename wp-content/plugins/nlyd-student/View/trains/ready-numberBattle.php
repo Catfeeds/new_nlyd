@@ -66,17 +66,6 @@ jQuery(function($) {
         var dom='<div class="matching-number">'+v+'</div>';
         $('.matching-number-zoo').append(dom)
     })
-    new AlloyFinger($('#complete')[0], {
-        tap:function(){
-            var _sessionData={//存储session
-                train_questions:questions_answer,
-                genre_id:$.Request('genre_id'),
-                type:'szzb',
-                end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
-            }
-            $.SetSession('train_match',_sessionData)
-        }
-    })
     function submit(time){//提交答案
         // $('#load').css({
         //         'display':'block',
@@ -150,23 +139,53 @@ jQuery(function($) {
             // }, 1000);
         }
     });
-    $('.matching-btn').each(function(){
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            tap:function(){
-                $('.matching-btn').removeClass('active');
-                _this.addClass('active')
-                var text=parseInt(_this.text())
-                $('.matching-number').removeClass('border-right');
-                if(text!='NAN'){
-                    $('.matching-number').each(function(j){
-                        if((j+1)%text==0){
-                            $(this).addClass('border-right')
-                        }
-                    })
-                }
+
+    layui.use('layer', function(){
+       function matchBtn(_this) {
+            $('.matching-btn').removeClass('active');
+            _this.addClass('active')
+            var text=parseInt(_this.text())
+            $('.matching-number').removeClass('border-right');
+            if(text!='NAN'){
+                $('.matching-number').each(function(j){
+                    if((j+1)%text==0){
+                        $(this).addClass('border-right')
+                    }
+                })
             }
-        })
+       }
+       function complete() {
+            var _sessionData={//存储session
+                train_questions:questions_answer,
+                genre_id:$.Request('genre_id'),
+                type:'szzb',
+                end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
+            }
+            $.SetSession('train_match',_sessionData)
+       }
+        if('ontouchstart' in window){// 移动端
+            $('.matching-btn').each(function(){
+                var _this=$(this);
+                new AlloyFinger(_this[0], {
+                    tap:function(){
+                        matchBtn(_this)
+                    }
+                })
+            })
+            new AlloyFinger($('#complete')[0], {//记忆完成
+                tap:function(){
+                    complete()
+                }
+            })
+        }else{
+            $('body').on('click','#complete',function(){
+                complete()
+            })
+            $('body').on('click','.matching-btn',function(){
+                var _this=$(this)
+                matchBtn(_this)
+            })
+        }
     })
 })
 </script>

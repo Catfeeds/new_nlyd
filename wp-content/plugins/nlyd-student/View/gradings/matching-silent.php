@@ -292,61 +292,36 @@ jQuery(function($) {
             $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
     }
-   
-layui.use('layer', function(){
-    // mTouch('body').on('tap','#sumbit',function(e){
-    new AlloyFinger($('#sumbit')[0], {
-        tap:function(){
+    layui.use('layer', function(){
+        var n=0;
+        if(how_ques<=1){
+            $('.a-two.right').addClass('disabled')
+        }
+        function layOpen() {//提交
             layer.open({
-                    type: 1
-                    ,maxWidth:300
-                    ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
-                    ,skin:'nl-box-skin'
-                    ,id: 'certification' //防止重复弹出
-                    ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                    ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>']
-                    ,success: function(layero, index){
-                    }
-                    ,yes: function(index, layero){
-                        layer.closeAll();
-                    }
-                    ,btn2: function(index, layero){
-                        layer.closeAll();
-                        submit(1);  
-                    }
-                    ,closeBtn:2
-                    ,btnAagn: 'c' //按钮居中
-                    ,shade: 0.3 //遮罩
-                    ,isOutAnim:true//关闭动画
-                });
-            }
-            
-    });
-});
-
-
-    var n=0;
-    if(how_ques<=1){
-        $('.a-two.right').addClass('disabled')
-    }
-    // mTouch('body').on('tap','.a-two.left',function(e){//上一题
-    new AlloyFinger($('.a-two.left')[0], {
-        touchStart: function () {
-            var left=$('.a-two.left');
-            if(!left.hasClass('disabled')){
-                left.addClass("opacity");
-            }
-        },
-        touchMove: function () {
-            $('.a-two.left').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('.a-two.left').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('.a-two.left').removeClass("opacity");
-        },
-        tap:function(){
+                type: 1
+                ,maxWidth:300
+                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
+                ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>']
+                ,success: function(layero, index){
+                }
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    layer.closeAll();
+                    submit(1);  
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        }
+        function left() {
             var left=$('.a-two.left');
             var len=$('.matching-reading').length-1;
             if(!left.hasClass('disabled')){
@@ -370,25 +345,7 @@ layui.use('layer', function(){
                 return false;
             }
         }
-    });
-    // mTouch('body').on('tap','.a-two.right',function(e){//下一题
-    new AlloyFinger($('.a-two.right')[0], {
-        touchStart: function () {
-            var right=$('.a-two.right');
-            if(!right.hasClass('disabled')){
-                $('.a-two.right').addClass("opacity");
-            }
-        },
-        touchMove: function () {
-            $('.a-two.right').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('.a-two.right').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('.a-two.right').removeClass("opacity");
-        },
-        tap:function(){
+        function right() {
             var right=$('.a-two.right');
             var len=$('.matching-reading').length-1;
             if(!right.hasClass('disabled')){
@@ -410,7 +367,63 @@ layui.use('layer', function(){
                 return false;
             }
         }
-    });
-    
+        if('ontouchstart' in window){// 移动端
+            new AlloyFinger($('.a-two.left')[0], {
+                touchStart: function () {
+                    var left=$('.a-two.left');
+                    if(!left.hasClass('disabled')){
+                        left.addClass("opacity");
+                    }
+                },
+                touchMove: function () {
+                    $('.a-two.left').removeClass("opacity");
+                },
+                touchEnd: function () {
+                    $('.a-two.left').removeClass("opacity");
+                },
+                touchCancel: function () {
+                    $('.a-two.left').removeClass("opacity");
+                },
+                tap:function(){
+                    left()
+                }
+            });
+            new AlloyFinger($('.a-two.right')[0], {
+                touchStart: function () {
+                    var right=$('.a-two.right');
+                    if(!right.hasClass('disabled')){
+                        $('.a-two.right').addClass("opacity");
+                    }
+                },
+                touchMove: function () {
+                    $('.a-two.right').removeClass("opacity");
+                },
+                touchEnd: function () {
+                    $('.a-two.right').removeClass("opacity");
+                },
+                touchCancel: function () {
+                    $('.a-two.right').removeClass("opacity");
+                },
+                tap:function(){
+                    right()
+                }
+            });
+            new AlloyFinger($('#sumbit')[0], {//提交
+                tap:function(){
+                    layOpen()
+                }
+            });
+        }else{
+            $('body').on('click','.a-two.left',function(){//提交
+                left()
+            })
+            $('body').on('click','.a-two.right',function(){//提交
+                right()
+            })
+            $('body').on('click','#sumbit',function(){//提交
+                layOpen()
+            })
+        }
+    })
 })
 </script>

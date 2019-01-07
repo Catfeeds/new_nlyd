@@ -294,34 +294,43 @@ jQuery(function($) {
                 }
         })
     } 
+
     layui.use('layer', function(){
-        new AlloyFinger($('#sumbit')[0], {
-            tap:function(){
-                layer.open({
-                        type: 1
-                        ,maxWidth:300
-                        ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
-                        ,skin:'nl-box-skin'
-                        ,id: 'certification' //防止重复弹出
-                        ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                        ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>']
-                        ,success: function(layero, index){
-                        }
-                        ,yes: function(index, layero){
-                            layer.closeAll();
-                        }
-                        ,btn2: function(index, layero){
-                            layer.closeAll();
-                            submit(1);
-                        }
-                        ,closeBtn:2
-                        ,btnAagn: 'c' //按钮居中
-                        ,shade: 0.3 //遮罩
-                        ,isOutAnim:true//关闭动画
-                    });
+        function layOpen() {//提交
+            layer.open({
+                type: 1
+                ,maxWidth:300
+                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
+                ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>']
+                ,success: function(layero, index){
                 }
-                
-        });
-    });
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    layer.closeAll();
+                    submit(1);
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        }
+        if('ontouchstart' in window){// 移动端
+            new AlloyFinger($('#sumbit')[0], {//提交
+                tap:function(){
+                    layOpen()
+                }
+            });
+        }else{
+            $('body').on('click','#sumbit',function(){//提交
+                layOpen()
+            })
+        }
+    })
 })
 </script>

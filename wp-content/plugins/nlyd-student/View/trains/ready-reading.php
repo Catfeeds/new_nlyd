@@ -39,18 +39,15 @@ jQuery(function($) {
     window.addEventListener('popstate', function () {
         history.pushState(null, null, document.URL);
     });
-    new AlloyFinger($('#complete')[0], {//阅读完成
-        tap:function(){
-            if(!$('#complete').hasClass('disabled')){
-                var time=$('.count_down').attr('data-seconds');
-                var href=$(this).attr('data-href')
-                var new_href=href+'/end_time/'+$.GetEndTime($('.count_down').attr('data-seconds'))
-                window.location.href=new_href
-                $('#complete').addClass('disabled')
-            }
+    $('#complete').click(function(){
+        if(!$(this).hasClass('disabled')){
+            var time=$('.count_down').attr('data-seconds');
+            var href=$(this).attr('data-href')
+            var new_href=href+'/end_time/'+$.GetEndTime($('.count_down').attr('data-seconds'))
+            window.location.href=new_href
+            $(this).addClass('disabled')
         }
-      
-    });
+    })
     function submit(time){//提交答案
         // $('#load').css({
         //         'display':'block',
