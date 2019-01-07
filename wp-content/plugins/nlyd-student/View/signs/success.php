@@ -27,11 +27,11 @@
                         <div class="signs_value c_blue fs_15"><?=sprintf(__('第%s号','nlyd-student'),$index)?></div>
                     </div>
                     <div class="signs_row">
-                        <div class="signs_label"><?=__('选手国籍', 'nlyd-student')?>：</div>
+                        <div class="signs_label"><?=__('国籍', 'nlyd-student')?>：</div>
                         <div class="signs_value c_black fs_15"><?=$user_nationality?> <span class="fastbannerform__span f32 NOFLAG <?=$user_nationality_pic?>"></span></div>
                     </div>
                     <div class="signs_row">
-                        <div class="signs_label"><?=__('选手姓名', 'nlyd-student')?>&<?=__('证件号码', 'nlyd-student')?>：</div>
+                        <div class="signs_label"><?=__('姓名', 'nlyd-student')?>&<?=__('证件号码', 'nlyd-student')?>：</div>
                         <div class="signs_value c_black fs_15"><?=$real_name?><br><?=$real_ID?></div>
                     </div>
                     <div class="signs_row">
