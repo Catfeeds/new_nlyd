@@ -27,6 +27,34 @@ class Match_Ajax
     }
 
     /**
+     * 设置发布机构
+     */
+    public function admin_get_zone_list(){
+
+        global $wpdb,$current_user;
+        if(!empty($_GET['term'])){
+            $where = " and  b.zone_name like '%{$_GET['term']}%' ";
+        }
+        $sql = "select a.user_id as id,if(a.zone_match_type=1,'战队精英赛','城市赛') as match_type, a.zone_city,a.zone_name from {$wpdb->prefix}zone_meta a 
+                left join {$wpdb->prefix}users b on a.user_id = b.ID
+                where a.user_id > 0 {$where}
+                limit 10;
+                ";
+        //print_r($sql);
+        $zones = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($zones)){
+            $arr = array();
+            foreach ($zones as $key => $value) {
+                $city = !empty($value['zone_city']) ? '（'.$value['zone_city'].'）' : '';
+                $arr[$key]['text'] = $value['zone_name'].$city.$value['match_type'].'组委会';
+                $arr[$key]['id'] = $value['id'];
+            }
+        }
+        wp_send_json_success($arr);
+        //print_r($arr);die;
+    }
+
+    /**
      * 一键生成比赛项目
      */
     public function found_match(){

@@ -4853,17 +4853,22 @@ class Student_Ajax
      * @return [type] [description]
      */
     public function get_match_cost(){
-        global $wpdb;
+        global $wpdb,$current_user;
         if(empty($_POST['type'])) wp_send_json_error(array('info'=>__('参数错误')));
-        print_r($_POST);die;
-        if($_POST['type'] == 1){
 
+        if($_POST['type'] == 'official-match'){
             //获取机构赛区类型
-            $zone_meta = $wpdb->get_row("select zone_match_type,is_double from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+            $zone_meta = $wpdb->get_row("select zone_match_type,is_double from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}",ARRAY_A);
+            if($zone_meta['zone_match_type'] == 1){ //战队赛
+                $role_alias = 'tram-match';
+            }else{  //城市赛
+                $role_alias = $zone_meta['is_double'] == 1 ? 'double-city-match' : 'single-city-match';
+            }
+        }elseif ($_POST['type'] == 'official-grading'){
+            $role_alias = 'official-grading';
         }
 
-
-        $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$_POST['type']}' ";
+        $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$role_alias}' ";
         $match_cost = $wpdb->get_var($set_sql);
         $match_cost = !empty($match_cost)? $match_cost :number_format(0);
         wp_send_json_success($match_cost);

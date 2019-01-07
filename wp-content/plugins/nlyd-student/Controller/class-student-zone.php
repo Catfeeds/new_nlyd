@@ -367,10 +367,10 @@ class Student_Zone extends Student_Home
 
          $data['match_genre'] = !empty($match_genre) ? json_encode($match_genre) : '';
 
-         //获取默认比赛费用
+         /*//获取默认比赛费用
          $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = 'official-match' ";
          $match_cost = $wpdb->get_var($set_sql);
-         $data['match_cost'] = !empty($match_cost)? $match_cost :number_format(0);
+         $data['match_cost'] = !empty($match_cost)? $match_cost :number_format(0);*/
 
          if(isset($_GET['match_id'])){
              //获取比赛信息
