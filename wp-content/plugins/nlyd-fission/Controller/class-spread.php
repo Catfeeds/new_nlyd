@@ -327,15 +327,15 @@ class Spread{
                         </td>
                     </tr>
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="sub_center">赛区/分中心/考级中心</label></th>
-                        <td>
-                            <input type="text" name="sub_center" value="<?=isset($row)?$row['sub_center']:''?>" id="sub_center" maxlength="60"><span>元/百分比</span>
-                        </td>
-                    </tr>
-                    <tr class="form-field form-required">
                         <th scope="row"><label for="mechanism">参赛机构</label></th>
                         <td>
                             <input type="text" name="mechanism" value="<?=isset($row)?$row['mechanism']:''?>" id="mechanism" maxlength="60"><span>元/百分比</span>
+                        </td>
+                    </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="sub_center">赛区/分中心/考级中心</label></th>
+                        <td>
+                            <input type="text" name="sub_center" value="<?=isset($row)?$row['sub_center']:''?>" id="sub_center" maxlength="60"><span>元/百分比</span>
                         </td>
                     </tr>
                     <tr class="">

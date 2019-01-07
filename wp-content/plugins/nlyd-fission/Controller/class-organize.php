@@ -791,7 +791,10 @@ class Organize{
                 $old_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}'");
                 if($old_id == $parent_id) $error_msg = $error_msg==''?'上级不能是自身':$error_msg.'<br >上级不能是自身';
             }
-            if($zone_match_type !== 1) $zone_title = '';
+            if($zone_match_type !== 1) {
+                $zone_title = '';
+                $is_double = 0;
+            };
             if($error_msg == ''){
                 $insertData = [
                     'type_id' => $zone_type,
@@ -1157,7 +1160,7 @@ class Organize{
                             <input type="text" name="zone_title" id="zone_title" value="<?=$row['zone_name']?>">
                         </td>
                     </tr>
-                    <tr class="" style="<?=$row['is_double'] != '1' ? 'display: none':''?>" id="is_double_tr">
+                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>" id="is_double_tr">
                         <th scope="row"><label for="is_double">区县 </label></th>
                         <td>
                             <label for="is_double_1"><input type="radio" <?=$row['is_double'] == '1' ? 'checked="checked"':''?> id="is_double_1" name="is_double" value="1">双区县</label>
