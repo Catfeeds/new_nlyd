@@ -77,16 +77,14 @@ jQuery(function($) {
         var item=v.split('-')
         data_match.push(item)
     })
-    new AlloyFinger($('#complete')[0], {
-        tap:function(){
-            var sessionData={//存储session
-                train_questions:questions_answer,
-                genre_id:$.Request('genre_id'),
-                type:'pkjl',
-                end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
-            }
-            $.SetSession('train_match',sessionData)
+    $('#complete').click(function(){
+        var sessionData={//存储session
+            train_questions:questions_answer,
+            genre_id:$.Request('genre_id'),
+            type:'pkjl',
+            end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
         }
+        $.SetSession('train_match',sessionData)
     })
     function splits(str) {
             return str.split('-');
@@ -335,32 +333,23 @@ jQuery(function($) {
         // })
     }
     initPagation()
-    // mTouch('body').on('tap','.matching-btn',function(e){
-    $('.matching-btn').each(function(){
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            tap:function(){
-                nowPage=1;
-                $('.matching-btn').removeClass('active');
-                _this.addClass('active');
-                var text=parseInt(_this.text())
-                if(!isNaN(text)){
-                    onePageItems=text;
-                    $('.left').css('display','block')
-                    $('.right').css('display','block')
-                }else{
-                    onePageItems=false
-                    $('.left').css('display','none')
-                    $('.right').css('display','none')
-                }
-                initPagation()
-            }
-        })
-    })
-    //左翻页
-    // mTouch('body').on('tap','.left',function(e){
-new AlloyFinger($('.left')[0], {
-    tap:function(){
+    function matchBtn(_this) {
+        nowPage=1;
+        $('.matching-btn').removeClass('active');
+        _this.addClass('active');
+        var text=parseInt(_this.text())
+        if(!isNaN(text)){
+            onePageItems=text;
+            $('.left').css('display','block')
+            $('.right').css('display','block')
+        }else{
+            onePageItems=false
+            $('.left').css('display','none')
+            $('.right').css('display','none')
+        }
+        initPagation()
+    }    
+    function left(){
         if($('.left').hasClass('disabled')){
             return false;
         }else{
@@ -368,11 +357,7 @@ new AlloyFinger($('.left')[0], {
             initPagation()
         }
     }
-});
-    //右翻页
-    // mTouch('body').on('tap','.right',function(e){
-new AlloyFinger($('.right')[0], {
-    tap:function(){
+    function right() {
         if($('.right').hasClass('disabled')){
             return false;
         }else{
@@ -380,7 +365,40 @@ new AlloyFinger($('.right')[0], {
             initPagation()
         }
     }
-});
-
+    if('ontouchstart' in window){// 移动端
+        //左翻页
+        new AlloyFinger($('.left')[0], {
+            tap:function(){
+                left()
+            }
+        });
+        //右翻页
+        new AlloyFinger($('.right')[0], {
+            tap:function(){
+                right()
+            }
+        });
+        $('.matching-btn').each(function(){
+            var _this=$(this);
+            new AlloyFinger(_this[0], {
+                tap:function(){
+                    matchBtn(_this)
+                }
+            })
+        })
+    }else{
+        $('.porker-zoo').css({
+            'height':'191px'
+        })
+        $('body').on('click','.left',function(){
+            left()
+        })
+        $('body').on('click','.right',function(){
+            right()
+        })
+        $('body').on('click','.matching-btn',function(){
+            matchBtn(_this)
+        })
+    }
 })
 </script>
