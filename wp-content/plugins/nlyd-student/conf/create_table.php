@@ -184,6 +184,7 @@ function the_table_install () {
           `user_id` int(20) NOT NULL,
           `type_id` int(20) DEFAULT NULL COMMENT '升级后用户类型',
           `zone_match_type` tinyint(2) DEFAULT NULL COMMENT '赛区类型 1战队赛 2城市赛',
+          `is_double` tinyint(2) DEFAULT NULL COMMENT '1:双区 2: 单区',
           `zone_city` varchar(50) DEFAULT NULL COMMENT '机构城市',
           `zone_name` text DEFAULT NULL COMMENT '机构名字',
           `zone_address` varchar(255) DEFAULT NULL COMMENT '机构地址',

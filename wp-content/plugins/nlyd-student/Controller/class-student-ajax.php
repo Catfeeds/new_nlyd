@@ -4714,6 +4714,7 @@ class Student_Ajax
         }else{
             $new_page_id = wp_insert_post($arr);
         }
+
         $match_meta = array(
             'match_id'=>$new_page_id,
             'match_scene'=>$_POST['match_scene'],
@@ -4854,6 +4855,12 @@ class Student_Ajax
     public function get_match_cost(){
         global $wpdb;
         if(empty($_POST['type'])) wp_send_json_error(array('info'=>__('参数错误')));
+        print_r($_POST);die;
+        if(in_array($_POST['type'],array('official-match','official-grading')))
+
+        //获取机构赛区类型
+        $zone_match_type = $wpdb->get_var("select zone_match_type from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+
         $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$_POST['type']}' ";
         $match_cost = $wpdb->get_var($set_sql);
         $match_cost = !empty($match_cost)? $match_cost :number_format(0);
