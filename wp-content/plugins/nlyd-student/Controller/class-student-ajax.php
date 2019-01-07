@@ -2185,7 +2185,10 @@ class Student_Ajax
 
             //添加推广人
             if($_POST['referee_id'] > 0){
-                if(empty($user->referee_id) && $_POST['referee_id'] != $user->ID){
+                //获取我的推广人上级
+                $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$_POST['referee_id']}");
+                if(empty($user->referee_id) && $_POST['referee_id'] != $user->ID && $referee_id != $user->ID){
+
                     $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user->ID));
                 }
             }
@@ -2215,8 +2218,13 @@ class Student_Ajax
                     }
 
                     //添加推广人
-                    if($_POST['referee_id'] > 0 ){
-                        $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$result));
+                    if($_POST['referee_id'] > 0){
+                        //获取我的推广人上级
+                        $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$_POST['referee_id']}");
+                        if(empty($user->referee_id) && $_POST['referee_id'] != $user->ID && $referee_id != $user->ID){
+
+                            $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$result));
+                        }
                     }
 
                     wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>$url));
@@ -3131,6 +3139,7 @@ class Student_Ajax
         //if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
             $user_id = $user->ID;
             //添加推广人
+
             if(isset($_SESSION['referee_id_wx']) && !(get_user_by('ID',$user_id)->referee_id)){
                 $bool = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_SESSION['referee_id_wx'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user_id));
                 unset($_SESSION['referee_id_wx']);
@@ -4410,7 +4419,7 @@ class Student_Ajax
         global $current_user;
         $upload_dir = wp_upload_dir();
         $spread_qrcode = get_user_meta($current_user->ID,'referee_qrcode');
-        //var_dump(file_exists($upload_dir['basedir'].$spread_qrcode[0]));die;
+
         if(!empty($spread_qrcode) && file_exists($upload_dir['basedir'].$spread_qrcode[0])){
             if($type=='user'){
                 return $upload_dir['baseurl'].$spread_qrcode[0];
@@ -4467,7 +4476,8 @@ class Student_Ajax
             imagejpeg ( $back_, $qrcode_path );//带Logo二维码的文件名*/
             update_user_meta($current_user->ID,'referee_qrcode',$dir.$filename);
             if($type=='user'){
-                return $upload_dir['baseurl'].$spread_qrcode[0];
+                //var_dump($upload_dir['baseurl'].$spread_qrcode[0]);die;
+                return $upload_dir['baseurl'].$dir.$filename;
             }
             wp_send_json_success($upload_dir['baseurl'].$dir.$filename);
         }
@@ -5832,6 +5842,65 @@ class Student_Ajax
             wp_send_json_error(array('info'=>__('未检测到管理员信息', 'nlyd-student')));
         }
     }
+
+    /**
+     * 设置收款
+     */
+    public function set_receivables(){
+        global $current_user;
+
+        switch ($_POST['type']){
+            case 'bank':
+                    if(empty($_POST['open_name']) || empty($_POST['open_bank']) || empty($_POST['open_address']) || empty($_POST['open_card_num']) ){
+                        wp_send_json_error(array('info'=>__('所有参数必填')));
+                    }
+                    unset($_POST['type']);
+                    unset($_POST['action']);
+                update_user_meta($current_user->ID,'user_cheques_bank',$_POST);
+                break;
+            case 'weChat':
+                if(!empty($_FILES['images_weChat'])){
+
+                    $upload_dir = wp_upload_dir();
+                    $dir = '/QRcode/'.$current_user->ID.'/';
+                    $imagePathArr = [];
+                    $num = 0;
+                    foreach ($_FILES['images_weChat']['tmp_name'] as $va){
+                        $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
+
+                        if($file){
+                            $_POST['user_coin_code'][] = $upload_dir['baseurl'].$dir.$file;
+                            ++$num;
+                        }
+                    }
+                    update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
+                }
+                break;
+            case 'aliPay':
+                if(!empty($_FILES['images_aliPay'])){
+
+                    $upload_dir = wp_upload_dir();
+                    $dir = '/QRcode/'.$current_user->ID.'/';
+                    $imagePathArr = [];
+                    $num = 0;
+                    foreach ($_FILES['images_aliPay']['tmp_name'] as $va){
+                        $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
+
+                        if($file){
+                            $_POST['user_coin_code'][] = $upload_dir['baseurl'].$dir.$file;
+                            ++$num;
+                        }
+                    }
+                    update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
+                }
+                break;
+            default:
+                wp_send_json_error(array('info'=>__('参数错误')));
+                break;
+        }
+
+    }
+
 
     /*
     *比较字符串不同的字符

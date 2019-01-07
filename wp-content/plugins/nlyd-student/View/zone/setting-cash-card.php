@@ -16,23 +16,25 @@
                 </header>
             </div> 
             <div class="layui-row nl-border nl-content">
-                <form class="nl-page-form layui-form width-margin-pc have-bottom">   
+                <form class="nl-page-form layui-form width-margin-pc have-bottom">
+                    <input type="hidden" name="action" value="set_receivables"/>
+                    <input type="hidden" name="type" value="bank"/>
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('开户姓名', 'nlyd-student')?></div></div>
-                            <input type="text" name="" value="" placeholder="<?=__('开户姓名', 'nlyd-student')?>" lay-verify="required"  class="nl-input nl-foucs">
+                            <input type="text" name="open_name" value="" placeholder="<?=__('开户姓名', 'nlyd-student')?>" lay-verify="required"  class="nl-input nl-foucs">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('开户银行', 'nlyd-student')?></div></div>
-                            <input type="text" id="opening_bank" name="opening_bank" readonly value="" placeholder="<?=__('开户银行', 'nlyd-student')?>" lay-verify="required"  class="nl-input nl-foucs">
+                            <input type="text" id="opening_bank" name="open_bank" readonly value="" placeholder="<?=__('开户银行', 'nlyd-student')?>" lay-verify="required"  class="nl-input nl-foucs">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('开户详细地址', 'nlyd-student')?></div></div>
-                            <input type="text" name="" value="" placeholder="<?=__('开户详细地址', 'nlyd-student')?>" lay-verify="required"  class="nl-input nl-foucs">
+                            <input type="text" name="open_address" value="" placeholder="<?=__('开户详细地址', 'nlyd-student')?>" lay-verify="required"  class="nl-input nl-foucs">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('银行卡号', 'nlyd-student')?></div></div>
-                            <input type="tel" name="" value="" placeholder="<?=__('银行卡号', 'nlyd-student')?>" lay-verify="number"  class="nl-input nl-foucs">
+                            <input type="tel" name="open_card_num" value="" placeholder="<?=__('银行卡号', 'nlyd-student')?>" lay-verify="number"  class="nl-input nl-foucs">
                         </div>
                         <a class="a-btn a-btn-table" id="layuiForm" lay-filter="layuiForm" lay-submit=""><div><?=__('保 存', 'nlyd-student')?></div></a>
                     </div>
