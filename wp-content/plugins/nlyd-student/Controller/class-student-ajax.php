@@ -5887,7 +5887,7 @@ class Student_Ajax
                         $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
 
                         if($file){
-                            $_POST['user_coin_code'][] = $upload_dir['baseurl'].$dir.$file;
+                            $_POST['aliPay_coin_code'][] = $upload_dir['baseurl'].$dir.$file;
                             ++$num;
                         }
                     }
