@@ -240,7 +240,7 @@ jQuery(function($) {
                                                         +'</div>'
                                                         +endTime
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label"><div><?=__('已报选手', 'nlyd-student')?>:</div></div>'
+                                                            +'<div class="nl-match-label"><div><?=__('已报人数', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.entry_total+'<?=__('人', 'nlyd-student')?></span>'
                                                                 +match_notice_url
