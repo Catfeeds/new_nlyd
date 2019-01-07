@@ -86,11 +86,11 @@ jQuery(function($) {
 $('.address-row').each(function(i){//左滑动
     var _this=$(this)
     new AlloyFinger(_this[0], {
-        touchMove:function(evt) {
-            if (Math.abs(evt.deltaX) >= Math.abs(evt.deltaY)) {
-                evt.preventDefault();
-            }
-        },
+        // touchMove:function(evt) {
+        //     if (Math.abs(evt.deltaX) >= Math.abs(evt.deltaY)) {
+        //         evt.preventDefault();
+        //     }
+        // },
         swipe:function(evt){
             if(evt.direction==="Left"){
                 _this.addClass('swipeleft')
