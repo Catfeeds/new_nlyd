@@ -75,7 +75,7 @@
                             <li class="nl-match">
                                 <div class="nl-match-header">
                                     <span class="nl-match-name fs_16 <?= $match['status'] != -3 ? 'c_blue' : ''; ?>"><?= __('报名列表', 'nlyd-student') ?></span>
-                                    <span class="nl-match-people <?= $match['status'] != -3 ? 'c_blue' : ''; ?>"><?php printf(__('%s位用户已报名', 'nlyd-student'), $total) ?></span>
+                                    <span class="nl-match-people <?= $match['status'] != -3 ? 'c_blue' : ''; ?>"><?php printf(__('%s人已报名', 'nlyd-student'), $total) ?></span>
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-table-wapper">
@@ -113,7 +113,7 @@
                         <?php if( ($match['is_me'] == 'y' && $match['status'] == 2) && ($match['status'] == -3 || $match['status'] == 2)){?>
                             <div class="a-btn two get_footer">
                                 <?php if($match['status'] == -3 || $match['status'] == 2):?>
-                                    <a class="a-two left c_white" href="<?=home_url('/gradings/record/grad_id/'.$_GET['grad_id']);?>"><div><?=__('查看战绩', 'nlyd-student')?></div></a>
+                                    <a class="a-two left c_white" href="<?=home_url('/gradings/record/grad_id/'.$_GET['grad_id']);?>"><div><?=__('查看成绩', 'nlyd-student')?></div></a>
                                 <?php endif;?>
                                 <?php if( $match['is_me'] == 'y' && $match['status'] == 2):?>
                                     <a class="a-two right c_white" href="<?=home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id']);?>"><div><?=__('进入考级', 'nlyd-student')?></div></a>
@@ -121,7 +121,7 @@
                             </div>              
                         <?php }else { ?>
                             <?php if($match['status'] == -3 || $match['status'] == 2):?>
-                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/gradings/record/grad_id/'.$_GET['grad_id']);?>"></div><?=__('查看战绩', 'nlyd-student')?></div></a>
+                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/gradings/record/grad_id/'.$_GET['grad_id']);?>"></div><?=__('查看成绩', 'nlyd-student')?></div></a>
                             <?php endif;?>
                             <?php if( $match['is_me'] == 'y' && $match['status'] == 2):?>
                                 <a class="a-btn a-btn-table get_footer" href="<?=home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id']);?>"></div><?=__('进入考级', 'nlyd-student')?></div></a>
