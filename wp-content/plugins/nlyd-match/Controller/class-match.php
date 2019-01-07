@@ -934,6 +934,24 @@ class Match
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">承办单位</label>
+            <div class="layui-input-block">
+                <?php
+                global $wpdb;
+                if(!empty($this->meta['created_id'])){
+                    $sql = "select id ,if(zone_match_type=1,'战队精英赛','城市赛') as match_type,zone_city,zone_name from {$wpdb->prefix}zone_meta where user_id = {$this->meta['created_id']} ";
+                    $zone = $wpdb->get_row($sql,ARRAY_A);
+                    $city = !empty($zone['zone_city']) ? '（'.$zone['zone_city'].'）' : '';
+                    $zone_name = $zone['zone_name'].$city.$zone['match_type'].'组委会';
+                    //print_r($zone_name);
+                }
+                ?>
+                <select class="js-data-select-ajax" name="match[created_id]" style="width: 100%" data-action="admin_get_zone_list" data-type="user" data-placeholder="输入机构名称" >
+                    <?php if(!empty($zone_name)):?><option value="<?=$this->meta['created_id']?>" selected="selected"><?=$zone_name?></option><?php endif;?>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">比赛状态</label>
 
             <div class="layui-input-block">
@@ -1281,6 +1299,25 @@ class Match
                 ?>
                 <select class="js-data-select-ajax" name="grading[person_liable]" style="width: 100%" data-action="admin_get_user_list" data-type="user" data-placeholder="输入用户名/手机/邮箱/昵称" >
                     <?php if(!empty($user_real_name)):?><option value="<?=$this->grading['person_liable']?>" selected="selected"><?=$user_real_name['real_name']?></option><?php endif;?>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">承办单位</label>
+            <div class="layui-input-block">
+                <?php
+                global $wpdb;
+                //print_r($this->grading['created_person']);
+                if(!empty($this->grading['created_person'])){
+                    $sql = "select id ,if(zone_match_type=1,'战队精英赛','城市赛') as match_type,zone_city,zone_name from {$wpdb->prefix}zone_meta where user_id = {$this->grading['created_person']} ";
+                    $zone = $wpdb->get_row($sql,ARRAY_A);
+                    $city = !empty($zone['zone_city']) ? '（'.$zone['zone_city'].'）' : '';
+                    $zone_name = $zone['zone_name'].$city.$zone['match_type'].'组委会';
+                    //print_r($zone);
+                }
+                ?>
+                <select class="js-data-select-ajax" name="grading[created_person]" style="width: 100%" data-action="admin_get_zone_list" data-type="user" data-placeholder="输入机构名称" >
+                    <?php if(!empty($zone_name)):?><option value="<?=$this->grading['created_person']?>" selected="selected"><?=$zone_name?></option><?php endif;?>
                 </select>
             </div>
         </div>

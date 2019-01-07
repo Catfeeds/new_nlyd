@@ -50,19 +50,29 @@ jQuery(function($) {
     var init_time=900;
     var sys_second=900;//记忆时间
     var endTime=$.GetEndTime(sys_second);//结束时间
-    new AlloyFinger($('#complete')[0], {//阅读完成
-        tap:function(){
-            if(!$('#complete').hasClass('disabled')){
-                var time=init_time-sys_second;
-                var href=$(this).attr('data-href')
-                var new_href=href+'/usetime/'+time+'/length/'+_length;
-                $.DelSession('grade_question')
-                window.location.href=new_href;
-                $('#complete').addClass('disabled')
-            }
+    $('#complete').click(function(){
+        if(!$(this).hasClass('disabled')){
+            var time=init_time-sys_second;
+            var href=$(this).attr('data-href')
+            var new_href=href+'/usetime/'+time+'/length/'+_length;
+            $.DelSession('grade_question')
+            window.location.href=new_href;
+            $(this).addClass('disabled')
         }
+    })
+    // new AlloyFinger($('#complete')[0], {//阅读完成
+    //     tap:function(){
+    //         if(!$('#complete').hasClass('disabled')){
+    //             var time=init_time-sys_second;
+    //             var href=$(this).attr('data-href')
+    //             var new_href=href+'/usetime/'+time+'/length/'+_length;
+    //             $.DelSession('grade_question')
+    //             window.location.href=new_href;
+    //             $('#complete').addClass('disabled')
+    //         }
+    //     }
 
-    });
+    // });
     init_question()
     count_down()
     function count_down(){

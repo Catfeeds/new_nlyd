@@ -1005,11 +1005,12 @@ if(!class_exists('MatchController')){
                     //查询是否发布了比赛信息
                     $result_ = $wpdb->get_var("select id from {$wpdb->prefix}match_meta_new where match_id = {$post_ID} ");
                     if($result_){
+                        $insert['created_id'] = $match_meta['created_id'] > 0 ? $match_meta['created_id'] : $current_user->ID;
                         $match_meta['revise_id'] = $current_user->ID;
                         $match_meta['revise_time'] = get_time('mysql');
                         $a = $wpdb->update($wpdb->prefix.'match_meta_new',$match_meta,array('match_id'=>$post_ID));
                     }else{
-                        $match_meta['created_id'] = $current_user->ID;
+                        $match_meta['created_id'] = $match_meta['created_id'] > 0 ? $match_meta['created_id'] : $current_user->ID;
                         $match_meta['created_time'] = get_time('mysql');
                         $a = $wpdb->insert($wpdb->prefix.'match_meta_new',$match_meta);
                     }
@@ -1049,12 +1050,14 @@ if(!class_exists('MatchController')){
                     $result_ = $wpdb->get_var("select id from {$wpdb->prefix}grading_meta where grading_id = {$post_ID} ");
                     //var_dump($result_);die;
                     if($result_){
+                        $insert['created_person'] = $insert['created_person'] > 0 ? $insert['created_person'] : $current_user->ID;
                         $insert['revise_id'] = $current_user->ID;
                         $insert['revise_time'] = get_time('mysql');
+                        //print_r($insert);die;
                         $a = $wpdb->update($wpdb->prefix.'grading_meta',$insert,array('grading_id'=>$post_ID));
                     }else{
 
-                        $insert['created_person'] = $current_user->ID;
+                        $insert['created_person'] = $insert['created_person'] > 0 ? $insert['created_person'] : $current_user->ID;
                         $insert['created_time'] = get_time('mysql');
                         $a = $wpdb->insert($wpdb->prefix.'grading_meta',$insert);
                     }

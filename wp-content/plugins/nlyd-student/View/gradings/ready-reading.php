@@ -48,19 +48,16 @@ jQuery(function($) {
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
     })
-    new AlloyFinger($('#complete')[0], {//阅读完成
-        tap:function(){
-            if(!$('#complete').hasClass('disabled')){
-                var time=init_time-sys_second;
-                var href=$(this).attr('data-href')
-                var new_href=href+'/usetime/'+time+'/length/'+_length+'/more/'+_more;
-                $.DelSession('grade_question')
-                window.location.href=new_href;
-                $('#complete').addClass('disabled')
-            }
+    $('#complete').click(function(){
+        if(!$(this).hasClass('disabled')){
+            var time=init_time-sys_second;
+            var href=$(this).attr('data-href')
+            var new_href=href+'/usetime/'+time+'/length/'+_length+'/more/'+_more;
+            $.DelSession('grade_question')
+            window.location.href=new_href;
+            $(this).addClass('disabled')
         }
-
-    });
+    })
     init_question()
     count_down()
     function count_down(){

@@ -211,7 +211,11 @@ jQuery(function($) {
                 $('.second_wap.poker-wrapper').css('width',W1);
             }
             initWidth();
-            
+            if('ontouchstart' in window){// 移动端
+                
+            }else{
+                $('.porker-zoo').height(477)
+            }
         <?php endif;?>
 })
 </script>

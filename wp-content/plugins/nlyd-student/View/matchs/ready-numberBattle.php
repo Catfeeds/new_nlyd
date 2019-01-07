@@ -164,24 +164,35 @@ jQuery(function($) {
             // }, 1000);
         }
     });
-    // mTouch('body').on('tap','.matching-btn',function(e){
-    $('.matching-btn').each(function(){
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            tap:function(){
-                $('.matching-btn').removeClass('active');
-                _this.addClass('active')
-                var text=parseInt(_this.text())
-                $('.matching-number').removeClass('border-right');
-                if(text!='NAN'){
-                    $('.matching-number').each(function(j){
-                        if((j+1)%text==0){
-                            $(this).addClass('border-right')
-                        }
-                    })
-                }
+    layui.use('layer', function(){
+       function matchBtn(_this) {
+            $('.matching-btn').removeClass('active');
+            _this.addClass('active')
+            var text=parseInt(_this.text())
+            $('.matching-number').removeClass('border-right');
+            if(text!='NAN'){
+                $('.matching-number').each(function(j){
+                    if((j+1)%text==0){
+                        $(this).addClass('border-right')
+                    }
+                })
             }
-        })
+       }
+        if('ontouchstart' in window){// 移动端
+            $('.matching-btn').each(function(){
+                var _this=$(this);
+                new AlloyFinger(_this[0], {
+                    tap:function(){
+                        matchBtn(_this)
+                    }
+                })
+            })
+        }else{
+            $('body').on('click','.matching-btn',function(){
+                var _this=$(this)
+                matchBtn(_this)
+            })
+        }
     })
 })
 </script>

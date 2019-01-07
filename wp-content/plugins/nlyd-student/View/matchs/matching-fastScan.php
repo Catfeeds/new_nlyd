@@ -337,44 +337,6 @@ jQuery(function($) {
 
     }
 
-$('#selectWrapper .fastScan-item').each(function(){
-    // mTouch('#selectWrapper').on('tap','.fastScan-item',function(){
-    var _this=$(this)
-    new AlloyFinger(_this[0], {
-        tap: function () {
-            // var _this=$(this);
-            var isFalse=true;
-            if(!_this.hasClass('noClick')){
-                var text=_this.text()
-                ajaxData[ajaxData.length-1].yours=text;//存储我的答案;
-                if(text==ajaxData[ajaxData.length-1].rights){//选择正确
-                    ajaxData[ajaxData.length-1].isRight=true;
-                    _this.addClass('right-fastScan')
-                }else{
-                    isFalse=false;
-                    ajaxData[ajaxData.length-1].isRight=false;
-                    _this.addClass('error-fastScan')
-                }
-                $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
-                if(ajaxData.length%itemAdd==0){
-                    itemLen++
-                }
-                if(ajaxData.length%nanduLen==0 && itemLen<=breakRow){
-                    nandu++
-                }
-                initBuild(itemLen,items,nandu,isFalse)
-                setTimeout(function(){
-                    if(flaseQuestion<flaseMax){
-                        showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
-                    }
-                }, 300);
-                if(typeof(timer)!="undefined"){
-                    clearTimeout(timer);
-                }
-            }
-        }
-    })
-})
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
             // $('#load').css({
@@ -477,11 +439,9 @@ $('#selectWrapper .fastScan-item').each(function(){
             // }, 1000);
         }
     });
-layui.use('layer', function(){
-    // mTouch('body').on('tap','#sumbit',function(e){
-    new AlloyFinger($('#sumbit')[0], {
-    tap:function(){
-        layer.open({
+    layui.use('layer', function(){
+        function layOpen() {//提交
+            layer.open({
                 type: 1
                 ,maxWidth:300
                 ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
@@ -512,7 +472,62 @@ layui.use('layer', function(){
                 ,isOutAnim:true//关闭动画
             });
         }
-    });
-});
+        function itemPress(dom){//数字键盘
+            var isFalse=true;
+            if(!dom.hasClass('noClick')){
+                var text=dom.text()
+                ajaxData[ajaxData.length-1].yours=text;//存储我的答案;
+                if(text==ajaxData[ajaxData.length-1].rights){//选择正确
+                    ajaxData[ajaxData.length-1].isRight=true;
+                    dom.addClass('right-fastScan')
+                }else{
+                    isFalse=false;
+                    ajaxData[ajaxData.length-1].isRight=false;
+                    dom.addClass('error-fastScan')
+                }
+                $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
+                if(ajaxData.length%itemAdd==0){
+                    itemLen++
+                }
+                if(ajaxData.length%nanduLen==0 && itemLen<=breakRow){
+                    nandu++
+                }
+                initBuild(itemLen,items,nandu,isFalse)
+                setTimeout(function(){
+                    if(flaseQuestion<flaseMax){
+                        showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
+                    }
+                }, 300);
+                if(typeof(timer)!="undefined"){
+                    clearTimeout(timer);
+                }
+                // console.log(ajaxData)
+            }
+        }
+       
+        if('ontouchstart' in window){// 移动端
+            $('#selectWrapper .fastScan-item').each(function(){
+                var _this=$(this)
+                new AlloyFinger(_this[0], {
+                    tap: function () {
+                        itemPress(_this)
+                    }
+                })
+            })
+            new AlloyFinger($('#sumbit')[0], {//提交
+                tap:function(){
+                    layOpen()
+                }
+            });
+        }else{
+            $('body').on('click','#selectWrapper .fastScan-item',function(){
+                var _this=$(this)
+                itemPress(_this)
+            })
+            $('body').on('click','#sumbit',function(){//提交
+                layOpen()
+            })
+        }
+    })
 })
 </script>

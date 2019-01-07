@@ -44,19 +44,15 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    // mTouch('body').on('tap','#complete',function(){//记忆完成
-    new AlloyFinger($('#complete')[0], {//阅读完成
-        tap:function(){
-            if(!$('#complete').hasClass('disabled')){
-                var time=$('.count_down').attr('data-seconds');
-                var href=$(this).attr('data-href')
-                var new_href=href+'/surplus_time/'+time;
-                window.location.href=new_href
-                $('#complete').addClass('disabled')
-            }
+    $('#complete').click(function(){
+        if(!$(this).hasClass('disabled')){
+            var time=$('.count_down').attr('data-seconds');
+            var href=$(this).attr('data-href')
+            var new_href=href+'/surplus_time/'+time;
+            window.location.href=new_href
+            $(this).addClass('disabled')
         }
-
-    });
+    })
     function submit(time,submit_type){//提交答案
         // $('#load').css({
         //         'display':'block',

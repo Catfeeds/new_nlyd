@@ -164,24 +164,6 @@ jQuery(function($) {
         }
         $.SetSession('grade_question',sessionData)
     })
-    $('.ready-btn').each(function(){//划线
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            tap:function(){
-                $('.ready-btn').removeClass('active');
-                _this.addClass('active')
-                var text=parseInt(_this.text())
-                $('.matching-number-readys').removeClass('border-right');
-                if(text!='NAN'){
-                    $('.matching-number-readys').each(function(j){
-                        if((j+1)%text==0){
-                            $(this).addClass('border-right')
-                        }
-                    })
-                }
-            }
-        })
-    })
     count_down()
     function count_down(){
         // sys_second=answer_time
@@ -333,181 +315,184 @@ jQuery(function($) {
                 }
         })
     } 
-    // 考级事件
-    $('.matching-number-match').each(function(){//填充区域
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            touchStart: function () {
-                _this.addClass("opacity");
-            },
-            touchMove: function () {
-                _this.removeClass("opacity");
-            },
-            touchEnd: function () {
-                _this.removeClass("opacity");
-            },
-            touchCancel: function () {
-                _this.removeClass("opacity");
-            },
-            tap:function(){
-                $('.matching-number-match').removeClass('active');
-                _this.addClass('active');
-            }
-        })
-    })
-    $('.matching-keyboard').eq(question_type-1).find('.number').each(function(){//数字键盘
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            touchStart: function () {
-                _this.addClass("opacity");
-            },
-            touchMove: function () {
-                _this.removeClass("opacity");
-            },
-            touchEnd: function () {
-                _this.removeClass("opacity");
-            },
-            touchCancel: function () {
-                _this.removeClass("opacity");
-            },
-            tap:function(){
-                var number=_this.attr('date-number');
-                var active=$('.matching-number-match.active');
-                var len=$('.matching-number-match').length;
-                if(!$('.matching-number-match').eq(len-1).hasClass('active')){
-                    active.text(number).removeClass('active').next('.matching-number-match').addClass('active');
-                }else{
-                    active.text(number);
+    layui.use('layer', function(){
+        function layOpen() {//提交
+            layer.open({
+                type: 1
+                ,maxWidth:300
+                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
+                ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>']
+                ,success: function(layero, index){
                 }
-            }
-        })
-    })
-    //删除tap事件
-$('._del').each(function(){//数字键盘
-    var _this=$(this);
-    new AlloyFinger(_this[0], {//删除
-        touchStart: function () {
-            _this.addClass("opacity");
-        },
-        touchMove: function () {
-            _this.removeClass("opacity");
-        },
-        touchEnd: function () {
-            _this.removeClass("opacity");
-        },
-        touchCancel: function () {
-            _this.removeClass("opacity");
-        },
-        tap:function(){
-        // if(!_this.hasClass('opcity')){
-        //     _this.addClass('opcity')
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    layer.closeAll();
+                    submit(1);
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        }
+        function zonePress(_this){//填充区域
+            $('.matching-number-match').removeClass('active');
+            _this.addClass('active');
+        }
+        function numberPress(_this){//数字键盘
+            var number=_this.attr('date-number');
             var active=$('.matching-number-match.active');
-            if(active.text()==""){//已经为空
-                if(!$('.matching-number-match').eq(0).hasClass('active')){
-                    active.prev('.matching-number-match').addClass('active')
-                    
-                }else{
-                    active.next('.matching-number-match').addClass('active')
-                }
-                active.remove()
-                var dom='<div class="matching-number-match"></div>'
-                $('.match_zoo').append(dom)
-                var len=$('.matching-number-match').length;
-                var newDom=$('.matching-number-match').eq(len-1)
-                new AlloyFinger(newDom[0], {
-                    touchStart: function () {
-                        newDom.addClass("opacity");
-                    },
-                    touchMove: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    touchEnd: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    touchCancel: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    tap:function(){
-                        $('.matching-number-match').removeClass('active');
-                        newDom.addClass('active');
-                    }
-                })
-            }else{
-                active.text('');
-
-            }
-        }
-    })
-})
-    //前插tap事件
-    new AlloyFinger($('#prev')[0], {
-        touchStart: function () {
-            $('#prev').addClass("opacity");
-        },
-        touchMove: function () {
-            $('#prev').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('#prev').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('#prev').removeClass("opacity");
-        },
-        tap: function () {
             var len=$('.matching-number-match').length;
-            var _this=$('#prev')
             if(!$('.matching-number-match').eq(len-1).hasClass('active')){
-                var active=$('.matching-number-match.active');
-                var dom='<div class="matching-number-match active"></div>';
-                active.removeClass('active').before(dom);
-                $('.match_zoo .matching-number-match').last().remove()
-                var newDom=$('.matching-number-match.active')
-                new AlloyFinger(newDom[0], {
-                    touchStart: function () {
-                        newDom.addClass("opacity");
-                    },
-                    touchMove: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    touchEnd: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    touchCancel: function () {
-                        newDom.removeClass("opacity");
-                    },
-                    tap:function(){
-                        $('.matching-number-match').removeClass('active');
-                        newDom.addClass('active');
-                    }
-                })
+                active.text(number).removeClass('active').next('.matching-number-match').addClass('active');
             }else{
-                $('.matching-number-match.active').text('')
+                active.text(number);
             }
         }
-    });
-    //后插tap事件
-    new AlloyFinger($('#next')[0], {
-        touchStart: function () {
-            $('#next').addClass("opacity");
-        },
-        touchMove: function () {
-            $('#next').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('#next').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('#next').removeClass("opacity");
-        },
-        tap: function () {
-            var _this=$('#next')
-            $('.matching-number-match').each(function(i){
-                if(i!=$('.matching-number-match').length-1){//如果不是最后一位
-                    if($(this).hasClass('active')){
-                        var dom='<div class="matching-number-match active"></div>'
-                        $(this).removeClass('active').after(dom);
-                        $('.match_zoo .matching-number-match').last().remove()
+        function drawLine(_this){//划线
+            $('.ready-btn').removeClass('active');
+            _this.addClass('active')
+            var text=parseInt(_this.text())
+            $('.matching-number-readys').removeClass('border-right');
+            if(text!='NAN'){
+                $('.matching-number-readys').each(function(j){
+                    if((j+1)%text==0){
+                        $(this).addClass('border-right')
+                    }
+                })
+            }
+        }
+        if('ontouchstart' in window){// 移动端
+            // 考级事件
+            $('.ready-btn').each(function(){//划线
+                var _this=$(this);
+                new AlloyFinger(_this[0], {
+                    tap:function(){
+                        drawLine(_this);
+                    }
+                })
+            })
+            $('.matching-number-match').each(function(){//填充区域
+                var _this=$(this);
+                new AlloyFinger(_this[0], {
+                    touchStart: function () {
+                        _this.addClass("opacity");
+                    },
+                    touchMove: function () {
+                        _this.removeClass("opacity");
+                    },
+                    touchEnd: function () {
+                        _this.removeClass("opacity");
+                    },
+                    touchCancel: function () {
+                        _this.removeClass("opacity");
+                    },
+                    tap:function(){
+                        zonePress(_this)
+                    }
+                })
+            })
+            $('.matching-keyboard').eq(question_type-1).find('.number').each(function(){//数字键盘
+                var _this=$(this);
+                new AlloyFinger(_this[0], {
+                    touchStart: function () {
+                        _this.addClass("opacity");
+                    },
+                    touchMove: function () {
+                        _this.removeClass("opacity");
+                    },
+                    touchEnd: function () {
+                        _this.removeClass("opacity");
+                    },
+                    touchCancel: function () {
+                        _this.removeClass("opacity");
+                    },
+                    tap:function(){
+                        numberPress(_this)
+                    }
+                })
+            })
+            //删除tap事件
+            $('._del').each(function(){//数字键盘
+                var _this=$(this);
+                new AlloyFinger(_this[0], {//删除
+                    touchStart: function () {
+                        _this.addClass("opacity");
+                    },
+                    touchMove: function () {
+                        _this.removeClass("opacity");
+                    },
+                    touchEnd: function () {
+                        _this.removeClass("opacity");
+                    },
+                    touchCancel: function () {
+                        _this.removeClass("opacity");
+                    },
+                    tap:function(){
+                        var active=$('.matching-number-match.active');
+                        if(active.text()==""){//已经为空
+                            if(!$('.matching-number-match').eq(0).hasClass('active')){
+                                active.prev('.matching-number-match').addClass('active')
+                                
+                            }else{
+                                active.next('.matching-number-match').addClass('active')
+                            }
+                            active.remove()
+                            var dom='<div class="matching-number-match"></div>'
+                            $('.match_zoo').append(dom)
+                            var len=$('.matching-number-match').length;
+                            var newDom=$('.matching-number-match').eq(len-1)
+                            new AlloyFinger(newDom[0], {
+                                touchStart: function () {
+                                    newDom.addClass("opacity");
+                                },
+                                touchMove: function () {
+                                    newDom.removeClass("opacity");
+                                },
+                                touchEnd: function () {
+                                    newDom.removeClass("opacity");
+                                },
+                                touchCancel: function () {
+                                    newDom.removeClass("opacity");
+                                },
+                                tap:function(){
+                                    $('.matching-number-match').removeClass('active');
+                                    newDom.addClass('active');
+                                }
+                            })
+                        }else{
+                            active.text('');
 
+                        }
+                    }
+                })
+            })
+            //前插tap事件
+            new AlloyFinger($('#prev')[0], {
+                touchStart: function () {
+                    $('#prev').addClass("opacity");
+                },
+                touchMove: function () {
+                    $('#prev').removeClass("opacity");
+                },
+                touchEnd: function () {
+                    $('#prev').removeClass("opacity");
+                },
+                touchCancel: function () {
+                    $('#prev').removeClass("opacity");
+                },
+                tap: function () {
+                    var len=$('.matching-number-match').length;
+                    if(!$('.matching-number-match').eq(len-1).hasClass('active')){
+                        var active=$('.matching-number-match.active');
+                        var dom='<div class="matching-number-match active"></div>';
+                        active.removeClass('active').before(dom);
+                        $('.match_zoo .matching-number-match').last().remove()
                         var newDom=$('.matching-number-match.active')
                         new AlloyFinger(newDom[0], {
                             touchStart: function () {
@@ -527,39 +512,118 @@ $('._del').each(function(){//数字键盘
                                 newDom.addClass('active');
                             }
                         })
+                    }else{
+                        $('.matching-number-match.active').text('')
                     }
                 }
+            });
+            //后插tap事件
+            new AlloyFinger($('#next')[0], {
+                touchStart: function () {
+                    $('#next').addClass("opacity");
+                },
+                touchMove: function () {
+                    $('#next').removeClass("opacity");
+                },
+                touchEnd: function () {
+                    $('#next').removeClass("opacity");
+                },
+                touchCancel: function () {
+                    $('#next').removeClass("opacity");
+                },
+                tap: function () {
+                    $('.matching-number-match').each(function(i){
+                        if(i!=$('.matching-number-match').length-1){//如果不是最后一位
+                            if($(this).hasClass('active')){
+                                var dom='<div class="matching-number-match active"></div>'
+                                $(this).removeClass('active').after(dom);
+                                $('.match_zoo .matching-number-match').last().remove()
+
+                                var newDom=$('.matching-number-match.active')
+                                new AlloyFinger(newDom[0], {
+                                    touchStart: function () {
+                                        newDom.addClass("opacity");
+                                    },
+                                    touchMove: function () {
+                                        newDom.removeClass("opacity");
+                                    },
+                                    touchEnd: function () {
+                                        newDom.removeClass("opacity");
+                                    },
+                                    touchCancel: function () {
+                                        newDom.removeClass("opacity");
+                                    },
+                                    tap:function(){
+                                        $('.matching-number-match').removeClass('active');
+                                        newDom.addClass('active');
+                                    }
+                                })
+                            }
+                        }
+                    })
+                }
+            });
+            new AlloyFinger($('#sumbit')[0], {//提交
+                tap:function(){
+                    layOpen()
+                }
+            });
+        }else{
+            $('body').on('click','.ready-btn',function(){//划线
+                var _this=$(this);
+                drawLine(_this);
+            })
+            $('body').on('click','.matching-number-match',function(){
+                var _this=$(this);
+                zonePress(_this)
+            })
+            $('.matching-keyboard').eq(question_type-1).find('.number').click(function(){
+                var _this=$(this);
+                numberPress(_this)
+            })
+            $('body').on('click','._del',function(){
+                var active=$('.matching-number-match.active');
+                if(active.text()==""){//已经为空
+                    if(!$('.matching-number-match').eq(0).hasClass('active')){
+                        active.prev('.matching-number-match').addClass('active')
+                        
+                    }else{
+                        active.next('.matching-number-match').addClass('active')
+                    }
+                    active.remove()
+                    var dom='<div class="matching-number-match"></div>'
+                    $('.match_zoo').append(dom)
+                }else{
+                    active.text('');
+
+                }
+            })
+            $('body').on('click','#prev',function(){
+                var len=$('.matching-number-match').length;
+                if(!$('.matching-number-match').eq(len-1).hasClass('active')){
+                    var active=$('.matching-number-match.active');
+                    var dom='<div class="matching-number-match active"></div>';
+                    active.removeClass('active').before(dom);
+                    $('.match_zoo .matching-number-match').last().remove()
+                }else{
+                    $('.matching-number-match.active').text('')
+                }
+            })
+            $('body').on('click','#next',function(){
+                $('.matching-number-match').each(function(i){
+                    if(i!=$('.matching-number-match').length-1){//如果不是最后一位
+                        if($(this).hasClass('active')){
+                            var dom='<div class="matching-number-match active"></div>'
+                            $(this).removeClass('active').after(dom);
+                            $('.match_zoo .matching-number-match').last().remove()
+                        }
+                    }
+                    })
+            })
+            $('body').on('click','#sumbit',function(){//提交
+                layOpen()
             })
         }
-    });
-    layui.use('layer', function(){
-        new AlloyFinger($('#sumbit')[0], {
-            tap:function(){
-                layer.open({
-                        type: 1
-                        ,maxWidth:300
-                        ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
-                        ,skin:'nl-box-skin'
-                        ,id: 'certification' //防止重复弹出
-                        ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                        ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>']
-                        ,success: function(layero, index){
-                        }
-                        ,yes: function(index, layero){
-                            layer.closeAll();
-                        }
-                        ,btn2: function(index, layero){
-                            layer.closeAll();
-                            submit(1);
-                        }
-                        ,closeBtn:2
-                        ,btnAagn: 'c' //按钮居中
-                        ,shade: 0.3 //遮罩
-                        ,isOutAnim:true//关闭动画
-                    });
-                }
-                
-        });
-    });
+    })
 })
 </script>

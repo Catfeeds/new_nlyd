@@ -192,14 +192,12 @@ jQuery(function($) {
             // }, 1000);
         }
     });
-
-    layui.use(['layer'], function(){
-
-
-//提交tap事件
-    // mTouch('body').on('tap','#sumbit',function(e){
-    new AlloyFinger($('#sumbit')[0], {
-        tap:function(){
+    layui.use('layer', function(){
+        var n=0;
+        if($('.matching-reading').length<=1){
+            $('.a-two.right').addClass('disabled')
+        }
+        function layOpen() {//提交
             var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
             layer.open({
                 type: 1
@@ -225,31 +223,7 @@ jQuery(function($) {
                 ,isOutAnim:true//关闭动画
             });
         }
-    });
-})
-
-    var n=0;
-    if($('.matching-reading').length<=1){
-        $('.a-two.right').addClass('disabled')
-    }
-    // mTouch('body').on('tap','.a-two.left',function(e){//上一题
-    new AlloyFinger($('.a-two.left')[0], {
-        touchStart: function () {
-            var left=$('.a-two.left');
-            if(!left.hasClass('disabled')){
-                left.addClass("opacity");
-            }
-        },
-        touchMove: function () {
-            $('.a-two.left').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('.a-two.left').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('.a-two.left').removeClass("opacity");
-        },
-        tap:function(){
+        function left() {
             var left=$('.a-two.left');
             var len=$('.matching-reading').length-1;
             if(!left.hasClass('disabled')){
@@ -273,25 +247,7 @@ jQuery(function($) {
                 return false;
             }
         }
-    });
-    // mTouch('body').on('tap','.a-two.right',function(e){//下一题
-    new AlloyFinger($('.a-two.right')[0], {
-        touchStart: function () {
-            var right=$('.a-two.right');
-            if(!right.hasClass('disabled')){
-                $('.a-two.right').addClass("opacity");
-            }
-        },
-        touchMove: function () {
-            $('.a-two.right').removeClass("opacity");
-        },
-        touchEnd: function () {
-            $('.a-two.right').removeClass("opacity");
-        },
-        touchCancel: function () {
-            $('.a-two.right').removeClass("opacity");
-        },
-        tap:function(){
+        function right() {
             var right=$('.a-two.right');
             var len=$('.matching-reading').length-1;
             if(!right.hasClass('disabled')){
@@ -313,6 +269,63 @@ jQuery(function($) {
                 return false;
             }
         }
-    });
+        if('ontouchstart' in window){// 移动端
+            new AlloyFinger($('.a-two.left')[0], {
+                touchStart: function () {
+                    var left=$('.a-two.left');
+                    if(!left.hasClass('disabled')){
+                        left.addClass("opacity");
+                    }
+                },
+                touchMove: function () {
+                    $('.a-two.left').removeClass("opacity");
+                },
+                touchEnd: function () {
+                    $('.a-two.left').removeClass("opacity");
+                },
+                touchCancel: function () {
+                    $('.a-two.left').removeClass("opacity");
+                },
+                tap:function(){
+                    left()
+                }
+            });
+            new AlloyFinger($('.a-two.right')[0], {
+                touchStart: function () {
+                    var right=$('.a-two.right');
+                    if(!right.hasClass('disabled')){
+                        $('.a-two.right').addClass("opacity");
+                    }
+                },
+                touchMove: function () {
+                    $('.a-two.right').removeClass("opacity");
+                },
+                touchEnd: function () {
+                    $('.a-two.right').removeClass("opacity");
+                },
+                touchCancel: function () {
+                    $('.a-two.right').removeClass("opacity");
+                },
+                tap:function(){
+                    right()
+                }
+            });
+            new AlloyFinger($('#sumbit')[0], {//提交
+                tap:function(){
+                    layOpen()
+                }
+            });
+        }else{
+            $('body').on('click','.a-two.left',function(){//提交
+                left()
+            })
+            $('body').on('click','.a-two.right',function(){//提交
+                right()
+            })
+            $('body').on('click','#sumbit',function(){//提交
+                layOpen()
+            })
+        }
+    })
 })
 </script>

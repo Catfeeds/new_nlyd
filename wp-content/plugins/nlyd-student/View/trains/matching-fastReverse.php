@@ -256,311 +256,6 @@ jQuery(function($) {
 
         }, 1000);
     }
-        // mTouch('body').on('tap','.number',function(e){
-$('.number').each(function(){
-    var _this=$(this)
-    new AlloyFinger(_this[0], {
-        tap: function () {
-            var _this=$(this);
-            if(!_this.hasClass('disabled')){
-                var flag=false;
-                $('.rand').each(function(){//所有数字按钮都已使用后
-                    if(!$(this).hasClass('disabled')){
-                        flag=true;
-                        return false;
-                    }
-                })
-                var number_Text=_this.text();
-                var number_dateNumber=_this.attr('date-number');
-                var answer_Text=$('.answer div').text();
-                var answer_dateNumber=$('.answer').attr('date-number');
-                if(answer_dateNumber=='本题无解'){
-                    answer_Text=''
-                }
-                if(number_dateNumber=='本题无解'){
-                    $('.answer div').text(number_Text)
-                    $('.number').removeClass('disabled')
-                        _this.stop(true).animate({
-                            'opacity':'0.6',
-                            'filter': 'alpha(opacity=60)',
-                        },50).animate({
-                            'opacity':'1',
-                            'filter': 'alpha(opacity=100)',
-                        },50)
-                    $('.answer').attr('date-number',"本题无解");
-                }else{
-                    var len=answer_Text.length;
-                    var x=answer_Text.charAt(len-1,1);
-                    if(!isNaN(parseInt(number_Text))){//数字，前一位必须是符号
-                        if(len>0){
-                            if(isNaN(parseInt(x)) && x!==')'){
-                                $('.answer div').text(answer_Text+number_Text)
-                                _this.addClass('disabled')
-                                dataIndex.push(_this.attr('data-index'))
-                                $('.answer').attr('date-number',"1");
-                            }
-                        }else{
-                            $('.answer div').text(answer_Text+number_Text)
-                            _this.addClass('disabled')
-                            dataIndex.push(_this.attr('data-index'))
-                            $('.answer').attr('date-number',"1");
-                        }
-                    }else{//符号
-                        if(flag){//数字没有全部按下
-                            var flag1=false
-                            if(len>0){
-                                if(_this.hasClass('operator')){//运算符
-                                    if(x===')'){
-                                        flag1=true
-                                    }
-                                    if (_this.hasClass('reduce')) {//减号
-                                    if(x==='(' || !isNaN(parseInt(x))){
-                                        flag1=true   
-                                    }
-                                    }else{
-                                        if(!isNaN(parseInt(x))){
-                                            flag1=true  
-                                        }
-                                    }
-                                }
-                                if(_this.hasClass('leftBrackets')){//左括号
-                                    if(isNaN(parseInt(x)) && x!==")"){
-                                        flag1=true
-                                    }   
-                                }
-                                if(_this.hasClass('rightBrackets')){//右括号
-                                    var leftBracket = 0, rightBracket = 0;
-                                    for (var i = 0; i < answer_Text.length; i++) {
-                                        if (answer_Text.charAt(i) === "(") {
-                                            leftBracket++;
-                                        } else if(answer_Text.charAt(i) === ")") {
-                                            rightBracket++;
-                                        }
-                                    }
-                                    if(leftBracket>rightBracket){
-                                        if(!isNaN(parseInt(x)) || x=== ")"){
-                                            flag1=true
-                                        }
-                                            
-                                    } 
-                                }
-                            }else{
-                                if (_this.hasClass('reduce') || _this.hasClass('leftBrackets')) {//减号//左括号
-                                    flag1=true  
-                                }
-                            }
-                            if(flag1){
-                                $('.answer div').text(answer_Text+number_Text) 
-                                _this.stop(true).animate({
-                                    'opacity':'0.6',
-                                    'filter': 'alpha(opacity=60)',
-                                },50).animate({
-                                    'opacity':'1',
-                                    'filter': 'alpha(opacity=100)',
-                                },50)
-                                $('.answer').attr('date-number',"1");
-                            }
-                        }else{//数字键盘全部按下且有（
-                            if(_this.hasClass('rightBrackets')){//点击右括号
-                                var leftBracket = 0, rightBracket = 0;
-                                for (var i = 0; i < answer_Text.length; i++) {
-                                    if (answer_Text.charAt(i) === "(") {
-                                        leftBracket++;
-                                    } else if(answer_Text.charAt(i) === ")") {
-                                        rightBracket++;
-                                    }
-                                }
-                                if(leftBracket>rightBracket){
-                                    $('.answer div').text(answer_Text+number_Text)  
-                                    _this.stop(true).animate({
-                                        'opacity':'0.6',
-                                        'filter': 'alpha(opacity=60)',
-                                    },50).animate({
-                                        'opacity':'1',
-                                        'filter': 'alpha(opacity=100)',
-                                    },50)
-                                    $('.answer').attr('date-number',"1");
-                                }
-                             
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    });
-})
-    //删除tap事件
-    // mTouch('body').on('tap','#del',function(e){
-new AlloyFinger($('#del')[0], {
-    touchStart: function () {
-        $('#del').addClass("opacity");
-    },
-    touchMove: function () {
-        $('#del').removeClass("opacity");
-    },
-    touchEnd: function () {
-        $('#del').removeClass("opacity");
-    },
-    touchCancel: function () {
-        $('#del').removeClass("opacity");
-    },
-    tap:function(e){
-        var _this=$('#del');
-        // if(!_this.hasClass('disabled')){
-        //     _this.addClass('disabled')
-            // var text=$('.answer div').text()
-        var answer_Text=$('.answer div').text();
-        var answer_dateNumber=$('.answer').attr('date-number');
-        var len=answer_Text.length;
-        var news='';
-        if(len>0){
-            if(answer_dateNumber!='本题无解'){
-                var end=answer_Text.substr(answer_Text.length-1,1);
-                var end_1=answer_Text.substr(answer_Text.length-2,1)
-                if(!isNaN(parseInt(end))){//删除的是数字
-                    var endIndex=dataIndex.length-1
-                    var data_index=dataIndex[endIndex];
-                    $('.rand').each(function(){
-                        if($(this).attr('data-index')==data_index){
-                            $(this).removeClass('disabled')
-                            dataIndex.splice(endIndex,1)
-                            return false;
-                        }
-                    })
-                    if(!isNaN(parseInt(end_1))){//删除的两位数数字
-                        news=answer_Text.substring(0,len-2);
-                    }else{
-                        news=answer_Text.substring(0,len-1);
-                    }
-                }else{
-                    news=answer_Text.substring(0,len-1);
-                }
-                $('.answer div').text(news)
-            }else{
-                $('.answer div').text('')
-            }
-        }
-        $('.answer').attr('date-number',"1");
-    }
-});
-    //下一题tap事件
-    // mTouch('body').on('tap','#next',function(e){
-new AlloyFinger($('#next')[0], {
-    tap:function(e){
-        var _this=$('#next');
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
-            var flag=false;
-            var _len=ajaxData.length;
-            // var text=$('.answer div').text()
-            var answer_Text=$('.answer div').text();
-            var answer_dateNumber=$('.answer').attr('date-number');
-            
-            var new_text=answer_Text.replace(/×/g,'*');
-            new_text=new_text.replace(/÷/g,'/');
-            $('.rand').each(function(){//所有数字按钮都已使用后
-                if(!$(this).hasClass('disabled')){
-                    flag=true;
-                    return false;
-                }
-            })
-            if(answer_Text.length!=0){
-                if(answer_dateNumber=='本题无解'){
-                     if(ajaxData[_len-1].rights=='本题无解'){
-                        $('.answer').addClass('right-fast')
-                        ajaxData[_len-1]['isRight']=true;
-                     }else{
-                        $('.answer').addClass('error-fast')
-                        ajaxData[_len-1]['isRight']=false;
-                     }
-                     ajaxData[_len-1].yours=answer_dateNumber;
-                    if(_len>=5){
-                        if(ajaxData[_len-1]['yours']=='本题无解' && ajaxData[_len-2]['yours']=='本题无解' && ajaxData[_len-3]['yours']=='本题无解' && ajaxData[_len-4]['yours']=='本题无解' && ajaxData[_len-5]['yours']=='本题无解'){
-                            $.alerts("<?=__('检测到恶意答题，强制提交答案', 'nlyd-student')?>")
-                            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                            submit(time)
-                            return false;
-                        }
-                    }
-
-                }else{
-                    ajaxData[_len-1].yours=answer_Text;
-                    if(flag){
-                        _this.removeClass('disabled')
-                        return false;
-                    }else{
-                        var _result=calculateResult(new_text)
-                        if(_result==24){
-                            $('.answer').addClass('right-fast')
-                            ajaxData[_len-1]['isRight']=true;
-                        }else{
-                            if(_result=='error'){//符号错误
-                                $('.answer').addClass('error-fast')
-                                ajaxData[_len-1]['isRight']=false;
-                            }else{
-                                if(_result%1==0){//整数
-                                    $('.answer').addClass('error-fast')
-                                    ajaxData[_len-1]['isRight']=false;
-                                }else{//浮点数
-                                    var __flag=false;
-                                    $.each(ajaxData[_len-1]['examples'],function(i,v){
-                                        var _item=v;
-                                        var AA='';
-                                        try {
-                                            AA=eval(_item); // no exception occured
-                                        }
-                                        catch (e) {
-                                            AA='error'; 
-                                        }
-                                        // console.log(_result)
-                                        if(AA==_result){//相同浮点数
-                                            __flag=true;
-                                            return false;
-                                        }
-                                    })
-                                    
-                                    if(__flag){//相同浮点数
-                                        $('.answer').addClass('right-fast')
-                                        ajaxData[_len-1]['isRight']=true;
-                                    }else{
-                                        $('.answer').addClass('error-fast')
-                                        ajaxData[_len-1]['isRight']=false;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                setTimeout(function() {
-                    initQuestion()
-                    nextQuestion()
-                    if(sys_second>=0){
-                        _this.removeClass('disabled')
-                    }
-                    
-                }, 300);
-            }else{
-                ajaxData[_len-1].yours=answer_Text;
-                //跳过2s
-                $('.answer').addClass('error-fast')
-                ajaxData[_len-1]['isRight']=false;
-                sys_second-=1
-                setTimeout(function() {
-                    initQuestion()
-                    nextQuestion()
-                    if(sys_second>=0){
-                        _this.removeClass('disabled')
-                    }
-                }, 300);
-            }
-            $('.answer').attr('date-number',"1");
-            delete ajaxData[_len-1].examples;
-        }
-    }
-});
-
-
 function isRights(text) {
     var flag=false;
     ajaxData[ajaxData.length-1].yours=text;
@@ -624,45 +319,382 @@ function isRights(text) {
     }
     delete ajaxData[ajaxData.length-1].examples;
 }
+
     layui.use('layer', function(){
-        // mTouch('body').on('tap','#sumbit',function(e){
-    new AlloyFinger($('#sumbit')[0], {
-        tap:function(){
+        function layOpen() {//提交
             var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
             layer.open({
-                    type: 1
-                    ,maxWidth:300
-                    ,title: '<?=__('提示', 'nlyhd-student')?>' //不显示标题栏
-                    ,skin:'nl-box-skin'
-                    ,id: 'certification' //防止重复弹出
-                    ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                    ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>',  ]
-                    ,success: function(layero, index){
+                type: 1
+                ,maxWidth:300
+                ,title: '<?=__('提示', 'nlyhd-student')?>' //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
+                ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>',  ]
+                ,success: function(layero, index){
+                }
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    layer.closeAll();
+                    // var text=$('.answer div').text()
+                    var answer_Text=$('.answer div').text();
+                    var answer_dateNumber=$('.answer').attr('date-number');
+                    if(answer_dateNumber=="本题无解"){
+                        isRights(answer_dateNumber)
+                    }else{
+                        isRights(answer_Text)
                     }
-                    ,yes: function(index, layero){
-                        layer.closeAll();
+                    
+                    submit(time);  
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        }
+        function numberPress(dom){//数字键盘
+            if(!dom.hasClass('disabled')){
+                var flag=false;
+                $('.rand').each(function(){//所有数字按钮都已使用后
+                    if(!$(this).hasClass('disabled')){
+                        flag=true;
+                        return false;
                     }
-                    ,btn2: function(index, layero){
-                        layer.closeAll();
-                        // var text=$('.answer div').text()
-                        var answer_Text=$('.answer div').text();
-                        var answer_dateNumber=$('.answer').attr('date-number');
-                        if(answer_dateNumber=="本题无解"){
-                            isRights(answer_dateNumber)
+                })
+                var number_Text=dom.text();
+                var number_dateNumber=dom.attr('date-number');
+                var answer_Text=$('.answer div').text();
+                var answer_dateNumber=$('.answer').attr('date-number');
+                if(answer_dateNumber=='本题无解'){
+                    answer_Text=''
+                }
+                if(number_dateNumber=='本题无解'){
+                    $('.answer div').text(number_Text)
+                    $('.number').removeClass('disabled')
+                    dom.stop(true).animate({
+                            'opacity':'0.6',
+                            'filter': 'alpha(opacity=60)',
+                        },50).animate({
+                            'opacity':'1',
+                            'filter': 'alpha(opacity=100)',
+                        },50)
+                    $('.answer').attr('date-number',"本题无解");
+                }else{
+                    var len=answer_Text.length;
+                    var x=answer_Text.charAt(len-1,1);
+                    if(!isNaN(parseInt(number_Text))){//数字，前一位必须是符号
+                        if(len>0){
+                            if(isNaN(parseInt(x)) && x!==')'){
+                                $('.answer div').text(answer_Text+number_Text)
+                                dom.addClass('disabled')
+                                dataIndex.push(dom.attr('data-index'))
+                                $('.answer').attr('date-number',"1");
+                            }
                         }else{
-                            isRights(answer_Text)
+                            $('.answer div').text(answer_Text+number_Text)
+                            dom.addClass('disabled')
+                            dataIndex.push(dom.attr('data-index'))
+                            $('.answer').attr('date-number',"1");
+                        }
+                    }else{//符号
+                        if(flag){//数字没有全部按下
+                            var flag1=false
+                            if(len>0){
+                                if(dom.hasClass('operator')){//运算符
+                                    if(x===')'){
+                                        flag1=true
+                                    }
+                                    if (dom.hasClass('reduce')) {//减号
+                                    if(x==='(' || !isNaN(parseInt(x))){
+                                        flag1=true   
+                                    }
+                                    }else{
+                                        if(!isNaN(parseInt(x))){
+                                            flag1=true  
+                                        }
+                                    }
+                                }
+                                if(dom.hasClass('leftBrackets')){//左括号
+                                    if(isNaN(parseInt(x)) && x!==")"){
+                                        flag1=true
+                                    }   
+                                }
+                                if(dom.hasClass('rightBrackets')){//右括号
+                                    var leftBracket = 0, rightBracket = 0;
+                                    for (var i = 0; i < answer_Text.length; i++) {
+                                        if (answer_Text.charAt(i) === "(") {
+                                            leftBracket++;
+                                        } else if(answer_Text.charAt(i) === ")") {
+                                            rightBracket++;
+                                        }
+                                    }
+                                    if(leftBracket>rightBracket){
+                                        if(!isNaN(parseInt(x)) || x=== ")"){
+                                            flag1=true
+                                        }
+                                            
+                                    } 
+                                }
+                            }else{
+                                if (dom.hasClass('reduce') || dom.hasClass('leftBrackets')) {//减号//左括号
+                                    flag1=true  
+                                }
+                            }
+                            if(flag1){
+                                $('.answer div').text(answer_Text+number_Text) 
+                                dom.stop(true).animate({
+                                    'opacity':'0.6',
+                                    'filter': 'alpha(opacity=60)',
+                                },50).animate({
+                                    'opacity':'1',
+                                    'filter': 'alpha(opacity=100)',
+                                },50)
+                                $('.answer').attr('date-number',"1");
+                            }
+                        }else{//数字键盘全部按下且有（
+                            if(dom.hasClass('rightBrackets')){//点击右括号
+                                var leftBracket = 0, rightBracket = 0;
+                                for (var i = 0; i < answer_Text.length; i++) {
+                                    if (answer_Text.charAt(i) === "(") {
+                                        leftBracket++;
+                                    } else if(answer_Text.charAt(i) === ")") {
+                                        rightBracket++;
+                                    }
+                                }
+                                if(leftBracket>rightBracket){
+                                    $('.answer div').text(answer_Text+number_Text)  
+                                    dom.stop(true).animate({
+                                        'opacity':'0.6',
+                                        'filter': 'alpha(opacity=60)',
+                                    },50).animate({
+                                        'opacity':'1',
+                                        'filter': 'alpha(opacity=100)',
+                                    },50)
+                                    $('.answer').attr('date-number',"1");
+                                }
+                             
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        function del() {//删除
+            var answer_Text=$('.answer div').text();
+            var answer_dateNumber=$('.answer').attr('date-number');
+            var len=answer_Text.length;
+            var news='';
+            if(len>0){
+                if(answer_dateNumber!='本题无解'){
+                    var end=answer_Text.substr(answer_Text.length-1,1);
+                    var end_1=answer_Text.substr(answer_Text.length-2,1)
+                    if(!isNaN(parseInt(end))){//删除的是数字
+                        var endIndex=dataIndex.length-1
+                        var data_index=dataIndex[endIndex];
+                        $('.rand').each(function(){
+                            if($(this).attr('data-index')==data_index){
+                                $(this).removeClass('disabled')
+                                dataIndex.splice(endIndex,1)
+                                return false;
+                            }
+                        })
+                        if(!isNaN(parseInt(end_1))){//删除的两位数数字
+                            news=answer_Text.substring(0,len-2);
+                        }else{
+                            news=answer_Text.substring(0,len-1);
+                        }
+                    }else{
+                        news=answer_Text.substring(0,len-1);
+                    }
+                    $('.answer div').text(news)
+                }else{
+                    $('.answer div').text('')
+                }
+            }
+            $('.answer').attr('date-number',"1");
+        }
+        function nextQues(dom) {//下一题
+            if(!dom.hasClass('disabled')){
+                dom.addClass('disabled')
+                var flag=false;
+                var _len=ajaxData.length;
+                // var text=$('.answer div').text()
+                var answer_Text=$('.answer div').text();
+                var answer_dateNumber=$('.answer').attr('date-number');
+                
+                var new_text=answer_Text.replace(/×/g,'*');
+                new_text=new_text.replace(/÷/g,'/');
+                $('.rand').each(function(){//所有数字按钮都已使用后
+                    if(!$(this).hasClass('disabled')){
+                        flag=true;
+                        return false;
+                    }
+                })
+                if(answer_Text.length!=0){
+                    if(answer_dateNumber=='本题无解'){
+                        if(ajaxData[_len-1].rights=='本题无解'){
+                            $('.answer').addClass('right-fast')
+                            ajaxData[_len-1]['isRight']=true;
+                        }else{
+                            $('.answer').addClass('error-fast')
+                            ajaxData[_len-1]['isRight']=false;
+                        }
+                        ajaxData[_len-1].yours=answer_dateNumber;
+                        if(_len>=5){
+                            if(ajaxData[_len-1]['yours']=='本题无解' && ajaxData[_len-2]['yours']=='本题无解' && ajaxData[_len-3]['yours']=='本题无解' && ajaxData[_len-4]['yours']=='本题无解' && ajaxData[_len-5]['yours']=='本题无解'){
+                                $.alerts("<?=__('检测到恶意答题，强制提交答案', 'nlyd-student')?>")
+                                var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+                                submit(time)
+                                return false;
+                            }
+                        }
+
+                    }else{
+                        ajaxData[_len-1].yours=answer_Text;
+                        if(flag){
+                            dom.removeClass('disabled')
+                            return false;
+                        }else{
+                            var _result=calculateResult(new_text)
+                            if(_result==24){
+                                $('.answer').addClass('right-fast')
+                                ajaxData[_len-1]['isRight']=true;
+                            }else{
+                                if(_result=='error'){//符号错误
+                                    $('.answer').addClass('error-fast')
+                                    ajaxData[_len-1]['isRight']=false;
+                                }else{
+                                    if(_result%1==0){//整数
+                                        $('.answer').addClass('error-fast')
+                                        ajaxData[_len-1]['isRight']=false;
+                                    }else{//浮点数
+                                        var __flag=false;
+                                        $.each(ajaxData[_len-1]['examples'],function(i,v){
+                                            var _item=v;
+                                            var AA='';
+                                            try {
+                                                AA=eval(_item); // no exception occured
+                                            }
+                                            catch (e) {
+                                                AA='error'; 
+                                            }
+                                            // console.log(_result)
+                                            if(AA==_result){//相同浮点数
+                                                __flag=true;
+                                                return false;
+                                            }
+                                        })
+                                        
+                                        if(__flag){//相同浮点数
+                                            $('.answer').addClass('right-fast')
+                                            ajaxData[_len-1]['isRight']=true;
+                                        }else{
+                                            $('.answer').addClass('error-fast')
+                                            ajaxData[_len-1]['isRight']=false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    setTimeout(function() {
+                        initQuestion()
+                        nextQuestion()
+                        if(sys_second>=0){
+                            dom.removeClass('disabled')
                         }
                         
-                        submit(time);  
-                    }
-                    ,closeBtn:2
-                    ,btnAagn: 'c' //按钮居中
-                    ,shade: 0.3 //遮罩
-                    ,isOutAnim:true//关闭动画
-                });
+                    }, 300);
+                }else{
+                    ajaxData[_len-1].yours=answer_Text;
+                    //跳过2s
+                    $('.answer').addClass('error-fast')
+                    ajaxData[_len-1]['isRight']=false;
+                    sys_second-=1
+                    setTimeout(function() {
+                        initQuestion()
+                        nextQuestion()
+                        if(sys_second>=0){
+                            dom.removeClass('disabled')
+                        }
+                    }, 300);
+                }
+                $('.answer').attr('date-number',"1");
+                delete ajaxData[_len-1].examples;
             }
-        });
-    });
+        }
+            if('ontouchstart' in window){// 移动端
+                $('.number').each(function(e){//数字键盘
+                    var _this=$(this)
+                    new AlloyFinger(_this[0], {
+                        touchStart: function () {
+                            _this.addClass("opacity");
+                        },
+                        touchMove: function () {
+                            _this.removeClass("opacity");
+                        },
+                        touchEnd: function () {
+                            _this.removeClass("opacity");
+                        },
+                        touchCancel: function () {
+                            _this.removeClass("opacity");
+                        },
+                        tap: function () {
+                            numberPress(_this)
+                        }
+                    })
+                });
+    
+                new AlloyFinger($('#del')[0], {//删除
+                    touchStart: function () {
+                        $('#del').addClass("opacity");
+                    },
+                    touchMove: function () {
+                        $('#del').removeClass("opacity");
+                    },
+                    touchEnd: function () {
+                        $('#del').removeClass("opacity");
+                    },
+                    touchCancel: function () {
+                        $('#del').removeClass("opacity");
+                    },
+                    tap: function () {
+                        del()
+                    }
+                });
+                //下一题tap事件
+                new AlloyFinger($('#next')[0], {
+                    tap: function () {
+                        var _this=$('#next')
+                        nextQues(_this)
+                    }
+                    
+                });
+                new AlloyFinger($('#sumbit')[0], {
+                    tap:function(){
+                        layOpen()
+                    }
+                });
+        }else{
+            $('body').on('click','.number',function(){//数字键盘
+                var _this=$(this)
+                numberPress(_this)
+            })
+            $('body').on('click','#del',function(){//删除
+                del()
+            })
+            $('body').on('click','#next',function(){//下一题
+                var _this=$('#next')
+                nextQues(_this)
+            })
+            $('body').on('click','#sumbit',function(){//下一题
+                layOpen()
+            })
+        }
+    })
 
     
 })

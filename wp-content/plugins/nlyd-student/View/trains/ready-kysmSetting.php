@@ -19,18 +19,28 @@
 </div>
 <script>
     jQuery(function($) {
-        new AlloyFinger($('#complete')[0], {
-            tap:function(){
-                var _this=$(this);
-                if(!_this.hasClass('disabled')){
-                    _this.addClass('disabled')
-                    var url = $(this).attr('href')+'/flash_time/'+$('#flash').val();
-                    //alert(url);
-                    setTimeout(function(){
-                        window.location.href = url;
-                    }, 800);
-                }
+        function setTime(dom) {
+            if(!dom.hasClass('disabled')){
+                dom.addClass('disabled')
+                var url = dom.attr('href')+'/flash_time/'+$('#flash').val();
+                //alert(url);
+                setTimeout(function(){
+                    window.location.href = url;
+                }, 800);
             }
-        })
+        }
+        if('ontouchstart' in window){// 移动端
+            new AlloyFinger($('#complete')[0], {
+                tap:function(){
+                    var _this=$(this);
+                    setTime(_this)
+                }
+            });
+        }else{
+            $('body').on('click','#complete',function(){//下一题
+                var _this=$(this);
+                setTime(_this)
+            })
+        }
     })
 </script>
