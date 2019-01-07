@@ -152,6 +152,8 @@ jQuery(document).ready(function($) {
             var _this=$(this);
             if(!_this.hasClass('disabled')){
                 var fd = new FormData();
+                fd.append('action','set_receivables');
+                fd.append('type','aliPay');
                 $.each(imgs1, function (i, v) {
                     fd.append('images_aliPay[]',v);
                 })

@@ -150,8 +150,10 @@ jQuery(document).ready(function($) {
             var _this=$(this);
             if(!_this.hasClass('disabled')){
                 var fd = new FormData();
+                fd.append('action','set_receivables');
+                fd.append('type','weChat');
                 $.each(imgs1, function (i, v) {
-                    fd.append('images_wechat[]',v);
+                    fd.append('images_weChat[]',v);
                 })
                 $.ajax({
                     data: fd,
