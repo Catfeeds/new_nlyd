@@ -35,7 +35,7 @@
                         </div>
                         <?php }else{ ?>
                         <div class="getCash_type_row">
-                            <input type="radio" name="extract_type" value="bank" title="<?=__("提现至银行卡（{$zone['opening_bank']} {$bank_card_num}）", 'nlyd-student')?>" >
+                            <input type="radio" name="extract_type" value="bank" title="<?=__("提现至银行卡（{$zone['opening_bank']} {$bank_card_num}）", 'nlyd-student')?>" checked>
                         </div>
                         <?php } ?>
 
