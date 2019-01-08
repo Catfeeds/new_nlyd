@@ -10,7 +10,11 @@
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
+                <?php if(isset($_GET['zone_id'])){?>
+                    <h1 class="mui-title"><div><?=__('资料查看', 'nlyd-student')?></div></h1>
+                <?php }else{ ?>
                 <h1 class="mui-title"><div><?=__($zone_type_name.'资料填写', 'nlyd-student')?></div></h1>
+                <?php } ?>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding layui-row width-margin-pc">
@@ -97,7 +101,7 @@
                             <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank_address'] :''?>"></div>
                         </div>
-                        <?php if($_GET['zone_type_alias'] == 'match'):?>
+                        <?php if($_GET['zone_type_alias'] == 'match' || !empty($row['chairman_name'])):?>
                             <div>
                                 <div class="lable_row"><span class="c_black"><?=__('组委会主席', 'nlyd-student')?>：</span></div>
                                 <div class="input_row">
