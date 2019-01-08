@@ -38,12 +38,12 @@ class Student_Zone
      * 机构主页
      */
     public function index(){
-        global $wpdb,$user_info;
+        global $wpdb,$current_user;
 
         $row = $this->get_zone_row();
 
         //获取用户今日收益
-        $sql = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
+        $sql = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
         $data['stream'] = $wpdb->get_var($sql);
         //print_r($row);
         if($row['user_status'] == 1){
@@ -95,7 +95,7 @@ class Student_Zone
          $row['referee_code'] = $ajax->qrcode('user');
 
          //获取所有机构列表
-         $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1",ARRAY_A);
+         $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1 order by zone_sort asc",ARRAY_A);
          if(!empty($rows)){
              foreach ($rows as $k => $v){
                  //获取是否有

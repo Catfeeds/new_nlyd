@@ -109,7 +109,7 @@ jQuery(function($) {
                                 $.each(res.data.info,function(i,v){
                                     var color=v.income_type=="extract" ? "c_black":"c_green";
                                     var income_type_class=v.income_type=="extract" ? "bg_reduce":"bg_add";
-                                    var Detail_url = v.user_income > 0 ? profit_url+v.id : extract_url+v.id;
+                                    var Detail_url = v.income_type != 'extract' ? profit_url+v.id : extract_url+v.id;
                                     var dom='<a class="profit_list c_black layui-row" href="'+Detail_url+'">'
                                                 +'<div class="profit_inline profit_icon">'
                                                     +'<div class="zone_bg '+income_type_class+'"></div>'
