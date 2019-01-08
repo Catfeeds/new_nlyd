@@ -3243,7 +3243,7 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         global $wpdb;
-        $rows = $wpdb->get_results("SELECT user_id,`{$cate_name}` AS skill_level FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 LIMIT {$start},{$pageSize}", ARRAY_A);
+        $rows = $wpdb->get_results("SELECT user_id,`{$cate_name}` AS skill_level FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `{$cate_name}`>0 LIMIT {$start},{$pageSize}", ARRAY_A);
         if($rows){
             foreach ($rows as $k => &$row){
                 $user_meta = get_user_meta($row['user_id']);
