@@ -5856,14 +5856,13 @@ class Student_Ajax
                     }
                     unset($_POST['type']);
                     unset($_POST['action']);
-                update_user_meta($current_user->ID,'user_cheques_bank',$_POST);
+                $result = update_user_meta($current_user->ID,'user_cheques_bank',$_POST);
                 break;
             case 'weChat':
                 if(!empty($_FILES['images_weChat'])){
 
                     $upload_dir = wp_upload_dir();
                     $dir = '/QRcode/'.$current_user->ID.'/';
-                    $imagePathArr = [];
                     $num = 0;
                     foreach ($_FILES['images_weChat']['tmp_name'] as $va){
                         $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
@@ -5873,15 +5872,15 @@ class Student_Ajax
                             ++$num;
                         }
                     }
-                    update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
+                    $result = update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
+                }else{
+                    wp_send_json_error(array('info'=>__('请选择收款码')));
                 }
                 break;
             case 'aliPay':
                 if(!empty($_FILES['images_aliPay'])){
-
                     $upload_dir = wp_upload_dir();
                     $dir = '/QRcode/'.$current_user->ID.'/';
-                    $imagePathArr = [];
                     $num = 0;
                     foreach ($_FILES['images_aliPay']['tmp_name'] as $va){
                         $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
@@ -5891,12 +5890,20 @@ class Student_Ajax
                             ++$num;
                         }
                     }
-                    update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
+                    //print_r($_POST['user_coin_code']);
+                    $result = update_user_meta($current_user->ID,'aliPay_coin_code',$_POST['aliPay_coin_code']);
+                }else{
+                    wp_send_json_error(array('info'=>__('请选择收款码')));
                 }
                 break;
             default:
                 wp_send_json_error(array('info'=>__('参数错误')));
                 break;
+        }
+        if($result){
+            wp_send_json_success(array('info'=>__('更新成功')));
+        }else{
+            wp_send_json_error(array('info'=>__('更新失败')));
         }
 
     }

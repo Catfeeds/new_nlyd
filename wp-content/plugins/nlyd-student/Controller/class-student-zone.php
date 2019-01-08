@@ -776,8 +776,16 @@ class Student_Zone extends Student_Home
      * 提现设置
      */
      public function settingCash(){
-        $view = student_view_path.CONTROLLER.'/setting-cash.php';
-        load_view_template($view);
+         global $wpdb,$current_user;
+         //获取相关收款设置
+         $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$current_user->ID} and meta_key in ('aliPay_coin_code','user_coin_code','user_cheques_bank') ";
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         if(!empty($rows)){
+             $data = array_column($rows,'meta_value','meta_key');
+         }
+         print_r($data);
+         $view = student_view_path.CONTROLLER.'/setting-cash.php';
+         load_view_template($view,$data);
     }
 
     /**
