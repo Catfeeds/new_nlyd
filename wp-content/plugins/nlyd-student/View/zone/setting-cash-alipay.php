@@ -18,11 +18,11 @@
             <div class="layui-row nl-border nl-content">
                 <form class="nl-page-form layui-form width-margin-pc have-bottom">   
                     <div class="input_row img-zoos img-zoos1 upload_qr_code">
-                        <?php if((!empty($row['business_licence_url']))){?>
-                            <input type="hidden" name="business_licence_url" class="business_licence_url" value="<?=$row['business_licence_url']?>">
+                        <?php if((!empty($img))){?>
+                            <input type="hidden" name="aliPay_coin_code[]" class="business_licence_url" value="<?=$img?>">
                             <div class="post-img no-dash">
                                 <div class="img-zoo img-box">
-                                    <img src="<?=$row['business_licence_url']?>"/>
+                                    <img src="<?=$img?>"/>
                                 </div>
                                 <div class="del">
                                     <i class="iconfont">&#xe633;</i>
@@ -149,23 +149,44 @@ jQuery(document).ready(function($) {
         // 自定义验证规则
         form.verify($.validationLayui.allRules);
         form.on('submit(layuiForm)', function(data){
-            
-            $.ajax({
-                data: data,
-                contentType : false,
-                processData : false,
-                cache : false,
-                success: function(res, textStatus, jqXHR){
-                    $.alerts(res.data.info)
-                    if(res.data.url){
-                        setTimeout(function() {
-                            window.location.href=res.data.url
-                        }, 300);
-
+            var _this=$(this);
+            if(!_this.hasClass('disabled')){
+                var fd = new FormData();
+                fd.append('action','set_receivables');
+                fd.append('type','aliPay');
+                $.each(imgs1, function (i, v) {
+                    fd.append('images_aliPay[]',v);
+                })
+                $.ajax({
+                    data: fd,
+                    contentType : false,
+                    processData : false,
+                    cache : false,
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success: function(res, textStatus, jqXHR){
+                        $.alerts(res.data.info)
+                        if(res.data.url){
+                            setTimeout(function() {
+                                window.location.href=res.data.url
+                            }, 300);
+                        }else{
+                            _this.removeClass('disabled');
+                        }
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                            _this.removeClass('disabled');
+                        }
+                        
                     }
-                }
-            })
-            return false;
+                })
+            }else{
+                $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+            }
+                return false;
         });
     });
 })

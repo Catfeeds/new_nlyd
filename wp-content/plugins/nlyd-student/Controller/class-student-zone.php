@@ -7,18 +7,31 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-class Student_Zone extends Student_Home
+class Student_Zone
 {
     public function __construct($action)
     {
 
-        parent::__construct();
+        //判断是否是管理员操作面板和是否登录
+        if(!is_user_logged_in()){
+            wp_redirect(home_url('logins'));
+        }
 
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
         //添加短标签
         add_shortcode('zone-home',array($this,$action));
+    }
+
+    public function get_404($tag){
+        $view = leo_student_public_view.'my-404.php';
+        if(!is_array($tag)){
+            $data['message'] = $tag;
+        }else{
+            $data = $tag;
+        }
+        load_view_template($view,$data);
     }
 
     /**
@@ -776,30 +789,48 @@ class Student_Zone extends Student_Home
      * 提现设置
      */
      public function settingCash(){
-        $view = student_view_path.CONTROLLER.'/setting-cash.php';
-        load_view_template($view);
+         global $wpdb,$current_user;
+         //获取相关收款设置
+         $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$current_user->ID} and meta_key in ('aliPay_coin_code','user_coin_code','user_cheques_bank') ";
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         if(!empty($rows)){
+             $data = array_column($rows,'meta_value','meta_key');
+         }
+         //print_r($data);
+         $view = student_view_path.CONTROLLER.'/setting-cash.php';
+         load_view_template($view,$data);
     }
 
     /**
      * 银行卡提现设置
      */
      public function settingCashCard(){
-        $view = student_view_path.CONTROLLER.'/setting-cash-card.php';
-        load_view_template($view);
+         global $current_user;
+         $bank = get_user_meta($current_user->ID,'user_cheques_bank')[0];
+         //print_r($bank);
+         $view = student_view_path.CONTROLLER.'/setting-cash-card.php';
+         load_view_template($view,$bank);
     }
     /**
      * 微信提现设置
      */
      public function settingCashWechat(){
-        $view = student_view_path.CONTROLLER.'/setting-cash-wechat.php';
-        load_view_template($view);
+
+         global $current_user;
+         $img = get_user_meta($current_user->ID,'user_coin_code')[0];
+
+         $view = student_view_path.CONTROLLER.'/setting-cash-wechat.php';
+         load_view_template($view,array('img'=>$img[0]));
     }
     /**
      * 支付宝提现设置
      */
      public function settingCashAlipay(){
-        $view = student_view_path.CONTROLLER.'/setting-cash-alipay.php';
-        load_view_template($view);
+         global $current_user;
+         $img = get_user_meta($current_user->ID,'aliPay_coin_code')[0];
+
+         $view = student_view_path.CONTROLLER.'/setting-cash-alipay.php';
+         load_view_template($view,array('img'=>$img[0]));
     }
     /**
      * 推荐管理
@@ -862,8 +893,53 @@ class Student_Zone extends Student_Home
      * 推荐管理
      */
      public function data(){
-        $view = student_view_path.CONTROLLER.'/data-statistics.php';
-        load_view_template($view);
+         global $wpdb,$current_user;
+
+         if($_SESSION['statistics'] && $_SESSION['statistics']['overdue_time'] > get_time()){
+             $data = unserialize($_COOKIE['user_statistics']);
+         }else{
+
+             //获取开设比赛/考级次数
+             $data['match_total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}match_meta_new where created_id = {$current_user->ID} ");
+             $data['grading_total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}grading_meta where created_person = {$current_user->ID} ");
+             //参与比赛/考级人数
+             $data['match_order'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order a 
+                                                         left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
+                                                         where a.order_type = 1 and b.created_id = {$current_user->ID} ");
+             $data['grading_order'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order a 
+                                                            left join {$wpdb->prefix}grading_meta b on a.match_id = b.grading_id
+                                                            where a.order_type = 2 and b.created_person = {$current_user->ID} ");
+             //获取考级/比赛收益
+             $data['match_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type = 'match' ");
+             $data['grading_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type = 'grading' ");
+
+             //获取累计收益/提现
+             $data['user_income'] = $wpdb->get_var("select sum(user_income) from {$wpdb->prefix}user_stream_logs where  user_id = {$current_user->ID} and user_income > 0 ");
+             $data['extract_income'] = $wpdb->get_var("select sum(user_income) from {$wpdb->prefix}user_stream_logs where  user_id = {$current_user->ID} and user_income < 0 ");
+
+
+             //获取机构赛区类型
+             $zone_meta = $wpdb->get_row("select zone_match_type,is_double,audit_time,term_time from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}",ARRAY_A);
+             //print_r($zone_meta);
+             if($zone_meta['zone_match_type'] == 1){ //战队赛
+                 $standard = 70;
+             }else{  //城市赛
+                 $standard = $zone_meta['is_double'] == 1 ? 200 : 100;
+             }
+             //达标人数
+             $standard_total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order a 
+                                                    left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
+                                                    where a.order_type = 1 and b.created_id = {$current_user->ID} 
+                                                    and a.created_time >= {$zone_meta['audit_time']} and a.created_time <= {$zone_meta['term_time']}
+                                                    and a.cost > 0
+                                                     ");
+             $data['is_standard'] = $standard_total > $standard ? 'y' : 'n';
+
+             $_SESSION['user_statistics'] = array('data'=>$data,'overdue_time'=>get_time()+1800);
+         }
+
+         $view = student_view_path.CONTROLLER.'/data-statistics.php';
+         load_view_template($view,$data);
     }
     /*
      *机构主体信息页面

@@ -17,9 +17,12 @@ class Student_Logins
         //引入当前页面css/js
         if($_SESSION['user_openid'] == false){
             if(is_user_logged_in()){
+                //添加推广人
                 if($_GET['referee_id'] > 0){
                     global $current_user,$wpdb;
-                    if(empty($current_user->data->referee_id) && $_POST['referee_id'] != $current_user->ID ){
+                    //获取我的推广人上级
+                    $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$_POST['referee_id']}");
+                    if(empty($current_user->data->referee_id) && $_POST['referee_id'] != $current_user->ID && $referee_id != $current_user->ID){
                         //添加推广人
                         $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_GET['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$current_user->ID));
                         //var_dump($a);die;
