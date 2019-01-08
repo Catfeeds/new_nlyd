@@ -18,11 +18,11 @@
             <div class="layui-row nl-border nl-content">
                 <form class="nl-page-form layui-form width-margin-pc have-bottom">   
                     <div class="input_row img-zoos img-zoos1 upload_qr_code">
-                        <?php if((!empty($row['business_licence_url']))){?>
-                            <input type="hidden" name="business_licence_url" class="business_licence_url" value="<?=$row['business_licence_url']?>">
+                        <?php if((!empty($img))){?>
+                            <input type="hidden" name="user_coin_code[]" class="business_licence_url" value="<?=$img?>">
                             <div class="post-img no-dash">
                                 <div class="img-zoo img-box">
-                                    <img src="<?=$row['business_licence_url']?>"/>
+                                    <img src="<?=$img?>"/>
                                 </div>
                                 <div class="del">
                                     <i class="iconfont">&#xe633;</i>

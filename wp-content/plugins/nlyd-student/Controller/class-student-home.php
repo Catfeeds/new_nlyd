@@ -24,11 +24,11 @@ class Student_Home
 
                 if(is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out' && ($_SERVER['SERVER_NAME'] == 'ydbeta.gjnlyd.com')){
 
-                    wp_redirect(home_url('weixin/webLogin'));
+                    wp_redirect(home_url('weixin/webLogin/'));
                     exit;
                 }
 
-                wp_redirect(home_url('logins'));
+                wp_redirect(home_url('/logins/'));
             }
         }elseif ((CONTROLLER == 'account' && ACTION != 'index')){
 
@@ -37,11 +37,11 @@ class Student_Home
 
                 if($this->is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
 
-                    wp_redirect(home_url('weixin/webLogin'));
+                    wp_redirect(home_url('weixin/webLogin/'));
                     exit;
                 }
 
-                wp_redirect(home_url('logins'));
+                wp_redirect(home_url('/logins/'));
             }
         }
 
@@ -53,6 +53,11 @@ class Student_Home
 
         global $current_user,$wpdb,$user_info;
 
+        //判断用户是否为机构
+        $zone_user_id = $wpdb->get_var("select user_id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+        if($zone_user_id){
+            wp_redirect(home_url('/zone/'));
+        }
         $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID} and meta_key in('nickname','user_head','user_address','user_real_name','real_ID','user_ID_Card','user_ID','user_gender','user_nationality','user_nationality_pic','user_nationality_short','user_birthday','user_coin_code','user_images_color') ",ARRAY_A);
         $user_info = array_column($rows,'meta_value','meta_key');
         if(empty($user_info['user_ID'])){

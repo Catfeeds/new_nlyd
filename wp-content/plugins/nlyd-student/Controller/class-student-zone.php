@@ -7,18 +7,31 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-class Student_Zone extends Student_Home
+class Student_Zone
 {
     public function __construct($action)
     {
 
-        parent::__construct();
+        //判断是否是管理员操作面板和是否登录
+        if(!is_user_logged_in()){
+            wp_redirect(home_url('logins'));
+        }
 
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
         //添加短标签
         add_shortcode('zone-home',array($this,$action));
+    }
+
+    public function get_404($tag){
+        $view = leo_student_public_view.'my-404.php';
+        if(!is_array($tag)){
+            $data['message'] = $tag;
+        }else{
+            $data = $tag;
+        }
+        load_view_template($view,$data);
     }
 
     /**
@@ -776,30 +789,48 @@ class Student_Zone extends Student_Home
      * 提现设置
      */
      public function settingCash(){
-        $view = student_view_path.CONTROLLER.'/setting-cash.php';
-        load_view_template($view);
+         global $wpdb,$current_user;
+         //获取相关收款设置
+         $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$current_user->ID} and meta_key in ('aliPay_coin_code','user_coin_code','user_cheques_bank') ";
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         if(!empty($rows)){
+             $data = array_column($rows,'meta_value','meta_key');
+         }
+         //print_r($data);
+         $view = student_view_path.CONTROLLER.'/setting-cash.php';
+         load_view_template($view,$data);
     }
 
     /**
      * 银行卡提现设置
      */
      public function settingCashCard(){
-        $view = student_view_path.CONTROLLER.'/setting-cash-card.php';
-        load_view_template($view);
+         global $current_user;
+         $bank = get_user_meta($current_user->ID,'user_cheques_bank')[0];
+         //print_r($bank);
+         $view = student_view_path.CONTROLLER.'/setting-cash-card.php';
+         load_view_template($view,$bank);
     }
     /**
      * 微信提现设置
      */
      public function settingCashWechat(){
-        $view = student_view_path.CONTROLLER.'/setting-cash-wechat.php';
-        load_view_template($view);
+
+         global $current_user;
+         $img = get_user_meta($current_user->ID,'user_coin_code')[0];
+
+         $view = student_view_path.CONTROLLER.'/setting-cash-wechat.php';
+         load_view_template($view,array('img'=>$img[0]));
     }
     /**
      * 支付宝提现设置
      */
      public function settingCashAlipay(){
-        $view = student_view_path.CONTROLLER.'/setting-cash-alipay.php';
-        load_view_template($view);
+         global $current_user;
+         $img = get_user_meta($current_user->ID,'aliPay_coin_code')[0];
+
+         $view = student_view_path.CONTROLLER.'/setting-cash-alipay.php';
+         load_view_template($view,array('img'=>$img[0]));
     }
     /**
      * 推荐管理
