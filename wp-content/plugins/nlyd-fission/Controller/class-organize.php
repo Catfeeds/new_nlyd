@@ -113,7 +113,7 @@ class Organize{
         $numSql .= " WHERE user_status='{$status_type}'";
         $all_num = $wpdb->get_var($numSql);
         //类型列表
-        $typeList = $wpdb->get_results("SELECT id,zone_type_name FROM {$wpdb->prefix}zone_type", ARRAY_A);
+        $typeList = $this->getOrganizeTypeList();
         $typeListCount = count($typeList)-1;
         ?>
         <div class="wrap">
@@ -229,7 +229,7 @@ class Organize{
                            </div>
                        </th>
                        <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                            <?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>
+                            <?=date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$row['zone_city'].'</span>'.($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>
                            <br>
                            <div class="row-actions">
 <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
@@ -243,7 +243,7 @@ class Organize{
                            if($row['zone_match_type']=='1'){
                                echo '战队精英赛';
                            }else{
-                                echo ($row['is_double']=='1'?'双区县':'单区县').'城市赛';
+                                echo ($row['is_double']=='1'?'多区县':'单区县').'城市赛';
                            }
                            ?>
                        </td>
@@ -910,6 +910,7 @@ class Organize{
                             //============
                             if($error_msg == ''){
                                 $orgType = $wpdb->get_row("SELECT zone_type_alias,zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'", ARRAY_A);
+                                if($orgType['zone_type_alias'] == 'match') $orgType['zone_type_name'] = '赛区';
                                 $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType['zone_type_alias']}' AND spread_status=1", ARRAY_A);
                                 //更新新账号推荐人和推荐时间
                                 $apply_user = $wpdb->get_row("SELECT referee_id,user_mobile FROM {$wpdb->users} WHERE ID='{$zmv['apply_id']}'", ARRAY_A);
@@ -1014,7 +1015,7 @@ class Organize{
             }
         }
         //类型列表
-        $typeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
+        $typeList = $this->getOrganizeTypeList();
         if($old_zm_id > 0){
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
@@ -1183,7 +1184,7 @@ class Organize{
                     <tr class="" style="<?=$row['zone_match_type'] != '2' ? 'display: none':''?>" id="is_double_tr">
                         <th scope="row"><label for="is_double">区县 </label></th>
                         <td>
-                            <label for="is_double_1"><input type="radio" <?=$row['is_double'] == '1' ? 'checked="checked"':''?> id="is_double_1" name="is_double" value="1">双区县</label>
+                            <label for="is_double_1"><input type="radio" <?=$row['is_double'] == '1' ? 'checked="checked"':''?> id="is_double_1" name="is_double" value="1">多区县</label>
                             <label for="is_double_2"><input type="radio" <?=$row['is_double'] == '2' ? 'checked="checked"':''?> id="is_double_2" name="is_double" value="2">单区县</label>
                         </td>
                     </tr>
@@ -2756,6 +2757,18 @@ class Organize{
             <br class="clear">
         </div>
         <?php
+    }
+
+    /**
+     * 获取机构类型列表
+     */
+    public function getOrganizeTypeList(){
+        global $wpdb;
+        $typeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
+        foreach ($typeList as &$tlv){
+            if($tlv['zone_type_alias'] == 'match') $tlv['zone_type_name'] = '赛区';
+        }
+        return $typeList;
     }
 
     /**

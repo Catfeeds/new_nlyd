@@ -189,12 +189,10 @@
                 document.addEventListener(visibilityChange, function() {
                     var isHidden = document.hidden;
                     if (isHidden) {
-                        jQuery(window).on("blur",function(){
-                            var sessionData={
-                                match_id:jQuery.Request('match_id')
-                            }
-                            jQuery.SetSession('waitting',sessionData)
-                        })
+                        var sessionData={
+                            match_id:jQuery.Request('match_id')
+                        }
+                        jQuery.SetSession('waitting',sessionData)
                     } else {
                         var waitting= jQuery.GetSession('waitting','1');
                         if(waitting && waitting['match_id']===jQuery.Request('match_id')){
