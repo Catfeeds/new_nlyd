@@ -53,9 +53,9 @@ class Order {
         CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "已支付" WHEN 3 THEN "待收货" WHEN 4 THEN "已完成" WHEN 5 THEN "已失效" ELSE "-" END AS pay_title,
         u.user_login,
         u.user_mobile,
-        p.post_title,
         o.order_type,
         o.pay_status,
+        o.match_id,
         o.created_time ';
     }
     public function orderLists(){
@@ -114,7 +114,6 @@ class Order {
         $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS '.$this->getSelectField().' FROM '.$wpdb->prefix.'order AS o
         LEFT JOIN '.$wpdb->prefix.'users AS u ON u.ID=o.user_id 
         LEFT JOIN '.$wpdb->prefix.'usermeta AS um ON u.ID=um.user_id AND um.meta_key="user_real_name" 
-        LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=o.match_id 
         WHERE '.$pay_status.$orderTypeWhere.$searchWhere.'   
         ORDER BY o.created_time DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
 //        leo_dump($rows);
@@ -218,7 +217,7 @@ class Order {
                             </a>
                         </th>
                         <th scope="col" id="username" class="manage-column column-username">用户名</th>
-                        <th scope="col" id="post_title" class="manage-column column-post_title">比赛</th>
+                        <th scope="col" id="post_title" class="manage-column column-post_title">项目</th>
                         <th scope="col" id="real_name" class="manage-column column-real_name">真实姓名</th>
                         <th scope="col" id="funllname" class="manage-column column-funllname">收件人</th>
                         <th scope="col" id="telephone" class="manage-column column-telephone">联系电话</th>
@@ -277,7 +276,21 @@ class Order {
                                     <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                 </td>
                                 <td class="name column-username" data-colname="用户名"><span aria-hidden="true"><?=$row['user_login']?></span><span class="screen-reader-text">—</span></td>
-                                <td class="email column-post_title" data-colname=""><?=$row['post_title']?></td>
+                                <td class="email column-post_title" data-colname="">
+                                   <?php
+                                    switch ($row['order_type']){
+                                        case '1':
+                                            echo get_post($row['match_id'])->post_title;
+                                            break;
+                                        case '2':
+                                            echo get_post($row['match_id'])->post_title;
+                                            break;
+                                        case '3':
+                                            echo $wpdb->get_var("SELECT course_title FROM {$wpdb->prefix}course WHERE id={$row['match_id']}");
+                                            break;
+                                    }
+                                    ?>
+                                </td>
                                 <td class="email column-real_name" data-colname="">
                                     <?php if($row['meta_value']){?>
                                         <?php echo isset(unserialize($row['meta_value'])['real_name']) ? unserialize($row['meta_value'])['real_name'] : '-'; ?>
@@ -321,7 +334,7 @@ class Order {
                             <a href="javascript:;"><span>订单流水</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col" class="manage-column column-username">用户名</th>
-                        <th scope="col" class="manage-column column-post_title">比赛</th>
+                        <th scope="col" class="manage-column column-post_title">项目</th>
                         <th scope="col" class="manage-column column-real_name">真实姓名</th>
                         <th scope="col" class="manage-column column-funllname">收件人</th>
                         <th scope="col" class="manage-column column-telephone">联系电话</th>
@@ -375,8 +388,9 @@ class Order {
     public function refund(){
         $serial = trim($_GET['serial']);
         global $wpdb;
-        $row = $wpdb->get_row('SELECT o.pay_lowdown,o.cost,o.serialnumber,o.telephone,o.address,o.express_number,o.express_company,u.user_login,
-        CASE o.pay_type WHEN "zfb" THEN "支付宝" WHEN "wx" THEN "微信" WHEN "ylk" THEN "银联卡" ELSE "-" END AS pay_type 
+        $row = $wpdb->get_row('SELECT o.pay_lowdown,o.cost,o.serialnumber,o.telephone,o.address,o.express_number,o.express_company,u.user_login,o.user_id,o.match_id,o.order_type,
+        CASE o.pay_type WHEN "zfb" THEN "支付宝" WHEN "wx" THEN "微信" WHEN "ylk" THEN "银联卡" ELSE "-" END AS pay_type,
+        CASE o.order_type WHEN 1 THEN "比赛订单" WHEN 2 THEN "考级订单" WHEN 3 THEN "课程订单" ELSE "-" END AS order_type_title 
         FROM '.$wpdb->prefix.'order AS o
         LEFT JOIN '.$wpdb->prefix.'users AS u ON u.id=o.user_id 
         WHERE o.serialnumber='.$serial, ARRAY_A);
@@ -388,8 +402,34 @@ class Order {
                         <td><?=$row['serialnumber']?></td>
                     </tr>
                     <tr>
+                        <td>订单类型</td>
+                        <td><?=$row['order_type_title']?></td>
+                    </tr>
+                    <tr>
+                        <td>项目</td>
+                        <td>
+                            <?php
+                            switch ($row['order_type']){
+                                case '1':
+                                    echo get_post($row['match_id'])->post_title;
+                                    break;
+                                case '2':
+                                    echo get_post($row['match_id'])->post_title;
+                                    break;
+                                case '3':
+                                    echo $wpdb->get_var("SELECT course_title FROM {$wpdb->prefix}course WHERE id={$row['match_id']}");
+                                    break;
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>下单用户名</td>
                         <td><?=$row['user_login']?></td>
+                    </tr>
+                    <tr>
+                        <td>下单用户真实姓名</td>
+                        <td><?=get_user_meta($row['user_id'],'user_real_name', true)['real_name']?></td>
                     </tr>
                         <td>支付方式</td>
                         <td><?=$row['pay_type']?></td>
