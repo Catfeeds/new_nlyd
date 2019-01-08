@@ -9,7 +9,7 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <div class="main-header">
                 <header class="mui-bar mui-bar-nav main">
-                    <a class="mui-pull-left nl-goback">
+                    <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/settingCash/');?>">
                         <div><i class="iconfont">&#xe610;</i></div>
                     </a>
                     <h1 class="mui-title"><div><?=__('上传收款二维码', 'nlyd-student')?></div></h1>
