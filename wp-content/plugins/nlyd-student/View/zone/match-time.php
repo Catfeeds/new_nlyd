@@ -31,7 +31,10 @@
                             $data_time = preg_replace('/\/|\s|:/',',',$v['start_time']);
                         ?>
                         <div class="add_lun_row">
-                            <span class="close_coin bg_gradient_orange mr_10">+</span>
+                            <div class="dis_inlineBlock close_it" style="width:40px">
+                                <span class="close_coin bg_gradient_orange mr_10 dis_inlineBlock">+</span>
+                            </div>
+                            
                             <span class="mr_10"><?=__('第', 'nlyd-student')?><span class="project_more"><?=$x+1?></span><?=__('轮', 'nlyd-student')?></span>
                             <a class="c_blue match_date edit_time" data-id ="<?=$v['id']?>" start-time="<?=$v['start_time']?>"  data-time="<?=$data_time?>"><?=__('修改开始时间', 'nlyd-student')?></a>
                             <br>
@@ -63,7 +66,7 @@ jQuery(function($) {
         return time;
     }
     layui.use('layer', function(){
-        $('body').on('click','.close_coin',function(){
+        $('body').on('click','.close_it',function(){
             var _this=$(this);
             layer.open({
                     type: 1
