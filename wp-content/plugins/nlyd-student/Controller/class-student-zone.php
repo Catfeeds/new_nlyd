@@ -7,18 +7,31 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-class Student_Zone extends Student_Home
+class Student_Zone
 {
     public function __construct($action)
     {
 
-        parent::__construct();
+        //判断是否是管理员操作面板和是否登录
+        if(!is_user_logged_in()){
+            wp_redirect(home_url('logins'));
+        }
 
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
         //添加短标签
         add_shortcode('zone-home',array($this,$action));
+    }
+
+    public function get_404($tag){
+        $view = leo_student_public_view.'my-404.php';
+        if(!is_array($tag)){
+            $data['message'] = $tag;
+        }else{
+            $data = $tag;
+        }
+        load_view_template($view,$data);
     }
 
     /**
