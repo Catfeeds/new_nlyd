@@ -36,23 +36,6 @@
 </div>
 <script>
     jQuery(function($) {
-        $('.js-data-select-ajax').each(function () {
-            var _this=$(this);
-            var _placeholder = _this.attr('data-placeholder');
-            _this.select2({
-                placeholder : _placeholder,
-                ajax: {
-                    url: admin_ajax +'?action=get_manage_user'  ,
-                    dataType: 'json',
-                    delay: 600, //wait 250 milliseconds before triggering the request
-                    processResults: function (res) {
-                        return {
-                            results: res.data
-                        };
-                    }
-                }
-            });
-        })
         layui.use(['form'], function(){
             var form = layui.form
             form.render();
