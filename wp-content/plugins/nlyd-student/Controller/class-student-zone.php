@@ -783,7 +783,7 @@ class Student_Zone extends Student_Home
          if(!empty($rows)){
              $data = array_column($rows,'meta_value','meta_key');
          }
-         print_r($data);
+         //print_r($data);
          $view = student_view_path.CONTROLLER.'/setting-cash.php';
          load_view_template($view,$data);
     }
@@ -792,22 +792,32 @@ class Student_Zone extends Student_Home
      * 银行卡提现设置
      */
      public function settingCashCard(){
-        $view = student_view_path.CONTROLLER.'/setting-cash-card.php';
-        load_view_template($view);
+         global $current_user;
+         $bank = get_user_meta($current_user->ID,'user_cheques_bank')[0];
+         //print_r($bank);
+         $view = student_view_path.CONTROLLER.'/setting-cash-card.php';
+         load_view_template($view,$bank);
     }
     /**
      * 微信提现设置
      */
      public function settingCashWechat(){
-        $view = student_view_path.CONTROLLER.'/setting-cash-wechat.php';
-        load_view_template($view);
+
+         global $current_user;
+         $img = get_user_meta($current_user->ID,'user_coin_code')[0];
+
+         $view = student_view_path.CONTROLLER.'/setting-cash-wechat.php';
+         load_view_template($view,array('img'=>$img[0]));
     }
     /**
      * 支付宝提现设置
      */
      public function settingCashAlipay(){
-        $view = student_view_path.CONTROLLER.'/setting-cash-alipay.php';
-        load_view_template($view);
+         global $current_user;
+         $img = get_user_meta($current_user->ID,'aliPay_coin_code')[0];
+
+         $view = student_view_path.CONTROLLER.'/setting-cash-alipay.php';
+         load_view_template($view,array('img'=>$img[0]));
     }
     /**
      * 推荐管理
