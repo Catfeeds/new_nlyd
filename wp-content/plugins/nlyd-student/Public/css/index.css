@@ -30,6 +30,10 @@
     vertical-align: middle;
     line-height: 20px;
 }
+.dis_inlineBlock{
+    display: inline-block;
+    vertical-align: middle;
+}
 input::-webkit-input-placeholder {
     color:#b8bcbe;
     font-size:0.12rem;
