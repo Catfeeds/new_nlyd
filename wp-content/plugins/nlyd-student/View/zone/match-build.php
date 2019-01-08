@@ -45,14 +45,6 @@
                             <div class="lable_row"><span class="c_black"><?=__('比赛费用', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row" disabled type="text" id="match_cost" name="match_cost" value="<?=$match['match_cost']?>"></div>
                         </div>
-                        <?php if(!empty($match['entry_end_time'])):?>
-                            <div>
-                                <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
-                                <div class="input_row">
-                                    <input class="radius_input_row nl-foucs" value="<?=$match['data_entry_end_time']?>" type="text" readonly name="start_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
-                                </div>
-                            </div>
-                        <?php endif;?>
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('开赛日期', 'nlyd-student')?>：</span>
@@ -65,6 +57,14 @@
                                 <input class="radius_input_row nl-foucs" type="text" readonly name="match_start_time" data-time="<?=$match['data_time']?>"  id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开赛日期', 'nlyd-student')?>" value="<?=$match['match_start_time']?>">
                             </div>
                         </div>
+                        <?php if(!empty($match['entry_end_time'])):?>
+                            <div>
+                                <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
+                                <div class="input_row">
+                                    <input class="radius_input_row nl-foucs" value="<?=$match['data_entry_end_time']?>" type="text" readonly name="end_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
+                                </div>
+                            </div>
+                        <?php endif;?>
                         <div class="c_red mt_10">
                             <?=__('比赛发布成功后，管理员可根据实际情况自定义修改赛程时间', 'nlyd-student')?>
                         </div>
@@ -85,7 +85,7 @@ var match_date_Data=$.validationLayui.dates2;//开赛日期
 var posiotion_match_type1=[0];//初始化位置，高亮展示
 var posiotion_match_type2=[0];//初始化位置，高亮展示
 var posiotion_match_date=[0,0,0,0,0];//初始化位置，高亮展示
-
+var posiotion_match_end_date=[0,0,0,0,0];//初始化位置，高亮展示
 //---------------------------比赛类别------------------------------
 if($('#match_type1').val().length>0 && $('#match_type1').val()){
     $.each(match_type1_Data,function(index,value){
@@ -158,20 +158,21 @@ var mobileSelect2 = new MobileSelect({
 //---------------------------开赛日期------------------------------
 if($('#match_date').length>0 && $('#match_date').attr('data-time').length>0){
     var timeValue=$('#match_date').attr('data-time').split('-');
+    console.log(timeValue)
     $.each(match_date_Data,function(index,value){
-        if(timeValue[0]==value.value+""){
+        if(parseInt(timeValue[0])==parseInt(value.value)){
             posiotion_match_date=[index,0,0,0,0];
             $.each(value.childs,function(i,v){
-                if(timeValue[1]==v.value+""){
+                if(parseInt(timeValue[1])==parseInt(v.value)){
                     posiotion_match_date=[index,i,0,0,0];
                     $.each(v.childs,function(j,val){
-                        if(timeValue[2]==val.value+""){
+                        if(parseInt(timeValue[2])==parseInt(val.value)){
                             posiotion_match_date=[index,i,j,0,0];
                             $.each(val.childs,function(k,b){
-                                if(timeValue[3]==b.value+""){
+                                if(parseInt(timeValue[3])==parseInt(b.value)){
                                     posiotion_match_date=[index,i,j,k,0];
                                     $.each(b.childs,function(l,c){
-                                        if(timeValue[4]==c.value+""){
+                                        if(parseInt(timeValue[4])==parseInt(c.value)){
                                             posiotion_match_date=[index,i,j,k,l];
                                         }
                                     })
@@ -199,6 +200,55 @@ var mobileSelect3 = new MobileSelect({
         var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
         var text1=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+'-'+data[3]['value']+'-'+data[4]['value'];
         $('#match_date').val(text).attr('data-time',text1);
+       
+    }
+});
+
+//---------------------------结束日期------------------------------
+if($('#entry_end_time').length>0 && $('#entry_end_time').attr('data-time').length>0){
+    var timeValue=$('#entry_end_time').attr('data-time').split('-');
+    console.log(timeValue)
+    $.each(match_date_Data,function(index,value){
+        if(parseInt(timeValue[0])==value.value){
+            posiotion_match_end_date=[index,0,0,0,0];
+            $.each(value.childs,function(i,v){
+                if(parseInt(timeValue[1])==parseInt(v.value)){
+                    posiotion_match_end_date=[index,i,0,0,0];
+                    $.each(v.childs,function(j,val){
+                        if(parseInt(timeValue[2])==parseInt(val.value)){
+                            posiotion_match_end_date=[index,i,j,0,0];
+                            $.each(val.childs,function(k,b){
+                                if(parseInt(timeValue[3])==parseInt(b.value)){
+                                    posiotion_match_end_date=[index,i,j,k,0];
+                                    $.each(b.childs,function(l,c){
+                                        if(parseInt(timeValue[4])==parseInt(c.value)){
+                                            posiotion_match_end_date=[index,i,j,k,l];
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })
+}
+var mobileSelect3 = new MobileSelect({
+    trigger: '#entry_end_time',
+    title: "<?=__('开赛日期', 'nlyd-student')?>",
+    wheels: [
+        {data: match_date_Data}
+    ],
+    new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>","<?=__('时', 'nlyd-student')?>","<?=__('分', 'nlyd-student')?>"],
+    position:posiotion_match_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+    transitionEnd:function(indexArr, data){
+        // console.log(data);
+    },
+    callback:function(indexArr, data){
+        var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
+        var text1=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+'-'+data[3]['value']+'-'+data[4]['value'];
+        $('#entry_end_time').val(text).attr('data-time',text1);
        
     }
 });
