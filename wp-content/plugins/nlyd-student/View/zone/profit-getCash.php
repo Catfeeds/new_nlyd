@@ -17,7 +17,9 @@
                     <form class="layui-form ">
                         <?php if(empty($zone)){ ?>
                         <div class="getCash_type_row">
-                            <input type="radio" name="extract_type" value="user_bank" title="<?=__("提现至银行卡", 'nlyd-student')?>" <?='('.$user_cheques_bank.')'?> checked>
+                            <input type="radio" name="extract_type" value="user_bank" title="<?=__('提现至银行卡', 'nlyd-student')?><?php if(!empty($user_cheques_bank)):?>
+                            <?='('.$user_cheques_bank.')'?>
+                            <?php endif;?>" checked>
                             <?php if(empty($user_cheques_bank)):?> <a class="c_red dis_inlineBlock ml_10" href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
                         </div>
                         <div class="getCash_type_row">
