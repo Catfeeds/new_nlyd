@@ -95,36 +95,6 @@
                             </a>
                         <?php } ?>
                     <?php } ?>
-                    <!--<a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('申请设立脑力训练中心', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('申请设立脑力水平测评中心', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('申请承办赛事', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>-->
-                    <!--<a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('赞助脑力比赛', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_red ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('申请代理赛事赞助', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>-->
                 </div>
                
         </div>            
