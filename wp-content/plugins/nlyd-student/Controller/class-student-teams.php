@@ -222,7 +222,7 @@ class Student_Teams
                 if(b.team_leader != '',b.team_leader,'--') as team_leader
                 from {$wpdb->prefix}posts a 
                 left join {$wpdb->prefix}team_meta b on a.ID = b.team_id 
-                left join {$wpdb->prefix}match_team c on a.ID = c.team_id and user_id = {$current_user->ID} 
+                left join {$wpdb->prefix}match_team c on a.ID = c.team_id and b.user_id = {$current_user->ID} 
                 where a.ID = {$_GET['team_id']} 
                 ";
         //print_r($sql);
@@ -234,10 +234,8 @@ class Student_Teams
         }
         //获取领队
         if(is_numeric($team['team_director'])){
-            $user = get_userdata( $team['team_director']);
-            if(!empty($user->data->display_name)){
-                $team['team_director'] = preg_replace('/, /','',$user->data->display_name);
-            }
+            $user = get_user_meta($team['team_director'],'user_real_name')[0];
+            $team['team_director'] = $user['real_name'];
         }
         //获取战队成员
         $total = $wpdb->get_var("select count(*) from {$wpdb->prefix}match_team where team_id = {$team['ID']} and status = 2 and user_type = 1");
@@ -245,6 +243,16 @@ class Student_Teams
 
         $view = student_view_path.CONTROLLER.'/teamDetail.php';
         load_view_template($view,array('team'=>$team));
+    }
+
+    public function get_404($tag){
+        $view = leo_student_public_view.'my-404.php';
+        if(!is_array($tag)){
+            $data['message'] = $tag;
+        }else{
+            $data = $tag;
+        }
+        load_view_template($view,$data);
     }
 
     /**

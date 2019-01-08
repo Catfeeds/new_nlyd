@@ -783,13 +783,17 @@ class Student_Grade extends Student_Home
             $wpdb->query('START TRANSACTION');
             $a = $wpdb->update($wpdb->prefix.'user_grade_log_history',$update,array('id'=>$_GET['history_id'],'user_id'=>$current_user->ID));
 
-            if(empty($rank_row) && $grading_result == 1){
-                $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
+            if(empty($rank_row)){
+                if($grading_result == 1){
+                    $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
+                }else{
+                    $b = true;
+                }
             }else{
                 if(!empty($update1)){
                     $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update1,array('user_id'=>$current_user->ID,'id'=>$rank_row['id'],'skill_type'=>2));
                 }else{
-                    $b = 1;
+                    $b = true;
                 }
             }
             //var_dump($a .'----'. $b);die;
