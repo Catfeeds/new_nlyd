@@ -4581,10 +4581,9 @@ class Student_Ajax
             $map[] = " (a.user_mobile like '%{$_GET['term']}%') ";
             $map[] = " (a.user_email like '%{$_GET['term']}%') ";
             $map[] = " (b.meta_value like '%{$_GET['term']}%') ";
-            $where = join( ' or ',$map);
-        }else{
-            $where = " a.ID > 0 and b.meta_value is not null ";
+            $where = 'and ('.join( ' or ',$map) .')';
         }
+
         global $wpdb;
         $sql = "select b.user_id as id, 
                 case 
@@ -4595,9 +4594,10 @@ class Student_Ajax
                 end as text,b.meta_value 
                 from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and meta_key = 'user_real_name'
-                where {$where} 
+                where a.ID > 0 and b.meta_value is not null {$where}
                 limit 20
                 ";
+        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if(!empty($rows)){
 
@@ -5183,7 +5183,19 @@ class Student_Ajax
             case 'weChat':
                 //获取收款二维码
                 $extract_code_img = get_user_meta($current_user->ID,'user_coin_code')[0];
-                print_r($extract_code_img);
+                break;
+            case 'aliPay':
+                //获取收款二维码
+                $extract_code_img = get_user_meta($current_user->ID,'aliPay_coin_code')[0];
+                break;
+            case 'user_bank':
+                //获取收款账户
+                $user_cheques_bank = get_user_meta($current_user->ID,'user_cheques_bank')[0];
+                $opening_user = $user_cheques_bank['open_name'];
+                $opening_bank = $user_cheques_bank['open_bank'];
+                $opening_bank_address = $user_cheques_bank['open_address'];
+                $bank_card_num = $user_cheques_bank['open_card_num'];
+                //print_r($user_cheques_bank);die;
                 break;
             case 'bank':
                 //获取账户信息
@@ -5221,6 +5233,7 @@ class Student_Ajax
             'extract_id'=>$current_user->ID,
             'extract_amount'=>$_POST['num'],
             'extract_type'=>$_POST['extract_type'],
+            'bank_user'=>!empty($opening_user) ? $opening_user : '' ,
             'bank_name'=>!empty($opening_bank) ? $opening_bank : '' ,
             'bank_address'=>!empty($opening_bank_address) ? $opening_bank_address : '' ,
             'extract_account'=>!empty($bank_card_num) ? $bank_card_num : '' ,
@@ -5266,7 +5279,7 @@ class Student_Ajax
         $start = ($page-1)*$pageSize;
 
         //判断是否为机构
-        $zone_id = $wpdb->get_var("select from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
+        $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
 
         //获取对应数据列表
         $sql = "select SQL_CALC_FOUND_ROWS a.*, b.post_title,
@@ -5280,7 +5293,12 @@ class Student_Ajax
                       from {$wpdb->prefix}user_income_logs a 
                       left join {$wpdb->prefix}posts b on a.match_id = b.ID where ";
         if(empty($zone_id)){    //
-            $where = "a.match_id = {$row['match_id']} and 
+            if($row['income_type'] == 'subject'){
+                $x = " a.id = {$row['match_id']} ";
+            }else{
+                $x = " a.match_id = {$row['match_id']} ";
+            }
+            $where = "{$x} and 
                       (
                         a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID} 
                         or a.indirect_referee_id = {$current_user->ID} or a.manager_id = {$current_user->ID}
@@ -5294,15 +5312,16 @@ class Student_Ajax
 
         //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($rows);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
         //print_r($rows);
         if(!empty($rows)){
             $list = array();
             foreach ($rows as $k => $v){
-                if($row['income_type'] == 'subject'){  //裂变收益
+                if($v['income_type'] == 'subject'){  //裂变收益
                     //获取裂变机构类型
                     $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
                     $list['profit_channel'] = '推荐'.$zone_type_name;
@@ -5334,6 +5353,7 @@ class Student_Ajax
                 $list['created_time'] = $v['created_time'];
                 $lists[] = $list;
             }
+            //print_r($list);
         }
         wp_send_json_success(array('info'=>$lists));
 
@@ -5513,6 +5533,8 @@ class Student_Ajax
         //判断该教练是否被占用
         $id = $wpdb->get_var("select id from {$wpdb->prefix}zone_join_coach where coach_id = {$_POST['coach_id']} ");
         if(!empty($id)) wp_send_json_error(array('info'=>__('该教练已绑定,请核实信息')));
+        $coach_name = get_user_meta($_POST['coach_id'],'user_real_name');
+        if(empty($coach_name)) wp_send_json_error(array('info'=>__('该教练未进行实名认证')));
         $result = $wpdb->insert($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$_POST['coach_id']));
         if($result){
             wp_send_json_success(array('info'=>__('添加成功')));

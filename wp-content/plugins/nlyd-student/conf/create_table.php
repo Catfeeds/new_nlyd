@@ -31,6 +31,21 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "zone_join_match_role";  //机构默认的开赛权限
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+           `zone_type_id` int(20) DEFAULT NULL COMMENT '机构类型id',
+           `match_role_id` int(20) DEFAULT NULL COMMENT '开赛权限id',
+           PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
     $table_name = $wpdb->prefix . "zone_manager";  //分中心管理员
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
@@ -940,6 +955,7 @@ function the_table_install () {
           `extract_id` int(20) unsigned NOT NULL COMMENT '用户id',
           `extract_amount` decimal(10,2) unsigned NOT NULL COMMENT '提现金额',
           `extract_type` varchar(10) DEFAULT NULL COMMENT '提现类型 bank 银行卡 wallet 钱包 weChat 微信',
+          `bank_user` varchar(255) DEFAULT NULL COMMENT '收款人姓名',
           `bank_name` varchar(255) DEFAULT NULL COMMENT '银行名称',
           `bank_address` varchar(255) DEFAULT NULL COMMENT '开户行地址',
           `extract_account` varchar(255) NOT NULL COMMENT '收款账号',
