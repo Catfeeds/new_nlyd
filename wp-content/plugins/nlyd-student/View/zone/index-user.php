@@ -83,12 +83,12 @@
                             }
                         ?>
                             <a class="apply_list c_black layui-row" href="<?= empty($url) ? 'javascript:void(0)' : $url ;?>">
-                                <div class="apply_list_line pull-left <?=$v['zone_type_class']?> ml"><i class="iconfont fs_20">&#xe650;</i></div>
+                                <div class="apply_list_line pull-left <?=$v['zone_type_class']?>" style="width:25px;text-align:center"><i class="iconfont fs_20">&#xe650;</i></div>
                                 <div class="apply_list_line center">
                                     <?php $title1 = $v['zone_type_alias'] == 'match' ? "承办":'设立' ?>
                                     <?=__('申请'.$title1.$v['zone_type_name'], 'nlyd-student')?>
                                 </div>
-                                <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
+                                <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                                 <?php if(!empty($title)):?>
                                 <div class="apply_list_line pull-right c_orange mr_10"><?=__($title, 'nlyd-student')?></div>
                                 <?php endif;?>
