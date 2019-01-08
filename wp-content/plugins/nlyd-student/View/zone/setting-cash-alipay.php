@@ -21,7 +21,7 @@
                         <?php if((!empty($img))){?>
                             <input type="hidden" name="aliPay_coin_code[]" class="business_licence_url" value="<?=$img?>">
                             <div class="post-img no-dash">
-                                <div class="img-zoo img-box">
+                                <div class="img-zoo img-box img-z">
                                     <img src="<?=$img?>"/>
                                 </div>
                                 <div class="del">
@@ -102,14 +102,14 @@ jQuery(document).ready(function($) {
         //     return false;
         // }
         array.unshift(file)
-        console.log(array)
+        
         var reader = new FileReader();
         var src='';
         //读取File对象的数据
         reader.onload = function(evt){
             //data:img base64 编码数据显示
             var dom='<div class="post-img no-dash">'
-                +'<div class="img-zoo img-box">'
+                +'<div class="img-zoo img-box img-z">'
                 +'<img src="'+evt.target.result+'"/>'
                 +'</div>'
                 +'<div class="del">'
@@ -118,12 +118,16 @@ jQuery(document).ready(function($) {
                 +'</div>'
             var className=_this.attr('data-this')
             $('.'+className).prepend(dom)
-          
+            layer.photos({//图片预览
+                photos: '.img-z',
+                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            })
             if(className=="img-zoos1"){
                 if($('.'+className+' .post-img.no-dash').length>=1){
                     $('.'+className+' .dash').css('display','none')
                 }
             }
+            console.log(evt)
         }
         reader.readAsDataURL(file);
         $(e.target).val('')
@@ -142,6 +146,10 @@ jQuery(document).ready(function($) {
             $('.business_licence_url').val('')
         }
         _this.parents('.post-img').remove();
+        layer.photos({//图片预览
+            photos: '.img-z',
+            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        })
     })
     layui.use(['form'], function(){
         var form = layui.form
@@ -188,6 +196,10 @@ jQuery(document).ready(function($) {
             }
                 return false;
         });
+        layer.photos({//图片预览
+            photos: '.img-z',
+            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        })
     });
 })
 

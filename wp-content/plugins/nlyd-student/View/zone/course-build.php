@@ -42,9 +42,12 @@
                             <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('填写课程时长', 'nlyd-student')?>" value="<?=!empty($row) ? $row['legal_person'] :''?>"></div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('授课教练', 'nlyd-student')?>：</span></div>
+                            <div class="lable_row"><span class="c_black">
+                                <?=__('授课教练', 'nlyd-student')?>：</span>
+                                <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
+                            </div>
                             <div class="input_row">
-                                <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" lay-verify="required"  data-placeholder="授课教练" ></select>
+                                <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" lay-verify="required"  data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" ></select>
                                 <!-- <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>"> -->
                             </div>
                         </div>
