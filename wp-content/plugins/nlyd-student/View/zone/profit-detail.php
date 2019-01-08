@@ -42,6 +42,10 @@ jQuery(function($) {
                             profit_page++
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
+                                    var match_detail=v.post_title ? '<div class="profit_detail_row">'+
+                                        '<div class="profit_detail_label"><?=__("比赛详情", "nlyd-student")?>：</div>'+
+                                        '<div class="profit_detail_info c_black">'+v.post_title+'</div>'+
+                                        '</div>' : '';
                                     var dom='<div class="layui-row width-margin width-margin-pc profit_detail_item">'+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益金额", "nlyd-student")?>：</div>'+
@@ -53,17 +57,10 @@ jQuery(function($) {
                                                         v.income_type_cn+
                                                     '</div>'+
                                                 '</div>'+
-                                                '<div class="profit_detail_row">'+
-                                                    '<div class="profit_detail_label"><?=__("比赛类型", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_black"></div>'+
-                                                '</div>'+
-                                                '<div class="profit_detail_row">'+
-                                                    '<div class="profit_detail_label"><?=__("比赛详情", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_black">'+v.post_title+'</div>'+
-                                                '</div>'+
+                                                    match_detail+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益途径", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_black">'+v.channel+'</div>'+
+                                                    '<div class="profit_detail_info c_black">'+v.profit_channel+' '+v.profit_lv+' '+v.channel_ID+'</div>'+
                                                 '</div>'+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益状态", "nlyd-student")?>：</div>'+

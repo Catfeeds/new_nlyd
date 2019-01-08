@@ -17,16 +17,26 @@
                     <form class="layui-form ">
                         <?php if(empty($zone)){ ?>
                         <div class="getCash_type_row">
-                            <input type="radio" name="extract_type" value="weChat" title="<?=__('提现至微信', 'nlyd-student')?>" checked>
+                            <input type="radio" name="extract_type" value="user_bank" title="<?=__("提现至银行卡（{$user_cheques_bank}）", 'nlyd-student')?>" checked>
+                            <?php if(empty($user_cheques_bank)):?> <a href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
                         </div>
-                        <?php }else{ ?>
                         <div class="getCash_type_row">
-                            <input type="radio" name="extract_type" value="bank" title="<?=__("提现至银行卡（{$zone['opening_bank']} {$bank_card_num}）", 'nlyd-student')?>" checked>
+                            <input type="radio" name="extract_type" value="weChat" title="<?=__('提现至微信', 'nlyd-student')?>" >
+                            <?php if(empty($user_coin_code)):?> <a href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
                         </div>
-                        <?php } ?>
+                        <div class="getCash_type_row">
+                            <input type="radio" name="extract_type" value="aliPay" title="<?=__('提现至支付宝', 'nlyd-student')?>" >
+                            <?php if(empty($aliPay_coin_code)):?> <a href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
+                        </div>
                         <div class="getCash_type_row">
                             <input type="radio" name="extract_type" value="wallet" title="<?=__('提现至平台账户钱包', 'nlyd-student')?>">
                         </div>
+                        <?php }else{ ?>
+                        <div class="getCash_type_row">
+                            <input type="radio" name="extract_type" value="bank" title="<?=__("提现至银行卡（{$zone['opening_bank']} {$bank_card_num}）", 'nlyd-student')?>" >
+                        </div>
+                        <?php } ?>
+
                         <div class="c_red fs_12">
                             <?=__('*充值进平台的余额只可用于消费，无法再次提现，谨慎操作', 'nlyd-student')?>
                         </div>

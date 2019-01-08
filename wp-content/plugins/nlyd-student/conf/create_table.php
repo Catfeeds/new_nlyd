@@ -955,6 +955,7 @@ function the_table_install () {
           `extract_id` int(20) unsigned NOT NULL COMMENT '用户id',
           `extract_amount` decimal(10,2) unsigned NOT NULL COMMENT '提现金额',
           `extract_type` varchar(10) DEFAULT NULL COMMENT '提现类型 bank 银行卡 wallet 钱包 weChat 微信',
+          `bank_user` varchar(255) DEFAULT NULL COMMENT '收款人姓名',
           `bank_name` varchar(255) DEFAULT NULL COMMENT '银行名称',
           `bank_address` varchar(255) DEFAULT NULL COMMENT '开户行地址',
           `extract_account` varchar(255) NOT NULL COMMENT '收款账号',
