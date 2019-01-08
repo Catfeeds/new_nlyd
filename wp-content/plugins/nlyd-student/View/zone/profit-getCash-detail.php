@@ -21,8 +21,7 @@
                     <div class="profit_detail_row">
                         <div class="profit_detail_label"><?=__('提现路径', 'nlyd-student')?>：</div>
                         <div class="profit_detail_info c_black">
-                            <?=!empty($bank_name)? $bank_name : '';?>
-                            <?=!empty($extract_account) ? '（'.substr_replace($extract_account,'****',4,9).'）':''?> <?=$extract_type_cn?>
+                            <?=$extract_type_cn;?>
                         </div>
                     </div>
                     <div class="profit_detail_row">

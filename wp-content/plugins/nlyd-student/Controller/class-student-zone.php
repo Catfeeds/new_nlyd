@@ -43,7 +43,7 @@ class Student_Zone
         $row = $this->get_zone_row();
 
         //获取用户今日收益
-        $sql = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
+        $sql = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() and user_income > 0";
         $data['stream'] = $wpdb->get_var($sql);
         //print_r($row);
         if($row['user_status'] == 1){
@@ -143,7 +143,7 @@ class Student_Zone
 
         global $wpdb,$current_user;
          //获取用户今日收益
-         $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
+         $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() and user_income > 0";
          $data['stream'] = $wpdb->get_var($sql1);
 
          //获取用户累计收益
@@ -176,7 +176,7 @@ class Student_Zone
                 $data['aliPay_coin_code'] = empty($meta['aliPay_coin_code']) ? '' : unserialize($meta['aliPay_coin_code'])[0];
                 $data['user_coin_code'] = empty($meta['user_coin_code']) ? '' : unserialize($meta['user_coin_code'])[0];
                 $user_cheques_bank = empty($meta['aliPay_coin_code']) ? '' : unserialize($meta['user_cheques_bank']);
-                $data['user_cheques_bank'] = empty($user_cheques_bank) ? '' : $user_cheques_bank['open_bank'].' '.substr_replace($user_cheques_bank['open_card_num'],'********',4,8);
+                $data['user_cheques_bank'] = empty($user_cheques_bank) ? '' : '（'.$user_cheques_bank['open_bank'].' 尾号'.substr($user_cheques_bank['open_card_num'],-4,4).'）';
             }
         }
 
@@ -328,9 +328,9 @@ class Student_Zone
 
          global $wpdb,$current_user;
          //获取提现信息
-         $row = $wpdb->get_row("select *, 
-                                      case 'extract_type'
-                                      when 'bank' then '提现至银行卡'
+         $row = $wpdb->get_row("select *,
+                                      case extract_type
+                                      when 'user_bank' then '提现至银行卡'
                                       when 'weChat' then '提现至微信'
                                       when 'aliPay' then '提现至支付宝'
                                       else '提现至钱包'

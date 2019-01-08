@@ -4638,7 +4638,7 @@ class Student_Ajax
 
         //获取收益列表
         $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,
-                  if(user_income > 0 ,user_income ,'待到账') user_income,
+                  if(user_income <> '' ,user_income ,'待到账') user_income,
                   case income_type
                     when 'match' then '比赛收益'
                     when 'grading' then '考级收益'
