@@ -922,7 +922,6 @@ class Student_Gradings extends Student_Home
                     $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
                     //var_dump($a);
                     if(empty($rank_row)){
-
                         $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
                     }else{
 

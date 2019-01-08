@@ -54,6 +54,14 @@
                             <div class="lable_row"><span class="c_black"><?=__('考级费用', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row" disabled type="text" id="cost" name="cost" value="<?=$match['cost']?>" ></div>
                         </div>
+                        <?php if(!empty($match['entry_end_time'])):?>
+                            <div>
+                                <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
+                                <div class="input_row">
+                                    <input class="radius_input_row nl-foucs" value="<?=$match['entry_end_time']?>" type="text" readonly name="start_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
+                                </div>
+                            </div>
+                        <?php endif;?>
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('考级开始日期', 'nlyd-student')?>：</span>
