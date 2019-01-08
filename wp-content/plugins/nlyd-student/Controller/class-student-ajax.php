@@ -3124,8 +3124,7 @@ class Student_Ajax
                 if($bindType == 'code') $this->get_smtp_code($_POST['mobile'],17,true,$_POST['send_code']);
             }
             $user_id = $_POST['user_id'];
-        }
-        else{
+        }else{
             $user = $wpdb->get_row('SELECT ID,user_pass,weChat_openid FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'")');
             //账号绑定
             //判断用户是否存在
@@ -3140,7 +3139,7 @@ class Student_Ajax
             $user_id = $user->ID;
             //添加推广人
 
-            if(isset($_SESSION['referee_id_wx']) && !(get_user_by('ID',$user_id)->referee_id)){
+            if(isset($_SESSION['referee_id_wx']) && !(get_user_by('ID',$user_id)->referee_id) && $user_id != $_SESSION['referee_id_wx'] && get_user_by('ID',$_SESSION['referee_id_wx'])->referee_id != $user_id){
                 $bool = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_SESSION['referee_id_wx'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user_id));
                 unset($_SESSION['referee_id_wx']);
                 if(!$bool) wp_send_json_error(array('info'=>__('添加推荐人失败!', 'nlyd-student')));
