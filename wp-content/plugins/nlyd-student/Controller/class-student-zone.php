@@ -38,12 +38,12 @@ class Student_Zone
      * 机构主页
      */
     public function index(){
-        global $wpdb,$user_info;
+        global $wpdb,$current_user;
 
         $row = $this->get_zone_row();
 
         //获取用户今日收益
-        $sql = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
+        $sql = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
         $data['stream'] = $wpdb->get_var($sql);
         //print_r($row);
         if($row['user_status'] == 1){
@@ -95,7 +95,7 @@ class Student_Zone
          $row['referee_code'] = $ajax->qrcode('user');
 
          //获取所有机构列表
-         $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1",ARRAY_A);
+         $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1 order by zone_sort asc",ARRAY_A);
          if(!empty($rows)){
              foreach ($rows as $k => $v){
                  //获取是否有
@@ -364,6 +364,47 @@ class Student_Zone
              return;
          }
 
+         $sql = "select a.id,a.match_id,a.match_status,a.match_start_time,a.match_end_time,a.entry_end_time,c.meta_value match_switch
+                from {$wpdb->prefix}match_meta_new a  
+                LEFT JOIN {$wpdb->prefix}postmeta c ON a.match_id = c.post_id and meta_key = 'default_match_switch'
+                where a.created_id = {$current_user->ID}
+                ";
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+
+         if(!empty($rows)){
+             $new_time = get_time('mysql');
+             $entry_is_true = 0;
+             $match_is_true = 0;
+             foreach ($rows as $v){
+
+                 if($v['match_switch'] == 'ON') {
+                     if($new_time < $v['entry_end_time']){
+                         //报名中
+                         $save['match_status'] = 1;
+                         $entry_is_true += 1;
+
+                     }
+                     elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['match_start_time']){
+                         //等待开赛
+                         $save['match_status'] = -2;
+                         $match_is_true += 1;
+
+                     }
+                     elseif ($v['match_start_time'] <= $new_time && $new_time < $v['match_end_time']){
+                         //进行中
+                         $save['match_status'] = 2;
+                         $match_is_true += 1;
+
+                     }else{
+                         //已结束
+                         $save['match_status'] = -3;
+
+                     }
+                 }
+                 $a = $wpdb->update($wpdb->prefix.'match_meta_new',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
+             }
+         }
+
         $view = student_view_path.CONTROLLER.'/match-list.php';
         load_view_template($view);
     }
@@ -413,6 +454,9 @@ class Student_Zone
              //print_r($match);
              if(!empty($match['match_start_time'])){
                  $match['data_time'] = preg_replace('/\s|:/','-',$match['match_start_time']);
+             }
+             if(!empty($match['entry_end_time'])){
+                 $match['data_entry_end_time'] = preg_replace('/\s|:/','-',$match['entry_end_time']);
              }
              $data['match'] = $match;
              //print_r($match);
@@ -472,6 +516,45 @@ class Student_Zone
      * 考级管理列表
      */
      public function grading(){
+
+         global $wpdb,$current_user;
+         $sql = "select a.id,a.grading_id,a.status,a.start_time,a.end_time,a.entry_end_time,c.meta_value match_switch
+                from {$wpdb->prefix}grading_meta a  
+                LEFT JOIN {$wpdb->prefix}postmeta c ON a.grading_id = c.post_id and meta_key = 'default_match_switch'
+                where a.created_person = {$current_user->ID}
+                ";
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         //print_r($sql);
+         if(!empty($rows)){
+             $new_time = get_time('mysql');
+             $entry_is_true = 0;
+             $match_is_true = 0;
+             foreach ($rows as $v){
+
+                 if($v['match_switch'] == 'ON') {
+                     if($new_time < $v['entry_end_time']){
+                         //报名中
+                         $save['status'] = 1;
+                         $entry_is_true += 1;
+                     }
+                     elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
+                         //等待开赛
+                         $save['status'] = -2;
+                         $match_is_true += 1;
+                     }
+                     elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
+                         //进行中
+                         $save['status'] = 2;
+                         $match_is_true += 1;
+                     }else{
+                         //已结束
+                         $save['status'] = -3;
+                     }
+                 }
+                 $a = $wpdb->update($wpdb->prefix.'grading_meta',$save,array('id'=>$v['id'],'grading_id'=>$v['grading_id']));
+             }
+         }
+
         $view = student_view_path.CONTROLLER.'/kaoji-list.php';
         load_view_template($view);
     }
@@ -521,6 +604,9 @@ class Student_Zone
              }
              if(!empty($match['end_time'])){
                  $match['data_end_time'] = preg_replace('/\s|:/','-',$match['end_time']);
+             }
+             if(!empty($match['entry_end_time'])){
+                 $match['data_entry_end_time'] = preg_replace('/\s|:/','-',$match['entry_end_time']);
              }
              $person_liable = get_user_meta($match['person_liable'],'user_real_name')[0];
              $match['person'] = !empty($person_liable['real_name']) ? $person_liable['real_name'] : '-';

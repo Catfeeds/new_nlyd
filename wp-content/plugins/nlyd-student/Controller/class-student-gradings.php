@@ -921,29 +921,35 @@ class Student_Gradings extends Student_Home
                     );
                     $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
                     //var_dump($a);
-                    if(empty($rank_row)){
-
-                        $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
-                    }else{
-
-                        if(!empty($update)){
-                            $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id'],'skill_type'=>1));
-                        }else{
-                            $b = 1;
-                        }
-                    }
-                    //var_dump($c .'---'.$a.'---'.$b);die;
-                    if($a && $b){
-                        $wpdb->query('COMMIT');
-                    }else{
-                        $wpdb->query('ROLLBACK');
-                    }
                 }
                 else{
                     if($grading_result == 1){
-
-                        $wpdb->update($wpdb->prefix.'grading_logs',array('grading_result'=>1),array('id'=>$id));
+                        $a = $wpdb->update($wpdb->prefix.'grading_logs',array('grading_result'=>1,'grading_lv'=>$lv),array('id'=>$id));
+                    }else{
+                        $a = true;
                     }
+                }
+                if(empty($rank_row)){
+
+                    if($grading_result == 1){
+                        $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
+                    }else{
+
+                        $b = true;
+                    }
+                }else{
+
+                    if(!empty($update)){
+                        $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id'],'skill_type'=>1));
+                    }else{
+                        $b = true;
+                    }
+                }
+                //var_dump($a.'---'.$b);die;
+                if($a && $b){
+                    $wpdb->query('COMMIT');
+                }else{
+                    $wpdb->query('ROLLBACK');
                 }
 
                 $next_project_url = home_url('gradings/record/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type']);

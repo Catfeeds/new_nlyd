@@ -54,6 +54,14 @@
                             <div class="lable_row"><span class="c_black"><?=__('考级费用', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row" disabled type="text" id="cost" name="cost" value="<?=$match['cost']?>" ></div>
                         </div>
+                        <?php if(!empty($match['entry_end_time'])):?>
+                            <div>
+                                <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
+                                <div class="input_row">
+                                    <input class="radius_input_row nl-foucs" value="<?=$match['entry_end_time']?>" type="text" readonly name="entry_end_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
+                                </div>
+                            </div>
+                        <?php endif;?>
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('考级开始日期', 'nlyd-student')?>：</span>
@@ -90,7 +98,7 @@ var posiotion_match_type1=[0];//初始化位置，高亮展示
 var posiotion_match_type2=[0];//初始化位置，高亮展示
 var posiotion_match_date=[0,0,0,0,0];//初始化位置，高亮展示
 var posiotion_gradeEnd_date=[0,0,0,0,0];
-
+var posiotion_gradeSign_date=[0,0,0,0,0];
 //---------------------------考级类别------------------------------
 if($('#match_type1').val().length>0 && $('#match_type1').val()){
     $.each(match_type1_Data,function(index,value){
@@ -197,7 +205,7 @@ var mobileSelect3 = new MobileSelect({
         // console.log(data);
     },
     callback:function(indexArr, data){
-        var text=data[0]['value']+'/'+data[1]['value']+'/'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
+        var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
         $('#match_date').val(text);
        
     }
@@ -237,11 +245,53 @@ var mobileSelect4 = new MobileSelect({
     new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>","<?=__('时', 'nlyd-student')?>","<?=__('分', 'nlyd-student')?>"],
     position:posiotion_gradeEnd_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
     transitionEnd:function(indexArr, data){
-        // console.log(data);
+        console.log(data);
     },
     callback:function(indexArr, data){
-        var text=data[0]['value']+'/'+data[1]['value']+'/'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
+        var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
         $('#match_end_date').val(text);
+       
+    }
+});
+//---------------------------报名结束日期------------------------------
+if($('#entry_end_time').length>0 && $('#entry_end_time').attr('data-time') && $('#entry_end_time').attr('data-time').length>0){
+    var timeValue=$('#entry_end_time').attr('data-time').split('-');
+    $.each(match_date_Data,function(index,value){
+        if(parseInt(timeValue[0])==parseInt(value.value)){
+            $.each(value.childs,function(i,v){
+                if(parseInt(timeValue[1])==parseInt(v.value)){
+                    $.each(v.childs,function(j,val){
+                        if(parseInt(timeValue[2])==parseInt(val.value)){
+                            $.each(val.childs,function(k,b){
+                                if(parseInt(timeValue[3])==parseInt(b.value)){
+                                    $.each(b.childs,function(l,c){
+                                        if(parseInt(timeValue[4])==parseInt(c.value)){
+                                            posiotion_gradeSign_date=[index,i,j,k,l];
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })
+}
+var mobileSelect5 = new MobileSelect({
+    trigger: '#entry_end_time',
+    title: "<?=__('报名截止', 'nlyd-student')?>",
+    wheels: [
+        {data: match_date_Data}
+    ],
+    new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>","<?=__('时', 'nlyd-student')?>","<?=__('分', 'nlyd-student')?>"],
+    position:posiotion_gradeSign_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+    transitionEnd:function(indexArr, data){
+        console.log(data);
+    },
+    callback:function(indexArr, data){
+        var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
+        $('#entry_end_time').val(text);
        
     }
 });

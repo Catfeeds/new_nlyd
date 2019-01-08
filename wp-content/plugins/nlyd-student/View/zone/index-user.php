@@ -83,48 +83,18 @@
                             }
                         ?>
                             <a class="apply_list c_black layui-row" href="<?= empty($url) ? 'javascript:void(0)' : $url ;?>">
-                                <div class="apply_list_line pull-left <?=$v['zone_type_class']?> ml"><i class="iconfont fs_20">&#xe650;</i></div>
+                                <div class="apply_list_line pull-left <?=$v['zone_type_class']?>" style="width:25px;text-align:center"><i class="iconfont fs_20">&#xe650;</i></div>
                                 <div class="apply_list_line center">
                                     <?php $title1 = $v['zone_type_alias'] == 'match' ? "承办":'设立' ?>
                                     <?=__('申请'.$title1.$v['zone_type_name'], 'nlyd-student')?>
                                 </div>
-                                <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
+                                <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                                 <?php if(!empty($title)):?>
                                 <div class="apply_list_line pull-right c_orange mr_10"><?=__($title, 'nlyd-student')?></div>
                                 <?php endif;?>
                             </a>
                         <?php } ?>
                     <?php } ?>
-                    <!--<a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('申请设立脑力训练中心', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('申请设立脑力水平测评中心', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('申请承办赛事', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>-->
-                    <!--<a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('赞助脑力比赛', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_red ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('申请代理赛事赞助', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>-->
                 </div>
                
         </div>            

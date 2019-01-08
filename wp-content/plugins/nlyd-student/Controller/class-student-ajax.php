@@ -4743,7 +4743,7 @@ class Student_Ajax
             'match_genre'=>$_POST['match_genre'],
             'match_address'=>$_POST['match_address'],
             'match_cost'=>$_POST['match_cost'],
-            'entry_end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-10 minute',strtotime($_POST['match_start_time']))),
+            'entry_end_time'=>!empty($_POST['entry_end_time']) ? $_POST['entry_end_time'] : date_i18n('Y-m-d H:i:s',strtotime('-10 minute',strtotime($_POST['match_start_time']))),
             'match_start_time'=>$_POST['match_start_time'],
             'match_project_id'=>$project_id,
         );
@@ -4842,7 +4842,7 @@ class Student_Ajax
             'category_id'=>$_POST['category_id'],
             'address'=>$_POST['address'],
             'cost'=>$_POST['cost'],
-            'entry_end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-10 minute',strtotime($_POST['start_time']))),
+            'entry_end_time'=>!empty($_POST['entry_end_time']) ? $_POST['entry_end_time'] : date_i18n('Y-m-d H:i:s',strtotime('-10 minute',strtotime($_POST['start_time']))),
             'start_time'=>$_POST['start_time'],
             'end_time'=>$_POST['end_time'],
             'person_liable'=>!empty($_POST['person_liable']) ? $_POST['person_liable'] : '',
@@ -5237,7 +5237,7 @@ class Student_Ajax
             'bank_name'=>!empty($opening_bank) ? $opening_bank : '' ,
             'bank_address'=>!empty($opening_bank_address) ? $opening_bank_address : '' ,
             'extract_account'=>!empty($bank_card_num) ? $bank_card_num : '' ,
-            'extract_code_img'=>!empty($extract_code_img) ? $extract_code_img : '' ,
+            'extract_code_img'=>!empty($extract_code_img) ? $extract_code_img[0] : '' ,
             'apply_time'=>get_time('mysql') ,
 
         );
