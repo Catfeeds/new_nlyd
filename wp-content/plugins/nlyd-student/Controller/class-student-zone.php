@@ -962,12 +962,12 @@ class Student_Zone
      * 获取机构信息
      */
     public function get_zone_row($zone_id=''){
-        global $wpdb,$user_info;
+        global $wpdb,$current_user;
 
         if(!empty($zone_id)){
             $where = " a.id = {$zone_id} ";
         }else{
-            $where = "a.user_id = '{$user_info['user_id']}'";
+            $where = "a.user_id = '{$current_user->ID}'";
         }
         $sql = "select a.*,
                 case a.zone_match_type
@@ -980,13 +980,13 @@ class Student_Zone
                 where {$where} ";
         //print_r($sql);
         $row = $wpdb->get_row($sql,ARRAY_A);
-        $row['user_head'] = $user_info['user_head'];
-        $row['user_ID'] = $user_info['user_ID'];
+        $row['user_head'] = get_user_meta($current_user->ID,'user_head')[0];
+        $row['user_ID'] = get_user_meta($current_user->ID,'user_ID')[0];
         $city = !empty($row['zone_city']) ? '（'.$row['zone_city'].'）' : '';
         $row['zone_name'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'赛组委会';
         
         //获取推荐人
-        $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$user_info['referee_id']} and meta_key in ('user_real_name','user_ID') ";
+        $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$current_user->ID} and meta_key in ('user_real_name','user_ID') ";
         $meta_value = $wpdb->get_results($sql,ARRAY_A);
         if(!empty($meta_value)){
             $meta = array_column($meta_value,'meta_value','meta_key');
