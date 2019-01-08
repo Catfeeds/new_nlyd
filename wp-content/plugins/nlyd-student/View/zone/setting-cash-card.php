@@ -82,7 +82,7 @@ jQuery(document).ready(function($) {
                 var _this=$(this);
                 if(!_this.hasClass('disabled')){
                     $.ajax({
-                        data: data,
+                        data: data.field,
                         beforeSend:function(XMLHttpRequest){
                             _this.addClass('disabled')
                         },
