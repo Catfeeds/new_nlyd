@@ -11,7 +11,7 @@
                 </a>
                 <h1 class="mui-title"><div><?=__('提 现', 'nlyd-student')?></div></h1>
             </header>
-            <div class="layui-row nl-border nl-content">
+            <div class="layui-row nl-border nl-content" style="padding-bottom: 333px;">
                 <div class="width-padding layui-row width-margin-pc">
                     <div class="bold c_black getCash_type"><?=__('选择提现方式', 'nlyd-student')?></div>
                     <form class="layui-form ">
