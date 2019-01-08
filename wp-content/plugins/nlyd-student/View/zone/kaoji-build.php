@@ -16,9 +16,12 @@
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('考级责任人', 'nlyd-student')?>：</span></div>
+                            <div class="lable_row">
+                                <span class="c_black"><?=__('考级责任人', 'nlyd-student')?>：</span>
+                                <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
+                            </div>
                             <div class="input_row">
-                                <select class="js-data-select-ajax" name="person_liable" style="width: 100%" data-action="get_manage_user" data-placeholder="选择考级责任人" >
+                                <select class="js-data-select-ajax" name="person_liable" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                     <option value="<?=$match['person_liable']?>" selected><?=$match['person']?></option>
                                 </select>
                             </div>

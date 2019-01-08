@@ -24,9 +24,12 @@
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('战队负责人', 'nlyd-student')?>：</span></div>
+                            <div class="lable_row">
+                                <span class="c_black"><?=__('战队负责人', 'nlyd-student')?>：</span>
+                                <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
+                            </div>
                             <div class="input_row">
-                                <select class="js-data-select-ajax" name="team_director" style="width: 100%" data-action="get_manage_user" data-placeholder="选择战队负责人" >
+                                <select class="js-data-select-ajax" name="team_director" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                     <option value="<?=$team_director?>" selected><?=$real_name?></option>
                                 </select>
                             </div>

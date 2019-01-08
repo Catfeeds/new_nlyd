@@ -326,8 +326,8 @@ if(!class_exists('StudentController')){
                     }
                     if(!isWeiXin()){
                         if(!isSafari()){
-                            alert('<?=__('请使用微信或Safari浏览器打开', 'nlyd-student')?>')
-                            window.history.back(-1);
+                            // alert('<?=__('请使用微信或Safari浏览器打开', 'nlyd-student')?>')
+                            // window.history.back(-1);
                         }
                     }
                 </script>
@@ -348,8 +348,8 @@ if(!class_exists('StudentController')){
                     }
                     if(!isWeiXin()){
                         if(!window.chrome){
-                            alert('<?=__('请使用微信或谷歌浏览器打开', 'nlyd-student')?>')
-                            window.location.href="https://a.app.qq.com/o/simple.jsp?pkgname=com.android.chrome";
+                            // alert('<?=__('请使用微信或谷歌浏览器打开', 'nlyd-student')?>')
+                            // window.location.href="https://a.app.qq.com/o/simple.jsp?pkgname=com.android.chrome";
                         }
                     }
                 </script>
