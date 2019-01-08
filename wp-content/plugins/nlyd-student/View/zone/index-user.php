@@ -71,7 +71,7 @@
                         <?php foreach ($list as $v){
                             if($v['user_status'] == -1){
                                 $title = '审核中';
-                                $url = '';
+                                $url = home_url('/zone/applySuccess/type_id/'.$v['id']);
                             }
                             elseif ($v['user_status'] == -2){
                                 $title = '审核失败';
@@ -113,18 +113,18 @@
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>-->
-                    <a class="apply_list c_black layui-row" href="<?=home_url('zone/introduce');?>">
+                    <!--<a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
                         <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?=__('赞助脑力比赛', 'nlyd-student')?></div>
+                        <div class="apply_list_line center"><?/*=__('赞助脑力比赛', 'nlyd-student')*/?></div>
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('zone/introduce');?>">
+                    <a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
                         <div class="apply_list_line pull-left c_red ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?=__('申请代理赛事赞助', 'nlyd-student')?></div>
+                        <div class="apply_list_line center"><?/*=__('申请代理赛事赞助', 'nlyd-student')*/?></div>
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
+                    </a>-->
                 </div>
                
         </div>            

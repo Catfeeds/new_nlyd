@@ -2145,7 +2145,7 @@ class Student_Ajax
             case 'mobile':
 
                 //短信验证
-                $this->get_sms_code($_POST['user_login'],19,true,$_POST['password']);
+               // $this->get_sms_code($_POST['user_login'],19,true,$_POST['password']);
 
                 break;
             case 'pass';
@@ -2187,6 +2187,7 @@ class Student_Ajax
             if($_POST['referee_id'] > 0){
                 //获取我的推广人上级
                 $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$_POST['referee_id']}");
+
                 if(empty($user->referee_id) && $_POST['referee_id'] != $user->ID && $referee_id != $user->ID){
 
                     $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user->ID));
@@ -2221,9 +2222,10 @@ class Student_Ajax
                     if($_POST['referee_id'] > 0){
                         //获取我的推广人上级
                         $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$_POST['referee_id']}");
-                        if(empty($user->referee_id) && $_POST['referee_id'] != $user->ID && $referee_id != $user->ID){
+                        if(empty($user->referee_id) && $_POST['referee_id'] != $result && $referee_id != $result){
 
-                            $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$result));
+                            $a=$wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$result));
+                            //var_dump($a);die;
                         }
                     }
 
@@ -2231,7 +2233,8 @@ class Student_Ajax
                 }else{
                     wp_send_json_error(array('info'=>__('登录失败', 'nlyd-student')));
                 }
-            }else{
+            }
+            else{
 
                 wp_send_json_error(array('info'=>__('不存在此用户,请先注册', 'nlyd-student')));
             }
@@ -4514,6 +4517,15 @@ class Student_Ajax
             if(empty($_POST['chairman_id']) || empty($_POST['secretary_id'])){
                 wp_send_json_error(array('info'=>'组委会主席或者秘书长为必选项'));
             }
+            //判断主席/秘书长资料
+            $chairman_meta = get_user_meta($_POST['chairman_id'],'user_ID_Card')[0];
+            if(empty($chairman_meta)){
+                wp_send_json_error(array('info'=>__('该主席未上传身份证,请核实')));
+            }
+            $secretary_meta = get_user_meta($_POST['secretary_id'],'user_ID_Card');
+            if(empty($secretary_meta)){
+                wp_send_json_error(array('info'=>__('该秘书长未上传身份证,请核实')));
+            }
         }
         if(!empty($_FILES['business_licence'])){
             $upload_dir = wp_upload_dir();
@@ -5874,7 +5886,7 @@ class Student_Ajax
                     }
                     $result = update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
                 }else{
-                    wp_send_json_error(array('info'=>__('请选择收款码')));
+                    //wp_send_json_error(array('info'=>__('请选择收款码')));
                 }
                 break;
             case 'aliPay':
@@ -5893,7 +5905,7 @@ class Student_Ajax
                     //print_r($_POST['user_coin_code']);
                     $result = update_user_meta($current_user->ID,'aliPay_coin_code',$_POST['aliPay_coin_code']);
                 }else{
-                    wp_send_json_error(array('info'=>__('请选择收款码')));
+                    //wp_send_json_error(array('info'=>__('请选择收款码')));
                 }
                 break;
             default:
