@@ -924,26 +924,28 @@ class Student_Gradings extends Student_Home
                 }
                 else{
                     if($grading_result == 1){
-                        $a = $wpdb->update($wpdb->prefix.'grading_logs',array('grading_result'=>1),array('id'=>$id));
+                        $a = $wpdb->update($wpdb->prefix.'grading_logs',array('grading_result'=>1,'grading_lv'=>$lv),array('id'=>$id));
                     }else{
-                        $a = 1;
+                        $a = true;
                     }
                 }
                 if(empty($rank_row)){
+
                     if($grading_result == 1){
                         $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
                     }else{
-                        $b = 1;
+
+                        $b = true;
                     }
                 }else{
 
                     if(!empty($update)){
                         $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id'],'skill_type'=>1));
                     }else{
-                        $b = 1;
+                        $b = true;
                     }
                 }
-                //var_dump($c .'---'.$a.'---'.$b);die;
+                //var_dump($a.'---'.$b);die;
                 if($a && $b){
                     $wpdb->query('COMMIT');
                 }else{
