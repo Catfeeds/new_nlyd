@@ -141,13 +141,13 @@ class Student_Zone
      */
      public function profit(){
 
-        global $wpdb,$user_info;
+        global $wpdb,$current_user;
          //获取用户今日收益
-         $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
+         $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
          $data['stream'] = $wpdb->get_var($sql1);
 
          //获取用户累计收益
-         $sql2 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and user_income > 0 ";
+         $sql2 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and user_income > 0 ";
          $data['stream_total'] = $wpdb->get_var($sql2);
 
          //获取可提现金额
@@ -164,8 +164,23 @@ class Student_Zone
 
         //获取机构信息
         $data['zone'] = $this->get_zone_meta();
-        $data['bank_card_num'] = substr_replace($data['zone']['bank_card_num'],'********',4,8);
-        //获取能提现的最大金额
+        if(!empty($data['zone'])){
+            $data['bank_card_num'] = substr_replace($data['zone']['bank_card_num'],'********',4,8);
+        }else{
+            global $wpdb,$current_user;
+            //获取相关收款设置
+            $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$current_user->ID} and meta_key in ('aliPay_coin_code','user_coin_code','user_cheques_bank') ";
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+            if(!empty($rows)){
+                $meta = array_column($rows,'meta_value','meta_key');
+                $data['aliPay_coin_code'] = empty($meta['aliPay_coin_code']) ? '' : unserialize($meta['aliPay_coin_code'])[0];
+                $data['user_coin_code'] = empty($meta['user_coin_code']) ? '' : unserialize($meta['user_coin_code'])[0];
+                $user_cheques_bank = empty($meta['aliPay_coin_code']) ? '' : unserialize($meta['user_cheques_bank']);
+                $data['user_cheques_bank'] = empty($user_cheques_bank) ? '' : $user_cheques_bank['open_bank'].' '.substr_replace($user_cheques_bank['open_card_num'],'********',4,8);
+            }
+        }
+
+         //获取能提现的最大金额
         $balance = $this->get_stream_total();
         $data['balance'] = $balance > 0 ? $balance : number_format(0,2);
 
@@ -342,6 +357,7 @@ class Student_Zone
          global $wpdb,$current_user;
          //获取用户发布比赛的权限
          $match_role_id = $wpdb->get_var("select match_role_id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+
          //print_r("select match_role_id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
          if(empty($match_role_id)){
              $this->get_404(array('message'=>__('你未拥有该权限,请联系管理员授权', 'nlyd-student'),'return_url'=>home_url('/zone/')));
@@ -993,7 +1009,8 @@ class Student_Zone
         $row['zone_name'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'赛组委会';
         
         //获取推荐人
-        $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$current_user->ID} and meta_key in ('user_real_name','user_ID') ";
+        $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$row['referee_id']} and meta_key in ('user_real_name','user_ID') ";
+        //print_r($sql);
         $meta_value = $wpdb->get_results($sql,ARRAY_A);
         if(!empty($meta_value)){
             $meta = array_column($meta_value,'meta_value','meta_key');
