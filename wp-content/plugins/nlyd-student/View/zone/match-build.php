@@ -45,6 +45,14 @@
                             <div class="lable_row"><span class="c_black"><?=__('比赛费用', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row" disabled type="text" id="match_cost" name="match_cost" value="<?=$match['match_cost']?>"></div>
                         </div>
+                        <?php if(!empty($match['entry_end_time'])):?>
+                            <div>
+                                <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
+                                <div class="input_row">
+                                    <input class="radius_input_row nl-foucs" value="<?=$match['data_entry_end_time']?>" type="text" readonly name="end_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
+                                </div>
+                            </div>
+                        <?php endif;?>
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('开赛日期', 'nlyd-student')?>：</span>
@@ -57,14 +65,6 @@
                                 <input class="radius_input_row nl-foucs" type="text" readonly name="match_start_time" data-time="<?=$match['data_time']?>"  id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开赛日期', 'nlyd-student')?>" value="<?=$match['match_start_time']?>">
                             </div>
                         </div>
-                        <?php if(!empty($match['entry_end_time'])):?>
-                            <div>
-                                <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
-                                <div class="input_row">
-                                    <input class="radius_input_row nl-foucs" value="<?=$match['data_entry_end_time']?>" type="text" readonly name="end_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
-                                </div>
-                            </div>
-                        <?php endif;?>
                         <div class="c_red mt_10">
                             <?=__('比赛发布成功后，管理员可根据实际情况自定义修改赛程时间', 'nlyd-student')?>
                         </div>
@@ -158,7 +158,6 @@ var mobileSelect2 = new MobileSelect({
 //---------------------------开赛日期------------------------------
 if($('#match_date').length>0 && $('#match_date').attr('data-time').length>0){
     var timeValue=$('#match_date').attr('data-time').split('-');
-    console.log(timeValue)
     $.each(match_date_Data,function(index,value){
         if(parseInt(timeValue[0])==parseInt(value.value)){
             posiotion_match_date=[index,0,0,0,0];
@@ -207,7 +206,6 @@ var mobileSelect3 = new MobileSelect({
 //---------------------------结束日期------------------------------
 if($('#entry_end_time').length>0 && $('#entry_end_time').attr('data-time').length>0){
     var timeValue=$('#entry_end_time').attr('data-time').split('-');
-    console.log(timeValue)
     $.each(match_date_Data,function(index,value){
         if(parseInt(timeValue[0])==value.value){
             posiotion_match_end_date=[index,0,0,0,0];
@@ -234,9 +232,9 @@ if($('#entry_end_time').length>0 && $('#entry_end_time').attr('data-time').lengt
         }
     })
 }
-var mobileSelect3 = new MobileSelect({
+var mobileSelect4 = new MobileSelect({
     trigger: '#entry_end_time',
-    title: "<?=__('开赛日期', 'nlyd-student')?>",
+    title: "<?=__('报名截止', 'nlyd-student')?>",
     wheels: [
         {data: match_date_Data}
     ],
