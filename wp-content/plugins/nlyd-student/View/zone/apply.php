@@ -7,7 +7,7 @@
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-bottom">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback">
+                <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/indexUser/');?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__($zone_type_name.'资料填写', 'nlyd-student')?></div></h1>
