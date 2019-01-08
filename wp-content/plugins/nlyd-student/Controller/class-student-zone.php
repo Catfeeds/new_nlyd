@@ -758,6 +758,13 @@ class Student_Zone
         load_view_template($view,$row);
     }
     /**
+     * 战队列表
+     */
+     public function teamList(){
+        $view = student_view_path.CONTROLLER.'/team-list.php';
+        load_view_template($view);
+    }
+    /**
      * 战队申请管理
      */
      public function teamApply(){
@@ -1093,7 +1100,11 @@ class Student_Zone
         wp_enqueue_style( 'my-student-userCenter' );
         // if(ACTION == 'index'){
         // }
-
+        
+        if(ACTION == 'teamList' ){
+            wp_register_style( 'my-student-teamList', student_css_url.'team.css',array('my-student') );
+            wp_enqueue_style( 'my-student-teamList' );
+        }
         if(ACTION == 'apply' || ACTION == 'courseBuild' || ACTION == 'kaojiBuild'  || ACTION == 'settingAdd' || ACTION == 'teamBuild' || ACTION == 'teamAddMember' || ACTION == 'coachAdd'){
             wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'zone_select2_js' );
