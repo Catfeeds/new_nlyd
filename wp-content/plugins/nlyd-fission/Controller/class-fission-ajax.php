@@ -319,22 +319,22 @@ class Fission_Ajax
         $wpdb->query('START TRANSACTION');
         if($status === 2){
             //查询当前提现记录
-            $user_extract_logs = $wpdb->get_row("SELECT extract_id,extract_amount,extract_type FROM {$wpdb->prefix}user_extract_logs WHERE id='{$id}'", ARRAY_A);
+            $user_extract_logs = $wpdb->get_row("SELECT extract_id,extract_amount,extract_type,stream_log_id FROM {$wpdb->prefix}user_extract_logs WHERE id='{$id}'", ARRAY_A);
             //判断金额是否足够
-            $money = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$user_extract_logs['extract_id']}'");
+            $money = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$user_extract_logs['extract_id']}' AND id != '{$user_extract_logs['stream_log_id']}'");
             if($money < $user_extract_logs['extract_amount']) wp_send_json_error(['info' => '用户余额不足!']);
             //通过,增加收益记录
             //查询机构
-            $type_id = $wpdb->get_var("SELECT type_id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_extract_logs['extract_id']}'");
-            $insertData = [
-                'user_id'=> $user_extract_logs['extract_id'],
-                'user_type'=> $type_id,
-                'income_type'=> 'extract',
-                'user_income'=> -1*$user_extract_logs['extract_amount'],
-                'extract_type'=> $user_extract_logs['extract_type'],
-                'created_time' => get_time('mysql')
-            ];
-            $bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData);
+//            $type_id = $wpdb->get_var("SELECT type_id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_extract_logs['extract_id']}'");
+//            $insertData = [
+//                'user_id'=> $user_extract_logs['extract_id'],
+//                'user_type'=> $type_id,
+//                'income_type'=> 'extract',
+//                'user_income'=> -1*$user_extract_logs['extract_amount'],
+//                'extract_type'=> $user_extract_logs['extract_type'],
+//                'created_time' => get_time('mysql')
+//            ];
+            $bool = $wpdb->update($wpdb->prefix.'user_stream_logs',['extract_type' => $user_extract_logs['extract_type']], ['id' => $user_extract_logs['stream_log_id']]);
 //            leo_dump($wpdb->last_query);die;
             if(!$bool){
                 $wpdb->query('ROLLBACK');

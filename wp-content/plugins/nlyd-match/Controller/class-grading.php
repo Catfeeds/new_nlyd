@@ -26,12 +26,16 @@ class Grading
 
             $role = 'grading_trainLogScore';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'grading_brainpower';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
 
         add_submenu_page('edit.php?post_type=grading','考级选手','考级选手','grading_students','grading-students',array($this,'gradingStudents'));
         add_submenu_page('edit.php?post_type=grading','添加选手','添加选手','add_grading_students','add-grading-students',array($this,'addGradingStudents'));
         add_submenu_page('edit.php?post_type=grading','答题记录','答题记录','grading_studentScore','grading-studentScore',array($this,'gradingStudentScore'));
         add_submenu_page('edit.php?post_type=grading','训练记录','训练记录','grading_trainLog','grading-trainLog',array($this,'gradingTrainLog'));
+        add_submenu_page('edit.php?post_type=grading','考级名录','考级名录','grading_brainpower','grading-grading_brainpower',array($this,'gradingBrainpower'));
         add_submenu_page('edit.php?post_type=grading','训练答题记录','训练答题记录','grading_trainLogScore','grading-trainLogScore',array($this,'trainLogScore'));
     }
 
@@ -1176,6 +1180,132 @@ class Grading
 
                 <br class="clear">
             </div>
+
+            <br class="clear">
+        </div>
+        <?php
+    }
+
+    /**
+     * 考级名录
+     */
+    public function gradingBrainpower(){
+        global $wpdb;
+        $categoryList = getCategory();
+        $categoryList = array_reduce($categoryList,function(&$newArray,$v){
+            if($v['alis'] == 'arithmetic') $v['alis'] = 'compute';
+            $newArray[$v['alis']] = $v;
+            return $newArray;
+        });
+
+        $cate_type = isset($_GET['ctype']) ? trim($_GET['ctype']) : current($categoryList)['alis'];
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $page < 1 && $page = 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        $rows = $wpdb->get_results("SELECT user_id,`{$cate_type}` AS skill_level FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `{$cate_type}`>0 LIMIT {$start},{$pageSize}", ARRAY_A);
+        if($rows){
+            foreach ($rows as $k => &$row){
+                $user_meta = get_user_meta($row['user_id']);
+                $row['user_ID'] = isset($user_meta['user_ID']) ? $user_meta['user_ID'][0] : '';
+                $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
+                $row['user_head'] = isset($user_meta['user_head']) ? $user_meta['user_head'][0] : '';
+                $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
+                if($row['real_name'] == '') unset($row);
+            }
+        }
+
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">考级名录</h1>
+
+
+            <hr class="wp-header-end">
+
+                <p class="search-box">
+                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                    <input type="search" id="search_val" name="s" placeholder="姓名/手机/ID" value="<?=$searchStr?>">
+                    <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?post_type=grading&page=grading-grading_brainpower&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                </p>
+            <ul class="subsubsub">
+                <?php
+                $caLiArr = [];
+                foreach ($categoryList as $clv){
+                    $caLiArr[] = '<li class="all"><a href="'.admin_url('edit.php?post_type=grading&page=grading-grading_brainpower&ctype='.$clv['alis']).'" '.($cate_type==$clv['alis']?'class="current"':'').' aria-current="page">'.$clv['post_title'].'<span class="count"></span></a></li>';
+                }
+                echo join(' | ',$caLiArr);
+                ?>
+
+            </ul>
+                <div class="tablenav top">
+                    <div class="tablenav-pages">
+                        <span class="displaying-num"><?=$count['count']?>个项目</span>
+                        <?=$pageHtml?>
+                    </div>
+                    <br class="clear">
+                </div>
+                <h2 class="screen-reader-text">考级选手</h2>
+            <table class="wp-list-table widefat fixed striped users">
+                    <thead>
+                    <tr>
+                        <th scope="col" id="real_name" class="manage-column column-real_name column-primary sortable">
+                            <a href="javascript:;">
+                                <span>姓名</span>
+                                <span class="sorting-indicator"></span>
+                            </a>
+                        </th>
+                        <th scope="col" id="ID" class="manage-column column-ID">ID</th>
+                        <th scope="col" id="sex" class="manage-column column-sex">性别</th>
+                        <th scope="col" id="grading_level" class="manage-column column-grading_level">级别</th>
+                        <th scope="col" id="cate_type" class="manage-column column-cate_type">类型</th>
+                    </tr>
+                     </thead>
+
+                    <tbody id="the-list" data-wp-lists="list:user">
+
+                    <?php foreach ($rows as $row){?>
+                    <tr id="user-<?=$row['user_id']?>"><td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名">
+                            <img alt="" src="<?=$row['user_head']?>" class="avatar avatar-32 photo" height="32" width="32">
+                            <strong><?=$row['real_name']?></strong>
+                            <br>
+
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="ID column-ID" data-colname="ID"><?=$row['user_ID']?></td>
+                        <td class="sex column-sex" data-colname="性别"><?=$row['user_sex']?></td>
+                        <td class="grading_level column-grading_level" data-colname="级别"><?=$row['skill_level']?></td>
+                        <td class="cate_type column-cate_type" data-colname="类型">
+                            <?=$categoryList[$cate_type]['post_title']?>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                    <tfoot>
+                    <tr>
+                        <th scope="col" class="manage-column column-real_name column-primary sortable">
+                            <a href="javascript:;">
+                                <span>姓名</span>
+                                <span class="sorting-indicator"></span>
+                            </a>
+                        </th>
+                        <th scope="col" class="manage-column column-ID">ID</th>
+                        <th scope="col" class="manage-column column-sex">性别</th>
+                        <th scope="col" class="manage-column column-grading_level">级别</th>
+                        <th scope="col" class="manage-column column-cate_type">类型</th>
+                    </tr>
+                     </tfoot>
+
+                </table>
+                <div class="tablenav bottom">
+
+
+                    <div class="tablenav-pages">
+                        <span class="displaying-num"><?=$count['count']?>个项目</span>
+                        <?=$pageHtml?>
+                    </div>
+                    <br class="clear">
+                </div>
+
 
             <br class="clear">
         </div>
