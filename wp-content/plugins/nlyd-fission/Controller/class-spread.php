@@ -978,7 +978,7 @@ class Spread{
                             ?>
                         </td>
                         <td class="user_income column-user_income" data-colname="数额">
-                            <span style="<?=$row['user_income'] < 0 ? 'color:#c41d00;': ($row['user_income']>0?'color:#0087c4;':'')?>;"><?=$row['user_income']?></span>
+                            <span style="<?=$row['user_income'] < 0 ? 'color:#c41d00;': ($row['user_income']>0?'color:#0087c4;':'')?>;"><?=$row['user_income']?$row['user_income']:'未到账'?></span>
 
                         </td>
                         <td class="created_time column-created_time" data-colname="时间"><?=$row['created_time']?> </td>
@@ -1112,7 +1112,6 @@ class Spread{
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                     <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/机构</th>
-                    <th scope="col" id="extract_user_type" class="manage-column column-extract_user_type">提现类型</th>
                     <th scope="col" id="extract_amount" class="manage-column column-extract_amount">提现金额</th>
                     <th scope="col" id="extract_type" class="manage-column column-extract_type">收款类型</th>
                     <th scope="col" id="extract_account" class="manage-column column-extract_account">收款账号</th>
@@ -1128,18 +1127,7 @@ class Spread{
 
                 <?php
                 foreach ($rows as $row){
-                    if($row['zone_name']){
-                        $real_name = $row['zone_name'];
-                        $extract_type_name = '机构提现';
-                    }else{
-                        $user_real_name = get_user_meta($row['extract_id'], 'user_real_name', true);
-                        if($user_real_name) {
-                            $real_name = $user_real_name['real_name'];
-                        }else{
-                            $real_name = get_user_by('ID',$row['extract_id'])->user_login;
-                        }
-                        $extract_type_name = '用户提现';
-                    }
+                    $real_name = get_user_meta($row['extract_id'],'user_real_name',true)['real_name'];
                     ?>
                     <tr data-id="<?=$row['id']?>">
                         <th scope="row" class="check-column">
@@ -1155,9 +1143,8 @@ class Spread{
                             <br>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
-                        <td class="extract_user_type column-extract_user_type" data-colname="提现金额"><?=$extract_type_name?> </td>
                         <td class="extract_amount column-extract_amount" data-colname="提现金额"><?=$row['extract_amount']?> </td>
-                        <td class="extract_type column-extract_type" data-colname="收款类型">
+                        <td class="extract_type column-extract_type" data-colname="收款类型" id="img-<?=$row['extract_id']?>">
                             <?php
                                 switch ($row['extract_type']){
                                     case 'weChat':
@@ -1172,7 +1159,21 @@ class Spread{
                                 }
                             ?>
                         </td>
-                        <td class="extract_account column-extract_account" data-colname="收款账号"><?=$row['extract_account']?> </td>
+                        <td class="extract_account column-extract_account" data-colname="收款账号" id="img-<?=$row['extract_id']?>">
+                            <?php
+                            switch ($row['extract_type']){
+                                case 'weChat':
+                                    echo '<img style="height:50px;" src="'.$row['extract_code_img'].'" />';
+                                    break;
+                                case 'wallet':
+                                    echo '钱包';
+                                    break;
+                                case 'bank':
+                                    echo $row['extract_account'];
+                                    break;
+                            }
+                            ?>
+                        </td>
                         <td class="apply_time column-apply_time" data-colname="申请时间"> <?=$row['apply_time']?></td>
                         <td class="censor_time column-censor_time" data-colname="审核时间"> <?=$row['censor_time']?></td>
                         <td class="extract_status column-extract_status" data-colname="提现状态">
@@ -1220,7 +1221,6 @@ class Spread{
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                     <th scope="col" class="manage-column column-real_name column-primary">姓名/机构</th>
-                    <th scope="col" class="manage-column column-extract_user_type">提现类型</th>
                     <th scope="col" class="manage-column column-extract_amount">提现金额</th>
                     <th scope="col" class="manage-column column-extract_type">收款类型</th>
                     <th scope="col" class="manage-column column-extract_account">收款账号</th>
@@ -1267,6 +1267,21 @@ class Spread{
                             });
                         }
                     });
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        var _title = '';
+                        <?php
+                        foreach ($rows as $row){
+                        ?>
+                        layer.photos({//图片预览
+                            photos: '#img-<?=$row['extract_id']?>',
+                            move : false,
+                            title : '',
+                            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                        })
+
+                        <?php } ?>
+                    });
                 });
             </script>
         </div>
@@ -1280,6 +1295,10 @@ class Spread{
 
         switch ($_GET['page']){
             case 'fission':
+                wp_register_script('layui-js',match_js_url.'layui/layui.js');
+                wp_enqueue_script( 'layui-js' );
+                break;
+            case 'fission-profit-extract-log':
                 wp_register_script('layui-js',match_js_url.'layui/layui.js');
                 wp_enqueue_script( 'layui-js' );
                 break;

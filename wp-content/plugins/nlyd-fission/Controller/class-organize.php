@@ -72,7 +72,7 @@ class Organize{
         $leftJoin = '';
         $joinWhere = '';
         $where = "WHERE zm.type_id='{$type}'";
-        if($status_type>0){
+        if($status_type !== 0){
             $where .= "AND zm.user_status='{$status_type}'";
         }
         if($status_type != -2){
