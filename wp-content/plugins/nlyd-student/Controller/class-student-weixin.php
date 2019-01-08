@@ -229,7 +229,7 @@ class Student_Weixin
             }
         }
         //添加推广人
-        if(isset($_SESSION['referee_id_wx']) && !(get_user_by('ID',$user_id)->referee_id)){
+        if(isset($_SESSION['referee_id_wx']) && !(get_user_by('ID',$user_id)->referee_id) && $user_id != $_SESSION['referee_id_wx'] && get_user_by('ID',$_SESSION['referee_id_wx'])->referee_id != $user_id){
             //获取我的推广人上级
             $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$_SESSION['referee_id_wx']}");
             if($referee_id != $user_id){
