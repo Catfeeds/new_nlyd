@@ -5,7 +5,7 @@ class Spread{
     {
         if($is_list === false){
             add_action( 'admin_menu', array($this,'register_organize_menu_page') );
-//            add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
+            add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
         }
     }
     public function register_organize_menu_page(){
@@ -1144,7 +1144,7 @@ class Spread{
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
                         <td class="extract_amount column-extract_amount" data-colname="提现金额"><?=$row['extract_amount']?> </td>
-                        <td class="extract_type column-extract_type" data-colname="收款类型" id="img-<?=$row['extract_id']?>">
+                        <td class="extract_type column-extract_type" data-colname="收款类型">
                             <?php
                                 switch ($row['extract_type']){
                                     case 'weChat':
@@ -1159,7 +1159,7 @@ class Spread{
                                 }
                             ?>
                         </td>
-                        <td class="extract_account column-extract_account" data-colname="收款账号" id="img-<?=$row['extract_id']?>">
+                        <td class="extract_account column-extract_account" data-colname="收款账号" <?=$row['extract_type'] == 'weChat' ? 'id="imgs-'.$row['extract_id'].'"':''?>>
                             <?php
                             switch ($row['extract_type']){
                                 case 'weChat':
@@ -1274,7 +1274,7 @@ class Spread{
                         foreach ($rows as $row){
                         ?>
                         layer.photos({//图片预览
-                            photos: '#img-<?=$row['extract_id']?>',
+                            photos: '#imgs-<?=$row['extract_id']?>',
                             move : false,
                             title : '',
                             anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
@@ -1294,10 +1294,10 @@ class Spread{
     public function register_scripts(){
 
         switch ($_GET['page']){
-            case 'fission':
-                wp_register_script('layui-js',match_js_url.'layui/layui.js');
-                wp_enqueue_script( 'layui-js' );
-                break;
+//            case 'fission':
+//                wp_register_script('layui-js',match_js_url.'layui/layui.js');
+//                wp_enqueue_script( 'layui-js' );
+//                break;
             case 'fission-profit-extract-log':
                 wp_register_script('layui-js',match_js_url.'layui/layui.js');
                 wp_enqueue_script( 'layui-js' );
