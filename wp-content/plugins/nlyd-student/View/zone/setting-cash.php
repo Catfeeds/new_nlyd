@@ -46,6 +46,7 @@
                         <div class="apply_list_line right_icoin"><i class="iconfont fs_20">&#xe727;</i></div>
                     </a>
                 </div>
-        </div>            
+            </div>            
+        </div>
     </div>
 </div>
