@@ -58,22 +58,26 @@ class Organize{
      *机构列表
      */
     public function organizeList(){
+        $typeList = $this->getOrganizeTypeList();
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
-        $type = isset($_GET['ctype']) ? intval($_GET['ctype']) : 0;
-        $status_type = isset($_GET['stype']) ? intval($_GET['stype']) : 1;
+        $type = isset($_GET['ctype']) ? intval($_GET['ctype']) : $typeList[0]['id'];
+        $status_type = isset($_GET['stype']) ? intval($_GET['stype']) : 0;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
 
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $where = "WHERE zm.user_status='{$status_type}'";
+
         $leftJoin = '';
         $joinWhere = '';
-        if($type>0){
-            $where .= " AND zm.type_id='{$type}'";
+        $where = "WHERE zm.type_id='{$type}'";
+        if($status_type>0){
+            $where .= "AND zm.user_status='{$status_type}'";
         }
-
+        if($status_type != -2){
+            $where .= "AND zm.user_status!=-2";
+        }
         if($searchStr != ''){
             $leftJoin = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'";
             $joinWhere = " AND (um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR u.user_login LIKE '%{$searchStr}%')";
@@ -93,6 +97,7 @@ class Organize{
                 {$leftJoin} 
                 {$where} 
                 {$joinWhere} 
+                ORDER BY zm.user_status ASC
                 LIMIT {$start},{$pageSize}",ARRAY_A);
 //        leo_dump($wpdb->last_query);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -106,14 +111,13 @@ class Organize{
             'current' => $page
         ));
         //各种数量
-        $numSql = "SELECT count(id) FROM {$wpdb->prefix}zone_meta";
-        $ok_num  = $wpdb->get_var($numSql.' WHERE user_status=1');
-        $apply_num  = $wpdb->get_var($numSql.' WHERE user_status=-1');
-        $refuse_num  = $wpdb->get_var($numSql.' WHERE user_status=-2');
-        $numSql .= " WHERE user_status='{$status_type}'";
-        $all_num = $wpdb->get_var($numSql);
+        $numSql = "SELECT count(id) FROM {$wpdb->prefix}zone_meta WHERE type_id='{$type}'";
+        $ok_num  = $wpdb->get_var($numSql.' AND user_status=1');
+        $apply_num  = $wpdb->get_var($numSql.' AND user_status=-1');
+        $refuse_num  = $wpdb->get_var($numSql.' AND user_status=-2');
+        $all_num = $wpdb->get_var($numSql.' AND user_status IN(1,-1)');
         //类型列表
-        $typeList = $this->getOrganizeTypeList();
+
         $typeListCount = count($typeList)-1;
         ?>
         <div class="wrap">
@@ -125,22 +129,24 @@ class Organize{
 
             <h2 class="screen-reader-text">过滤机构列表</h2>
             <ul class="subsubsub">
+<!--                <li class="all"><a href="--><?//=admin_url('admin.php?page=fission&ctype=0&stype='.$status_type)?><!--" --><?//=$type===0?'class="current"':''?><!-- aria-current="page">全部<span class="count">（--><?//=$all_num?><!--）</span></a> |</li>-->
+                <?php
+                foreach ($typeList as $tlk => $tlv){
+                    $typeNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}zone_meta WHERE type_id='{$tlv['id']}' AND user_status IN(1,-1,-2)");
+                    ?>
+                    <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype='.$tlv['id'])?>" <?=$type==$tlv['id']?'class="current"':''?> aria-current="page"><?=$tlv['zone_type_name']?><span class="count">（<?=$typeNum>0?$typeNum:0?>）</span></a><?=$tlk<$typeListCount?' | ':''?></li>
+                    <?php
+                }
+                ?>
+            </ul>
+            <br class="clear">
+            <ul class="subsubsub">
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission&stype=0&ctype='.$type)?>" <?=$status_type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> |</li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission&stype=1&ctype='.$type)?>" <?=$status_type===1?'class="current"':''?> aria-current="page">已通过<span class="count">（<?=$ok_num?>）</span></a> |</li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission&stype=-1&ctype='.$type)?>" <?=$status_type===-1?'class="current"':''?> aria-current="page">待审核<span class="count">（<?=$apply_num?>）</span></a> |</li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission&stype=-2&ctype='.$type)?>" <?=$status_type===-2?'class="current"':''?> aria-current="page">未通过<span class="count">（<?=$refuse_num?>）</span></a> </li>
             </ul>
-            <br class="clear">
-            <ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype=0&stype='.$status_type)?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> |</li>
-                <?php
-                foreach ($typeList as $tlk => $tlv){
-                    $typeNum = $wpdb->get_var($numSql." AND type_id='{$tlv['id']}'");
-                ?>
-                <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype='.$tlv['id']).'&stype='.$status_type?>" <?=$type==$tlv['id']?'class="current"':''?> aria-current="page"><?=$tlv['zone_type_name']?><span class="count">（<?=$typeNum>0?$typeNum:0?>）</span></a><?=$tlk<$typeListCount?' | ':''?></li>
-                <?php
-                }
-                ?>
-            </ul>
+
             <style type="text/css">
                 .column-name{
                     width: 230px;

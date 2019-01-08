@@ -18,15 +18,15 @@
                         <?php if(empty($zone)){ ?>
                         <div class="getCash_type_row">
                             <input type="radio" name="extract_type" value="user_bank" title="<?=__("提现至银行卡（{$user_cheques_bank}）", 'nlyd-student')?>" checked>
-                            <?php if(empty($user_cheques_bank)):?> <a href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
+                            <?php if(empty($user_cheques_bank)):?> <a class="c_red dis_inlineBlock ml_10" href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
                         </div>
                         <div class="getCash_type_row">
                             <input type="radio" name="extract_type" value="weChat" title="<?=__('提现至微信', 'nlyd-student')?>" >
-                            <?php if(empty($user_coin_code)):?> <a href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
+                            <?php if(empty($user_coin_code)):?> <a class="c_red dis_inlineBlock ml_10" href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
                         </div>
                         <div class="getCash_type_row">
                             <input type="radio" name="extract_type" value="aliPay" title="<?=__('提现至支付宝', 'nlyd-student')?>" >
-                            <?php if(empty($aliPay_coin_code)):?> <a href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
+                            <?php if(empty($aliPay_coin_code)):?> <a class="c_red dis_inlineBlock ml_10" href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
                         </div>
                         <div class="getCash_type_row">
                             <input type="radio" name="extract_type" value="wallet" title="<?=__('提现至平台账户钱包', 'nlyd-student')?>">

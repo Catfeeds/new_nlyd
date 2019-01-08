@@ -1744,13 +1744,30 @@ class Download
         return;
 
     }
+    /**
+     * 测试公共导出
+     */
+    public function testPublicExport(){
+        $data = [
+            ['age' => 10, 'name' => '马尿', 'sex' => '女'],
+            ['age' => 12, 'name' => '罗一斤', 'sex' => '女'],
+        ];
+        $title = '测试导出';
+        $field = [
+            ['letter' => 'A','width' => 80, 'title_key' => 'age', 'title' => '年龄'],
+            ['letter' => 'B','width' => 60, 'title_key' => 'name', 'title' => '名字'],
+            ['letter' => 'C','width' => 40, 'title_key' => 'sex', 'title' => '性别'],
+        ];
+        $file_name = 'testPublic';
+        $this->publicExport($data,$field,$title,$file_name);
+    }
 
     /**
      * 公用导出方法
      */
-    public function publicExport($data,$field,$title){
+    public function publicExport($data,$field,$title,$file_name){
         if(!is_array($data) || !is_array($data[0])) return false;
-        $filename = $title.".xls";
+        $filename = $file_name.".xls";
 //        $path = self::$downloadPath.$filename;
 //        file_put_contents($path,$html);
         header('Pragma:public');
@@ -1768,96 +1785,44 @@ class Download
         $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical('center');
 
         //行高
-//        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(50);
-        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(70);
-        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(40);
+        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(20);
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(50);
+        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(30);
+
+        foreach ($field as $fv){
+            $objPHPExcel->getActiveSheet()->getColumnDimension($fv['letter'])->setWidth($fv['width']);
+        }
 
 
+        $objPHPExcel->getActiveSheet()->getStyle('A1:C1')->getAlignment()->setWrapText(true);
 
-
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(35);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
-
-        $objPHPExcel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setWrapText(true);
         $titleObjRichText = new \PHPExcel_RichText();
-        $titlePayable = $titleObjRichText->createTextRun(get_post($team_id)->post_title);
+        $titlePayable = $titleObjRichText->createTextRun($title);
         $titlePayable->getFont()->setBold( true);
         $titlePayable->getFont()->setSize( 20);
 //        $objRichText->createTextRun($is_send)->getFont()->setColor( new \PHPExcel_Style_Color( $color ) );//设置颜色
 
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $titleObjRichText);
         //边加粗
-        $objPHPExcel->getActiveSheet()->getStyle('A2')->getBorders()->getAllBorders()->setBorderStyle('thin');
-        $objPHPExcel->getActiveSheet()->getStyle('B2')->getBorders()->getAllBorders()->setBorderStyle('thin');
-        $objPHPExcel->getActiveSheet()->getStyle('C2')->getBorders()->getAllBorders()->setBorderStyle('thin');
-        $objPHPExcel->getActiveSheet()->getStyle('D2')->getBorders()->getAllBorders()->setBorderStyle('thin');
-        $objPHPExcel->getActiveSheet()->getStyle('E2')->getBorders()->getAllBorders()->setBorderStyle('thin');
-        $objPHPExcel->getActiveSheet()->getStyle('F2')->getBorders()->getAllBorders()->setBorderStyle('thin');
-        $objPHPExcel->getActiveSheet()->getStyle('G2')->getBorders()->getAllBorders()->setBorderStyle('thin');
-        $objPHPExcel->getActiveSheet()->getStyle('H2')->getBorders()->getAllBorders()->setBorderStyle('thin');
-        $objPHPExcel->getActiveSheet()->getStyle('I2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        foreach ($field as $fv2){
+            $objPHPExcel->getActiveSheet()->getStyle($fv2['letter'].'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        }
 
 //        $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle( 'B2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle( 'C2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle( 'D2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle( 'E2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle( 'F2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle( 'G2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle( 'H2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
-
+        foreach ($field as $fv3){
+            $objPHPExcel->getActiveSheet()->getStyle($fv3['letter'].'2')->getFont()->setBold(true);
+        }
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:C1');
         //自动换行
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:L1');
+        foreach ($field as $fv4){
+            $objPHPExcel->getActiveSheet()->getStyle($fv4['letter'].'2')->getFont()->setBold(true);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fv4['letter'].'2', $fv4['title']);
+        }
 
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '用户名');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '姓名');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', 'ID');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '所在地区');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '邮箱');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '手机');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '年龄');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '性别');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '类别');
-
-        foreach ($rows as $k => $row){
-            $usermeta = get_user_meta($row['user_id']);
-            $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
-            $user_address = isset($usermeta['user_address'][0]) ? unserialize($usermeta['user_address'][0]) : [];
-            if($user_address != []) $user_address = $user_address['province'].$user_address['city'].$user_address['area'];
-            else $user_address = '';
-
-//            $objRichText = new \PHPExcel_RichText();
-//            $objRichText->createTextRun($is_send)->getFont()->setColor( new \PHPExcel_Style_Color( $color ) );//设置颜色
-//
-//            $tax_allObjRichText = new \PHPExcel_RichText();
-//            $tax_allObjRichText->createTextRun(' ￥'.$row['tax_all'])->getFont()->setColor( new \PHPExcel_Style_Color( '00FF0000' ) );//设置颜色
-//
-//            $tax_send_bonusObjRichText = new \PHPExcel_RichText();
-//            $tax_send_bonusObjRichText->createTextRun(' ￥'.$row['tax_send_bonus'])->getFont()->setColor( new \PHPExcel_Style_Color( '0008C715' ) );//设置颜色
-
-            //换行
-            $objPHPExcel->getActiveSheet()->getStyle('C'.($k+3))->getAlignment()->setWrapText(true);
-            $objPHPExcel->getActiveSheet()->getStyle('D'.($k+3))->getAlignment()->setWrapText(true);
-
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$row['user_login']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$usermeta['user_ID'][0]);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$user_address);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$row['user_email']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$row['user_mobile']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.isset($user_real_name['real_age']) ? $user_real_name['real_age'] : '');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.isset($usermeta['user_gender'][0]) ? $usermeta['user_gender'][0] : '');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$row['user_type'] == 2 ? '教练' : '学员');
-
+        foreach ($data as $k => $dataV){
+            foreach ($field as $fv5){
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fv5['letter'].($k+3),' '.$dataV[$fv5['title_key']]);
+            }
         }
 
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
