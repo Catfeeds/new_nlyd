@@ -118,15 +118,31 @@
 .apply_list_line{
     display: inline-block;
     vertical-align: middle;
+    line-height: 20px;
 }
 .apply_list_line.center{
-    margin-left: 21px;
+    margin-left: 20px;
 }
 .apply_list_line.ml{
     margin-left: 20px;
 }
 .apply_list_line.mr{
     margin-right: 20px;
+}
+.apply_list_line.left_bg{
+    width: 25px;
+}
+.apply_list_line.left_label{
+    width:80px;
+}
+.apply_list_line.right_tips{
+    margin-right: 10px;
+    width: -webkit-calc(100% - 175px);
+    width: calc(100% - 175px);
+    text-align: right;
+}
+.apply_list_line.right_icoin{
+    margin-right: 0;
 }
 @media screen and (min-width: 1200px){
 
