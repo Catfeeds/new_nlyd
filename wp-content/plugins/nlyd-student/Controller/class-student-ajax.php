@@ -4491,6 +4491,8 @@ class Student_Ajax
      */
     public function zone_apply_submit(){
         global $wpdb,$current_user;
+        ini_set('post_max_size','30M');
+        //print_r($_FILES);die;
         //print_r($_POST);die;
         if($_POST['zone_num'] > 0){
             $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where id = {$_POST['zone_num']}",ARRAY_A);
@@ -4640,6 +4642,7 @@ class Student_Ajax
         $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,
                   if(user_income <> '' ,user_income ,'待到账') user_income,
                   case income_type
+                    when 'undertake' then '承办赛事'
                     when 'match' then '比赛收益'
                     when 'grading' then '考级收益'
                     when 'subject' then '推荐奖励'
@@ -5215,11 +5218,12 @@ class Student_Ajax
         if(empty($_POST['num'])) wp_send_json_error(array('info'=>__('请输入提现金额')));
 
         //获取可提现金额
-        $stream_total = $wpdb->get_var("select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} ");
+        $stream_total = $wpdb->get_var("select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type != 'undertake' ");
 
         if($stream_total < $_POST['num']){
-            wp_send_json_error(array('info'=>__('余额不足,无法提现')));
+            wp_send_json_error(array('info'=>__('可提现余额不足,无法提现')));
         }
+
         $wpdb->query('START TRANSACTION');
         $insert1 = array(
             'user_id'=>$current_user->ID,
