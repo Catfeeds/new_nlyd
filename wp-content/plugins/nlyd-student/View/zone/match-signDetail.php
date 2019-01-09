@@ -79,7 +79,7 @@ jQuery(function($) {
                                                 '<td><div class="table_content">'+v.real_name+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_age+'</div></td>'+
-                                                '<td><div class="table_content">已签</div></td>'+
+                                                '<td><div class="table_content c_green">已签</div></td>'+
                                             '</tr>'
                                     lis.push(dom) 
                                 })
