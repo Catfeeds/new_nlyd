@@ -98,12 +98,44 @@ class Users {
             }
 
             //证件照片
-            $upload_dir = wp_upload_dir();
-            $dir = '/user/'.$user_id.'/';
-            $file = saveIosFile($_FILES['cardImg']['tmp_name'],$upload_dir['basedir'].$dir);
-            if($file){
-                update_user_meta($user_id,'user_ID_Card',[$upload_dir['baseurl'].$dir.$file]) && true;
+//            $upload_dir = wp_upload_dir();
+//            $dir = '/user/'.$user_id.'/';
+//            $file = saveIosFile($_FILES['cardImg']['tmp_name'],$upload_dir['basedir'].$dir);
+//            if($file){
+//                update_user_meta($user_id,'user_ID_Card',[$upload_dir['baseurl'].$dir.$file]) && true;
+//            }
+            $imgArr = [];
+            if(isset($_FILES['cardImg'])){
+                $upload_dir = wp_upload_dir();
+                $dir = '/user/'.$user_id.'/';
+                foreach ($_FILES['cardImg']['tmp_name'] as $k => $upd){
+                    $file = saveIosFile($upd,$upload_dir['basedir'].$dir);
+                    if($file){
+                        $imgArr[$k] = $upload_dir['baseurl'].$dir.$file;
+                    }
+                }
+
+                $unsetImgArr = [];
+                if($imgArr != []){
+                    //查询要删除的原图片
+                    $cardOldImg = get_user_meta($user_id, 'user_ID_Card', true);
+                    foreach ($cardOldImg as $coik => $coiv){
+                        if(isset($imgArr[$coik])) {
+                            $unsetImgArr[] = $coiv;
+                        }else{
+                            $imgArr[$coik] = $coiv;
+                        }
+                    }
+                    update_user_meta($user_id,'user_ID_Card',$imgArr);
+                }
+                foreach ($unsetImgArr as $uiav){
+                    $filePa = explode('uploads',$uiav);
+                    if(is_file(wp_upload_dir()['basedir'].$filePa[1])) unlink(wp_upload_dir()['basedir'].$filePa[1]);
+                };
             }
+
+
+
         }
 
         $user = $wpdb->get_row("SELECT * FROM `{$wpdb->users}` WHERE `ID`='{$user_id}'", ARRAY_A);
@@ -130,7 +162,7 @@ class Users {
         $nationalityArr = json_decode($str, true);
 
         //证件照片
-        $cardImg = isset($usermeta['user_ID_Card']) ? unserialize($usermeta['user_ID_Card'][0])[0] : '';
+        $cardImg = isset($usermeta['user_ID_Card']) ? unserialize($usermeta['user_ID_Card'][0]) : '';
 
         //所在地区
         $whereAddress = isset($usermeta['user_address']) ? unserialize($usermeta['user_address'][0]) : [];
@@ -220,8 +252,23 @@ class Users {
                     <tr>
                         <th><label for="card_img">证件图片</label></th>
                         <td>
-                            <img src="<?=$cardImg?>" style="height: 80px;" alt="">
-                            <input type="file" name="cardImg" value="重新上传">
+                            <?php
+                            $num = 1;
+                            foreach ($cardImg as $k => $civ) {
+
+                                ?>
+                                <div>
+                                    <img src="<?=$civ?>" style="height: 80px;" alt="">
+                                    <input type="file" name="cardImg[<?=$k?>]" value="重新上传" >
+                                    <a href="javascript:;" data-k="<?=$k?>" class="cardImg">删除</a>
+                                </div>
+                                <?php
+                                if($k >= $num) $num = ++$k;
+                            }
+                            ?>
+                           <div>
+                               <input type="file" name="cardImg[<?=$num?>]" value="新增图片">
+                           </div>
                         </td>
                     </tr>
                     <tr>
@@ -436,6 +483,30 @@ class Users {
                             });
                         }
                     })
+                    /**
+                     * 删除图片
+                     */
+                    $('.cardImg').on('click', function () {
+                        if(confirm('是否确认删除证件照片?')){
+                            var k = $(this).attr('data-k');
+                            var user_id = '<?=$user_id?>';
+                            var _this = $(this);
+                            $.ajax({
+                                url : ajaxurl,
+                                data : {'action' : 'delCardImg', 'k':k, 'user_id':user_id},
+                                dataType : 'json',
+                                type : 'post',
+                                success : function (response) {
+                                    alert(response.data.info);
+                                    if(response['success']){
+                                        _this.closest('div').remove();
+                                    }
+                                }, error : function () {
+                                    alert('请求失败!');
+                                }
+                            });
+                        }
+                    });
                 })
 
             </script>

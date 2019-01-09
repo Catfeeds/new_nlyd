@@ -2270,6 +2270,20 @@ class Match_Ajax
             if($rows) wp_send_json_success($rows);
         }
     }
+
+    /**
+     * 删除用户证件照片
+     */
+    public function delCardImg(){
+        $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+        $k = isset($_POST['k']) ? intval($_POST['k']) : 0;
+        if($user_id < 1 || $k < 1) wp_send_json_error(['info' => '参数错误']);
+        $cardOldImg = get_user_meta($user_id, 'user_ID_Card', true);
+        unset($cardOldImg[$k]);
+        $bool = update_user_meta($user_id,'user_ID_Card',$cardOldImg);
+        if($bool) wp_send_json_success(['info' => '删除成功!']);
+        else wp_send_json_error(['info' => '删除失败!']);
+    }
 }
 
 new Match_Ajax();

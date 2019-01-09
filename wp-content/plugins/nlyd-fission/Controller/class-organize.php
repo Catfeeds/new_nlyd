@@ -789,12 +789,12 @@ class Organize{
             if($user_id < 0) $error_msg = '请选择负责人';
 //            if($zone_match_type < 0) $error_msg = $error_msg==''?'请选择赛区类型':$error_msg.'<br >请选择赛区类型';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择机构类型':$error_msg.'<br >请选择机构类型';
-            if($user_id == $referee_id && $user_status !==1 && $user_status !== -2) $error_msg = $error_msg==''?'推荐人不能为机构账号':$error_msg.'<br >推荐人不能为机构账号';
+            if($user_id == $referee_id && $user_status !==1 && $user_status !== -2 && $user_status !== 99) $error_msg = $error_msg==''?'推荐人不能为机构账号':$error_msg.'<br >推荐人不能为机构账号';
             if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($admin_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
             if($user_status !== 1 && $user_status !== -2 && $user_status !== 99) $error_msg = $error_msg==''?'审核状态错误':$error_msg.'<br >审核状态错误';
 //            if($zone_title == '') $error_msg = $error_msg==''?'请填写机构名称':$error_msg.'<br >请填写机构名称';
-            if($zone_address == '' && !in_array($zone_match_type,[1,2])) $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
+            if($zone_address == '' && $zone_match_type === 1) $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
 //            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
             if($legal_person == '') $error_msg = $error_msg==''?'请填写法人':$error_msg.'<br >请填写法人';
             if($zone_city == '') $error_msg = $error_msg==''?'请填写机构城市':$error_msg.'<br >请填写机构城市';
@@ -1094,7 +1094,7 @@ class Organize{
                     <tr class="form-field form-required">
                         <th scope="row"><label for="zone_type">机构类型</label></th>
                         <td>
-                            <select name="zone_type" <?=$old_zm_id < 1 ? 'id="zone_type"':''?>>
+                            <select name="zone_type" id="zone_type" <?=$old_zm_id < 1 ? 'id="zone_type"':''?>>
                                 <?php foreach ($typeList as $tlv){ ?>
                                     <option value="<?=$tlv['id']?>" <?=$row['type_id']==$tlv['id']?'selected="selected"':''?> ><?=$tlv['zone_type_name']?></option>
                                 <?php } ?>
@@ -2023,7 +2023,7 @@ class Organize{
                     $this->getOrganizeStatisticsMember($zone_meta['user_id'],$id);
                     break;
                 case 5:
-                    $this->getOrganizeStatisticsIncome($zone_meta['user_id'],$id);
+                    $this->getOrganizeStatisticsIncome($zone_meta['user_id'],$id,$zone_meta);
                     break;
                 case 6:
                     $this->addOrganize($zone_meta['user_id']);
@@ -2282,7 +2282,7 @@ class Organize{
     /**
      * 机构统计信息收益数据
      */
-    public function getOrganizeStatisticsIncome($user_id,$id){
+    public function getOrganizeStatisticsIncome($user_id,$id,$zone_meta){
         global $wpdb;
         $itype = isset($_GET['itype']) ? trim($_GET['itype']) : 'match';
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
@@ -2308,11 +2308,12 @@ class Organize{
         ));
 //        leo_dump($rows);
         //各种收益数量
-        $sql = "SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE income_type=";
+        $sql = "SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$zone_meta['user_id']}' AND income_type=";
         $match_income = $wpdb->get_var($sql."'match'");
         $grading_income = $wpdb->get_var($sql."'grading'");
         $subject_income = $wpdb->get_var($sql."'subject'");
         $extract_income = $wpdb->get_var($sql."'extract'");
+        $undertake_income = $wpdb->get_var($sql."'undertake'");
 //        leo_dump($wpdb->last_query);die;
         ?>
         <ul class="subsubsub">
@@ -2320,7 +2321,7 @@ class Organize{
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=grading')?>" <?=$itype==='grading'?'class="current"':''?> aria-current="page">考级<span class="count">（<?=$grading_income != false? $grading_income : 0?>）</span></a> | </li>
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=subject')?>" <?=$itype==='subject'?'class="current"':''?> aria-current="page">申请机构<span class="count">（<?=$subject_income != false ? $subject_income : 0?>）</span></a> | </li>
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=extract')?>" <?=$itype==='extract'?'class="current"':''?> aria-current="page">提现<span class="count">（<?=$extract_income != false ? $extract_income : 0?>）</span></a>  </li>
-<!--            <li class="all"><a href="--><?//=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=extract')?><!--" --><?//=$itype==='extract'?'class="current"':''?><!-- aria-current="page">承办<span class="count">（--><?//=$extract_income != false ? $extract_income : 0?><!--）</span></a>  </li>-->
+            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=undertake')?>" <?=$itype==='undertake'?'class="current"':''?> aria-current="page">承办<span class="count">（<?=$undertake_income != false ? $undertake_income : 0?>）</span></a>  </li>
           </ul>
         <div class="tablenav top">
             <div class="tablenav-pages">
@@ -2381,6 +2382,9 @@ class Organize{
                             case 'subject':
                                 $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['user_type']}'");
                                 echo '申请'.$zone_type_name;
+                                break;
+                            case 'undertake':
+                                echo '承办';
                                 break;
                         }
                         ?>

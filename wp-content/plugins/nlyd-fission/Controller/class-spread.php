@@ -28,6 +28,9 @@ class Spread{
 
             $role = 'profit_match_log';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'profit_match_log_detail';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
         add_submenu_page('fission','收益设置','收益设置','profit_set','fission-profit-set',array($this,'profitSet'));
         add_submenu_page('fission','新增收益设置','新增收益设置','add_profit_set','fission-add-profit-set',array($this,'addProfitSet'));
@@ -35,6 +38,7 @@ class Spread{
         add_submenu_page('fission','赛事分成记录','赛事分成记录','profit_match_log','fission-profit-match-log',array($this,'profitMatchLog'));
         add_submenu_page('fission','用户收益流水','用户收益流水','profit_user_log','fission-profit-user-log',array($this,'profitUserLog'));
         add_submenu_page('fission','提现记录','提现记录','profit_extract_log','fission-profit-extract-log',array($this,'profitExtractLog'));
+        add_submenu_page('fission','赛事分成记录详情','赛事分成记录详情','profit_match_log_detail','fission-profit-match-log-detail',array($this,'profitMatchLogDetail'));
     }
 
     /**
@@ -455,7 +459,7 @@ class Spread{
 
                 <?php
                 foreach ($rows as $row){
-                    if(empty($row['user_id'])){
+                    if(empty($row['user_real_name'])){
                         $real_name = get_user_by('ID',$row['user_id'])->user_login;
                     }else{
                         $real_name = unserialize($row['user_real_name'])['real_name'];
@@ -492,6 +496,12 @@ class Spread{
                                     break;
                                 case 'grading':
                                     echo '考级';
+                                    break;
+                                case 'undertake':
+                                    echo '承办';
+                                    break;
+                                case 'extract':
+                                    echo '提现';
                                     break;
                             }
                             ?>
@@ -741,8 +751,8 @@ class Spread{
                         </td>
                         <td class="options1 column-options1" data-colname="操作">
 
-                                <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a>':''?>
-
+                            <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a> |':''?>
+                            <a href="<?=admin_url('admin.php?page=fission-profit-match-log-detail&match_id='.$row['match_id'])?>">查看详情</a>
                        </td>
                     </tr>
                     <?php
@@ -823,6 +833,196 @@ class Spread{
                 });
 
             </script>
+        </div>
+        <?php
+    }
+
+    /**
+     * 赛事分成详细流水
+     */
+    public function profitMatchLogDetail(){
+        $match_id = isset($_GET['match_id']) ? intval($_GET['match_id']) : 0;
+        $match_id < 1 && exit('参数错误');
+
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+
+
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
+                il.income_type,il.match_id,il.referee_income,il.indirect_referee_income,il.person_liable_income,il.sponsor_income,il.manager_income,
+                il.user_id,il.referee_id,il.indirect_referee_id,il.person_liable_id,il.sponsor_id,il.manager_id,il.income_status,il.id,
+                um.meta_value AS user_real_name,  
+                um2.meta_value AS referee_real_name,  
+                um3.meta_value AS indirect_referee_real_name,  
+                um4.meta_value AS person_liable_real_name,  
+                zm.zone_name,  
+                um6.meta_value AS manager_real_name 
+                FROM {$wpdb->prefix}user_income_logs AS il 
+                LEFT JOIN `{$wpdb->usermeta}` AS um ON um.user_id=il.user_id AND um.meta_key='user_real_name' 
+                LEFT JOIN `{$wpdb->usermeta}` AS um2 ON um2.user_id=il.referee_id AND um2.meta_key='user_real_name' 
+                LEFT JOIN `{$wpdb->usermeta}` AS um3 ON um3.user_id=il.indirect_referee_id AND um3.meta_key='user_real_name' 
+                LEFT JOIN `{$wpdb->usermeta}` AS um4 ON um4.user_id=il.person_liable_id AND um4.meta_key='user_real_name' 
+                LEFT JOIN `{$wpdb->prefix}zone_meta` AS zm ON zm.user_id=il.sponsor_id  
+                LEFT JOIN `{$wpdb->usermeta}` AS um6 ON um6.user_id=il.manager_id AND um6.meta_key='user_real_name' 
+                WHERE il.match_id='{$match_id}' AND il.income_type IN('match','grading')
+                LIMIT {$start},{$pageSize}",ARRAY_A);
+//        leo_dump($rows);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page
+        ));
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline"><?=get_post($match_id)->post_title.'-分成详情'?></h1>
+
+
+            <hr class="wp-header-end">
+
+            <h2 class="screen-reader-text">过滤用户分成列表</h2>
+
+
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+            <div class="tablenav top">
+
+
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">付款人</th>
+                    <th scope="col" id="project" class="manage-column column-project">类型</th>
+                    <th scope="col" id="referee" class="manage-column column-referee">直接推广</th>
+                    <th scope="col" id="indirect_referee" class="manage-column column-indirect_referee">间接推广</th>
+                    <th scope="col" id="person_liable" class="manage-column column-person_liable">负责人</th>
+                    <th scope="col" id="sponsor" class="manage-column column-sponsor">主办方</th>
+                    <th scope="col" id="manager" class="manage-column column-manager">事业员</th>
+                    <th scope="col" id="income_status" class="manage-column column-income_status">状态</th>
+                </tr>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+
+                <?php
+                foreach ($rows as $row){
+                    if(empty($row['user_real_name'])){
+                        $real_name = get_user_by('ID',$row['user_id'])->user_login;
+                    }else{
+                        $real_name = unserialize($row['user_real_name'])['real_name'];
+                    }
+                    ?>
+                    <tr data-id="<?=$row['id']?>">
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text" for="cb-select-407">选择<?=$real_name?></label>
+                            <input id="cb-select-<?=$row['id']?>" class="check_list" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                            <div class="locked-indicator">
+                                <span class="locked-indicator-icon" aria-hidden="true"></span>
+                                <span class="screen-reader-text">“<?=$real_name?>”已被锁定</span>
+                            </div>
+                        </th>
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="付款人">
+                            <?=$real_name?>
+                            <br>
+                            <div class="row-actions">
+                                <!--                                <span class="edit"><a href="">编辑</a></span>-->
+                                <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
+                                <!--                               <span class="view"><a href="">资料</a></span>-->
+                            </div>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="project column-project" data-colname="类型">
+                            <?php
+                            switch ($row['income_type']){
+                                case 'subject':
+                                    $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['match_id']}'");
+                                    echo '申请'.$zone_type_name;
+                                    break;
+                                case 'match':
+                                    echo '比赛';
+                                    break;
+                                case 'grading':
+                                    echo '考级';
+                                    break;
+                                case 'undertake':
+                                    echo '承办';
+                                    break;
+                                case 'extract':
+                                    echo '提现';
+                                    break;
+                            }
+                            ?>
+
+                        </td>
+                        <td class="referee column-referee" data-colname="直接推广">
+                            <?=!empty($row['referee_real_name'])?unserialize($row['referee_real_name'])['real_name']:get_user_by('ID',$row['referee_id'])->user_login?>
+                            (<?=$row['referee_income']?>)
+                        </td>
+                        <td class="indirect_referee column-indirect_referee" data-colname="间接推广">
+                            <?=!empty($row['indirect_referee_name'])?unserialize($row['indirect_referee_name'])['real_name']:get_user_by('ID',$row['indirect_referee_id'])->user_login?>
+                            <?=$row['indirect_referee_income']>0?'('.$row['indirect_referee_income'].')':''?>
+                        </td>
+                        <td class="person_liable column-person_liable" data-colname="负责人">
+                            <?=!empty($row['person_liable_name'])?unserialize($row['person_liable_name'])['real_name']:get_user_by('ID',$row['person_liable_id'])->user_login?>
+                            <?=$row['person_liable_income']>0?'('.$row['person_liable_income'].')':''?>
+                        </td>
+                        <td class="sponsor column-sponsor" data-colname="主办方">
+                            <?=$row['zone_name']?>
+                            <?=$row['sponsor_income']>0?'('.$row['sponsor_income'].')':''?>
+                        </td>
+                        <td class="manager column-manager" data-colname="事业员">
+                            <?=!empty($row['manager_name'])?unserialize($row['manager_name'])['real_name']:get_user_by('ID',$row['manager_id'])->user_login?>
+                            <?=$row['manager_income']>0?'('.$row['manager_income'].')':''?>
+                        </td>
+                        <td class="income_status column-income_status" data-colname="状态" id="cardImg-<?=$row['user_id']?>">
+                            <?=$row['income_status'] == '1'?'待确认':'已确认'?>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                    <th scope="col" class="manage-column column-real_name column-primary">付款人</th>
+                    <th scope="col" class="manage-column column-project">类型</th>
+                    <th scope="col" class="manage-column column-referee">直接推广</th>
+                    <th scope="col" class="manage-column column-indirect_referee">间接推广</th>
+                    <th scope="col" class="manage-column column-person_liable">负责人</th>
+                    <th scope="col" class="manage-column column-sponsor">主办方</th>
+                    <th scope="col" class="manage-column column-manager">事业员</th>
+                    <th scope="col" class="manage-column column-income_status">状态</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+
+            <br class="clear">
+
         </div>
         <?php
     }
@@ -973,6 +1173,9 @@ class Spread{
                                 case 'subject':
                                     $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['user_type']}'");
                                     echo '申请'.$zone_type_name;
+                                    break;
+                                case 'undertake':
+                                    echo '承办';
                                     break;
                             }
                             ?>
