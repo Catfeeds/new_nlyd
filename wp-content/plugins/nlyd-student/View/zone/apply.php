@@ -308,13 +308,14 @@
             //     alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
             //     return false;
             // }
-            array.unshift(file)
+            // array.unshift(file)
             console.log(array)
             var reader = new FileReader();
             var src='';
             //读取File对象的数据
             reader.onload = function(evt){
                 //data:img base64 编码数据显示
+                array.unshift(evt.target.result)
                 var dom='<div class="post-img no-dash">'
                     +'<div class="img-zoo img-box">'
                     +'<img src="'+evt.target.result+'"/>'
@@ -384,7 +385,6 @@
                     fd.append('opening_bank_address',data.field['opening_bank_address']);
                     fd.append('bank_card_num',data.field['bank_card_num']);
                     fd.append('bank_card_name',data.field['bank_card_name']);
-                    
                     if($('.business_licence_url').val()=='' || !$('.business_licence_url').val()){//修改具有初始图片
                         if(imgs1[0]){
                             fd.append('business_licence',imgs1[0]);
@@ -408,11 +408,11 @@
                     }else{
                         fd.append('zone_type_alias','');
                     }
-                    if(data.field['chairman_id']){
-                        fd.append('chairman_id',data.field['chairman_id']);
+                    if(data.field['chairman_phone']){
+                        fd.append('chairman_phone',data.field['chairman_phone']);
                     }
-                    if(data.field['secretary_id']){
-                        fd.append('secretary_id',data.field['secretary_id']);
+                    if(data.field['secretary_phone']){
+                        fd.append('secretary_phone',data.field['secretary_phone']);
                     }
                     fd.append('zone_match_type',data.field['zone_match_type']);
                     if(data.field['zone_match_type']==1){//战队赛
