@@ -1124,9 +1124,9 @@ class Student_Zone
         //print_r($row);
         if(!empty($row)){
             //获取主席
-            $row['chairman_name'] = !empty($row['chairman_id']) ? get_user_meta($row['chairman_id'],'user_real_name')[0]['real_name'] : '';
+            $row['chairman_mobile'] = !empty($row['chairman_id']) ? $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['chairman_id']} ") : '';
             //获取秘书长
-            $row['secretary_name'] = !empty($row['secretary_id']) ? get_user_meta($row['secretary_id'],'user_real_name')[0]['real_name'] : '';
+            $row['secretary_mobile'] = !empty($row['secretary_id']) ? $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['secretary_id']} ") : '';
 
             $data['row'] = $row;
         }
