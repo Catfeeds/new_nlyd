@@ -822,7 +822,7 @@ class Teacher
                   'real_ID' => $card_num,
                 ];
                 update_user_meta($user_id, 'user_real_name',$user_real_name);
-                update_user_meta($user_id, 'user_ID', 10000000*$user_id);
+                update_user_meta($user_id, 'user_ID', 10000000+$user_id);
                 update_user_meta($user_id, 'user_gender', $user_gender);
             }
 

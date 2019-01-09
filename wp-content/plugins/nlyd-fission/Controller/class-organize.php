@@ -84,7 +84,7 @@ class Organize{
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
                 zm.zone_address,zm.business_licence_url,
-                zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,zm.id,zm.zone_match_type,
+                zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,zm.id,zm.zone_match_type,zm.apply_id,
                 zm.chairman_id,zm.secretary_id,zm.zone_city,zm.term_time,zm.user_status,zm.is_double,
                 CASE zm.is_able 
                 WHEN 1 THEN '正常' 
@@ -188,6 +188,7 @@ class Organize{
                         <th scope="col" id="person" class="manage-column column-person">负责人</th>
                         <th scope="col" id="chairman_id" class="manage-column column-chairman_id">主席</th>
                         <th scope="col" id="secretary_id" class="manage-column column-secretary_id">秘书长</th>
+                        <th scope="col" id="apply_id" class="manage-column column-apply_id">申请人</th>
                         <th scope="col" id="term_time" class="manage-column column-term_time">有效期</th>
                         <th scope="col" id="match_num" class="manage-column column-match_num">办赛次数</th>
                         <th scope="col" id="match_member_num" class="manage-column column-match_member_num">参赛人次(累计)</th>
@@ -207,10 +208,12 @@ class Organize{
                         $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
                         $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
                         $secretary_real_name = get_user_meta($row['secretary_id'],'user_real_name',true);
-                        //负责人
+                        $apply_real_name = get_user_meta($row['apply_id'],'user_real_name',true);
+                           //负责人
                        $person = $wpdb->get_var("SELECT um.meta_value FROM {$wpdb->prefix}zone_manager AS zm 
                                  LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'
                                  WHERE zm.zone_id='{$row['id']}' AND um.meta_value != '' limit 1");
+
                        //办赛次数
                        $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
                        //参赛人次
@@ -254,10 +257,31 @@ class Organize{
                            ?>
                        </td>
                        <td class="nums column-nums" data-colname="编号"><?=sprintf("%04d",$row['id']);?></td>
-                       <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
-                       <td class="person column-person" data-colname="负责人"><?=unserialize($person)['real_name']?></td>
-                       <td class="chairman_id column-chairman_id" data-colname="主席"><?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?></td>
-                       <td class="secretary_id column-secretary_id" data-colname="秘书长"><?=isset($secretary_real_name['real_name'])?$secretary_real_name['real_name']:($row['secretary_id']>0?get_user_by('ID',$row['secretary_id'])->user_login:'')?></td>
+                       <td class="referee_id column-referee_id" data-colname="推荐人">
+                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['referee_id'])?>">
+                               <?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?>
+                           </a>
+                       </td>
+                       <td class="person column-person" data-colname="负责人">
+                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['user_id'])?>">
+                               <?=unserialize($person)['real_name']?unserialize($person)['real_name']:($row['user_id']>0?get_user_by('ID',$row['user_id'])->user_login:'')?>
+                           </a>
+                       </td>
+                       <td class="chairman_id column-chairman_id" data-colname="主席">
+                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['chairman_id'])?>">
+                               <?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?>
+                           </a>
+                       </td>
+                       <td class="secretary_id column-secretary_id" data-colname="秘书长">
+                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['secretary_id'])?>">
+                               <?=isset($secretary_real_name['real_name'])?$secretary_real_name['real_name']:($row['secretary_id']>0?get_user_by('ID',$row['secretary_id'])->user_login:'')?>
+                           </a>
+                       </td>
+                       <td class="apply_id column-apply_id" data-colname="申请人">
+                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['apply_id'])?>">
+                               <?=isset($apply_real_name['real_name'])?$apply_real_name['real_name']:($row['apply_id']>0?get_user_by('ID',$row['apply_id'])->user_login:'')?>
+                           </a>
+                       </td>
 
                        <td class="term_time column-term_time" data-colname="有效期"><?=$row['term_time']?$row['term_time']:'无'?></td>
                        <td class="match_num column-match_num" data-colname="办赛次数"><?=$match_num?></td>
@@ -309,6 +333,7 @@ class Organize{
                         <th scope="col" class="manage-column column-person">负责人</th>
                         <th scope="col" class="manage-column column-chairman_id">主席</th>
                         <th scope="col" class="manage-column column-secretary_id">秘书长</th>
+                        <th scope="col" class="manage-column column-apply_id">申请人</th>
                         <th scope="col" class="manage-column column-term_time">有效期</th>
                         <th scope="col" class="manage-column column-match_num">办赛次数</th>
                         <th scope="col" class="manage-column column-match_member_num">参赛人次(累计)</th>
@@ -878,7 +903,7 @@ class Organize{
                             if(!$user_id) {
                                 $error_msg = '操作失败!';
                             }
-                            update_user_meta($user_id, 'user_ID', 10000000*$user_id);
+                            update_user_meta($user_id, 'user_ID', 10000000+$user_id);
                             if($error_msg == '') {
                                 //更新机构所有者id
                                 if (!$wpdb->update($wpdb->prefix . 'zone_meta', ['user_id' => $user_id], ['id' => $zmv['id']])) {
@@ -2798,7 +2823,7 @@ class Organize{
      */
     public function getOrganizeTypeList(){
         global $wpdb;
-        $typeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
+        $typeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1 ORDER BY id DESC", ARRAY_A);
         foreach ($typeList as &$tlv){
             if($tlv['zone_type_alias'] == 'match') $tlv['zone_type_name'] = '赛区';
         }
