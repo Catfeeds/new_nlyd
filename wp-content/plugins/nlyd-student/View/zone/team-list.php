@@ -36,7 +36,7 @@
                        
                     </div>
                 <?php } ?>
-                <a class="a-btn a-btn-table" href="<?=home_url('/zone/teamBuild/');?>"><div><?=__('新建战队', 'nlyd-student')?></div></a>
+                <a class="a-btn a-btn-table" href="<?=home_url('/zone/teamBuild/type/child');?>"><div><?=__('新建战队', 'nlyd-student')?></div></a>
             </div>
         </div>           
     </div>
@@ -58,7 +58,7 @@ layui.use(['layer','flow'], function(){
                 ,done: function(page, next){ //加载下一页
                     //模拟插入
                     var postData={
-                        action:'getTeamsBySearch',
+                        action:'get_zone_teams',
                         _wpnonce:$('#searchTeam').val(),
                         page:page,
                         search:searchValue,
@@ -71,7 +71,7 @@ layui.use(['layer','flow'], function(){
                             if(res.success){
                                 // 战队状态 -3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队  
                                 $.each(res.data.info,function(index,value){
-                                    var url=window.home_url+'/zone/team/team_id/'+value.ID
+                                    var url=window.home_url+'/zone/teamDetail/team_id/'+value.team_id
                                     var dom='<a class="team-row" href="'+url+'">'
                                                 +'<div class="team-detail">'
                                                     +'<div class="team-detail-row">'
