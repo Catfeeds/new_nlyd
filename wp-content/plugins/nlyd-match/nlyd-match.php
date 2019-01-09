@@ -704,6 +704,7 @@ if(!class_exists('MatchController')){
         public function add_new_match_columns($columns){
             if($this->post_type == 'team'){
                 $columns['team_student'] = '战队成员';
+                $columns['team_zone'] = '所属机构';
                 $columns['into_apply_num'] = '入队申请';
                 $columns['out_apply_num'] = '退队申请';
                 return $columns;
@@ -931,8 +932,14 @@ if(!class_exists('MatchController')){
                     }else{
                         $str = '<a href="javascript:;" class="closeGrading" data-status="'.$row['match_status'].'" data-id="'.$id.'">关闭考级</a>';
                     }
-
                     echo $str;
+                    break;
+                case 'team_zone':
+                    //考级操作选项
+                    $zone_name = $wpdb->get_row("SELECT zone_city,zone_match_type FROM {$wpdb->prefix}team_meta AS tm 
+                                 LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=tm.user_id
+                                 WHERE tm.team_id='{$id}'",ARRAY_A);
+                    echo date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$zone_name['zone_city'].'</span>'.($zone_name['zone_match_type']=='1'?'战队精英赛':'城市赛');
                     break;
                 default:
                     break;
@@ -995,6 +1002,7 @@ if(!class_exists('MatchController')){
                     $project_id = arr2str($project_array);
                     $match_meta['match_project_id'] = $project_id;
 
+                    $wpdb->query("delete from {$wpdb->prefix}match_project_more where match_id = {$post_ID} and project_id not in({$project_id})");
 
                     $match_meta['match_id'] = $post_ID;
                     /*$match_meta['created_id'] = $current_user->ID;
