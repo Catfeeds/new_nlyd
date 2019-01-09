@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="input_row">
                                     <!-- <input class="get_id" name="chairman_id" type="hidden" value="<?=$row['chairman_id']?>"> -->
-                                    <input class="radius_input_row change_num" name="chairman_phone" value="<?=$row['chairman_phone']?>" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                    <input class="radius_input_row change_num" name="chairman_phone" value="<?=$row['chairman_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
                                     <!-- <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a> -->
                                     <!-- <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                         <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
@@ -126,7 +126,7 @@
                                         <option value="<?=$row['secretary_id']?>" selected><?=$row['secretary_name']?></option>
                                     </select> -->
                                     <!-- <input class="get_id" name="secretary_id" type="hidden" value="<?=$row['secretary_id']?>"> -->
-                                    <input class="radius_input_row change_num" name="secretary_phone" value="<?=$row['secretary_phone']?>" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                    <input class="radius_input_row change_num" name="secretary_phone" value="<?=$row['secretary_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
                                     <!-- <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a> -->
                                 </div>
                             </div>
