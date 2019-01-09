@@ -2394,6 +2394,39 @@ class Student_Ajax
         }
     }
 
+    /*
+     * base64文件流上传
+     */
+    public function base64file($filecontent,$upload_dir){
+        if(empty($filecontent)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
+        $len = strpos($filecontent, ';');//寻找位置
+        $img_type = substr($filecontent, 5, $len - 5);//删除后面
+        $arr = str2arr($img_type,'/');
+        if($arr[1] == 'jpeg' || $arr[1] == 'jpg'){
+            $ext = '.jpg';
+        }elseif ($arr[1] == 'png'){
+            $ext = '.png';
+        }else{
+            wp_send_json_error(array('info'=>__('只支持jpg,jpeg,png格式文件上传')));
+        }
+
+        if(!file_exists($upload_dir)){
+            mkdir($upload_dir,0755,true);
+        }
+
+        $base_img = str_replace("data:image/{$arr[1]};base64,", '', $filecontent);
+        $filename = date('YmdHis').'_'.rand(1000,9999).$ext;          //定义图片名字及格式
+        $savepath = $upload_dir.'/'.$filename;
+        //print_r($base_img);die;
+        $a = file_put_contents($savepath, base64_decode($base_img));
+        //print_r($a);die;
+        if ($a) {
+            return $filename;
+        }else{
+            return false;
+        }
+    }
+
     /**
      * 保存用户cookie信息
      * @param $user_id
@@ -4493,7 +4526,6 @@ class Student_Ajax
         global $wpdb,$current_user;
         ini_set('post_max_size','30M');
         //print_r($_FILES);die;
-        //print_r($_POST);die;
         if($_POST['zone_num'] > 0){
             $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where id = {$_POST['zone_num']}",ARRAY_A);
             if($row['user_status']== -1){
@@ -4507,7 +4539,7 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
         }
         if(empty($_POST['business_licence_url'])){
-            if(empty($_FILES['business_licence'])){
+            if(empty($_POST['business_licence'])){
                 wp_send_json_error(array('info'=>'营业执照必传'));
             }
         }else{
@@ -4525,27 +4557,27 @@ class Student_Ajax
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['chairman_phone']}'
                 ";
-            $row = $wpdb->get_row($sql,ARRAY_A);
-            if(empty($row)) wp_send_json_error(array('info'=>__('该组委会主席未注册')));
-            if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该组委会主席未实名认证')));
+            $chairman = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($chairman)) wp_send_json_error(array('info'=>__('该组委会主席未注册')));
+            if(empty($chairman['meta_value'])) wp_send_json_error(array('info'=>__('该组委会主席未实名认证')));
 
             $sql_ = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['secretary_phone']}'
                 ";
-            $row_ = $wpdb->get_row($sql_,ARRAY_A);
-            if(empty($row)) wp_send_json_error(array('info'=>__('该秘书长未注册')));
-            if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该秘书长未实名认证')));
+            $secretary = $wpdb->get_row($sql_,ARRAY_A);
+            if(empty($secretary)) wp_send_json_error(array('info'=>__('该秘书长未注册')));
+            if(empty($secretary['meta_value'])) wp_send_json_error(array('info'=>__('该秘书长未实名认证')));
 
-            $chairman_id = $row['ID'];
-            $secretary_id = $row_['ID'];
+            $chairman_id = $chairman['ID'];
+            $secretary_id = $secretary['ID'];
 
         }
-        if(!empty($_FILES['business_licence'])){
+
+        if(!empty($_POST['business_licence'])){
             $upload_dir = wp_upload_dir();
-            $dir = '/business_licence/'.$current_user->ID.'/';
-            $tmp = $_FILES['business_licence']['tmp_name'];
-            $file = $this->saveIosFile($tmp,$upload_dir['basedir'].$dir);
+            $dir = '/business_licence/'.$current_user->ID;
+            $file = $this->base64file($_POST['business_licence'],$upload_dir['basedir'].$dir);
             if($file){
                 $business_licence_url = $upload_dir['baseurl'].$dir.$file;
             }
@@ -4573,9 +4605,9 @@ class Student_Ajax
             'role_id'=>$role_id,
             'created_time'=>get_time('mysql'),
         );
-        
+
+        //print_r($row);die;
         if(empty($row)){
-            //print_r($data);die;
             $result = $wpdb->insert($wpdb->prefix.'zone_meta',$data);
         }else{
             $result = $wpdb->update($wpdb->prefix.'zone_meta',$data,array('id'=>$row['id']));
