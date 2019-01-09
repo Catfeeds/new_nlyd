@@ -108,9 +108,9 @@
                                     <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                                 </div>
                                 <div class="input_row">
-                                    <input class="get_id" name="chairman_id" type="hidden" value="<?=$row['chairman_id']?>">
-                                    <input class="radius_input_row" name="chairman_phone" value="<?=$row['chairman_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
-                                    <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a>
+                                    <!-- <input class="get_id" name="chairman_id" type="hidden" value="<?=$row['chairman_id']?>"> -->
+                                    <input class="radius_input_row change_num" name="chairman_phone" value="<?=$row['chairman_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                    <!-- <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a> -->
                                     <!-- <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                         <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
                                     </select> -->
@@ -125,9 +125,9 @@
                                     <!-- <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                         <option value="<?=$row['secretary_id']?>" selected><?=$row['secretary_name']?></option>
                                     </select> -->
-                                    <input class="get_id" name="secretary_id" type="hidden" value="<?=$row['secretary_id']?>">
-                                    <input class="radius_input_row" name="secretary_phone" value="<?=$row['secretary_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
-                                    <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a>
+                                    <!-- <input class="get_id" name="secretary_id" type="hidden" value="<?=$row['secretary_id']?>"> -->
+                                    <input class="radius_input_row change_num" name="secretary_phone" value="<?=$row['secretary_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                    <!-- <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a> -->
                                 </div>
                             </div>
                         <?php endif;?>
@@ -225,47 +225,47 @@
             var id=$(this).attr('data-file')
             $('#'+id).click()
         })
-        $('.search_val').click(function(){
-            var _this=$(this);
-            if(!_this.hasClass('disabled')){
-                var search_val=_this.prev('.radius_input_row').val()
-                if(search_val.length>0){
-                    var post_data={
-                        mobile:search_val,
-                        action:"get_mobile_user",
-                    }
-                    $.ajax({
-                        data: post_data,
-                        beforeSend:function(XMLHttpRequest){
-                            _this.addClass('disabled')
-                        },
-                        success: function(res, textStatus, jqXHR){
-                            console.log(res)
-                            // $.alerts(res.data.info)
-                            if(!res.success){
-                                $.alerts(res.data.info+'，选择失败')
-                            }else{
-                                var user_id=res.data.user_id;
-                                _this.parent('div').find('.get_id').val(user_id);
-                                $.alerts("<?=__('选择成功', 'nlyd-student')?>")
-                            }
-                            _this.removeClass('disabled');
-                        },
-                        complete: function(jqXHR, textStatus){
-                            if(textStatus=='timeout'){
-                                $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                                _this.removeClass('disabled');
-                            }
+        // $('.search_val').click(function(){
+        //     var _this=$(this);
+        //     if(!_this.hasClass('disabled')){
+        //         var search_val=_this.prev('.radius_input_row').val()
+        //         if(search_val.length>0){
+        //             var post_data={
+        //                 mobile:search_val,
+        //                 action:"get_mobile_user",
+        //             }
+        //             $.ajax({
+        //                 data: post_data,
+        //                 beforeSend:function(XMLHttpRequest){
+        //                     _this.addClass('disabled')
+        //                 },
+        //                 success: function(res, textStatus, jqXHR){
+        //                     console.log(res)
+        //                     // $.alerts(res.data.info)
+        //                     if(!res.success){
+        //                         $.alerts(res.data.info+'，选择失败')
+        //                     }else{
+        //                         var user_id=res.data.user_id;
+        //                         _this.parent('div').find('.get_id').val(user_id);
+        //                         $.alerts("<?=__('选择成功', 'nlyd-student')?>")
+        //                     }
+        //                     _this.removeClass('disabled');
+        //                 },
+        //                 complete: function(jqXHR, textStatus){
+        //                     if(textStatus=='timeout'){
+        //                         $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+        //                         _this.removeClass('disabled');
+        //                     }
                             
-                        }
-                    })
-                }else{
-                    $.alerts("<?=__('请填写您要搜索的信息', 'nlyd-student')?>")
-                }
-            }else{
-                $.alerts("<?=__('正在查询是否存在该用户..', 'nlyd-student')?>")
-            }
-        })
+        //                 }
+        //             })
+        //         }else{
+        //             $.alerts("<?=__('请填写您要搜索的信息', 'nlyd-student')?>")
+        //         }
+        //     }else{
+        //         $.alerts("<?=__('正在查询是否存在该用户..', 'nlyd-student')?>")
+        //     }
+        // })
         // $('.js-data-select-ajax').each(function () {
         //     var _this=$(this);
         //     var _placeholder = _this.attr('data-placeholder');
