@@ -108,9 +108,9 @@
                                     <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                                 </div>
                                 <div class="input_row">
-                                    <input class="get_id" name="chairman_id" style="display:none" value="<?=$row['chairman_id']?>">
+                                    <input class="get_id" name="chairman_id" type="hidden" value="<?=$row['chairman_id']?>">
                                     <input class="radius_input_row" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
-                                    <a class="input_row_arrow c_blue change_ajax"><?=__('确 认', 'nlyd-student')?></a>
+                                    <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a>
                                     <!-- <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                         <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
                                     </select> -->
@@ -125,9 +125,9 @@
                                     <!-- <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                         <option value="<?=$row['secretary_id']?>" selected><?=$row['secretary_name']?></option>
                                     </select> -->
-                                    <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>">
+                                    <input class="get_id" name="secretary_id" type="hidden" value="<?=$row['secretary_id']?>">
                                     <input class="radius_input_row"  value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
-                                    <a class="input_row_arrow c_blue change_ajax"><?=__('确 认', 'nlyd-student')?></a>
+                                    <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a>
                                 </div>
                             </div>
                         <?php endif;?>
@@ -225,7 +225,7 @@
             var id=$(this).attr('data-file')
             $('#'+id).click()
         })
-        $('.change_ajax').click(function(){
+        $('.search_val').click(function(){
             var _this=$(this);
             if(!_this.hasClass('disabled')){
                 var search_val=_this.prev('.radius_input_row').val()
@@ -242,6 +242,13 @@
                         success: function(res, textStatus, jqXHR){
                             console.log(res)
                             // $.alerts(res.data.info)
+                            if(!res.success){
+                                $.alerts(res.data.info+'，选择失败')
+                            }else{
+                                var user_id=res.data.user_id;
+                                _this.parents('.input_row').find('.get_id').val(user_id);
+                                $.alerts("<?=__('选择成功', 'nlyd-student')?>")
+                            }
                             _this.removeClass('disabled');
                         },
                         complete: function(jqXHR, textStatus){
