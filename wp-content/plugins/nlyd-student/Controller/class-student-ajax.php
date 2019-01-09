@@ -5712,30 +5712,37 @@ class Student_Ajax
      * 战队申请
      */
     public function team_apply(){
-        if(empty($_POST['post_title']) || empty($_POST['team_director'])){
-            wp_send_json_error(array('info'=>__('战队名字/负责人必填')));
+        if(empty($_POST['post_title']) || empty($_POST['director_phone'])){
+            //wp_send_json_error(array('info'=>__('战队名字/负责人必填')));
         }
         //print_r($_POST);die;
         global $wpdb,$current_user;
 
-        //判断当前机构是否已有战队
-        $team = $wpdb->get_row("select * from {$wpdb->prefix}team_meta where user_id = {$current_user->ID}",ARRAY_A);
-        //print_r($team);die;
+        //判断战队负责人
+        /*if(reg_match('m',$_POST['director_phone'])) wp_send_json_error(array(__('负责人手机格式不正确', 'nlyd-student')));
+        $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['director_phone']}'
+                ";
+        $team_director = $wpdb->get_row($sql,ARRAY_A);
+        if(empty($team_director)) wp_send_json_error(array('info'=>__('该负责人未注册')));
+        if(empty($team_director['meta_value'])) wp_send_json_error(array('info'=>__('该负责人未实名认证')));*/
+
         //开启事务
         $wpdb->query('START TRANSACTION');
-        if(!empty($team)){
-            $a = $wpdb->update($wpdb->prefix.'posts',array('post_title'=>$_POST['post_title'],'post_modified'=>get_time('mysql')),array('ID'=>$team['team_id']));
+        if(!empty($_POST['team_id'])){
+            $a = $wpdb->update($wpdb->prefix.'posts',array('post_title'=>$_POST['post_title'],'post_modified'=>get_time('mysql')),array('ID'=>$_POST['team_id']));
             $b = $wpdb->update($wpdb->prefix.'team_meta',
                                     array(
                                         'team_world'=>!empty($_POST['team_world']) ? $_POST['team_world'] : '',
                                         'team_slogan'=>!empty($_POST['team_slogan']) ? $_POST['team_slogan'] : '',
-                                        'team_director'=>!empty($_POST['team_director']) ? $_POST['team_director'] : '',
+                                        'team_director'=>!empty($team_director['ID']) ? $team_director['ID'] : '',
                                         'max_number'=>!empty($_POST['max_number']) ? $_POST['max_number'] : '',
                                         'team_leader'=>!empty($_POST['team_leader']) ? $_POST['team_leader'] : '',
                                         'team_brief'=>!empty($_POST['team_brief']) ? $_POST['team_brief'] : '',
                                         'created_time'=>get_time('mysql'),
                                     ),
-                                    array('id'=>$team['id'])
+                                    array('team_id'=>$_POST['team_id'])
                             );
         }else{
 
@@ -5747,21 +5754,24 @@ class Student_Ajax
                     'post_author' => $current_user->ID,
                 )
             );
+            $parent_id = !empty($_POST['type']) ? $current_user->ID : '';
+            $user_id = !empty($_POST['type']) ? '' : $current_user->ID;
             $b = $wpdb->insert($wpdb->prefix.'team_meta',
                 array(
-                    'user_id'=>$current_user->ID,
+                    'user_id'=>$user_id,
                     'team_id'=>$a,
                     'team_world'=>!empty($_POST['team_world']) ? $_POST['team_world'] : '',
                     'team_slogan'=>!empty($_POST['team_slogan']) ? $_POST['team_slogan'] : '',
-                    'team_director'=>!empty($_POST['team_director']) ? $_POST['team_director'] : '',
+                    'team_director'=>!empty($team_director['ID']) ? $team_director['ID'] : '',
                     'max_number'=>!empty($_POST['max_number']) ? $_POST['max_number'] : '',
                     'team_leader'=>!empty($_POST['team_leader']) ? $_POST['team_leader'] : '',
                     'team_brief'=>!empty($_POST['team_brief']) ? $_POST['team_brief'] : '',
+                    'parent_id'=>!empty($parent_id) ? $parent_id : '',
                     'created_time'=>get_time('mysql'),
                 )
             );
         }
-        //print_r($a .'&&'. $b);
+        //print_r($a .'&&'. $b);die;
         if($a && $b){
             $wpdb->query('COMMIT');
             wp_send_json_success(array('info' => __('提交成功', 'nlyd-student')));
@@ -5769,6 +5779,41 @@ class Student_Ajax
             $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
         }
+    }
+
+    /**
+     * 获取机构战队
+     */
+    public function get_zone_teams(){
+        global $wpdb,$current_user;
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        $sql = "select a.*,b.post_title from {$wpdb->prefix}team_meta a 
+                left join {$wpdb->prefix}posts b on a.team_id = b.ID
+                where a.user_id = {$current_user->ID} or a.parent_id = {$current_user->ID}  
+                order by parent_id asc limit $start,$pageSize";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($sql);
+        //print_r($sql);die;
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无战队', 'nlyd-student')));
+        if(!empty($rows)){
+
+            foreach ($rows as $k => $v){
+                //获取战队负责人
+                $team_director = get_user_meta($v['team_director'],'user_real_name')[0];
+                $meta = empty($team_director['real_name']) ? '暂无' : $team_director['real_name'];
+                $rows[$k]['team_director'] =  $meta;
+                //获取人数
+                $sql_ = "select count(*) total from {$wpdb->prefix}match_team where team_id = {$v['user_id']}";
+                $rows[$k]['team_total'] = $wpdb->get_var($sql_);
+            }
+        }
+        //print_r($rows);
+        wp_send_json_success(array('info'=>$rows));
     }
 
     /**

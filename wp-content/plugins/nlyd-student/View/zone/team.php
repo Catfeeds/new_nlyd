@@ -7,7 +7,7 @@
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12  detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/');?>">
+                <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/team/');?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title">
@@ -26,7 +26,7 @@
                     <div class="team_row width-padding layui-row layui-bg-white width-margin-pc" style="margin-top: 0;">
                         <div class="team_row_title">
                             <span class="bold fs_16 c_black"><?=$post_title?> </span>
-                            <a class="fs_12 c_blue" href="<?=home_url('/zone/teamBuild/');?>"><?=__('编辑资料', 'nlyd-student')?></a>
+                            <a class="fs_12 c_blue" href="<?=home_url('/zone/teamBuild/team_id/'.$team_id);?>"><?=__('编辑资料', 'nlyd-student')?></a>
                             <input type="hidden" name="team_id" id="team_id" value="<?=$team_id;?>"/>
                         </div>
                         <div class="team_row_tag"><span class="c_yellow mr_10"><i class="iconfont">&#xe658;</i></span><?=__($team_slogan, 'nlyd-student')?></div>

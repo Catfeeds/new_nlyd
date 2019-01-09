@@ -16,7 +16,8 @@
                 <div class="width-padding layui-row width-margin-pc  have-bottom">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <input type="hidden" name="action" value="team_apply" />
-                        <input type="hidden" name="id" value="<?=$id?>" />
+                        <input type="hidden" name="team_id" value="<?=$_GET['team_id']?>" />
+                        <input type="hidden" name="type" value="<?=$_GET['type']?>" />
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('战队名称', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
@@ -48,7 +49,6 @@
                         </div>
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认申请', 'nlyd-student')?></div></a>
                     </form>
-                    
                 </div>
             </div>
         </div>            
