@@ -203,7 +203,7 @@ class Student_Matchs extends Student_Home
 
         //获取比赛项目
         $project = $this->get_match_project($_GET['match_id'],$match['match_project_id']);
-        //print_r($project);
+        print_r($project);
 
         //获取所有报名选手总数
         $sql2 = "select count(a.id) order_total
@@ -240,16 +240,14 @@ class Student_Matchs extends Student_Home
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
-//        $row = get_post($_GET['project_id']);
-        $project_alias = get_post_meta($_GET['project_id'],'project_alias', true);
+        $project = get_post($_GET['project_id']);
         $data = array(
-//            'post_content'=>$row->post_content,
-            'project_alias'=>$project_alias,
+            'project_title'=>$project->post_title,
+            'genre_title'=>'脑力世界杯',
         );
 
-
-
-        $view = student_view_path.CONTROLLER.'/match-Rule.php';
+        $view = student_view_path.'trains/ready.php';
+        //$view = student_view_path.CONTROLLER.'/match-Rule.php';
         load_view_template($view,$data);
     }
     /**
@@ -1432,7 +1430,8 @@ class Student_Matchs extends Student_Home
                     }
                 }
                 $project_id = isset($val['match_project_id']) ? $val['match_project_id'] : $val['ID'];
-                $val['rule_url'] = home_url('matchs/matchRule/match_id/'.$match_id.'/project_id/'.$project_id);
+                $project_alias = get_post_meta($project_id,'project_alias')[0];
+                $val['rule_url'] = home_url('matchs/matchRule/match_id/'.$match_id.'/project_id/'.$project_id.'/type/'.$project_alias);
                 $project[$k]['project'][] = $val;
 
             }

@@ -5948,6 +5948,22 @@ class Student_Ajax
 
     }
 
+    /**
+     * 通过手机获取用户
+     */
+    public function get_mobile_user(){
+        global $wpdb;
+        if(reg_match('m',$_POST['mobile'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
+        $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['mobile']}'
+                ";
+        $row = $wpdb->get_row($sql,ARRAY_A);
+        if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册')));
+        if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证')));
+        wp_send_json_success(array('user_id'=>$row['ID']));
+    }
+
 
     /*
     *比较字符串不同的字符
