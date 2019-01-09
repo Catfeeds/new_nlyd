@@ -108,11 +108,12 @@
                                     <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                                 </div>
                                 <div class="input_row">
-                                    <!-- <input class="get_id" name="chairman_id" style="display:none" value="<?=$row['chairman_id']?>"> -->
-                                    <!-- <input class="radius_input_row change_ajax" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会主席', 'nlyd-student')?>"> -->
-                                    <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
+                                    <input class="get_id" name="chairman_id" style="display:none" value="<?=$row['chairman_id']?>">
+                                    <input class="radius_input_row" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                    <a class="input_row_arrow c_blue change_ajax"><?=__('确 认', 'nlyd-student')?></a>
+                                    <!-- <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                         <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
-                                    </select>
+                                    </select> -->
                                 </div>
                             </div>
                             <div>
@@ -121,12 +122,12 @@
                                     <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                                 </div>
                                 <div class="input_row">
-                                    <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
+                                    <!-- <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                         <option value="<?=$row['secretary_id']?>" selected><?=$row['secretary_name']?></option>
-                                    </select>
-                                    <!-- <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>"> -->
-                                    <!-- <input class="radius_input_row change_ajax" name="secretary_id"  value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会秘书', 'nlyd-student')?>"> -->
-
+                                    </select> -->
+                                    <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>">
+                                    <input class="radius_input_row"  value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                    <a class="input_row_arrow c_blue change_ajax"><?=__('确 认', 'nlyd-student')?></a>
                                 </div>
                             </div>
                         <?php endif;?>
@@ -138,33 +139,6 @@
                                 </div>
                             </div>
                         <?php endif;?>
-
-                        <!--<div>
-                            <div class="lable_row"><span class="c_black"><?/*=__($zone_type_name.'管理员', 'nlyd-student')*/?>：</span></div>
-                            <div class="input_row">
-                                <input class="radius_input_row" disabled type="text" value="<?/*=$director*/?>">
-                            </div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?/*=__('管理员电话', 'nlyd-student')*/?>：</span></div>
-                            <div class="input_row">
-                                <input class="radius_input_row" disabled type="text" value="<?/*=$contact*/?>">
-                            </div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?/*=__('管理员证件', 'nlyd-student')*/?>：</span></div>
-                            <div class="input_row img-zoos img-zoos0">
-                                <?php /*if(!empty(!empty($user_ID_Card))):*/?>
-                                    <?php /*foreach ($user_ID_Card as $v){ */?>
-                                        <div class="post-img no-dash">
-                                            <div class="img-zoo img-box">
-                                                <img src="<?/*=$v*/?>"/>
-                                            </div>
-                                        </div>
-                                    <?php /*} */?>
-                                <?php /*endif;*/?>
-                            </div>
-                        </div>-->
                         <?php if($row['user_status'] != 1):?>
                             <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
                         <?php endif;?>
@@ -251,24 +225,58 @@
             var id=$(this).attr('data-file')
             $('#'+id).click()
         })
-        $('.js-data-select-ajax').each(function () {
+        $('.change_ajax').click(function(){
             var _this=$(this);
-            var _placeholder = _this.attr('data-placeholder');
-            _this.select2({
-                placeholder : _placeholder,
-                allowClear:true,
-                ajax: {
-                    url: admin_ajax +'?action=get_manage_user'  ,
-                    dataType: 'json',
-                    delay: 600, //wait 250 milliseconds before triggering the request
-                    processResults: function (res) {
-                        return {
-                            results: res.data
-                        };
+            if(!_this.hasClass('disabled')){
+                var search_val=_this.prev('.radius_input_row').val()
+                if(search_val.length>0){
+                    var post_data={
+                        mobile:search_val,
+                        action:"get_mobile_user",
                     }
+                    $.ajax({
+                        data: post_data,
+                        beforeSend:function(XMLHttpRequest){
+                            _this.addClass('disabled')
+                        },
+                        success: function(res, textStatus, jqXHR){
+                            console.log(res)
+                            // $.alerts(res.data.info)
+                            _this.removeClass('disabled');
+                        },
+                        complete: function(jqXHR, textStatus){
+                            if(textStatus=='timeout'){
+                                $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                                _this.removeClass('disabled');
+                            }
+                            
+                        }
+                    })
+                }else{
+                    $.alerts("<?=__('请填写您要搜索的信息', 'nlyd-student')?>")
                 }
-            });
+            }else{
+                $.alerts("<?=__('正在查询是否存在该用户..', 'nlyd-student')?>")
+            }
         })
+        // $('.js-data-select-ajax').each(function () {
+        //     var _this=$(this);
+        //     var _placeholder = _this.attr('data-placeholder');
+        //     _this.select2({
+        //         placeholder : _placeholder,
+        //         allowClear:true,
+        //         ajax: {
+        //             url: admin_ajax +'?action=get_manage_user'  ,
+        //             dataType: 'json',
+        //             delay: 600, //wait 250 milliseconds before triggering the request
+        //             processResults: function (res) {
+        //                 return {
+        //                     results: res.data
+        //                 };
+        //             }
+        //         }
+        //     });
+        // })
 
         var imgs=[]
         var imgs1=[]
