@@ -119,6 +119,7 @@ class Users {
                 if($imgArr != []){
                     //查询要删除的原图片
                     $cardOldImg = get_user_meta($user_id, 'user_ID_Card', true);
+                    $cardOldImg = $cardOldImg ? $cardOldImg : [];
                     foreach ($cardOldImg as $coik => $coiv){
                         if(isset($imgArr[$coik])) {
                             $unsetImgArr[] = $coiv;
@@ -162,10 +163,10 @@ class Users {
         $nationalityArr = json_decode($str, true);
 
         //证件照片
-        $cardImg = isset($usermeta['user_ID_Card']) ? unserialize($usermeta['user_ID_Card'][0]) : '';
+        $cardImg = isset($usermeta['user_ID_Card'][0]) ? unserialize($usermeta['user_ID_Card'][0]) : [];
 
         //所在地区
-        $whereAddress = isset($usermeta['user_address']) ? unserialize($usermeta['user_address'][0]) : [];
+        $whereAddress = isset($usermeta['user_address'][0]) ? unserialize($usermeta['user_address'][0]) : [];
 //        leo_dump($usermeta);
 //        die;
 
@@ -269,7 +270,6 @@ class Users {
                             <?php
                             $num = 1;
                             foreach ($cardImg as $k => $civ) {
-
                                 ?>
                                 <div id="cardImg-<?=$k?>">
                                     <div style="width: 190px;display: inline-block;">
