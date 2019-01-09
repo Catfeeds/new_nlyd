@@ -191,6 +191,15 @@
 .bg_alipay_qr{
     background-position: -428px 1px;
 }
+.bg_qr_code{
+    background-position: -453px 1px;
+}
+.bg_time{
+    background-position: -478px 1px;
+}
+.bg_edit{
+    background-position: -501px 1px;
+}
 .select_box{
     position: absolute;
     width: 100%;

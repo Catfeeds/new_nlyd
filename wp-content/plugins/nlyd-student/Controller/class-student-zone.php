@@ -509,6 +509,13 @@ class Student_Zone
         load_view_template($view,$data);
     }
     /**
+     * 比赛学员报名/签到情况
+     */
+    public function matchSignDetail(){
+        $view = student_view_path.CONTROLLER.'/match-signDetail.php';
+        load_view_template($view);
+    }
+    /**
      * 比赛发布成功
      */
     public function buildSuccess(){
