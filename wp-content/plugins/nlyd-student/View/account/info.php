@@ -453,7 +453,7 @@ jQuery(document).ready(function($) {
                     _this.find('.post-img.dash').css('display','none')
                 }
             }else if(_this.hasClass('img-zoos0')){//身份证
-                if(_this.find('.post-img.no-dash').length>=3){
+                if(_this.find('.post-img.no-dash').length>=2){
                     _this.find('.post-img.dash').css('display','none')
                 }
             }else if(_this.hasClass('img-zoos2')){//寸照
@@ -471,11 +471,13 @@ jQuery(document).ready(function($) {
             //     alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
             //     return false;
             // }
-            array.unshift(file)
+            // array.unshift(file)
             var reader = new FileReader();
+            
             var src='';
             //读取File对象的数据
             reader.onload = function(evt){
+                array.unshift(evt.target.result)
                 //data:img base64 编码数据显示
                 var dom='<div class="post-img no-dash" style="top:3px">'
                         +'<div class="img-zoo img-box">'
@@ -492,7 +494,7 @@ jQuery(document).ready(function($) {
                     anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
                 })
                 if(className=="img-zoos0"){
-                    if($('.'+className+' .post-img.no-dash').length>=3){
+                    if($('.'+className+' .post-img.no-dash').length>=2){
                         $('.'+className+' .post-img.dash').css('display','none')
                     }
                 }else if(className=="img-zoos1"){
@@ -507,6 +509,10 @@ jQuery(document).ready(function($) {
                 }
             }
             reader.readAsDataURL(file);
+            // reader.readAsArrayBuffer(file);
+            // reader.readAsBinaryString(file);
+            // reader.readAsText(file)
+
             $(e.target).val('')
         }
 
@@ -601,7 +607,7 @@ jQuery(document).ready(function($) {
                         $.alerts(res.data.info)
                         if(res.data.url){
                             setTimeout(function() {
-                                window.location.href=res.data.url
+                                // window.location.href=res.data.url
                             }, 300);
 
                         }
