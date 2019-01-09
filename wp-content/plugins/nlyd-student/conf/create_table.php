@@ -87,7 +87,7 @@ function the_table_install () {
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `user_id` int(20) DEFAULT NULL COMMENT '收益人id',
           `user_type` int(10) DEFAULT NULL COMMENT '主体类型id',
-          `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 match  grading extract subject',
+          `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 match grading extract subject undertake',
           `match_id`    int(20) DEFAULT NULL COMMENT '收益领取记录表(user_income_logs)',
           `user_income` decimal(10,2) DEFAULT NULL COMMENT '收益+ 收益- 两情况',
           `extract_type` varchar(20) DEFAULT NULL COMMENT '提现类型 bank 银行卡 wallet 钱包 weChat 微信',
