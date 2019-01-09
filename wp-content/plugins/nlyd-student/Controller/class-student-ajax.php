@@ -4515,18 +4515,31 @@ class Student_Ajax
         }
         //print_r($_POST);die;
         if($_POST['type_id'] == 3 && $_POST['zone_type_alias'] == 'match'){    //赛区
-            if(empty($_POST['chairman_id']) || empty($_POST['secretary_id'])){
+            if(empty($_POST['chairman_phone']) || empty($_POST['secretary_phone'])){
                 wp_send_json_error(array('info'=>'组委会主席或者秘书长为必选项'));
             }
-            //判断主席/秘书长资料
-            $chairman_meta = get_user_meta($_POST['chairman_id'],'user_ID_Card')[0];
-            if(empty($chairman_meta)){
-                wp_send_json_error(array('info'=>__('该主席未上传身份证,请核实')));
-            }
-            $secretary_meta = get_user_meta($_POST['secretary_id'],'user_ID_Card');
-            if(empty($secretary_meta)){
-                wp_send_json_error(array('info'=>__('该秘书长未上传身份证,请核实')));
-            }
+
+            if(reg_match('m',$_POST['chairman_phone'])) wp_send_json_error(array(__('组委会主席手机格式不正确', 'nlyd-student')));
+            if(reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array(__('秘书长手机格式不正确', 'nlyd-student')));
+            $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['chairman_phone']}'
+                ";
+            $row = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($row)) wp_send_json_error(array('info'=>__('该组委会主席未注册')));
+            if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该组委会主席未实名认证')));
+
+            $sql_ = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['secretary_phone']}'
+                ";
+            $row_ = $wpdb->get_row($sql_,ARRAY_A);
+            if(empty($row)) wp_send_json_error(array('info'=>__('该秘书长未注册')));
+            if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该秘书长未实名认证')));
+
+            $chairman_id = $row['ID'];
+            $secretary_id = $row_['ID'];
+
         }
         if(!empty($_FILES['business_licence'])){
             $upload_dir = wp_upload_dir();
@@ -4553,8 +4566,8 @@ class Student_Ajax
             'opening_bank'=>$_POST['opening_bank'],
             'opening_bank_address'=>$_POST['opening_bank_address'],
             'bank_card_num'=>$_POST['bank_card_num'],
-            'chairman_id'=>!empty($_POST['chairman_id']) ? $_POST['chairman_id'] : '',
-            'secretary_id'=>!empty($_POST['secretary_id']) ? $_POST['secretary_id'] : '',
+            'chairman_id'=>!empty($chairman_id) ? $chairman_id : '',
+            'secretary_id'=>!empty($secretary_id) ? $secretary_id : '',
             'referee_id'=>$current_user->data->referee_id,
             'user_status'=>-1,
             'role_id'=>$role_id,
