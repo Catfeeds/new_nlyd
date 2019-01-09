@@ -222,6 +222,7 @@ function the_table_install () {
           `parent_id` int(20) unsigned DEFAULT 0 COMMENT '上级主体id',
           `apply_id` int(20) unsigned DEFAULT 0 COMMENT '申请人id',
           `term_time` varchar(64) DEFAULT NULL COMMENT '有效期',
+          `zone_number` varchar(64) DEFAULT NULL COMMENT '机构编号',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
