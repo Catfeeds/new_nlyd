@@ -1154,7 +1154,7 @@ class Spread{
                                         echo '钱包';
                                         break;
                                     case 'bank':
-                                        echo '银行卡';
+                                        echo $row['bank_address'];
                                         break;
                                 }
                             ?>
