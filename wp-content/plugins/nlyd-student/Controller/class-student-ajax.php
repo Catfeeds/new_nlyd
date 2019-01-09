@@ -372,7 +372,7 @@ class Student_Ajax
                     }
                 }
                 $my_score = $success_len * 23;
-                if ($len/$success_len >= 0.8){
+                if ($success_len/$len >= 0.8){
                     $my_score += $_POST['surplus_time'] * 1;
                 }
 
