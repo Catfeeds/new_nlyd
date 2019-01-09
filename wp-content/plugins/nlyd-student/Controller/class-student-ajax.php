@@ -4491,6 +4491,8 @@ class Student_Ajax
      */
     public function zone_apply_submit(){
         global $wpdb,$current_user;
+        ini_set('post_max_size','30M');
+        //print_r($_FILES);die;
         //print_r($_POST);die;
         if($_POST['zone_num'] > 0){
             $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where id = {$_POST['zone_num']}",ARRAY_A);
@@ -4513,18 +4515,31 @@ class Student_Ajax
         }
         //print_r($_POST);die;
         if($_POST['type_id'] == 3 && $_POST['zone_type_alias'] == 'match'){    //赛区
-            if(empty($_POST['chairman_id']) || empty($_POST['secretary_id'])){
+            if(empty($_POST['chairman_phone']) || empty($_POST['secretary_phone'])){
                 wp_send_json_error(array('info'=>'组委会主席或者秘书长为必选项'));
             }
-            //判断主席/秘书长资料
-            $chairman_meta = get_user_meta($_POST['chairman_id'],'user_ID_Card')[0];
-            if(empty($chairman_meta)){
-                wp_send_json_error(array('info'=>__('该主席未上传身份证,请核实')));
-            }
-            $secretary_meta = get_user_meta($_POST['secretary_id'],'user_ID_Card');
-            if(empty($secretary_meta)){
-                wp_send_json_error(array('info'=>__('该秘书长未上传身份证,请核实')));
-            }
+
+            if(reg_match('m',$_POST['chairman_phone'])) wp_send_json_error(array(__('组委会主席手机格式不正确', 'nlyd-student')));
+            if(reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array(__('秘书长手机格式不正确', 'nlyd-student')));
+            $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['chairman_phone']}'
+                ";
+            $row = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($row)) wp_send_json_error(array('info'=>__('该组委会主席未注册')));
+            if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该组委会主席未实名认证')));
+
+            $sql_ = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['secretary_phone']}'
+                ";
+            $row_ = $wpdb->get_row($sql_,ARRAY_A);
+            if(empty($row)) wp_send_json_error(array('info'=>__('该秘书长未注册')));
+            if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该秘书长未实名认证')));
+
+            $chairman_id = $row['ID'];
+            $secretary_id = $row_['ID'];
+
         }
         if(!empty($_FILES['business_licence'])){
             $upload_dir = wp_upload_dir();
@@ -4551,8 +4566,8 @@ class Student_Ajax
             'opening_bank'=>$_POST['opening_bank'],
             'opening_bank_address'=>$_POST['opening_bank_address'],
             'bank_card_num'=>$_POST['bank_card_num'],
-            'chairman_id'=>!empty($_POST['chairman_id']) ? $_POST['chairman_id'] : '',
-            'secretary_id'=>!empty($_POST['secretary_id']) ? $_POST['secretary_id'] : '',
+            'chairman_id'=>!empty($chairman_id) ? $chairman_id : '',
+            'secretary_id'=>!empty($secretary_id) ? $secretary_id : '',
             'referee_id'=>$current_user->data->referee_id,
             'user_status'=>-1,
             'role_id'=>$role_id,
@@ -4640,6 +4655,7 @@ class Student_Ajax
         $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,
                   if(user_income <> '' ,user_income ,'待到账') user_income,
                   case income_type
+                    when 'undertake' then '承办赛事'
                     when 'match' then '比赛收益'
                     when 'grading' then '考级收益'
                     when 'subject' then '推荐奖励'
@@ -5215,11 +5231,12 @@ class Student_Ajax
         if(empty($_POST['num'])) wp_send_json_error(array('info'=>__('请输入提现金额')));
 
         //获取可提现金额
-        $stream_total = $wpdb->get_var("select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} ");
+        $stream_total = $wpdb->get_var("select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type != 'undertake' ");
 
         if($stream_total < $_POST['num']){
-            wp_send_json_error(array('info'=>__('余额不足,无法提现')));
+            wp_send_json_error(array('info'=>__('可提现余额不足,无法提现')));
         }
+
         $wpdb->query('START TRANSACTION');
         $insert1 = array(
             'user_id'=>$current_user->ID,
@@ -5943,6 +5960,23 @@ class Student_Ajax
         }
 
     }
+
+    /**
+     * 通过手机获取用户
+     */
+    public function get_mobile_user(){
+        global $wpdb;
+        if(reg_match('m',$_POST['mobile'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
+        $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['mobile']}'
+                ";
+        $row = $wpdb->get_row($sql,ARRAY_A);
+        if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册')));
+        if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证')));
+        wp_send_json_success(array('user_id'=>$row['ID']));
+    }
+
 
 
     /*

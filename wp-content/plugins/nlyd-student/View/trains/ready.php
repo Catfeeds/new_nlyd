@@ -452,9 +452,9 @@
                 break;
         }
     ?>
+    <?php if(isset($_GET['genre_id'])):?>
     <a class="a-btn a-btn-table" id="go" href="<?=$url?>"><div><?=__('开始训练', 'nlyd-student')?></div></a>
-
-
+    <?php endif;?>
 </div>
 <script>
 jQuery(function($) { 

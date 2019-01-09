@@ -143,7 +143,7 @@ class Student_Zone
 
         global $wpdb,$current_user;
         //获取用户今日收益
-        $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() and user_income > 0";
+        $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() and user_income > 0 ";
         $data['stream'] = $wpdb->get_var($sql1);
 
         //获取用户累计收益
@@ -1124,9 +1124,9 @@ class Student_Zone
         //print_r($row);
         if(!empty($row)){
             //获取主席
-            $row['chairman_name'] = !empty($row['chairman_id']) ? get_user_meta($row['chairman_id'],'user_real_name')[0]['real_name'] : '';
+            $row['chairman_phone'] = !empty($row['chairman_id']) ? $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['chairman_id']} ") : '';
             //获取秘书长
-            $row['secretary_name'] = !empty($row['secretary_id']) ? get_user_meta($row['secretary_id'],'user_real_name')[0]['real_name'] : '';
+            $row['secretary_phone'] = !empty($row['secretary_id']) ? $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['secretary_id']} ") : '';
 
             $data['row'] = $row;
         }
@@ -1174,7 +1174,7 @@ class Student_Zone
      */
     public function get_stream_total(){
         global $wpdb,$current_user;
-        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} ";
+        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type != 'undertake' ";
         return $wpdb->get_var($sql3);
     }
 
