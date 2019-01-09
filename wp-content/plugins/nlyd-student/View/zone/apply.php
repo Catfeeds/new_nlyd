@@ -126,7 +126,7 @@
                                         <option value="<?=$row['secretary_id']?>" selected><?=$row['secretary_name']?></option>
                                     </select> -->
                                     <input class="get_id" name="secretary_id" type="hidden" value="<?=$row['secretary_id']?>">
-                                    <input class="radius_input_row"  value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                    <input class="radius_input_row" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
                                     <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                                 $.alerts(res.data.info+'，选择失败')
                             }else{
                                 var user_id=res.data.user_id;
-                                _this.parents('.input_row').find('.get_id').val(user_id);
+                                _this.parent('div').find('.get_id').val(user_id);
                                 $.alerts("<?=__('选择成功', 'nlyd-student')?>")
                             }
                             _this.removeClass('disabled');
