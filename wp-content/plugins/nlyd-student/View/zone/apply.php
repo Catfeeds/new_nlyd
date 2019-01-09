@@ -225,47 +225,6 @@
             var id=$(this).attr('data-file')
             $('#'+id).click()
         })
-        // $('.search_val').click(function(){
-        //     var _this=$(this);
-        //     if(!_this.hasClass('disabled')){
-        //         var search_val=_this.prev('.radius_input_row').val()
-        //         if(search_val.length>0){
-        //             var post_data={
-        //                 mobile:search_val,
-        //                 action:"get_mobile_user",
-        //             }
-        //             $.ajax({
-        //                 data: post_data,
-        //                 beforeSend:function(XMLHttpRequest){
-        //                     _this.addClass('disabled')
-        //                 },
-        //                 success: function(res, textStatus, jqXHR){
-        //                     console.log(res)
-        //                     // $.alerts(res.data.info)
-        //                     if(!res.success){
-        //                         $.alerts(res.data.info+'，选择失败')
-        //                     }else{
-        //                         var user_id=res.data.user_id;
-        //                         _this.parent('div').find('.get_id').val(user_id);
-        //                         $.alerts("<?=__('选择成功', 'nlyd-student')?>")
-        //                     }
-        //                     _this.removeClass('disabled');
-        //                 },
-        //                 complete: function(jqXHR, textStatus){
-        //                     if(textStatus=='timeout'){
-        //                         $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-        //                         _this.removeClass('disabled');
-        //                     }
-                            
-        //                 }
-        //             })
-        //         }else{
-        //             $.alerts("<?=__('请填写您要搜索的信息', 'nlyd-student')?>")
-        //         }
-        //     }else{
-        //         $.alerts("<?=__('正在查询是否存在该用户..', 'nlyd-student')?>")
-        //     }
-        // })
         // $('.js-data-select-ajax').each(function () {
         //     var _this=$(this);
         //     var _placeholder = _this.attr('data-placeholder');
@@ -302,23 +261,20 @@
 
         function changes(e,_this,array) {
             var file=e.target.files[0];
-            // var fileSize=file.size;
-            // var fSize=2;
-            // if(fileSize > 1024*1024*fSize){
-            //     alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
-            //     return false;
-            // }
-            // array.unshift(file)
-            console.log(array)
+            if( !file.type.match(/.png|.jpg|.jpeg/) ) {
+                alert("<?=__('上传错误,文件格式必须为', 'nlyd-student')?>：png/jpg/jpeg");
+                return;  
+            }
             var reader = new FileReader();
             var src='';
             //读取File对象的数据
-            reader.onload = function(evt){
-                //data:img base64 编码数据显示
-                array.unshift(evt.target.result)
+            imgCompress(file,function(imgBase64){
+                imgBase64 = imgBase64;    //存储转换的base64编码
+                array.unshift(imgBase64)
+                // console.log(imgBase64);  
                 var dom='<div class="post-img no-dash">'
                     +'<div class="img-zoo img-box">'
-                    +'<img src="'+evt.target.result+'"/>'
+                    +'<img src="'+imgBase64+'"/>'
                     +'</div>'
                     +'<div class="del">'
                     +'<i class="iconfont">&#xe633;</i>'
@@ -339,9 +295,8 @@
                         $('.'+className+' .dash').css('display','none')
                     }
                 }
-            }
-            reader.readAsDataURL(file);
-            $(e.target).val('')
+                $(e.target).val('')
+            });
         }
 
         $("#img-zoos0").change(function(e) {
@@ -433,7 +388,7 @@
                             $.alerts(res.data.info)
                             if(res.data.url){
                                 setTimeout(function() {
-                                    window.location.href=res.data.url
+                                    // window.location.href=res.data.url
                                 }, 300);
                             }else{
                                 _this.removeClass('disabled');

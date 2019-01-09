@@ -1,5 +1,6 @@
-jQuery(document).ready(function($) {
 
+jQuery(document).ready(function($) {
+    
     var _style="<style type='text/css' id='_font'>"
              
         +"@font-face {font-family: 'iconfont';"
