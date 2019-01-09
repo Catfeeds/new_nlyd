@@ -44,7 +44,7 @@
                         </div>
                         <div class="enter_num">
                             <div class="danwei bold c_black fs_20">￥</div>
-                            <input class="radius_input_row nl-foucs" type="text" name="num" lay-verify="number" autocomplete="off" placeholder="<?=__('输入金额，最多可提现'.$balance, 'nlyd-student')?>">
+                            <input class="radius_input_row nl-foucs" id="num" type="text" name="num" lay-verify="number" autocomplete="off" data-max="<?=$balance?>" placeholder="<?=__('输入金额，最多可提现'.$balance, 'nlyd-student')?>">
                         </div>
                         <input type="hidden" name="action" value="user_extract_apply"/>
                         <a class="a-btn a-btn-table bg_gradient_green" lay-filter="layform" lay-submit=""><div><?=__('提 现', 'nlyd-student')?></div></a>
@@ -62,33 +62,37 @@ jQuery(function($) {
         form.render();
         form.verify($.validationLayui.allRules);
         form.on('submit(layform)', function(data){//实名认证提交
-            console.log(data.field)
             var _this=$(this);
-            if(!_this.hasClass('disabled')){
-                $.ajax({
-                    data:data.field,
-                    beforeSend:function(XMLHttpRequest){
-                        _this.addClass('disabled')
-                    },
-                    success:function(res){
-                        $.alerts(res.data.info);
-                        if(res.success){
-                            setTimeout(function () {
-                                window.location.href = res.data.url;
-                            },800)
-                        }else{
-                            _this.removeClass('disabled');
+            var _num=parseInt($('#num').attr('data-max'))
+            if (data.field.num<=_num) {//可提现金额小于max
+                if(!_this.hasClass('disabled')){
+                    $.ajax({
+                        data:data.field,
+                        beforeSend:function(XMLHttpRequest){
+                            _this.addClass('disabled')
+                        },
+                        success:function(res){
+                            $.alerts(res.data.info);
+                            if(res.success){
+                                setTimeout(function () {
+                                    window.location.href = res.data.url;
+                                },800)
+                            }else{
+                                _this.removeClass('disabled');
+                            }
+                        },
+                        complete: function(jqXHR, textStatus){
+                            if(textStatus=='timeout'){
+                                $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                                _this.removeClass('disabled');
+                    　　　　 }
                         }
-                    },
-                    complete: function(jqXHR, textStatus){
-                        if(textStatus=='timeout'){
-                            $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                            _this.removeClass('disabled');
-                　　　　 }
-                    }
-                })
+                    })
+                }else{
+                    $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+                }
             }else{
-                $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+                $.alerts("<?=__('余额不足', 'nlyd-student')?>")
             }
         })
     })
