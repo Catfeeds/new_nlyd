@@ -1002,6 +1002,7 @@ if(!class_exists('MatchController')){
                     $project_id = arr2str($project_array);
                     $match_meta['match_project_id'] = $project_id;
 
+                    $wpdb->query("delete from {$wpdb->prefix}match_project_more where match_id = {$post_ID} and project_id not in({$project_id})");
 
                     $match_meta['match_id'] = $post_ID;
                     /*$match_meta['created_id'] = $current_user->ID;

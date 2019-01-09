@@ -492,6 +492,7 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
             formData.append('_wpnonce',$("#inputImg").val());
             formData.append('meta_key','user_head');
             formData.append('meta_val',blob);
+            console.log(blob)
             $.ajax({
                     data: formData,
                     contentType : false,

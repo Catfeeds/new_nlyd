@@ -22,11 +22,11 @@ function directTurnIntoBase64(fileObj,callback){//直接转换base64
   // 对图片进行压缩
 function imgCompress(fileObj, callback) { 
 	if ( typeof (FileReader) === 'undefined') {  
-		console.log("当前浏览器内核不支持base64图标压缩");  
+		// console.log("当前浏览器内核不支持base64图标压缩");  
 		//调用上传方式不压缩  
 		directTurnIntoBase64(fileObj,callback);
 	}else if(fileObj.size<250000){      //图片小于250k就不压缩
-		console.log("不需要压缩");  
+		// console.log("不需要压缩");  
 		directTurnIntoBase64(fileObj,callback);
 	} else {  
 		try {    
@@ -56,7 +56,7 @@ function imgCompress(fileObj, callback) {
 			};  
 			reader.readAsDataURL(fileObj);  
 		}catch(e){  
-			console.log("压缩失败!");  
+			// console.log("压缩失败!");  
 			//调用直接上传方式  不压缩 
 			directTurnIntoBase64(fileObj,callback); 
 		}  
