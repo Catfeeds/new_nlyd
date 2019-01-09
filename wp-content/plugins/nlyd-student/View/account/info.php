@@ -553,67 +553,84 @@ jQuery(document).ready(function($) {
                 return false;
             });
             form.on('submit(certificationFormBtn)', function(data){//实名认证提交
-                var match_id=$.Request('match_id')
-                var grad_id=$.Request('grad_id')
-                var fd = new FormData();
-                fd.append('action',data.field.action);
-                fd.append('_wpnonce',data.field._wpnonce);
-                fd.append('meta_key',data.field.meta_key);
-                fd.append('meta_val[real_type]',data.field['meta_val[real_type]']);
-                fd.append('meta_val[real_name]',data.field['meta_val[real_name]']);
-                fd.append('meta_val[real_ID]',data.field['meta_val[real_ID]']);
-                fd.append('user_gender',$('#trigger3').attr('data-value'));
-                fd.append('meta_val[real_age]',data.field['meta_val[real_age]']);
-                fd.append('user_address[area]',data.field['user_address[area]']);
-                fd.append('user_address[city]',data.field['user_address[city]']);
-                fd.append('user_address[province]',data.field['user_address[province]']);
-                fd.append('type',$('.sbu_type').val());
-                fd.append('nationality',data.field['nationality']);
-                fd.append('nationality_pic',data.field['nationality_pic']);
-                fd.append('birthday',data.field['birthday']);
-                fd.append('nationality_short',data.field['nationality_short']);
-                fd.append('sign_match',$.Request('sign_match'));
-                fd.append('order_index',$.Request('order_index'));
-                // console.log(data.field)
-                if(match_id!=null){
-                    fd.append('match_id',match_id);
-                }else{
-                    fd.append('match_id','');
-                }
-                if(grad_id!=null){
-                    fd.append('grad_id',grad_id);
-                }else{
-                    fd.append('grad_id','');
-                }
-                $.each(imgs, function (i, v) {
-                    fd.append('images[]',v);
-                })
-                // $.each(imgs1, function (i, v) {
-                //     fd.append('images_wechat[]',v);
-                // })
-                $.each(imgs2, function (i, v) {
-                    fd.append('images_color[]',v);
-                })
-                $('.post-img.no-dash input').each(function () {
-                    var name=$(this).attr('name')
-                    fd.append(name,$(this).val());
-                })
-                $.ajax({
-                    data: fd,
-                    contentType : false,
-                    processData : false,
-                    cache : false,
-                    success: function(res, textStatus, jqXHR){
-                        $.alerts(res.data.info)
-                        if(res.data.url){
-                            setTimeout(function() {
-                                // window.location.href=res.data.url
-                            }, 300);
-
-                        }
+                var _this=$(this);
+                if(!_this.hasClass('disabled')){
+                    var match_id=$.Request('match_id')
+                    var grad_id=$.Request('grad_id')
+                    var fd = new FormData();
+                    fd.append('action',data.field.action);
+                    fd.append('_wpnonce',data.field._wpnonce);
+                    fd.append('meta_key',data.field.meta_key);
+                    fd.append('meta_val[real_type]',data.field['meta_val[real_type]']);
+                    fd.append('meta_val[real_name]',data.field['meta_val[real_name]']);
+                    fd.append('meta_val[real_ID]',data.field['meta_val[real_ID]']);
+                    fd.append('user_gender',$('#trigger3').attr('data-value'));
+                    fd.append('meta_val[real_age]',data.field['meta_val[real_age]']);
+                    fd.append('user_address[area]',data.field['user_address[area]']);
+                    fd.append('user_address[city]',data.field['user_address[city]']);
+                    fd.append('user_address[province]',data.field['user_address[province]']);
+                    fd.append('type',$('.sbu_type').val());
+                    fd.append('nationality',data.field['nationality']);
+                    fd.append('nationality_pic',data.field['nationality_pic']);
+                    fd.append('birthday',data.field['birthday']);
+                    fd.append('nationality_short',data.field['nationality_short']);
+                    fd.append('sign_match',$.Request('sign_match'));
+                    fd.append('order_index',$.Request('order_index'));
+                    // console.log(data.field)
+                    if(match_id!=null){
+                        fd.append('match_id',match_id);
+                    }else{
+                        fd.append('match_id','');
                     }
-                })
-                return false;
+                    if(grad_id!=null){
+                        fd.append('grad_id',grad_id);
+                    }else{
+                        fd.append('grad_id','');
+                    }
+                    $.each(imgs, function (i, v) {
+                        fd.append('images[]',v);
+                    })
+                    // $.each(imgs1, function (i, v) {
+                    //     fd.append('images_wechat[]',v);
+                    // })
+                    $.each(imgs2, function (i, v) {
+                        fd.append('images_color[]',v);
+                    })
+                    $('.post-img.no-dash input').each(function () {
+                        var name=$(this).attr('name')
+                        fd.append(name,$(this).val());
+                    })
+                    $.ajax({
+                        data: fd,
+                        contentType : false,
+                        processData : false,
+                        cache : false,
+                        beforeSend:function(XMLHttpRequest){
+                            _this.addClass('disabled')
+                        },
+                        success: function(res, textStatus, jqXHR){
+                            $.alerts(res.data.info)
+                            if(res.data.url){
+                                setTimeout(function() {
+                                    window.location.href=res.data.url
+                                }, 300);
+
+                            }else{
+                                _this.removeClass('disabled');
+                            }
+                            
+                        },
+                        complete: function(jqXHR, textStatus){
+                            if(textStatus=='timeout'){
+                                $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                                _this.removeClass('disabled');
+                    　　　　 }
+                        }
+                    })
+                    return false;
+                }else{
+                    $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+                }
             });
             layer.photos({//图片预览
                 photos: '.img-zoos',
