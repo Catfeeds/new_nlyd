@@ -9,7 +9,7 @@
                 <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/indexUser/');?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
-                <h1 class="mui-title"><div><?=__('关联账号设置', 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__('提现设置', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="apply width-padding layui-row layui-bg-white width-padding-pc" style="margin-top:0">

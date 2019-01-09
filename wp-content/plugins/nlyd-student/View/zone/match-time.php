@@ -56,7 +56,7 @@
 <script>
 jQuery(function($) { 
     var match_date_Data=$.validationLayui.dates2;//开赛日期
-    var  posiotion_match_date={};//初始化位置，高亮展示
+    var posiotion_match_date={};//初始化位置，高亮展示
     var mobileSelect={}
     var match_id=$.Request('match_id');
     function judgFailTime(startTime,interval) {
