@@ -150,7 +150,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="match_footer flex-h">'
-                                                    +'<a data-id="'+v.match_id+'" class="edit_match c_black6 flex1 ta_l">'
+                                                    +'<a data-img="'+v.match_sign_code+'" class="edit_match c_black6 flex1 ta_l">'
                                                         +'<div class="zone_bg bg_qr_code dis_inlineBlock"></div>'
                                                         +'<span class=" dis_inlineBlock"> <?=__("获取签到码", "nlyd-student")?></span>'
                                                     +'</a>'

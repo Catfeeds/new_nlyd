@@ -21,9 +21,9 @@
                 <h1 class="mui-title"><div><?=__('报名签到表', 'nlyd-student')?></div></h1>
             </header>    
             <div class="layui-row nl-border nl-content have-bottom">
-                <div class=" width-padding width-padding-pc">
+                <div class="match_sign_row width-padding width-padding-pc">
                     <div class="bold fs_16 c_black">2018脑力世界杯战队精英赛</div>
-                    <div class="flex-h">
+                    <div class="flex-h mt_10">
                         <div class="flex1">
                             <span class="c_blue"><?=__('报 名', 'nlyd-student')?>：</span>
                             <span class="ff_num">18</span>
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="nl-table-wapper">
+                <div class="nl-table-wapper layui-bg-white">
                     <table class="nl-table">
                         <tbody id="coach_flow">
                             <tr class='table-head'>
