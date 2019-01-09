@@ -265,8 +265,6 @@
                 alert("<?=__('上传错误,文件格式必须为', 'nlyd-student')?>：png/jpg/jpeg");
                 return;  
             }
-            var reader = new FileReader();
-            var src='';
             //读取File对象的数据
             imgCompress(file,function(imgBase64){
                 imgBase64 = imgBase64;    //存储转换的base64编码

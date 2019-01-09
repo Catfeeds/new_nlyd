@@ -95,22 +95,18 @@ jQuery(document).ready(function($) {
     })
     function changes(e,_this,array) {
         var file=e.target.files[0];
-        // var fileSize=file.size;
-        // var fSize=2;
-        // if(fileSize > 1024*1024*fSize){
-        //     alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
-        //     return false;
-        // }
-        array.unshift(file)
-        
-        var reader = new FileReader();
-        var src='';
+        if( !file.type.match(/.png|.jpg|.jpeg/) ) {
+            alert("<?=__('上传错误,文件格式必须为', 'nlyd-student')?>：png/jpg/jpeg");
+            return;  
+        }
         //读取File对象的数据
-        reader.onload = function(evt){
-            //data:img base64 编码数据显示
-            var dom='<div class="post-img no-dash">'
+        imgCompress(file,function(imgBase64){
+            imgBase64 = imgBase64;    //存储转换的base64编码
+            array.unshift(imgBase64)
+            // console.log(imgBase64);  
+             var dom='<div class="post-img no-dash">'
                 +'<div class="img-zoo img-box img-z">'
-                +'<img src="'+evt.target.result+'"/>'
+                +'<img src="'+imgBase64+'"/>'
                 +'</div>'
                 +'<div class="del">'
                 +'<i class="iconfont">&#xe633;</i>'
@@ -127,10 +123,8 @@ jQuery(document).ready(function($) {
                     $('.'+className+' .dash').css('display','none')
                 }
             }
-            console.log(evt)
-        }
-        reader.readAsDataURL(file);
-        $(e.target).val('')
+            $(e.target).val('')
+        });
     }
 
     $("#img-zoos1").change(function(e) {
