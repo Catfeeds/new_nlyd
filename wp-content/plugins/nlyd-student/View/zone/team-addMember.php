@@ -28,8 +28,10 @@
                             <input type="hidden" name="action" value="add_team_personnel">
                             <input type="hidden" name="team_id" value="<?=$id?>">
                             <div class="coach_add_btn c_blue" lay-filter='layform' lay-submit="" ><?=__('确 定', 'nlyd-student')?></div>
+                            
                         </div>
                     </form>
+                    <button class="clear">22</button>
                 </div>
             </div>
         </div>           
@@ -42,6 +44,7 @@ jQuery(function($) {
         var _placeholder = _this.attr('data-placeholder');
         _this.select2({
             placeholder : _placeholder,
+            allowClear:true,
             ajax: {
                 url: admin_ajax +'?action=get_manage_user',
                 dataType: 'json',

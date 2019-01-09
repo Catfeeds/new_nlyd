@@ -60,6 +60,7 @@ jQuery(function($) {
             var _placeholder = _this.attr('data-placeholder');
             _this.select2({
                 placeholder : _placeholder,
+                allowClear:true,
                 ajax: {
                     url: admin_ajax +'?action=get_manage_user'  ,
                     dataType: 'json',
