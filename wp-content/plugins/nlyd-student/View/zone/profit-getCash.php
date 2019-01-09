@@ -11,13 +11,15 @@
                 </a>
                 <h1 class="mui-title"><div><?=__('提 现', 'nlyd-student')?></div></h1>
             </header>
-            <div class="layui-row nl-border nl-content">
+            <div class="layui-row nl-border nl-content" style="padding-bottom: 333px;">
                 <div class="width-padding layui-row width-margin-pc">
                     <div class="bold c_black getCash_type"><?=__('选择提现方式', 'nlyd-student')?></div>
                     <form class="layui-form ">
                         <?php if(empty($zone)){ ?>
                         <div class="getCash_type_row">
-                            <input type="radio" name="extract_type" value="user_bank" title="<?=__("提现至银行卡{$user_cheques_bank}", 'nlyd-student')?>" checked>
+                            <input type="radio" name="extract_type" value="user_bank" title="<?=__('提现至银行卡', 'nlyd-student')?><?php if(!empty($user_cheques_bank)):?>
+                            <?='('.$user_cheques_bank.')'?>
+                            <?php endif;?>" checked>
                             <?php if(empty($user_cheques_bank)):?> <a class="c_red dis_inlineBlock ml_10" href="<?=home_url('/zone/settingCash/')?>">未设置</a> <?php endif;?>
                         </div>
                         <div class="getCash_type_row">
