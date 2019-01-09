@@ -54,17 +54,19 @@
         })
         var imgs=[]
         $("#img").change(function(e) {
-            
             var file=e.target.files[0];
-            imgs.unshift(file)
-            var reader = new FileReader();
-            var src='';
+            if( !file.type.match(/.png|.jpg|.jpeg/) ) {
+                alert("<?=__('上传错误,文件格式必须为', 'nlyd-student')?>：png/jpg/jpeg");
+                return;  
+            }
             //读取File对象的数据
-            reader.onload = function(evt){
+            imgCompress(file,function(imgBase64){
+                imgBase64 = imgBase64;    //存储转换的base64编码
+                imgs.unshift(imgBase64)
                 //data:img base64 编码数据显示
                 var dom='<div class="post-img no-dash">'
                         +'<div class="img-zoo img-box">'
-                            +'<img src="'+evt.target.result+'"/>'
+                            +'<img src="'+imgBase64+'"/>'
                         +'</div>'
                         +'<div class="del">'
                             +'<i class="iconfont">&#xe633;</i>'
@@ -75,13 +77,11 @@
                     photos: '.img-zoos',
                     anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
                 }) 
-            }
-            reader.readAsDataURL(file);
-           if(imgs.length==4){
-               $('#add-img').css('display','none')
-           }
-           $(e.target).val('')
-
+                if(imgs.length==4){
+                    $('#add-img').css('display','none')
+                }
+                $(e.target).val('')
+            });
         });
         $('.img-zoos').on('click','.del',function(){//删除图片
             var _this=$(this);
