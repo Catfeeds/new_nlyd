@@ -31,7 +31,6 @@
                             
                         </div>
                     </form>
-                    <button class="clear">22</button>
                 </div>
             </div>
         </div>           

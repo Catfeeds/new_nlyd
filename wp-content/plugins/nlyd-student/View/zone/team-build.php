@@ -16,7 +16,8 @@
                 <div class="width-padding layui-row width-margin-pc  have-bottom">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <input type="hidden" name="action" value="team_apply" />
-                        <input type="hidden" name="id" value="<?=$id?>" />
+                        <input type="hidden" name="team_id" value="<?=$_GET['team_id']?>" />
+                        <input type="hidden" name="type" value="<?=$_GET['type']?>" />
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('战队名称', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
@@ -29,9 +30,10 @@
                                 <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                             </div>
                             <div class="input_row">
-                                <select class="js-data-select-ajax" name="team_director" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
+                                <input class="radius_input_row change_num" name="team_director_phone" value="<?=$row['chairman_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                <!-- <select class="js-data-select-ajax" name="team_director" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                     <option value="<?=$team_director?>" selected><?=$real_name?></option>
-                                </select>
+                                </select> -->
                             </div>
                         </div>
                  
@@ -47,7 +49,6 @@
                         </div>
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认申请', 'nlyd-student')?></div></a>
                     </form>
-                    
                 </div>
             </div>
         </div>            
@@ -55,24 +56,24 @@
 </div>
 <script>
 jQuery(function($) { 
-    $('.js-data-select-ajax').each(function () {
-            var _this=$(this);
-            var _placeholder = _this.attr('data-placeholder');
-            _this.select2({
-                placeholder : _placeholder,
-                allowClear:true,
-                ajax: {
-                    url: admin_ajax +'?action=get_manage_user'  ,
-                    dataType: 'json',
-                    delay: 600, //wait 250 milliseconds before triggering the request
-                    processResults: function (res) {
-                        return {
-                            results: res.data
-                        };
-                    }
-                }
-            });
-        })
+    // $('.js-data-select-ajax').each(function () {
+    //         var _this=$(this);
+    //         var _placeholder = _this.attr('data-placeholder');
+    //         _this.select2({
+    //             placeholder : _placeholder,
+    //             allowClear:true,
+    //             ajax: {
+    //                 url: admin_ajax +'?action=get_manage_user'  ,
+    //                 dataType: 'json',
+    //                 delay: 600, //wait 250 milliseconds before triggering the request
+    //                 processResults: function (res) {
+    //                     return {
+    //                         results: res.data
+    //                     };
+    //                 }
+    //             }
+    //         });
+    //     })
     layui.use(['form'], function(){
         var form = layui.form
         form.render();

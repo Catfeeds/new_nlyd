@@ -509,6 +509,13 @@ class Student_Zone
         load_view_template($view,$data);
     }
     /**
+     * 比赛学员报名/签到情况
+     */
+    public function matchSignDetail(){
+        $view = student_view_path.CONTROLLER.'/match-signDetail.php';
+        load_view_template($view);
+    }
+    /**
      * 比赛发布成功
      */
     public function buildSuccess(){
@@ -807,7 +814,7 @@ class Student_Zone
     /**
      * 战队管理
      */
-    public function team(){
+    public function teamDetail(){
         global $wpdb,$current_user;
         $sql = "select a.id,a.team_id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
                                       left join {$wpdb->prefix}posts b on a.team_id = b.ID
@@ -832,15 +839,19 @@ class Student_Zone
      */
     public function teamBuild(){
 
-        global $wpdb,$current_user;
-        //获取战队信息
-        $sql = "select a.id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
+        global $wpdb;
+        if(isset($_GET['team_id'])){
+
+            //获取战队信息
+            $sql = "select a.id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
                                       left join {$wpdb->prefix}posts b on a.team_id = b.ID
-                                      where user_id = {$current_user->ID} ";
-        $row = $wpdb->get_row($sql,ARRAY_A);
-        if(!empty($row['team_director'])){
-            $user_real_name = get_user_meta($row['team_director'],'user_real_name')[0];
-            $row['real_name'] = $user_real_name['real_name'];
+                                      where team_id = {$_GET['team_id']} ";
+            $row = $wpdb->get_row($sql,ARRAY_A);
+            //print_r($row);
+            if(!empty($row['team_director'])){
+                $user_real_name = get_user_meta($row['team_director'],'user_real_name')[0];
+                $row['real_name'] = $user_real_name['real_name'];
+            }
         }
         //print_r($row);
         $view = student_view_path.CONTROLLER.'/team-build.php';
@@ -865,7 +876,7 @@ class Student_Zone
     /**
      * 战队列表
      */
-    public function teamList(){
+    public function team(){
         $view = student_view_path.CONTROLLER.'/team-list.php';
         load_view_template($view);
     }
@@ -1207,7 +1218,7 @@ class Student_Zone
         // if(ACTION == 'index'){
         // }
 
-        if(ACTION == 'teamList' ){
+        if(ACTION == 'team' ){
             wp_register_style( 'my-student-teamList', student_css_url.'team.css',array('my-student') );
             wp_enqueue_style( 'my-student-teamList' );
         }
