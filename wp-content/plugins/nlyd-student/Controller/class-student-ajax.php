@@ -1515,7 +1515,7 @@ class Student_Ajax
         $where = join(' and ',$map);
 
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
-                a.post_content,b.match_notice_url,
+                a.post_content,b.match_notice_url,b.created_id,
                 DATE_FORMAT(b.match_start_time,'%Y-%m-%d %H:%i') match_start_time,
                 if(b.match_address = '','--',b.match_address) match_address,
                 if(d.role_name = '','正式比赛',d.role_name) role_name,
@@ -1535,7 +1535,14 @@ class Student_Ajax
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
         foreach ($rows as $k => $val){
-
+            //print_r($val);
+            //获取办赛机构
+            $zone_meta = $wpdb->get_row("select id,if(zone_match_type=1,'战队精英赛','城市赛') as match_type,zone_city,zone_name from {$wpdb->prefix}zone_meta where user_id = {$val['created_id']}",ARRAY_A);
+            if(!empty($zone_meta)){
+                $meta = $zone_meta['zone_city'].$zone_meta['match_type'].'组委会';
+                //print_r($meta);
+            }
+            $rows[$k]['zone'] = empty($zone_meta) ? '' : $meta;
             //获取参赛须知
             $rows[$k]['match_notice_url'] = !empty($val['match_notice_url']) ? $val['match_notice_url'] : '';
 
@@ -3928,7 +3935,7 @@ class Student_Ajax
         $where = join(' and ',$map);
 
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
-                a.post_content,b.grading_notice_url,
+                a.post_content,b.grading_notice_url,b.created_person,
                 DATE_FORMAT(b.start_time,'%Y-%m-%d %H:%i') start_time,
                 if(b.address = '','--',b.address) address,
                 b.cost,b.entry_end_time,b.status ,c.user_id
@@ -3946,6 +3953,14 @@ class Student_Ajax
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无考级', 'nlyd-student')));
         foreach ($rows as $k => $val){
+
+            //获取办赛机构
+            $zone_meta = $wpdb->get_row("select id,if(zone_match_type=1,'战队精英赛','城市赛') as match_type,zone_city,zone_name from {$wpdb->prefix}zone_meta where user_id = {$val['created_person']}",ARRAY_A);
+            if(!empty($zone_meta)){
+                $meta = $zone_meta['zone_city'].$zone_meta['match_type'].'组委会';
+                //print_r($meta);
+            }
+            $rows[$k]['zone'] = empty($zone_meta) ? '' : $meta;
 
             //获取参赛须知
             $rows[$k]['match_notice_url'] = !empty($val['match_notice_url']) ? $val['match_notice_url'] : '';
