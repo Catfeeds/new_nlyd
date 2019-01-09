@@ -931,6 +931,8 @@ if(is_admin()){
                 break;
             case 'user_ID':
                 $user_ID = get_user_meta($user_id, 'user_ID',true);
+//                $user_ID_Card =
+//                return (isset($usermeta['user_ID_Card']) ? unserialize($usermeta['user_ID_Card'][0])[0] : '').$user_ID;
                 return $user_ID;
                 break;
             case 'card_num':
