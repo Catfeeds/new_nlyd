@@ -41,7 +41,7 @@
                                 <span class="bold fs_16 c_black"><?=__('战队成员', 'nlyd-student')?>（<?=$total[2] > 0 ? $total[2] : 0;?>）</span>
                                 <a class="c_orange fs_12" href="<?=home_url('/zone/teamApply/map/hide');?>"><?=__('新的申请', 'nlyd-student')?>（<?=$total[-1]+$total[1]>0 ? $total[-1]+$total[1] : 0;?>）</a>
                             </span>
-                            <a class="fs_12 c_blue" href="<?=home_url('/zone/teamAddMember/');?>"><?=__('添加成员', 'nlyd-student')?></a>
+                            <a class="fs_12 c_blue" href="<?=home_url('/zone/teamAddMember/team_id/'.$_GET['team_id']);?>"><?=__('添加成员', 'nlyd-student')?></a>
                         </div>
                     </div>
                     <div class="layui-row layui-bg-white">

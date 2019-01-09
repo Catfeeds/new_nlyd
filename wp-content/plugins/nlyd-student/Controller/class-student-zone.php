@@ -818,12 +818,15 @@ class Student_Zone
         global $wpdb,$current_user;
         $sql = "select a.id,a.team_id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
                                       left join {$wpdb->prefix}posts b on a.team_id = b.ID
-                                      where user_id = {$current_user->ID} ";
+                                      where team_id = {$_GET['team_id']} ";
         $row = $wpdb->get_row($sql,ARRAY_A);
-
+        if(empty($row)){
+            $this->get_404(array('message'=>__('战队信息错误', 'nlyd-student'),'return_url'=>home_url('/zone/')));
+            return;
+        }
         //获取新的申请人数
         if(!empty($row)){
-            $result = $wpdb->get_results("select status,count(*) total from {$wpdb->prefix}match_team where team_id = {$current_user->ID} group by status",ARRAY_A);
+            $result = $wpdb->get_results("select status,count(*) total from {$wpdb->prefix}match_team where team_id = {$_GET['team_id']} group by status",ARRAY_A);
             if(!empty($result)){
                 $row['total'] = array_column($result,'total','status');
                 //print_r($row['total']);
