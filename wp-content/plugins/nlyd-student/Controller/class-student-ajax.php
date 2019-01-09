@@ -372,7 +372,7 @@ class Student_Ajax
                     }
                 }
                 $my_score = $success_len * 23;
-                if ($len/$success_len >= 0.8){
+                if ($success_len/$len >= 0.8){
                     $my_score += $_POST['surplus_time'] * 1;
                 }
 
@@ -1690,7 +1690,7 @@ class Student_Ajax
                     }
                     break;
                 case 'user_real_name':
-                    //print_r($_FILES);die;
+
                     //验证格式
                     if(empty($_POST['nationality']) || empty($_POST['nationality_pic'])) wp_send_json_error(array('info'=>__('国籍必选', 'nlyd-student')));
                     if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>__('真实姓名不能为空', 'nlyd-student')));
@@ -1754,55 +1754,36 @@ class Student_Ajax
                     }
 
                     //寸照
-                    if(!empty($_FILES['images_color'])){
+                    if(!empty($_POST['images_color'])){
 
                         $upload_dir = wp_upload_dir();
                         $dir = '/color/'.$current_user->ID.'/';
-                        $imagePathArr = [];
                         $num = 0;
-                        foreach ($_FILES['images_color']['tmp_name'] as $va){
-                            $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
-
+                        foreach ($_POST['images_color'] as $va){
+                            $file = $this->base64file($va,$upload_dir['basedir'].$dir);
                             if($file){
                                 $_POST['user_images_color'][] = $upload_dir['baseurl'].$dir.$file;
                                 ++$num;
                             }
                         }
+
                         update_user_meta($current_user->ID,'user_images_color',$_POST['user_images_color']);
                     }
 
-                    //收钱码
-                    if(!empty($_FILES['images_wechat'])){
-
-                        $upload_dir = wp_upload_dir();
-                        $dir = '/QRcode/'.$current_user->ID.'/';
-                        $imagePathArr = [];
-                        $num = 0;
-                        foreach ($_FILES['images_wechat']['tmp_name'] as $va){
-                            $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
-
-                            if($file){
-                                $_POST['user_coin_code'][] = $upload_dir['baseurl'].$dir.$file;
-                                ++$num;
-                            }
-                        }
-                        update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
-                    }
-
-
-                    if(!empty($_FILES['images'])){
+                    if(!empty($_POST['images'])){
                         //var_dump($_FILES['images']);
                         $upload_dir = wp_upload_dir();
                         $dir = '/user/'.$current_user->ID.'/';
                         $imagePathArr = [];
                         $num = 0;
-                        foreach ($_FILES['images']['tmp_name'] as $upd){
-                            $file = $this->saveIosFile($upd,$upload_dir['basedir'].$dir);
+                        foreach ($_POST['images'] as $upd){
+                            $file = $this->base64file($upd,$upload_dir['basedir'].$dir);
                             if($file){
                                 $_POST['user_ID_Card'][] = $upload_dir['baseurl'].$dir.$file;
                                 ++$num;
                             }
                         }
+                        //print_r($_POST['user_ID_Card']);die;
                         update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
                     }
 
@@ -2739,8 +2720,8 @@ class Student_Ajax
         $dir = '/'.$dateArr[0].'/'.$dateArr[1].'/';
         $num = 0;
         $imagePathArr = [];
-        foreach ($_FILES['images']['tmp_name'] as $upd){
-            $file = $this->saveIosFile($upd,$upload_dir['basedir'].$dir);
+        foreach ($_POST['images'] as $upd){
+            $file = $this->base64file($upd,$upload_dir['basedir'].$dir);
             if($file){
                 $imagePathArr[] = $upload_dir['baseurl'].$dir.$file;
                 ++$num;
@@ -4518,6 +4499,36 @@ class Student_Ajax
         }
     }
 
+    /**
+     * 生成比赛签到码
+     */
+    public function match_sign_code(){
+
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('id不能为空')));
+
+        $upload_dir = wp_upload_dir();
+
+        $dir = '/sign-code/'.$_POST['match_id'].'/';
+        $path = $upload_dir['basedir'].$dir;
+        $filename = 'sign-'.$_POST['match_id'].'.jpg';          //定义图片名字及格式
+
+        if(file_exists($path.$filename)){
+            wp_send_json_success($upload_dir['baseurl'].$dir.$filename);
+        }
+        include_once leo_student_path."library/Vendor/phpqrcode/phpqrcode.php"; //引入PHP QR库文件
+        $value=home_url('/signs/index/match_id/'.$_POST['match_id']);
+
+
+        if(!file_exists($path)){
+            mkdir($path,0755,true);
+        }
+        $qrcode_path = $path.$filename;
+
+        $errorCorrectionLevel = "L"; //容错级别
+        $matrixPointSize = "6"; //生成图片大小
+        QRcode::png($value, $qrcode_path, $errorCorrectionLevel, $matrixPointSize, 2);
+        wp_send_json_success($upload_dir['baseurl'].$dir.$filename);
+    }
 
     /**
      * 机构申请资料提交
@@ -5944,31 +5955,33 @@ class Student_Ajax
                 $result = update_user_meta($current_user->ID,'user_cheques_bank',$_POST);
                 break;
             case 'weChat':
-                if(!empty($_FILES['images_weChat'])){
+                if(!empty($_POST['images_weChat'])){
 
                     $upload_dir = wp_upload_dir();
                     $dir = '/QRcode/'.$current_user->ID.'/';
                     $num = 0;
-                    foreach ($_FILES['images_weChat']['tmp_name'] as $va){
-                        $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
+                    foreach ($_POST['images_weChat'] as $va){
+                        $file = $this->base64file($va,$upload_dir['basedir'].$dir);
 
                         if($file){
                             $_POST['user_coin_code'][] = $upload_dir['baseurl'].$dir.$file;
                             ++$num;
                         }
                     }
-                    $result = update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
+
+                    //$result = update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
                 }else{
                     //wp_send_json_error(array('info'=>__('请选择收款码')));
                 }
+                $result = update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
                 break;
             case 'aliPay':
-                if(!empty($_FILES['images_aliPay'])){
+                if(!empty($_POST['images_aliPay'])){
                     $upload_dir = wp_upload_dir();
                     $dir = '/QRcode/'.$current_user->ID.'/';
                     $num = 0;
-                    foreach ($_FILES['images_aliPay']['tmp_name'] as $va){
-                        $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
+                    foreach ($_POST['images_aliPay'] as $va){
+                        $file = $this->base64file($va,$upload_dir['basedir'].$dir);
 
                         if($file){
                             $_POST['aliPay_coin_code'][] = $upload_dir['baseurl'].$dir.$file;
@@ -5976,10 +5989,11 @@ class Student_Ajax
                         }
                     }
                     //print_r($_POST['user_coin_code']);
-                    $result = update_user_meta($current_user->ID,'aliPay_coin_code',$_POST['aliPay_coin_code']);
+                    //$result = update_user_meta($current_user->ID,'aliPay_coin_code',$_POST['aliPay_coin_code']);
                 }else{
                     //wp_send_json_error(array('info'=>__('请选择收款码')));
                 }
+                $result = update_user_meta($current_user->ID,'aliPay_coin_code',$_POST['aliPay_coin_code']);
                 break;
             default:
                 wp_send_json_error(array('info'=>__('参数错误')));
