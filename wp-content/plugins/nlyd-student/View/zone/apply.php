@@ -388,7 +388,7 @@
                             $.alerts(res.data.info)
                             if(res.data.url){
                                 setTimeout(function() {
-                                    // window.location.href=res.data.url
+                                     window.location.href=res.data.url
                                 }, 300);
                             }else{
                                 _this.removeClass('disabled');
