@@ -2320,6 +2320,7 @@ class Organize{
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=grading')?>" <?=$itype==='grading'?'class="current"':''?> aria-current="page">考级<span class="count">（<?=$grading_income != false? $grading_income : 0?>）</span></a> | </li>
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=subject')?>" <?=$itype==='subject'?'class="current"':''?> aria-current="page">申请机构<span class="count">（<?=$subject_income != false ? $subject_income : 0?>）</span></a> | </li>
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=extract')?>" <?=$itype==='extract'?'class="current"':''?> aria-current="page">提现<span class="count">（<?=$extract_income != false ? $extract_income : 0?>）</span></a>  </li>
+<!--            <li class="all"><a href="--><?//=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=extract')?><!--" --><?//=$itype==='extract'?'class="current"':''?><!-- aria-current="page">承办<span class="count">（--><?//=$extract_income != false ? $extract_income : 0?><!--）</span></a>  </li>-->
           </ul>
         <div class="tablenav top">
             <div class="tablenav-pages">
@@ -2378,7 +2379,8 @@ class Organize{
                                 echo '提现';
                                 break;
                             case 'subject':
-                                echo '申请机构';
+                                $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['user_type']}'");
+                                echo '申请'.$zone_type_name;
                                 break;
                         }
                         ?>
