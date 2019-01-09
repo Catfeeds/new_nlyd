@@ -870,3 +870,9 @@ input[type="text"].coach_form_input{
     margin-top: 15px;
     margin-bottom: 7px;
 }
+.match_sign_row{
+    padding-bottom: 20px;
+    padding-top: 20px;
+    margin-bottom: 20px;
+    background: #ffffff;
+}

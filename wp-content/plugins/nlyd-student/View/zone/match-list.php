@@ -85,9 +85,80 @@ jQuery(function($) {
             window.location.href=href;
         }
     })
-    layui.use(['element','flow'], function(){
+  function savaFile(data,filename)
+    {
+        var save_link=document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+        save_link.href=data;
+        save_link.download=filename;
+        var event=document.createEvent('MouseEvents');
+        event.initMouseEvent('click',true,false,window,0,0,0,0,0,false,false,false,false,0,null);
+        save_link.dispatchEvent(event);
+    };
+    layui.use(['element','flow','layer'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
+        $('body').on('click','.get_sign_code',function(){
+            var _this=$(this);
+            var match_id=_this.attr('data-id');
+            var match_name=_this.attr('data-name');
+            if(!_this.hasClass('disabled')){
+                var post_data={
+                    action:'match_sign_code',
+                    match_id:match_id,
+                }
+                $.ajax({
+                    data: post_data,
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success: function(res, textStatus, jqXHR){
+                        if(res.success){
+                            if(res.data && res.data.length>0){
+                                var url=res.data;
+                                var json={
+                                    "title": "<?=__('签到二维码', 'nlyd-student')?>", //相册标题
+                                    "id": match_id, //相册id
+                                    "start": 0, //初始显示的图片序号，默认0
+                                    "data": [   //相册包含的图片，数组格式
+                                        {
+                                        "alt": "<?=__('签到二维码', 'nlyd-student')?>",
+                                        "pid": match_id, //图片id
+                                        "src": url, //原图地址
+                                        "thumb": url //缩略图地址
+                                        }
+                                    ]
+                                    }
+                                layer.photos({//图片预览
+                                    photos: json,
+                                    anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                                })
+                                setTimeout(function(){
+                                    var _layerImg=$('.layui-layer-phimg');
+                                    var _tips='<div class="ta_c c_white" style="position: absolute;width: 100%;bottom: 40px;"><?=__("长按下载图片", "nlyd-student")?></div>'
+                                    $('.layui-layer-shade').append(_tips);
+                                    new AlloyFinger(_layerImg[0], {
+                                        longTap:function(){
+                                            savaFile(url,match_name+"<?=__('签到二维码', 'nlyd-student')?>")
+                                        }
+                                    })
+                                },100)
+                            }
+                        }
+                        _this.removeClass('disabled');
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                            _this.removeClass('disabled');
+                        }
+                        
+                    }
+                })
+            }else{
+                $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+            }
+        })
+
         function pagation(id,match_page){
             flow.load({
                 elem: '#'+id //流加载容器
@@ -125,11 +196,11 @@ jQuery(function($) {
                                                 +'<div class="match_header bold c_black f_16 mt_10">'+v.post_title+'</div>'
                                                 +'<div class="match_body">'
                                                     +'<div class="match_body_row">'
-                                                        +'<div class="match_body_label"><?=__('比赛类型：', 'nlyd-student')?></div>'
+                                                        +'<div class="match_body_label"><?=__("比赛类型：", "nlyd-student")?></div>'
                                                         +'<div class="match_body_info c_black">'+v.role_name+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
-                                                        +'<div class="match_body_label"><?=__('报名截止：', 'nlyd-student')?></div>'
+                                                        +'<div class="match_body_label"><?=__("报名截止：", "nlyd-student")?></div>'
                                                         +'<div class="match_body_info c_black">'+v.entry_end_time+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
@@ -150,7 +221,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="match_footer flex-h">'
-                                                    +'<a data-id="'+v.match_id+'" class="edit_match c_black6 flex1 ta_l">'
+                                                    +'<a data-id="'+v.match_id+'" data-name="'+v.post_title+'" class="edit_match c_black6 flex1 ta_l get_sign_code">'
                                                         +'<div class="zone_bg bg_qr_code dis_inlineBlock"></div>'
                                                         +'<span class=" dis_inlineBlock"> <?=__("获取签到码", "nlyd-student")?></span>'
                                                     +'</a>'

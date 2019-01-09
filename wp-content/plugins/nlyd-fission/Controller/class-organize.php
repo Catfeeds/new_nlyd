@@ -85,7 +85,7 @@ class Organize{
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
                 zm.zone_address,zm.business_licence_url,
                 zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,zm.id,zm.zone_match_type,zm.apply_id,
-                zm.chairman_id,zm.secretary_id,zm.zone_city,zm.term_time,zm.user_status,zm.is_double,
+                zm.chairman_id,zm.secretary_id,zm.zone_city,zm.term_time,zm.user_status,zm.is_double,zm.zone_number,
                 CASE zm.is_able 
                 WHEN 1 THEN '正常' 
                 WHEN 2 THEN '被冻结' 
@@ -132,7 +132,7 @@ class Organize{
 <!--                <li class="all"><a href="--><?//=admin_url('admin.php?page=fission&ctype=0&stype='.$status_type)?><!--" --><?//=$type===0?'class="current"':''?><!-- aria-current="page">全部<span class="count">（--><?//=$all_num?><!--）</span></a> |</li>-->
                 <?php
                 foreach ($typeList as $tlk => $tlv){
-                    $typeNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}zone_meta WHERE type_id='{$tlv['id']}' AND user_status IN(1,-1,-2)");
+                    $typeNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}zone_meta WHERE type_id='{$tlv['id']}' AND user_status IN(1,-1)");
                     ?>
                     <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype='.$tlv['id'])?>" <?=$type==$tlv['id']?'class="current"':''?> aria-current="page"><?=$tlv['zone_type_name']?><span class="count">（<?=$typeNum>0?$typeNum:0?>）</span></a><?=$tlk<$typeListCount?' | ':''?></li>
                     <?php
@@ -177,6 +177,11 @@ class Organize{
                 </div>
                 <br class="clear">
             </div>
+            <style type="text/css">
+                .widefat td, .widefat th{
+                    padding: 15px 10px;;
+                }
+            </style>
             <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                     <tr>
@@ -210,10 +215,10 @@ class Organize{
                         $secretary_real_name = get_user_meta($row['secretary_id'],'user_real_name',true);
                         $apply_real_name = get_user_meta($row['apply_id'],'user_real_name',true);
                            //负责人
-                       $person = $wpdb->get_var("SELECT um.meta_value FROM {$wpdb->prefix}zone_manager AS zm 
-                                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'
-                                 WHERE zm.zone_id='{$row['id']}' AND um.meta_value != '' limit 1");
-
+                       $person_id = $wpdb->get_var("SELECT user_id 
+                                 FROM {$wpdb->prefix}zone_manager
+                                 WHERE zone_id='{$row['id']}'limit 1");
+                       $person_real_name = get_user_meta($person_id,'user_real_name',true);
                        //办赛次数
                        $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
                        //参赛人次
@@ -256,15 +261,15 @@ class Organize{
                            }
                            ?>
                        </td>
-                       <td class="nums column-nums" data-colname="编号"><?=sprintf("%04d",$row['id']);?></td>
+                       <td class="nums column-nums" data-colname="编号"><?=$row['zone_number'];?></td>
                        <td class="referee_id column-referee_id" data-colname="推荐人">
                            <a href="<?=admin_url('users.php?page=users-info&ID='.$row['referee_id'])?>">
                                <?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?>
                            </a>
                        </td>
                        <td class="person column-person" data-colname="负责人">
-                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['user_id'])?>">
-                               <?=unserialize($person)['real_name']?unserialize($person)['real_name']:($row['user_id']>0?get_user_by('ID',$row['user_id'])->user_login:'')?>
+                           <a href="<?=admin_url('users.php?page=users-info&ID='.$person_id)?>">
+                               <?=isset($person_real_name['real_name'])?$person_real_name['real_name']:($person_id>0?get_user_by('ID',$person_id)->user_login:'')?>
                            </a>
                        </td>
                        <td class="chairman_id column-chairman_id" data-colname="主席">
@@ -540,7 +545,6 @@ class Organize{
                 <span style="color: #2bc422"><?=$success_msg?></span>
                 <span style="color: #c44e00"><?=$error_msg?></span>
             </div>
-
             <form method="post" action="" id="adduser" class="validate" novalidate="novalidate">
                 <input name="action" type="hidden" value="createuser">
                 <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="5f6ea9ff44"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php"><table class="form-table">
@@ -810,7 +814,9 @@ class Organize{
             $admin_power = isset($_POST['admin_power']) ? $_POST['admin_power'] : [];
             $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
             $is_double = isset($_POST['is_double']) ? intval($_POST['is_double']) : 0;
+            $is_able = isset($_POST['is_able']) ? intval($_POST['is_able']) : 2;
             $term_time = isset($_POST['term_time']) ? trim($_POST['term_time']) : '';
+            $zone_number = isset($_POST['zone_number']) ? trim($_POST['zone_number']) : '';
             if($user_id < 0) $error_msg = '请选择负责人';
 //            if($zone_match_type < 0) $error_msg = $error_msg==''?'请选择赛区类型':$error_msg.'<br >请选择赛区类型';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择机构类型':$error_msg.'<br >请选择机构类型';
@@ -822,7 +828,7 @@ class Organize{
             if($zone_address == '' && $zone_match_type === 1) $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
 //            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
             if($legal_person == '') $error_msg = $error_msg==''?'请填写法人':$error_msg.'<br >请填写法人';
-            if($zone_city == '') $error_msg = $error_msg==''?'请填写机构城市':$error_msg.'<br >请填写机构城市';
+            if($zone_city == '' && $zone_match_type == 2 && $user_status != -2) $error_msg = $error_msg==''?'请填写机构城市':$error_msg.'<br >请填写机构城市';
             if($opening_bank == '') $error_msg = $error_msg==''?'请填写开户行':$error_msg.'<br >请填写开户行';
             if($opening_bank_address == '') $error_msg = $error_msg==''?'请填写开户行地址':$error_msg.'<br >请填写开户行地址';
             if($bank_card_num == '') $error_msg = $error_msg==''?'请填写银行卡号':$error_msg.'<br >请填写银行卡号';
@@ -851,7 +857,9 @@ class Organize{
                     'zone_city' => $zone_city,
                     'business_licence' => $business_licence,
                     'legal_person' => $legal_person,
+                    'is_able' => $is_able,
                     'opening_bank' => $opening_bank,
+                    'zone_number' => $zone_number,
                     'opening_bank_address' => $opening_bank_address,
                     'bank_card_num' => $bank_card_num,
                     'chairman_id' => $chairman_id,
@@ -864,7 +872,7 @@ class Organize{
                     'zone_match_type' => $zone_match_type,
                 ];
                 if($user_status !== 0 && $user_status !== 99) $insertData['user_status'] = $user_status;
-                if($user_status === 1) $insertData['audit_time'] = get_time('mysql');//审核时间
+                if($user_status === 1 || $user_status === -2) $insertData['audit_time'] = get_time('mysql');//审核时间
                 //图片
                 if(isset($_FILES['business_licence_url'])){
                     $upload_dir = wp_upload_dir();
@@ -876,7 +884,7 @@ class Organize{
                     }
                 }
 
-                $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND user_status='-1' OR user_status='-2'",ARRAY_A);
+                $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND (user_status='-1' OR user_status='-2')",ARRAY_A);
                 $wpdb->query('START TRANSACTION');
                 if($old_zm_id>0){
                     $bool = $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['id'=>$old_zm_id]);
@@ -900,7 +908,7 @@ class Organize{
                             $user_email = $zmv['apply_id'].rand(000,999).date('is', get_time()).'@gjnlyd.com';
                             $user_password = '123456';
                             $user_id = wp_create_user($user_email,$user_password,$user_email);
-                            if(!$user_id) {
+                            if($user_id < 1) {
                                 $error_msg = '操作失败!';
                             }
                             update_user_meta($user_id, 'user_ID', 10000000+$user_id);
@@ -917,26 +925,28 @@ class Organize{
                                 }
                             }
                             //创建战队
+                            if($error_msg == '') {
+                                $team_id = wp_insert_post(['post_title' => '暂未设置','post_status' => 'publish', 'comment_status' => 'close', 'ping_status' => 'close','post_type' => 'team']);
 
-                            $team_id = wp_insert_post(['post_title' => '暂未设置','post_status' => 'publish', 'comment_status' => 'close', 'ping_status' => 'close','post_type' => 'team']);
-
-                            if($team_id > 0){
-                                $teamInsert = [
-                                    'user_id' => $user_id,
-                                    'team_id' => $team_id,
-                                    'team_director' => $user_id,
-                                    'team_world' => '暂未设置',
-                                    'team_slogan' => '暂未设置',
-                                    'team_brief' => '暂未设置',
-                                    'team_status' => 2,
-                                    'created_time' => get_time('mysql'),
-                                ];
-                                if(!$wpdb->insert($wpdb->prefix.'team_meta',$teamInsert)){
+                                if($team_id > 0){
+                                    $teamInsert = [
+                                        'user_id' => $user_id,
+                                        'team_id' => $team_id,
+                                        'team_director' => $user_id,
+                                        'team_world' => '暂未设置',
+                                        'team_slogan' => '暂未设置',
+                                        'team_brief' => '暂未设置',
+                                        'team_status' => 2,
+                                        'created_time' => get_time('mysql'),
+                                    ];
+                                    if(!$wpdb->insert($wpdb->prefix.'team_meta',$teamInsert)){
+                                        $error_msg = '添加战队失败!';
+                                    }
+                                }else{
                                     $error_msg = '添加战队失败!';
                                 }
-                            }else{
-                                $error_msg = '添加战队失败!';
                             }
+
 
                             //============
                             if($error_msg == ''){
@@ -1048,10 +1058,10 @@ class Organize{
         //类型列表
         $typeList = $this->getOrganizeTypeList();
         if($old_zm_id > 0){
-            $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,
+            $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,zm.is_able,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
-                   zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,um3.meta_value AS chairman_real_name,um4.meta_value AS secretary_real_name,
-                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city,zm.term_time,zm.is_double 
+                   zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,um3.meta_value AS chairman_real_name,um4.meta_value AS secretary_real_name,zm.apply_id,zm.created_time,
+                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city,zm.term_time,zm.is_double,zm.zone_number 
                    FROM {$wpdb->prefix}zone_meta AS zm 
                    LEFT JOIN {$wpdb->users} AS u ON u.ID=zm.user_id AND u.ID!='' 
                    LEFT JOIN {$wpdb->users} AS u2 ON u2.ID=zm.referee_id AND u2.ID!='' 
@@ -1087,24 +1097,52 @@ class Organize{
                 <span style="color: #c44e00"><?=$error_msg?></span>
             </div>
 
+            <style type="text/css">
+                input[type=text]{
+                    height: 35px;!important;
+                    width: 300px;
+                }
+                .wp-admin select {
+                    padding: 2px;
+                    line-height: 35px;
+                    height: 35px;
+                    width: 300px;
+                }
+            </style>
             <form method="post" action="" class="validate" novalidate="novalidate" enctype="multipart/form-data">
                 <input name="action" type="hidden" value="createuser">
                 <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="5f6ea9ff44">
                 <input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php">
                 <table class="form-table">
                     <tbody>
-
-
+                    <?php
+                    if($old_zm_id > 0){
+                        ?>
+                        <tr class="form-field form-required">
+                            <th scope="row"><label for="">申请信息 </label></th>
+                            <td>
+                                <div style="font-size: 22px;color: #3f77c4">由<?=get_user_meta($row['apply_id'],'user_real_name',true)['real_name']?>于<?=$row['created_time']?>申请</div>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>" id="zone_title_tr">
+                        <th scope="row"><label for="zone_number">机构编号 </label></th>
+                        <td>
+                            <input type="text" name="zone_number" id="zone_number" value="<?=$row['zone_number']?>">
+                        </td>
+                    </tr>
                     <tr class="form-field form-required">
                         <th scope="row"><label for="user_id">负责人 </label></th>
                         <td>
 
                             <?php if($old_zm_id > 0){?>
                                 <input type="hidden" name="user_id" value="<?=$row['user_id']?>">
-                                <?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']?>
+                                <?=($real_name = isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']) ? $real_name : '无'?>
                                 <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
                             <?php }else{ ?>
-                                <select class="js-data-select-ajax" name="user_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
+                                <select class="js-data-select-ajax" name="user_id" data-action="get_base_user_list" data-type="base">
                                     <option value="<?=$row['user_id']?>" selected="selected">
                                         <?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']?>
                                         <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
@@ -1155,12 +1193,12 @@ class Organize{
                             if($old_zm_id > 0){
                                 ?>
                                 <input type="hidden" name="referee_id" value="<?=$row['referee_id']?>">
-                                <?=isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']?>
+                                <?=($referee_name = isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']) ? $referee_name : '无'?>
                                 <?=!empty($row['referee_mobile'])?'('.$row['referee_mobile'].')':''?>
                                 <?php
                             }else{
                                 ?>
-                                <select class="js-data-select-ajax" name="referee_id" style="width: 50%" data-action="get_base_user_list" data-type="all">
+                                <select class="js-data-select-ajax" name="referee_id" data-action="get_base_user_list" data-type="all">
                                     <option value="<?=$row['referee_id']?>" selected="selected">
                                         <?=isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']?>
                                         <?=!empty($row['referee_mobile'])?'('.$row['referee_mobile'].')':''?>
@@ -1181,11 +1219,11 @@ class Organize{
                             if($old_zm_id > 0){
                                 ?>
                                 <input type="hidden" name="parent_id" value="<?=$row['parent_id']?>">
-                                <?=$row['parent_name']?>
+                                <?=$row['parent_name'] ? $row['parent_name'] :'无'?>
                                 <?php
                             }else{
                                 ?>
-                                <select class="js-data-select-ajax" name="parent_id" style="width: 50%" data-action="get_base_zone_list" data-type="parent">
+                                <select class="js-data-select-ajax" name="parent_id" data-action="get_base_zone_list" data-type="parent">
                                     <option value="<?=$row['parent_id']?>" selected="selected">
                                         <?=$row['parent_name']?>
                                     </option>
@@ -1228,7 +1266,7 @@ class Organize{
                     <tr class="">
                         <th scope="row"><label for="chairman_id">主席 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="chairman_id" style="width: 50%" data-action="get_base_user_list" data-type="select">
+                            <select class="js-data-select-ajax" name="chairman_id" data-action="get_base_user_list" data-type="select">
                                 <option value="<?=$row['chairman_id']?>" selected="selected">
                                     <?=isset($row['chairman_real_name']) ? unserialize($row['chairman_real_name'])['real_name'] : ''?>
                                 </option>
@@ -1238,7 +1276,7 @@ class Organize{
                     <tr class="">
                         <th scope="row"><label for="secretary_id">秘书长 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="secretary_id" style="width: 50%" data-action="get_base_user_list" data-type="select">
+                            <select class="js-data-select-ajax" name="secretary_id" data-action="get_base_user_list" data-type="select">
                                 <option value="<?=$row['secretary_id']?>" selected="selected">
                                     <?=isset($row['secretary_real_name']) ? unserialize($row['secretary_real_name'])['real_name'] : ''?>
                                 </option>
@@ -1298,7 +1336,7 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row"><label for="">状态 </label></th>
+                        <th scope="row"><label for="">申请状态 </label></th>
                         <td>
                         <?php if($row['user_status'] == '-1' || $old_zm_id == 0 || $row['user_status'] == '-2'){
                             ?>
@@ -1319,7 +1357,13 @@ class Organize{
 
                         </td>
                     </tr>
-
+                    <tr class="">
+                        <th scope="row"><label for="">冻结状态 </label></th>
+                        <td>
+                            <label for="is_able"> <input type="checkbox" <?=$row['is_able'] == '1' || !isset($row)? 'checked="checked"':''?> class="apply_ch2" name="is_able" id="is_able" value="1" />正常 </label>
+                            <label for="is_able2"> <input type="checkbox" <?=$row['is_able'] == '2' ? 'checked="checked"':''?> class="apply_ch2" name="is_able" id="is_able2" value="2" />冻结 </label>
+                        </td>
+                    </tr>
 
                     </tbody>
                 </table>
@@ -1382,6 +1426,15 @@ class Organize{
                             $('#user_status').prop('checked',status);
                         }else if(val == '1'){
                             $('#user_status2').prop('checked',status);
+                        }
+                    });
+                    $('.apply_ch2').on('change',function () {
+                        var val = $(this).val();
+                        var status = !$(this).prop('checked');
+                        if(val == '2'){
+                            $('#is_able').prop('checked',status);
+                        }else if(val == '1'){
+                            $('#is_able2').prop('checked',status);
                         }
                     });
                     $('#zone_match_type').on('change', function () {
