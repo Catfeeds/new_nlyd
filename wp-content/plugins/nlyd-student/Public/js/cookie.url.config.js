@@ -8,6 +8,60 @@
 $.n('');
 */
 /*$.alerts*/
+function directTurnIntoBase64(fileObj,callback){//直接转换base64
+	var r = new FileReader();
+	// 转成base64
+	r.onload = function(){
+	//变成字符串
+		imgBase64 = r.result;
+		// console.log(imgBase64);
+		callback(imgBase64);
+	}
+	r.readAsDataURL(fileObj);    //转成Base64格式
+}
+  // 对图片进行压缩
+function imgCompress(fileObj, callback) { 
+	if ( typeof (FileReader) === 'undefined') {  
+		console.log("当前浏览器内核不支持base64图标压缩");  
+		//调用上传方式不压缩  
+		directTurnIntoBase64(fileObj,callback);
+	}else if(fileObj.size<250000){      //图片小于250k就不压缩
+		console.log("不需要压缩");  
+		directTurnIntoBase64(fileObj,callback);
+	} else {  
+		try {    
+			var type=fileObj.type;
+			var reader = new FileReader();  
+			reader.onload = function (e) {  
+				var image = jQuery('<img/>');  
+				image.load(function(){  
+					square = 700,   //定义画布的大小，也就是图片压缩之后的像素
+					canvas = document.createElement('canvas'), 
+					context = canvas.getContext('2d'),
+					imageWidth = 0,    //压缩图片的大小
+					imageHeight = 0, 
+					offsetX = 0, 
+					offsetY = 0,
+					data = ''; 
+
+					canvas.width = this.width;  
+					canvas.height = this.height; 
+					context.clearRect(0, 0, square, square); 
+					context.drawImage(this, 0, 0, this.width, this.height); 
+					var data = canvas.toDataURL(type);  
+					//压缩完成执行回调  
+					callback(data);
+				});  
+				image.attr('src', e.target.result);  
+			};  
+			reader.readAsDataURL(fileObj);  
+		}catch(e){  
+			console.log("压缩失败!");  
+			//调用直接上传方式  不压缩 
+			directTurnIntoBase64(fileObj,callback); 
+		}  
+	}
+}
 function Alert(msg,delay){
 	this.msg=msg;
 	this.delay=delay ? delay : 800;
