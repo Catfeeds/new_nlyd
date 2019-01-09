@@ -83,14 +83,14 @@ class Timer
                     }else{
                         //已结束
                         $save['match_status'] = -3;
-                        //if($v['match_id'] == 56989){
+                        if($v['match_id'] == 57014){
                             //获取当前考级是否已经进行了收益分配
                             $sql1 = "select a.match_id,a.match_scene,c.user_id,c.user_income
                                 from {$wpdb->prefix}match_meta_new a 
                                 left join {$wpdb->prefix}user_stream_logs c on a.match_id = c.match_id 
                                 where c.match_id = {$v['match_id']} AND c.user_income is null";
                             $row_ = $wpdb->get_row($sql1,ARRAY_A);
-
+                            //print_r($sql1);
                             if(empty($row_['user_income'])){
                                 //获取本次考级所有考级学员以及2级推广人
                                 $sql2 = "select a.user_id,a.order_type,a.match_id,a.sub_centres_id,b.referee_id,c.referee_id as indirect_referee_id 
@@ -99,11 +99,10 @@ class Timer
                                         left join {$wpdb->prefix}users c on b.referee_id = c.ID
                                         where a.match_id = {$v['match_id']} and a.order_type = 1 and pay_status in (2,3,4) ";
                                 $rows_ = $wpdb->get_results($sql2,ARRAY_A);
+                                //print_r($sql2);
                                 if(!empty($rows_)){
                                     //获取当前考级收益列表
                                     $results = $wpdb->get_results("select * from {$wpdb->prefix}user_income_logs where match_id = {$v['match_id']} and income_type = 'match' ",ARRAY_A);
-
-                                    //print_r($results);die;
 
                                     if(!empty($results)){
                                         $str = '';
@@ -164,22 +163,23 @@ class Timer
                                                 }
                                             }
                                         }
+                                        //var_dump($results[0]['income_status']);die;
                                         if($results[0]['income_status'] == 2){
 
                                             $wpdb->query('START TRANSACTION');
                                             if(!empty($user_stream)){
                                                 $str1 = '';
                                                 foreach ($user_stream as $k => $t){
-                                                    $str1 .= "({$k}, 2,'match',{$v['match_id']}, {$t}, NOW()),";
+                                                    $str1 .= "({$k},'match',{$v['match_id']}, {$t}, NOW()),";
                                                 }
-                                                $sql_ = "INSERT INTO `{$wpdb->prefix}user_stream_logs` ( `user_id`,`user_type`, `income_type`, `match_id`, `user_income`, `created_time`) VALUES ".rtrim($str1, ',');
+                                                $sql_ = "INSERT INTO `{$wpdb->prefix}user_stream_logs` ( `user_id`, `income_type`, `match_id`, `user_income`, `created_time`) VALUES ".rtrim($str1, ',');
                                                 //print_r($sql_);die;
                                                 $x = $wpdb->query($sql_);
                                             }else{
                                                 $x = 1;
                                             }
 
-                                            $y = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$money4),array('user_id'=>$v['created_id'],'match_id'=>$v['match_id'],'income_type'=>'match','user_type'=>'1'));
+                                            $y = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$money4),array('user_id'=>$v['created_id'],'match_id'=>$v['match_id'],'income_type'=>'undertake'));
 
                                             //print_r($x .'&&'. $y);die;
                                             if($x && $y){
@@ -193,7 +193,7 @@ class Timer
                                     }
                                 }
                             }
-                        //}
+                        }
                     }
                     //var_dump($v['match_id']);
                     //var_dump($save);
