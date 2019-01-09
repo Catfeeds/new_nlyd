@@ -116,12 +116,12 @@ jQuery(function($) {
                             if(res.data && res.data.length>0){
                                 var url=res.data;
                                 var json={
-                                    "title": "签到二维码", //相册标题
+                                    "title": "<?=__('签到二维码', 'nlyd-student')?>", //相册标题
                                     "id": match_id, //相册id
                                     "start": 0, //初始显示的图片序号，默认0
                                     "data": [   //相册包含的图片，数组格式
                                         {
-                                        "alt": "签到二维码",
+                                        "alt": "<?=__('签到二维码', 'nlyd-student')?>",
                                         "pid": match_id, //图片id
                                         "src": url, //原图地址
                                         "thumb": url //缩略图地址
@@ -134,12 +134,14 @@ jQuery(function($) {
                                 })
                                 setTimeout(function(){
                                     var _layerImg=$('.layui-layer-phimg');
+                                    var _tips='<div class="ta_c c_white" style="position: absolute;width: 100%;bottom: 40px;"><?=__("长按下载图片", "nlyd-student")?></div>'
+                                    $('.layui-layer-shade').append(_tips);
                                     new AlloyFinger(_layerImg[0], {
                                         longTap:function(){
-                                            savaFile(url,match_name+"签到二维码")
+                                            savaFile(url,match_name+"<?=__('签到二维码', 'nlyd-student')?>")
                                         }
                                     })
-                                },300)
+                                },100)
                             }
                         }
                         _this.removeClass('disabled');
