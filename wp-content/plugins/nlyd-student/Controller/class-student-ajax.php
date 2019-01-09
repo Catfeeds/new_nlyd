@@ -4679,6 +4679,7 @@ class Student_Ajax
                 if(income_type = 'extract','bg_reduce', 'bg_add') as income_type_class,
                 case income_type
                 when 'match' then '比赛收益'
+                when 'match' then '比赛收益'
                 when 'grading' then '考级收益'
                 when 'extract' then '比赛提现'
                 when 'subject' then '推荐补贴'
@@ -5214,7 +5215,8 @@ class Student_Ajax
         if(empty($_POST['num'])) wp_send_json_error(array('info'=>__('请输入提现金额')));
 
         //获取可提现金额
-        $stream_total = $wpdb->get_row("select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} ");
+        $stream_total = $wpdb->get_var("select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} ");
+
         if($stream_total < $_POST['num']){
             wp_send_json_error(array('info'=>__('余额不足,无法提现')));
         }
@@ -5222,6 +5224,7 @@ class Student_Ajax
         $insert1 = array(
             'user_id'=>$current_user->ID,
             'income_type'=>'extract',
+            'extract_type'=>$_POST['extract_type'],
             'user_income'=>-$_POST['num'],
             'created_time'=>get_time('mysql'),
 

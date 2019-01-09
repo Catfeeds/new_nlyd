@@ -409,10 +409,10 @@ class Student_Payment {
                             $wpdb->query('START TRANSACTION');
                             $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
-                            $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and user_type = 1 and match_id = {$order['match_id']}");
+                            $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and user_type = {$zone_meta['zone_match_type']} and match_id = {$order['match_id']}");
                             //var_dump($stream_id);
                             if(empty($stream_id)){
-                                $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_type'=>1,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_type'=>$zone_meta['zone_match_type'],'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                             }
                             else{
                                 $b = true;
@@ -694,10 +694,10 @@ class Student_Payment {
                     $wpdb->query('START TRANSACTION');
                     $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
-                    $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and user_type = 1 and match_id = {$order['match_id']}");
+                    $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and user_type = {$zone_meta['zone_match_type']} and match_id = {$order['match_id']}");
                     //var_dump($stream_id);
                     if(empty($stream_id)){
-                        $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_type'=>1,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                        $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_type'=>{$zone_meta['zone_match_type']},'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
                     else{
                         $b = true;
@@ -885,10 +885,10 @@ class Student_Payment {
                                 $wpdb->query('START TRANSACTION');
                                 $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
-                                $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and user_type = 1 and match_id = {$order['match_id']}");
+                                $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and user_type = {$zone_meta['zone_match_type']} and match_id = {$order['match_id']}");
                                 //var_dump($stream_id);
                                 if(empty($stream_id)){
-                                    $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_type'=>1,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                    $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_type'=>$zone_meta['zone_match_type'],'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                                 }
                                 else{
                                     $b = true;
