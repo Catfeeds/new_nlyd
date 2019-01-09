@@ -1298,9 +1298,12 @@ class Organize{
 
                     </tbody>
                 </table>
+                <?php if($old_zm_id > 0){ ?>
 
+                    <button type="button" id="editForm" data-type="edit" class="button">编辑</button>
+                <?php } ?>
+                    <input type="submit" name="createuser" id="createusersub" class="button button-primary" value="提交">
 
-                <p class="submit"><input type="submit" name="createuser" id="createusersub" class="button button-primary" value="提交"></p>
             </form>
             <script>
                 jQuery(document).ready(function($) {
@@ -1375,6 +1378,25 @@ class Organize{
                             $("#term_time").val('');
                         }
                     });
+                    <?php if($old_zm_id > 0){ ?>
+                    $('input').prop('disabled','disabled');
+                    $('select').prop('disabled','disabled');
+                    $('#editForm').on('click', function () {
+                        var _type = $(this).attr('data-type');
+                        var _ab = '';
+                        if(_type == 'edit'){
+                            $(this).text('取消编辑');
+                            $(this).attr('data-type','disable');
+                        }else if(_type == 'disable'){
+                            $(this).text('编辑');
+                            $(this).attr('data-type','edit');
+                            _ab = 'disabled';
+                        }
+                        $('input').prop('disabled',_ab);
+                        $('select').prop('disabled',_ab);
+                    });
+                    <?php } ?>
+
                 });
             </script>
 

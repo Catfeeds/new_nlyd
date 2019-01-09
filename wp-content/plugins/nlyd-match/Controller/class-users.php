@@ -3,7 +3,7 @@ class Users {
     public function __construct()
     {
         add_action( 'admin_menu', array($this,'register_order_menu_page') );
-//        add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
+        add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
 //        die;
 
         add_action('user_row_actions', array($this,'users_Row_actions'), 10, 2);
@@ -170,6 +170,15 @@ class Users {
 //        die;
 
         ?>
+        <style>
+            @media screen and (max-width: 782px){
+                .form-table input[type='radio'].regular-text {
+                    height: 25px;
+                    width: 25px;
+                }
+            }
+
+        </style>
         <div class="wrap" id="profile-page">
             <h1 class="wp-heading-inline">个人资料</h1>
 
@@ -222,6 +231,7 @@ class Users {
                         <th><label for="real_name">真实姓名</label></th>
                         <td><input type="text" name="real_name" id="real_name" value="<?=isset($user_real_name['real_name']) ? $user_real_name['real_name']:''?>" class="regular-text"></td>
                     </tr>
+
                     <tr>
                         <th><label for="sex">性别</label></th>
                         <td>
@@ -252,23 +262,30 @@ class Users {
                     <tr>
                         <th><label for="card_img">证件图片</label></th>
                         <td>
+                            <div>
+                                <label style="font-weight: bold" class="ui_button ui_button_primary" for="xFileaaaa">新增图片</label>
+                            </div>
+                            <br>
                             <?php
                             $num = 1;
                             foreach ($cardImg as $k => $civ) {
 
                                 ?>
-                                <div>
-                                    <img src="<?=$civ?>" style="height: 80px;" alt="">
-                                    <input type="file" name="cardImg[<?=$k?>]" value="重新上传" >
+                                <div id="cardImg-<?=$k?>">
+                                    <div style="width: 190px;display: inline-block;">
+                                        <img src="<?=$civ?>" style="height: 80px;" alt="">
+                                    </div>
+
+                                    <label class="ui_button ui_button_primary" for="xFile<?=$k?>">重新上传</label>
+                                    <input type="file" id="xFile<?=$k?>" name="cardImg[<?=$k?>]" style="position:absolute;clip:rect(0 0 0 0);">
+
                                     <a href="javascript:;" data-k="<?=$k?>" class="cardImg">删除</a>
                                 </div>
                                 <?php
                                 if($k >= $num) $num = ++$k;
                             }
                             ?>
-                           <div>
-                               <input type="file" name="cardImg[<?=$num?>]" value="新增图片">
-                           </div>
+                            <input type="file" id="xFileaaaa" name="cardImg[<?=$num?>]" style="position:absolute;clip:rect(0 0 0 0);">
                         </td>
                     </tr>
                     <tr>
@@ -507,11 +524,36 @@ class Users {
                             });
                         }
                     });
+
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        var _title = '';
+                        <?php
+                        foreach ($cardImg as $k=>$v){
+                        ?>
+
+                        layer.photos({//图片预览
+                            photos: '#cardImg-<?=$k?>',
+                            move : false,
+                            title : '',
+                            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                        })
+                        <?php } ?>
+                    });
                 })
 
             </script>
         </div>
         <?php
+    }
+
+    public function register_scripts(){
+        switch ($_GET['page']){
+            case 'users-info';
+                wp_register_script('layui-js',match_js_url.'layui/layui.js');
+                wp_enqueue_script( 'layui-js' );
+            break;
+        }
     }
 
 }
