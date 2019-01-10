@@ -4779,6 +4779,7 @@ class Student_Ajax
         if(empty($_POST['post_title']) ||empty($_POST['match_scene']) || empty($_POST['match_genre']) || empty($_POST['match_address']) || empty($_POST['match_start_time']) ){
             wp_send_json_error(array('info'=>'比赛场景/类型/名称/地点/时间为必填项'));
         }
+        if($_POST['entry_end_time'] > $_POST['match_start_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
         global $wpdb,$current_user;
 
         //print_r($_POST);die;
@@ -4887,6 +4888,7 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'考级场景/类别/名称/时间为必填项'));
         }
         if($_POST['start_time'] > $_POST['end_time'] )wp_send_json_error(array('info'=>'结束时间必须大于开始时间'));
+        if($_POST['entry_end_time'] > $_POST['start_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
         global $wpdb,$current_user;
 
         //print_r($_POST);die;

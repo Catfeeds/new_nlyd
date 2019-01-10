@@ -337,7 +337,7 @@ class Student_Payment {
                         }else{  //城市赛
                             $role_alias = $zone_meta['is_double'] == 1 ? 'double-city-match' : 'single-city-match';
                         }
-                    }elseif ($_POST['role_alias'] == 'official-grading'){
+                    }elseif ($row['role_alias'] == 'official-grading'){
                         $role_alias = 'official-grading';
                     }
 
@@ -610,6 +610,7 @@ class Student_Payment {
                             left join {$wpdb->prefix}zone_match_role b on a.{$join} = b.id
                             where a.{$income_type} = {$order['match_id']} and b.is_profit = 1 and b.status = 1";
         $row = $wpdb->get_row($sql,ARRAY_A);
+        //print_r($row);die;
         if(!empty($row)){
             $zone_user_id = $row['created_id'] ? $row['created_id'] : $row['created_person'];
             //print_r($row);die;
@@ -622,11 +623,11 @@ class Student_Payment {
                 }else{  //城市赛
                     $role_alias = $zone_meta['is_double'] == 1 ? 'double-city-match' : 'single-city-match';
                 }
-            }elseif ($_POST['role_alias'] == 'official-grading'){
+            }elseif ($row['role_alias'] == 'official-grading'){
                 $role_alias = 'official-grading';
             }
-
             $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$role_alias}' ";
+            //print_r($set_sql);
             $setting = $wpdb->get_row($set_sql,ARRAY_A);
             //print_r($setting);die;
             if(!empty($setting)){
@@ -702,7 +703,7 @@ class Student_Payment {
                     else{
                         $b = true;
                     }
-                    //print_r($a .'************'. $b);die;
+                    print_r($a .'************'. $b);die;
                     if($a && $b){
                         $wpdb->query('COMMIT');
                     }else{
@@ -813,7 +814,7 @@ class Student_Payment {
                             }else{  //城市赛
                                 $role_alias = $zone_meta['is_double'] == 1 ? 'double-city-match' : 'single-city-match';
                             }
-                        }elseif ($_POST['role_alias'] == 'official-grading'){
+                        }elseif ($row['role_alias'] == 'official-grading'){
                             $role_alias = 'official-grading';
                         }
 
