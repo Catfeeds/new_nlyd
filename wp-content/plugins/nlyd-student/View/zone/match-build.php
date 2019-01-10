@@ -294,7 +294,7 @@ var mobileSelect4 = new MobileSelect({
             return false;
         });
 
-        $('#end_match').click(function(){
+        $('#end_match').click(function(){//取消比赛
             var _this=$(this);
             layer.open({
                 type: 1

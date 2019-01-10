@@ -360,7 +360,7 @@ var mobileSelect5 = new MobileSelect({
             return false;
         });
 
-        $('#end_match').click(function(){
+        $('#end_match').click(function(){//取消考级
             var _this=$(this);
             layer.open({
                 type: 1
@@ -368,7 +368,7 @@ var mobileSelect5 = new MobileSelect({
                 ,title: "<?=__('提示', 'nlyd-student')?>" //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: "<div class='box-conent-wrapper'><?=__('是否结束比赛', 'nlyd-student')?>？</div>"
+                ,content: "<div class='box-conent-wrapper'><?=__('是否结束考级', 'nlyd-student')?>？</div>"
                 ,btn: [ "<?=__('按错了', 'nlyd-student')?>","<?=__('确认', 'nlyd-student')?>",]
                 ,success: function(layero, index){
                 },
