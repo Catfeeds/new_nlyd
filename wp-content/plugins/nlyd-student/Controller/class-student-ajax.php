@@ -6089,6 +6089,51 @@ class Student_Ajax
         wp_send_json_success(array('user_id'=>$row['ID']));
     }
 
+    /**
+     * 获取比赛签到情况
+     */
+    public function get_sign_list(){
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('参数错误')));
+        global $wpdb,$current_user;
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        $sql = "select a.match_id,a.user_id,if(c.id > 0,c.id,0) sign_id from {$wpdb->prefix}order a 
+                left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
+                left join {$wpdb->prefix}match_sign c on a.user_id = c.user_id
+                where a.match_id = {$_POST['match_id']} and pay_status in (2,3,4) and b.created_id = {$current_user->ID}
+                group by a.user_id limit {$start},{$pageSize}
+                ";
+        //print_r($sql);die;
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无教练', 'nlyd-student')));
+        if(!empty($rows)){
+
+            foreach ($rows as $k => $v){
+                $rows[$k]['order'] =  $start+$k+1;
+
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','user_images_color','user_head') and user_id = {$v['user_id']}";
+                $res = $wpdb->get_results($sql_,ARRAY_A);
+                $user_info = array_column($res,'meta_value','meta_key');
+                //print_r($user_info);
+                //获取工作照
+                $coach_work_photo = !empty($user_info['user_images_color']) ? unserialize($user_info['user_images_color'])[0] : $user_info['user_head'] ;
+                $rows[$k]['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
+
+                $rows[$k]['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-' ;
+                $user_real_name = unserialize($user_info['user_real_name']);
+                $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
+                $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
+                $rows[$k]['sign_cn'] = !empty($v['sign_id']) ? '已签' : '未签' ;
+            }
+        }
+        //print_r($rows);
+        wp_send_json_success(array('info'=>$rows));
+    }
+
 
 
     /*

@@ -512,8 +512,25 @@ class Student_Zone
      * 比赛学员报名/签到情况
      */
     public function matchSignDetail(){
+        global $wpdb,$current_user;
+        //获取比赛学员签到情况
+        $sql = "select count(*) total from {$wpdb->prefix}order a 
+                left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
+                where a.match_id = {$_GET['match_id']} and a.pay_status in (2,3,4) and b.created_id = {$current_user->ID}";
+        $order_total = $wpdb->get_var($sql);
+        $data['order_total'] = $order_total > 0 ? $order_total : 0;
+
+        $sql_ = "select count(distinct a.user_id) total from {$wpdb->prefix}match_sign a 
+                left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
+                where a.match_id = {$_GET['match_id']} and b.created_id = {$current_user->ID}
+                group by a.match_id
+                ";
+        $sign_total = $wpdb->get_var($sql_);
+        $data['sign_total'] = $sign_total > 0 ? $sign_total : 0;
+        //print_r($data);
+
         $view = student_view_path.CONTROLLER.'/match-signDetail.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     /**
      * 比赛发布成功
