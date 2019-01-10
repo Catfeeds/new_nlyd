@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div>
-                            <a class="c_blue"><?=__('解散并删除战队', 'nlyd-student')?></a>
+                            <a class="c_blue team_clear"><?=__('解散并删除战队', 'nlyd-student')?></a>
                         </div>
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认申请', 'nlyd-student')?></div></a>
                     </form>
@@ -77,6 +77,39 @@ jQuery(function($) {
     //             }
     //         });
     //     })
+    $('.team_clear').click(function(){
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            var data={
+                action:'team_personnel_operation',
+            }
+            $.ajax({
+                data: data,
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
+                success: function(res, textStatus, jqXHR){
+                    console.log(res)
+                    if(res.success){
+                        if(res.data.url){
+                            window.location.href=res.data.url
+                        }
+                    }else{
+                        _this.removeClass('disabled');
+                    }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                        _this.removeClass('disabled');
+            　　　　 }
+                    
+                }
+            })
+        }else{
+            $.alerts("<?=__('正在处理您的请求，请稍后再试', 'nlyd-student')?>",1200)
+        }
+    })
     layui.use(['form'], function(){
         var form = layui.form
         form.render();
