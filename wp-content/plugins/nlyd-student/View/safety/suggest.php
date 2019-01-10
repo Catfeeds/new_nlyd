@@ -94,24 +94,6 @@
                 anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
             }) 
         })
-        sendloginAjax=function(formData){
-            //type:确定回调函数
-            //url:ajax地址
-            //formData:ajax传递的参数
-            $.ajax({
-                data: formData,
-                success: function(data, textStatus, jqXHR){
-                    console.log(data)
-                    $.alerts(data.data.info)
-                    if(data.data.url){
-                        setTimeout(function(){
-                            window.location.href=data.data.url
-                        },300)
-                    }
-                    return false;
-                }
-            });
-        }
         layui.use(['form'], function(){
             var form = layui.form
             form.render();
@@ -119,40 +101,52 @@
             form.verify($.validationLayui.allRules);
             // 监听提交
             form.on('submit(suggestionBtn)', function(data){
-                var fd = new FormData();
-                var contact=$('#contact').val()
-                var content=$('#contents').val()
-                fd.append('action','feedback');
-                fd.append('_wpnonce',$("#inputSuggest").val());
-                fd.append('contact',contact);
-                fd.append('content',content);
-                $.each(imgs, function (i, v) {
-                    fd.append('images[]',v);
-                })
+                var _this=$(this);
+                if(!_this.hasClass('disabled')){
+                    var fd = new FormData();
+                    var contact=$('#contact').val()
+                    var content=$('#contents').val()
+                    fd.append('action','feedback');
+                    fd.append('_wpnonce',$("#inputSuggest").val());
+                    fd.append('contact',contact);
+                    fd.append('content',content);
+                    $.each(imgs, function (i, v) {
+                        fd.append('images[]',v);
+                    })
 
-                $.ajax({
-                    data: fd,
-                    contentType : false,
-                    processData : false,
-                    cache : false,
-                    success: function(res, textStatus, jqXHR){
-                        if(res.success){
-                            $.alerts(res.data.info)
-                            setTimeout(function() {
-                                 window.location.reload() 
-                            }, 300);
-                           
-                        }else{
-                            $.alerts(res.data.info)
+                    $.ajax({
+                        data: fd,
+                        contentType : false,
+                        processData : false,
+                        cache : false,
+                        beforeSend:function(XMLHttpRequest){
+                            _this.addClass('disabled')
+                        },
+                        success: function(res, textStatus, jqXHR){
+                            if(res.success){
+                                $.alerts(res.data.info)
+                                setTimeout(function() {
+                                    window.location.reload() 
+                                }, 300);
+                            
+                            }else{
+                                $.alerts(res.data.info)
+                                _this.removeClass('disabled');
+                            }
+                            
+                        },
+                        complete: function(jqXHR, textStatus){
+                            if(textStatus=='timeout'){
+                                $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                                _this.removeClass('disabled');
+                    　　　　 }
                         }
-                        
-                    }
-                })
+                    })
+                }else{
+                    $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+                }
                 return false;
             });
         });
-        $('#loginOut').click(function(){//登出
-            sendloginAjax({action:'user_logout'})
-        })
     })
 </script>
