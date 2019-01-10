@@ -584,13 +584,13 @@ class Student_Payment {
             'return_url'    => home_url('payment/zfb_returnUrl/type/alipay/serialnumber/'.$order['serialnumber']),
             'out_trade_no'  => $order['serialnumber'],
             'subject'       => '脑力中国',
-            //'total_amount'  =>  0.01,
-            'total_amount'  => $order['cost'],
+            'total_amount'  =>  0.01,
+            //'total_amount'  => $order['cost'],
             'body'  => '', //商品描述,可空
         ];
 
         /*****************收益分配start*******************/
-        /*
+
         //获取当前比赛场景
         if($order['order_type'] == 1){
             $income_type = 'match_id';
@@ -627,9 +627,10 @@ class Student_Payment {
                 $role_alias = 'official-grading';
             }
             $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$role_alias}' ";
-            //print_r($set_sql);
+            //print_r($set_sql);die;
             $setting = $wpdb->get_row($set_sql,ARRAY_A);
-            //print_r($setting);die;
+            //print_r($setting);
+            //die;
             if(!empty($setting)){
                 $id = $wpdb->get_var("select id from {$wpdb->prefix}user_income_logs where user_id = {$order['user_id']} and match_id = {$order['match_id']}");
 
@@ -690,6 +691,7 @@ class Student_Payment {
                             'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
                         );
                     }
+                    //print_r($insert);die;
                     $insert['created_time'] = get_time('mysql');
 
                     $wpdb->query('START TRANSACTION');
@@ -703,7 +705,7 @@ class Student_Payment {
                     else{
                         $b = true;
                     }
-                    print_r($a .'************'. $b);die;
+                    //print_r($a .'************'. $b);die;
                     if($a && $b){
                         $wpdb->query('COMMIT');
                     }else{
@@ -713,7 +715,7 @@ class Student_Payment {
                 }
 
             }
-        }*/
+        }
 
         /*****************收益分配end*******************/
 

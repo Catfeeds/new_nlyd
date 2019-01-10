@@ -5429,6 +5429,7 @@ class Student_Ajax
                 $list['channel_ID'] = $v['user_id']+10000000;
                 $list['post_title'] = $v['post_title'];
                 $list['income_type_cn'] = $v['income_type_cn'];
+                $list['income_type'] = $v['income_type'];
                 $list['income_status_cn'] = $v['income_status_cn'];
                 $list['created_time'] = $v['created_time'];
                 $lists[] = $list;
@@ -5555,9 +5556,9 @@ class Student_Ajax
 
             $sql__ = "select ID
                  from {$wpdb->prefix}users
-                 where referee_id = {$current_user->ID} and user_id > 0 ";
+                 where referee_id = {$current_user->ID} and ID > 0 ";
             $rows__ = $wpdb->get_results($sql__,ARRAY_A);
-            
+
             if(empty($rows)){
                 $rows = $rows__;
                 $map = "y";
@@ -6130,6 +6131,7 @@ class Student_Ajax
                 $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
                 $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
                 $rows[$k]['sign_cn'] = !empty($v['sign_id']) ? '已签' : '未签' ;
+                $rows[$k]['sign_color'] = !empty($v['sign_id']) ? 'c_green' : 'c_black6' ;
             }
         }
         //print_r($rows);

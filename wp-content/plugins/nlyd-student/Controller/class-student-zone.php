@@ -513,6 +513,7 @@ class Student_Zone
      */
     public function matchSignDetail(){
         global $wpdb,$current_user;
+
         //获取比赛学员签到情况
         $sql = "select count(*) total from {$wpdb->prefix}order a 
                 left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
@@ -528,6 +529,10 @@ class Student_Zone
         $sign_total = $wpdb->get_var($sql_);
         $data['sign_total'] = $sign_total > 0 ? $sign_total : 0;
         //print_r($data);
+
+        //获取比赛名字
+        $post = get_post($_GET['match_id']);
+        $data['post_title'] = $post->post_title;
 
         $view = student_view_path.CONTROLLER.'/match-signDetail.php';
         load_view_template($view,$data);
