@@ -24,7 +24,7 @@
                             <div class="coach_add_input">
                                 <!--<select class="js-data-select-ajax" name="user_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?/*=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')*/?>" >
                                 </select>-->
-                                <input style="margin-bottom:0" class="radius_input_row change_num" name="user_phone" value="<?=$row['user_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                <input style="margin-bottom:0" class="radius_input_row change_num nl-foucs" name="user_phone" value="<?=$row['user_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
                             </div>
                             <input type="hidden" name="action" value="add_team_personnel">
                             <input type="hidden" name="team_id" value="<?=$_GET['team_id']?>">
