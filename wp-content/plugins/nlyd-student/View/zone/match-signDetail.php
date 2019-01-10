@@ -22,8 +22,7 @@
             </header>    
             <div class="layui-row nl-border nl-content have-bottom">
                 <div class="match_sign_row width-padding width-padding-pc">
-                    <!-- 开赛机构不加2018脑力世界杯 -->
-                    <div class="bold fs_16 c_black">2018脑力世界杯战队精英赛</div>
+                    <div class="bold fs_16 c_black"><?=$post_title?></div>
                     <div class="flex-h mt_10">
                         <div class="flex1">
                             <span class="c_blue"><?=__('报 名', 'nlyd-student')?>：</span>
