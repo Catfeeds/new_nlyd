@@ -110,7 +110,7 @@ jQuery(function($) {
                                     // 未开始-1
                                     // 报名中1
                                     // 进行中2
-                                    var end_match=v.match_status==2 ? '<a class="end_match c_black6"><span class="c_orange"><i class="iconfont">&#xe6a1;</i></span><span class="ml_10">结束考级</span></a>' : '';
+                                    var end_match=v.match_status==2 ? '<span>结束考级</span>' : '';
                                   
                                     var dom='<li class="match_row">'
                                                 +'<div class="bold c_black f_16 mt_10">'+v.post_title+'</div>'
@@ -132,11 +132,22 @@ jQuery(function($) {
                                                         +'<div class="match_body_info c_black">'+v.entry_total+'</div>'
                                                     +'</div>'
                                                 +'</div>'
-                                                +'<div class="match_footer ta_r">'
-                                                    // +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>'
-                                                    +'<a href="'+window.home_url+'/zone/kaojiBuild/grading_id/'+v.grading_id+'/" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>'
-                                                    +end_match
+                                                +'<div class="match_footer flex-h">'
+                                                    +'<div class="edit_match c_black6 flex1 ta_l get_sign_code">'
+                                                    +'</div>'
+                                                    +'<div class="edit_match c_black6 flex1 ta_c">'
+                                                        +end_match
+                                                    +'</div>'
+                                                    +'<a href="'+window.home_url+'/zone/kaojiBuild/grading_id/'+v.grading_id+'/" class="edit_match c_black6 flex1 ta_r">'
+                                                        +'<div class="zone_bg bg_edit dis_inlineBlock"></div>'
+                                                        +'<span class=" dis_inlineBlock"> <?=__("编辑考级", "nlyd-student")?></span>'
+                                                    +'</a>'
                                                 +'</div>'
+                                                // +'<div class="match_footer ta_r">'
+                                                //     +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>'
+                                                //     +'<a href="'+window.home_url+'/zone/kaojiBuild/grading_id/'+v.grading_id+'/" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>'
+                                                //     +end_match
+                                                // +'</div>'
                                             +'</li>'
                                     lis.push(dom) 
                                 })

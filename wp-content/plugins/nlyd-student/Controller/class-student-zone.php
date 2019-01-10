@@ -512,8 +512,30 @@ class Student_Zone
      * 比赛学员报名/签到情况
      */
     public function matchSignDetail(){
+        global $wpdb,$current_user;
+
+        //获取比赛学员签到情况
+        $sql = "select count(*) total from {$wpdb->prefix}order a 
+                left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
+                where a.match_id = {$_GET['match_id']} and a.pay_status in (2,3,4) and b.created_id = {$current_user->ID}";
+        $order_total = $wpdb->get_var($sql);
+        $data['order_total'] = $order_total > 0 ? $order_total : 0;
+
+        $sql_ = "select count(distinct a.user_id) total from {$wpdb->prefix}match_sign a 
+                left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
+                where a.match_id = {$_GET['match_id']} and b.created_id = {$current_user->ID}
+                group by a.match_id
+                ";
+        $sign_total = $wpdb->get_var($sql_);
+        $data['sign_total'] = $sign_total > 0 ? $sign_total : 0;
+        //print_r($data);
+
+        //获取比赛名字
+        $post = get_post($_GET['match_id']);
+        $data['post_title'] = $post->post_title;
+
         $view = student_view_path.CONTROLLER.'/match-signDetail.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     /**
      * 比赛发布成功
@@ -842,18 +864,26 @@ class Student_Zone
      */
     public function teamBuild(){
 
-        global $wpdb;
+        global $wpdb,$current_user;
         if(isset($_GET['team_id'])){
 
             //获取战队信息
-            $sql = "select a.id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
+            $sql = "select a.id,b.post_title,a.team_director,a.user_id,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
                                       left join {$wpdb->prefix}posts b on a.team_id = b.ID
                                       where team_id = {$_GET['team_id']} ";
             $row = $wpdb->get_row($sql,ARRAY_A);
             //print_r($row);
+            if(empty($row)){
+                $this->get_404(array('message'=>__('战队信息错误', 'nlyd-student'),'return_url'=>home_url('/zone/team/')));
+                return;
+            }
             if(!empty($row['team_director'])){
                 $user_real_name = get_user_meta($row['team_director'],'user_real_name')[0];
                 $row['real_name'] = $user_real_name['real_name'];
+            }
+
+            if($row['user_id'] == $current_user->ID){
+                $row['is_default'] = 'y';
             }
         }
         //print_r($row);

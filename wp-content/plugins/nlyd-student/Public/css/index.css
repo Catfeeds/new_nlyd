@@ -667,13 +667,23 @@ p.no-info-text{
     /* white-space: nowrap; */
     color: #262626;
 }
-.mui-title div{
+.mui-title div,
+.mui-right-header div{
     width: 100%;
     height: 100%;
     display: table-cell;
     vertical-align: middle;
 }
-
+.mui-right-header{
+    display: table;
+    width: 80px;
+    height: 44px;
+    text-align: right;
+    line-height: 22px;
+    position: absolute;
+    right: 10px;
+    top: 0;
+}
 .mui-pull-left.nl-goback{
     display: table;
     width: 44px;

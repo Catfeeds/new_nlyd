@@ -8,7 +8,7 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12  detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/team/');?>">
+            <a class="mui-pull-left nl-goback">
                 <div><i class="iconfont">&#xe610;</i></div>
             </a>
             <h1 class="mui-title">
@@ -104,6 +104,7 @@ jQuery(function($) {
                 ,done: function(page, next){ //加载下一页
                     var postData={
                         action:'get_team_personnel',
+                        team_id:$.Request('team_id'),
                         page:team_page,
                         map:_map,
                     }

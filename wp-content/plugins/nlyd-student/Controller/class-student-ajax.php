@@ -4779,6 +4779,7 @@ class Student_Ajax
         if(empty($_POST['post_title']) ||empty($_POST['match_scene']) || empty($_POST['match_genre']) || empty($_POST['match_address']) || empty($_POST['match_start_time']) ){
             wp_send_json_error(array('info'=>'比赛场景/类型/名称/地点/时间为必填项'));
         }
+        if($_POST['entry_end_time'] > $_POST['match_start_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
         global $wpdb,$current_user;
 
         //print_r($_POST);die;
@@ -4880,6 +4881,59 @@ class Student_Ajax
 
 
     /**
+     * 机构关闭比赛
+     */
+    public function end_match(){
+        global $wpdb,$current_user;
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('参数必传')));
+        $match_id = $wpdb->get_var("select id from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} and created_id = {$current_user->ID} ");
+        if(empty($match_id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布的比赛')));
+        $update = array(
+            'revise_id'=>$current_user->ID,
+            'match_status'=>-4,
+            'match_end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-5 minute',get_time()))
+        );
+        $update1 = array(
+            'end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-5 minute',get_time())),
+            'status'=>-1,
+        );
+        $wpdb->query('START TRANSACTION');
+        $a = $wpdb->update($wpdb->prefix.'match_meta_new',$update,array('match_id'=>$match_id));
+        $b = $wpdb->update($wpdb->prefix.'match_project_more',$update1,array('match_id'=>$match_id));
+        if($a && $b){
+            $wpdb->query('COMMIT');
+            wp_send_json_success(array('info' => __('提交成功', 'nlyd-student')));
+        }else{
+            $wpdb->query('ROLLBACK');
+            wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
+        }
+    }
+
+
+    /**
+     * 机构关闭考级
+     */
+    public function end_grading(){
+        global $wpdb,$current_user;
+        if(empty($_POST['grading_id'])) wp_send_json_error(array('info'=>__('参数必传')));
+        $grading_id = $wpdb->get_var("select id from {$wpdb->prefix}grading_meta where grading_id = {$_POST['grading_id']} and created_person = {$current_user->ID} ");
+        if(empty($grading_id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布的考级')));
+        $update = array(
+            'revise_id'=>$current_user->ID,
+            'status'=>-4,
+            'end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-5 minute',get_time()))
+        );
+
+        $a = $wpdb->update($wpdb->prefix.'grading_meta',$update,array('grading_id'=>$grading_id));
+        if($a){
+
+        }else{
+            wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
+        }
+    }
+
+
+    /**
      * 机构发布考级
      */
     public function zone_create_grading(){
@@ -4887,6 +4941,7 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'考级场景/类别/名称/时间为必填项'));
         }
         if($_POST['start_time'] > $_POST['end_time'] )wp_send_json_error(array('info'=>'结束时间必须大于开始时间'));
+        if($_POST['entry_end_time'] > $_POST['start_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
         global $wpdb,$current_user;
 
         //print_r($_POST);die;
@@ -5427,6 +5482,7 @@ class Student_Ajax
                 $list['channel_ID'] = $v['user_id']+10000000;
                 $list['post_title'] = $v['post_title'];
                 $list['income_type_cn'] = $v['income_type_cn'];
+                $list['income_type'] = $v['income_type'];
                 $list['income_status_cn'] = $v['income_status_cn'];
                 $list['created_time'] = $v['created_time'];
                 $lists[] = $list;
@@ -5553,9 +5609,9 @@ class Student_Ajax
 
             $sql__ = "select ID
                  from {$wpdb->prefix}users
-                 where referee_id = {$current_user->ID} and user_id > 0 ";
+                 where referee_id = {$current_user->ID} and ID > 0 ";
             $rows__ = $wpdb->get_results($sql__,ARRAY_A);
-            
+
             if(empty($rows)){
                 $rows = $rows__;
                 $map = "y";
@@ -5789,7 +5845,7 @@ class Student_Ajax
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $sql = "select a.team_id,b.post_title from {$wpdb->prefix}team_meta a 
+        $sql = "select a.team_id,a.parent_id,b.post_title from {$wpdb->prefix}team_meta a 
                 left join {$wpdb->prefix}posts b on a.team_id = b.ID
                 where a.user_id = {$current_user->ID} or a.parent_id = {$current_user->ID}  
                 order by parent_id asc limit $start,$pageSize";
@@ -5921,6 +5977,34 @@ class Student_Ajax
         }
     }
 
+
+    /**
+     * 战队解散
+     */
+    public function team_disband(){
+        if(empty($_POST['type']) || empty($_POST['team_id'])) wp_send_json_error(array('info'=>__('参数不全')));
+        global $wpdb,$current_user;
+        //获取默认战队
+        $team_id = $wpdb->get_var("select team_id from {$wpdb->prefix}team_meta where user_id = {$current_user->ID}");
+        if($team_id == $_POST['team_id']) wp_send_json_error(array('info'=>__('默认战队禁止删除')));
+        $wpdb->query('START TRANSACTION');
+        if($_POST['type']==2){
+            $a = $wpdb->update($wpdb->prefix.'match_team',array('team_id'=>$team_id),array('team_id'=>$_POST['team_id']));
+        }else{
+
+            $a = $wpdb->delete($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id']));
+        }
+        $b = $wpdb->delete($wpdb->prefix.'team_meta',array('team_id'=>$_POST['team_id']));
+        $c = $wpdb->delete($wpdb->prefix.'posts',array('ID'=>$_POST['team_id']));
+        //print_r($a .'&&'. $b.'&&'. $c);die;
+        if($a && $b && $c){
+            $wpdb->query('COMMIT');
+            wp_send_json_success(array('info' => __('提交成功', 'nlyd-student'),'url'=>home_url('/zone/team/')));
+        }else{
+            $wpdb->query('ROLLBACK');
+            wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
+        }
+    }
 
     /**
      * 机构学员列表
@@ -6087,6 +6171,52 @@ class Student_Ajax
         if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册')));
         if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证')));
         wp_send_json_success(array('user_id'=>$row['ID']));
+    }
+
+    /**
+     * 获取比赛签到情况
+     */
+    public function get_sign_list(){
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('参数错误')));
+        global $wpdb,$current_user;
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        $sql = "select a.match_id,a.user_id,if(c.id > 0,c.id,0) sign_id from {$wpdb->prefix}order a 
+                left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
+                left join {$wpdb->prefix}match_sign c on a.user_id = c.user_id
+                where a.match_id = {$_POST['match_id']} and pay_status in (2,3,4) and b.created_id = {$current_user->ID}
+                group by a.user_id limit {$start},{$pageSize}
+                ";
+        //print_r($sql);die;
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无教练', 'nlyd-student')));
+        if(!empty($rows)){
+
+            foreach ($rows as $k => $v){
+                $rows[$k]['order'] =  $start+$k+1;
+
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','user_images_color','user_head') and user_id = {$v['user_id']}";
+                $res = $wpdb->get_results($sql_,ARRAY_A);
+                $user_info = array_column($res,'meta_value','meta_key');
+                //print_r($user_info);
+                //获取工作照
+                $coach_work_photo = !empty($user_info['user_images_color']) ? unserialize($user_info['user_images_color'])[0] : $user_info['user_head'] ;
+                $rows[$k]['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
+
+                $rows[$k]['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-' ;
+                $user_real_name = unserialize($user_info['user_real_name']);
+                $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
+                $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
+                $rows[$k]['sign_cn'] = !empty($v['sign_id']) ? '已签' : '未签' ;
+                $rows[$k]['sign_color'] = !empty($v['sign_id']) ? 'c_green' : 'c_black6' ;
+            }
+        }
+        //print_r($rows);
+        wp_send_json_success(array('info'=>$rows));
     }
 
 
