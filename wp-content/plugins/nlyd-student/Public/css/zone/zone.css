@@ -641,7 +641,8 @@ div .layui-row:last-child{
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%
+    width: 100%;
+    background: #ffffff;
 }
 .details_btn.focus_none
 {

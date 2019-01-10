@@ -68,7 +68,15 @@
                         </div>
                         <input type="hidden" name="action" value="zone_create_match">
                         <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
-                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></div></a>
+                        <span class="details_btn flex-h">
+                            <div class="details-button flex1">
+                                <button class="save" type="button" id="end_match"><?=__('取消比赛', 'nlyd-student')?></button>
+                            </div>
+                            <div class="details-button flex1 last-btn">
+                                <button class="see_button" type="button" lay-filter='layform' lay-submit=""><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></button>
+                            </div>
+                        </span>
+                        <!-- <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></div></a> -->
                     </form>
                 </div>
             </div>
@@ -285,6 +293,65 @@ var mobileSelect4 = new MobileSelect({
             }
             return false;
         });
+
+        $('#end_match').click(function(){
+            var _this=$(this);
+            layer.open({
+                type: 1
+                ,maxWidth:300
+                ,title: "<?=__('提示', 'nlyd-student')?>" //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: "<div class='box-conent-wrapper'><?=__('是否结束比赛', 'nlyd-student')?>？</div>"
+                ,btn: [ "<?=__('按错了', 'nlyd-student')?>","<?=__('确认', 'nlyd-student')?>",]
+                ,success: function(layero, index){
+                },
+                cancel: function(index, layero){
+                    
+                    layer.closeAll();
+                }
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    if(!_this.hasClass('disabled')){
+                        var data={
+                            action:'team_personnel_operation',
+                        }
+                        $.ajax({
+                            data: data,
+                            beforeSend:function(XMLHttpRequest){
+                                _this.addClass('disabled')
+                            },
+                            success: function(res, textStatus, jqXHR){
+                                console.log(res)
+                                if(res.success){
+                                    if(res.data.url){
+                                        window.location.href=res.data.url
+                                    }
+                                }else{
+                                    _this.removeClass('disabled');
+                                }
+                            },
+                            complete: function(jqXHR, textStatus){
+                                if(textStatus=='timeout'){
+                                    $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                                    _this.removeClass('disabled');
+                        　　　　 }
+                                
+                            }
+                        })
+                    }else{
+                        $.alerts("<?=__('正在处理您的请求，请稍后再试', 'nlyd-student')?>",1200)
+                    }
+                    layer.closeAll();
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        })
     });
 })
 </script>
