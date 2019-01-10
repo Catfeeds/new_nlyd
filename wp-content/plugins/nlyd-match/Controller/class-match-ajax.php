@@ -2279,10 +2279,37 @@ class Match_Ajax
         $k = isset($_POST['k']) ? intval($_POST['k']) : 0;
         if($user_id < 1 || $k < 1) wp_send_json_error(['info' => '参数错误']);
         $cardOldImg = get_user_meta($user_id, 'user_ID_Card', true);
+        $old = $cardOldImg[$k];
         unset($cardOldImg[$k]);
         $bool = update_user_meta($user_id,'user_ID_Card',$cardOldImg);
-        if($bool) wp_send_json_success(['info' => '删除成功!']);
-        else wp_send_json_error(['info' => '删除失败!']);
+        if($bool){
+            //删除图片
+            $filePa = explode('uploads',$old);
+            if(is_file(wp_upload_dir()['basedir'].$filePa[1])) unlink(wp_upload_dir()['basedir'].$filePa[1]);
+            wp_send_json_success(['info' => '删除成功!']);
+        }else{
+            wp_send_json_error(['info' => '删除失败!']);
+        }
+    }
+    /**
+     * 删除用户寸照
+     */
+    public function delImagesColor(){
+        $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+        $k = isset($_POST['k']) ? intval($_POST['k']) : 0;
+        if($user_id < 1 || $k < 1) wp_send_json_error(['info' => '参数错误']);
+        $cardOldImg = get_user_meta($user_id, 'user_images_color', true);
+        $old = $cardOldImg[$k];
+        unset($cardOldImg[$k]);
+        $bool = update_user_meta($user_id,'user_images_color',$cardOldImg);
+        if($bool){
+            //删除图片
+            $filePa = explode('uploads',$old);
+            if(is_file(wp_upload_dir()['basedir'].$filePa[1])) unlink(wp_upload_dir()['basedir'].$filePa[1]);
+            wp_send_json_success(['info' => '删除成功!']);
+        }else{
+            wp_send_json_error(['info' => '删除失败!']);
+        }
     }
 }
 

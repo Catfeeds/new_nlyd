@@ -101,7 +101,7 @@ layui.use(['layer','flow'], function(){
                                     }
                                    
                                     var dom='<a class="team_list_row layui-row width-padding width-padding-pc c_black" href="'+url+'">'
-                                                +'<div class="left_name c_black"><?=__("收款二维码", "nlyd-student")?></div>'
+                                                +'<div class="left_name c_black">'+value.post_title+'</div>'
                                                 +'<div class="right_tips c_orange">1个新的申请</div>'
                                                 +'<div class="right_icoin"><i class="iconfont fs_20">&#xe727;</i></div>'
                                             +'</a>'

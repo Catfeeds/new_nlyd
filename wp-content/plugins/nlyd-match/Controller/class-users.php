@@ -135,6 +135,38 @@ class Users {
                 };
             }
 
+            //寸照
+            $imgArr2 = [];
+            if(isset($_FILES['images_color'])){
+                $upload_dir = wp_upload_dir();
+                $dir = '/user/'.$user_id.'/';
+                foreach ($_FILES['images_color']['tmp_name'] as $k => $upd){
+                    $file = saveIosFile($upd,$upload_dir['basedir'].$dir);
+                    if($file){
+                        $imgArr2[$k] = $upload_dir['baseurl'].$dir.$file;
+                    }
+                }
+
+                $unsetImgArr = [];
+                if($imgArr2 != []){
+                    //查询要删除的原图片
+                    $cardOldImg = get_user_meta($user_id, 'user_images_color', true);
+                    $cardOldImg = $cardOldImg ? $cardOldImg : [];
+                    foreach ($cardOldImg as $coik => $coiv){
+                        if(isset($imgArr2[$coik])) {
+                            $unsetImgArr[] = $coiv;
+                        }else{
+                            $imgArr2[$coik] = $coiv;
+                        }
+                    }
+                    update_user_meta($user_id,'user_images_color',$imgArr2);
+                }
+                foreach ($unsetImgArr as $uiav){
+                    $filePa = explode('uploads',$uiav);
+                    if(is_file(wp_upload_dir()['basedir'].$filePa[1])) unlink(wp_upload_dir()['basedir'].$filePa[1]);
+                };
+            }
+
 
 
         }
@@ -164,6 +196,9 @@ class Users {
 
         //证件照片
         $cardImg = isset($usermeta['user_ID_Card'][0]) ? unserialize($usermeta['user_ID_Card'][0]) : [];
+
+        //寸照
+        $user_images_color = isset($usermeta['user_images_color'][0]) ? unserialize($usermeta['user_images_color'][0]) : [];
 
         //所在地区
         $whereAddress = isset($usermeta['user_address'][0]) ? unserialize($usermeta['user_address'][0]) : [];
@@ -286,6 +321,34 @@ class Users {
                             }
                             ?>
                             <input type="file" id="xFileaaaa" name="cardImg[<?=$num?>]" style="position:absolute;clip:rect(0 0 0 0);">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="card_img">寸照</label></th>
+                        <td>
+                            <div>
+                                <label style="font-weight: bold" class="ui_button ui_button_primary" for="cacccc">新增图片</label>
+                            </div>
+                            <br>
+                            <?php
+                            $num2 = 1;
+                            foreach ($user_images_color as $k2 => $civ2) {
+                                ?>
+                                <div id="del_images_color-<?=$k2?>">
+                                    <div style="width: 190px;display: inline-block;">
+                                        <img src="<?=$civ2?>" style="height: 80px;" alt="">
+                                    </div>
+
+                                    <label class="ui_button ui_button_primary" for="xFiles<?=$k2?>">重新上传</label>
+                                    <input type="file" id="xFiles<?=$k2?>" name="images_color[<?=$k2?>]" style="position:absolute;clip:rect(0 0 0 0);">
+
+                                    <a href="javascript:;" data-k="<?=$k2?>" class="del_images_color">删除</a>
+                                </div>
+                                <?php
+                                if($k2 >= $num2) $num2 = ++$k2;
+                            }
+                            ?>
+                            <input type="file" id="cacccc" name="images_color[<?=$num2?>]" style="position:absolute;clip:rect(0 0 0 0);">
                         </td>
                     </tr>
                     <tr>
@@ -524,6 +587,30 @@ class Users {
                             });
                         }
                     });
+                    /**
+                     * 删除寸照
+                     */
+                    $('.del_images_color').on('click', function () {
+                        if(confirm('是否确认删除寸照?')){
+                            var k = $(this).attr('data-k');
+                            var user_id = '<?=$user_id?>';
+                            var _this = $(this);
+                            $.ajax({
+                                url : ajaxurl,
+                                data : {'action' : 'delImagesColor', 'k':k, 'user_id':user_id},
+                                dataType : 'json',
+                                type : 'post',
+                                success : function (response) {
+                                    alert(response.data.info);
+                                    if(response['success']){
+                                        _this.closest('div').remove();
+                                    }
+                                }, error : function () {
+                                    alert('请求失败!');
+                                }
+                            });
+                        }
+                    });
 
                     layui.use('layer', function(){
                         var layer = layui.layer;
@@ -534,6 +621,17 @@ class Users {
 
                         layer.photos({//图片预览
                             photos: '#cardImg-<?=$k?>',
+                            move : false,
+                            title : '',
+                            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                        })
+                        <?php } ?>
+                        <?php
+                        foreach ($user_images_color as $k=>$v){
+                        ?>
+
+                        layer.photos({//图片预览
+                            photos: '#del_images_color-<?=$k?>',
                             move : false,
                             title : '',
                             anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）

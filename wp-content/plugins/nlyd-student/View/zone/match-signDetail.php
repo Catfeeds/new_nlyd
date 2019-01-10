@@ -26,11 +26,11 @@
                     <div class="flex-h mt_10">
                         <div class="flex1">
                             <span class="c_blue"><?=__('报 名', 'nlyd-student')?>：</span>
-                            <span class="ff_num">18</span>
+                            <span class="ff_num"><?=$order_total?></span>
                         </div>
                         <div class="flex1 ">
                             <span class="c_blue"><?=__('签 到', 'nlyd-student')?>：</span>
-                            <span class="ff_num">18</span>
+                            <span class="ff_num"><?=$sign_total?></span>
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,8 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'zone_coach_list',
+                        action:'get_sign_list',
+                        match_id:$.Request('match_id'),
                         page:team_page,
                     }
                     var lis = [];

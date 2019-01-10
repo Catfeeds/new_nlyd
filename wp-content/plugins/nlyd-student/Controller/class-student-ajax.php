@@ -5712,21 +5712,21 @@ class Student_Ajax
      * 战队申请
      */
     public function team_apply(){
-        if(empty($_POST['post_title']) || empty($_POST['director_phone'])){
-            //wp_send_json_error(array('info'=>__('战队名字/负责人必填')));
+        if(empty($_POST['post_title']) || empty($_POST['team_director_phone'])){
+            wp_send_json_error(array('info'=>__('战队名字/负责人必填')));
         }
         //print_r($_POST);die;
         global $wpdb,$current_user;
 
         //判断战队负责人
-        /*if(reg_match('m',$_POST['director_phone'])) wp_send_json_error(array(__('负责人手机格式不正确', 'nlyd-student')));
+        if(reg_match('m',$_POST['team_director_phone'])) wp_send_json_error(array(__('负责人手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['director_phone']}'
+                where a.user_mobile = '{$_POST['team_director_phone']}'
                 ";
         $team_director = $wpdb->get_row($sql,ARRAY_A);
         if(empty($team_director)) wp_send_json_error(array('info'=>__('该负责人未注册')));
-        if(empty($team_director['meta_value'])) wp_send_json_error(array('info'=>__('该负责人未实名认证')));*/
+        if(empty($team_director['meta_value'])) wp_send_json_error(array('info'=>__('该负责人未实名认证')));
 
         //开启事务
         $wpdb->query('START TRANSACTION');
@@ -5789,7 +5789,7 @@ class Student_Ajax
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $sql = "select a.*,b.post_title from {$wpdb->prefix}team_meta a 
+        $sql = "select a.team_id,a.parent_id,b.post_title from {$wpdb->prefix}team_meta a 
                 left join {$wpdb->prefix}posts b on a.team_id = b.ID
                 where a.user_id = {$current_user->ID} or a.parent_id = {$current_user->ID}  
                 order by parent_id asc limit $start,$pageSize";
@@ -5801,15 +5801,10 @@ class Student_Ajax
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无战队', 'nlyd-student')));
         if(!empty($rows)){
-
             foreach ($rows as $k => $v){
-                //获取战队负责人
-                $team_director = get_user_meta($v['team_director'],'user_real_name')[0];
-                $meta = empty($team_director['real_name']) ? '暂无' : $team_director['real_name'];
-                $rows[$k]['team_director'] =  $meta;
-                //获取人数
-                $sql_ = "select count(*) total from {$wpdb->prefix}match_team where team_id = {$v['user_id']}";
-                $rows[$k]['team_total'] = $wpdb->get_var($sql_);
+                //获取申请
+                $result = $wpdb->get_var("select count(*) total from {$wpdb->prefix}match_team where team_id = {$v['team_id']} and status in(1,-1)");
+                $rows[$k]['apply_total'] = $result;
             }
         }
         //print_r($rows);
@@ -5820,18 +5815,29 @@ class Student_Ajax
      * 为战队添加成员
      */
     public function add_team_personnel(){
-        if(empty($_POST['user_id']) || empty($_POST['team_id'])){
+        if(empty($_POST['user_phone']) || empty($_POST['team_id'])){
            wp_send_json_error(array('info'=>__('请选择需要添加的用户')));
         }
-
         //查看当前用户是否已有战队
         global $wpdb,$current_user;
-        $result = $wpdb->get_var("select id from {$wpdb->prefix}match_team where user_id = {$_POST['user_id']} and user_type = 1 and status > -2");
+
+        //判断成员
+        if(reg_match('m',$_POST['user_phone'])) wp_send_json_error(array(__('学员手机格式不正确', 'nlyd-student')));
+        $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['user_phone']}'
+                ";
+        $user = $wpdb->get_row($sql,ARRAY_A);
+        if(empty($user)) wp_send_json_error(array('info'=>__('该学员未注册')));
+        if(empty($user['meta_value'])) wp_send_json_error(array('info'=>__('该学员未实名认证')));
+
+
+        $result = $wpdb->get_var("select id from {$wpdb->prefix}match_team where user_id = {$user['ID']} and user_type = 1 and status > -2");
         if($result > 0){
-            wp_send_json_error(array('info'=>__('该用户有战队,请核实')));
+            wp_send_json_error(array('info'=>__('该用户已有战队,请核实')));
         }
 
-        $res = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$current_user->ID,'user_id'=>$_POST['user_id'],'user_type'=>1,'status'=>-4,'created_time'=>get_time('mysql')));
+        $res = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id'],'user_id'=>$user['ID'],'user_type'=>1,'status'=>2,'created_time'=>get_time('mysql')));
 
         if($res){
             wp_send_json_success(array('info'=>__('添加成功')));
@@ -5863,9 +5869,9 @@ class Student_Ajax
                 when 1 then '加入'
                 end status_cn
                 from {$wpdb->prefix}match_team a 
-                left join {$wpdb->prefix}team_meta b on a.team_id = b.user_id
+                left join {$wpdb->prefix}team_meta b on a.team_id = b.team_id
                 left join {$wpdb->prefix}users c on a.user_id = c.ID
-                where a.team_id = {$current_user->ID} {$where} 
+                where a.team_id = {$_POST['team_id']} {$where} 
                 order by id desc limit $start,$pageSize";
         //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -6081,6 +6087,51 @@ class Student_Ajax
         if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册')));
         if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证')));
         wp_send_json_success(array('user_id'=>$row['ID']));
+    }
+
+    /**
+     * 获取比赛签到情况
+     */
+    public function get_sign_list(){
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('参数错误')));
+        global $wpdb,$current_user;
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        $sql = "select a.match_id,a.user_id,if(c.id > 0,c.id,0) sign_id from {$wpdb->prefix}order a 
+                left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
+                left join {$wpdb->prefix}match_sign c on a.user_id = c.user_id
+                where a.match_id = {$_POST['match_id']} and pay_status in (2,3,4) and b.created_id = {$current_user->ID}
+                group by a.user_id limit {$start},{$pageSize}
+                ";
+        //print_r($sql);die;
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无教练', 'nlyd-student')));
+        if(!empty($rows)){
+
+            foreach ($rows as $k => $v){
+                $rows[$k]['order'] =  $start+$k+1;
+
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','user_images_color','user_head') and user_id = {$v['user_id']}";
+                $res = $wpdb->get_results($sql_,ARRAY_A);
+                $user_info = array_column($res,'meta_value','meta_key');
+                //print_r($user_info);
+                //获取工作照
+                $coach_work_photo = !empty($user_info['user_images_color']) ? unserialize($user_info['user_images_color'])[0] : $user_info['user_head'] ;
+                $rows[$k]['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
+
+                $rows[$k]['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-' ;
+                $user_real_name = unserialize($user_info['user_real_name']);
+                $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
+                $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
+                $rows[$k]['sign_cn'] = !empty($v['sign_id']) ? '已签' : '未签' ;
+            }
+        }
+        //print_r($rows);
+        wp_send_json_success(array('info'=>$rows));
     }
 
 
