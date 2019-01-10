@@ -254,7 +254,8 @@ class Spread{
             $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE id='{$id}'", ARRAY_A);
         }
         //获取机构类型
-        $organizeList = $wpdb->get_results("SELECT zone_type_name,zone_type_alias FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
+        $organizeClass = new Organize();
+        $organizeList = $organizeClass->getOrganizeTypeList();
         //获取比赛权限类型
         $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_match_role WHERE is_profit=1", ARRAY_A);
         $spreadCategory = getSpreadCategory();
