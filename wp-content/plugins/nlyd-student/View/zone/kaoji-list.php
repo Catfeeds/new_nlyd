@@ -23,7 +23,7 @@
                         <div><?=__('近期考级', 'nlyd-student')?></div>
                         </li>
                         <li lay-id="3"><div><?=__('往期考级', 'nlyd-student')?></div></li>
-                        <div class="nl-transform"><div><?=__('近期考级', 'nlyd-student')?></div></div>
+                        <div class="nl-transform"><div><?=__('全部考级', 'nlyd-student')?></div></div>
                     </ul>
                     <div class="layui-tab-content">
                         <!-- 全部考级 -->
@@ -186,11 +186,12 @@ jQuery(function($) {
         })
         element.on('tab(matchList)', function(){//matchList
             // location.hash = 'matchList='+ $(this).attr('lay-id');
+            var html=$(this).html();
             var left=$(this).position().left+parseInt($(this).css('marginLeft'));
             var id=$(this).attr('lay-id')
             $('.nl-transform').css({
                 'transform':'translate3d('+left+'px, 0px, 0px)'
-            })
+            }).html(html)
             if(!isClick[id]){
                 pagation(id,1)
             }
