@@ -4926,7 +4926,7 @@ class Student_Ajax
 
         $a = $wpdb->update($wpdb->prefix.'grading_meta',$update,array('grading_id'=>$grading_id));
         if($a){
-            wp_send_json_success(array('info' => __('提交成功', 'nlyd-student')));
+
         }else{
             wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
         }
