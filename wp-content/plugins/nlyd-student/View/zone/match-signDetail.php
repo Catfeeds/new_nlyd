@@ -22,6 +22,7 @@
             </header>    
             <div class="layui-row nl-border nl-content have-bottom">
                 <div class="match_sign_row width-padding width-padding-pc">
+                    <!-- 开赛机构不加2018脑力世界杯 -->
                     <div class="bold fs_16 c_black"><?=$post_title?></div>
                     <div class="flex-h mt_10">
                         <div class="flex1">
@@ -80,7 +81,7 @@ jQuery(function($) {
                                                 '<td><div class="table_content">'+v.real_name+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_age+'</div></td>'+
-                                                '<td><div class="table_content c_green">'+v.sign_cn+'</div></td>'+
+                                                '<td><div class="table_content '+v.sign_color+'">'+v.sign_cn+'</div></td>'+
                                             '</tr>'
                                     lis.push(dom) 
                                 })
