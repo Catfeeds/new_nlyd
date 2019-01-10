@@ -89,8 +89,10 @@ layui.use(['layer','flow'], function(){
                                 $.each(res.data.info,function(index,value){
                                     var url=window.home_url+'/zone/teamDetail/team_id/'+value.team_id
                                     var team_type='';
+                                    var style=''
                                     switch (index) {
                                         case 0:
+                                            style='style="margin-bottom:0"'
                                             team_type='<div class="team_type_name width-padding width-padding-pc"><?=__("赛区默认战队", "nlyd-student")?></div>'
                                             break;
                                         case 1:
@@ -100,7 +102,7 @@ layui.use(['layer','flow'], function(){
                                             break;
                                     }
                                    var apply_total=value.apply_total>0 ?　value.apply_total+'<?=__("个新的申请", "nlyd-student")?>' : '';
-                                    var dom=team_type+'<a class="team_list_row layui-row width-padding width-padding-pc c_black" href="'+url+'">'
+                                    var dom=team_type+'<a class="team_list_row layui-row width-padding width-padding-pc c_black" href="'+url+'" '+style+'>'
                                                 +'<div class="left_name c_black">'+value.post_title+'</div>'
                                                 +'<div class="right_tips c_orange">'+apply_total+'</div>'
                                                 +'<div class="right_icoin"><i class="iconfont fs_20">&#xe727;</i></div>'
