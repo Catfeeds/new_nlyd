@@ -635,12 +635,12 @@ class Spread{
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
                 SUM(il.referee_income) AS referee_income,SUM(il.indirect_referee_income) AS indirect_referee_income,
                 SUM(il.person_liable_income) AS person_liable_income,SUM(il.sponsor_income) AS sponsor_income,SUM(il.manager_income) AS manager_income,
-                il.income_status,p.post_title,il.match_id,gm.grading_id 
+                il.income_status,p.post_title,il.match_id,gm.grading_id,mmn.match_status,gm.status 
                 FROM {$wpdb->prefix}user_income_logs AS il 
                 LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=il.match_id 
                 LEFT JOIN `{$wpdb->prefix}match_meta_new` AS mmn ON il.match_id=mmn.match_id 
                 LEFT JOIN `{$wpdb->prefix}grading_meta` AS gm ON il.match_id=gm.grading_id 
-                {$where} AND il.income_type IN('match','grading') AND (mmn.match_status=-3 OR gm.status=-3)
+                {$where} AND il.income_type IN('match','grading') AND (mmn.id!='' OR gm.id!='')
                 GROUP BY p.ID
                 LIMIT {$start},{$pageSize}",ARRAY_A);
 //        leo_dump($rows);
@@ -751,8 +751,9 @@ class Spread{
                             <?=$row['income_status'] == '1'?'待确认':'已确认'?>
                         </td>
                         <td class="options1 column-options1" data-colname="操作">
-
+                            <?php if($row['match_status'] == '-3' || $row['status'] == '-3'){ ?>
                             <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a> |':''?>
+                            <?php } ?>
                             <a href="<?=admin_url('admin.php?page=fission-profit-match-log-detail&match_id='.$row['match_id'])?>">查看详情</a>
                        </td>
                     </tr>
@@ -1173,7 +1174,8 @@ class Spread{
                                     break;
                                 case 'subject':
                                     $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['user_type']}'");
-                                    echo '申请'.$zone_type_name;
+                                    if($zone_type_name == '赛事') $zone_type_name = '赛区';
+                                    echo '推荐'.$zone_type_name;
                                     break;
                                 case 'undertake':
                                     echo '承办';

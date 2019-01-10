@@ -304,7 +304,7 @@ var mobileSelect4 = new MobileSelect({
                 ,title: "<?=__('提示', 'nlyd-student')?>" //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: "<div class='box-conent-wrapper'><?=__('是否结束比赛', 'nlyd-student')?>？</div>"
+                ,content: "<div class='box-conent-wrapper'><?=__('比赛取消不可恢复，是否确认取消', 'nlyd-student')?>？</div>"
                 ,btn: [ "<?=__('按错了', 'nlyd-student')?>","<?=__('确认', 'nlyd-student')?>",]
                 ,success: function(layero, index){
                 },
