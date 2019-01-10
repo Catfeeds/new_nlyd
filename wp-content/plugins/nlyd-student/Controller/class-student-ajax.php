@@ -4881,6 +4881,36 @@ class Student_Ajax
 
 
     /**
+     * 机构终止比赛
+     */
+    public function end_match(){
+        global $wpdb,$current_user;
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('参数必传')));
+        $match_id = $wpdb->get_var("select id from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} and created_id = {$current_user->ID} ");
+        if(empty($match_id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布比赛')));
+        $update = array(
+            'revise_id'=>$current_user->ID,
+            'match_status'=>-4,
+            'match_end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-5 minute',get_time()))
+        );
+        $update1 = array(
+            'end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-5 minute',get_time())),
+            'status'=>-1,
+        );
+        $wpdb->query('START TRANSACTION');
+        $a = $wpdb->update($wpdb->prefix.'match_meta_new',$update,array('match_id'=>$match_id));
+        $b = $wpdb->update($wpdb->prefix.'match_project_more',$update1,array('match_id'=>$match_id));
+        if($a && $b){
+            $wpdb->query('COMMIT');
+            wp_send_json_success(array('info' => __('提交成功', 'nlyd-student')));
+        }else{
+            $wpdb->query('ROLLBACK');
+            wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
+        }
+    }
+
+
+    /**
      * 机构发布考级
      */
     public function zone_create_grading(){
@@ -5924,6 +5954,13 @@ class Student_Ajax
         }
     }
 
+
+    /**
+     * 战队解散
+     */
+    public function team_disband(){
+
+    }
 
     /**
      * 机构学员列表
