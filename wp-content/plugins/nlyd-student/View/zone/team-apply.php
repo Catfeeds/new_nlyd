@@ -104,6 +104,7 @@ jQuery(function($) {
                 ,done: function(page, next){ //加载下一页
                     var postData={
                         action:'get_team_personnel',
+                        team_id:$.Request('team_id'),
                         page:team_page,
                         map:_map,
                     }
