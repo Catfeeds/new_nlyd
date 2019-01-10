@@ -4881,13 +4881,13 @@ class Student_Ajax
 
 
     /**
-     * 机构终止比赛
+     * 机构关闭比赛
      */
     public function end_match(){
         global $wpdb,$current_user;
         if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('参数必传')));
         $match_id = $wpdb->get_var("select id from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} and created_id = {$current_user->ID} ");
-        if(empty($match_id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布比赛')));
+        if(empty($match_id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布的比赛')));
         $update = array(
             'revise_id'=>$current_user->ID,
             'match_status'=>-4,
@@ -4905,6 +4905,29 @@ class Student_Ajax
             wp_send_json_success(array('info' => __('提交成功', 'nlyd-student')));
         }else{
             $wpdb->query('ROLLBACK');
+            wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
+        }
+    }
+
+
+    /**
+     * 机构关闭考级
+     */
+    public function end_grading(){
+        global $wpdb,$current_user;
+        if(empty($_POST['grading_id'])) wp_send_json_error(array('info'=>__('参数必传')));
+        $grading_id = $wpdb->get_var("select id from {$wpdb->prefix}grading_meta where grading_id = {$_POST['grading_id']} and created_person = {$current_user->ID} ");
+        if(empty($grading_id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布的考级')));
+        $update = array(
+            'revise_id'=>$current_user->ID,
+            'status'=>-4,
+            'end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-5 minute',get_time()))
+        );
+
+        $a = $wpdb->update($wpdb->prefix.'grading_meta',$update,array('grading_id'=>$grading_id));
+        if($a){
+            wp_send_json_success(array('info' => __('提交成功', 'nlyd-student')));
+        }else{
             wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
         }
     }
@@ -5959,7 +5982,28 @@ class Student_Ajax
      * 战队解散
      */
     public function team_disband(){
+        if(empty($_POST['type']) || empty($_POST['team_id'])) wp_send_json_error(array('info'=>__('参数不全')));
+        global $wpdb,$current_user;
+        //获取默认战队
+        $team_id = $wpdb->get_var("select team_id from {$wpdb->prefix}team_meta where user_id = {$current_user->ID}");
+        if($team_id == $_POST['team_id']) wp_send_json_error(array('info'=>__('默认战队禁止删除')));
+        $wpdb->query('START TRANSACTION');
+        if($_POST['type']==2){
+            $a = $wpdb->update($wpdb->prefix.'match_team',array('team_id'=>$team_id),array('team_id'=>$_POST['team_id']));
+        }else{
 
+            $a = $wpdb->delete($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id']));
+        }
+        $b = $wpdb->delete($wpdb->prefix.'team_meta',array('team_id'=>$_POST['team_id']));
+        $c = $wpdb->delete($wpdb->prefix.'posts',array('ID'=>$_POST['team_id']));
+        //print_r($a .'&&'. $b.'&&'. $c);die;
+        if($a && $b && $c){
+            $wpdb->query('COMMIT');
+            wp_send_json_success(array('info' => __('提交成功', 'nlyd-student'),'url'=>home_url('/zone/team/')));
+        }else{
+            $wpdb->query('ROLLBACK');
+            wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
+        }
     }
 
     /**

@@ -864,18 +864,26 @@ class Student_Zone
      */
     public function teamBuild(){
 
-        global $wpdb;
+        global $wpdb,$current_user;
         if(isset($_GET['team_id'])){
 
             //获取战队信息
-            $sql = "select a.id,b.post_title,a.team_director,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
+            $sql = "select a.id,b.post_title,a.team_director,a.user_id,a.team_slogan,a.team_brief from {$wpdb->prefix}team_meta a 
                                       left join {$wpdb->prefix}posts b on a.team_id = b.ID
                                       where team_id = {$_GET['team_id']} ";
             $row = $wpdb->get_row($sql,ARRAY_A);
             //print_r($row);
+            if(empty($row)){
+                $this->get_404(array('message'=>__('战队信息错误', 'nlyd-student'),'return_url'=>home_url('/zone/team/')));
+                return;
+            }
             if(!empty($row['team_director'])){
                 $user_real_name = get_user_meta($row['team_director'],'user_real_name')[0];
                 $row['real_name'] = $user_real_name['real_name'];
+            }
+
+            if($row['user_id'] == $current_user->ID){
+                $row['is_default'] = 'y';
             }
         }
         //print_r($row);
