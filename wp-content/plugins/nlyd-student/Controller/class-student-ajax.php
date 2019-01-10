@@ -5789,7 +5789,7 @@ class Student_Ajax
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $sql = "select a.team_id,b.post_title from {$wpdb->prefix}team_meta a 
+        $sql = "select a.team_id,a.parent_id,b.post_title from {$wpdb->prefix}team_meta a 
                 left join {$wpdb->prefix}posts b on a.team_id = b.ID
                 where a.user_id = {$current_user->ID} or a.parent_id = {$current_user->ID}  
                 order by parent_id asc limit $start,$pageSize";
