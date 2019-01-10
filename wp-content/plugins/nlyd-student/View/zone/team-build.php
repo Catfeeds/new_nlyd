@@ -47,6 +47,9 @@
                                 <textarea class="radius_input_row nl-foucs" type="text" name="team_brief" placeholder="<?=__('填写战队简介', 'nlyd-student')?>"><?=$team_brief?></textarea>
                             </div>
                         </div>
+                        <div>
+                            <a class="c_blue"><?=__('解散并删除战队', 'nlyd-student')?></a>
+                        </div>
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认申请', 'nlyd-student')?></div></a>
                     </form>
                 </div>
