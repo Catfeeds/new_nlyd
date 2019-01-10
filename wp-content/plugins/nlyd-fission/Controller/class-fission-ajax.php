@@ -475,6 +475,32 @@ class Fission_Ajax
         if($bool) wp_send_json_success(['info' => '删除成功!']);
         else wp_send_json_error(['info' => '删除失败!']);
     }
+
+    /**
+     * 添加机构管理员
+     */
+    public function addZoneAdmin(){
+        $zid = isset($_POST['zid']) ? intval($_POST['zid']) : 0;
+        $uid = isset($_POST['uid']) ? intval($_POST['uid']) : 0;
+        if($zid < 1 || $uid < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        $bool = $wpdb->insert($wpdb->prefix.'zone_manager', ['zone_id' => $zid, 'user_id' => $uid]);
+        if($bool) wp_send_json_success(['info' => '添加成功!']);
+        else wp_send_json_error(['info' => '添加失败!']);
+    }
+
+    /**
+     * 删除机构管理员
+     */
+    public function removeZoneAdmin(){
+        $zid = isset($_POST['zid']) ? intval($_POST['zid']) : 0;
+        $uid = isset($_POST['uid']) ? intval($_POST['uid']) : 0;
+        if($zid < 1 || $uid < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        $bool = $wpdb->delete($wpdb->prefix.'zone_manager', ['zone_id' => $zid, 'user_id' => $uid]);
+        if($bool) wp_send_json_success(['info' => '删除成功!']);
+        else wp_send_json_error(['info' => '删除失败!']);
+    }
 }
 
 new Fission_Ajax();
