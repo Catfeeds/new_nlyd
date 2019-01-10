@@ -1134,7 +1134,7 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="user_id">负责人 </label></th>
+                        <th scope="row"><label for="user_id">赛区账号 </label></th>
                         <td>
 
                             <?php if($old_zm_id > 0){?>
@@ -2681,30 +2681,31 @@ class Organize{
         $start = ($page-1)*$pageSize;
 
         //管理员数量
-        $admin_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}zone_manager WHERE zone_id={$user_id}");
+        $admin_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}zone_manager WHERE zone_id={$id}");
         //教练数量
         $coach_ids = $wpdb->get_var("SELECT GROUP_CONCAT(coach_id) FROM {$wpdb->prefix}zone_join_coach WHERE zone_id='{$user_id}'");
-        $coach_num = count(explode(',',$coach_ids));
+        $coach_num = $coach_ids ? count(explode(',',$coach_ids)) : 0;
         //学员数量
         $student_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}my_coach WHERE coach_id IN({$coach_ids}) AND apply_status=2");
         switch ($mtype){
             case 1:
-                $sql = "SELECT zm.user_id AS coach_id FROM {$wpdb->prefix}zone_manager AS zm 
+                $sql = "SELECT zm.user_id AS coach_id,b.user_mobile FROM {$wpdb->prefix}zone_manager AS zm 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'
-                WHERE zm.zone_id='{$user_id}'";
+                LEFT JOIN {$wpdb->prefix}users b ON zm.user_id = b.ID     
+                WHERE zm.zone_id='{$id}'";
                 break;
             case 2:
-                $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID 
+                $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile 
                     FROM {$wpdb->prefix}coach_skill a 
                     LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON a.coach_id = zjc.coach_id 
-                    LEFT JOIN {$wpdb->prefix}users b ON a.coach_id = b.ID 
-                    LEFT JOIN {$wpdb->usermeta} AS um_id ON um_id.user_id = a.coach_id AND um_id.meta_key='user_ID'             
+                    LEFT JOIN {$wpdb->prefix}users b ON a.coach_id = b.ID         
                     WHERE a.coach_id > 0 AND b.ID !='' AND zjc.zone_id='{$user_id}'
                     LIMIT {$start},{$pageSize}";
                 break;
             case 3:
-                $sql = "SELECT zm.user_id AS coach_id FROM {$wpdb->prefix}my_coach AS zm 
+                $sql = "SELECT zm.user_id AS coach_id,b.user_mobile FROM {$wpdb->prefix}my_coach AS zm 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'
+                LEFT JOIN {$wpdb->prefix}users b ON zm.user_id = b.ID       
                 WHERE zm.coach_id IN({$coach_ids}) AND zm.apply_status=2";
                 break;
         }
@@ -2729,13 +2730,27 @@ class Organize{
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=2')?>" <?=$mtype===2?'class="current"':''?> aria-current="page">教练<span class="count">（<?=$coach_num > 0 ? $coach_num : 0?>）</span></a> | </li>
             <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=4&mtype=3')?>" <?=$mtype===3?'class="current"':''?> aria-current="page">学员<span class="count">（<?=$student_num > 0 ? $student_num : 0?>）</span></a> </li>
         </ul>
+
         <div class="tablenav top">
+            <?php if($mtype === 1){ ?>
+            <div>
+
+                <button class="button" id="confirmAddAdmin">添加管理员</button>
+
+                <div style="margin-top: 5px;">
+                    <select class="js-data-select-ajax" name="admin_id" style="width: 50%" data-action="get_base_user_list" data-type="select">
+
+                    </select>
+                </div>
+            </div>
+            <?php } ?>
             <div class="tablenav-pages">
                 <span class="displaying-num"><?=$count['count']?>个项目</span>
                 <?=$pageHtml?>
             </div>
             <br class="clear">
         </div>
+
         <h2 class="screen-reader-text">统计信息</h2>
         <table class="wp-list-table widefat fixed striped users">
             <thead>
@@ -2755,6 +2770,10 @@ class Organize{
                 <th scope="col" id="category" class="manage-column column-category">教学类别 </th>
                 <th scope="col" id="student_num" class="manage-column column-student_num">学员数量 </th>
                 <th scope="col" id="course_num" class="manage-column column-course_num">课程数量 </th>';
+               }elseif ($mtype === 1){
+                   ?>
+                   <th scope="col" id="remove_admin" class="manage-column column-remove_admin">删除</th>
+                   <?php
                }
                ?>
             </tr>
@@ -2773,11 +2792,9 @@ class Organize{
                 $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
 //                        leo_dump($usermeta);
 //                        die;
+                $user_ID = $usermeta['user_ID'][0];
                 //有多少类别
-                $categoryArr = [];
-                if($row['read']) $categoryArr[]='速读';
-                if($row['memory']) $categoryArr[]='记忆';
-                if($row['compute']) $categoryArr[]='心算';
+
                 ?>
                 <tr>
                     <th scope="row" class="check-column">
@@ -2802,13 +2819,16 @@ class Organize{
                         <span class="screen-reader-text">-</span>
                     </td>
                     <td class="ID column-ID" data-colname="ID">
-                        <span aria-hidden="true"><?=$row['userID']?></span>
+                        <span aria-hidden="true"><?=$user_ID?></span>
                         <span class="screen-reader-text">未知</span>
                     </td>
 
-
                     <?php
                     if($mtype === 2){
+                        $categoryArr = [];
+                        if($row['read']) $categoryArr[]='速读';
+                        if($row['memory']) $categoryArr[]='记忆';
+                        if($row['compute']) $categoryArr[]='心算';
                         ?>
                         <td class="image column-image" data-colname="教练照片" id="cardImg-<?=$row['coach_id']?>">
                             <img src="<?=isset($usermeta['user_head'])?$usermeta['user_head'][0]:''?>" style="height: 60px;" alt="">
@@ -2824,6 +2844,12 @@ class Organize{
                         </td>
                         <td class="course_num column-course_num" data-colname="课程数量">
                             <?=$courseNum > 0 ? $courseNum :0 ?>
+                        </td>
+                        <?php
+                    }elseif ($mtype === 1){
+                        ?>
+                        <td class="remove_admin column-remove_admin" data-colname="删除">
+                            <a href="javascript:;" data-uid="<?=$row['coach_id']?>" class="remove_admin_a">删除</a>
                         </td>
                         <?php
                     }
@@ -2851,6 +2877,10 @@ class Organize{
                 <th scope="col" class="manage-column column-category">教学类别</th>
                 <th scope="col" class="manage-column column-student_num">学员数量 </th>
                 <th scope="col" class="manage-column column-course_num">课程数量 </th>';
+                }elseif ($mtype === 1){
+                    ?>
+                    <th scope="col" class="manage-column column-remove_admin">删除</th>
+                    <?php
                 }
                 ?>
 
@@ -2867,6 +2897,53 @@ class Organize{
                 <?=$pageHtml?>
             </div>
             <br class="clear">
+            <script>
+                jQuery(document).ready(function($) {
+                    <?php if($mtype === 1){ ?>
+                    $('#confirmAddAdmin').on('click', function () {
+                        var id = $('select[name="admin_id"]').val();
+                        var zid = '<?=$id?>';
+                        if(id < 1) return false;
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action' : 'addZoneAdmin', 'zid' : zid, 'uid' : id},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            }, error : function () {
+                                alert('请求失败!');
+                            }
+                        });
+                    });
+                    $('.remove_admin_a').on('click', function () {
+                        var id = $(this).attr('data-uid');
+                        var zid = '<?=$id?>';
+                        if(id < 1) return false;
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action' : 'removeZoneAdmin', 'zid' : zid, 'uid' : id},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            }, error : function () {
+                                alert('请求失败!');
+                            }
+                        });
+                    });
+                    
+                    <?php } ?>
+
+                });
+
+            </script>
         </div>
         <?php
     }

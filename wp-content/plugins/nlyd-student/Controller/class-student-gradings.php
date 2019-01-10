@@ -809,8 +809,11 @@ class Student_Gradings extends Student_Home
         }
 
         //如果为当前考级最后一项就计算考核结果
-
-        if(empty($next_project)){
+        //获取考级场景
+        $role_alias = $wpdb->get_var("select b.role_alias from {$wpdb->prefix}grading_meta a 
+                                        left join {$wpdb->prefix}zone_match_role b on a.scene = b.id
+                                        where grading_id = {$_GET['grad_id']}");
+        if(empty($next_project) && $role_alias == 'official-grading'){
             //获取所有项目
             $sql_ = "select id,user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,my_score,post_str_length,use_time
                       from {$wpdb->prefix}grading_questions 
