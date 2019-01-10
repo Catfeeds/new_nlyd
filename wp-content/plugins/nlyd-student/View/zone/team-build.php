@@ -77,40 +77,7 @@ jQuery(function($) {
     //             }
     //         });
     //     })
-    $('.team_clear').click(function(){
-        var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            var data={
-                action:'team_personnel_operation',
-            }
-            $.ajax({
-                data: data,
-                beforeSend:function(XMLHttpRequest){
-                    _this.addClass('disabled')
-                },
-                success: function(res, textStatus, jqXHR){
-                    console.log(res)
-                    if(res.success){
-                        if(res.data.url){
-                            window.location.href=res.data.url
-                        }
-                    }else{
-                        _this.removeClass('disabled');
-                    }
-                },
-                complete: function(jqXHR, textStatus){
-                    if(textStatus=='timeout'){
-                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                        _this.removeClass('disabled');
-            　　　　 }
-                    
-                }
-            })
-        }else{
-            $.alerts("<?=__('正在处理您的请求，请稍后再试', 'nlyd-student')?>",1200)
-        }
-    })
-    layui.use(['form'], function(){
+    layui.use(['form','layer'], function(){
         var form = layui.form
         form.render();
         // 自定义验证规则
@@ -146,7 +113,73 @@ jQuery(function($) {
             }
             return false;
         });
-      
+        $('.team_clear').click(function(){//解散
+            var _this=$(this);
+            var content="<div class='box-conent-wrapper'>"
+                            +"<form class='layui-form ta_l' style='width:75%;margin:auto' id='checkForm'>"
+                                +"<input type='radio' name='memberGo' value='1' title='<?=__('直接移出该战队', 'nlyd-student')?>' checked>"
+                                +"<input type='radio' name='memberGo' value='2' title='<?=__('转移队员至赛区默认战队', 'nlyd-student')?>'>"
+                            +"</form>"
+                        +"</div>"
+            layer.open({
+                type: 1
+                ,maxWidth:300
+                ,title: "<?=__('选择该战队队员操作', 'nlyd-student')?>" //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: content
+                ,btn: [ "<?=__('按错了', 'nlyd-student')?>","<?=__('确认', 'nlyd-student')?>",]
+                ,success: function(layero, index){
+                    form.render('radio'); //刷新select选择框渲染
+                },
+                cancel: function(index, layero){
+                    
+                    layer.closeAll();
+                }
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    if(!_this.hasClass('disabled')){
+                        var memberGo=$('#checkForm').serializeObject().memberGo;
+                        console.log(memberGo)
+                        var data={
+                            action:'team_personnel_operation',
+                        }
+                        $.ajax({
+                            data: data,
+                            beforeSend:function(XMLHttpRequest){
+                                _this.addClass('disabled')
+                            },
+                            success: function(res, textStatus, jqXHR){
+                                console.log(res)
+                                if(res.success){
+                                    if(res.data.url){
+                                        window.location.href=res.data.url
+                                    }
+                                }else{
+                                    _this.removeClass('disabled');
+                                }
+                            },
+                            complete: function(jqXHR, textStatus){
+                                if(textStatus=='timeout'){
+                                    $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                                    _this.removeClass('disabled');
+                        　　　　 }
+                                
+                            }
+                        })
+                    }else{
+                        $.alerts("<?=__('正在处理您的请求，请稍后再试', 'nlyd-student')?>",1200)
+                    }
+                    layer.closeAll();
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        })
     });
 
 })
