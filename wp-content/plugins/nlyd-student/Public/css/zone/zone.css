@@ -876,3 +876,47 @@ input[type="text"].coach_form_input{
     margin-bottom: 20px;
     background: #ffffff;
 }
+
+.team_type_name{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.team_list_row{
+    display: block;
+    font-size: 0;
+    background: #ffffff;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+}
+.team_list_row:last-child,
+.team_list_row:first-child{
+    margin-bottom: 0;
+}
+
+.team_list_row .left_name,
+.team_list_row .right_tips,
+.team_list_row .right_icoin
+{
+    display: inline-block;
+    vertical-align: middle;
+}
+.team_list_row .left_name{
+    font-size: 0.14rem;
+    font-weight: bold;
+    width: calc(100% - 120px);
+    width: -webkit-calc(100% - 120px);
+}
+.team_list_row .right_tips{
+    font-size: 0.12rem;
+    width: 80px;
+    margin-right: 20px;
+    text-align: left;
+}
+.team_list_row .right_icoin{
+    width: 20px;
+}
+.team_list_row .right_icoin i{
+    position: relative;
+    top: 5.4px;
+}

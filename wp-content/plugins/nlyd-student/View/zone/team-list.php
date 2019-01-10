@@ -1,7 +1,7 @@
 <style>
 @media screen and (max-width: 1199px){
     #content,.detail-content-wrapper{
-        background:#fff;
+        background:#f6f6f6;
     }
 }
 </style>
@@ -24,8 +24,24 @@
         </header>
             <div class="layui-row nl-border nl-content have-bottom">
             <?php if(!$row){?>
-                    <div class="width-margin width-margin-pc layui-row flow-default" id="team-flow" style="margin-top:15px">
-                        
+                    <div class="layui-row flow-default" id="team-flow">
+                        <div class="team_type_name width-padding width-padding-pc"><?=__('赛区默认战队', 'nlyd-student')?></div>
+                        <a class="team_list_row layui-row width-padding width-padding-pc c_black" href="<?=home_url('/zone/settingCashWechat/');?>" style="margin-bottom:0">
+                            <div class="left_name c_black"><?=__('收款二维码', 'nlyd-student')?></div>
+                            <div class="right_tips c_orange">1个新的申请</div>
+                            <div class="right_icoin"><i class="iconfont fs_20">&#xe727;</i></div>
+                        </a>
+                        <div class="team_type_name width-padding width-padding-pc"><?=__('赛区其他参赛（团体）战队', 'nlyd-student')?></div>
+                        <a class="team_list_row layui-row width-padding width-padding-pc c_black" href="<?=home_url('/zone/settingCashWechat/');?>">
+                            <div class="left_name c_black"><?=__('收款二维码', 'nlyd-student')?></div>
+                            <div class="right_tips c_orange">1个新的申请</div>
+                            <div class="right_icoin"><i class="iconfont fs_20">&#xe727;</i></div>
+                        </a>
+                        <a class="team_list_row layui-row width-padding width-padding-pc c_black" href="<?=home_url('/zone/settingCashWechat/');?>">
+                            <div class="left_name c_black"><?=__('收款二维码', 'nlyd-student')?></div>
+                            <div class="right_tips c_orange">1个新的申请</div>
+                            <div class="right_icoin"><i class="iconfont fs_20">&#xe727;</i></div>
+                        </a>
                     </div>
                 <?php }else{ ?>
                     <div class="no-info-page layui-row">
@@ -72,25 +88,23 @@ layui.use(['layer','flow'], function(){
                                 // 战队状态 -3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队  
                                 $.each(res.data.info,function(index,value){
                                     var url=window.home_url+'/zone/teamDetail/team_id/'+value.team_id
-                                    var dom='<a class="team-row" href="'+url+'">'
-                                                +'<div class="team-detail">'
-                                                    +'<div class="team-detail-row">'
-                                                        +'<span class="fs_16 c_blue">'+value.post_title+'</span>'
-                                                    +'</div>'
-                                                    +'<div class="team-detail-row">'
-                                                        +'<span class="team-info-label"><?=__('战队负责人', 'nlyd-student')?>:</span>'
-                                                        +'<span class="team-info">'+value.team_director+'</span>'
-                                                    +'</div>'
-                                                    +'<div class="team-detail-row">'
-                                                        +'<span class="team-info-label"><?=__('战队口号', 'nlyd-student')?>:</span>'
-                                                        +'<span class="team-info">'+value.team_slogan+'</span>'
-                                                    +'</div>'
-                                                    +'<div class="team-detail-row">'
-                                                        +'<span class="team-info-label"><?=__('战队成员', 'nlyd-student')?>:</span>'
-                                                        +'<span class="team-info">'+value.team_total+'<?=__('人', 'nlyd-student')?></span>'
-                                                    +'</div>'
-                                                +'</div>'
-                                            +'</a>'   
+                                    var team_type='';
+                                    switch (index) {
+                                        case 0:
+                                            team_type='<div class="team_type_name width-padding width-padding-pc"><?=__("赛区默认战队", "nlyd-student")?></div>'
+                                            break;
+                                        case 1:
+                                            team_type='<div class="team_type_name width-padding width-padding-pc"><?=__("赛区其他参赛（团体）战队", "nlyd-student")?></div>'
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                   
+                                    var dom='<a class="team_list_row layui-row width-padding width-padding-pc c_black" href="'+url+'">'
+                                                +'<div class="left_name c_black"><?=__("收款二维码", "nlyd-student")?></div>'
+                                                +'<div class="right_tips c_orange">1个新的申请</div>'
+                                                +'<div class="right_icoin"><i class="iconfont fs_20">&#xe727;</i></div>'
+                                            +'</a>'
                                     lis.push(dom)                           
                                 })  
                                 
