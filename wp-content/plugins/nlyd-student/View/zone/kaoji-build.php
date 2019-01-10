@@ -81,9 +81,11 @@
                         <input type="hidden" name="action" value="zone_create_grading">
                         <input type="hidden" name="grading_id" value="<?=$_GET['grading_id']?>">
                         <span class="details_btn flex-h">
+                            <?php if($match['allow_cancel'] == 'y'):?>
                             <div class="details-button flex1">
                                 <button class="save" type="button" id="end_match"><?=__('取消考级', 'nlyd-student')?></button>
                             </div>
+                            <?php endif;?>
                             <div class="details-button flex1 last-btn">
                                 <button class="see_button" type="button" lay-filter='layform' lay-submit=""><?=__(!empty($_GET['grading_id']) ? '保存更新' :'确认发布', 'nlyd-student')?></button>
                             </div>
@@ -382,7 +384,8 @@ var mobileSelect5 = new MobileSelect({
                 ,btn2: function(index, layero){
                     if(!_this.hasClass('disabled')){
                         var data={
-                            action:'team_personnel_operation',
+                            action:'end_grading',
+                            grading_id:$.Request('grading_id'),
                         }
                         $.ajax({
                             data: data,

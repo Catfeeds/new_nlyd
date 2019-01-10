@@ -66,24 +66,25 @@ class Timer
 
             $new_time = get_time('mysql');
             foreach ($rows as $v){
+                if($v['match_status'] != -4){
 
-                if($v['match_switch'] == 'ON'){
+                    if($v['match_switch'] == 'ON'){
 
-                    if($new_time < $v['entry_end_time']){
-                        //报名中
-                        $save['match_status'] = 1;
-                    }
-                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['match_start_time']){
-                        //等待开赛
-                        $save['match_status'] = -2;
-                    }
-                    elseif ($v['match_start_time'] <= $new_time && $new_time < $v['match_end_time']){
-                        //进行中
-                        $save['match_status'] = 2;
-                    }else{
-                        //已结束
-                        $save['match_status'] = -3;
-                        //if($v['match_id'] == 57014){
+                        if($new_time < $v['entry_end_time']){
+                            //报名中
+                            $save['match_status'] = 1;
+                        }
+                        elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['match_start_time']){
+                            //等待开赛
+                            $save['match_status'] = -2;
+                        }
+                        elseif ($v['match_start_time'] <= $new_time && $new_time < $v['match_end_time']){
+                            //进行中
+                            $save['match_status'] = 2;
+                        }else{
+                            //已结束
+                            $save['match_status'] = -3;
+                            //if($v['match_id'] == 57014){
                             //获取当前考级是否已经进行了收益分配
                             $sql1 = "select a.match_id,a.match_scene,c.user_id,c.user_income
                                 from {$wpdb->prefix}match_meta_new a 
@@ -193,35 +194,36 @@ class Timer
                                     }
                                 }
                             }
-                        //}
-                    }
-                    //var_dump($v['match_id']);
-                    //var_dump($save);
-                    //改变比赛状态
-
-                    $a = $wpdb->update($wpdb->prefix.'match_meta_new',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
-
-                    //改变比赛项目状态
-                    $sql1 = "select id,match_id,start_time,end_time from {$wpdb->prefix}match_project_more where match_id = {$v['match_id']} ";
-                    $project_rows = $wpdb->get_results($sql1,ARRAY_A);
-                    if(!empty($project_rows)){
-                        foreach ($project_rows as $val){
-
-                            if($new_time < $val['start_time']){
-                                //未开始
-                                $status['status'] = 1;
-                            }elseif ($val['start_time'] <= $new_time && $new_time <= $val['end_time']){
-                                //进行中
-                                $status['status'] = 2;
-                            }else{
-                                //进行中
-                                $status['status'] = -1;
-                            }
-                            //改变比赛项目状态
-                            $b = $wpdb->update($wpdb->prefix.'match_project_more',$status,array('id'=>$val['id'],'match_id'=>$val['match_id']));
+                            //}
                         }
+                        //var_dump($v['match_id']);
+                        //var_dump($save);
+                        //改变比赛状态
+
+                        $a = $wpdb->update($wpdb->prefix.'match_meta_new',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
+
+                        //改变比赛项目状态
+                        $sql1 = "select id,match_id,start_time,end_time from {$wpdb->prefix}match_project_more where match_id = {$v['match_id']} ";
+                        $project_rows = $wpdb->get_results($sql1,ARRAY_A);
+                        if(!empty($project_rows)){
+                            foreach ($project_rows as $val){
+
+                                if($new_time < $val['start_time']){
+                                    //未开始
+                                    $status['status'] = 1;
+                                }elseif ($val['start_time'] <= $new_time && $new_time <= $val['end_time']){
+                                    //进行中
+                                    $status['status'] = 2;
+                                }else{
+                                    //进行中
+                                    $status['status'] = -1;
+                                }
+                                //改变比赛项目状态
+                                $b = $wpdb->update($wpdb->prefix.'match_project_more',$status,array('id'=>$val['id'],'match_id'=>$val['match_id']));
+                            }
+                        }
+                        //print_r($project_rows);
                     }
-                    //print_r($project_rows);
                 }
             }
         }
@@ -255,25 +257,26 @@ class Timer
 
             $new_time = get_time('mysql');
             foreach ($rows as $v){
+                if($v['status'] != -4){
 
-                if($v['match_switch'] == 'ON'){
+                    if($v['match_switch'] == 'ON'){
 
-                    if($new_time < $v['entry_end_time']){
-                        //报名中
-                        $save['status'] = 1;
-                    }
-                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
-                        //等待开赛
-                        $save['status'] = -2;
-                    }
-                    elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
-                        //进行中
-                        $save['status'] = 2;
-                    }else{
-                        //已结束
-                        $save['status'] = -3;
+                        if($new_time < $v['entry_end_time']){
+                            //报名中
+                            $save['status'] = 1;
+                        }
+                        elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
+                            //等待开赛
+                            $save['status'] = -2;
+                        }
+                        elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
+                            //进行中
+                            $save['status'] = 2;
+                        }else{
+                            //已结束
+                            $save['status'] = -3;
 
-                        //if($v['grading_id'] = 56987){
+                            //if($v['grading_id'] = 56987){
                             //获取当前考级是否已经进行了收益分配
                             $sql1 = "select a.grading_id,a.scene,c.user_id,c.user_income
                                 from {$wpdb->prefix}grading_meta a 
@@ -381,14 +384,15 @@ class Timer
                                     }
                                 }
                             }
-                        //}
-                    }
+                            //}
+                        }
 
-                    //var_dump($v['match_id']);
-                    //var_dump($save);
-                    //改变考级状态
-                    $a = $wpdb->update($wpdb->prefix.'grading_meta',$save,array('id'=>$v['id'],'grading_id'=>$v['grading_id']));
-                    //var_dump($a);
+                        //var_dump($v['match_id']);
+                        //var_dump($save);
+                        //改变考级状态
+                        $a = $wpdb->update($wpdb->prefix.'grading_meta',$save,array('id'=>$v['id'],'grading_id'=>$v['grading_id']));
+                        //var_dump($a);
+                    }
                 }
             }
         }

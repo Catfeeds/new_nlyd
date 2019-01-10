@@ -69,9 +69,11 @@
                         <input type="hidden" name="action" value="zone_create_match">
                         <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
                         <span class="details_btn flex-h">
+                            <?php if($match['allow_cancel'] == 'y'):?>
                             <div class="details-button flex1">
                                 <button class="save" type="button" id="end_match"><?=__('取消比赛', 'nlyd-student')?></button>
                             </div>
+                            <?php endif;?>
                             <div class="details-button flex1 last-btn">
                                 <button class="see_button" type="button" lay-filter='layform' lay-submit=""><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></button>
                             </div>
@@ -316,7 +318,8 @@ var mobileSelect4 = new MobileSelect({
                 ,btn2: function(index, layero){
                     if(!_this.hasClass('disabled')){
                         var data={
-                            action:'team_personnel_operation',
+                            action:'end_match',
+                            match_id:$.Request('match_id'),
                         }
                         $.ajax({
                             data: data,
