@@ -54,7 +54,7 @@
             $.each(v1.childs,function(i2,v2){
                 v2.childs.unshift({
                     id:'-',
-                    value:' '
+                    value:''
                 })
             })
         })
@@ -90,7 +90,8 @@
 
                 },
                 callback:function(indexArr, data){
-                    var text=data[0]['value']+data[1]['value']+data[2]['value'];
+                    var three=data[2]['value'].length==0 ? '' : '-'+data[2]['value']
+                    var text=data[0]['value']+'-'+data[1]['value']+three;
                     // $('#province').val(data[0]['value']);
                     // $('#city').val(data[1]['value']);
                     // $('#area').val(data[2]['value']);
