@@ -16,6 +16,24 @@
                 <h1 class="mui-title"><div><?=__($zone_type_name.'资料填写', 'nlyd-student')?></div></h1>
                 <?php } ?>
             </header>
+
+            <?php
+                switch ($_GET['zone_type_alias']){
+                    case 'match':
+                        student_view_path.CONTROLLER.'/match.php';
+                        break;
+                    case 'trains':
+                        student_view_path.CONTROLLER.'/trains.php';
+                        break;
+                    case 'test':
+                        student_view_path.CONTROLLER.'/test.php';
+                        break;
+                    default:
+                        return false;
+                        break;
+                }
+            ?>
+
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
