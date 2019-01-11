@@ -4563,11 +4563,22 @@ class Student_Ajax
                 wp_send_json_error(array('info'=>'审核已通过,资料禁止修改'));
             }
         }
-        if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['bank_card_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) ||  empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
+        if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_address']) || empty($_POST['bank_card_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) ||  empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
         }
         if($_POST['zone_type_alias'] == 'match'){
             if(empty($_POST['zone_match_type'])) wp_send_json_error(array('info'=>'赛区类型必选'));
+            if($_POST['zone_match_type'] == 'team'){
+                $zone_match_type = 1;
+            }else{
+                $zone_match_type = 2;
+            }
+            if($_POST['zone_match_type'] == 'city_double'){
+                $is_double = 1;
+            }
+            if($_POST['zone_match_type'] == 'city_double'){
+                $is_double = 2;
+            }
         }
         if(empty($_POST['business_licence_url'])){
             if(empty($_POST['business_licence'])){
@@ -4575,6 +4586,18 @@ class Student_Ajax
             }
         }else{
             $business_licence_url = $_POST['business_licence_url'];
+        }
+
+        if(!empty($_POST['center_manager'])){
+            $manager = $_POST['zone_type_alias'] == 'match' ? '中心负责人' : '总经理';
+            if(reg_match('m',$_POST['center_manager'])) wp_send_json_error(array(__($manager.'手机格式不正确', 'nlyd-student')));
+            $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['center_manager']}'
+                ";
+            $center_manager = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($center_manager)) wp_send_json_error(array('info'=>__('该'.$manager.'未注册')));
+            if(empty($center_manager['meta_value'])) wp_send_json_error(array('info'=>__('该'.$manager.'未实名认证')));
         }
         //print_r($_POST);die;
         if($_POST['type_id'] == 3 && $_POST['zone_type_alias'] == 'match'){    //赛区
@@ -4618,27 +4641,35 @@ class Student_Ajax
         $role = $wpdb->get_results("select role_id from {$wpdb->prefix}zone_join_role where zone_type_id = {$_POST['type_id']} ",ARRAY_A);
         $role_id = arr2str(array_column($role,'role_id'));
 
+        $match_role= $wpdb->get_results("select match_role_id from {$wpdb->prefix}zone_join_match_role where zone_type_id = {$_POST['type_id']} ",ARRAY_A);
+        $match_role_id = arr2str(array_column($match_role,'match_role_id'));
+
+        //print_r($_POST);die;
         $data = array(
             'apply_id'=>$current_user->ID,
             'type_id'=>$_POST['type_id'],
             'zone_name'=>$_POST['zone_name'],
-            'zone_match_type'=>$_POST['zone_match_type'],
+            'zone_match_type'=>$zone_match_type,
+            'is_double'=>$is_double,
             'zone_address'=>$_POST['zone_address'],
             'business_licence_url'=>$business_licence_url,
             'legal_person'=>$_POST['legal_person'],
+            'zone_city'=>$_POST['zone_match_address'],
             'bank_card_name'=>$_POST['bank_card_name'],
             'opening_bank'=>$_POST['opening_bank'],
             'opening_bank_address'=>$_POST['opening_bank_address'],
             'bank_card_num'=>$_POST['bank_card_num'],
             'chairman_id'=>!empty($chairman_id) ? $chairman_id : '',
             'secretary_id'=>!empty($secretary_id) ? $secretary_id : '',
+            'center_manager_id'=>!empty($center_manager) ? $center_manager['ID'] : '',
             'referee_id'=>$current_user->data->referee_id,
             'user_status'=>-1,
             'role_id'=>$role_id,
+            'match_role_id'=>$match_role_id,
             'created_time'=>get_time('mysql'),
         );
 
-        //print_r($row);die;
+        //print_r($data);die;
         if(empty($row)){
             $result = $wpdb->insert($wpdb->prefix.'zone_meta',$data);
         }else{
