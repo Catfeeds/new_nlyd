@@ -37,8 +37,24 @@
                                         id="zone_match_type_val"
                                         lay-verify="required"
                                         autocomplete="off"
-                                        placeholder="<?=__('选择承办赛事类型', 'nlyd-student')?>"
+                                        placeholder="<?=__('请按照合同约定的赛区类型如实选择', 'nlyd-student')?>"
                                         value="<?=$row['zone_match_type_cn']?>">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="lable_row"><span class="c_black"><?=__('办赛地区', 'nlyd-student')?>：</span></div>
+                            <div class="input_row">
+                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
+                                <input
+                                        class="radius_input_row nl-foucs"
+                                        type="text"
+                                        readonly
+                                        id="areaSelect"
+                                        name="zone_match_address"
+                                        lay-verify="required"
+                                        autocomplete="off"
+                                        placeholder="<?=__('请按照合同约定的办赛区域如实选择', 'nlyd-student')?>"
+                                        value="">
                             </div>
                         </div>
                         <div class="name_row dis_none">
@@ -51,9 +67,10 @@
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__($zone_type_name.'营业地址', 'nlyd-student')?>：</span></div>
+                            <div class="lable_row"><span class="c_black"><?=__('营业地址', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
                         </div>
+                        <div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
                             <div class="input_row img-zoos img-zoos1">
@@ -157,8 +174,56 @@
         var zone_type_alias=$.Request('zone_type_alias')
         var type_id=$.Request('type_id')
         var opening_bank_Data=$.validationLayui.back;
-
         var posiotion_back=[0];//初始化位置，高亮展示
+        var area=$.validationLayui.allArea.area;
+        //省市区三级联动
+        var posiotionarea=[0,0,0];//初始化位置，高亮展示
+        $.each(area,function(i1,v1){
+            $.each(v1.childs,function(i2,v2){
+                v2.childs.unshift({
+                    id:'-',
+                    value:' '
+                })
+            })
+        })
+        if($('#areaSelect').val().length>0 && $('#areaSelect').val()){
+            var areaValue=$('#areaSelect').val()
+            $.each(area,function(index,value){
+                if(areaValue.indexOf(value.value)!=-1){
+                    // console.log(value)
+                    posiotionarea=[index,0,0];
+                    $.each(value.childs,function(i,v){
+                        if(areaValue.indexOf(v.value)!=-1){
+                            posiotionarea=[index,i,0];
+                            $.each(v.childs,function(j,val){
+                                if(areaValue.indexOf(val.value)!=-1){
+                                    posiotionarea=[index,i,j];
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+        // console.log(JSON.stringify(area))
+        var mobileSelect3 = new MobileSelect({
+            trigger: '#areaSelect',
+            title: "<?=__('地址', 'nlyd-student')?>",
+            wheels: [
+                {data: area},
+            ],
+            position:posiotionarea, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+            transitionEnd:function(indexArr, data){
+
+            },
+            callback:function(indexArr, data){
+                var text=data[0]['value']+data[1]['value']+data[2]['value'];
+                // $('#province').val(data[0]['value']);
+                // $('#city').val(data[1]['value']);
+                // $('#area').val(data[2]['value']);
+                $('#areaSelect').val(text);
+            }
+        });
         if($('#opening_bank').length>0){
             if($('#opening_bank').val().length>0 && $('#opening_bank').val()){
                 $.each(opening_bank_Data,function(index,value){
@@ -338,6 +403,8 @@
                     fd.append('opening_bank_address',data.field['opening_bank_address']);
                     fd.append('bank_card_num',data.field['bank_card_num']);
                     fd.append('bank_card_name',data.field['bank_card_name']);
+                    fd.append('zone_match_address',data.field['zone_match_address']);
+                    
                     if($('.business_licence_url').val()=='' || !$('.business_licence_url').val()){//修改具有初始图片
                         if(imgs1[0]){
                             fd.append('business_licence',imgs1[0]);
