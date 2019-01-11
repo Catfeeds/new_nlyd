@@ -66,14 +66,36 @@ class Student_Account extends Student_Home
             if(!$brainpower) $brainpower = $wpdb->get_row("SELECT type_name,MAX(`level`) AS `level`,`range`,`category_name` FROM {$wpdb->prefix}directories WHERE `range`=1 AND user_id={$user_info['user_id']} GROUP BY user_id", ARRAY_A);
 
             //获取是否存在管理机构
-            $sql_ = "select b.id ,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type,b.zone_city,b.zone_name from {$wpdb->prefix}zone_manager a left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id where a.user_id = {$user_info['user_id']} order by id desc";
+            $sql_ = "select b.id ,c.zone_type_alias,c.zone_type_name,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type,b.zone_city,b.zone_name 
+                    from {$wpdb->prefix}zone_manager a 
+                    left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id 
+                    left join {$wpdb->prefix}zone_type c on b.type_id = c.id 
+                    where a.user_id = {$user_info['user_id']} 
+                    order by id desc";
 
             $zones = $wpdb->get_results($sql_,ARRAY_A);
+            //print_r($zones);
             if(!empty($zones)){
                 $arr = array();
                 foreach ($zones as $key => $value) {
-                    $city = !empty($value['zone_city']) ? '（'.$value['zone_city'].'）' : '';
-                    $arr[$key]['value'] = $value['zone_name'].$city.$value['match_type'].'组委会';
+                    if(!empty($value['zone_city'])){
+
+                        $city_arr = str2arr($value['zone_city'],'-');
+                        if(!empty($city_arr[2])){
+                            $city = $city_arr[2];
+                        }elseif ($city_arr[1] != '市辖区'){
+                            $city = $city_arr[1];
+                        }else{
+                            $city = $city_arr[0];
+                        }
+                    }
+                    //print_r($city);
+                    $city = !empty($city) ? '（'.$city.'）' : '';
+                    if($value['zone_type_alias'] == 'match'){
+                        $arr[$key]['value'] = $value['zone_name'].$city.$value['match_type'].'组委会';
+                    }else{
+                        $arr[$key]['value'] = $value['zone_name'].$city.$value['zone_type_name'].'组委会';
+                    }
                     $arr[$key]['id'] = $value['id'];
                 }
             }
