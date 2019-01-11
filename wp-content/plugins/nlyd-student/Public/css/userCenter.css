@@ -351,14 +351,14 @@
         position: relative;
         margin-top: -31px;
         font-size: 0.12rem;
-        padding: 0px 20px;
+        min-width: 90px;
         vertical-align: middle;
-        border-radius: 15px;
+        border-radius: 14px;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        background: -webkit-linear-gradient(5deg,#FBE9D4, #ECC7A2);
-        background: -o-linear-gradient(5deg,#FBE9D4, #ECC7A2);
-        background: -moz-linear-gradient(5deg,#FBE9D4, #ECC7A2);
-        background: linear-gradient(5deg,#FBE9D4, #ECC7A2);
+        background: -webkit-linear-gradient(90deg,#FBE9D4, #ECC7A2);
+        background: -o-linear-gradient(90deg,#FBE9D4, #ECC7A2);
+        background: -moz-linear-gradient(90deg,#FBE9D4, #ECC7A2);
+        background: linear-gradient(90deg,#FBE9D4, #ECC7A2);
     }
     .userCenter-main div.img-box{
         width: 100px;

@@ -126,7 +126,7 @@
         }
         function nameRowIsShow() {
             var id=$('#zone_match_type').val();
-            if(id==1){
+            if(id==1 || id=='team'){
                 $('.name_row').removeClass('dis_none')
             }else{
                 $('.name_row').addClass('dis_none')
