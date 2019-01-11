@@ -42,9 +42,20 @@ jQuery(function($) {
                             profit_page++
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
+                                    var income_type=''
+                                    switch (v.income_type) {
+                                        case 'match':
+                                            income_type='<?=__("比赛详情", "nlyd-student")?>'
+                                            break;
+                                        case 'grading':
+                                            income_type='<?=__("考级详情", "nlyd-student")?>'
+                                        break;
+                                        default:
+                                            break;
+                                    }
                                     var profit_channel = v.profit_channel ? v.profit_channel : '';
                                     var match_detail=v.post_title ? '<div class="profit_detail_row">'+
-                                        '<div class="profit_detail_label"><?=__("比赛详情", "nlyd-student")?>：</div>'+
+                                        '<div class="profit_detail_label">'+income_type+'：</div>'+
                                         '<div class="profit_detail_info c_black">'+v.post_title+'</div>'+
                                         '</div>' : '';
                                     var dom='<div class="layui-row width-margin width-margin-pc profit_detail_item">'+
