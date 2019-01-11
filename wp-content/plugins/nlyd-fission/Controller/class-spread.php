@@ -261,10 +261,12 @@ class Spread{
         $spreadCategory = getSpreadCategory();
         foreach ($organizeList as $olv){
             $spreadCategory[$olv['zone_type_alias']] = '成为'.$olv['zone_type_name'];
+            foreach ($zoneMatchRoleList as $zmrlv){
+                $spreadCategory[$olv['zone_type_alias'].'_'.$zmrlv['role_alias']] = $olv['zone_type_name'].$zmrlv['role_name'];
+            }
         }
-        foreach ($zoneMatchRoleList as $zmrlv){
-            $spreadCategory[$zmrlv['role_alias']] = $zmrlv['role_name'];
-        }
+
+
         //=..去除已有类型
         $oldList = $wpdb->get_results("SELECT spread_type FROM {$wpdb->prefix}spread_set", ARRAY_A);
         foreach ($oldList as $oldv){
