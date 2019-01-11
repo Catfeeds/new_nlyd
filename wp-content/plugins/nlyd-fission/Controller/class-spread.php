@@ -66,6 +66,7 @@ class Spread{
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                     <th scope="col" id="spread_type" class="manage-column column-spread_type column-primary">分成类别</th>
+                    <th scope="col" id="match_type" class="manage-column column-match_type">赛事类型</th>
                     <th scope="col" id="pay_amount" class="manage-column column-pay_amount">支付金额</th>
                     <th scope="col" id="direct_superior" class="manage-column column-direct_superior">直接上级</th>
                     <th scope="col" id="indirect_superior" class="manage-column column-indirect_superior">间接上级</th>
@@ -97,6 +98,22 @@ class Spread{
                                 <?=$row['spread_name']?>
                                 <br>
                                 <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                            </td>
+
+                            <td class="match_type column-match_type" data-colname="赛事类型">
+                                <?php
+                                    switch ($row['match_type']){
+                                        case '1':
+                                            echo '战队赛';
+                                            break;
+                                        case '2':
+                                            echo '多区县';
+                                            break;
+                                        case '3':
+                                            echo '单区县';
+                                            break;
+                                    }
+                                ?>
                             </td>
                             <td class="direct_superior column-direct_superior" data-colname="直接上级">
                                 <?=$row['pay_amount']?>
@@ -149,6 +166,7 @@ class Spread{
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                     <th scope="col" class="manage-column column-spread_type column-primary">分成类别</th>
+                    <th scope="col" class="manage-column column-match_type">赛事类型</th>
                     <th scope="col" class="manage-column column-pay_amount">支付金额</th>
                     <th scope="col" class="manage-column column-direct_superior">直接上级</th>
                     <th scope="col" class="manage-column column-indirect_superior">间接上级</th>
@@ -218,10 +236,24 @@ class Spread{
             $mechanism = isset($_POST['mechanism']) ? trim($_POST['mechanism']) : '';
             $spread_status = isset($_POST['spread_status']) ? intval($_POST['spread_status']) : '';
             $pay_amount = isset($_POST['pay_amount']) ? floatval($_POST['pay_amount']) : '';
+            $match_grading = 0;
+            $match_type = 0;
             $spread_arr = explode('()',$spread_type);
             $spread_type = $spread_arr[0];
             $spread_name = $spread_arr[1];
             if($spread_status !== 1 && $spread_status !== 2) $error_msg = '请选择状态!';
+            if($spread_type == 'match_grading_run'){
+                //赛事考级收益
+                $spread_type2 = isset($_POST['spread_type2']) ? trim($_POST['spread_type2']) : '';
+                $match_grading = isset($_POST['match_grading']) ? intval($_POST['match_grading']) : 0;
+                $match_type = isset($_POST['match_type']) ? intval($_POST['match_type']) : 0;
+                if($match_grading < 1) $error_msg .= '<br />请选择比赛或考级';
+                if($match_type < 1) $error_msg .= '<br />请选择赛事类型';
+                $spread_arr = explode('()',$spread_type2);
+                $spread_type = $spread_arr[0];
+                $spread_name = $spread_arr[1].($match_grading === 1 ? '比赛' : '考级');
+            }
+
             if($error_msg == ''){
                 $insertData = [
                     'pay_amount' => $pay_amount,
@@ -235,18 +267,25 @@ class Spread{
                     'sub_center' => $sub_center,
                     'mechanism' => $mechanism,
                     'spread_status' => $spread_status,
+                    'match_type' => $match_type,
+                    'match_grading' => $match_grading,
                 ];
                 if($id > 0){
                     $bool = $wpdb->update($wpdb->prefix.'spread_set',$insertData,['id' => $id]);
                 }else{
                     //判断是否已经存在此类设置
-
-                    $bool = $wpdb->insert($wpdb->prefix.'spread_set',$insertData);
+                    $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}spread_set WHERE spread_type='{$spread_type}' AND match_grading='{$match_grading}' AND match_type='{$match_type}'");
+                    if($var){
+                        $error_msg = '当前类型设置已存在';
+                    }else{
+                        $bool = $wpdb->insert($wpdb->prefix.'spread_set',$insertData);
+                    }
+//                    leo_dump($wpdb->last_query);die;
                 }
                 if($bool){
                     $success_msg = '操作成功!';
                 }else{
-                    $error_msg = '操作失败!';
+                    $error_msg .= '<br />操作失败!';
                 }
             }
         }
@@ -257,15 +296,19 @@ class Spread{
         $organizeClass = new Organize();
         $organizeList = $organizeClass->getOrganizeTypeList();
         //获取比赛权限类型
-        $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_match_role WHERE is_profit=1", ARRAY_A);
+
         $spreadCategory = getSpreadCategory();
         foreach ($organizeList as $olv){
             $spreadCategory[$olv['zone_type_alias']] = '成为'.$olv['zone_type_name'];
-            foreach ($zoneMatchRoleList as $zmrlv){
-                $spreadCategory[$olv['zone_type_alias'].'_'.$zmrlv['role_alias']] = $olv['zone_type_name'].$zmrlv['role_name'];
-            }
         }
-
+        //默认比赛权限
+//        $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_join_match_role AS zjmr
+//                                 LEFT JOIN {$wpdb->prefix}zone_match_role AS zmr ON zmr.id=zjmr.match_role_id
+//                                 WHERE zjmr.zone_type_id='{$olv['id']}' AND zmr.is_profit=1", ARRAY_A);
+//        foreach ($zoneMatchRoleList as $zmrlv){
+//            $spreadCategory[$olv['zone_type_alias'].'_'.$zmrlv['role_alias']] = $olv['zone_type_name'].$zmrlv['role_name'];
+//        }
+        $spreadCategory['match_grading_run'] = '机构比赛考级';
 
         //=..去除已有类型
         $oldList = $wpdb->get_results("SELECT spread_type FROM {$wpdb->prefix}spread_set", ARRAY_A);
@@ -276,7 +319,14 @@ class Spread{
         ?>
         <div class="wrap">
             <h1 id="add-new-user">添加/编辑分成项</h1>
+            <style type="text/css">
+                .match_spread_tr{
+                    <?php if($row['match_grading'] < 1){
+                        echo 'display: none;';
+                    }?>
 
+                }
+            </style>
             <div id="ajax-response">
                 <span style="color: #2bc422"><?=$success_msg?></span>
                 <span style="color: #c44e00"><?=$error_msg?></span>
@@ -291,9 +341,34 @@ class Spread{
                         <td>
                             <select name="spread_type" id="spread_type">
                                 <?php foreach ($spreadCategory as $sck => $scv){ ?>
-                                    <option <?=isset($row) && $row['spread_type'] == $sck?'selected="selected"':''?> value="<?=$sck.'()'.$scv?>"><?=$scv?></option>
+                                    <option <?=isset($row) && (($row['spread_type'] == $sck && $row['match_grading'] < 1) || ($sck == 'match_grading_run' && $row['match_grading'] > 0))?'selected="selected"':''?> value="<?=$sck.'()'.$scv?>"><?=$scv?></option>
                                 <?php } ?>
                             </select>
+                        </td>
+                    </tr>
+                    <tr class="match_spread_tr">
+                        <th scope="row"><label for="spread_type2">机构类型 </label></th>
+                        <td>
+                            <select name="spread_type2" id="spread_type2">
+                                <?php foreach ($organizeList as $olv2){ ?>
+                                    <option <?=isset($row) && $row['spread_type'] == $olv2['zone_type_alias']?'selected="selected"':''?> value="<?=$olv2['zone_type_alias'].'()'.$olv2['zone_type_name']?>"><?=$olv2['zone_type_name']?></option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="match_spread_tr">
+                        <th scope="row"><label for="spread_type2">考级比赛 </label></th>
+                        <td>
+                            <label for="match_grading_1"><input type="radio" <?=isset($row['match_grading']) && $row['match_grading'] == '1' ? 'checked="checked"' : ''?> name="match_grading" value="1" id="match_grading_1">比赛</label>
+                            <label for="match_grading_2"><input type="radio" <?=isset($row['match_grading']) && $row['match_grading'] == '2' ? 'checked="checked"' : ''?> name="match_grading" value="2" id="match_grading_2">考级</label>
+                        </td>
+                    </tr>
+                    <tr class="match_spread_tr">
+                        <th scope="row"><label for="spread_type2">赛事类型 </label></th>
+                        <td>
+                            <label for="match_type_1"><input type="radio" <?=isset($row['match_type']) && $row['match_type'] == '1' ? 'checked="checked"' : ''?> name="match_type" value="1" id="match_type_1">战队赛</label>
+                            <label for="match_type_2"><input type="radio" <?=isset($row['match_type']) && $row['match_type'] == '2' ? 'checked="checked"' : ''?> name="match_type" value="2" id="match_type_2">多区县城市赛</label>
+                            <label for="match_type_3"><input type="radio" <?=isset($row['match_type']) && $row['match_type'] == '3' ? 'checked="checked"' : ''?> name="match_type" value="3" id="match_type_3">单区县城市赛</label>
                         </td>
                     </tr>
                     <tr class="">
@@ -357,6 +432,20 @@ class Spread{
 
                 <p class="submit"><input type="submit" class="button button-primary" value="提交"></p>
             </form>
+            <script>
+                jQuery(document).ready(function($) {
+                    $('#spread_type').on('change', function () {
+                        var val = $(this).val();
+                        if(!val) return false;
+                        val = val.split('()')[0];
+                        if(val == 'match_grading_run'){
+                            $('.match_spread_tr').show();
+                        }else{
+                            $('.match_spread_tr').hide();
+                        }
+                    });
+                });
+            </script>
         </div>
         <?php
     }
