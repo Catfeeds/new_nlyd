@@ -1076,9 +1076,10 @@ class Organize{
 //            var_dump($row);die;
             $role_id = $row['role_id']; //已有课程权限
         }else{
-            $role_id = $wpdb->get_row("SELECT match_role_id,role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$typeList[0]['id']}'",ARRAY_A);
-            $match_role_id = $role_id['match_role_id'];
+            $role_id = $wpdb->get_row("SELECT role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$typeList[0]['id']}'",ARRAY_A);
             $role_id = $role_id['role_id'];
+            $match_role_id = $wpdb->get_row("SELECT match_role_id FROM {$wpdb->prefix}zone_join_match_role WHERE zone_type_id='{$typeList[0]['id']}'",ARRAY_A);
+            $match_role_id = $match_role_id['match_role_id'];
         }
         $match_role_id = explode(',',$match_role_id);
         $role_id = explode(',',$role_id);
