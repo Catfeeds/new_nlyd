@@ -18,15 +18,16 @@
             </header>
 
             <?php
+
                 switch ($_GET['zone_type_alias']){
                     case 'match':
-                        student_view_path.CONTROLLER.'/apply-match.php';
+                        require_once student_view_path.CONTROLLER.'/apply-match.php';
                         break;
                     case 'trains':
-                        student_view_path.CONTROLLER.'/apply-trains.php';
+                        require_once student_view_path.CONTROLLER.'/apply-trains.php';
                         break;
                     case 'test':
-                        student_view_path.CONTROLLER.'/apply-test.php';
+                        require_once student_view_path.CONTROLLER.'/apply-test.php';
                         break;
                     default:
                         return false;
@@ -143,7 +144,12 @@
                                     <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                                 </div>
                                 <div class="input_row">
+                                    <!-- <input class="get_id" name="chairman_id" type="hidden" value="<?=$row['chairman_id']?>"> -->
                                     <input class="radius_input_row change_num nl-foucs" name="chairman_phone" value="<?=$row['chairman_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                    <!-- <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a> -->
+                                    <!-- <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
+                                        <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
+                                    </select> -->
                                 </div>
                             </div>
                             <div>
@@ -152,7 +158,12 @@
                                     <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                                 </div>
                                 <div class="input_row">
+                                    <!-- <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
+                                        <option value="<?=$row['secretary_id']?>" selected><?=$row['secretary_name']?></option>
+                                    </select> -->
+                                    <!-- <input class="get_id" name="secretary_id" type="hidden" value="<?=$row['secretary_id']?>"> -->
                                     <input class="radius_input_row change_num nl-foucs" name="secretary_phone" value="<?=$row['secretary_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                    <!-- <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a> -->
                                 </div>
                             </div>
                         <?php endif;?>
@@ -169,7 +180,7 @@
                         <?php endif;?>
                     </form>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 </div>
