@@ -833,6 +833,9 @@ class Organize{
             if($opening_bank_address == '') $error_msg = $error_msg==''?'请填写开户行地址':$error_msg.'<br >请填写开户行地址';
             if($bank_card_num == '') $error_msg = $error_msg==''?'请填写银行卡号':$error_msg.'<br >请填写银行卡号';
 //            if($chairman_id < 1) $error_msg = $error_msg==''?'请选择组委会主席':$error_msg.'<br >请选择组委会主席';
+            //是否已存在编号
+            $number_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE zone_number='{$zone_number}'");
+            if($number_id && $number_id != $old_zm_id) $error_msg .= '<br >当前机构编号已存在';
             if($parent_id > 0){
                 $old_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}'");
                 if($old_id == $parent_id) $error_msg = $error_msg==''?'上级不能是自身':$error_msg.'<br >上级不能是自身';
@@ -1128,7 +1131,7 @@ class Organize{
                         <?php
                     }
                     ?>
-                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>" id="zone_title_tr">
+                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>">
                         <th scope="row"><label for="zone_number">机构编号 </label></th>
                         <td>
                             <input type="text" name="zone_number" id="zone_number" value="<?=$row['zone_number']?>">
