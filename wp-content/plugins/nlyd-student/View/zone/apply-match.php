@@ -1,20 +1,20 @@
-<!-- 训练中心(分中心) -->
+<!-- 赛区 -->
 <div class="layui-row nl-border nl-content">
     <div class="width-padding layui-row width-margin-pc">
         <form class="layui-form apply_form" lay-filter='layform'>
             <div>
                 <div class="lable_row">
-                    <span class="c_black"><?=__('训练中心名字', 'nlyd-student')?>：</span>
+                    <span class="c_black"><?=__('测评中心名字', 'nlyd-student')?>：</span>
                     <span class="c_black3"><?=__('示例：', 'nlyd-student')?>
-                        IISC<span class="c_green">明德</span><?=__('国际脑力训练中心', 'nlyd-student')?>
+                        IISC<span class="c_green">明德</span><?=__('国际脑力测评中心', 'nlyd-student')?>
                                 </span>
                 </div>
                 <div class="input_row">
-                    <input class="radius_input_row nl-foucs" type="text" name="zone_name" autocomplete="off" placeholder="<?=__('填写训练中心名字，仅需填写绿色部分', 'nlyd-student')?>" value="<?=!empty($row['id']) ? $row['zone_name'] :''?>">
+                    <input class="radius_input_row nl-foucs" type="text" name="zone_name" autocomplete="off" placeholder="<?=__('填写测评中心名字，仅需填写绿色部分', 'nlyd-student')?>" value="<?=!empty($row['id']) ? $row['zone_name'] :''?>">
                 </div>
             </div>
             <div>
-                <div class="lable_row"><span class="c_black"><?=__('训练中心所在地', 'nlyd-student')?>：</span></div>
+                <div class="lable_row"><span class="c_black"><?=__('测评中心所在地', 'nlyd-student')?>：</span></div>
                 <div class="input_row">
                     <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
                     <input
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div>
-                <div class="lable_row"><span class="c_black"><?=__('训练中心营业地址', 'nlyd-student')?>：</span></div>
+                <div class="lable_row"><span class="c_black"><?=__('测评中心营业地址', 'nlyd-student')?>：</span></div>
                 <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
             </div>
             <div>
@@ -82,16 +82,7 @@
                     <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank_address'] :''?>"></div>
                 </div>
                 <div>
-                    <div class="lable_row">
-                        <span class="c_black"><?=__('分中心总经理', 'nlyd-student')?>：</span>
-                        <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
-                    </div>
-                    <div class="input_row">
-                        <input class="radius_input_row change_num nl-foucs" name="center_manager" value="<?=$row['center_manager']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
-                    </div>
-                </div>
-                <div>
-                    <div class="lable_row"><span class="c_black"><?=__('事业管理员', 'nlyd-student')?>：</span></div>
+                    <div class="lable_row"><span class="c_black"><?=__('推荐人', 'nlyd-student')?>：</span></div>
                     <div class="input_row">
                         <input class="radius_input_row" disabled type="text" value="<?=$referee_name?>">
                     </div>

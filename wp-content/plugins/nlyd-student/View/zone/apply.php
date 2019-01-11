@@ -20,13 +20,13 @@
             <?php
                 switch ($_GET['zone_type_alias']){
                     case 'match':
-                        student_view_path.CONTROLLER.'/match.php';
+                        student_view_path.CONTROLLER.'/apply-match.php';
                         break;
                     case 'trains':
-                        student_view_path.CONTROLLER.'/trains.php';
+                        student_view_path.CONTROLLER.'/apply-trains.php';
                         break;
                     case 'test':
-                        student_view_path.CONTROLLER.'/test.php';
+                        student_view_path.CONTROLLER.'/apply-test.php';
                         break;
                     default:
                         return false;
