@@ -1760,6 +1760,8 @@ class Student_Ajax
                         unset($_POST['user_address']);
                     }
 
+                    //print_r($_POST);die;
+
                     //寸照
                     if(!empty($_POST['images_color'])){
 
@@ -1773,9 +1775,8 @@ class Student_Ajax
                                 ++$num;
                             }
                         }
-
-                        update_user_meta($current_user->ID,'user_images_color',$_POST['user_images_color']);
                     }
+                    update_user_meta($current_user->ID,'user_images_color',$_POST['user_images_color']);
 
                     if(!empty($_POST['images'])){
                         //var_dump($_FILES['images']);
@@ -1791,8 +1792,8 @@ class Student_Ajax
                             }
                         }
                         //print_r($_POST['user_ID_Card']);die;
-                        update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
                     }
+                    update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
 
                     $user_ID_Card_update = true;
 
