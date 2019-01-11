@@ -890,8 +890,8 @@ class Student_Zone
                 return;
             }
             if(!empty($row['team_director'])){
-                $user_real_name = get_user_meta($row['team_director'],'user_real_name')[0];
-                $row['real_name'] = $user_real_name['real_name'];
+                $user_mobile = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['team_director']}");
+                $row['user_mobile'] = $user_mobile;
             }
 
             if($row['user_id'] == $current_user->ID){
