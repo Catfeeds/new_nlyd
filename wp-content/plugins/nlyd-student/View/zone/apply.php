@@ -258,7 +258,7 @@
             }
         }
         nameRowIsShow()
-        var match_type_data=[{id:1,value:"<?=__('战队精英赛', 'nlyd-student')?>"},{id:2,value:"<?=__('城市赛', 'nlyd-student')?>"}]
+        var match_type_data=[{id:'team',value:"<?=__('战队精英赛', 'nlyd-student')?>"},{id:'city_single',value:"<?=__('城市赛(单)', 'nlyd-student')?>"},{id:'city_double',value:"<?=__('城市赛(双)', 'nlyd-student')?>"}]
         var posiotion_match_type=[0];//初始化位置，高亮展示
         if($('#zone_match_type_val').length>0){
             if($('#zone_match_type_val').val() && $('#zone_match_type_val').val().length>0){
