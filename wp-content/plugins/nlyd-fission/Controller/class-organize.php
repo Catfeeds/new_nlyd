@@ -1083,7 +1083,7 @@ class Organize{
         $match_role_id = explode(',',$match_role_id);
         $role_id = explode(',',$role_id);
         //所有赛事权限
-        $allMatchPowerList = $wpdb->get_results("SELECT id,role_name FROM {$wpdb->prefix}zone_match_role", ARRAY_A);
+        $allMatchPowerList = $wpdb->get_results("SELECT id,role_name FROM {$wpdb->prefix}zone_match_role WHERE status=1", ARRAY_A);
         //所有基础权限
         $allPowerList = $wpdb->get_results("SELECT id,role_name FROM {$wpdb->prefix}zone_type_role", ARRAY_A);
         ?>
