@@ -21,7 +21,7 @@
                         <span class="c_red"><?=__('开户银行：中国农业银行成都桂溪支行', 'nlyd-student')?></span><br>
                         <span class="c_red"><?=__('开户账号：22822201040011959', 'nlyd-student')?></span><br>
                         <span class="c_red"><?=__('开户地址：成都市武侯区二环路南一段11号', 'nlyd-student')?></span><br>
-                        转入一笔<span class="c_red"><?=__('不高于0.1元', 'nlyd-student')?></span>的资金，<span class="c_red"><?=__('并备注“赛区申请”字样', 'nlyd-student')?></span>用于验证您的对公账户真实性。
+                        转入一笔<span class="c_red"><?=__('不高于0.1元', 'nlyd-student')?></span>的资金，<span class="c_red"><?=__('并备注“'.$zone_type_name.'申请”字样', 'nlyd-student')?></span>用于验证您的对公账户真实性。
                         </div>
                         <div class="c_black">2、<?=__('审核时间大约2~3个工作日，法定节假日顺延。', 'nlyd-student')?></div>
                         <div class="c_black">3、<?=__('审核资料期间请管理员保持电话畅通，若资料有误或缺失平台工作人员将以电话的方式与您沟通联系。', 'nlyd-student')?></div>
