@@ -4552,7 +4552,7 @@ class Student_Ajax
     public function zone_apply_submit(){
         global $wpdb,$current_user;
         ini_set('post_max_size','30M');
-        //print_r($_FILES);die;
+        //print_r($_POST);die;
         if($_POST['zone_num'] > 0){
             $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where id = {$_POST['zone_num']}",ARRAY_A);
             if($row['user_status']== -1){
