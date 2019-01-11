@@ -1760,6 +1760,8 @@ class Student_Ajax
                         unset($_POST['user_address']);
                     }
 
+                    //print_r($_POST);die;
+
                     //寸照
                     if(!empty($_POST['images_color'])){
 
@@ -1773,9 +1775,8 @@ class Student_Ajax
                                 ++$num;
                             }
                         }
-
-                        update_user_meta($current_user->ID,'user_images_color',$_POST['user_images_color']);
                     }
+                    update_user_meta($current_user->ID,'user_images_color',$_POST['user_images_color']);
 
                     if(!empty($_POST['images'])){
                         //var_dump($_FILES['images']);
@@ -1791,8 +1792,8 @@ class Student_Ajax
                             }
                         }
                         //print_r($_POST['user_ID_Card']);die;
-                        update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
                     }
+                    update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
 
                     $user_ID_Card_update = true;
 
@@ -2404,8 +2405,8 @@ class Student_Ajax
 
         $base_img = str_replace("data:image/{$arr[1]};base64,", '', $filecontent);
         $filename = date('YmdHis').'_'.rand(1000,9999).$ext;          //定义图片名字及格式
-        $savepath = $upload_dir.'/'.$filename;
-        //print_r($base_img);die;
+        $savepath = $upload_dir.$filename;
+        //print_r($savepath);die;
         $a = file_put_contents($savepath, base64_decode($base_img));
         //print_r($a);die;
         if ($a) {
@@ -4601,11 +4602,12 @@ class Student_Ajax
         }
 
         if(!empty($_POST['business_licence'])){
+
             $upload_dir = wp_upload_dir();
-            $dir = '/business_licence/'.$current_user->ID;
+            $dir = '/business_licence/'.$current_user->ID.'/';
             $file = $this->base64file($_POST['business_licence'],$upload_dir['basedir'].$dir);
             if($file){
-                $business_licence_url = $upload_dir['baseurl'].$dir.$file;
+                $business_licence_url = $upload_dir['baseurl'].$dir.'/'.$file;
             }
         }
         //获取默认权限
@@ -4886,8 +4888,9 @@ class Student_Ajax
     public function end_match(){
         global $wpdb,$current_user;
         if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('参数必传')));
-        $match_id = $wpdb->get_var("select id from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} and created_id = {$current_user->ID} ");
-        if(empty($match_id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布的比赛')));
+        $id = $wpdb->get_var("select id from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} and created_id = {$current_user->ID} ");
+        //print_r($id);die;
+        if(empty($id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布的比赛')));
         $update = array(
             'revise_id'=>$current_user->ID,
             'match_status'=>-4,
@@ -4898,11 +4901,12 @@ class Student_Ajax
             'status'=>-1,
         );
         $wpdb->query('START TRANSACTION');
-        $a = $wpdb->update($wpdb->prefix.'match_meta_new',$update,array('match_id'=>$match_id));
-        $b = $wpdb->update($wpdb->prefix.'match_project_more',$update1,array('match_id'=>$match_id));
+        $a = $wpdb->update($wpdb->prefix.'match_meta_new',$update,array('id'=>$id));
+        $b = $wpdb->update($wpdb->prefix.'match_project_more',$update1,array('match_id'=>$_POST['match_id']));
+        //print_r($a .'&&'. $b);die;
         if($a && $b){
             $wpdb->query('COMMIT');
-            wp_send_json_success(array('info' => __('提交成功', 'nlyd-student')));
+            wp_send_json_success(array('info' => __('提交成功', 'nlyd-student'),'url'=>home_url('/zone/match/')));
         }else{
             $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
@@ -4916,17 +4920,17 @@ class Student_Ajax
     public function end_grading(){
         global $wpdb,$current_user;
         if(empty($_POST['grading_id'])) wp_send_json_error(array('info'=>__('参数必传')));
-        $grading_id = $wpdb->get_var("select id from {$wpdb->prefix}grading_meta where grading_id = {$_POST['grading_id']} and created_person = {$current_user->ID} ");
-        if(empty($grading_id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布的考级')));
+        $id = $wpdb->get_var("select id from {$wpdb->prefix}grading_meta where grading_id = {$_POST['grading_id']} and created_person = {$current_user->ID} ");
+        if(empty($id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布的考级')));
         $update = array(
             'revise_id'=>$current_user->ID,
             'status'=>-4,
             'end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-5 minute',get_time()))
         );
 
-        $a = $wpdb->update($wpdb->prefix.'grading_meta',$update,array('grading_id'=>$grading_id));
+        $a = $wpdb->update($wpdb->prefix.'grading_meta',$update,array('id'=>$id));
         if($a){
-
+            wp_send_json_success(array('info' => __('提交成功', 'nlyd-student'),'url'=>home_url('/zone/grading/')));
         }else{
             wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
         }
@@ -5210,6 +5214,7 @@ class Student_Ajax
 
         $sql = "select a.grading_id,a.scene,b.post_title,d.role_name,a.status,entry_end_time,a.start_time,a.person_liable,a.cost,a.address,count(c.id) entry_total,
                 case a.status
+                when '-4' then '已取消'
                 when '-3' then '已结束'
                 when '-2' then '等待考级'
                 when '1' then '报名中'
@@ -5261,6 +5266,7 @@ class Student_Ajax
 
         $sql = "select a.match_id,a.match_scene,b.post_title,d.role_name,a.match_status,entry_end_time,a.match_start_time,match_cost,a.match_address,count(c.id) entry_total,
                 case a.match_status
+                when '-4' then '已取消'
                 when '-3' then '已结束'
                 when '-2' then '等待开赛'
                 when '1' then '报名中'

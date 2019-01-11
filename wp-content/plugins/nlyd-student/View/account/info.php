@@ -131,7 +131,7 @@
                                     <div class="img-zoo img-box">
                                         <img src="<?=$value?>"/>
                                     </div>
-                                    <input type="hidden" name="user_ID_Card[]" value="<?=$value?>" />
+                                    <input type="hidden" name="user_images_color[]" value="<?=$value?>" />
                                     <div class="del">
                                         <i class="iconfont">&#xe633;</i>
                                     </div>

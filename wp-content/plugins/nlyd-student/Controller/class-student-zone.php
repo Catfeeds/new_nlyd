@@ -379,32 +379,34 @@ class Student_Zone
             $entry_is_true = 0;
             $match_is_true = 0;
             foreach ($rows as $v){
+                if($v['match_status'] != -4){
 
-                if($v['match_switch'] == 'ON') {
-                    if($new_time < $v['entry_end_time']){
-                        //报名中
-                        $save['match_status'] = 1;
-                        $entry_is_true += 1;
+                    if($v['match_switch'] == 'ON') {
+                        if($new_time < $v['entry_end_time']){
+                            //报名中
+                            $save['match_status'] = 1;
+                            $entry_is_true += 1;
 
+                        }
+                        elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['match_start_time']){
+                            //等待开赛
+                            $save['match_status'] = -2;
+                            $match_is_true += 1;
+
+                        }
+                        elseif ($v['match_start_time'] <= $new_time && $new_time < $v['match_end_time']){
+                            //进行中
+                            $save['match_status'] = 2;
+                            $match_is_true += 1;
+
+                        }else{
+                            //已结束
+                            $save['match_status'] = -3;
+
+                        }
                     }
-                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['match_start_time']){
-                        //等待开赛
-                        $save['match_status'] = -2;
-                        $match_is_true += 1;
-
-                    }
-                    elseif ($v['match_start_time'] <= $new_time && $new_time < $v['match_end_time']){
-                        //进行中
-                        $save['match_status'] = 2;
-                        $match_is_true += 1;
-
-                    }else{
-                        //已结束
-                        $save['match_status'] = -3;
-
-                    }
+                    $a = $wpdb->update($wpdb->prefix.'match_meta_new',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
                 }
-                $a = $wpdb->update($wpdb->prefix.'match_meta_new',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
             }
         }
 
@@ -447,7 +449,7 @@ class Student_Zone
 
         if(isset($_GET['match_id'])){
             //获取比赛信息
-            $sql = "select a.post_title ,c.role_name as scene_title,d.post_title as genre_title, b.* from {$wpdb->prefix}posts a 
+            $sql = "select a.post_title ,c.role_name as scene_title,c.role_alias,d.post_title as genre_title, b.* from {$wpdb->prefix}posts a 
                       left join {$wpdb->prefix}match_meta_new b on a.ID = b.match_id 
                       left join {$wpdb->prefix}zone_match_role c on b.match_scene = c.id 
                       left join {$wpdb->prefix}posts d on b.match_genre = d.ID 
@@ -461,6 +463,10 @@ class Student_Zone
             if(!empty($match['entry_end_time'])){
                 $match['data_entry_end_time'] = preg_replace('/\s|:/','-',$match['entry_end_time']);
             }
+            if($match['match_status'] == 2 && $match['role_alias'] == 'simulate-match'){
+                $match['allow_cancel'] = 'y';
+            }
+
             $data['match'] = $match;
             //print_r($match);
         }
@@ -562,28 +568,30 @@ class Student_Zone
             $entry_is_true = 0;
             $match_is_true = 0;
             foreach ($rows as $v){
+                if($v['status'] != -4){
 
-                if($v['match_switch'] == 'ON') {
-                    if($new_time < $v['entry_end_time']){
-                        //报名中
-                        $save['status'] = 1;
-                        $entry_is_true += 1;
+                    if($v['match_switch'] == 'ON') {
+                        if($new_time < $v['entry_end_time']){
+                            //报名中
+                            $save['status'] = 1;
+                            $entry_is_true += 1;
+                        }
+                        elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
+                            //等待开赛
+                            $save['status'] = -2;
+                            $match_is_true += 1;
+                        }
+                        elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
+                            //进行中
+                            $save['status'] = 2;
+                            $match_is_true += 1;
+                        }else{
+                            //已结束
+                            $save['status'] = -3;
+                        }
                     }
-                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
-                        //等待开赛
-                        $save['status'] = -2;
-                        $match_is_true += 1;
-                    }
-                    elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
-                        //进行中
-                        $save['status'] = 2;
-                        $match_is_true += 1;
-                    }else{
-                        //已结束
-                        $save['status'] = -3;
-                    }
+                    $a = $wpdb->update($wpdb->prefix.'grading_meta',$save,array('id'=>$v['id'],'grading_id'=>$v['grading_id']));
                 }
-                $a = $wpdb->update($wpdb->prefix.'grading_meta',$save,array('id'=>$v['id'],'grading_id'=>$v['grading_id']));
             }
         }
 
@@ -623,7 +631,7 @@ class Student_Zone
 
         if(isset($_GET['grading_id'])){
             //获取比赛信息
-            $sql = "select a.post_title ,c.role_name as scene_title,d.post_title as genre_title, b.* from {$wpdb->prefix}posts a 
+            $sql = "select a.post_title ,c.role_name as scene_title,c.role_alias,d.post_title as genre_title, b.* from {$wpdb->prefix}posts a 
                       left join {$wpdb->prefix}grading_meta b on a.ID = b.grading_id 
                       left join {$wpdb->prefix}zone_match_role c on b.scene = c.id 
                       left join {$wpdb->prefix}posts d on b.category_id = d.ID 
@@ -642,6 +650,10 @@ class Student_Zone
             }
             $person_liable = get_user_meta($match['person_liable'],'user_real_name')[0];
             $match['person'] = !empty($person_liable['real_name']) ? $person_liable['real_name'] : '-';
+            //print_r($match);
+            if($match['status'] == 2 && $match['role_alias'] == 'simulate-grading'){
+                $match['allow_cancel'] = 'y';
+            }
             $data['match'] = $match;
             //print_r($match);
         }
@@ -878,8 +890,8 @@ class Student_Zone
                 return;
             }
             if(!empty($row['team_director'])){
-                $user_real_name = get_user_meta($row['team_director'],'user_real_name')[0];
-                $row['real_name'] = $user_real_name['real_name'];
+                $user_mobile = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['team_director']}");
+                $row['user_mobile'] = $user_mobile;
             }
 
             if($row['user_id'] == $current_user->ID){
