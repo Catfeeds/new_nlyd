@@ -23,71 +23,79 @@
     <div class="layui-row">
         <div class="nl-left-menu layui-col-sm12 layui-col-xs12 layui-col-md12 layui-bg-white have-footer">
             <div class="userCenter-info layui-row">
-                <?php if(is_user_logged_in()): ?>
-                <!-- 消息 -->
-                <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
-                <!-- 编辑 -->
-                <?php endif;?>
-                <a id="language" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;
-                <span id="checked_lan">
-                        <?php
-                            if(isset($_COOKIE['user_language']) && $_COOKIE['user_language'] == 'zh_CN'){
-                                echo 'English';
-                            }else{
-                                echo '中文';
-                            }
-                        ?>
-                    </span></a>
-                <div class="radius-zoo">
+                <!-- <div class="bg_gradient_blue"> -->
+                    <?php if(is_user_logged_in()): ?>
+                    <!-- 消息 -->
+                    <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
+                    <!-- 编辑 -->
+                    <?php endif;?>
+                    <a id="language" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;
+                    <span id="checked_lan">
+                            <?php
+                                if(isset($_COOKIE['user_language']) && $_COOKIE['user_language'] == 'zh_CN'){
+                                    echo 'English';
+                                }else{
+                                    echo '中文';
+                                }
+                            ?>
+                        </span></a>
                     <!-- 头像 -->
                     <div class="userCenter-main layui-row">
                         <div class="img-box">
                             <img src="<?=$user_info['user_head'];?>" class="logoImg rounded" id="avatar">
                         </div>
                     </div>
-                    <!-- 用户名称 -->
-                    <div class="userCenter-name layui-row">
-                        <?php if(!is_user_logged_in()){ ?>
-                        <a class="userCenter-names c_black" href="<?=home_url('/logins')?>"><?=__('未登录', 'nlyd-student')?></a>
-                        <?php }else{ ?>
-                        <div class="userCenter-names login"><?php
-                            if(isset($user_info['user_real_name']) && isset($user_info['user_real_name']['real_name']) && $user_info['user_real_name']['real_name']){
-                                echo $user_info['user_real_name']['real_name'];
-                            }elseif ($user_info['user_mobile']){
-                                echo $user_info['user_mobile'];
-                            }else{
-                                echo $user_info['user_email'];
-                            }
+                    <?=$user_info['user_type'] ? '<div class="userCenter_meta layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
+                    <div class="radius-zoo">
+                        
+                        <!-- 用户名称 -->
+                        <div class="userCenter-name layui-row">
+                            <?php if(!is_user_logged_in()){ ?>
+                            <a class="userCenter-names c_black" href="<?=home_url('/logins')?>"><?=__('未登录', 'nlyd-student')?></a>
+                            <?php }else{ ?>
+                            <div class="userCenter-names"><?php
+                                if(isset($user_info['user_real_name']) && isset($user_info['user_real_name']['real_name']) && $user_info['user_real_name']['real_name']){
+                                    echo $user_info['user_real_name']['real_name'];
+                                }elseif ($user_info['user_mobile']){
+                                    echo $user_info['user_mobile'];
+                                }else{
+                                    echo $user_info['user_email'];
+                                }
 
-                            ?>
+                                ?>
+                            </div>
+                            <div class="userCenter-type layui-hide-lg"></div>
+                           
+                            <?php } ?>
                         </div>
-                        <?=$user_info['user_type'] ? '<div class="userCenter-type fs_12  layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
-                        <?php } ?>
-                    </div>
-                    <?php if(is_user_logged_in()): ?>
-                    <!-- 用户标签 -->
-                    <div class="userCenter-describe layui-row  layui-hide-lg">
+                        <?php if(is_user_logged_in()): ?>
+                        <!-- 用户标签 -->
+                        <div class="userCenter-describe layui-row  layui-hide-lg">
 
-                        <span class="userCenter-item">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : $user_info['user_id'];?></span>
+                            <span class="userCenter-item c_black ff_num">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : $user_info['user_id'];?></span>
 
-                        <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
-                            <a class="userCenter-item c_black6" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
-                                <?=$my_team['my_team']?>
-                                <?php if($my_team['status'] != 2):?>
-                                <span>(<?=$my_team['status_cn']?>)</span>
-                                <?php endif;?>
-                            </a>
-                        <?php }else{ ?>
-                            <a class="userCenter-item c_blue" href="<?=home_url('teams')?>"><?=__('加入战队', 'nlyd-student')?></a>
-                        <?php }; ?>
+                            <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
+                                <a class="userCenter-item c_black" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
+                                    <?=$my_team['my_team']?>
+                                    <?php if($my_team['status'] != 2):?>
+                                    <span>(<?=$my_team['status_cn']?>)</span>
+                                    <?php endif;?>
+                                </a>
+                            <?php }else{ ?>
+                                <a class="userCenter-item c_blue" href="<?=home_url('teams')?>"><?=__('加入战队', 'nlyd-student')?></a>
+                            <?php }; ?>
+                        </div>
+                        <?php endif;?>
+                        
                     </div>
-                    <?php endif;?>
-                </div>
+                <!-- </div> -->
+                <div class="userCenter_bg"></div>
             </div>
+            
             <div class="layui-row menu-wrapper">
                 <?php if(is_user_logged_in()){ ?>
                 <!-- 级别 -->
-                <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">
+                <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1" style="margin-top:0">
                     <p class="fs_14 c_black">
                         <?php if($brainpower):?>
                             <?php

@@ -34,7 +34,7 @@
                             lay-verify="required"
                             autocomplete="off"
                             placeholder="<?=__('请按照合同约定的办赛区域如实选择', 'nlyd-student')?>"
-                            value="">
+                            value="河北省-石家庄市-桥西区">
                 </div>
             </div>
             <div class="name_row dis_none">
