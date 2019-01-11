@@ -4553,6 +4553,7 @@ class Student_Ajax
         global $wpdb,$current_user;
         ini_set('post_max_size','30M');
         //print_r($_POST);die;
+        //$_POST['zone_match_address'] = '江苏省-南京市-建邺区';
         if($_POST['zone_num'] > 0){
             $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where id = {$_POST['zone_num']}",ARRAY_A);
             if($row['user_status']== -1){
@@ -4562,8 +4563,11 @@ class Student_Ajax
                 wp_send_json_error(array('info'=>'审核已通过,资料禁止修改'));
             }
         }
-        if(empty($_POST['type_id']) || empty($_POST['zone_match_type']) || empty($_POST['zone_type_alias']) || empty($_POST['bank_card_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
+        if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['bank_card_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) ||  empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
+        }
+        if($_POST['zone_type_alias'] == 'match'){
+            if(empty($_POST['zone_match_type'])) wp_send_json_error(array('info'=>'赛区类型必选'));
         }
         if(empty($_POST['business_licence_url'])){
             if(empty($_POST['business_licence'])){
