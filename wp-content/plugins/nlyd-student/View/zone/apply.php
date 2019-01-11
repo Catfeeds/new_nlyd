@@ -1,4 +1,4 @@
-
+<!-- 赛区 -->
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -16,135 +16,26 @@
                 <h1 class="mui-title"><div><?=__($zone_type_name.'资料填写', 'nlyd-student')?></div></h1>
                 <?php } ?>
             </header>
-            <div class="layui-row nl-border nl-content">
-                <div class="width-padding layui-row width-margin-pc">
-                    <form class="layui-form apply_form" lay-filter='layform'>
-                        <?php if(!empty($row['id'])):?>
-                            <div>
-                                <div class="lable_row"><span class="c_black"><?=__($zone_type_name.'编号', 'nlyd-student')?>：</span></div>
-                                <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="<?=dispRepair($row['id'],4,0)?>"></div>
-                            </div>
-                        <?php endif;?>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__($zone_type_name.'类型', 'nlyd-student')?>：</span></div>
-                            <div class="input_row">
-                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input type="hidden" id="zone_match_type" name="zone_match_type" value="<?=$row['zone_match_type']?>">
-                                <input
-                                        class="radius_input_row nl-foucs"
-                                        type="text"
-                                        readonly
-                                        id="zone_match_type_val"
-                                        lay-verify="required"
-                                        autocomplete="off"
-                                        placeholder="<?=__('选择承办赛事类型', 'nlyd-student')?>"
-                                        value="<?=$row['zone_match_type_cn']?>">
-                            </div>
-                        </div>
-                        <div class="name_row dis_none">
-                            <div class="lable_row">
-                                <span class="c_black"><?=__($zone_type_name.'字号', 'nlyd-student')?>：</span>
-                                <span class="c_black3"><?=__('规则：IISC+“名字”+国际脑力训练中心+城市', 'nlyd-student')?></span>
-                            </div>
-                            <div class="input_row">
-                                <input class="radius_input_row nl-foucs" type="text" name="zone_name" autocomplete="off" placeholder="<?=__('输入您的'.$zone_type_name.'名字', 'nlyd-student')?>" value="<?=!empty($row['id']) ? $row['zone_name'] :''?>">
-                            </div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__($zone_type_name.'营业地址', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
-                            <div class="input_row img-zoos img-zoos1">
-                                <?php if((!empty($row['business_licence_url']))){?>
-                                    <input type="hidden" name="business_licence_url" class="business_licence_url" value="<?=$row['business_licence_url']?>">
-                                    <div class="post-img no-dash">
-                                        <div class="img-zoo img-box">
-                                            <img src="<?=$row['business_licence_url']?>"/>
-                                        </div>
-                                        <div class="del">
-                                            <i class="iconfont">&#xe633;</i>
-                                        </div>
-                                    </div>
 
-                                <?php }?>
-                                <div class="post-img dash">
-                                    <div class="add-zoo" data-file="img-zoos1">
-                                        <div class="transverse"></div>
-                                        <div class="vertical"></div>
-                                    </div>
-                                </div>
-                                <span class="fs_12 c_black3 _tips"><?=__('原件影印件或盖有鲜章的复印件', 'nlyd-student')?></span>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__('法定代表人', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>" value="<?=!empty($row) ? $row['legal_person'] :''?>"></div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__('对公账户开户名称', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户开户名称', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_name'] :''?>"></div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__('选择对公账户开户行', 'nlyd-student')?>：</span></div>
-                            <div class="input_row">
-                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" readonly id="opening_bank" name="opening_bank"  lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank'] :''?>">
-                            </div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__('对公账户号码', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="tel" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户号码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank_address'] :''?>"></div>
-                        </div>
-                        <?php if($_GET['zone_type_alias'] == 'match' || !empty($row['chairman_name'])):?>
-                            <div>
-                                <div class="lable_row">
-                                    <span class="c_black"><?=__('组委会主席', 'nlyd-student')?>：</span>
-                                    <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
-                                </div>
-                                <div class="input_row">
-                                    <!-- <input class="get_id" name="chairman_id" type="hidden" value="<?=$row['chairman_id']?>"> -->
-                                    <input class="radius_input_row change_num nl-foucs" name="chairman_phone" value="<?=$row['chairman_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
-                                    <!-- <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a> -->
-                                    <!-- <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
-                                        <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
-                                    </select> -->
-                                </div>
-                            </div>
-                            <div>
-                                <div class="lable_row">
-                                    <span class="c_black"><?=__('组委会秘书长', 'nlyd-student')?>：</span>
-                                    <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
-                                </div>
-                                <div class="input_row">
-                                    <!-- <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
-                                        <option value="<?=$row['secretary_id']?>" selected><?=$row['secretary_name']?></option>
-                                    </select> -->
-                                    <!-- <input class="get_id" name="secretary_id" type="hidden" value="<?=$row['secretary_id']?>"> -->
-                                    <input class="radius_input_row change_num nl-foucs" name="secretary_phone" value="<?=$row['secretary_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
-                                    <!-- <a class="input_row_arrow c_blue search_val"><?=__('确 认', 'nlyd-student')?></a> -->
-                                </div>
-                            </div>
-                        <?php endif;?>
-                        <?php if(!empty($referee_name)):?>
-                            <div>
-                                <div class="lable_row"><span class="c_black"><?=__($_GET['zone_type_alias']=='trains'?'事业管理员':'推荐人', 'nlyd-student')?>：</span></div>
-                                <div class="input_row">
-                                    <input class="radius_input_row" disabled type="text" value="<?=$referee_name?>">
-                                </div>
-                            </div>
-                        <?php endif;?>
-                        <?php if($row['user_status'] != 1):?>
-                            <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
-                        <?php endif;?>
-                    </form>
-                </div>
-            </div>
+            <?php
+
+                switch ($_GET['zone_type_alias']){
+                    case 'match':
+                        require_once student_view_path.CONTROLLER.'/apply-match.php';
+                        break;
+                    case 'trains':
+                        require_once student_view_path.CONTROLLER.'/apply-trains.php';
+                        break;
+                    case 'test':
+                        require_once student_view_path.CONTROLLER.'/apply-test.php';
+                        break;
+                    default:
+                        return false;
+                        break;
+                }
+            ?>
+            
+              
         </div>
     </div>
 </div>
@@ -152,13 +43,62 @@
 <input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
 <script>
     jQuery(function($) {
+        var zone_type_alias=$.Request('zone_type_alias');
+        var type_id=$.Request('type_id');
+        var opening_bank_Data=$.validationLayui.back;//开户行
+        var posiotion_back=[0];//开户行初始化位置，高亮展示
+        var area=$.validationLayui.allArea.area;//省市区三级联动
+        //省市区三级联动
+        var posiotionarea=[0,0,0];//初始化位置，高亮展示
+        $.each(area,function(i1,v1){
+            $.each(v1.childs,function(i2,v2){
+                v2.childs.unshift({
+                    id:'-',
+                    value:''
+                })
+            })
+        })
+        if($('#areaSelect').length>0){
+            if($('#areaSelect').val().length>0 && $('#areaSelect').val()){
+                var areaValue=$('#areaSelect').val()
+                $.each(area,function(index,value){
+                    if(areaValue.indexOf(value.value)!=-1){
+                        // console.log(value)
+                        posiotionarea=[index,0,0];
+                        $.each(value.childs,function(i,v){
+                            if(areaValue.indexOf(v.value)!=-1){
+                                posiotionarea=[index,i,0];
+                                $.each(v.childs,function(j,val){
+                                    if(areaValue.indexOf(val.value)!=-1){
+                                        posiotionarea=[index,i,j];
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+            // console.log(JSON.stringify(area))
+            var mobileSelect3 = new MobileSelect({
+                trigger: '#areaSelect',
+                title: "<?=__('地址', 'nlyd-student')?>",
+                wheels: [
+                    {data: area},
+                ],
+                position:posiotionarea, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+                transitionEnd:function(indexArr, data){
 
-
-        var zone_type_alias=$.Request('zone_type_alias')
-        var type_id=$.Request('type_id')
-        var opening_bank_Data=$.validationLayui.back;
-
-        var posiotion_back=[0];//初始化位置，高亮展示
+                },
+                callback:function(indexArr, data){
+                    var three=data[2]['value'].length==0 ? '' : '-'+data[2]['value']
+                    var text=data[0]['value']+'-'+data[1]['value']+three;
+                    // $('#province').val(data[0]['value']);
+                    // $('#city').val(data[1]['value']);
+                    // $('#area').val(data[2]['value']);
+                    $('#areaSelect').val(text);
+                }
+            });
+        }
         if($('#opening_bank').length>0){
             if($('#opening_bank').val().length>0 && $('#opening_bank').val()){
                 $.each(opening_bank_Data,function(index,value){
@@ -193,7 +133,7 @@
             }
         }
         nameRowIsShow()
-        var match_type_data=[{id:1,value:"<?=__('战队精英赛', 'nlyd-student')?>"},{id:2,value:"<?=__('城市赛', 'nlyd-student')?>"}]
+        var match_type_data=[{id:'team',value:"<?=__('战队精英赛', 'nlyd-student')?>"},{id:'city_single',value:"<?=__('城市赛(单)', 'nlyd-student')?>"},{id:'city_double',value:"<?=__('城市赛(双)', 'nlyd-student')?>"}]
         var posiotion_match_type=[0];//初始化位置，高亮展示
         if($('#zone_match_type_val').length>0){
             if($('#zone_match_type_val').val() && $('#zone_match_type_val').val().length>0){
@@ -225,25 +165,6 @@
             var id=$(this).attr('data-file')
             $('#'+id).click()
         })
-        // $('.js-data-select-ajax').each(function () {
-        //     var _this=$(this);
-        //     var _placeholder = _this.attr('data-placeholder');
-        //     _this.select2({
-        //         placeholder : _placeholder,
-        //         allowClear:true,
-        //         ajax: {
-        //             url: admin_ajax +'?action=get_manage_user'  ,
-        //             dataType: 'json',
-        //             delay: 600, //wait 250 milliseconds before triggering the request
-        //             processResults: function (res) {
-        //                 return {
-        //                     results: res.data
-        //                 };
-        //             }
-        //         }
-        //     });
-        // })
-
         var imgs=[]
         var imgs1=[]
         $('.img-zoos').each(function(){
@@ -331,14 +252,15 @@
                 if(!_this.hasClass('disabled')){
                     var fd = new FormData();
                     fd.append('action','zone_apply_submit');
-                    // fd.append('zone_num',data.field['zone_num']);
-                    fd.append('zone_address',data.field['zone_address']);
-                    fd.append('legal_person',data.field['legal_person']);
-                    fd.append('opening_bank',data.field['opening_bank']);
-                    fd.append('opening_bank_address',data.field['opening_bank_address']);
-                    fd.append('bank_card_num',data.field['bank_card_num']);
-                    fd.append('bank_card_name',data.field['bank_card_name']);
-                    if($('.business_licence_url').val()=='' || !$('.business_licence_url').val()){//修改具有初始图片
+                    fd.append('zone_address',data.field['zone_address']);//营业地址
+                    fd.append('legal_person',data.field['legal_person']);//法定代表人姓名
+                    fd.append('opening_bank',data.field['opening_bank']);//对公账户开户行
+                    fd.append('opening_bank_address',data.field['opening_bank_address']);//对公账户开户详细地址
+                    fd.append('bank_card_num',data.field['bank_card_num']);//对公账户开户号码
+                    fd.append('bank_card_name',data.field['bank_card_name']);//对公账户开户名称
+                    fd.append('zone_match_address',data.field['zone_match_address']);//中心所在地
+                    
+                    if($('.business_licence_url').val()=='' || !$('.business_licence_url').val()){//修改具有初始图片,上传营业执照
                         if(imgs1[0]){
                             fd.append('business_licence',imgs1[0]);
                         }else{
@@ -361,18 +283,22 @@
                     }else{
                         fd.append('zone_type_alias','');
                     }
-                    if(data.field['chairman_phone']){
+                    if(data.field['chairman_phone']){//赛事组委会主席(赛区)
                         fd.append('chairman_phone',data.field['chairman_phone']);
                     }
-                    if(data.field['secretary_phone']){
+                    if(data.field['secretary_phone']){//赛事组委会秘书长(赛区)
                         fd.append('secretary_phone',data.field['secretary_phone']);
                     }
-                    fd.append('zone_match_type',data.field['zone_match_type']);
-                    if(data.field['zone_match_type']==1){//战队赛
+                    if(data.field['zone_match_type']){//赛区
+                        fd.append('zone_match_type',data.field['zone_match_type']);
+                        if(data.field['zone_match_type']=='team'){//战队赛
+                            fd.append('zone_name',data.field['zone_name']);
+                        }
+                    }else{//训练中心、测评中心字号
                         fd.append('zone_name',data.field['zone_name']);
                     }
-                    if(data.field['zone_num']){//战队赛
-                        fd.append('zone_num',data.field['zone_num']);
+                    if(data.field['center_manager']){//训练中心（分中心总经理）
+                        fd.append('center_manager',data.field['center_manager']);
                     }
                     $.ajax({
                         data: fd,
