@@ -33,7 +33,7 @@
                         break;
                 }
             ?>
-
+            
             <!-- <div class="layui-row nl-border nl-content">
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
@@ -177,13 +177,11 @@
 <input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
 <script>
     jQuery(function($) {
-
-
-        var zone_type_alias=$.Request('zone_type_alias')
-        var type_id=$.Request('type_id')
-        var opening_bank_Data=$.validationLayui.back;
-        var posiotion_back=[0];//初始化位置，高亮展示
-        var area=$.validationLayui.allArea.area;
+        var zone_type_alias=$.Request('zone_type_alias');
+        var type_id=$.Request('type_id');
+        var opening_bank_Data=$.validationLayui.back;//开户行
+        var posiotion_back=[0];//开户行初始化位置，高亮展示
+        var area=$.validationLayui.allArea.area;//省市区三级联动
         //省市区三级联动
         var posiotionarea=[0,0,0];//初始化位置，高亮展示
         $.each(area,function(i1,v1){
@@ -194,44 +192,46 @@
                 })
             })
         })
-        if($('#areaSelect').length>0 && $('#areaSelect').val().length>0 && $('#areaSelect').val()){
-            var areaValue=$('#areaSelect').val()
-            $.each(area,function(index,value){
-                if(areaValue.indexOf(value.value)!=-1){
-                    // console.log(value)
-                    posiotionarea=[index,0,0];
-                    $.each(value.childs,function(i,v){
-                        if(areaValue.indexOf(v.value)!=-1){
-                            posiotionarea=[index,i,0];
-                            $.each(v.childs,function(j,val){
-                                if(areaValue.indexOf(val.value)!=-1){
-                                    posiotionarea=[index,i,j];
-                                }
-                            })
-                        }
-                    })
-                }
-            })
-        }
-        // console.log(JSON.stringify(area))
-        var mobileSelect3 = new MobileSelect({
-            trigger: '#areaSelect',
-            title: "<?=__('地址', 'nlyd-student')?>",
-            wheels: [
-                {data: area},
-            ],
-            position:posiotionarea, //初始化定位 打开时默认选中的哪个 如果不填默认为0
-            transitionEnd:function(indexArr, data){
-
-            },
-            callback:function(indexArr, data){
-                var text=data[0]['value']+data[1]['value']+data[2]['value'];
-                // $('#province').val(data[0]['value']);
-                // $('#city').val(data[1]['value']);
-                // $('#area').val(data[2]['value']);
-                $('#areaSelect').val(text);
+        if($('#areaSelect').length>0){
+            if($('#areaSelect').val().length>0 && $('#areaSelect').val()){
+                var areaValue=$('#areaSelect').val()
+                $.each(area,function(index,value){
+                    if(areaValue.indexOf(value.value)!=-1){
+                        // console.log(value)
+                        posiotionarea=[index,0,0];
+                        $.each(value.childs,function(i,v){
+                            if(areaValue.indexOf(v.value)!=-1){
+                                posiotionarea=[index,i,0];
+                                $.each(v.childs,function(j,val){
+                                    if(areaValue.indexOf(val.value)!=-1){
+                                        posiotionarea=[index,i,j];
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
             }
-        });
+            // console.log(JSON.stringify(area))
+            var mobileSelect3 = new MobileSelect({
+                trigger: '#areaSelect',
+                title: "<?=__('地址', 'nlyd-student')?>",
+                wheels: [
+                    {data: area},
+                ],
+                position:posiotionarea, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+                transitionEnd:function(indexArr, data){
+
+                },
+                callback:function(indexArr, data){
+                    var text=data[0]['value']+data[1]['value']+data[2]['value'];
+                    // $('#province').val(data[0]['value']);
+                    // $('#city').val(data[1]['value']);
+                    // $('#area').val(data[2]['value']);
+                    $('#areaSelect').val(text);
+                }
+            });
+        }
         if($('#opening_bank').length>0){
             if($('#opening_bank').val().length>0 && $('#opening_bank').val()){
                 $.each(opening_bank_Data,function(index,value){
