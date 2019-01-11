@@ -2405,8 +2405,8 @@ class Student_Ajax
 
         $base_img = str_replace("data:image/{$arr[1]};base64,", '', $filecontent);
         $filename = date('YmdHis').'_'.rand(1000,9999).$ext;          //定义图片名字及格式
-        $savepath = $upload_dir.'/'.$filename;
-        //print_r($base_img);die;
+        $savepath = $upload_dir.$filename;
+        //print_r($savepath);die;
         $a = file_put_contents($savepath, base64_decode($base_img));
         //print_r($a);die;
         if ($a) {
@@ -4602,11 +4602,12 @@ class Student_Ajax
         }
 
         if(!empty($_POST['business_licence'])){
+
             $upload_dir = wp_upload_dir();
-            $dir = '/business_licence/'.$current_user->ID;
+            $dir = '/business_licence/'.$current_user->ID.'/';
             $file = $this->base64file($_POST['business_licence'],$upload_dir['basedir'].$dir);
             if($file){
-                $business_licence_url = $upload_dir['baseurl'].$dir.$file;
+                $business_licence_url = $upload_dir['baseurl'].$dir.'/'.$file;
             }
         }
         //获取默认权限
