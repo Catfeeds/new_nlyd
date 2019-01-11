@@ -274,14 +274,18 @@ class Spread{
                     $bool = $wpdb->update($wpdb->prefix.'spread_set',$insertData,['id' => $id]);
                 }else{
                     //判断是否已经存在此类设置
-
-                    $bool = $wpdb->insert($wpdb->prefix.'spread_set',$insertData);
+                    $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}spread_set WHERE spread_type='{$spread_type}' AND match_grading='{$match_grading}' AND match_type='{$match_type}'");
+                    if($var){
+                        $error_msg = '当前类型设置已存在';
+                    }else{
+                        $bool = $wpdb->insert($wpdb->prefix.'spread_set',$insertData);
+                    }
 //                    leo_dump($wpdb->last_query);die;
                 }
                 if($bool){
                     $success_msg = '操作成功!';
                 }else{
-                    $error_msg = '操作失败!';
+                    $error_msg .= '<br />操作失败!';
                 }
             }
         }

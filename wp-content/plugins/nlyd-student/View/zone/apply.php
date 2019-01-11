@@ -60,16 +60,16 @@
         })
         if($('#areaSelect').length>0){
             if($('#areaSelect').val().length>0 && $('#areaSelect').val()){
-                var areaValue=$('#areaSelect').val()
+                var areaValue=$('#areaSelect').val().split('-');
                 $.each(area,function(index,value){
-                    if(areaValue.indexOf(value.value)!=-1){
+                    if(areaValue[0]==value.value){
                         // console.log(value)
                         posiotionarea=[index,0,0];
                         $.each(value.childs,function(i,v){
-                            if(areaValue.indexOf(v.value)!=-1){
+                            if(areaValue[1]==v.value){
                                 posiotionarea=[index,i,0];
                                 $.each(v.childs,function(j,val){
-                                    if(areaValue.indexOf(val.value)!=-1){
+                                    if(areaValue[2] && areaValue[2]==val.value){
                                         posiotionarea=[index,i,j];
                                     }
                                 })
@@ -126,7 +126,7 @@
         }
         function nameRowIsShow() {
             var id=$('#zone_match_type').val();
-            if(id==1){
+            if(id==1 || id=='team'){
                 $('.name_row').removeClass('dis_none')
             }else{
                 $('.name_row').addClass('dis_none')
