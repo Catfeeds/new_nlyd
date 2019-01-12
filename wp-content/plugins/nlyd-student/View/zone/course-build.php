@@ -10,13 +10,13 @@
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
-                <h1 class="mui-title"><div><?=__('发布课程', 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__($_GET['id'] > 0 ? '编辑课程':'发布课程', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <input type="hidden" name="action" value="zone_course_created"/>
-                        <input type="hidden" name="id" value="<?=$_GET['id']?>"/>
+                        <input type="hidden" id="course_id" name="id" value="<?=$_GET['id']?>"/>
                         <?php if(!empty($course_type)):?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程类型', 'nlyd-student')?>：</span></div>
@@ -76,7 +76,11 @@
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('结课日期', 'nlyd-student')?>：</span><a href="" class="c_blue pull-right"><?=__('立即结课', 'nlyd-student')?></a></div>
+                            <div class="lable_row"><span class="c_black"><?=__('结课日期', 'nlyd-student')?>：</span>
+                                <?php if(!empty($course['start_time']) && strtotime($course['start_time']) < get_time()):?>
+                                <a href="" class="c_blue pull-right"><?=__('立即结课', 'nlyd-student')?></a>
+                                <?php endif;?>
+                            </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
                                 <input class="radius_input_row nl-foucs" type="text" readonly name="course_end_time" data-time="<?=$course['data_end_time']?>"  id="course_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="<?=$course['end_time']?>">
@@ -93,7 +97,7 @@
                                 <button class="save" type="button" class=""><?=__('存草稿', 'nlyd-student')?></button>
                             </div>
                             <div class="details-button flex1 last-btn">
-                                <button class="see_button" type="button" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><?=__('发 布', 'nlyd-student')?></button>
+                                <button class="see_button" type="button" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><?=__($_GET['id'] > 0 ? '编 辑':'发 布', 'nlyd-student')?></button>
                             </div>
                         </span>
                     </form>
@@ -126,6 +130,44 @@ jQuery(function($) {
             }
         })
     }
+    $('#close_course').click(function(){
+        var course_id=$('#course_id').val();
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            $.ajax({
+                data: {id:course_id,type:'zone_close_course'},
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
+                success: function(res, textStatus, jqXHR){
+                    if(res.data.info){
+                        $.alerts(res.data.info)
+                    }
+                    if(res.success){
+                        if(res.data.url){
+                            setTimeout(function() {
+                                window.location.href=res.data.url
+                            }, 300);
+
+                        }else{
+                            _this.removeClass('disabled');
+                        }
+                    }else{
+                        _this.removeClass('disabled');
+                    }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                        _this.removeClass('disabled');
+            　　　　 }
+                }
+            })
+        }else{
+            $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+        }
+
+    })
     //---------------------------课程类型------------------------------
     if($('#course_type1').val().length>0 && $('#course_type1').val()){
         $.each(course_type1_Data,function(index,value){
