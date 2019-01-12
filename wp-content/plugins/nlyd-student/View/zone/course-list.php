@@ -95,23 +95,23 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'get_match_list',
+                        action:'get_zone_course',
                         _wpnonce:$('#inputMatch').val(),
                         page:match_page,
                         match_type:'',
                     }
                     if(parseInt(id)==1){//全部报名
-                        postData['match_type']="all";
+                        postData['course_type']="all";
                     }else if(parseInt(id)==2){//课程
-                        postData['match_type']="matching";
+                        postData['course_type']="matching";
                     }else{//往期
-                        postData['match_type']="history";
+                        postData['course_type']="history";
                     }
                     var lis = [];
                     $.ajax({
                         data: postData,
                         success:function(res,ajaxStatu,xhr){
-                            console.log(res)
+                            console.log(res,postData)
                             match_page++
                             isClick[id]=true
                             if(res.success){
@@ -122,28 +122,28 @@ jQuery(function($) {
                                     // 报名中1
                                     // 进行中2
                                     var dom='<li class="match_row">'
-                                                +'<div class="match_header bold c_black f_16 mt_10">'+v.post_title+'</div>'
+                                                +'<div class="match_header bold c_black f_16 mt_10">'+v.course_title+'</div>'
                                                 +'<div class="match_body">'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('开课日期：', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black">'+v.match_start_time+' <span class="c_blue ml_10">'+v.match_status_cn+'</span></div>'
+                                                        +'<div class="match_body_info c_black">'+v.start_time+' <span class="c_blue ml_10">'+v.status_cn+'</span></div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('授课教练', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black">'+v.match_address+'</div>'
+                                                        +'<div class="match_body_info c_black">'+v.real_name+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('开放名额', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black">'+v.entry_total+'</div>'
+                                                        +'<div class="match_body_info c_black">'+v.open_quota+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('已占名额', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black">'+v.entry_total+' <a href="<?=home_url('/zone/courseStudent/');?>" class="c_blue ml_10">查看</a></div>'
+                                                        +'<div class="match_body_info c_black">'+v.entry_total+' <a href="'+window.home_url+'/zone/courseStudent/id/'+v.id+'" class="c_blue ml_10">查看</a></div>'
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="match_footer ta_r">'
-                                                    +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭课程</span></a>'
-                                                    +'<a href="<?=home_url('/zone/courseBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑课程</span></a>'
+                                                    // +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭课程</span></a>'
+                                                    +'<a href="'+window.home_url+'/zone/courseBuild/id/'+v.id+'" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑课程</span></a>'
                                                 +'</div>'
                                             +'</li>'
                                     lis.push(dom) 
