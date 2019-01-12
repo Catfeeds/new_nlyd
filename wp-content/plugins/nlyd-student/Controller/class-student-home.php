@@ -64,18 +64,30 @@ class Student_Home
             update_user_meta($current_user->ID,'user_ID',10000000+$current_user->ID);
         }
         //print_r($user_info);
-        $user_level = get_the_author_meta('user_level',$current_user->ID);
+        //$user_level = get_the_author_meta('user_level',$current_user->ID);
         //print_r($user_level);
         switch ($current_user->roles[0]){
             case 'administrator':
                 $user_info['user_type'] = __('管理员', 'nlyd-student');
                 $user_info['user_roles'] = 'administrator';
                 break;
+            case 'referee_ambassador':
+                $user_info['user_type'] = __('推广大使', 'nlyd-student');
+                $user_info['user_roles'] = 'referee_ambassador';
+                break;
+            case 'general_manager':
+                $user_info['user_type'] = __('总经理', 'nlyd-student');
+                $user_info['user_roles'] = 'general_manager';
+                break;
+            case 'referee_manager':
+                $user_info['user_type'] = __('事业管理员', 'nlyd-student');
+                $user_info['user_roles'] = 'referee_manager';
+                break;
             case 'supervisor':
                 $user_info['user_type'] = __('监赛官', 'nlyd-student');
                 $user_info['user_roles'] = 'supervisor';
                 break;
-            case 'editor':
+            case 'coach':
                 $user_info['user_type'] = __('教练', 'nlyd-student');
                 $user_info['user_roles'] = 'editor';
                 break;
