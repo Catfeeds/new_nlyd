@@ -215,10 +215,8 @@ class Organize{
                         $secretary_real_name = get_user_meta($row['secretary_id'],'user_real_name',true);
                         $apply_real_name = get_user_meta($row['apply_id'],'user_real_name',true);
                            //负责人
-                       $person_id = $wpdb->get_var("SELECT user_id 
-                                 FROM {$wpdb->prefix}zone_manager
-                                 WHERE zone_id='{$row['id']}'limit 1");
-                       $person_real_name = get_user_meta($person_id,'user_real_name',true);
+
+                       $person_real_name = get_user_meta($person_id,'center_manager_id',true);
                        //办赛次数
                        $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
                        //参赛人次
@@ -268,8 +266,8 @@ class Organize{
                            </a>
                        </td>
                        <td class="person column-person" data-colname="负责人">
-                           <a href="<?=admin_url('users.php?page=users-info&ID='.$person_id)?>">
-                               <?=isset($person_real_name['real_name'])?$person_real_name['real_name']:($person_id>0?get_user_by('ID',$person_id)->user_login:'')?>
+                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['center_manager_id'])?>">
+                               <?=isset($person_real_name['real_name'])?$person_real_name['real_name']:($row['center_manager_id']>0?get_user_by('ID',$row['center_manager_id'])->user_login:'')?>
                            </a>
                        </td>
                        <td class="chairman_id column-chairman_id" data-colname="主席">
@@ -921,10 +919,16 @@ class Organize{
                                     $error_msg = '更新机构所有者id失败!';
                                 }
                             }
+//                            if($error_msg == '') {
+//                                //添加机构管理员
+//                                if (!$wpdb->insert($wpdb->prefix . 'zone_manager', ['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) {
+//                                    $error_msg = '添加管理员失败!';
+//                                }
+//                            }
                             if($error_msg == '') {
-                                //添加机构管理员
-                                if (!$wpdb->insert($wpdb->prefix . 'zone_manager', ['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) {
-                                    $error_msg = '添加管理员失败!';
+                                //更新管理员/负责人
+                                if (!$wpdb->update($wpdb->prefix . 'zone_meta', ['center_manager_id' => $zmv['apply_id']], ['user_id' => $user_id])) {
+                                    $error_msg = '更新管理员失败!';
                                 }
                             }
                             //创建战队
@@ -1131,7 +1135,7 @@ class Organize{
                         <?php
                     }
                     ?>
-                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>">
+                    <tr class="" style="">
                         <th scope="row"><label for="zone_number">机构编号 </label></th>
                         <td>
                             <input type="text" name="zone_number" id="zone_number" value="<?=$row['zone_number']?>">
@@ -1248,7 +1252,7 @@ class Organize{
                             </select>
                         </td>
                     </tr>
-                    <tr class="" style="<?=$row['zone_match_type'] != '1' ? 'display: none':''?>" id="zone_title_tr">
+                    <tr class="" style="<?=isset($row) && $row['zone_match_type'] != '1' ? 'display: none':''?>" id="zone_title_tr">
                         <th scope="row"><label for="zone_title">字号 </label></th>
                         <td>
                             <input type="text" name="zone_title" id="zone_title" value="<?=$row['zone_name']?>">

@@ -943,7 +943,7 @@ function the_table_install () {
           `spread_status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1正常,2禁用',
           `spread_name` varchar(255) DEFAULT NULL COMMENT '',
           `match_grading` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1比赛,2考级',
-          `match_type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1战队赛,2多区县城市赛,3单区县城市赛',
+          `match_type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1战队赛,2多区县城市赛,3单区县城市赛,4其它比赛',
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
         dbDelta($sql);
