@@ -16,7 +16,7 @@
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <input type="hidden" name="action" value="zone_course_created"/>
-                        <input type="hidden" name="id" value="<?=$_GET['id']?>"/>
+                        <input type="hidden" id="course_id" name="id" value="<?=$_GET['id']?>"/>
                         <?php if(!empty($course_type)):?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程类型', 'nlyd-student')?>：</span></div>
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('结课日期', 'nlyd-student')?>：</span><a href="" class="c_blue pull-right"><?=__('立即结课', 'nlyd-student')?></a></div>
+                            <div class="lable_row"><span class="c_black"><?=__('结课日期', 'nlyd-student')?>：</span><a id="close_course" class="c_blue pull-right"><?=__('立即结课', 'nlyd-student')?></a></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
                                 <input class="radius_input_row nl-foucs" type="text" readonly name="course_end_time" data-time="<?=$course['data_end_time']?>"  id="course_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="<?=$course['end_time']?>">
@@ -126,6 +126,44 @@ jQuery(function($) {
             }
         })
     }
+    $('#close_course').click(function(){
+        var course_id=$('#course_id').val();
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            $.ajax({
+                data: {id:course_id,type:'zone_close_course'},
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
+                success: function(res, textStatus, jqXHR){
+                    if(res.data.info){
+                        $.alerts(res.data.info)
+                    }
+                    if(res.success){
+                        if(res.data.url){
+                            setTimeout(function() {
+                                window.location.href=res.data.url
+                            }, 300);
+
+                        }else{
+                            _this.removeClass('disabled');
+                        }
+                    }else{
+                        _this.removeClass('disabled');
+                    }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                        _this.removeClass('disabled');
+            　　　　 }
+                }
+            })
+        }else{
+            $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+        }
+
+    })
     //---------------------------课程类型------------------------------
     if($('#course_type1').val().length>0 && $('#course_type1').val()){
         $.each(course_type1_Data,function(index,value){
@@ -296,31 +334,7 @@ jQuery(function($) {
         
         }
     });
-    $('.js-data-select-ajax').select2({
-        ajax: {
-            url: function(params){
-                return admin_ajax +'?action=get_manage_user'   
-                // return "https://api.github.com/search/repositories"
-            },
-            dataType: 'json',
-            delay: 250,//在多少毫秒内没有输入时则开始请求服务器
-            processResults: function (data, params) {
-                // 此处解析数据，将数据返回给select2
-                console.log(data.data)
-                var x=data.data;
-                return {
-                    results:x,// data返回数据（返回最终数据给results，如果我的数据在data.res下，则返回data.res。这个与服务器返回json有关）
-                };
-            },
-            cache: true
-        },
-        placeholder: '请输入关键字',
-        escapeMarkup: function (markup) { return markup; }, // 字符转义处理
-        templateResult: formatRepo,//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
-        templateSelection: formatRepoSelection,//选中项回调function formatRepoSelection(repo){return repo.text}
-        language:'zh-CN'
 
-    })
     function formatRepo (repo) {//repo对象根据拼接返回结果
         if (repo.loading) {
             return repo.text;
