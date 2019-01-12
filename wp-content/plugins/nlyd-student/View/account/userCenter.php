@@ -64,8 +64,9 @@
 
                                 ?>
                             </div>
+                            <?php if(!empty($user_info['user_real_name']['real_name'])):?>
                             <div class="userCenter-type layui-hide-lg"></div>
-                           
+                            <?php endif;?>
                             <?php } ?>
                         </div>
                         <?php if(is_user_logged_in()): ?>

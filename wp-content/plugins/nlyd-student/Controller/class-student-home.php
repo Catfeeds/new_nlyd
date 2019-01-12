@@ -71,11 +71,23 @@ class Student_Home
                 $user_info['user_type'] = __('管理员', 'nlyd-student');
                 $user_info['user_roles'] = 'administrator';
                 break;
+            case 'referee_ambassador':
+                $user_info['user_type'] = __('推广大使', 'nlyd-student');
+                $user_info['user_roles'] = 'referee_ambassador';
+                break;
+            case 'general_manager':
+                $user_info['user_type'] = __('总经理', 'nlyd-student');
+                $user_info['user_roles'] = 'general_manager';
+                break;
+            case 'referee_manager':
+                $user_info['user_type'] = __('事业管理员', 'nlyd-student');
+                $user_info['user_roles'] = 'referee_manager';
+                break;
             case 'supervisor':
                 $user_info['user_type'] = __('监赛官', 'nlyd-student');
                 $user_info['user_roles'] = 'supervisor';
                 break;
-            case 'editor':
+            case 'coach':
                 $user_info['user_type'] = __('教练', 'nlyd-student');
                 $user_info['user_roles'] = 'editor';
                 break;
