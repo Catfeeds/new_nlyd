@@ -101,17 +101,17 @@ jQuery(function($) {
                         match_type:'',
                     }
                     if(parseInt(id)==1){//全部报名
-                        postData['match_type']="all";
+                        postData['course_type']="all";
                     }else if(parseInt(id)==2){//课程
-                        postData['match_type']="matching";
+                        postData['course_type']="matching";
                     }else{//往期
-                        postData['match_type']="history";
+                        postData['course_type']="history";
                     }
                     var lis = [];
                     $.ajax({
                         data: postData,
                         success:function(res,ajaxStatu,xhr){
-                            console.log(res)
+                            console.log(res,postData)
                             match_page++
                             isClick[id]=true
                             if(res.success){
