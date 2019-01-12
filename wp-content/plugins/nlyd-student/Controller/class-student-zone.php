@@ -687,33 +687,32 @@ class Student_Zone
         if(!empty($rows)){
 
             foreach ($rows as $k => $v){
-                $is_enable = '';
+                if($v['is_enable'] != -4){
+                    $is_enable = '';
+                    if($v['course_start_time'] > 0){
 
-                if($v['course_start_time'] > 0){
+                        if(get_time() < $v['course_start_time']){
+                            $is_enable = 1; //报名中
+                        }
+                        elseif ( $v['course_start_time'] <= get_time() && get_time() <= $v['course_start_time']){
 
-                    if(get_time() < $v['course_start_time']){
-                        $is_enable = 1; //报名中
+                            $is_enable = 2; //授课中
+                        }
+                        else{
+                            $is_enable = -3;    //已结课
+                        }
+                    }else{
+                        if($v['entry_total'] < $v['open_quota']){
+                            $is_enable = 1;
+                        }
+                        elseif ($v['entry_total'] >= $v['open_quota']){
+                            $is_enable = -2;
+                        }
                     }
-                    elseif ( $v['course_start_time'] <= get_time() && get_time() <= $v['course_start_time']){
-
-                        $is_enable = 2; //授课中
-                    }
-                    else{
-                        $is_enable = -3;    //已结课
-                    }
-                }else{
-                    if($v['entry_total'] < $v['open_quota']){
-                        $is_enable = 1;
-                    }
-                    elseif ($v['entry_total'] >= $v['open_quota']){
-                        $is_enable = -2;
+                    if(!empty($is_enable)){
+                        $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>$is_enable),array('id'=>$v['id']));
                     }
                 }
-                if(!empty($is_enable)){
-                    $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>$is_enable),array('id'=>$v['id']));
-                }
-
-
             }
         }
         $view = student_view_path.CONTROLLER.'/course-list.php';
@@ -726,7 +725,7 @@ class Student_Zone
 
         //获取课程类型
         global $wpdb,$current_user;
-        $course_type = $wpdb->get_results("select id,type_name value from {$wpdb->prefix}course_type ",ARRAY_A);
+        $course_type = $wpdb->get_results("select id,type_name value,type_alias role_alias from {$wpdb->prefix}course_type ",ARRAY_A);
         $data['course_type'] = !empty($course_type) ? json_encode($course_type) : '';
 
         //获取教学类型

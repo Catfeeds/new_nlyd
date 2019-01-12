@@ -5058,6 +5058,8 @@ class Student_Ajax
             }
         }elseif ($_POST['type'] == 'official-grading'){
             $role_alias = 'official-grading';
+        }else{
+            $role_alias = $_POST['type'];
         }
 
         $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$role_alias}' ";
@@ -6271,6 +6273,10 @@ class Student_Ajax
         if(empty($_POST['course_type']) || empty($_POST['course_category_id']) || empty($_POST['course_title']) || empty($_POST['duration']) || empty($_POST['coach_phone']) || empty($_POST['const']) ){
             wp_send_json_error(array('info'=>__('必填项不能为空')));
         }
+        if(!empty($_POST['course_start_time']) && !empty($_POST['course_end_time'])){
+            if($_POST['course_start_time'] > $_POST['course_end_time']) wp_send_json_error(array('info'=>__('开课时间不能大于结课时间')));
+        }
+
         global $wpdb,$current_user;
         if(!empty($_POST['coach_phone'])){
             if(reg_match('m',$_POST['coach_phone'])) wp_send_json_error(array(__('授课教练手机格式不正确', 'nlyd-student')));
@@ -6320,7 +6326,7 @@ class Student_Ajax
 
         $map[] = " a.zone_id = {$current_user->ID} ";
         if($_POST['is_enable'] == 'history'){
-            $map[] = " a.is_enable = -3 ";
+            $map[] = " a.is_enable = -3 or a.is_enable = -4 ";
         }elseif ($_POST['is_enable'] == 'matching'){
             $map[] = " a.match_status != -3 ";
         }
@@ -6361,6 +6367,20 @@ class Student_Ajax
             $rows[$k]['real_name'] = !empty($user_real_name) ? $user_real_name['real_name'] : '-';
         }
         wp_send_json_success(array('info'=>$rows));
+    }
+
+    /**
+     * 机构关闭课程
+     */
+    public function zone_close_course(){
+        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('参数必传')));
+        global $wpdb,$current_user;
+        $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>-4),array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
+        if($a){
+            wp_send_json_success(array('info'=>__('关闭成功')));
+        }else{
+            wp_send_json_error(array('info'=>'关闭失败'));
+        }
     }
 
 
