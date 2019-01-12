@@ -15,13 +15,15 @@
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
+                        <input type="hidden" name="action" value="zone_course_created"/>
+                        <input type="hidden" name="id" value="<?=$_GET['id']?>"/>
                         <?php if(!empty($course_type)):?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程类型', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input type="hidden" name="course_type"  value="" id="course_scene">
-                                <input class="radius_input_row nl-foucs" readonly id="course_type1" type="text" lay-verify="required" value="乐学乐分享基础应用课" placeholder="<?=__('课程类型', 'nlyd-student')?>">
+                                <input type="hidden" name="course_type"  value="<?=$course['course_type']?>" id="course_scene">
+                                <input class="radius_input_row nl-foucs" readonly id="course_type1" type="text" lay-verify="required" value="<?=$course['type_name']?>" placeholder="<?=__('课程类型', 'nlyd-student')?>">
                             </div>
                         </div>
                         <?php endif;?>
@@ -31,17 +33,17 @@
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input type="hidden" name="course_category_id"  value="" id="course_genre">
-                                <input class="radius_input_row nl-foucs" readonly id="course_type2" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('记忆课程教学', 'nlyd-student')?>" value="记忆课程教学">
+                                <input type="hidden" name="course_category_id"  value="<?=$course['course_category_id']?>" id="course_genre">
+                                <input class="radius_input_row nl-foucs" readonly id="course_type2" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('记忆课程教学', 'nlyd-student')?>" value="<?=$course['category_type']?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程名称', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="course_title" lay-verify="required" autocomplete="off" placeholder="<?=__('填写课程名称', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="course_title" lay-verify="required" autocomplete="off" placeholder="<?=__('填写课程名称', 'nlyd-student')?>" value="<?=$course['course_title']?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程时长', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="duration" lay-verify="required" autocomplete="off" placeholder="<?=__('填写课程时长', 'nlyd-student')?>" value="<?=!empty($row) ? $row['legal_person'] :''?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="duration" lay-verify="required" autocomplete="off" placeholder="<?=__('填写课程时长', 'nlyd-student')?>" value="<?=$course['duration']?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black">
@@ -49,8 +51,8 @@
                                 <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                             </div>
                             <div class="input_row">
-                                <select class="js-data-select-ajax" name="coach_id" style="width: 100%" data-action="get_manage_user" lay-verify="required"  data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" ></select>
-                                <!-- <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>"> -->
+                                <input class="radius_input_row nl-foucs" type="tel" lay-verify="required" autocomplete="off" name="coach_phone" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_phone']?>">
+                                <!--<select class="js-data-select-ajax" name="coach_id" style="width: 100%" data-action="get_manage_user" lay-verify="required"  data-placeholder="<?/*=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')*/?>" ></select>-->
                             </div>
                         </div>
                         <div>
@@ -62,7 +64,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('开放名额', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" type="tel" name="open_quota" lay-verify="required" autocomplete="off" placeholder="<?=__('输入开放名额', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank_address'] :''?>">
+                                <input class="radius_input_row nl-foucs" type="tel" name="open_quota" lay-verify="required" autocomplete="off" placeholder="<?=__('输入开放名额', 'nlyd-student')?>" value="<?=$course['open_quota']?>">
                             </div>
                         </div>
                   
@@ -70,14 +72,14 @@
                             <div class="lable_row"><span class="c_black"><?=__('开课日期', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" readonly name="course_start_time" data-time="2019-11-11-11-11"  id="course_start_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="2019-11-11 11:11">
+                                <input class="radius_input_row nl-foucs" type="text" readonly name="course_start_time" data-time="<?=$course['data_start_time']?>"  id="course_start_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="<?=$course['start_time']?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('结课日期', 'nlyd-student')?>：</span><a href="" class="c_blue pull-right"><?=__('立即结课', 'nlyd-student')?></a></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" readonly name="course_end_time" data-time="2019-11-11-11-11"  id="course_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="2019-11-11 11:11">
+                                <input class="radius_input_row nl-foucs" type="text" readonly name="course_end_time" data-time="<?=$course['data_end_time']?>"  id="course_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="<?=$course['end_time']?>">
                             </div>
                         </div>
                         <div>

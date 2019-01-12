@@ -683,17 +683,43 @@ class Student_Zone
 
         //获取课程类型
         global $wpdb,$current_user;
-        $course_type = $wpdb->get_results("select id,type_name valeu from {$wpdb->prefix}course_type ",ARRAY_A);
+        $course_type = $wpdb->get_results("select id,type_name value from {$wpdb->prefix}course_type ",ARRAY_A);
         $data['course_type'] = !empty($course_type) ? json_encode($course_type) : '';
 
         //获取教学类型
         $post_id = $wpdb->get_var("select post_id from {$wpdb->prefix}postmeta where meta_key = 'project_alias' and meta_value = 'mental_world_cup'");
-        $sql = "select ID,post_title 
+        $sql = "select ID id,post_title value 
                 from {$wpdb->prefix}posts 
                 where post_parent = {$post_id} and post_status = 'publish'
                 " ;
         $category_type = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($category_type);
         $data['category_type'] = !empty($category_type) ? json_encode($category_type) : '';
+
+        if(isset($_GET['id'])){
+            $sql_ = "select a.*,b.type_name,c.post_title category_type,
+                    if(unix_timestamp(course_start_time)>0,date_format(course_start_time,'%Y-%m-%d %H:%i'),'') start_time,
+                    if(unix_timestamp(course_end_time)>0,date_format(course_end_time,'%Y-%m-%d %H:%i'),'') end_time
+                    from {$wpdb->prefix}course a 
+                    left join {$wpdb->prefix}course_type b on a.course_type = b.id
+                    left join {$wpdb->prefix}posts c on a.course_category_id = c.ID
+                    where a.id = {$_GET['id']} and zone_id = {$current_user->ID}";
+            $row = $wpdb->get_row($sql_,ARRAY_A);
+            if(empty($row)){
+                $this->get_404($this->get_404(array('message'=>__('数据错误', 'nlyd-student'),'return_url'=>home_url('/zone/course/'))));
+                return;
+            }
+            if($row['start_time'] > 0){
+                $row['data_start_time'] = preg_replace('/\s|:/','-',$row['start_time']);
+            }
+            if($row['end_time'] > 0 ){
+                $row['data_end_time'] = preg_replace('/\s|:/','-',$row['end_time']);
+            }
+            //获取授课教练
+            $row['coach_phone'] = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['coach_id']}");
+            //print_r($row);
+            $data['course'] = $row;
+        }
 
         $view = student_view_path.CONTROLLER.'/course-build.php';
         load_view_template($view,$data);
