@@ -936,10 +936,21 @@ if(!class_exists('MatchController')){
                     break;
                 case 'team_zone':
                     //考级操作选项
-                    $zone_name = $wpdb->get_row("SELECT zone_city,zone_match_type FROM {$wpdb->prefix}team_meta AS tm 
+                    $zone_name = $wpdb->get_row("SELECT zm.zone_city,zm.zone_match_type,zm.zone_name,zm.type_id FROM {$wpdb->prefix}team_meta AS tm 
                                  LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=tm.user_id
                                  WHERE tm.team_id='{$id}'",ARRAY_A);
-                    echo date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$zone_name['zone_city'].'</span>'.($zone_name['zone_match_type']=='1'?'战队精英赛':'城市赛');
+                    $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$zone_name['type_id']}");
+                    switch ($type_alias){
+                        case 'match':
+                            echo date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$zone_name['zone_city'].'</span>'.($zone_name['zone_match_type']=='1'?'战队精英赛':'城市赛');
+                            break;
+                        case 'trains':
+                            echo 'IISC'. '<span style="color: #c40c0f">' .$zone_name['zone_name'].'</span>'.'国际脑力训练中心';
+                            break;
+                        case 'test':
+                            echo 'IISC'. '<span style="color: #c40c0f">' .$zone_name['zone_name'].'</span>'.'国际脑力测评中心';
+                            break;
+                    }
                     break;
                 default:
                     break;

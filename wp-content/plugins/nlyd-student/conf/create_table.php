@@ -223,7 +223,7 @@ function the_table_install () {
           `apply_id` int(20) unsigned DEFAULT 0 COMMENT '申请人id',
           `term_time` varchar(64) DEFAULT NULL COMMENT '有效期',
           `zone_number` varchar(64) DEFAULT NULL COMMENT '机构编号',
-          `center_manager_id` varchar(64) DEFAULT NULL COMMENT '管理员/负责人',
+          `center_manager_id` unsigned int(20) DEFAULT NULL COMMENT '管理员/负责人',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
