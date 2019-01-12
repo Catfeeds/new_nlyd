@@ -83,7 +83,7 @@ class Organize{
             $joinWhere = " AND (um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR u.user_login LIKE '%{$searchStr}%')";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
-                zm.zone_address,zm.business_licence_url,
+                zm.zone_address,zm.business_licence_url,zm.center_manager_id,
                 zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,zm.id,zm.zone_match_type,zm.apply_id,
                 zm.chairman_id,zm.secretary_id,zm.zone_city,zm.term_time,zm.user_status,zm.is_double,zm.zone_number,
                 CASE zm.is_able 
