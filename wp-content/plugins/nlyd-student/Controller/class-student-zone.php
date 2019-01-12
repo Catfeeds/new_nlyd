@@ -1150,9 +1150,11 @@ class Student_Zone
         $row = $wpdb->get_row($sql,ARRAY_A);
         $row['user_head'] = get_user_meta($current_user->ID,'user_head')[0];
         $row['user_ID'] = get_user_meta($current_user->ID,'user_ID')[0];
-        $city = !empty($row['zone_city']) ? '（'.$row['zone_city'].'）' : '';
-        $row['zone_title'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'赛组委会';
-        $row['zone_match_type_cn'] = $row['is_double']==1 ? $row['zone_match_type_cn'].'（多）' : $row['zone_match_type_cn'].'（单）';
+        if(!empty($row['id'])){
+            $city = !empty($row['zone_city']) ? '（'.$row['zone_city'].'）' : '';
+            $row['zone_title'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'赛组委会';
+            $row['zone_match_type_cn'] = $row['is_double']==1 ? $row['zone_match_type_cn'].'（多）' : $row['zone_match_type_cn'].'（单）';
+        }
         //获取负责人
         if(!empty($row['center_manager_id'])){
             $row['center_manager'] = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['center_manager_id']} ");

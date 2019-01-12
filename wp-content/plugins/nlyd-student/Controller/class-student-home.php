@@ -64,7 +64,7 @@ class Student_Home
             update_user_meta($current_user->ID,'user_ID',10000000+$current_user->ID);
         }
         //print_r($user_info);
-        $user_level = get_the_author_meta('user_level',$current_user->ID);
+        //$user_level = get_the_author_meta('user_level',$current_user->ID);
         //print_r($user_level);
         switch ($current_user->roles[0]){
             case 'administrator':

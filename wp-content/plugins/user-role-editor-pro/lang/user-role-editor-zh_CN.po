@@ -1,0 +1,2398 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: User Role Editor 2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-27 11:47+0800\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: ShinePHP.com <vladimir@shinephp.com>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;esc_html__;esc_html_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 2.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../includes/classes/capabilities-groups-manager.php:44
+msgid "Custom Post Types"
+msgstr "自定义文章类型"
+
+#: ../includes/classes/capabilities-groups-manager.php:75
+#: ../includes/classes/lib.php:234 ../includes/classes/user-role-editor.php:557
+#: ../includes/classes/user-role-editor.php:588
+#: ../pro/includes/classes/user-role-editor-pro.php:174
+msgid "User Role Editor"
+msgstr "用户权限编辑"
+
+#: ../includes/classes/capabilities-groups-manager.php:90
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: ../includes/classes/capabilities-groups-manager.php:91
+#: ../includes/classes/capabilities-groups-manager.php:111
+msgid "Core"
+msgstr "核心"
+
+#: ../includes/classes/capabilities-groups-manager.php:110
+msgid "All"
+msgstr "全部"
+
+#: ../includes/classes/capabilities-groups-manager.php:112
+#: ../includes/classes/user-role-editor.php:529
+#: ../includes/settings-template.php:20
+msgid "General"
+msgstr "通用设置"
+
+#: ../includes/classes/capabilities-groups-manager.php:113
+#: ../pro/includes/classes/admin-menu-access.php:1053
+msgid "Themes"
+msgstr "主题"
+
+#: ../includes/classes/capabilities-groups-manager.php:114
+msgid "Posts"
+msgstr "文章"
+
+#: ../includes/classes/capabilities-groups-manager.php:115
+msgid "Pages"
+msgstr "页"
+
+#: ../includes/classes/capabilities-groups-manager.php:116
+#: ../pro/includes/classes/admin-menu-access.php:1059
+#: ../pro/includes/classes/plugins-access-role-view.php:32
+#: ../pro/includes/classes/plugins-access-role.php:50
+msgid "Plugins"
+msgstr "插件"
+
+#: ../includes/classes/capabilities-groups-manager.php:117
+#: ../pro/includes/classes/admin-menu-access.php:1047
+msgid "Users"
+msgstr "用户"
+
+#: ../includes/classes/capabilities-groups-manager.php:121
+#: ../includes/classes/user-role-editor.php:547
+#: ../includes/settings-template.php:36
+msgid "Multisite"
+msgstr "多站点"
+
+#: ../includes/classes/capabilities-groups-manager.php:123
+msgid "Deprecated"
+msgstr "弃用"
+
+#: ../includes/classes/capabilities-groups-manager.php:126
+msgid "Custom capabilities"
+msgstr "自定义功能"
+
+#: ../includes/classes/capability.php:38
+msgid "Error: Capability name must contain latin characters and digits only!"
+msgstr "错误：能力名称必须包含拉丁字符和数字！"
+
+#: ../includes/classes/capability.php:47
+msgid "Error: this capability is used internally by WordPress"
+msgstr "错误：此功能由WordPress内部使用"
+
+#: ../includes/classes/capability.php:54
+msgid "Error: this word is used by WordPress as a role ID"
+msgstr ""
+
+#: ../includes/classes/capability.php:79 ../includes/classes/capability.php:190
+#: ../includes/classes/lib.php:1161 ../includes/classes/lib.php:1405
+#: ../includes/classes/lib.php:1520 ../includes/classes/lib.php:1567
+#: ../includes/classes/user-role-editor.php:641
+msgid "Insufficient permissions to work with User Role Editor"
+msgstr "使用用户角色编辑器的权限不足"
+
+#: ../includes/classes/capability.php:101
+#, php-format
+msgid "Capability %s was added successfully"
+msgstr "能力 %s 已成功添加"
+
+#: ../includes/classes/capability.php:103
+#, php-format
+msgid "Capability %s exists already"
+msgstr "等级%s已存在"
+
+#: ../includes/classes/capability.php:197
+#: ../includes/classes/capability.php:202
+msgid "There are no capabilities available for deletion!"
+msgstr "没有可删除的功能！"
+
+#: ../includes/classes/capability.php:208
+#, php-format
+msgid "Capability %s was removed successfully"
+msgstr "权限%s成功删除"
+
+#: ../includes/classes/capability.php:211
+msgid "capabilities were removed successfully"
+msgstr "功能已成功删除"
+
+#: ../includes/classes/grant-roles.php:153
+#: ../includes/classes/grant-roles.php:199
+msgid "Not enough permissions"
+msgstr "没有足够的权限"
+
+#: ../includes/classes/grant-roles.php:159
+msgid "Can not edit user or invalid data at the users list"
+msgstr "无法在用户列表中编辑用户或无效数据"
+
+#: ../includes/classes/grant-roles.php:167
+msgid "Invalid primary role"
+msgstr "主要角色无效"
+
+#: ../includes/classes/grant-roles.php:180
+msgid "Invalid data at the other roles list"
+msgstr "其他角色列表中的数据无效"
+
+#: ../includes/classes/grant-roles.php:189
+msgid "Roles were granted to users successfully"
+msgstr "角色已成功授予用户"
+
+#: ../includes/classes/grant-roles.php:206
+msgid "Wrong request, valid user ID was missed"
+msgstr "错误的请求，错过了有效的用户ID"
+
+#: ../includes/classes/grant-roles.php:212
+msgid "Requested user does not exist"
+msgstr "请求的用户不存在"
+
+#: ../includes/classes/grant-roles.php:235
+msgid "Primary Role: "
+msgstr "主要角色："
+
+#: ../includes/classes/grant-roles.php:241 ../includes/classes/user-view.php:98
+msgid "&mdash; No role for this site &mdash;"
+msgstr "&mdash; 这个站点没有用户组 &mdash;"
+
+#: ../includes/classes/grant-roles.php:255
+msgid "Other Roles: "
+msgstr "其他角色："
+
+#: ../includes/classes/grant-roles.php:286
+msgid "Grant Roles"
+msgstr "授予角色"
+
+#: ../includes/classes/grant-roles.php:322
+msgid "Grant roles to selected users"
+msgstr "向所选用户授予角色"
+
+#: ../includes/classes/grant-roles.php:323
+msgid "Select users to which you wish to grant roles!"
+msgstr "选择您要授予角色的用户！"
+
+#: ../includes/classes/grant-roles.php:324
+msgid "Select role(s) which you wish to grant!"
+msgstr "选择您希望授予的角色！"
+
+#: ../includes/classes/lib.php:211
+msgid "Error: wrong request"
+msgstr "错误：错误的请求"
+
+#: ../includes/classes/lib.php:295
+msgid "Error: "
+msgstr "错误："
+
+#: ../includes/classes/lib.php:295
+#: ../pro/includes/classes/widgets-show-view.php:146
+msgid "Role"
+msgstr "角色"
+
+#: ../includes/classes/lib.php:296
+msgid "does not exist"
+msgstr "不存在"
+
+#: ../includes/classes/lib.php:358
+msgid "Role is updated successfully"
+msgstr "角色更新成功"
+
+#: ../includes/classes/lib.php:360
+msgid "Roles are updated for all network"
+msgstr "为所有网络更新角色"
+
+#: ../includes/classes/lib.php:366
+msgid "Error occurred during role(s) update"
+msgstr "在角色更新期间出错"
+
+#: ../includes/classes/lib.php:373
+msgid "User capabilities are updated successfully"
+msgstr "用户功能已成功更新"
+
+#: ../includes/classes/lib.php:378
+msgid "Error occurred during user update"
+msgstr "用户更新过程中出错"
+
+#: ../includes/classes/lib.php:436
+msgid "User Roles are restored to WordPress default values. "
+msgstr "用户角色恢复到WordPress默认值。"
+
+#: ../includes/classes/lib.php:1414 ../includes/classes/lib.php:1480
+msgid ""
+"Error: Role ID must contain latin characters, digits, hyphens or underscore "
+"only!"
+msgstr "错误：角色ID只能包含拉丁字符，数字，连字符或下划线！"
+
+#: ../includes/classes/lib.php:1418 ../includes/classes/lib.php:1484
+msgid ""
+"Error: WordPress does not support numeric Role name (ID). Add latin "
+"characters to it."
+msgstr "错误：WordPress不支持数字角色名称（ID）。添加拉丁字符。"
+
+#: ../includes/classes/lib.php:1433
+#, php-format
+msgid "Role %s exists already"
+msgstr "角色%s已经存在"
+
+#: ../includes/classes/lib.php:1448
+msgid "Error is encountered during new role create operation"
+msgstr "在新角色创建操作中遇到错误"
+
+#: ../includes/classes/lib.php:1450
+#, php-format
+msgid "Role %s is created successfully"
+msgstr "成功创建角色%s"
+
+#: ../includes/classes/lib.php:1473
+msgid "Error: Role ID is empty!"
+msgstr "错误：角色ID为空！"
+
+#: ../includes/classes/lib.php:1491
+msgid "Error: Empty role display name is not allowed."
+msgstr "错误：空的角色显示名称不允许。"
+
+#: ../includes/classes/lib.php:1498
+#, php-format
+msgid "Role %s does not exists"
+msgstr "角色%s不存在"
+
+#: ../includes/classes/lib.php:1506
+#, php-format
+msgid "Role %s is renamed to %s successfully"
+msgstr "角色%s被成功重命名为%s。"
+
+#: ../includes/classes/lib.php:1578
+msgid "Error encountered during role delete operation"
+msgstr "角色删除操作期间遇到错误"
+
+#: ../includes/classes/lib.php:1580
+msgid "Unused roles are deleted successfully"
+msgstr "未使用的角色被成功删除"
+
+#: ../includes/classes/lib.php:1582
+#, php-format
+msgid "Role %s is deleted successfully"
+msgstr "成功删除角色%s"
+
+#: ../includes/classes/lib.php:1615
+#, php-format
+msgid "Default role for new users is set to %s successfully"
+msgstr "新用户的默认角色已成功设置为%s"
+
+#: ../includes/classes/lib.php:1617
+msgid "Error encountered during default role change operation"
+msgstr "默认角色更改操作期间遇到错误"
+
+#: ../includes/classes/lib.php:1620
+msgid "Can not set Administrator role as a default one"
+msgstr "无法将管理员角色设置为默认值"
+
+#: ../includes/classes/lib.php:1622
+msgid "This role does not exist - "
+msgstr "这个角色不存在 - "
+
+#: ../includes/classes/lib.php:1638
+msgid "Editor"
+msgstr "编辑"
+
+#: ../includes/classes/lib.php:1639
+msgid "Author"
+msgstr "作者"
+
+#: ../includes/classes/lib.php:1640
+msgid "Contributor"
+msgstr "贡献者"
+
+#: ../includes/classes/lib.php:1641
+msgid "Subscriber"
+msgstr "订阅者"
+
+#: ../includes/classes/lib.php:1643
+msgid "Switch themes"
+msgstr "切换主题"
+
+#: ../includes/classes/lib.php:1644
+msgid "Edit themes"
+msgstr "编辑主题"
+
+#: ../includes/classes/lib.php:1645
+msgid "Activate plugins"
+msgstr "激活插件"
+
+#: ../includes/classes/lib.php:1646
+msgid "Edit plugins"
+msgstr "编辑插件"
+
+#: ../includes/classes/lib.php:1647
+msgid "Edit users"
+msgstr "编辑用户"
+
+#: ../includes/classes/lib.php:1648
+msgid "Edit files"
+msgstr "编辑文件"
+
+#: ../includes/classes/lib.php:1649
+msgid "Manage options"
+msgstr "管理选项"
+
+#: ../includes/classes/lib.php:1650
+msgid "Moderate comments"
+msgstr "适度评论"
+
+#: ../includes/classes/lib.php:1651
+msgid "Manage categories"
+msgstr "管理类别"
+
+#: ../includes/classes/lib.php:1652
+msgid "Manage links"
+msgstr "管理链接"
+
+#: ../includes/classes/lib.php:1653
+msgid "Upload files"
+msgstr "上传文件"
+
+#: ../includes/classes/lib.php:1654
+#: ../pro/includes/classes/import-single-role.php:92
+msgid "Import"
+msgstr "导入"
+
+#: ../includes/classes/lib.php:1655
+msgid "Unfiltered html"
+msgstr "不过滤html"
+
+#: ../includes/classes/lib.php:1656
+msgid "Edit posts"
+msgstr "编辑帖子"
+
+#: ../includes/classes/lib.php:1657
+msgid "Edit others posts"
+msgstr "编辑他人的文章"
+
+#: ../includes/classes/lib.php:1658
+msgid "Edit published posts"
+msgstr "编辑已发布的文章"
+
+#: ../includes/classes/lib.php:1659
+msgid "Publish posts"
+msgstr "发布文章"
+
+#: ../includes/classes/lib.php:1660
+msgid "Edit pages"
+msgstr "编辑页面"
+
+#: ../includes/classes/lib.php:1661
+msgid "Read"
+msgstr "已读"
+
+#: ../includes/classes/lib.php:1662
+msgid "Level 10"
+msgstr "Level 10"
+
+#: ../includes/classes/lib.php:1663
+msgid "Level 9"
+msgstr "9级"
+
+#: ../includes/classes/lib.php:1664
+msgid "Level 8"
+msgstr "Level 8"
+
+#: ../includes/classes/lib.php:1665
+msgid "Level 7"
+msgstr "Level 7"
+
+#: ../includes/classes/lib.php:1666
+msgid "Level 6"
+msgstr "Level 6"
+
+#: ../includes/classes/lib.php:1667
+msgid "Level 5"
+msgstr "Level 5"
+
+#: ../includes/classes/lib.php:1668
+msgid "Level 4"
+msgstr "Level 4"
+
+#: ../includes/classes/lib.php:1669
+msgid "Level 3"
+msgstr "Level 3"
+
+#: ../includes/classes/lib.php:1670
+msgid "Level 2"
+msgstr "Level 2"
+
+#: ../includes/classes/lib.php:1671
+msgid "Level 1"
+msgstr "1级"
+
+#: ../includes/classes/lib.php:1672
+msgid "Level 0"
+msgstr "Level 0"
+
+#: ../includes/classes/lib.php:1673
+msgid "Edit others pages"
+msgstr "编辑其他页面"
+
+#: ../includes/classes/lib.php:1674
+msgid "Edit published pages"
+msgstr "编辑已发布的页面"
+
+#: ../includes/classes/lib.php:1675
+msgid "Publish pages"
+msgstr "发布页面"
+
+#: ../includes/classes/lib.php:1676
+msgid "Delete pages"
+msgstr "删除页面"
+
+#: ../includes/classes/lib.php:1677
+msgid "Delete others pages"
+msgstr "删除其他页面"
+
+#: ../includes/classes/lib.php:1678
+msgid "Delete published pages"
+msgstr "删除已发布的页面"
+
+#: ../includes/classes/lib.php:1679
+msgid "Delete posts"
+msgstr "删除帖子"
+
+#: ../includes/classes/lib.php:1680
+msgid "Delete others posts"
+msgstr "删除其他帖子"
+
+#: ../includes/classes/lib.php:1681
+msgid "Delete published posts"
+msgstr "删除已发布的文章"
+
+#: ../includes/classes/lib.php:1682
+msgid "Delete private posts"
+msgstr "删除私人帖子"
+
+#: ../includes/classes/lib.php:1683
+msgid "Edit private posts"
+msgstr "编辑私人帖子"
+
+#: ../includes/classes/lib.php:1684
+msgid "Read private posts"
+msgstr "阅读私人帖子"
+
+#: ../includes/classes/lib.php:1685
+msgid "Delete private pages"
+msgstr "删除私人页面"
+
+#: ../includes/classes/lib.php:1686
+msgid "Edit private pages"
+msgstr "编辑私人页面"
+
+#: ../includes/classes/lib.php:1687
+msgid "Read private pages"
+msgstr "阅读加密页面"
+
+#: ../includes/classes/lib.php:1688
+msgid "Delete users"
+msgstr "删除用户"
+
+#: ../includes/classes/lib.php:1689
+msgid "Create users"
+msgstr "创建用户"
+
+#: ../includes/classes/lib.php:1690
+msgid "Unfiltered upload"
+msgstr "未经过滤的上传"
+
+#: ../includes/classes/lib.php:1691
+msgid "Edit dashboard"
+msgstr "编辑控制面板"
+
+#: ../includes/classes/lib.php:1692
+msgid "Update plugins"
+msgstr "更新插件"
+
+#: ../includes/classes/lib.php:1693
+msgid "Delete plugins"
+msgstr "删除插件"
+
+#: ../includes/classes/lib.php:1694
+msgid "Install plugins"
+msgstr "安装插件"
+
+#: ../includes/classes/lib.php:1695
+msgid "Update themes"
+msgstr "更新主题"
+
+#: ../includes/classes/lib.php:1696
+msgid "Install themes"
+msgstr "安装主题"
+
+#: ../includes/classes/lib.php:1697
+msgid "Update core"
+msgstr "更新核心"
+
+#: ../includes/classes/lib.php:1698
+msgid "List users"
+msgstr "列出用户"
+
+#: ../includes/classes/lib.php:1699
+msgid "Remove users"
+msgstr "删除用户"
+
+#: ../includes/classes/lib.php:1700
+msgid "Add users"
+msgstr "添加用户"
+
+#: ../includes/classes/lib.php:1701
+msgid "Promote users"
+msgstr "升级用户"
+
+#: ../includes/classes/lib.php:1702
+msgid "Edit theme options"
+msgstr "编辑主题选项"
+
+#: ../includes/classes/lib.php:1703
+msgid "Delete themes"
+msgstr "删除主题"
+
+#: ../includes/classes/lib.php:1704
+#: ../pro/includes/classes/export-single-role.php:55
+msgid "Export"
+msgstr "导出"
+
+#: ../includes/classes/lib.php:1878
+msgid "Version:"
+msgstr "版本："
+
+#: ../includes/classes/lib.php:1879
+msgid "Author's website"
+msgstr "作者的网站"
+
+#: ../includes/classes/lib.php:1880
+msgid "Plugin webpage"
+msgstr "插件网页"
+
+#: ../includes/classes/lib.php:1881
+msgid "Plugin download"
+msgstr "插件下载"
+
+#: ../includes/classes/lib.php:1882
+#: ../includes/classes/user-role-editor.php:506
+msgid "Changelog"
+msgstr "更新日志"
+
+#: ../includes/classes/lib.php:1883
+msgid "FAQ"
+msgstr "常见问题"
+
+#: ../includes/classes/lib.php:2063
+#, php-format
+msgid "Denied: %s"
+msgstr "拒绝：%s"
+
+#: ../includes/classes/role-additional-options.php:53
+msgid "Hide admin bar"
+msgstr "隐藏管理栏"
+
+#: ../includes/classes/role-additional-options.php:113
+msgid "Additional Options"
+msgstr "其他选项"
+
+#: ../includes/classes/role-view.php:74
+msgid "None"
+msgstr "没有一个"
+
+#: ../includes/classes/role-view.php:107
+msgid "Delete All Unused Roles"
+msgstr "删除所有未使用的角色"
+
+#: ../includes/classes/role-view.php:207 ../includes/classes/role-view.php:218
+msgid "Role name (ID): "
+msgstr "角色名称（ID）："
+
+#: ../includes/classes/role-view.php:209 ../includes/classes/role-view.php:220
+msgid "Display Role Name: "
+msgstr "显示角色名称："
+
+#: ../includes/classes/role-view.php:211
+msgid "Make copy of: "
+msgstr "复制："
+
+#: ../includes/classes/role-view.php:227
+msgid "Select Role:"
+msgstr "选择角色："
+
+#: ../includes/classes/role-view.php:252
+msgid "Capability name (ID): "
+msgstr "权限名:"
+
+#: ../includes/classes/role-view.php:364 ../includes/classes/user-view.php:155
+msgid "Show capabilities in human readable form"
+msgstr "以可读形式显示功能"
+
+#: ../includes/classes/role-view.php:374 ../includes/classes/screen-help.php:21
+#: ../includes/classes/user-view.php:165 ../includes/settings-template.php:78
+msgid "Show deprecated capabilities"
+msgstr "显示弃用的功能"
+
+#: ../includes/classes/role-view.php:378
+#: ../pro/includes/classes/import-roles-view.php:26
+msgid "If checked, then apply action to ALL sites of this Network"
+msgstr "如果选中，则将操作应用于此网络的所有站点"
+
+#: ../includes/classes/role-view.php:391 ../includes/classes/tools.php:44
+#: ../pro/includes/classes/import-roles-view.php:31
+msgid "Apply to All Sites"
+msgstr "适用于所有网站"
+
+#: ../includes/classes/role-view.php:408
+msgid "Select Role and change its capabilities:"
+msgstr "选择角色并更改其功能："
+
+#: ../includes/classes/screen-help.php:12
+#: ../includes/classes/screen-help.php:43
+#: ../includes/classes/screen-help.php:62
+#: ../includes/classes/screen-help.php:81
+msgid "User Role Editor Options page help"
+msgstr "用户角色编辑器选项页帮助"
+
+#: ../includes/classes/screen-help.php:15 ../includes/settings-template.php:61
+msgid "Show Administrator role at User Role Editor"
+msgstr "在用户角色编辑器中显示管理员角色"
+
+#: ../includes/classes/screen-help.php:16
+msgid ""
+"turn this option on in order to make the \"Administrator\" role available at "
+"the User Role Editor roles selection drop-down list. It is hidden by default "
+"for security reasons."
+msgstr ""
+"打开这个选项以使“管理员”角色在用户角色编辑器角色选择下拉列表中可用。出于安全"
+"原因，它默认是隐藏的。"
+
+#: ../includes/classes/screen-help.php:18 ../includes/settings-template.php:70
+msgid "Show capabilities in the human readable form"
+msgstr "以人类可读的形式显示功能"
+
+#: ../includes/classes/screen-help.php:19
+msgid ""
+"automatically converts capability names from the technical form for internal "
+"use like \"edit_others_posts\" to more user friendly form, e.g. \"Edit "
+"others posts\"."
+msgstr ""
+"自动转换能力的名字从技术形态内部使用像“edit_others_posts”更加用户友好的形式，"
+"例如“编辑别人的帖子”。"
+
+#: ../includes/classes/screen-help.php:22
+msgid ""
+"Capabilities like \"level_0\", \"level_1\" are deprecated and are not used "
+"by WordPress. They are left at the user roles for the compatibility purpose "
+"with the old themes and plugins code. Turning on this option will show those "
+"deprecated capabilities."
+msgstr ""
+"等级像“等级0”、“等级1”是过时的和不使用的WordPress。它们与旧主题和插件代码一起"
+"留在用户角色的兼容性目标上。打开此选项会显示那些过时的能力。"
+
+#: ../includes/classes/screen-help.php:25 ../includes/settings-template.php:86
+msgid "Confirm role update"
+msgstr "确认角色更新"
+
+#: ../includes/classes/screen-help.php:26
+msgid "Show confirmation dialog before save changes made to a current role."
+msgstr "在保存对当前角色所做的更改之前显示确认对话框。"
+
+#: ../includes/classes/screen-help.php:27 ../includes/settings-template.php:94
+msgid "Edit user capabilities"
+msgstr "编辑用户功能"
+
+#: ../includes/classes/screen-help.php:28
+msgid ""
+"If turned off - capabilities section of selected user is shown in readonly "
+"mode. Administrator can not assign capabilities to the user directly. He "
+"should make it using roles only."
+msgstr ""
+"如果关闭 - 所选用户的功能部分以只读模式显示。 管理员无法直接向用户分配功能。 "
+"他应该只使用角色。"
+
+#: ../includes/classes/screen-help.php:47 ../includes/settings-template.php:141
+msgid "Count users without role"
+msgstr "计算没有角色的用户"
+
+#: ../includes/classes/screen-help.php:48
+msgid ""
+"Show at the \"Users\" page a quant of users without role. Module allows to "
+"assign all of them an empty role \"No rights\", in order to look on the "
+"users list with role \"No rights\" at the separate tab then."
+msgstr ""
+"显示在“用户”页的数量的用户没有作用。模块允许分配给他们一个空的角色“没有权"
+"利”，以查看用户列表中的角色“没有权利”在单独的标签，然后。"
+
+#: ../includes/classes/screen-help.php:65
+msgid "Other default roles for new registered user"
+msgstr "新注册用户的其他默认角色"
+
+#: ../includes/classes/screen-help.php:66
+msgid ""
+"select roles below to assign them to the new user automatically as an "
+"addition to the primary role. Note for multisite environment: take into "
+"account that other default roles should exist at the site, in order to be "
+"assigned to the new registered users."
+msgstr ""
+"选择下面的角色，将其自动分配给新用户，作为主角色的添加。对于多站点环境注：考"
+"虑到其他的默认角色应该在网站的存在，是为了给新注册用户。"
+
+#: ../includes/classes/screen-help.php:84
+msgid "Allow non super-administrators to create, edit and delete users"
+msgstr "允许非超级管理员创建、编辑和删除用户"
+
+#: ../includes/classes/screen-help.php:85
+msgid ""
+"Super administrator only may create, edit and delete users under WordPress "
+"multi-site by default. Turn this option on in order to remove this "
+"limitation."
+msgstr ""
+"超级管理员只能在WordPress多站点下创建，编辑和删除用户。 打开此选项以消除此限"
+"制。"
+
+#: ../includes/classes/settings.php:70 ../includes/classes/settings.php:90
+#: ../includes/classes/settings.php:140
+msgid "User Role Editor options are updated"
+msgstr "用户角色编辑器选项已更新"
+
+#: ../includes/classes/settings.php:120
+msgid "Default Roles are updated"
+msgstr "默认角色已更新"
+
+#: ../includes/classes/settings.php:151
+msgid "Tools: Reset: User Roles were initialized"
+msgstr "工具：重置：用户角色已初始化"
+
+#: ../includes/classes/tools.php:32
+msgid "WARNING!"
+msgstr "警告！"
+
+#: ../includes/classes/tools.php:34
+msgid ""
+"Resetting will setup default user roles and capabilities from WordPress core."
+msgstr "重置将设置WordPress核心的默认用户角色和功能。"
+
+#: ../includes/classes/tools.php:35
+msgid ""
+"If any plugins (such as WooCommerce, S2Member and many others) have changed "
+"user roles and capabilities during installation, those changes will be LOST!"
+msgstr ""
+"如果任何插件（例如WooCommerce，S2Member和许多其他插件）在安装期间更改了用户角"
+"色和功能，那么这些更改将会丢失！"
+
+#: ../includes/classes/tools.php:36
+msgid ""
+"For more information on how to undo undesired changes and restore plugins "
+"capabilities in case you lost them by mistake go to: "
+msgstr ""
+"有关如何撤消不需要的更改并恢复插件功能的更多信息，以防您错误地丢失它们，请访"
+"问："
+
+#: ../includes/classes/tools.php:45
+msgid ""
+"If checked, then apply action to ALL sites. Main site only is affected in "
+"other case."
+msgstr "如果选中，则将操作应用于所有站点。 主站点仅在其他情况下受到影响。"
+
+#: ../includes/classes/tools.php:50
+msgid "Reset Roles to its original state"
+msgstr "将角色重置为其原始状态"
+
+#: ../includes/classes/tools.php:50
+#: ../includes/classes/user-role-editor.php:729
+msgid "Reset"
+msgstr "重置"
+
+#: ../includes/classes/user-other-roles.php:85
+#: ../includes/classes/user-other-roles.php:194
+#: ../pro/includes/classes/other-roles-access.php:59
+msgid "Other Roles"
+msgstr "其他角色"
+
+#: ../includes/classes/user-other-roles.php:86
+msgid "Select additional roles for this user"
+msgstr "为此用户选择其他角色"
+
+#: ../includes/classes/user-other-roles.php:173
+#: ../includes/classes/user-role-editor.php:387
+msgid "Capabilities"
+msgstr "权限"
+
+#: ../includes/classes/user-other-roles.php:180
+msgid "Edit"
+msgstr "编辑"
+
+#: ../includes/classes/user-other-roles.php:229
+msgid "Additional Capabilities"
+msgstr "其他功能"
+
+#: ../includes/classes/user-role-editor.php:284
+msgid "Change role for users without role"
+msgstr "更改没有角色的用户的角色"
+
+#: ../includes/classes/user-role-editor.php:285
+msgid "To:"
+msgstr "至："
+
+#: ../includes/classes/user-role-editor.php:286
+msgid "No rights"
+msgstr "没有权利"
+
+#: ../includes/classes/user-role-editor.php:287
+msgid "Provide new role"
+msgstr "提供新角色"
+
+#: ../includes/classes/user-role-editor.php:359
+#: ../includes/classes/user-role-editor.php:361
+msgid "You do not have permission to edit this user."
+msgstr "您没有权限编辑此用户。"
+
+#: ../includes/classes/user-role-editor.php:480
+#: ../includes/classes/user-role-editor.php:493
+#: ../pro/includes/classes/admin-menu-access.php:1065
+msgid "Settings"
+msgstr "设定"
+
+#: ../includes/classes/user-role-editor.php:535
+#: ../includes/settings-template.php:26
+msgid "Additional Modules"
+msgstr "附加模块"
+
+#: ../includes/classes/user-role-editor.php:541
+#: ../includes/settings-template.php:31
+msgid "Default Roles"
+msgstr "默认角色"
+
+#: ../includes/classes/user-role-editor.php:608
+msgid ""
+"You do not have sufficient permissions to manage options for User Role "
+"Editor."
+msgstr "您没有足够的权限来管理用户角色编辑器的选项。"
+
+#: ../includes/classes/user-role-editor.php:679
+#: ../includes/classes/user-role-editor.php:726
+msgid "Confirm"
+msgstr "确认"
+
+#: ../includes/classes/user-role-editor.php:680
+#: ../includes/classes/user-role-editor.php:727
+msgid "Yes"
+msgstr "是"
+
+#: ../includes/classes/user-role-editor.php:681
+#: ../includes/classes/user-role-editor.php:728
+msgid "No"
+msgstr "否"
+
+#: ../includes/classes/user-role-editor.php:682
+#: ../pro/includes/classes/admin-menu-view.php:41
+#: ../pro/includes/classes/meta-boxes-access.php:57
+#: ../pro/includes/classes/other-roles-access.php:61
+#: ../pro/includes/classes/plugins-access-role.php:52
+#: ../pro/includes/classes/plugins-access-user.php:134
+#: ../pro/includes/classes/posts-edit-access-role.php:52
+#: ../pro/includes/classes/posts-view-access.php:66
+#: ../pro/includes/classes/user-role-editor-pro.php:225
+#: ../pro/includes/classes/widgets-admin-view.php:43
+#: ../pro/includes/classes/widgets-show-view.php:103
+msgid "Update"
+msgstr "更新"
+
+#: ../includes/classes/user-role-editor.php:683
+msgid "Please confirm permissions update"
+msgstr "请确认权限更新"
+
+#: ../includes/classes/user-role-editor.php:684
+msgid "Add New Role"
+msgstr "添加新角色"
+
+#: ../includes/classes/user-role-editor.php:685
+#: ../includes/classes/user-role-editor.php:690
+msgid "Rename Role"
+msgstr "重命名角色"
+
+#: ../includes/classes/user-role-editor.php:686
+msgid " Role name (ID) can not be empty!"
+msgstr "用户组名称（ID）不能为空"
+
+#: ../includes/classes/user-role-editor.php:687
+msgid ""
+" Role name (ID) must contain latin characters, digits, hyphens or underscore "
+"only!"
+msgstr "用户组名称（ID）只能包含拉丁字符，数字，字符或下划线"
+
+#: ../includes/classes/user-role-editor.php:688
+msgid ""
+" WordPress does not support numeric Role name (ID). Add latin characters to "
+"it."
+msgstr "WordPress不支持纯数字角色名称（ID）。请增加拉丁字符。"
+
+#: ../includes/classes/user-role-editor.php:689
+msgid "Add Role"
+msgstr "添加角色"
+
+#: ../includes/classes/user-role-editor.php:691
+msgid "Delete Role"
+msgstr "删除角色"
+
+#: ../includes/classes/user-role-editor.php:692
+#: ../pro/includes/classes/plugins-access-user.php:135
+#: ../pro/includes/classes/widgets-show-view.php:101
+msgid "Cancel"
+msgstr "取消"
+
+#: ../includes/classes/user-role-editor.php:693
+msgid "Add Capability"
+msgstr "添加功能"
+
+#: ../includes/classes/user-role-editor.php:694
+#: ../includes/classes/user-role-editor.php:698
+msgid "Delete Capability"
+msgstr "删除权限"
+
+#: ../includes/classes/user-role-editor.php:695
+#: ../includes/classes/user-role-editor.php:735
+msgid "Continue?"
+msgstr "继续？"
+
+#: ../includes/classes/user-role-editor.php:696
+msgid "Default Role"
+msgstr "默认角色"
+
+#: ../includes/classes/user-role-editor.php:697
+msgid "Set New Default Role"
+msgstr "设置新的默认角色"
+
+#: ../includes/classes/user-role-editor.php:699
+msgid ""
+"Warning! Be careful - removing critical capability could crash some plugin "
+"or other custom code"
+msgstr "警告！ 小心 - 删除关键功能可能会导致某些插件或其他自定义代码崩溃"
+
+#: ../includes/classes/user-role-editor.php:700
+msgid " Capability name (ID) can not be empty!"
+msgstr " 能力名称（ID）不能为空！"
+
+#: ../includes/classes/user-role-editor.php:701
+msgid ""
+" Capability name (ID) must contain latin characters, digits, hyphens or "
+"underscore only!"
+msgstr " 能力名称（ID）只能包含拉丁字符，数字，连字符或下划线！"
+
+#: ../includes/classes/user-role-editor.php:730
+msgid "DANGER!"
+msgstr "危险！"
+
+#: ../includes/classes/user-role-editor.php:731
+msgid ""
+" Resetting will restore default user roles and capabilities from WordPress "
+"core."
+msgstr " 重置将从WordPress核心恢复默认的用户角色和功能。"
+
+#: ../includes/classes/user-role-editor.php:732
+msgid ""
+"If any plugins (such as WooCommerce, S2Member and many others) have changed "
+"user roles and capabilities during installation, all those changes will be "
+"LOST!"
+msgstr ""
+"如果任何插件（如WooCommerce，S2Member和其他许多插件）在安装期间更改了用户角色"
+"和功能，所有这些更改都将丢失！"
+
+#: ../includes/classes/user-role-editor.php:733
+msgid ""
+"For more information on how to undo undesired changes and restore plugin "
+"capabilities go to"
+msgstr "有关如何撤消不需要的更改和恢复插件功能的更多信息，请参阅"
+
+#: ../includes/classes/user-view.php:61
+msgid "Switch&nbsp;To"
+msgstr "开关&nbsp;至"
+
+#: ../includes/classes/user-view.php:73
+msgid "Network Super Admin"
+msgstr "网络超级管理员"
+
+#: ../includes/classes/user-view.php:138
+msgid "Change capabilities for user"
+msgstr "更改用户的功能"
+
+#: ../includes/classes/user-view.php:176
+msgid "Primary Role:"
+msgstr "主要角色："
+
+#: ../includes/classes/user-view.php:182
+msgid "bbPress Role:"
+msgstr "bbPress角色："
+
+#: ../includes/classes/user-view.php:191
+msgid "Other Roles:"
+msgstr "其他角色："
+
+#: ../includes/classes/view.php:273
+msgid "Working..."
+msgstr "加工..."
+
+#: ../includes/classes/view.php:303
+msgid "Group"
+msgstr "组"
+
+#: ../includes/classes/view.php:303
+msgid "Total"
+msgstr "总计"
+
+#: ../includes/classes/view.php:303
+msgid "Granted"
+msgstr "授予"
+
+#: ../includes/classes/view.php:316
+msgid "Quick filter:"
+msgstr "快速过滤："
+
+#: ../includes/classes/view.php:319
+msgid "Granted Only"
+msgstr "仅授予"
+
+#: ../includes/classes/view.php:322
+msgid "Columns:"
+msgstr "列："
+
+#: ../includes/settings-template.php:16
+msgid "User Role Editor - Options"
+msgstr "用户角色编辑器 - 选项"
+
+#: ../includes/settings-template.php:42
+msgid "Tools"
+msgstr "工具"
+
+#: ../includes/settings-template.php:46
+msgid "About"
+msgstr "关于"
+
+#: ../includes/settings-template.php:101
+msgid "Show capabilities in"
+msgstr "显示功能"
+
+#: ../includes/settings-template.php:107
+msgid "columns"
+msgstr "列"
+
+#: ../includes/settings-template.php:121 ../includes/settings-template.php:156
+#: ../includes/settings-template.php:188 ../includes/settings-template.php:220
+#: ../pro/includes/classes/content-view-restrictions.php:255
+#: ../pro/includes/classes/themes-access.php:150
+msgid "Save"
+msgstr "保存"
+
+#: ../includes/settings-template.php:168
+msgid "Primary default role: "
+msgstr "系统默认角色："
+
+#: ../includes/settings-template.php:175
+msgid "Other default roles for new registered user: "
+msgstr "新注册用户的其他默认角色："
+
+#: ../includes/settings-template.php:181
+msgid ""
+"Note for multisite environment: take into account that other default roles "
+"should exist at the site, in order to be assigned to the new registered "
+"users."
+msgstr ""
+"多站点环境注意事项：考虑到站点中应存在其他默认角色，以便分配给新注册用户。"
+
+#: ../includes/settings-template.php:207
+msgid "Allow non super administrators to create, edit, and delete users"
+msgstr "允许非超级管理员创建，编辑和删除用户"
+
+#: ../pro/includes/classes/addons-manager.php:71
+msgid "Admin menu access restrictions"
+msgstr "管理菜单访问限制"
+
+#: ../pro/includes/classes/addons-manager.php:78
+msgid "Widgets admin access restrictions"
+msgstr "小部件管理访问限制"
+
+#: ../pro/includes/classes/addons-manager.php:81
+msgid "Widgets show access restrictions"
+msgstr "小部件显示访问限制"
+
+#: ../pro/includes/classes/addons-manager.php:85
+msgid "Meta Boxes access restrictions"
+msgstr "元盒访问限制"
+
+#: ../pro/includes/classes/addons-manager.php:89
+msgid "Other Roles access restrictions"
+msgstr "其他角色访问限制"
+
+#: ../pro/includes/classes/addons-manager.php:93
+msgid "Posts/Pages edit access restrictions"
+msgstr "帖子/页面编辑访问限制"
+
+#: ../pro/includes/classes/addons-manager.php:97
+msgid "Plugins activation/deactivation access restrictions"
+msgstr "插件激活/去激活访问限制"
+
+#: ../pro/includes/classes/addons-manager.php:110
+msgid "Posts/Pages view access restrictions"
+msgstr "页面/页面查看访问限制"
+
+#: ../pro/includes/classes/admin-menu-access.php:1015
+msgid "My Sites"
+msgstr "我的站点"
+
+#: ../pro/includes/classes/admin-menu-access.php:1028
+msgid "Network Admin"
+msgstr "网络管理"
+
+#: ../pro/includes/classes/admin-menu-access.php:1035
+#: ../pro/includes/classes/admin-menu-access.php:1106
+msgid "Dashboard"
+msgstr "仪表盘"
+
+#: ../pro/includes/classes/admin-menu-access.php:1041
+msgid "Sites"
+msgstr "站点"
+
+#: ../pro/includes/classes/admin-menu-access.php:1117
+msgid "New Post"
+msgstr "最新帖子"
+
+#: ../pro/includes/classes/admin-menu-access.php:1127
+msgid "Manage Comments"
+msgstr "管理评论"
+
+#: ../pro/includes/classes/admin-menu-access.php:1135
+msgid "Visit Site"
+msgstr "访问网站"
+
+#: ../pro/includes/classes/admin-menu-copy.php:245
+#: ../pro/includes/classes/admin-menu-copy.php:263
+#: ../pro/includes/classes/admin-menu-view.php:69
+msgid "Profile"
+msgstr "个人资料"
+
+#: ../pro/includes/classes/admin-menu-copy.php:265
+#: ../pro/includes/classes/admin-menu-view.php:71
+msgid "Your Profile"
+msgstr "你的个人资料"
+
+#: ../pro/includes/classes/admin-menu-copy.php:268
+#: ../pro/includes/classes/admin-menu-copy.php:270
+#: ../pro/includes/classes/admin-menu-view.php:73
+#: ../pro/includes/classes/admin-menu-view.php:75
+msgid "Add New User"
+msgstr "添加新用户"
+
+#: ../pro/includes/classes/admin-menu-url-allowed-args.php:206
+msgid "Wrong request: Missed base URL"
+msgstr "错误请求：丢失的基本URL"
+
+#: ../pro/includes/classes/admin-menu-url-allowed-args.php:225
+msgid "Allowed arguments list was updated successfully"
+msgstr "允许参数列表被成功更新"
+
+#: ../pro/includes/classes/admin-menu-view.php:39
+msgid "Admin Menu"
+msgstr "管理菜单"
+
+#: ../pro/includes/classes/admin-menu-view.php:40
+msgid "Admin menu"
+msgstr "管理菜单"
+
+#: ../pro/includes/classes/admin-menu-view.php:153
+#: ../pro/includes/classes/admin-menu-view.php:371
+#: ../pro/includes/classes/admin-menu.php:180
+msgid "URE: Insufficient permissions to use this add-on"
+msgstr "URE:使用此附件的权限不足"
+
+#: ../pro/includes/classes/admin-menu-view.php:188
+msgid "Block menu items:"
+msgstr "阻止菜单项："
+
+#: ../pro/includes/classes/admin-menu-view.php:190
+#: ../pro/includes/classes/other-roles.php:200
+#: ../pro/includes/classes/plugins-access-view.php:47
+#: ../pro/includes/classes/posts-view.php:178
+#: ../pro/includes/classes/widgets-show-view.php:138
+msgid "Selected"
+msgstr "已选择"
+
+#: ../pro/includes/classes/admin-menu-view.php:192
+#: ../pro/includes/classes/other-roles.php:202
+#: ../pro/includes/classes/plugins-access-view.php:49
+#: ../pro/includes/classes/posts-view.php:180
+#: ../pro/includes/classes/widgets-show-view.php:140
+msgid "Not Selected"
+msgstr "没有选择"
+
+#: ../pro/includes/classes/admin-menu-view.php:205
+msgid "Menu"
+msgstr "菜单"
+
+#: ../pro/includes/classes/admin-menu-view.php:206
+msgid "Submenu"
+msgstr "子菜单"
+
+#: ../pro/includes/classes/admin-menu-view.php:207
+msgid "User capability"
+msgstr "用户能力"
+
+#: ../pro/includes/classes/admin-menu-view.php:208
+#: ../pro/includes/classes/admin-menu-view.php:390
+msgid "URL"
+msgstr "URL"
+
+#: ../pro/includes/classes/admin-menu-view.php:310
+msgid "Base URL"
+msgstr "基 URL"
+
+#: ../pro/includes/classes/admin-menu-view.php:318
+msgid "Allowed arguments"
+msgstr "允许的参数"
+
+#: ../pro/includes/classes/admin-menu-view.php:319
+msgid "(comma separated)"
+msgstr "（以逗号分隔）"
+
+#: ../pro/includes/classes/admin-menu-view.php:327
+msgid "Extract from URL"
+msgstr "从URL中提取"
+
+#: ../pro/includes/classes/admin-menu-view.php:389
+msgid "Menu item"
+msgstr "菜单项"
+
+#: ../pro/includes/classes/admin-menu-view.php:391
+msgid "Allowed args"
+msgstr "允许ARG"
+
+#: ../pro/includes/classes/admin-menu.php:186
+msgid ""
+"URE: administrator menu access: Wrong object type. Data was not updated."
+msgstr "URE: 管理员菜单访问限制 ︰ 对象类型错误。未更新数据。"
+
+#: ../pro/includes/classes/admin-menu.php:192
+msgid "URE: administrator menu access: Empty object name. Data was not updated"
+msgstr "URE:管理员菜单访问：空对象名称。数据未更新"
+
+#: ../pro/includes/classes/admin-menu.php:202
+msgid "Administrator menu access data was updated successfully"
+msgstr "管理员菜单访问数据已成功更新"
+
+#: ../pro/includes/classes/bbpress.php:183
+msgid "bbPress"
+msgstr "bbPress"
+
+#: ../pro/includes/classes/content-view-restrictions.php:99
+msgid "Content View Restrictions"
+msgstr "内容视图限制"
+
+#: ../pro/includes/classes/content-view-restrictions.php:182
+msgid "View Access:"
+msgstr "视图访问："
+
+#: ../pro/includes/classes/content-view-restrictions.php:184
+#: ../pro/includes/settings-content-view-defaults.php:15
+msgid "Allow View"
+msgstr "允许视图"
+
+#: ../pro/includes/classes/content-view-restrictions.php:185
+#: ../pro/includes/settings-content-view-defaults.php:18
+msgid "Prohibit View"
+msgstr "禁止视图"
+
+#: ../pro/includes/classes/content-view-restrictions.php:190
+#: ../pro/includes/settings-content-view-defaults.php:22
+msgid "For Users:"
+msgstr "用户："
+
+#: ../pro/includes/classes/content-view-restrictions.php:193
+#: ../pro/includes/settings-content-view-defaults.php:25
+msgid "All visitors (logged in or not)"
+msgstr "所有访客（登录或不登录）"
+
+#: ../pro/includes/classes/content-view-restrictions.php:195
+#: ../pro/includes/settings-content-view-defaults.php:27
+msgid "Any User Role (logged in only)"
+msgstr "任何用户角色（仅登录）"
+
+#: ../pro/includes/classes/content-view-restrictions.php:197
+msgid "Selected User Roles"
+msgstr "选定的用户角色"
+
+#: ../pro/includes/classes/content-view-restrictions.php:199
+#: ../pro/includes/classes/content-view-restrictions.php:253
+#: ../pro/includes/classes/front-end-menu-view.php:45
+msgid "Edit Roles List"
+msgstr "编辑角色列表"
+
+#: ../pro/includes/classes/content-view-restrictions.php:205
+#: ../pro/includes/settings-content-view-defaults.php:33
+msgid "Action:"
+msgstr "动作："
+
+#: ../pro/includes/classes/content-view-restrictions.php:209
+#: ../pro/includes/settings-content-view-defaults.php:42
+msgid "Return HTTP 404 error"
+msgstr "返回HTTP 404错误"
+
+#: ../pro/includes/classes/content-view-restrictions.php:212
+msgid "Show access error message"
+msgstr "显示访问错误消息"
+
+#: ../pro/includes/classes/content-view-restrictions.php:215
+msgid "Show custom access error message"
+msgstr "显示自定义访问错误消息"
+
+#: ../pro/includes/classes/content-view-restrictions.php:219
+#: ../pro/includes/settings-content-view-defaults.php:49
+msgid "Redirect to URL"
+msgstr "重定向到URL"
+
+#: ../pro/includes/classes/content-view-restrictions.php:223
+msgid "User Role Editor Pro"
+msgstr "用户角色编辑器"
+
+#: ../pro/includes/classes/content-view-restrictions.php:254
+msgid "Roles List restrict/allow content view"
+msgstr "角色列表限制/允许内容视图"
+
+#: ../pro/includes/classes/content-view-restrictions.php:256
+#: ../pro/includes/classes/themes-access.php:151
+#: ../pro/includes/classes/user-role-editor-pro.php:226
+msgid "Close"
+msgstr "关闭"
+
+#: ../pro/includes/classes/export-single-role.php:90
+msgid "Role ID is empty"
+msgstr "角色ID为空"
+
+#: ../pro/includes/classes/export-single-role.php:95
+#: ../pro/includes/classes/import-single-role.php:295
+msgid "Wrong nonce. Action prohibitied."
+msgstr "错误的随机数， 禁止行动。"
+
+#: ../pro/includes/classes/export-single-role.php:100
+msgid "You do not have sufficient permissions to export roles."
+msgstr "您没有足够的权限来导出角色。"
+
+#: ../pro/includes/classes/export-single-role.php:105
+msgid "Role requested for export does not exist"
+msgstr "请求导出的角色不存在"
+
+#: ../pro/includes/classes/export-single-role.php:246
+msgid "Export data error."
+msgstr "导出数据错误。"
+
+#: ../pro/includes/classes/front-end-menu-access.php:68
+msgid "Select roles"
+msgstr "选择角色"
+
+#: ../pro/includes/classes/front-end-menu-view.php:31
+msgid "Show to:"
+msgstr "显示给："
+
+#: ../pro/includes/classes/front-end-menu-view.php:33
+msgid "Everyone"
+msgstr "所有人"
+
+#: ../pro/includes/classes/front-end-menu-view.php:35
+msgid "Logged-in users"
+msgstr "登录用户"
+
+#: ../pro/includes/classes/front-end-menu-view.php:37
+msgid "Logged-in users with roles"
+msgstr "具有角色的登录用户"
+
+#: ../pro/includes/classes/front-end-menu-view.php:40
+msgid "Not logged-in"
+msgstr "未登录"
+
+#: ../pro/includes/classes/front-end-menu-view.php:42
+msgid "Not logged-in and logged-in users with roles"
+msgstr "未登录和已登录的角色用户"
+
+#: ../pro/includes/classes/gf-access.php:97
+msgid "Gravity Forms Restrictions"
+msgstr "重力形式限制"
+
+#: ../pro/includes/classes/gf-access.php:100
+msgid "Allow access to forms with ID (comma separated) "
+msgstr "允许访问带ID的表单（以逗号分隔）"
+
+#: ../pro/includes/classes/import-roles-view.php:37
+msgid "Together with selected add-ons data:"
+msgstr "与选定的附加组件数据一起："
+
+#: ../pro/includes/classes/import-roles-view.php:38
+msgid ""
+"(addon settings are imported in case addon is presented at the imported file)"
+msgstr "（如果在导入的文件中显示插件，则导入插件设置）"
+
+#: ../pro/includes/classes/import-single-role.php:93
+msgid "Import Role"
+msgstr "导入角色"
+
+#: ../pro/includes/classes/import-single-role.php:94
+msgid "Importing to"
+msgstr "导入到"
+
+#: ../pro/includes/classes/import-single-role.php:95
+msgid "Select file with role data"
+msgstr "选择包含角色数据的文件"
+
+#: ../pro/includes/classes/import-single-role.php:126
+msgid "Role was imported successfully"
+msgstr "角色已成功导入"
+
+#: ../pro/includes/classes/import-single-role.php:128
+msgid "Unknown error: Role import was failed"
+msgstr "未知错误：角色导入失败"
+
+#: ../pro/includes/classes/import-single-role.php:183
+msgid "Import failure: Role file is broken possibly."
+msgstr "导入失败：角色文件可能已损坏。"
+
+#: ../pro/includes/classes/import-single-role.php:188
+msgid "Import failure: Role ID was not found"
+msgstr "导入失败：找不到角色ID"
+
+#: ../pro/includes/classes/import-single-role.php:300
+msgid "You do not have sufficient permissions to import roles."
+msgstr "您没有足够的权限来导入角色。"
+
+#: ../pro/includes/classes/import-single-role.php:306
+msgid "File upload error."
+msgstr "文件上传错误。"
+
+#: ../pro/includes/classes/import-single-role.php:312
+msgid "File upload error. Can not write to"
+msgstr "文件上传错误。 不能写"
+
+#: ../pro/includes/classes/import-single-role.php:331
+msgid "There was database error during role import"
+msgstr "角色导入期间出现数据库错误"
+
+#: ../pro/includes/classes/import-single-role.php:333
+msgid "Role was imported"
+msgstr "角色已导入"
+
+#: ../pro/includes/classes/import-single-role.php:348
+msgid "Missed site ID"
+msgstr "错过了网站ID"
+
+#: ../pro/includes/classes/import-single-role.php:352
+msgid "Wrong site ID"
+msgstr "网站ID错误"
+
+#: ../pro/includes/classes/import-single-role.php:357
+#: ../pro/includes/classes/import-single-role.php:369
+msgid "Site does not exist"
+msgstr "网站不存在"
+
+#: ../pro/includes/classes/import-single-role.php:363
+msgid "Wrong next site ID"
+msgstr "错误的下一个站点ID"
+
+#: ../pro/includes/classes/import-single-role.php:379
+msgid "Wrong role ID"
+msgstr "错误的角色ID"
+
+#: ../pro/includes/classes/import-validator.php:21
+msgid "Import failure: role ID contains invalid characters."
+msgstr "导入失败：角色ID包含无效字符。"
+
+#: ../pro/includes/classes/import-validator.php:23
+msgid "Import failure: role should have an array structure."
+msgstr "导入失败：角色应该有一个数组结构。"
+
+#: ../pro/includes/classes/import-validator.php:25
+msgid "Import failure: role array is not valid (should have 2 items)."
+msgstr "导入失败：角色数组无效（应该有2个项目）。"
+
+#: ../pro/includes/classes/import-validator.php:27
+msgid "Import failure: Wrong role array structure: \"name\" key not found."
+msgstr "导入失败：错误的角色数组结构：找不到“名称”键。"
+
+#: ../pro/includes/classes/import-validator.php:29
+msgid ""
+"Import failure: Wrong role array structure: \"capabilities\" key not found."
+msgstr "导入失败：错误的角色阵列结构：找不到“功能”键。"
+
+#: ../pro/includes/classes/import-validator.php:31
+msgid "Import failure: Wrong characters in the role name - sanitized version:"
+msgstr "导入失败：角色名称中的字符错误 - 已清理版本："
+
+#: ../pro/includes/classes/import-validator.php:33
+msgid "Import failure: role capabilities should have an array structure."
+msgstr "导入失败：角色功能应具有数组结构。"
+
+#: ../pro/includes/classes/import-validator.php:65
+msgid ""
+"Import failure: Wrong characters in the capability ID - sanitized version:"
+msgstr "导入失败：功能ID中的字符错误 - 已清理的版本："
+
+#: ../pro/includes/classes/import-validator.php:72
+#, php-format
+msgid ""
+"Import failure: Role \"%s\", wrong capability value for \"%s\" - only TRUE, "
+"FALSE, 1 and 0 are allowed, but \"%s\" found"
+msgstr ""
+"导入失败：角色“%s”，“%s”的错误功能值 - 仅允许为TRUE，FALSE，1和0，但发现“%s”"
+
+#: ../pro/includes/classes/license-key.php:54
+msgid "Active"
+msgstr "激活"
+
+#: ../pro/includes/classes/license-key.php:58
+msgid "Expired"
+msgstr "过期"
+
+#: ../pro/includes/classes/license-key.php:62
+msgid "Invalid"
+msgstr "无效"
+
+#: ../pro/includes/classes/meta-boxes-access.php:42
+msgid "Prohibit access to selected meta_boxes"
+msgstr "禁止访问选定的meta_box"
+
+#: ../pro/includes/classes/meta-boxes-access.php:43
+#: ../pro/includes/classes/meta-boxes-access.php:55
+#: ../pro/includes/classes/meta-boxes-access.php:56
+msgid "Meta Boxes"
+msgstr "元盒"
+
+#: ../pro/includes/classes/meta-boxes-access.php:58
+msgid ""
+"Turn ON at least \"edit_posts\" capability to manage access to meta_boxes "
+"for this role"
+msgstr "至少打开“编辑文章”功能以管理对此角色的meta_boxes的访问"
+
+#: ../pro/includes/classes/meta-boxes-access.php:84
+#: ../pro/includes/classes/widgets-admin-controller.php:239
+msgid "URE: you do not have enough permissions to access this module."
+msgstr "URE：您没有足够的权限来访问此模块。"
+
+#: ../pro/includes/classes/meta-boxes-access.php:90
+msgid "URE: Meta boxes access: Wrong object type. Data was not updated."
+msgstr "URE：元框访问：错误的对象类型。 数据未更新。"
+
+#: ../pro/includes/classes/meta-boxes-access.php:95
+msgid "URE: Meta boxes access: Empty object name. Data was not updated"
+msgstr "URE：元框访问：空对象名称。 数据未更新"
+
+#: ../pro/includes/classes/meta-boxes-access.php:104
+msgid "Meta boxes access data was updated successfully"
+msgstr "元框访问数据已成功更新"
+
+#: ../pro/includes/classes/meta-boxes.php:364
+msgid ""
+"Please open post, page and (custom post type) editor page to initilize the "
+"list of available meta_boxes"
+msgstr "请打开帖子，页面和（自定义帖子类型）编辑器页面以初始化可用元框列表"
+
+#: ../pro/includes/classes/meta-boxes.php:378
+#: ../pro/includes/classes/widgets-admin-view.php:69
+#: ../pro/includes/classes/widgets-admin-view.php:104
+msgid "Block"
+msgstr "块"
+
+#: ../pro/includes/classes/meta-boxes.php:379
+msgid "Title"
+msgstr "标题"
+
+#: ../pro/includes/classes/meta-boxes.php:380
+msgid "Id"
+msgstr "ID"
+
+#: ../pro/includes/classes/meta-boxes.php:408
+msgid "Delete from the list of available meta boxes"
+msgstr "从可用元框列表中删除"
+
+#: ../pro/includes/classes/other-roles-access.php:46
+msgid "Prohibit access to selected roles"
+msgstr "禁止访问所选角色"
+
+#: ../pro/includes/classes/other-roles-access.php:60
+msgid "Other Roles Access"
+msgstr "其他角色访问"
+
+#: ../pro/includes/classes/other-roles-access.php:62
+msgid "Blocking any role for \"administrator\" is not allowed."
+msgstr ""
+
+#: ../pro/includes/classes/other-roles-access.php:63
+msgid ""
+"Turn ON \"edit_users\" capability to manage access of current role to other "
+"roles"
+msgstr "打开“编辑用户”功能，以管理当前角色对其他角色的访问"
+
+#: ../pro/includes/classes/other-roles-access.php:89
+#: ../pro/includes/classes/posts-edit-access-role-controller.php:131
+#: ../pro/includes/classes/posts-view-access.php:79
+msgid "URE: you have not enough permissions to use this add-on."
+msgstr "URE：您没有足够的权限来使用此加载项。"
+
+#: ../pro/includes/classes/other-roles-access.php:94
+msgid "URE: other roles access: Wrong object type. Data was not updated."
+msgstr "URE：其他角色访问：错误的对象类型，数据未更新。"
+
+#: ../pro/includes/classes/other-roles-access.php:99
+msgid "URE: other roles access: Empty object name. Data was not updated"
+msgstr "URE：其他角色访问：空对象名称， 数据未更新"
+
+#: ../pro/includes/classes/other-roles-access.php:109
+msgid "Other roles access data was updated successfully"
+msgstr "其他角色访问数据已成功更新"
+
+#: ../pro/includes/classes/other-roles.php:198
+msgid "Block roles:"
+msgstr "阻止角色："
+
+#: ../pro/includes/classes/other-roles.php:206
+msgid "Role Name"
+msgstr "角色名称"
+
+#: ../pro/includes/classes/other-roles.php:207
+msgid "Role ID"
+msgstr "角色ID"
+
+#: ../pro/includes/classes/page-permissions-view.php:150
+msgid "User capabilities checked for this page:"
+msgstr "检查此页面的用户功能："
+
+#: ../pro/includes/classes/page-permissions-view.php:180
+msgid "View page permissions"
+msgstr "查看页面权限"
+
+#: ../pro/includes/classes/plugins-access-role-controller.php:121
+msgid "URE: you do not have enough permissions to use this add-on."
+msgstr "URE：您没有足够的权限来使用此加载项。"
+
+#: ../pro/includes/classes/plugins-access-role-controller.php:126
+msgid "URE: plugins access: Wrong object type. Data was not updated."
+msgstr "URE：插件访问：错误的对象类型， 数据未更新。"
+
+#: ../pro/includes/classes/plugins-access-role-controller.php:131
+msgid "URE: plugins: Empty object name. Data was not updated"
+msgstr "URE：插件：空对象名称。 数据未更新"
+
+#: ../pro/includes/classes/plugins-access-role-controller.php:137
+msgid "Plugins access data was updated successfully"
+msgstr "插件访问数据已成功更新"
+
+#: ../pro/includes/classes/plugins-access-role-view.php:31
+msgid "Allow activate/deactivate selected plugins"
+msgstr "允许激活/停用所选插件"
+
+#: ../pro/includes/classes/plugins-access-role.php:51
+msgid "Allow manage plugins"
+msgstr "允许管理插件"
+
+#: ../pro/includes/classes/plugins-access-role.php:53
+msgid "Role should have \"activate_plugins\" capability"
+msgstr "角色应具有“激活插件”功能"
+
+#: ../pro/includes/classes/plugins-access-user-view.php:56
+msgid "Plugins available for activation/deactivation"
+msgstr "插件可用于激活/停用"
+
+#: ../pro/includes/classes/plugins-access-user-view.php:58
+msgid "Edit List"
+msgstr "编辑列表"
+
+#: ../pro/includes/classes/plugins-access-user.php:133
+msgid "Allow manage"
+msgstr "允许管理"
+
+#: ../pro/includes/classes/plugins-access-user.php:136
+msgid "selected plugins"
+msgstr "选定的插件"
+
+#: ../pro/includes/classes/plugins-access-user.php:137
+msgid "all plugins except selected"
+msgstr "所有插件除了选中"
+
+#: ../pro/includes/classes/plugins-access-view.php:45
+msgid "Allow plugins:"
+msgstr "允许插件："
+
+#: ../pro/includes/classes/plugins-access-view.php:73
+msgid "Plugin Name"
+msgstr "插件名称"
+
+#: ../pro/includes/classes/plugins-access-view.php:74
+msgid "Path"
+msgstr "路径"
+
+#: ../pro/includes/classes/posts-edit-access-bulk-action.php:86
+msgid "Edit Access"
+msgstr "编辑访问权限"
+
+#: ../pro/includes/classes/posts-edit-access-bulk-action.php:87
+msgid "Editor Restrictions Helper"
+msgstr "编辑限制助手"
+
+#: ../pro/includes/classes/posts-edit-access-bulk-action.php:88
+msgid "Apply"
+msgstr "应用"
+
+#: ../pro/includes/classes/posts-edit-access-bulk-action.php:89
+msgid "Provide list of users ID"
+msgstr "提供用户ID列表"
+
+#: ../pro/includes/classes/posts-edit-access-bulk-action.php:99
+msgid "You do not have enough permissions for this action."
+msgstr "您没有足够的权限执行此操作。"
+
+#: ../pro/includes/classes/posts-edit-access-bulk-action.php:111
+msgid "Provide users ID list."
+msgstr "提供用户ID列表。"
+
+#: ../pro/includes/classes/posts-edit-access-bulk-action.php:121
+msgid "Provide valid users ID list (integers separated by commas)."
+msgstr "提供有效的用户ID列表（以逗号分隔的整数）。"
+
+#: ../pro/includes/classes/posts-edit-access-role-controller.php:136
+msgid "URE: posts edit access: Wrong object type. Data was not updated."
+msgstr "URE：帖子编辑访问：错误的对象类型。 数据未更新。"
+
+#: ../pro/includes/classes/posts-edit-access-role-controller.php:141
+msgid "URE: posts edit access: Empty object name. Data was not updated"
+msgstr "URE：帖子编辑访问：空对象名称， 数据未更新"
+
+#: ../pro/includes/classes/posts-edit-access-role-controller.php:146
+msgid "Posts edit access data was updated successfully"
+msgstr "帖子编辑访问数据已成功更新"
+
+#: ../pro/includes/classes/posts-edit-access-role.php:50
+#: ../pro/includes/classes/posts-edit-access-view.php:32
+msgid "Posts Edit"
+msgstr "帖子编辑"
+
+#: ../pro/includes/classes/posts-edit-access-role.php:51
+msgid "Posts Edit Access"
+msgstr "帖子编辑访问权限"
+
+#: ../pro/includes/classes/posts-edit-access-view.php:31
+msgid "Allow/Prohibit editing selected posts"
+msgstr "允许/禁止编辑所选帖子"
+
+#: ../pro/includes/classes/posts-edit-access-view.php:53
+msgid "Posts/Pages/Custom Post Types Editor Restrictions"
+msgstr "帖子/页面/自定义帖子类型编辑器限制"
+
+#: ../pro/includes/classes/posts-edit-access-view.php:64
+msgid "What to do"
+msgstr "该怎么办"
+
+#: ../pro/includes/classes/posts-edit-access-view.php:68
+msgid "Allow"
+msgstr "允许"
+
+#: ../pro/includes/classes/posts-edit-access-view.php:70
+msgid "Prohibit"
+msgstr "禁止"
+
+#: ../pro/includes/classes/posts-edit-access-view.php:75
+msgid "Look at roles"
+msgstr "看看角色"
+
+#: ../pro/includes/classes/posts-edit-access-view.php:83
+#: ../pro/includes/classes/posts-view.php:194
+msgid "Own data only"
+msgstr "仅拥有数据"
+
+#: ../pro/includes/classes/posts-edit-access-view.php:91
+msgid "with post ID (comma separated)"
+msgstr "带有帖子ID（以逗号分隔）"
+
+#: ../pro/includes/classes/posts-edit-access-view.php:99
+msgid "with category/taxonomy ID (comma separated)"
+msgstr "与类别/分类ID（逗号分隔）"
+
+#: ../pro/includes/classes/posts-edit-access-view.php:110
+msgid "with author user ID (comma separated)"
+msgstr "与作者用户ID（逗号分隔）"
+
+#: ../pro/includes/classes/posts-view-access.php:35
+msgid "Prohibit view selected posts"
+msgstr "禁止查看选定的帖子"
+
+#: ../pro/includes/classes/posts-view-access.php:36
+#: ../pro/includes/classes/posts-view-access.php:64
+msgid "Posts View"
+msgstr "帖子查看"
+
+#: ../pro/includes/classes/posts-view-access.php:65
+msgid "Posts View Access"
+msgstr "帖子查看访问权限"
+
+#: ../pro/includes/classes/posts-view-access.php:84
+msgid "URE: posts view access: Wrong object type. Data was not updated."
+msgstr "URE：发布视图访问：错误的对象类型， 数据未更新。"
+
+#: ../pro/includes/classes/posts-view-access.php:89
+msgid "URE: posts view access: Empty object name. Data was not updated"
+msgstr "URE：发布视图访问：空对象名称， 数据未更新"
+
+#: ../pro/includes/classes/posts-view-access.php:99
+msgid "URE: posts view access: Data was updated successfully"
+msgstr "URE：发布视图访问权限：数据已成功更新"
+
+#: ../pro/includes/classes/posts-view.php:53
+msgid "ID"
+msgstr "ID"
+
+#: ../pro/includes/classes/posts-view.php:112
+msgid "Page templates:"
+msgstr ""
+
+#: ../pro/includes/classes/posts-view.php:116
+#: ../pro/includes/classes/widgets-admin-view.php:70
+#: ../pro/includes/classes/widgets-admin-view.php:105
+msgid "Name"
+msgstr "名称"
+
+#: ../pro/includes/classes/posts-view.php:117
+msgid "File"
+msgstr "文件"
+
+#: ../pro/includes/classes/posts-view.php:176
+msgid "Block:"
+msgstr "区块："
+
+#: ../pro/includes/classes/posts-view.php:187
+msgid "Posts ID list (comma separated)"
+msgstr "帖子ID列表（以逗号分隔）"
+
+#: ../pro/includes/classes/posts-view.php:191
+msgid "Authors ID list (comma separated)"
+msgstr "作者ID列表（逗号分隔）"
+
+#: ../pro/includes/classes/screen-help-pro.php:23
+#: ../pro/includes/settings-template1.php:17
+msgid "Show plugins/themes notices to admin only"
+msgstr "仅向管理员显示插件/主题通知"
+
+#: ../pro/includes/classes/screen-help-pro.php:24
+msgid ""
+"Show update or install notices generated by plugins or themes to the users "
+"with \"install_plugins\" capability only"
+msgstr "仅使用“安装插件”功能向用户显示插件或主题生成的更新或安装通知"
+
+#: ../pro/includes/classes/screen-help-pro.php:25
+msgid "License key"
+msgstr "注册码"
+
+#: ../pro/includes/classes/screen-help-pro.php:36
+msgid "Activate \"Administrator Menu Access\" module"
+msgstr "激活“管理员菜单访问”模块"
+
+#: ../pro/includes/classes/screen-help-pro.php:37
+msgid ""
+"Adds \"Admin Menu\" button to the \"User Role Editor\" page. Turning on "
+"checkboxes near menu items in the opened dialog window you may block admin "
+"menu items available for the selected role"
+msgstr ""
+"将“管理员菜单”按钮添加到“用户角色编辑器”页面。 打开打开的对话框窗口中菜单项附"
+"近的复选框，可以阻止可用于所选角色的管理菜单项"
+
+#: ../pro/includes/classes/screen-help-pro.php:39
+#: ../pro/includes/classes/screen-help-pro.php:43
+#: ../pro/includes/classes/screen-help-pro.php:47
+#: ../pro/includes/classes/screen-help-pro.php:51
+#: ../pro/includes/classes/screen-help-pro.php:56
+#: ../pro/includes/classes/screen-help-pro.php:71
+#: ../pro/includes/classes/screen-help-pro.php:95
+msgid "more info..."
+msgstr "更多信息..."
+
+#: ../pro/includes/classes/screen-help-pro.php:40
+msgid "Activate \"Front End Menu Access\" module"
+msgstr "激活“前端菜单访问”模块"
+
+#: ../pro/includes/classes/screen-help-pro.php:41
+msgid ""
+"Allows to manage access to the front end menu items. Select menu item at "
+"\"Appearance->Menu\" page and turn ON needed controls: allow/prohibit, all, "
+"logged-in, not-logged-in, with roles"
+msgstr ""
+"允许管理对前端菜单项的访问。 在“外观 - >菜单”页面选择菜单项并打开所需的控件："
+"允许/禁止，全部，登录，未登录，带角色"
+
+#: ../pro/includes/classes/screen-help-pro.php:44
+msgid "Activate \"Widgets Access\" module"
+msgstr "激活“窗口小部件访问”模块"
+
+#: ../pro/includes/classes/screen-help-pro.php:45
+msgid ""
+"Adds \"Widgets\" button to the \"User Role Editor\" page. Turning on "
+"checkboxes near widgets names in the opened dialog window you may block "
+"widgets available for selected role under the \"Appearance\" menu"
+msgstr ""
+"将“窗口小部件”按钮添加到“用户角色编辑器”页面。 在打开的对话框窗口中打开窗口小"
+"部件名称旁边的复选框，可以在“外观”菜单下阻止可用于所选角色的窗口小部件"
+
+#: ../pro/includes/classes/screen-help-pro.php:48
+msgid "Activate \"Metaboxes Access\" module"
+msgstr "激活“元信息访问”模块"
+
+#: ../pro/includes/classes/screen-help-pro.php:49
+msgid ""
+"Adds \"Metaboxes\" button to the \"User Role Editor\" page. Turning on "
+"checkboxes to the left from the meta boxes names in the opened dialog window "
+"you may block meta boxes available for selected role"
+msgstr ""
+"在“用户角色编辑器”页面中添加“Myabox”按钮。在打开的对话框窗口中从元框名称向左"
+"打开复选框，可以阻止可用于所选角色的元框"
+
+#: ../pro/includes/classes/screen-help-pro.php:52
+msgid "Activate \"Other Roles Access\" module"
+msgstr "激活“其他角色访问”模块"
+
+#: ../pro/includes/classes/screen-help-pro.php:53
+msgid ""
+"Adds \"Other Roles\" button to the \"User Role Editor\" page. Turning on "
+"checkboxes near roles names in the opened dialog window you may block that "
+"roles from selection in the WordPress drop-down lists (e.g \"Role\" at the "
+"user profile page) by the user with current role. Users with blocked roles "
+"will not be available for view/edit at the “Users” page also."
+msgstr ""
+"将“其他角色”按钮添加到“用户角色编辑器”页面。打开打开的对话框窗口中角色名称附"
+"近的复选框，可以阻止具有当前角色的用户在CMS下拉列表（例如，用户配置文件页上"
+"的“角色”）中选择该角色。在“用户”页面中，具有阻止角色的用户将无法查看/编辑。"
+
+#: ../pro/includes/classes/screen-help-pro.php:57
+#: ../pro/includes/settings-template2.php:77
+msgid "Activate per plugin user access management for plugins activation"
+msgstr "为插件激活激活每个插件用户访问管理"
+
+#: ../pro/includes/classes/screen-help-pro.php:58
+msgid ""
+"this feature is useful when you need to allow different users activate/"
+"deactivate different plugins. When this option is turned on you may input, "
+"what plugins are available for the user with \"activate_plugins\" "
+"capability. Go to such user profile and select plugins you allow him to "
+"manage."
+msgstr ""
+"当你需要允许不同的用户激活/去激活不同的插件时，这个特性是有用的。当这个选项打"
+"开时，你可以输入什么插件可以为用户提供“激活插件”功能。转到这样的用户配置文件"
+"并选择允许他管理的插件。"
+
+#: ../pro/includes/classes/screen-help-pro.php:61
+msgid "Activate \"Create Post/Page\" capability"
+msgstr "激活“创建帖子/页面”功能"
+
+#: ../pro/includes/classes/screen-help-pro.php:62
+msgid ""
+"Turning on this option you automatically add \"create_posts\" and "
+"\"create_pages\" capabilities to the list of WordPress core user "
+"capabilities. After that user with \"edit_posts\" capability (even "
+"administrator) will can not create new post or page until you apparently "
+"include this capability to his user role. \"edit_posts\" will permit just to "
+"edit posts. Go to \"User Role Editor\" and turn on \"create_posts\", "
+"\"create_pages\" capability\" for \"Administrator\" role and other roles of "
+"your choice after this option activation."
+msgstr ""
+"启用此选项可以自动将“创建文章”和“创建页面”功能添加到CMS核心用户功能列表中。 "
+"具有“编辑帖子”功能的用户（甚至管理员）将无法创建新帖子或页面，直到您显然将此"
+"功能包含在其用户角色中。 “编辑帖子”只允许编辑帖子。 转到“用户角色编辑器”并在"
+"激活此选项后启用“管理员”角色和您选择的其他角色的“创建文章”，“创建页面”功能。"
+
+#: ../pro/includes/classes/screen-help-pro.php:67
+msgid "Activate user access management to editing selected posts and pages"
+msgstr "激活用户访问管理以编辑选定的帖子和页面"
+
+#: ../pro/includes/classes/screen-help-pro.php:68
+msgid ""
+"This way you may have for example the user with limited \"Editor\" role, who "
+"may edit just 2-3 posts or pages, but has no access to all the rest. After "
+"this option activation go to the user profile and input allowed posts/pages "
+"ID to the correspondent text input field. That's it."
+msgstr ""
+"这样，您可能拥有“编辑”角色有限的用户，他可能只编辑2-3个帖子或页面，但无法访问"
+"所有其他帖子或页面。 激活此选项后，转到用户配置文件并将允许的帖子/页面ID输入"
+"到对应的文本输入字段。 而已。"
+
+#: ../pro/includes/classes/screen-help-pro.php:72
+#: ../pro/includes/settings-template2.php:116
+msgid "Force custom post types to use their own capabilities"
+msgstr "强制自定义帖子类型以使用自己的功能"
+
+#: ../pro/includes/classes/screen-help-pro.php:73
+msgid ""
+"Some custom post types use WordPress built-in \"posts\" based capabilities "
+"set: \"edit_posts\", \"delete_posts\", etc. Activating this option your "
+"force such custom post types to use their own capabilities set, based on "
+"custom post type name: for \"videos\" custom post type it will be "
+"\"edit_videos\", \"delete_videos\", etc."
+msgstr ""
+"一些自定义帖子类型使用cms内置的“帖子”功能：“编辑文章”，“删除文章”等。根据自定"
+"义帖子类型名称激活此选项，您可以强制使用自己的功能： “视频”自定义帖子类型将"
+"是“编辑视频”，“删除视频”等。"
+
+#: ../pro/includes/classes/screen-help-pro.php:78
+#: ../pro/includes/settings-template2.php:127
+msgid "Activate per form user access management for Gravity Forms"
+msgstr "激活重力形式的每个表单用户访问管理"
+
+#: ../pro/includes/classes/screen-help-pro.php:79
+msgid ""
+"after turning on this option you may see the new “Gravity Forms "
+"Restrictions” section at the user profile with input field “Allow access to "
+"forms with ID (comma separated)”. This field will appear at profile of those "
+"users only who have at least one capability from the “Gravity Forms” "
+"capabilities list, e.g. “gravityforms_edit_forms”, "
+"“gravityforms_view_entries”, etc. Look "
+msgstr ""
+"打开此选项后，您可以在带有输入字段的用户配置文件中看到新的“重力形式”部分“允许"
+"访问具有ID（逗号分隔）的表单”。这个字段将只出现在“重力形式”功能列表中具有至少"
+"一个功能的用户的配置文件中，例如“.y._edit_.”、“.y._view_entries”等。"
+
+#: ../pro/includes/classes/screen-help-pro.php:84
+msgid "support video"
+msgstr "支持视频"
+
+#: ../pro/includes/classes/screen-help-pro.php:85
+msgid "for your reference."
+msgstr "供大家参考。"
+
+#: ../pro/includes/classes/screen-help-pro.php:88
+msgid "Activate [user_role_editor roles=\"role1, role2, ...\"] shortcode:"
+msgstr "激活[user_role_editor roles=\"role1, role2, ...\"] 短代码:"
+
+#: ../pro/includes/classes/screen-help-pro.php:89
+msgid ""
+"Allows view the content enclosed inside [user_role_editor roles=\"role1, "
+"role2\"] Some restricted content [/user-role-editor] just to users who have "
+"one of roles listed in the \"roles\" attribute. \"role1\" or \"role2\" in "
+"this case. Other users (except administrator) will not see the \"restricted "
+"content\" at the post or page. When this option is turned off, all "
+"restricted content input earlier, becomes available as usual content."
+msgstr ""
+"允许查看包含在[user_role_editor roles=\"role1,role2\"]中的一些受限制的内容[/"
+"user-role-.]，这些内容仅针对具有“roles”属性中列出的角色之一的用户。ReL1"
+"或“RoLe2”在这种情况下。其他用户（除了管理员）将不会看到“限制内容”在文章或页"
+"面。当关闭此选项时，较早地输入所有受限内容，将成为通常的内容。"
+
+#: ../pro/includes/classes/screen-help-pro.php:93
+#: ../pro/includes/settings-template2.php:152
+msgid "Activate content view restrictions"
+msgstr "激活内容视图限制"
+
+#: ../pro/includes/classes/screen-help-pro.php:94
+msgid ""
+"Allows to set which roles may or prohibited view what post/page, custom post "
+"type"
+msgstr "允许设置哪些角色可以或禁止查看帖子／页面、自定义帖子类型"
+
+#: ../pro/includes/classes/screen-help-pro.php:111
+#: ../pro/includes/settings-template-ms.php:19
+msgid "Allow single site administrator access to User Role Editor"
+msgstr "允许单站点管理员访问用户角色编辑器"
+
+#: ../pro/includes/classes/screen-help-pro.php:112
+msgid ""
+"Super administator only has access to the User Role Editor under multi-site "
+"WordPress installation by default.Turn on this option if you wish to make "
+"User Role Editor available for subsite administrators ."
+msgstr ""
+"默认情况下，超级管理员只能在多站点CMS安装下访问用户角色编辑器。如果希望让子站"
+"点管理员可以使用用户角色编辑器，请打开此选项。"
+
+#: ../pro/includes/classes/screen-help-pro.php:114
+msgid "Show help links for single site administrator"
+msgstr "显示单个站点管理员的帮助链接"
+
+#: ../pro/includes/classes/screen-help-pro.php:115
+msgid ""
+"Turning off this checkbox you will hide question side icons to the right of "
+"user capabilities at the User Role Editor."
+msgstr ""
+"关闭这个复选框，您将在用户角色编辑器中将问题侧图标隐藏到用户能力的右侧。"
+
+#: ../pro/includes/classes/screen-help-pro.php:117
+#: ../pro/includes/settings-template-ms.php:32
+msgid "Enable \"unfiltered_html\" capability"
+msgstr "启用\"unfiltered_html\" 功能"
+
+#: ../pro/includes/classes/screen-help-pro.php:118
+msgid ""
+"WordPress multisite blocks this capabilities by default for all users except "
+"superadmin. Be careful and double think before enable it. This makes your "
+"site potentially vulnerable."
+msgstr ""
+"CMS多站点默认为除了超级管理员之外的所有用户阻止此功能。在启用之前要小心和仔细"
+"考虑。这使得你的网站可能受到攻击。"
+
+#: ../pro/includes/classes/screen-help-pro.php:120
+#: ../pro/includes/settings-template-ms.php:52
+msgid "Activate access management for themes"
+msgstr "激活主题访问管理"
+
+#: ../pro/includes/classes/screen-help-pro.php:121
+msgid ""
+"with this option active you may setup individual lists of themes available "
+"for activation to selected single sites administrators "
+msgstr ""
+"使用此选项激活，您可以设置单个主题列表，用于激活到选定的单个站点管理员。"
+
+#: ../pro/includes/classes/screen-help-pro.php:123
+#: ../pro/includes/settings-template-ms.php:63
+msgid ""
+"Activate access restrictions to User Role Editor for single site "
+"administrator"
+msgstr "激活对单站点管理员的用户角色编辑器的访问限制"
+
+#: ../pro/includes/classes/screen-help-pro.php:124
+msgid ""
+"Restrict access of single sites administrators to the selected user "
+"capabilities and Add/Delete role operations inside User Role Editor"
+msgstr ""
+"限制单个站点管理员对选定用户功能的访问以及在用户角色编辑器中添加/删除角色操作"
+
+#: ../pro/includes/classes/themes-access.php:122
+msgid "Themes available for activation"
+msgstr "可用于激活的主题"
+
+#: ../pro/includes/classes/themes-access.php:148
+msgid "Edit Themes List"
+msgstr "编辑主题列表"
+
+#: ../pro/includes/classes/themes-access.php:149
+msgid "Themes list you allow this user to activate/deactivate"
+msgstr "允许用户激活/停用的主题列表"
+
+#: ../pro/includes/classes/user-role-editor-pro-view.php:40
+msgid ""
+"After confirmation all sites of the network will get permissions from the "
+"main site. Are you sure?"
+msgstr "确认后，网络的所有站点将从主站点获得许可。你确定吗？"
+
+#: ../pro/includes/classes/user-role-editor-pro-view.php:43
+msgid "It is possible to replicate also:"
+msgstr "复制也是可能的："
+
+#: ../pro/includes/classes/user-role-editor-pro-view.php:66
+msgid ""
+"After confirmation this user will be added to all sites with the same "
+"permissions as he has at the main site. Are you sure?"
+msgstr "确认后，该用户将以与他在主站点相同的权限添加到所有站点。你确定吗？"
+
+#: ../pro/includes/classes/user-role-editor-pro.php:210
+msgid "Update Network"
+msgstr "更新网络"
+
+#: ../pro/includes/classes/user-role-editor-pro.php:223
+msgid "Admin menu allowed arguments for URLs"
+msgstr "管理员菜单允许URL的参数"
+
+#: ../pro/includes/classes/user-role-editor-pro.php:224
+msgid "Extract"
+msgstr "提取"
+
+#: ../pro/includes/classes/user-role-editor-pro.php:227
+msgid "Input allowed aguments before try to save it."
+msgstr "在尝试保存之前输入允许的参数。"
+
+#: ../pro/includes/classes/widgets-admin-controller.php:245
+msgid "URE: widgets access: Wrong object type. Data was not updated."
+msgstr "URE：小部件访问：错误的对象类型，数据未更新。"
+
+#: ../pro/includes/classes/widgets-admin-controller.php:250
+msgid "URE: widgets access: Empty object name. Data was not updated"
+msgstr "URE：小部件访问：空对象名称， 数据未更新"
+
+#: ../pro/includes/classes/widgets-admin-controller.php:260
+msgid "Widgets access: data was updated successfully"
+msgstr "窗口小部件访问：数据已成功更新"
+
+#: ../pro/includes/classes/widgets-admin-view.php:28
+msgid "Prohibit access to selected widgets"
+msgstr "禁止访问选定的小部件"
+
+#: ../pro/includes/classes/widgets-admin-view.php:29
+#: ../pro/includes/classes/widgets-admin-view.php:41
+#: ../pro/includes/classes/widgets-admin-view.php:67
+msgid "Widgets"
+msgstr "小工具"
+
+#: ../pro/includes/classes/widgets-admin-view.php:42
+msgid "Widgets Access"
+msgstr "小部件访问"
+
+#: ../pro/includes/classes/widgets-admin-view.php:44
+msgid "Turn ON \"edit_theme_options\" capability to manage widgets permissions"
+msgstr "启用“编辑主题选项”功能以管理窗口小部件权限"
+
+#: ../pro/includes/classes/widgets-admin-view.php:71
+#: ../pro/includes/classes/widgets-admin-view.php:106
+msgid "Description"
+msgstr "描述"
+
+#: ../pro/includes/classes/widgets-admin-view.php:102
+msgid "Sidebars"
+msgstr "侧边栏"
+
+#: ../pro/includes/classes/widgets-show-view.php:83
+#: ../pro/includes/classes/widgets-show-view.php:100
+msgid "Access"
+msgstr "访问"
+
+#: ../pro/includes/classes/widgets-show-view.php:102
+msgid "Do not show"
+msgstr "不显示"
+
+#: ../pro/includes/classes/widgets-show-view.php:136
+msgid "for:"
+msgstr "为："
+
+#: ../pro/includes/classes/widgets-show-view.php:175
+msgid "No role for this site"
+msgstr "这个网站没有任何作用"
+
+#: ../pro/includes/settings-content-view-defaults.php:9
+msgid "Defaults for content view restrictions:"
+msgstr "内容视图限制的默认值："
+
+#: ../pro/includes/settings-content-view-defaults.php:11
+msgid "View access:"
+msgstr "查看权限："
+
+#: ../pro/includes/settings-content-view-defaults.php:29
+msgid "Selected User Roles / (logged in only)"
+msgstr "选定的用户角色/（仅限登录）"
+
+#: ../pro/includes/settings-content-view-defaults.php:38
+msgid "Show Access Error Message"
+msgstr "显示访问错误消息"
+
+#: ../pro/includes/settings-content-view-defaults.php:44
+msgid "Message for post access error:"
+msgstr "邮件访问错误消息："
+
+#: ../pro/includes/settings-template-ms.php:87
+msgid ""
+"Single site administrator can delete roles with allowed capabilities inside "
+"only"
+msgstr "单站点管理员只能删除具有允许功能的角色"
+
+#: ../pro/includes/settings-template-ms.php:88
+msgid "Allow single site administrator Add/Delete roles"
+msgstr "允许单站点管理员添加/删除角色"
+
+#: ../pro/includes/settings-template-ms.php:97
+msgid "Blocked capabilities:"
+msgstr "被阻止的能力："
+
+#: ../pro/includes/settings-template-ms.php:114
+msgid "Allowed capabilities:"
+msgstr "允许的功能："
+
+#: ../pro/includes/settings-template1.php:25
+msgid "License"
+msgstr "许可证"
+
+#: ../pro/includes/settings-template1.php:29
+msgid "License Key:"
+msgstr "许可授权码："
+
+#: ../pro/includes/settings-template1.php:38
+msgid "Not installed!"
+msgstr "未安装！"
+
+#: ../pro/includes/settings-template1.php:39
+msgid "Input license key to activate automatic updates from role-editor.com"
+msgstr "输入许可证密钥以激活role-editor.com的自动更新"
+
+#: ../pro/includes/settings-template1.php:48
+msgid "License key is hidden to limit access to it"
+msgstr "隐藏许可证密钥以限制对其的访问"
+
+#: ../pro/includes/settings-template1.php:51
+msgid "Installed"
+msgstr "已安装"
+
+#: ../pro/includes/settings-template2.php:18
+msgid "Activate Administrator Menu Access module"
+msgstr "激活管理员菜单访问模块"
+
+#: ../pro/includes/settings-template2.php:31
+msgid "Activate Front End Menu Access module"
+msgstr "激活前端菜单访问模块"
+
+#: ../pro/includes/settings-template2.php:41
+msgid "Activate Widgets Admin Access module"
+msgstr "激活窗口小部件管理员访问模块"
+
+#: ../pro/includes/settings-template2.php:50
+msgid "Activate Widgets Show Access module"
+msgstr "激活窗口小部件显示访问模块"
+
+#: ../pro/includes/settings-template2.php:59
+msgid "Activate Meta Boxes Access module"
+msgstr "激活Meta Boxes访问模块"
+
+#: ../pro/includes/settings-template2.php:68
+msgid "Activate Other Roles Access module"
+msgstr "激活其他角色访问模块"
+
+#: ../pro/includes/settings-template2.php:86
+msgid "Activate wp-admin pages permissions viewer"
+msgstr ""
+
+#: ../pro/includes/settings-template2.php:92
+msgid "Content editing restrictions"
+msgstr "内容编辑限制"
+
+#: ../pro/includes/settings-template2.php:98
+msgid "Activate \"Create\" capability for posts/pages/custom post types"
+msgstr "激活帖子/页面/自定义帖子类型的“创建”功能"
+
+#: ../pro/includes/settings-template2.php:107
+msgid ""
+"Activate user access management to editing selected posts, pages, custom "
+"post types"
+msgstr "激活用户访问管理以编辑所选帖子，页面，自定义帖子类型"
+
+#: ../pro/includes/settings-template2.php:137
+msgid "Content view restrictions"
+msgstr "内容视图限制"
+
+#: ../pro/includes/settings-template2.php:143
+msgid "Activate [user_role_editor roles=\"role1, role2, ...\"] shortcode"
+msgstr "激活[user_role_editor roles =“role1，role2，...”]短代码"
+
+#: ../pro/includes/settings-template2.php:159
+msgid "Show Defaults..."
+msgstr "显示默认值..."
+
+#: ../pro/includes/settings-template2.php:159
+msgid "Hide Defaults..."
+msgstr "隐藏默认值..."
+
+#: ../pro/includes/settings-template2.php:167
+msgid "Use additional user capabilities"
+msgstr "使用其他用户功能"
+
+#: ../pro/includes/settings-template2.php:173
+msgid "Plugins related"
+msgstr "插件相关"
+
+#: ../pro/includes/settings-template2.php:182
+msgid "Languages related"
+msgstr "语言相关"
+
+#: ../pro/includes/settings-template2.php:191
+msgid "Privacy related"
+msgstr "隐私相关"
