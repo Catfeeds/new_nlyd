@@ -1750,7 +1750,7 @@ class Download
     public function testPublicExport(){
         $data = [
             ['age' => 10, 'name' => '马尿', 'sex' => '女'],
-            ['age' => 12, 'name' => '罗一斤', 'sex' => '女'],
+            ['age' => 12, 'name' => '罗一斤', 'sex' => '女', 'link' => 'http://dssd.dsad.cc/img.img', 'link_name' => '图片', 'link_key' => 'name'],
         ];
         $title = '测试导出';
         $field = [
@@ -1760,6 +1760,101 @@ class Download
         ];
         $file_name = 'testPublic';
         $this->publicExport($data,$field,$title,$file_name);
+    }
+
+    /**
+     * 导出提现记录
+     */
+    public function exportExtractLog(){
+        $start_date = isset($_POST['start']) ? trim($_POST['start']) : '';
+        $end_date1 = isset($_POST['end']) ? trim($_POST['end']) : '';
+        if($start_date == '' || $end_date1 == '') exit;
+        $start_date = date("Y-m-d",strtotime($start_date));
+        $end_date = date("Y-m-d",strtotime("+1 day",strtotime($end_date1)));
+        global $wpdb;
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS ue.*,um.meta_value AS censor_real_name,zm.zone_name 
+                FROM {$wpdb->prefix}user_extract_logs AS ue 
+                LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=ue.censor_user_id AND um.meta_key='user_real_name'
+                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=ue.extract_id
+                WHERE ue.apply_time BETWEEN '{$start_date}' AND '{$end_date}'",ARRAY_A);
+        $title = $start_date.'_'.$end_date.'extractLog';
+        $field = [
+            ['letter' => 'A','width' => 50, 'title_key' => 'real_name', 'title' => '提现主体'],
+            ['letter' => 'B','width' => 20, 'title_key' => 'extract_type', 'title' => '提现类型'],
+            ['letter' => 'C','width' => 20, 'title_key' => 'extract_amount', 'title' => '提现金额'],
+            ['letter' => 'D','width' => 30, 'title_key' => 'extract_mode', 'title' => '提现方式'],
+            ['letter' => 'E','width' => 80, 'title_key' => 'extract_account', 'title' => '提现账户', 'link'],
+            ['letter' => 'F','width' => 30, 'title_key' => 'apply_time', 'title' => '发起时间'],
+            ['letter' => 'G','width' => 30, 'title_key' => 'censor_time', 'title' => '处理时间'],
+            ['letter' => 'H','width' => 30, 'title_key' => 'extract_status', 'title' => '提现状态'],
+            ['letter' => 'I','width' => 30, 'title_key' => 'censor_user_id', 'title' => '处理人'],
+        ];
+        foreach ($rows as &$row){
+            $zone_meta = $wpdb->get_row("SELECT zone_name,zone_city,zone_match_type,type_id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$row['extract_id']}'", ARRAY_A);
+            $type_name = '';
+            if($zone_meta){
+                $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$zone_meta['type_id']}");
+                switch ($type_alias){
+                    case 'match':
+                        $real_name = date('Y').'脑力世界杯' .$zone_meta['zone_city'].($zone_meta['zone_match_type']=='1'?'战队精英赛':'城市赛');
+                        break;
+                    case 'trains':
+                        $real_name = 'IISC'.$zone_meta['zone_name'].'国际脑力训练中心';
+                        break;
+                    case 'test':
+                        $real_name =  'IISC' .$zone_meta['zone_name'].'国际脑力测评中心';
+                        break;
+                }
+                $type_name = '机构';
+            }else{
+                $real_name = get_user_meta($row['extract_id'],'user_real_name',true)['real_name'];
+                $type_name = '个人';
+            }
+            switch ($row['extract_type']){
+                case 'weChat':
+                    $row['extract_mode'] = '微信';
+                    break;
+                case 'wallet':
+                    $row['extract_mode'] = '钱包';
+                    break;
+                case 'bank':
+                    $row['extract_mode'] = $row['bank_address'];
+                    break;
+            }
+            switch ($row['extract_type']){
+                case 'weChat':
+                    $row['link_name'] = '收款二维码';
+                    $row['link_key'] = 'extract_account';
+                    $row['link'] = $row['extract_code_img'];
+                    break;
+                case 'wallet':
+                    $row['extract_account'] = '钱包';
+                    echo '钱包';
+                    break;
+                case 'bank':
+//                    $row['extract_account'] = $row['extract_account'];
+                    break;
+            }
+            switch ($row['extract_status']){
+                case '1':
+                    $row['extract_status'] =  '审核中';
+                    break;
+                case '2':
+                    $row['extract_status'] = '已提现';
+                    break;
+                case '3':
+                    $row['extract_status'] = '未通过';
+                    break;
+            }
+            $row['real_name'] = $real_name;
+            $row['extract_type'] = $type_name;
+            if($row['censor_real_name']){
+                $row['censor_user_id'] = unserialize($row['censor_real_name'])['real_name'];
+            }else{
+                $row['censor_user_id'] = $wpdb->get_var("SELECT user_login FROM {$wpdb->users} WHERE ID='{$row['censor_user_id']}'");
+            }
+        }
+        $this->publicExport($rows,$field,$title,$start_date.'_'.$end_date1.'ExtractLog');
     }
 
     /**
@@ -1821,7 +1916,16 @@ class Download
 
         foreach ($data as $k => $dataV){
             foreach ($field as $fv5){
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fv5['letter'].($k+3),' '.$dataV[$fv5['title_key']]);
+                if(isset($dataV['link_key']) && $dataV['link_key'] == $fv5['title_key'] && $dataV['link']){
+                    //超链接
+                    $path_bonusObjRichText = new \PHPExcel_RichText();
+                    $path_bonusObjRichText->createTextRun($dataV['link_name'])->getFont()->setColor( new \PHPExcel_Style_Color( '005e70cc' ) );//设置颜色
+                    $objPHPExcel->getActiveSheet()->setCellValue($fv5['letter'].($k+3), $path_bonusObjRichText);
+                    $objPHPExcel->getActiveSheet()->getCell($fv5['letter'].($k+3))->getHyperlink()->setUrl($dataV['link']);
+
+                }else{
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($fv5['letter'].($k+3),' '.$dataV[$fv5['title_key']]);
+                }
             }
         }
 

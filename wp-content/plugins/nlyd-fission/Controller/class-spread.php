@@ -1414,6 +1414,12 @@ class Spread{
                 </div>
                 <br class="clear">
             </div>
+            <form action="<?=admin_url('admin.php?page=download&action=exportExtractLog')?>" method="post">
+                <input type="date" name="start"> -
+                <input type="date" name="end">
+                <button class="button-primary" type="submit">确认导出</button>
+            </form>
+            <br class="clear">
             <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>

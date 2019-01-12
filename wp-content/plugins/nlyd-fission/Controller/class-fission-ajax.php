@@ -501,6 +501,18 @@ class Fission_Ajax
         if($bool) wp_send_json_success(['info' => '删除成功!']);
         else wp_send_json_error(['info' => '删除失败!']);
     }
+
+    /**
+     * 删除课程类型
+     */
+    public function delCourseType(){
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $id < 1 && wp_send_json_error(['info' => '参数错误!']);
+        global  $wpdb;
+        $bool = $wpdb->delete($wpdb->prefix.'course_type', ['id' => $id]);
+        if($bool) wp_send_json_success(['info' => '删除成功!']);
+        else wp_send_json_error(['info' => '删除失败!']);
+    }
 }
 
 new Fission_Ajax();
