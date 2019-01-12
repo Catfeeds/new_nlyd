@@ -680,8 +680,49 @@ class Student_Zone
      * 发布课程
      */
     public function courseBuild(){
+
+        //获取课程类型
+        global $wpdb,$current_user;
+        $course_type = $wpdb->get_results("select id,type_name value from {$wpdb->prefix}course_type ",ARRAY_A);
+        $data['course_type'] = !empty($course_type) ? json_encode($course_type) : '';
+
+        //获取教学类型
+        $post_id = $wpdb->get_var("select post_id from {$wpdb->prefix}postmeta where meta_key = 'project_alias' and meta_value = 'mental_world_cup'");
+        $sql = "select ID id,post_title value 
+                from {$wpdb->prefix}posts 
+                where post_parent = {$post_id} and post_status = 'publish'
+                " ;
+        $category_type = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($category_type);
+        $data['category_type'] = !empty($category_type) ? json_encode($category_type) : '';
+
+        if(isset($_GET['id'])){
+            $sql_ = "select a.*,b.type_name,c.post_title category_type,
+                    if(unix_timestamp(course_start_time)>0,date_format(course_start_time,'%Y-%m-%d %H:%i'),'') start_time,
+                    if(unix_timestamp(course_end_time)>0,date_format(course_end_time,'%Y-%m-%d %H:%i'),'') end_time
+                    from {$wpdb->prefix}course a 
+                    left join {$wpdb->prefix}course_type b on a.course_type = b.id
+                    left join {$wpdb->prefix}posts c on a.course_category_id = c.ID
+                    where a.id = {$_GET['id']} and zone_id = {$current_user->ID}";
+            $row = $wpdb->get_row($sql_,ARRAY_A);
+            if(empty($row)){
+                $this->get_404($this->get_404(array('message'=>__('数据错误', 'nlyd-student'),'return_url'=>home_url('/zone/course/'))));
+                return;
+            }
+            if($row['start_time'] > 0){
+                $row['data_start_time'] = preg_replace('/\s|:/','-',$row['start_time']);
+            }
+            if($row['end_time'] > 0 ){
+                $row['data_end_time'] = preg_replace('/\s|:/','-',$row['end_time']);
+            }
+            //获取授课教练
+            $row['coach_phone'] = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['coach_id']}");
+            //print_r($row);
+            $data['course'] = $row;
+        }
+
         $view = student_view_path.CONTROLLER.'/course-build.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     /**
      * 课程发布成功
@@ -798,7 +839,7 @@ class Student_Zone
         global $wpdb,$current_user;
         //获取教练信息
         $sql = "select b.meta_key,b.meta_value from {$wpdb->prefix}zone_join_coach a 
-                  left join  {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key in('user_real_name','coach_ID','user_ID','user_gender','user_head','coach_work_photo','real_ID','user_ID_Card','coach_brief') 
+                  left join  {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key in('user_real_name','coach_ID','user_ID','user_gender','user_head','user_images_color','real_ID','user_ID_Card','coach_brief') 
                   where a.coach_id = {$_GET['coach_id']} and zone_id = $current_user->ID";
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if(empty($rows)){
@@ -806,7 +847,7 @@ class Student_Zone
             return;
         }
         $user_info = array_column($rows,'meta_value','meta_key');
-        $coach_work_photo = !empty($user_info['coach_work_photo']) ? $user_info['coach_work_photo'] : $user_info['user_head'] ;
+        $coach_work_photo = !empty($user_info['user_images_color']) ? unserialize($user_info['user_images_color'])[0] : $user_info['user_head'] ;
         $coach['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
         $coach['real_name'] = unserialize($user_info['user_real_name'])['real_name'];
         $coach['coach_ID'] = !empty($user_info['coach_ID']) ? $user_info['coach_ID'] : $user_info['user_ID'];

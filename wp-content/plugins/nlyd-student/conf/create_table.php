@@ -904,7 +904,7 @@ function the_table_install () {
           `course_details` mediumtext,
           `course_img` varchar(255) DEFAULT NULL,
           `const` decimal(10,2) unsigned NOT NULL,
-          `is_enable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1启用,2禁用',
+          `is_enable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '-3:已结课 -2等待开课 1:报名中 2:已开课',
           `coach_id` int(10) unsigned NOT NULL,
           `course_start_time` datetime DEFAULT NULL COMMENT '开课时间',
           `course_end_time` datetime DEFAULT NULL COMMENT '课程结束时间',
@@ -973,7 +973,7 @@ function the_table_install () {
         dbDelta($sql);
     }
 
-    $table_name = $wpdb->prefix . "course_type";  //用户提现记录表
+    $table_name = $wpdb->prefix . "course_type";  //课程类型表
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //用户提现记录表
         $sql = "CREATE TABLE `{$table_name}` (

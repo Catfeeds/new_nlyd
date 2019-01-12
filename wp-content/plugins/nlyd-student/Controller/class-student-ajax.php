@@ -6058,10 +6058,11 @@ class Student_Ajax
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $sql = "select a.*,b.referee_id from {$wpdb->prefix}match_team a 
-                left join {$wpdb->prefix}users b on a.user_id = b.ID
-                where a.team_id = {$current_user->ID} and a.status = 2  
-                order by id desc limit $start,$pageSize";
+        $sql = "select b.user_id from {$wpdb->prefix}zone_join_coach a 
+                left join {$wpdb->prefix}my_coach b on a.coach_id = b.coach_id
+                left join {$wpdb->prefix}users c on b.user_id = c.ID
+                where a.zone_id = {$current_user->ID} and c.ID is not null
+                GROUP by b.user_id limit $start,$pageSize";
         $rows = $wpdb->get_results($sql,ARRAY_A);
         //print_r($sql);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -6086,7 +6087,8 @@ class Student_Ajax
                 $user_real_name = unserialize($user_info['user_real_name']);
                 $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
                 $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
-                $rows[$k]['referee_id'] = !empty($v['referee_id']) ? $v['referee_id']+10000000 : '-' ;
+                $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$v['user_id']} ");
+                $rows[$k]['referee_id'] = !empty($referee_id > 0 ) ? $referee_id+10000000 : '-' ;
             }
         }
         //print_r($rows);
@@ -6261,6 +6263,99 @@ class Student_Ajax
         wp_send_json_success(array('info'=>$rows));
     }
 
+
+    /**
+     * 机构课程发布
+     */
+    public function zone_course_created(){
+        if(empty($_POST['course_type']) || empty($_POST['course_category_id']) || empty($_POST['course_title']) || empty($_POST['duration']) || empty($_POST['coach_phone']) || empty($_POST['const']) ){
+            wp_send_json_error(array('info'=>__('必填项不能为空')));
+        }
+        global $wpdb,$current_user;
+        if(!empty($_POST['coach_phone'])){
+            if(reg_match('m',$_POST['coach_phone'])) wp_send_json_error(array(__('授课教练手机格式不正确', 'nlyd-student')));
+            $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['coach_phone']}'
+                ";
+            $coach = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($coach)) wp_send_json_error(array('info'=>__('该教练未注册')));
+            if(empty($coach['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证')));
+        }
+
+        $data = array(
+            'course_title'=>$_POST['course_title'],
+            'course_details'=>!empty($_POST['course_details']) ? $_POST['course_details'] : '',
+            'const'=>$_POST['const'] > 0 ? $_POST['const'] : 0,
+            'is_enable'=>$_POST['is_enable'] > 0 ? $_POST['is_enable'] : 1,
+            'coach_id'=>$coach['ID'],
+            'course_start_time'=>!empty($_POST['course_start_time']) ? $_POST['course_start_time'] : '',
+            'course_end_time'=>!empty($_POST['course_end_time']) ? $_POST['course_end_time'] : '',
+            'open_quota'=>$_POST['open_quota'] > 0 ? $_POST['open_quota'] : '',
+            'zone_id'=>$current_user->ID,
+            'course_type'=>$_POST['course_type'],
+            'duration'=>$_POST['duration'],
+            'course_category_id'=>$_POST['course_category_id'],
+        );
+        //print_r($_POST);die;
+        if($_POST['id'] > 0){
+            $a = $wpdb->update($wpdb->prefix.'course',$data,array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
+        }else{
+            $data['created_time'] = get_time('mysql');
+            $a = $wpdb->insert($wpdb->prefix.'course',$data);
+        }
+        if($a){
+            wp_send_json_success(array('info'=>__('操作完成'),'url'=>home_url('/zone/course/')));
+        }else{
+            wp_send_json_error(array('info'=>__('操作失败')));
+        }
+    }
+
+
+    /**
+     * 获取机构发布课程
+     */
+    public function get_zone_course(){
+        global $wpdb,$current_user;
+
+        $map[] = " a.created_id = {$current_user->ID} ";
+        if($_POST['is_enable'] == 'history'){
+            $map[] = " a.is_enable = -3 ";
+        }elseif ($_POST['is_enable'] == 'matching'){
+            $map[] = " a.match_status != -3 ";
+        }
+        $where = join("and",$map);
+
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        $sql = "select a.course_title,a.const,count(c.id) entry_total,b.course_type,a.open_quota,
+                if(unix_timestamp(course_start_time)>0,date_format(course_start_time,'%Y-%m-%d %H:%i'),'待确认') start_time,
+                case a.is_enable
+                when '-3' then '已结课'
+                when '-2' then '等待开课'
+                when '1' then '报名中'
+                when '2' then '已开课'
+                end status_cn
+                from {$wpdb->prefix}course a 
+                left join {$wpdb->prefix}course_type b on a.course_type = b.id
+                left join {$wpdb->prefix}order c on a.id = c.match_id and c.pay_status in (2,3,4)
+                where {$where} 
+                group by a.match_id
+                order by a.match_start_time desc ,a.match_status desc
+                limit $start,$pageSize
+               ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        //print_r($rows);
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无课程', 'nlyd-student')));
+        wp_send_json_success(array('info'=>$rows));
+    }
 
 
     /*

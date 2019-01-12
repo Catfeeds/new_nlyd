@@ -45,7 +45,7 @@
                             <img src="<?=$user_info['user_head'];?>" class="logoImg rounded" id="avatar">
                         </div>
                     </div>
-                    <?=$user_info['user_type'] ? '<div class="userCenter_meta layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
+                    <?=$user_info['user_roles'] !='student' ? '<div class="userCenter_meta layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
                     <div class="radius-zoo">
                         
                         <!-- 用户名称 -->
