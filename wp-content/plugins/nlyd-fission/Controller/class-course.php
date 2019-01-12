@@ -763,6 +763,7 @@ class Course{
                     </td>
                     <th scope="col" id="type_name" class="manage-column column-type_name column-primary">名称</th>
                     <th scope="col" id="type_alias" class="manage-column column-type_alias">别名</th>
+                    <th scope="col" id="type_options" class="manage-column column-type_options">操作</th>
                 </tr>
                 </thead>
 
@@ -786,6 +787,10 @@ class Course{
                         <td class="type_alias column-type_alias" data-colname="别名">
                             <span aria-hidden="true"><?=$row['type_alias']?></span>
                         </td>
+                        <td class="type_options column-type_options" data-colname="操作">
+                            <a href="<?=admin_url('admin.php?page=add-course-type&id='.$row['id'])?>">编辑</a> |
+                            <a href="javascript:;" class="del-course-type" data-id="<?=$row['id']?>">删除</a>
+                        </td>
 
 
                     </tr>
@@ -802,6 +807,7 @@ class Course{
                     </td>
                     <th scope="col" class="manage-column column-type_name column-primary">名称</th>
                     <th scope="col" class="manage-column column-type_alias">别名</th>
+                    <th scope="col" class="manage-column column-type_options">操作</th>
                 </tr>
                 </tfoot>
 
@@ -813,7 +819,26 @@ class Course{
             </div>
 
             <script type="text/javascript">
-
+                jQuery(document).ready(function($) {
+                     $('.del-course-type').on('click', function () {
+                         var id = $(this).attr('data-id');
+                         if(id < 1) return false;
+                         $.ajax({
+                             url : ajaxurl,
+                             data : {'action' : 'delCourseType', 'id' : id},
+                             dataType : 'json',
+                             type : 'post',
+                             success : function (response) {
+                                 alert(response.data.info);
+                                 if(response['success']){
+                                     window.location.reload();
+                                 }
+                             }, error : function () {
+                                 alert('请求失败!');
+                             }
+                         });
+                     });
+                })
 
             </script>
         </div>
@@ -824,6 +849,7 @@ class Course{
      * 添加/编辑课程类型
      */
     public function addCourseType(){
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         global $wpdb;
         $err_msg = '';
         $suc_msg = '';
@@ -831,22 +857,28 @@ class Course{
             $type_name = isset($_POST['type_name']) ? trim($_POST['type_name']) : '';
             $type_alias = isset($_POST['type_alias']) ? trim($_POST['type_alias']) : '';
             if($type_name == '') $err_msg .= '请填写类型名称';
-            if($type_alias == '') $err_msg .= '<br />请填写类型别名';
+            if($type_alias == '' && $id < 1) $err_msg .= '<br />请填写类型别名';
 
             if($err_msg == ''){
                 $insertData = [
                     'type_name' => $type_name,
-                    'type_alias' => $type_alias,
                 ];
-
-                $bool = $wpdb->insert($wpdb->prefix.'course_type',$insertData);
-
+                if($id > 0){
+                    $bool = $wpdb->update($wpdb->prefix.'course_type',$insertData, ['id' => $id]);
+                }else{
+                    $insertData['type_alias'] = $type_alias;
+                    $bool = $wpdb->insert($wpdb->prefix.'course_type',$insertData);
+                }
                 if($bool){
                     $suc_msg = '操作成功!';
                 }else{
                     $err_msg = '操作失败';
                 }
             }
+        }
+        $row = [];
+        if($id > 0){
+            $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}course_type WHERE id='{$id}'", ARRAY_A);
         }
         ?>
         <div id="wpbody" role="main">
@@ -873,11 +905,11 @@ class Course{
                             <tbody>
                             <tr class="user-user-login-wrap">
                                 <th><label for="type_name">名称</label></th>
-                                <td><input type="text" name="type_name" value="" placeholder=""></td>
+                                <td><input type="text" name="type_name" value="<?=isset($row['type_name']) ? $row['type_name'] : ''?>" placeholder=""></td>
                             </tr>
                             <tr class="user-user-login-wrap">
                                 <th><label for="type_alias">别名</label></th>
-                                <td><input type="text" name="type_alias" value=""></td>
+                                <td><input type="text" <?=isset($row['type_alias']) ? 'disabled="disabled"' : ''?> name="type_alias" value="<?=isset($row['type_alias']) ? $row['type_alias'] : ''?>"></td>
                             </tr>
                             </tbody>
                         </table>
