@@ -1131,7 +1131,7 @@ class Organize{
                             if($error_msg == '') {
                                 //更新管理员/负责人
                                 $center_manager_id = $wpdb->get_var("SELECT center_manager_id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_id}'");
-                                if($center_manager_id){
+                                if(!$center_manager_id){
                                     if (!$wpdb->update($wpdb->prefix . 'zone_meta', ['center_manager_id' => $zmv['apply_id']], ['user_id' => $user_id])) {
                                         $error_msg = '更新管理员失败!';
                                     }
