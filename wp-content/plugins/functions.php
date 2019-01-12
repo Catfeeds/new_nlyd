@@ -395,9 +395,9 @@ if(!function_exists('getSpreadCategory')){
     function getSpreadCategory($key=''){
 
         $arr = array(
-                'course' => '购买课程',
-                'course_grading' => '课程2级达标',
-                'course_recommend' => '课程推荐满3人',
+//                'course' => '购买课程',
+//                'course_grading' => '课程2级达标',
+//                'course_recommend' => '课程推荐满3人',
                 'stock' => '股权出售',
                 'profit_bonus' => '分中心收益分红',
             );

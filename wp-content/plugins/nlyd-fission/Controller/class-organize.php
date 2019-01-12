@@ -2521,8 +2521,10 @@ class Organize{
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS p.post_title AS match_name,mmn.* FROM {$wpdb->prefix}match_meta_new AS mmn
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS p.post_title AS match_name,mmn.* 
+                FROM {$wpdb->prefix}match_meta_new AS mmn
                 LEFT JOIN {$wpdb->posts} AS p ON p.ID=mmn.match_id
+                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=mmn.created_id
                 WHERE mmn.created_id='{$user_id}'
                 LIMIT {$start},{$pageSize}", ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -2551,8 +2553,15 @@ class Organize{
             <tr>
                 <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                 <th scope="col" id="match_name" class="manage-column column-match_name column-primary">比赛名称</th>
-                <th scope="col" id="match_status" class="manage-column column-match_status">状态</th>
-                <th scope="col" id="date_time" class="manage-column column-date_time">时间</th>
+                <th scope="col" id="scene" class="manage-column column-scene">场景</th>
+                <th scope="col" id="match_people_num" class="manage-column column-match_people_num">参赛人数</th>
+                <th scope="col" id="cost" class="manage-column column-cost">费用</th>
+                <th scope="col" id="match_address" class="manage-column column-match_address">比赛地点</th>
+                <th scope="col" id="match_date" class="manage-column column-match_date">比赛日期</th>
+                <th scope="col" id="sign_date" class="manage-column column-sign_date">报名日期</th>
+                <th scope="col" id="created_date" class="manage-column column-created_date">发布日期</th>
+                <th scope="col" id="match_status" class="manage-column column-match_status">比赛状态</th>
+                <th scope="col" id="match_options" class="manage-column column-match_options">操作</th>
             </tr>
             </thead>
 
@@ -2560,10 +2569,12 @@ class Organize{
 
             <?php
             foreach ($rows as $row){
+                //参赛人数
+                $match_people_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}order WHERE match_id='{$row['match_id']}' AND order_type=1 AND pay_status IN(2,3,4)");
                 ?>
                 <tr>
                     <th scope="row" class="check-column">
-                        <label class="screen-reader-text" for="cb-select-407">选择<?=$row['role_name']?></label>
+                        <label class="screen-reader-text" for="cb-select-407">选择<?=$row['match_name']?></label>
                         <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                         <div class="locked-indicator">
                             <span class="locked-indicator-icon" aria-hidden="true"></span>
@@ -2576,28 +2587,52 @@ class Organize{
 
                         <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                     </td>
-                    <td class="match_status column-match_status" data-colname="状态">
+                    <td class="scene column-scene" data-colname="场景">
                         <?php
-                        switch ($row['match_status']){
-                            case '-3':
-                                echo '已结束';
-                                break;
-                            case '-2':
-                                echo '等待开赛';
-                                break;
+                        switch ($row['match_scene']){
                             case '1':
-                                echo '报名中';
+                                echo '正式比赛';
                                 break;
                             case '2':
-                                echo '进行中';
+                                echo '模拟比赛';
                                 break;
+                            default:
+                                echo '未知';
                         }
                         ?>
                     </td>
-                    <td class="date_time column-date_time" data-colname="时间">
-                        <?=$row['match_start_time'].'<br >'.$row['match_end_time']?>
+                    <td class="match_people_num column-match_people_num" data-colname="参赛人数">
+                        <a href="<?=admin_url('edit.php?post_type=match&page=match_student&match_id='.$row['match_id'])?>"> <?=$match_people_num > 0 ? $match_people_num : 0?></a>
                     </td>
-
+                    <td class="cost column-cost" data-colname="费用"><?=$row['match_cost']?></td>
+                    <td class="match_address column-match_address" data-colname="比赛地点"><?=$row['match_address']?></td>
+                    <td class="match_date column-match_date" data-colname="比赛日期"><?=$row['match_start_time']?><br /><?=$row['match_end_time']?></td>
+                    <td class="sign_date column-sign_date" data-colname="报名截止日期"><?=$row['entry_end_time']?></td>
+                    <td class="created_date column-created_date" data-colname="发布日期"><?=$row['created_time']?></td>
+                    <td class="match_status column-match_status" data-colname="比赛状态">
+                    <?php
+                    switch ($row['match_status']){
+                        case '-3':
+                            echo '已结束';
+                            break;
+                        case '-2':
+                            echo '等待开赛';
+                            break;
+                        case '1':
+                            echo '报名中';
+                            break;
+                        case '2':
+                            echo '进行中';
+                            break;
+                        default:
+                            echo '未知';
+                    }
+                    ?>
+                    </td>
+                    <td class="match_options column-match_options" data-colname="操作">
+                        <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$row['match_id'])?>">成绩</a> |
+                        <a href="<?=admin_url('post.php?post='.$row['match_id'].'&action=edit');?>">编辑</a>
+                    </td>
                 </tr>
                 <?php
             }
@@ -2606,8 +2641,15 @@ class Organize{
             <tr>
                 <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                 <th scope="col" class="manage-column column-match_name column-primary">比赛名称</th>
-                <th scope="col" class="manage-column column-match_status">状态</th>
-                <th scope="col" class="manage-column column-date_time">时间</th>
+                <th scope="col" class="manage-column column-scene">场景</th>
+                <th scope="col" class="manage-column column-match_people_num">参赛人数</th>
+                <th scope="col" class="manage-column column-cost">费用</th>
+                <th scope="col" class="manage-column column-match_address">比赛地点</th>
+                <th scope="col" class="manage-column column-match_date">比赛日期</th>
+                <th scope="col" class="manage-column column-sign_date">报名日期</th>
+                <th scope="col" class="manage-column column-created_date">发布日期</th>
+                <th scope="col" class="manage-column column-match_status">比赛状态</th>
+                <th scope="col" class="manage-column column-match_options">操作</th>
             </tr>
             </tfoot>
 
@@ -2634,9 +2676,10 @@ class Organize{
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS p.post_title AS match_name,gm.* 
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS p.post_title AS grading_name,gm.*,p2.post_title AS grading_type 
                 FROM {$wpdb->prefix}grading_meta AS gm
                 LEFT JOIN {$wpdb->posts} AS p ON p.ID=gm.grading_id
+                LEFT JOIN {$wpdb->posts} AS p2 ON p2.ID=gm.category_id
                 WHERE gm.created_person='{$user_id}'
                 LIMIT {$start},{$pageSize}", ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -2664,10 +2707,18 @@ class Organize{
             <thead>
             <tr>
                 <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                <th scope="col" id="match_name" class="manage-column column-match_name column-primary">比赛名称</th>
+                <th scope="col" id="grading_name" class="manage-column column-grading_name column-primary">考级名称</th>
                 <th scope="col" id="scene" class="manage-column column-scene">考级场景</th>
-                <th scope="col" id="match_status" class="manage-column column-match_status">状态</th>
-                <th scope="col" id="date_time" class="manage-column column-date_time">时间</th>
+                <th scope="col" id="grading_type" class="manage-column column-grading_type">考级类型</th>
+                <th scope="col" id="created_person" class="manage-column column-created_person">责任人</th>
+                <th scope="col" id="grading_people_num" class="manage-column column-grading_people_num">考级人数</th>
+                <th scope="col" id="cost" class="manage-column column-cost">费用</th>
+                <th scope="col" id="grading_address" class="manage-column column-grading_address">考级地点</th>
+                <th scope="col" id="grading_date" class="manage-column column-grading_date">考级日期</th>
+                <th scope="col" id="sign_date" class="manage-column column-sign_date">报名日期</th>
+                <th scope="col" id="created_date" class="manage-column column-created_date">发布日期</th>
+                <th scope="col" id="grading_status" class="manage-column column-grading_status">考级状态</th>
+                <th scope="col" id="grading_options" class="manage-column column-grading_options">操作</th>
             </tr>
             </thead>
 
@@ -2675,18 +2726,23 @@ class Organize{
 
             <?php
             foreach ($rows as $row){
+                //参赛人数
+                $match_people_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}order WHERE match_id='{$row['grading_id']}' AND order_type=2 AND pay_status IN(2,3,4)");
+                //责任人
+                $created_person = get_user_meta($row['created_person'], 'user_real_name', true)['real_name'];
+                $created_person = $created_person ? $created_person : get_user_by('ID', $row['created_person'])->user_login;
                 ?>
                 <tr>
                     <th scope="row" class="check-column">
-                        <label class="screen-reader-text" for="cb-select-407">选择<?=$row['role_name']?></label>
+                        <label class="screen-reader-text" for="cb-select-407">选择<?=$row['grading_name']?></label>
                         <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                         <div class="locked-indicator">
                             <span class="locked-indicator-icon" aria-hidden="true"></span>
-                            <span class="screen-reader-text">“<?=$row['match_name']?>”已被锁定</span>
+                            <span class="screen-reader-text">“<?=$row['grading_name']?>”已被锁定</span>
                         </div>
                     </th>
-                    <td class="match_name column-match_name has-row-actions column-primary" data-colname="比赛名称">
-                        <?=$row['match_name']?>
+                    <td class="grading_name column-grading_name has-row-actions column-primary" data-colname="考级名称">
+                        <?=$row['grading_name']?>
                         <br>
 
                         <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
@@ -2700,10 +2756,22 @@ class Organize{
                             case '2':
                                 echo '模拟考级';
                                 break;
+                            default:
+                                echo '未知';
                         }
                         ?>
                     </td>
-                    <td class="match_status column-match_status" data-colname="状态">
+                    <td class="grading_type column-grading_type" data-colname="考级类型"><?=$row['grading_type']?></td>
+                    <td class="created_person column-created_person" data-colname="责任人"><?=$created_person?></td>
+                    <td class="grading_people_num column-grading_people_num" data-colname="考级人数">
+                        <?=$match_people_num > 0 ? $match_people_num : 0?>
+                    </td>
+                    <td class="cost column-cost" data-colname="费用"><?=$row['cost']?></td>
+                    <td class="grading_address column-grading_address" data-colname="考级地点"><?=$row['address']?></td>
+                    <td class="grading_date column-grading_date" data-colname="考级日期"><?=$row['start_time']?><br /><?=$row['end_time']?></td>
+                    <td class="sign_date column-sign_date" data-colname="报名截止日期"><?=$row['entry_end_time']?></td>
+                    <td class="created_date column-created_date" data-colname="发布日期"><?=$row['created_time']?></td>
+                    <td class="grading_status column-grading_status" data-colname="考级状态">
                         <?php
                         switch ($row['status']){
                             case '-3':
@@ -2718,13 +2786,15 @@ class Organize{
                             case '2':
                                 echo '进行中';
                                 break;
+                            default:
+                                echo '未知';
                         }
                         ?>
                     </td>
-                    <td class="date_time column-date_time" data-colname="时间">
-                        <?=$row['start_time'].'<br >'.$row['end_time']?>
+                    <td class="match_options column-match_options" data-colname="操作">
+                        <a href="<?=admin_url('edit.php?post_type=grading&page=grading-students&grading_id='.$row['grading_id'])?>">成绩</a> |
+                        <a href="<?=admin_url('post.php?post='.$row['grading_id'].'&action=edit');?>">编辑</a>
                     </td>
-
                 </tr>
                 <?php
             }
@@ -2732,17 +2802,23 @@ class Organize{
             <tfoot>
             <tr>
                 <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                <th scope="col" class="manage-column column-match_name column-primary">比赛名称</th>
+                <th scope="col" class="manage-column column-grading_name column-primary">考级名称</th>
                 <th scope="col" class="manage-column column-scene">考级场景</th>
-                <th scope="col" class="manage-column column-match_status">状态</th>
-                <th scope="col" class="manage-column column-date_time">时间</th>
+                <th scope="col" class="manage-column column-grading_type">考级类型</th>
+                <th scope="col" class="manage-column column-created_person">责任人</th>
+                <th scope="col" class="manage-column column-grading_people_num">考级人数</th>
+                <th scope="col" class="manage-column column-cost">费用</th>
+                <th scope="col" class="manage-column column-grading_address">考级地点</th>
+                <th scope="col" class="manage-column column-grading_date">考级日期</th>
+                <th scope="col" class="manage-column column-sign_date">报名日期</th>
+                <th scope="col" class="manage-column column-created_date">发布日期</th>
+                <th scope="col" class="manage-column column-grading_status">考级状态</th>
+                <th scope="col" class="manage-column column-grading_options">操作</th>
             </tr>
             </tfoot>
 
         </table>
         <div class="tablenav bottom">
-
-
             <div class="tablenav-pages">
                 <span class="displaying-num"><?=$count['count']?>个项目</span>
                 <?=$pageHtml?>

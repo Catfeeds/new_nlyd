@@ -382,7 +382,7 @@ function the_table_install () {
             `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
             `match_id` int(20) NOT NULL COMMENT '比赛id(posts主键ID)',
             `match_slogan` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '比赛口号',
-            `match_scene` tinyint(2) DEFAULT NULL COMMENT '比赛口号',
+            `match_scene` tinyint(2) DEFAULT NULL COMMENT '1正式,2模拟',
             `match_genre` int(20) DEFAULT NULL COMMENT '比赛类型',
             `match_start_time` datetime DEFAULT NULL COMMENT '比赛时间',
             `match_end_time` datetime DEFAULT NULL COMMENT '比赛结束时间',

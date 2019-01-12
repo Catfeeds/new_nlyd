@@ -50,6 +50,11 @@ class Spread{
 
         ?>
         <div class="wrap">
+            <style type="text/css">
+                #the-list td,#the-list th{
+                    padding: 15px 10px;
+                }
+            </style>
             <h1 class="wp-heading-inline">收益设置列表</h1>
 
             <a href="<?=admin_url('admin.php?page=fission-add-profit-set')?>" class="page-title-action">添加收益设置</a>
@@ -161,10 +166,11 @@ class Spread{
                             </td>
 
                         </tr>
-                    </tbody>
+
                     <?php
                 }
                 ?>
+                </tbody>
                 <tfoot>
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
@@ -304,13 +310,14 @@ class Spread{
         foreach ($organizeList as $olv){
             $spreadCategory[$olv['zone_type_alias']] = '成为'.$olv['zone_type_name'];
         }
-        //默认比赛权限
-//        $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_join_match_role AS zjmr
-//                                 LEFT JOIN {$wpdb->prefix}zone_match_role AS zmr ON zmr.id=zjmr.match_role_id
-//                                 WHERE zjmr.zone_type_id='{$olv['id']}' AND zmr.is_profit=1", ARRAY_A);
-//        foreach ($zoneMatchRoleList as $zmrlv){
-//            $spreadCategory[$olv['zone_type_alias'].'_'.$zmrlv['role_alias']] = $olv['zone_type_name'].$zmrlv['role_name'];
-//        }
+        //课程类型
+        $courseTypeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}course_type", ARRAY_A);
+
+        foreach ($courseTypeList as $ctlv){
+            $spreadCategory[$ctlv['type_alias']] = '购买'.$ctlv['type_name'];
+//            $spreadCategory[$ctlv['type_alias']] = $ctlv['type_name'].'2级达标';
+//            $spreadCategory[$ctlv['type_alias']] = $ctlv['type_name'].'推荐满3人';
+        }
         $spreadCategory['match_grading_run'] = '机构比赛考级';
 
         //=..去除已有类型
@@ -327,7 +334,6 @@ class Spread{
                     <?php if($row['match_grading'] < 1 && count($spreadCategory) > 1){
                         echo 'display: none;';
                     }?>
-
                 }
             </style>
             <div id="ajax-response">
@@ -1412,14 +1418,15 @@ class Spread{
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/机构</th>
+                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">提现主体</th>
+                    <th scope="col" id="extract_type" class="manage-column column-extract_type">提现类型</th>
                     <th scope="col" id="extract_amount" class="manage-column column-extract_amount">提现金额</th>
-                    <th scope="col" id="extract_type" class="manage-column column-extract_type">收款类型</th>
-                    <th scope="col" id="extract_account" class="manage-column column-extract_account">收款账号</th>
-                    <th scope="col" id="apply_time" class="manage-column column-apply_time">申请时间</th>
-                    <th scope="col" id="censor_time" class="manage-column column-censor_time">审核时间</th>
+                    <th scope="col" id="extract_mode" class="manage-column column-extract_mode">提现方式</th>
+                    <th scope="col" id="extract_account" class="manage-column column-extract_account">提现账户</th>
+                    <th scope="col" id="apply_time" class="manage-column column-apply_time">发起时间</th>
+                    <th scope="col" id="censor_time" class="manage-column column-censor_time">处理时间</th>
                     <th scope="col" id="extract_status" class="manage-column column-extract_status">提现状态</th>
-                    <th scope="col" id="censor_user_id" class="manage-column column-censor_user_id">审核人</th>
+                    <th scope="col" id="censor_user_id" class="manage-column column-censor_user_id">处理人</th>
                     <th scope="col" id="options1" class="manage-column column-options1">操作</th>
                 </tr>
                 </thead>
@@ -1428,7 +1435,27 @@ class Spread{
 
                 <?php
                 foreach ($rows as $row){
-                    $real_name = get_user_meta($row['extract_id'],'user_real_name',true)['real_name'];
+                    //主体或机构
+                    $zone_meta = $wpdb->get_row("SELECT zone_name,zone_city,zone_match_type,type_id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$row['extract_id']}'", ARRAY_A);
+                    $type_name = '';
+                    if($zone_meta){
+                        $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$zone_meta['type_id']}");
+                        switch ($type_alias){
+                            case 'match':
+                                $real_name = date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$zone_meta['zone_city'].'</span>'.($zone_meta['zone_match_type']=='1'?'战队精英赛':'城市赛');
+                                break;
+                            case 'trains':
+                                $real_name = 'IISC'. '<span style="color: #c40c0f">' .$zone_meta['zone_name'].'</span>'.'国际脑力训练中心';
+                                break;
+                            case 'test':
+                                $real_name =  'IISC'. '<span style="color: #c40c0f">' .$zone_meta['zone_name'].'</span>'.'国际脑力测评中心';
+                                break;
+                        }
+                        $type_name = '机构';
+                    }else{
+                        $real_name = get_user_meta($row['extract_id'],'user_real_name',true)['real_name'];
+                        $type_name = '个人';
+                    }
                     ?>
                     <tr data-id="<?=$row['id']?>">
                         <th scope="row" class="check-column">
@@ -1439,13 +1466,14 @@ class Spread{
                                 <span class="screen-reader-text">“<?=$real_name?>”已被锁定</span>
                             </div>
                         </th>
-                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/用户名">
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="提现主体">
                             <?=$real_name?>
                             <br>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
+                        <td class="extract_type column-extract_type" data-colname="提现方式"><?=$type_name?> </td>
                         <td class="extract_amount column-extract_amount" data-colname="提现金额"><?=$row['extract_amount']?> </td>
-                        <td class="extract_type column-extract_type" data-colname="收款类型">
+                        <td class="extract_mode column-extract_mode" data-colname="收款类型">
                             <?php
                                 switch ($row['extract_type']){
                                     case 'weChat':
@@ -1460,7 +1488,7 @@ class Spread{
                                 }
                             ?>
                         </td>
-                        <td class="extract_account column-extract_account" data-colname="收款账号" <?=$row['extract_type'] == 'weChat' ? 'id="imgs-'.$row['extract_id'].'"':''?>>
+                        <td class="extract_account column-extract_account" data-colname="提现账户" <?=$row['extract_type'] == 'weChat' ? 'id="imgs-'.$row['extract_id'].'"':''?>>
                             <?php
                             switch ($row['extract_type']){
                                 case 'weChat':
@@ -1475,8 +1503,8 @@ class Spread{
                             }
                             ?>
                         </td>
-                        <td class="apply_time column-apply_time" data-colname="申请时间"> <?=$row['apply_time']?></td>
-                        <td class="censor_time column-censor_time" data-colname="审核时间"> <?=$row['censor_time']?></td>
+                        <td class="apply_time column-apply_time" data-colname="发起时间"> <?=$row['apply_time']?></td>
+                        <td class="censor_time column-censor_time" data-colname="处理时间"> <?=$row['censor_time']?></td>
                         <td class="extract_status column-extract_status" data-colname="提现状态">
                         <?php
                             switch ($row['extract_status']){
@@ -1492,20 +1520,20 @@ class Spread{
                             }
                         ?>
                         </td>
-                        <td class="censor_user_id column-censor_user_id" data-colname="审核人">
-                            <?=$row['censor_real_name'] ? unserialize($row['censor_real_name'])['real_name']:get_user_by('ID','censor_user_id')->user_login?>
+                        <td class="censor_user_id column-censor_user_id" data-colname="处理人">
+                            <?=$row['censor_real_name'] ? unserialize($row['censor_real_name'])['real_name']:get_user_by('ID',$row['censor_user_id'])->user_login?>
                         </td>
                         <td class="options1 column-options1" data-colname="操作">
                             <?php
                             switch ($row['extract_status']){
                                 case '1':
-                                    echo '<a href="javascript:;" class="option-a" data-status="2">改为已提现</a> | <a href="javascript:;" class="option-a" data-status="3">改为未通过</a>';
+                                    echo '<a href="javascript:;" class="option-a" data-status="2">确认</a> | <a href="javascript:;" class="option-a" data-status="3">拒绝</a>';
                                     break;
                                 case '2':
 //                                    echo '<a href="javascript:;" class="option-a" data-status="1">改为审核中</a> | <a href="javascript:;" class="option-a" data-status="3">改为未通过</a>';
                                     break;
                                 case '3':
-                                    echo '<a href="javascript:;" class="option-a" data-status="1">改为审核中</a> | <a href="javascript:;" class="option-a" data-status="2">改为已提现</a>';
+                                    echo '<a href="javascript:;" class="option-a" data-status="2">确认</a>';
                                     break;
                             }
                             ?>
@@ -1521,14 +1549,15 @@ class Spread{
                 <tfoot>
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                    <th scope="col" class="manage-column column-real_name column-primary">姓名/机构</th>
+                    <th scope="col" class="manage-column column-real_name column-primary">提现主体</th>
+                    <th scope="col" class="manage-column column-extract_type">提现类型</th>
                     <th scope="col" class="manage-column column-extract_amount">提现金额</th>
-                    <th scope="col" class="manage-column column-extract_type">收款类型</th>
-                    <th scope="col" class="manage-column column-extract_account">收款账号</th>
-                    <th scope="col" class="manage-column column-apply_time">申请时间</th>
-                    <th scope="col" class="manage-column column-censor_time">审核时间</th>
+                    <th scope="col" class="manage-column column-extract_mode">提现方式</th>
+                    <th scope="col" class="manage-column column-extract_account">提现账户</th>
+                    <th scope="col" class="manage-column column-apply_time">发起时间</th>
+                    <th scope="col" class="manage-column column-censor_time">处理时间</th>
                     <th scope="col" class="manage-column column-extract_status">提现状态</th>
-                    <th scope="col" class="manage-column column-censor_user_id">审核人</th>
+                    <th scope="col" class="manage-column column-censor_user_id">处理人</th>
                     <th scope="col" class="manage-column column-options1">操作</th>
                 </tr>
                 </tfoot>
