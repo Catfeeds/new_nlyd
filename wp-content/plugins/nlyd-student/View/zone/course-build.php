@@ -16,7 +16,7 @@
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <input type="hidden" name="action" value="zone_course_created"/>
-                        <input type="hidden" name="id" value="<?=$_GET['id']?>"/>
+                        <input type="hidden" id="course_id" name="id" value="<?=$_GET['id']?>"/>
                         <?php if(!empty($course_type)):?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程类型', 'nlyd-student')?>：</span></div>
@@ -130,6 +130,44 @@ jQuery(function($) {
             }
         })
     }
+    $('#close_course').click(function(){
+        var course_id=$('#course_id').val();
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            $.ajax({
+                data: {id:course_id,type:'zone_close_course'},
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
+                success: function(res, textStatus, jqXHR){
+                    if(res.data.info){
+                        $.alerts(res.data.info)
+                    }
+                    if(res.success){
+                        if(res.data.url){
+                            setTimeout(function() {
+                                window.location.href=res.data.url
+                            }, 300);
+
+                        }else{
+                            _this.removeClass('disabled');
+                        }
+                    }else{
+                        _this.removeClass('disabled');
+                    }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                        _this.removeClass('disabled');
+            　　　　 }
+                }
+            })
+        }else{
+            $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+        }
+
+    })
     //---------------------------课程类型------------------------------
     if($('#course_type1').val().length>0 && $('#course_type1').val()){
         $.each(course_type1_Data,function(index,value){
