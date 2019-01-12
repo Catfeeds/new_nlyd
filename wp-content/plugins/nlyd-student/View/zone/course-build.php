@@ -109,7 +109,6 @@ jQuery(function($) {
     var posiotion_course_type1=[0];//初始化位置，高亮展示
     var posiotion_course_type2=[0];//初始化位置，高亮展示
     var posiotion_course_date=[0,0,0,0,0];//初始化位置，高亮展示
-
     //---------------------------课程类型------------------------------
     if($('#course_type1').val().length>0 && $('#course_type1').val()){
         $.each(course_type1_Data,function(index,value){
