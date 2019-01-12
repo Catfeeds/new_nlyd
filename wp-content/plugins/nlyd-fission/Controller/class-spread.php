@@ -112,6 +112,9 @@ class Spread{
                                         case '3':
                                             echo '单区县';
                                             break;
+                                        case '4':
+                                            echo '其它';
+                                            break;
                                     }
                                 ?>
                             </td>
@@ -321,7 +324,7 @@ class Spread{
             <h1 id="add-new-user">添加/编辑分成项</h1>
             <style type="text/css">
                 .match_spread_tr{
-                    <?php if($row['match_grading'] < 1){
+                    <?php if($row['match_grading'] < 1 && count($spreadCategory) > 1){
                         echo 'display: none;';
                     }?>
 
@@ -369,6 +372,7 @@ class Spread{
                             <label for="match_type_1"><input type="radio" <?=isset($row['match_type']) && $row['match_type'] == '1' ? 'checked="checked"' : ''?> name="match_type" value="1" id="match_type_1">战队赛</label>
                             <label for="match_type_2"><input type="radio" <?=isset($row['match_type']) && $row['match_type'] == '2' ? 'checked="checked"' : ''?> name="match_type" value="2" id="match_type_2">多区县城市赛</label>
                             <label for="match_type_3"><input type="radio" <?=isset($row['match_type']) && $row['match_type'] == '3' ? 'checked="checked"' : ''?> name="match_type" value="3" id="match_type_3">单区县城市赛</label>
+                            <label for="match_type_4"><input type="radio" <?=isset($row['match_type']) && $row['match_type'] == '4' ? 'checked="checked"' : ''?> name="match_type" value="4" id="match_type_4">其它比赛</label>
                         </td>
                     </tr>
                     <tr class="">
