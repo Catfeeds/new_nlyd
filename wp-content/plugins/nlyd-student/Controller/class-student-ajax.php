@@ -6325,10 +6325,10 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         $map[] = " a.zone_id = {$current_user->ID} ";
-        if($_POST['is_enable'] == 'history'){
-            $map[] = " a.is_enable = -3 or a.is_enable = -4 ";
-        }elseif ($_POST['is_enable'] == 'matching'){
-            $map[] = " a.match_status != -3 ";
+        if($_POST['course_type'] == 'history'){
+            $map[] = " a.is_enable < -2 ";
+        }elseif ($_POST['course_type'] == 'matching'){
+            $map[] = " a.is_enable != -3 ";
         }
         $where = join("and",$map);
 
@@ -6373,7 +6373,7 @@ class Student_Ajax
      * 机构关闭课程
      */
     public function zone_close_course(){
-        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('参数必传')));
+        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('课程id不能为空')));
         global $wpdb,$current_user;
         $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>-4),array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
         if($a){
@@ -6381,6 +6381,61 @@ class Student_Ajax
         }else{
             wp_send_json_error(array('info'=>'关闭失败'));
         }
+    }
+
+    /**
+     * 获取课程报名学员
+     */
+    public function get_course_student(){
+        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('课程id不能为空')));
+        global $wpdb,$current_user;
+
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        $sql = "select a.match_id,a.user_id,b.course_category_id from {$wpdb->prefix}order a 
+                left join {$wpdb->prefix}course b on a.match_id = b.id
+                left join {$wpdb->prefix}users c on b.user_id = c.ID
+                where b.zone_id = {$current_user->ID} and a.match_id = {$_POST['id']} 
+                and a.order_type = 3 and pay_status in (2,3,4)
+                limit $start,$pageSize";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($sql);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无学员', 'nlyd-student')));
+        if(!empty($rows)){
+
+            foreach ($rows as $k => $v){
+                $rows[$k]['order'] =  $start+$k+1;
+
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','user_images_color','user_head') and user_id = {$v['user_id']}";
+                $res = $wpdb->get_results($sql_,ARRAY_A);
+                $user_info = array_column($res,'meta_value','meta_key');
+                //print_r($user_info);
+                $rows[$k]['user_ID'] = !empty($user_info['user_ID']) ? $user_info['user_ID'] : $v['coach_id']+10000000;
+                $rows[$k]['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-' ;
+                $user_real_name = unserialize($user_info['user_real_name']);
+                $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
+                $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
+                $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$v['user_id']} ");
+                $rows[$k]['referee_id'] = !empty($referee_id > 0 ) ? $referee_id+10000000 : '-' ;
+                //获取考级是否达标
+                $project_alias = get_post_meta($v['course_category_id'],'project_alias');
+                if($project_alias == 'reading'){
+
+                }
+                elseif ($project_alias == 'memory'){
+
+                }
+                else{
+                    //arithmetic
+                }
+            }
+        }
+        //print_r($rows);
+        wp_send_json_success(array('info'=>$rows));
     }
 
 
