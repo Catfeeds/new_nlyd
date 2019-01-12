@@ -688,17 +688,17 @@ class Student_Zone
 
             foreach ($rows as $k => $v){
                 if($v['is_enable'] != -4){
+
                     $is_enable = '';
                     if($v['course_start_time'] > 0){
-
                         if(get_time() < $v['course_start_time']){
                             $is_enable = 1; //报名中
                         }
-                        elseif ( $v['course_start_time'] <= get_time() && get_time() <= $v['course_start_time']){
-
+                        elseif ( $v['course_start_time'] <= get_time() && get_time() <= $v['course_end_time']){
                             $is_enable = 2; //授课中
                         }
                         else{
+
                             $is_enable = -3;    //已结课
                         }
                     }else{
