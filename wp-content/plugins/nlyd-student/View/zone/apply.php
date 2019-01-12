@@ -60,16 +60,16 @@
         })
         if($('#areaSelect').length>0){
             if($('#areaSelect').val().length>0 && $('#areaSelect').val()){
-                var areaValue=$('#areaSelect').val()
+                var areaValue=$('#areaSelect').val().split('-');
                 $.each(area,function(index,value){
-                    if(areaValue.indexOf(value.value)!=-1){
+                    if(areaValue[0]==value.value){
                         // console.log(value)
                         posiotionarea=[index,0,0];
                         $.each(value.childs,function(i,v){
-                            if(areaValue.indexOf(v.value)!=-1){
+                            if(areaValue[1]==v.value){
                                 posiotionarea=[index,i,0];
                                 $.each(v.childs,function(j,val){
-                                    if(areaValue.indexOf(val.value)!=-1){
+                                    if(areaValue[2] && areaValue[2]==val.value){
                                         posiotionarea=[index,i,j];
                                     }
                                 })
@@ -126,14 +126,14 @@
         }
         function nameRowIsShow() {
             var id=$('#zone_match_type').val();
-            if(id==1){
+            if(id==1 || id=='team'){
                 $('.name_row').removeClass('dis_none')
             }else{
                 $('.name_row').addClass('dis_none')
             }
         }
         nameRowIsShow()
-        var match_type_data=[{id:'team',value:"<?=__('战队精英赛', 'nlyd-student')?>"},{id:'city_single',value:"<?=__('城市赛(单)', 'nlyd-student')?>"},{id:'city_double',value:"<?=__('城市赛(双)', 'nlyd-student')?>"}]
+        var match_type_data=[{id:'1',value:"<?=__('战队精英赛', 'nlyd-student')?>"},{id:'2',value:"<?=__('城市赛(单)', 'nlyd-student')?>"},{id:'3',value:"<?=__('城市赛(多)', 'nlyd-student')?>"}]
         var posiotion_match_type=[0];//初始化位置，高亮展示
         if($('#zone_match_type_val').length>0){
             if($('#zone_match_type_val').val() && $('#zone_match_type_val').val().length>0){
@@ -157,6 +157,7 @@
                 callback:function(indexArr, data){
                     $('#zone_match_type_val').val(data[0]['value']);
                     $('#zone_match_type').val(data[0]['id']);
+
                     nameRowIsShow()
                 }
             });
@@ -291,7 +292,8 @@
                     }
                     if(data.field['zone_match_type']){//赛区
                         fd.append('zone_match_type',data.field['zone_match_type']);
-                        if(data.field['zone_match_type']=='team'){//战队赛
+                        //alert(data.field['zone_match_type']);
+                        if(data.field['zone_match_type'] == 1){//战队赛
                             fd.append('zone_name',data.field['zone_name']);
                         }
                     }else{//训练中心、测评中心字号
@@ -299,6 +301,9 @@
                     }
                     if(data.field['center_manager']){//训练中心（分中心总经理）
                         fd.append('center_manager',data.field['center_manager']);
+                    }
+                    if($.Request('zone_id')){//训练中心（分中心总经理）
+                        fd.append('zone_id',$.Request('zone_id'));
                     }
                     $.ajax({
                         data: fd,

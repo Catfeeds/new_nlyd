@@ -1151,7 +1151,12 @@ class Student_Zone
         $row['user_head'] = get_user_meta($current_user->ID,'user_head')[0];
         $row['user_ID'] = get_user_meta($current_user->ID,'user_ID')[0];
         $city = !empty($row['zone_city']) ? '（'.$row['zone_city'].'）' : '';
-        $row['zone_name'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'赛组委会';
+        $row['zone_title'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'赛组委会';
+        $row['zone_match_type_cn'] = $row['is_double']==1 ? $row['zone_match_type_cn'].'（多）' : $row['zone_match_type_cn'].'（单）';
+        //获取负责人
+        if(!empty($row['center_manager_id'])){
+            $row['center_manager'] = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['center_manager_id']} ");
+        }
 
         //获取推荐人
         $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$row['referee_id']} and meta_key in ('user_real_name','user_ID') ";
@@ -1189,22 +1194,12 @@ class Student_Zone
 
         //获取机构类型
         $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
-        if($_GET['zone_type_alias'] == 'match'){
-            $data['zone_type_name'] = '赛区';
-        }
+
         //获取事业管理员
         $user_real_name = get_user_meta($current_user->data->referee_id,'user_real_name')[0];
         if(!empty($user_real_name)){
             $data['referee_name'] = $user_real_name['real_name'];
         }
-        //print_r($user_info);
-        //分中心负责人
-        if(!empty($user_info['user_real_name'])){
-            $data['director'] = $user_info['user_real_name']['real_name'];
-            $data['contact'] = $user_info['contact'];
-            $data['user_ID_Card'] = $user_info['user_ID_Card'];
-        }
-
         //print_r($row);
         $view = student_view_path.CONTROLLER.'/apply.php';
         load_view_template($view,$data);

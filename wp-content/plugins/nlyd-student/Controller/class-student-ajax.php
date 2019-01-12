@@ -4554,10 +4554,10 @@ class Student_Ajax
         ini_set('post_max_size','30M');
         //print_r($_POST);die;
         //$_POST['zone_match_address'] = '江苏省-南京市-建邺区';
-        if($_POST['zone_num'] > 0){
-            $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where id = {$_POST['zone_num']}",ARRAY_A);
+        if($_POST['zone_id'] > 0){
+            $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where id = {$_POST['zone_id']}",ARRAY_A);
             if($row['user_status']== -1){
-                wp_send_json_error(array('info'=>'资料审核中,禁止修改'));
+                //wp_send_json_error(array('info'=>'资料审核中,禁止修改'));
             }
             if($row['user_status']== 1){
                 wp_send_json_error(array('info'=>'审核已通过,资料禁止修改'));
@@ -4568,18 +4568,19 @@ class Student_Ajax
         }
         if($_POST['zone_type_alias'] == 'match'){
             if(empty($_POST['zone_match_type'])) wp_send_json_error(array('info'=>'赛区类型必选'));
-            if($_POST['zone_match_type'] == 'team'){
+            if($_POST['zone_match_type'] == 1){
                 $zone_match_type = 1;
             }else{
                 $zone_match_type = 2;
             }
-            if($_POST['zone_match_type'] == 'city_double'){
-                $is_double = 1;
-            }
-            if($_POST['zone_match_type'] == 'city_double'){
+            if($_POST['zone_match_type'] == 2){ //单区
                 $is_double = 2;
             }
+            if($_POST['zone_match_type'] == 3){ //多区
+                $is_double = 1;
+            }
         }
+        //print_r($is_double);
         if(empty($_POST['business_licence_url'])){
             if(empty($_POST['business_licence'])){
                 wp_send_json_error(array('info'=>'营业执照必传'));
