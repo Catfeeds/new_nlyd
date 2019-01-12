@@ -673,6 +673,49 @@ class Student_Zone
      * 课程管理列表
      */
     public function course(){
+
+        //判断课程状态
+        global $wpdb,$current_user;
+        $sql = "select a.id,count(c.id) entry_total,a.open_quota,a.is_enable,unix_timestamp(course_start_time) course_start_time,unix_timestamp(course_end_time) course_end_time
+                from {$wpdb->prefix}course a 
+                left join {$wpdb->prefix}order c on a.id = c.match_id and c.pay_status in (2,3,4)
+                where a.zone_id = {$current_user->ID}
+                group by a.id
+                order by a.course_start_time desc ,a.is_enable desc";
+        $rows =  $wpdb->get_results($sql,ARRAY_A);
+        //print_r($rows);
+        if(!empty($rows)){
+
+            foreach ($rows as $k => $v){
+                $is_enable = '';
+
+                if($v['course_start_time'] > 0){
+
+                    if(get_time() < $v['course_start_time']){
+                        $is_enable = 1; //报名中
+                    }
+                    elseif ( $v['course_start_time'] <= get_time() && get_time() <= $v['course_start_time']){
+
+                        $is_enable = 2; //授课中
+                    }
+                    else{
+                        $is_enable = -3;    //已结课
+                    }
+                }else{
+                    if($v['entry_total'] < $v['open_quota']){
+                        $is_enable = 1;
+                    }
+                    elseif ($v['entry_total'] >= $v['open_quota']){
+                        $is_enable = -2;
+                    }
+                }
+                if(!empty($is_enable)){
+                    $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>$is_enable),array('id'=>$v['id']));
+                }
+
+
+            }
+        }
         $view = student_view_path.CONTROLLER.'/course-list.php';
         load_view_template($view);
     }

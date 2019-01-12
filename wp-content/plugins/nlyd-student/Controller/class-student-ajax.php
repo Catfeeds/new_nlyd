@@ -6318,7 +6318,7 @@ class Student_Ajax
     public function get_zone_course(){
         global $wpdb,$current_user;
 
-        $map[] = " a.created_id = {$current_user->ID} ";
+        $map[] = " a.zone_id = {$current_user->ID} ";
         if($_POST['is_enable'] == 'history'){
             $map[] = " a.is_enable = -3 ";
         }elseif ($_POST['is_enable'] == 'matching'){
@@ -6331,7 +6331,7 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
-        $sql = "select a.course_title,a.const,count(c.id) entry_total,b.course_type,a.open_quota,
+        $sql = "select a.id,a.course_title,a.const,count(c.id) entry_total,b.type_name,a.open_quota,a.is_enable,a.coach_id,
                 if(unix_timestamp(course_start_time)>0,date_format(course_start_time,'%Y-%m-%d %H:%i'),'待确认') start_time,
                 case a.is_enable
                 when '-3' then '已结课'
@@ -6343,10 +6343,11 @@ class Student_Ajax
                 left join {$wpdb->prefix}course_type b on a.course_type = b.id
                 left join {$wpdb->prefix}order c on a.id = c.match_id and c.pay_status in (2,3,4)
                 where {$where} 
-                group by a.match_id
-                order by a.match_start_time desc ,a.match_status desc
+                group by a.id
+                order by a.course_start_time desc ,a.is_enable desc
                 limit $start,$pageSize
                ";
+        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -6354,6 +6355,11 @@ class Student_Ajax
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无课程', 'nlyd-student')));
+        foreach ($rows as $k => $val){
+            $user_real_name = get_user_meta($val['coach_id'],'user_real_name')[0];
+
+            $rows[$k]['real_name'] = !empty($user_real_name) ? $user_real_name['real_name'] : '-';
+        }
         wp_send_json_success(array('info'=>$rows));
     }
 
