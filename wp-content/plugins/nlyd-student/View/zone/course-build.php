@@ -15,6 +15,7 @@
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
+                        <?php if(!empty($course_type)):?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程类型', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
@@ -23,6 +24,7 @@
                                 <input class="radius_input_row nl-foucs" readonly id="course_type1" type="text" lay-verify="required" value="乐学乐分享基础应用课" placeholder="<?=__('课程类型', 'nlyd-student')?>">
                             </div>
                         </div>
+                        <?php endif;?>
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('教学类型', 'nlyd-student')?>：</span>
@@ -101,8 +103,8 @@
 </div>
 <script>
 jQuery(function($) { 
-    var course_type1_Data=[{id:1,value:"乐学乐"},{id:2,value:"乐学乐2"}];//课程类型
-    var course_type2_Data=[{id:1,value:"基础应用课"},{id:2,value:"提升应用课"}];//教学类型
+    var course_type1_Data=<?=$course_type?>;//课程类型
+    var course_type2_Data=<?=$category_type?>;//教学类型
     var course_date_Data=$.validationLayui.dates2;//开课日期
     var posiotion_course_type1=[0];//初始化位置，高亮展示
     var posiotion_course_type2=[0];//初始化位置，高亮展示

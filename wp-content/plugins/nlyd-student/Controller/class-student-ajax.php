@@ -6058,10 +6058,11 @@ class Student_Ajax
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $sql = "select a.*,b.referee_id from {$wpdb->prefix}match_team a 
-                left join {$wpdb->prefix}users b on a.user_id = b.ID
-                where a.team_id = {$current_user->ID} and a.status = 2  
-                order by id desc limit $start,$pageSize";
+        $sql = "select b.user_id from {$wpdb->prefix}zone_join_coach a 
+                left join {$wpdb->prefix}my_coach b on a.coach_id = b.coach_id
+                left join {$wpdb->prefix}users c on b.user_id = c.ID
+                where a.zone_id = {$current_user->ID} and c.ID is not null
+                GROUP by b.user_id limit $start,$pageSize";
         $rows = $wpdb->get_results($sql,ARRAY_A);
         //print_r($sql);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -6086,7 +6087,8 @@ class Student_Ajax
                 $user_real_name = unserialize($user_info['user_real_name']);
                 $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
                 $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
-                $rows[$k]['referee_id'] = !empty($v['referee_id']) ? $v['referee_id']+10000000 : '-' ;
+                $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$v['user_id']} ");
+                $rows[$k]['referee_id'] = !empty($referee_id > 0 ) ? $referee_id+10000000 : '-' ;
             }
         }
         //print_r($rows);

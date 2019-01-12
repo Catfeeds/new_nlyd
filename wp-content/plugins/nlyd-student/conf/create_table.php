@@ -973,7 +973,7 @@ function the_table_install () {
         dbDelta($sql);
     }
 
-    $table_name = $wpdb->prefix . "course_type";  //用户提现记录表
+    $table_name = $wpdb->prefix . "course_type";  //课程类型表
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //用户提现记录表
         $sql = "CREATE TABLE `{$table_name}` (

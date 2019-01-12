@@ -97,6 +97,7 @@ class Student_Home
                 break;
             default:
                 $user_info['user_type'] = __('学 员', 'nlyd-student');
+                $user_info['user_roles'] = 'student';
                 break;
         }
 
