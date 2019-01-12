@@ -182,172 +182,23 @@ class Organize{
                     padding: 15px 10px;;
                 }
             </style>
-            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
-                <thead>
-                    <tr>
-                        <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                        <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
-                        <th scope="col" id="zone_match_type" class="manage-column column-zone_match_type">办赛类型</th>
-                        <th scope="col" id="nums" class="manage-column column-nums">编号</th>
-                        <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
-                        <th scope="col" id="person" class="manage-column column-person">负责人</th>
-                        <th scope="col" id="chairman_id" class="manage-column column-chairman_id">主席</th>
-                        <th scope="col" id="secretary_id" class="manage-column column-secretary_id">秘书长</th>
-                        <th scope="col" id="apply_id" class="manage-column column-apply_id">申请人</th>
-                        <th scope="col" id="term_time" class="manage-column column-term_time">有效期</th>
-                        <th scope="col" id="match_num" class="manage-column column-match_num">办赛次数</th>
-                        <th scope="col" id="match_member_num" class="manage-column column-match_member_num">参赛人次(累计)</th>
-                        <th scope="col" id="grading_num" class="manage-column column-grading_num">考级次数</th>
-                        <th scope="col" id="grading_member_num" class="manage-column column-grading_member_num">考级人次(累计)</th>
-                        <th scope="col" id="zone_status" class="manage-column column-zone_status">申请状态</th>
-                        <th scope="col" id="options1" class="manage-column column-options1">操作</th>
-                    </tr>
-                 </thead>
+            <h2 class="screen-reader-text">机构列表</h2>
 
-                <tbody id="the-list" data-wp-lists="list:user">
+            <?php
+            $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id='{$type}'");
 
-                   <?php
-                   foreach ($rows as $row){
-//                        $usermeta = get_user_meta($row['user_id']);
-//                        $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
-                        $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
-                        $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
-                        $secretary_real_name = get_user_meta($row['secretary_id'],'user_real_name',true);
-                        $apply_real_name = get_user_meta($row['apply_id'],'user_real_name',true);
-                           //负责人
-
-                       $person_real_name = get_user_meta($person_id,'center_manager_id',true);
-                       //办赛次数
-                       $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
-                       //参赛人次
-                       $match_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}match_meta_new AS mmn 
-                                           LEFT JOIN {$wpdb->prefix}order AS o ON o.match_id=mmn.match_id
-                                           WHERE mmn.created_id='{$row['user_id']}' AND o.order_type=1 AND o.pay_status IN(2,3,4)");
-                       //考级次数
-                       $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$row['user_id']}'");
-                       //考级人次
-                       $grading_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}grading_meta AS gm 
-                                           LEFT JOIN {$wpdb->prefix}order AS o ON o.match_id=gm.grading_id
-                                           WHERE gm.created_person='{$row['user_id']}' AND o.order_type=2 AND o.pay_status IN(2,3,4)");
-//                       leo_dump($wpdb->last_query);die;
-                   ?>
-                   <tr data-uid="<?=$row['user_id']?>" data-id="<?=$row['id']?>">
-                       <th scope="row" class="check-column">
-                           <label class="screen-reader-text" for="cb-select-407">选择<?=$row['legal_person']?></label>
-                           <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
-                           <div class="locked-indicator">
-                               <span class="locked-indicator-icon" aria-hidden="true"></span>
-                               <span class="screen-reader-text">“<?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>”已被锁定</span>
-                           </div>
-                       </th>
-                       <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                            <?=date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$row['zone_city'].'</span>'.($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>
-                           <br>
-                           <div class="row-actions">
-<!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
-<!--                               <span class="view"><a href="">资料</a></span>-->
-                           </div>
-                           <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
-                       </td>
-                       <td class="zone_match_type column-zone_match_type" data-colname="办赛类型">
-
-                           <?php
-                           if($row['zone_match_type']=='1'){
-                               echo '战队精英赛';
-                           }else{
-                                echo ($row['is_double']=='1'?'多区县':'单区县').'城市赛';
-                           }
-                           ?>
-                       </td>
-                       <td class="nums column-nums" data-colname="编号"><?=$row['zone_number'];?></td>
-                       <td class="referee_id column-referee_id" data-colname="推荐人">
-                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['referee_id'])?>">
-                               <?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?>
-                           </a>
-                       </td>
-                       <td class="person column-person" data-colname="负责人">
-                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['center_manager_id'])?>">
-                               <?=isset($person_real_name['real_name'])?$person_real_name['real_name']:($row['center_manager_id']>0?get_user_by('ID',$row['center_manager_id'])->user_login:'')?>
-                           </a>
-                       </td>
-                       <td class="chairman_id column-chairman_id" data-colname="主席">
-                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['chairman_id'])?>">
-                               <?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?>
-                           </a>
-                       </td>
-                       <td class="secretary_id column-secretary_id" data-colname="秘书长">
-                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['secretary_id'])?>">
-                               <?=isset($secretary_real_name['real_name'])?$secretary_real_name['real_name']:($row['secretary_id']>0?get_user_by('ID',$row['secretary_id'])->user_login:'')?>
-                           </a>
-                       </td>
-                       <td class="apply_id column-apply_id" data-colname="申请人">
-                           <a href="<?=admin_url('users.php?page=users-info&ID='.$row['apply_id'])?>">
-                               <?=isset($apply_real_name['real_name'])?$apply_real_name['real_name']:($row['apply_id']>0?get_user_by('ID',$row['apply_id'])->user_login:'')?>
-                           </a>
-                       </td>
-
-                       <td class="term_time column-term_time" data-colname="有效期"><?=$row['term_time']?$row['term_time']:'无'?></td>
-                       <td class="match_num column-match_num" data-colname="办赛次数"><?=$match_num?></td>
-                       <td class="match_member_num column-match_member_num" data-colname="参赛人次"><?=$match_member_num?></td>
-                       <td class="grading_num column-grading_num" data-colname="考级次数"><?=$grading_num?></td>
-                       <td class="grading_member_num column-grading_member_num" data-colname="考级人次"><?=$grading_member_num?></td>
-                       <td class="zone_status column-zone_status" data-colname="申请状态">
-                           <?php
-                           if($row['user_status'] == '-1'){
-                                echo '<span style="color: #c43800">待审核</span>';
-                           } elseif ($row['user_status'] == '1'){
-                               echo '<span style="color: #0dc42b">已通过</span>';
-                           }elseif ($row['user_status'] == '-2'){
-                               echo '<span style="">已拒绝</span>';
-                           }
-                           ?>
-                       </td>
-
-                       <td class="options1 column-options1" data-colname="操作">
-
-                       <?php
-                       //操作列表
-                       $optionsArr = ["<a href='".admin_url('admin.php?page=fission-organize-statistics&id='.$row['id'])."' data-type='thaw' class=''>查看</a>"];
-                       if($row['user_status'] == '1'){
-                           switch ($row['is_able']){
-                               case 1:
-                                   array_push($optionsArr,"<a href='javascript:;' data-type='frozen' class='edit-frozen'>冻结</a>");
-                                   break;
-                               case 2:
-                                   array_push($optionsArr,"<a href='javascript:;' data-type='thaw' class='edit-thaw'>解冻</a>");
-                                   break;
-                           }
-                       }
-                       echo join(' | ',$optionsArr);
-                       ?>
-                       </td>
-                   </tr>
-                   <?php
-                   }
-                   ?>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                        <th scope="col" class="manage-column column-name column-primary">名称</th>
-                        <th scope="col" class="manage-column column-zone_match_type">办赛类型</th>
-                        <th scope="col" class="manage-column column-nums">编号</th>
-                        <th scope="col" class="manage-column column-referee_id">推荐人</th>
-                        <th scope="col" class="manage-column column-person">负责人</th>
-                        <th scope="col" class="manage-column column-chairman_id">主席</th>
-                        <th scope="col" class="manage-column column-secretary_id">秘书长</th>
-                        <th scope="col" class="manage-column column-apply_id">申请人</th>
-                        <th scope="col" class="manage-column column-term_time">有效期</th>
-                        <th scope="col" class="manage-column column-match_num">办赛次数</th>
-                        <th scope="col" class="manage-column column-match_member_num">参赛人次(累计)</th>
-                        <th scope="col" class="manage-column column-grading_num">考级次数</th>
-                        <th scope="col" class="manage-column column-grading_member_num">考级人次(累计)</th>
-                        <th scope="col" class="manage-column column-zone_status">申请状态</th>
-                        <th scope="col" class="manage-column column-options1">操作</th>
-                    </tr>
-                </tfoot>
-
-            </table>
+            switch ($type_alias){
+                case 'match':
+                    $this->matchListHtml($rows);
+                    break;
+                case 'trains':
+                    $this->trainCenterListHtml($rows);
+                    break;
+                case 'test':
+                    $this->gradingCenterListHtml($rows);
+                    break;
+            }
+            ?>
             <div class="tablenav bottom">
 
                 <div class="alignleft actions bulkactions">
@@ -359,7 +210,6 @@ class Organize{
                     </select>
                     <input type="button" id="doaction2" class="button action all_options" value="应用">
                 </div>
-
                 <div class="tablenav-pages">
                     <span class="displaying-num"><?=$count['count']?>个项目</span>
                     <?=$pageHtml?>
@@ -441,6 +291,359 @@ class Organize{
             </script>
         </div>
         <?php
+    }
+
+    /**
+     * 赛区列表html
+     */
+    private function matchListHtml($rows){
+        global $wpdb;
+        ?>
+        <table class="wp-list-table widefat fixed striped users">
+            <thead>
+            <tr>
+                <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
+                <th scope="col" id="zone_match_type" class="manage-column column-zone_match_type">办赛类型</th>
+                <th scope="col" id="nums" class="manage-column column-nums">编号</th>
+                <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
+                <th scope="col" id="person" class="manage-column column-person">负责人</th>
+                <th scope="col" id="chairman_id" class="manage-column column-chairman_id">主席</th>
+                <th scope="col" id="secretary_id" class="manage-column column-secretary_id">秘书长</th>
+                <th scope="col" id="apply_id" class="manage-column column-apply_id">申请人</th>
+                <th scope="col" id="term_time" class="manage-column column-term_time">有效期</th>
+                <th scope="col" id="match_num" class="manage-column column-match_num">办赛次数</th>
+                <th scope="col" id="match_member_num" class="manage-column column-match_member_num">参赛人次(累计)</th>
+                <th scope="col" id="grading_num" class="manage-column column-grading_num">考级次数</th>
+                <th scope="col" id="grading_member_num" class="manage-column column-grading_member_num">考级人次(累计)</th>
+                <th scope="col" id="zone_status" class="manage-column column-zone_status">申请状态</th>
+                <th scope="col" id="options1" class="manage-column column-options1">操作</th>
+            </tr>
+            </thead>
+
+            <tbody id="the-list" data-wp-lists="list:user">
+
+            <?php
+            foreach ($rows as $row){
+//                        $usermeta = get_user_meta($row['user_id']);
+//                        $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
+                $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
+                $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
+                $secretary_real_name = get_user_meta($row['secretary_id'],'user_real_name',true);
+                $apply_real_name = get_user_meta($row['apply_id'],'user_real_name',true);
+                //负责人
+
+                $person_real_name = get_user_meta($row['center_manager_id'],'user_real_name',true);
+                //办赛次数
+                $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
+                //参赛人次
+                $match_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}match_meta_new AS mmn 
+                                           LEFT JOIN {$wpdb->prefix}order AS o ON o.match_id=mmn.match_id
+                                           WHERE mmn.created_id='{$row['user_id']}' AND o.order_type=1 AND o.pay_status IN(2,3,4)");
+                //考级次数
+                $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$row['user_id']}'");
+                //考级人次
+                $grading_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}grading_meta AS gm 
+                                           LEFT JOIN {$wpdb->prefix}order AS o ON o.match_id=gm.grading_id
+                                           WHERE gm.created_person='{$row['user_id']}' AND o.order_type=2 AND o.pay_status IN(2,3,4)");
+//                       leo_dump($wpdb->last_query);die;
+                ?>
+                <tr data-uid="<?=$row['user_id']?>" data-id="<?=$row['id']?>">
+                    <th scope="row" class="check-column">
+                        <label class="screen-reader-text" for="cb-select-407">选择<?=$row['legal_person']?></label>
+                        <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                        <div class="locked-indicator">
+                            <span class="locked-indicator-icon" aria-hidden="true"></span>
+                            <span class="screen-reader-text">“<?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>”已被锁定</span>
+                        </div>
+                    </th>
+                    <td class="name column-name has-row-actions column-primary" data-colname="名称">
+                        <?=date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$row['zone_city'].'</span>'.($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>
+                        <br>
+                        <div class="row-actions">
+                            <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
+                            <!--                               <span class="view"><a href="">资料</a></span>-->
+                        </div>
+                        <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                    </td>
+                    <td class="zone_match_type column-zone_match_type" data-colname="办赛类型">
+
+                        <?php
+                        if($row['zone_match_type']=='1'){
+                            echo '战队精英赛';
+                        }else{
+                            echo ($row['is_double']=='1'?'多区县':'单区县').'城市赛';
+                        }
+                        ?>
+                    </td>
+                    <td class="nums column-nums" data-colname="编号"><?=$row['zone_number'];?></td>
+                    <td class="referee_id column-referee_id" data-colname="推荐人">
+                        <a href="<?=admin_url('users.php?page=users-info&ID='.$row['referee_id'])?>">
+                            <?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?>
+                        </a>
+                    </td>
+                    <td class="person column-person" data-colname="负责人">
+                        <a href="<?=admin_url('users.php?page=users-info&ID='.$row['center_manager_id'])?>">
+                            <?=isset($person_real_name['real_name'])?$person_real_name['real_name']:($row['center_manager_id']>0?get_user_by('ID',$row['center_manager_id'])->user_login:'')?>
+                        </a>
+                    </td>
+                    <td class="chairman_id column-chairman_id" data-colname="主席">
+                        <a href="<?=admin_url('users.php?page=users-info&ID='.$row['chairman_id'])?>">
+                            <?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?>
+                        </a>
+                    </td>
+                    <td class="secretary_id column-secretary_id" data-colname="秘书长">
+                        <a href="<?=admin_url('users.php?page=users-info&ID='.$row['secretary_id'])?>">
+                            <?=isset($secretary_real_name['real_name'])?$secretary_real_name['real_name']:($row['secretary_id']>0?get_user_by('ID',$row['secretary_id'])->user_login:'')?>
+                        </a>
+                    </td>
+                    <td class="apply_id column-apply_id" data-colname="申请人">
+                        <a href="<?=admin_url('users.php?page=users-info&ID='.$row['apply_id'])?>">
+                            <?=isset($apply_real_name['real_name'])?$apply_real_name['real_name']:($row['apply_id']>0?get_user_by('ID',$row['apply_id'])->user_login:'')?>
+                        </a>
+                    </td>
+
+                    <td class="term_time column-term_time" data-colname="有效期"><?=$row['term_time']?$row['term_time']:'无'?></td>
+                    <td class="match_num column-match_num" data-colname="办赛次数"><?=$match_num?></td>
+                    <td class="match_member_num column-match_member_num" data-colname="参赛人次"><?=$match_member_num?></td>
+                    <td class="grading_num column-grading_num" data-colname="考级次数"><?=$grading_num?></td>
+                    <td class="grading_member_num column-grading_member_num" data-colname="考级人次"><?=$grading_member_num?></td>
+                    <td class="zone_status column-zone_status" data-colname="申请状态">
+                        <?php
+                        if($row['user_status'] == '-1'){
+                            echo '<span style="color: #c43800">待审核</span>';
+                        } elseif ($row['user_status'] == '1'){
+                            echo '<span style="color: #0dc42b">已通过</span>';
+                        }elseif ($row['user_status'] == '-2'){
+                            echo '<span style="">已拒绝</span>';
+                        }
+                        ?>
+                    </td>
+
+                    <td class="options1 column-options1" data-colname="操作">
+
+                        <?php
+                        //操作列表
+                        $optionsArr = ["<a href='".admin_url('admin.php?page=fission-organize-statistics&id='.$row['id'])."' data-type='thaw' class=''>查看</a>"];
+                        if($row['user_status'] == '1'){
+                            switch ($row['is_able']){
+                                case 1:
+                                    array_push($optionsArr,"<a href='javascript:;' data-type='frozen' class='edit-frozen'>冻结</a>");
+                                    break;
+                                case 2:
+                                    array_push($optionsArr,"<a href='javascript:;' data-type='thaw' class='edit-thaw'>解冻</a>");
+                                    break;
+                            }
+                        }
+                        echo join(' | ',$optionsArr);
+                        ?>
+                    </td>
+                </tr>
+                <?php
+            }
+            ?>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                <th scope="col" class="manage-column column-name column-primary">名称</th>
+                <th scope="col" class="manage-column column-zone_match_type">办赛类型</th>
+                <th scope="col" class="manage-column column-nums">编号</th>
+                <th scope="col" class="manage-column column-referee_id">推荐人</th>
+                <th scope="col" class="manage-column column-person">负责人</th>
+                <th scope="col" class="manage-column column-chairman_id">主席</th>
+                <th scope="col" class="manage-column column-secretary_id">秘书长</th>
+                <th scope="col" class="manage-column column-apply_id">申请人</th>
+                <th scope="col" class="manage-column column-term_time">有效期</th>
+                <th scope="col" class="manage-column column-match_num">办赛次数</th>
+                <th scope="col" class="manage-column column-match_member_num">参赛人次(累计)</th>
+                <th scope="col" class="manage-column column-grading_num">考级次数</th>
+                <th scope="col" class="manage-column column-grading_member_num">考级人次(累计)</th>
+                <th scope="col" class="manage-column column-zone_status">申请状态</th>
+                <th scope="col" class="manage-column column-options1">操作</th>
+            </tr>
+            </tfoot>
+
+        </table>
+        <?php
+    }
+
+    /**
+     * 训练中心/分中心列表html
+     */
+    private function trainCenterListHtml($rows){
+        global $wpdb;
+        ?>
+        <table class="wp-list-table widefat fixed striped users">
+            <thead>
+            <tr>
+                <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                <th scope="col" id="name" class="manage-column column-name column-primary">训练中心名称</th>
+                <th scope="col" id="zone_city" class="manage-column column-zone_city">所在地</th>
+                <th scope="col" id="nums" class="manage-column column-nums">编号</th>
+                <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
+                <th scope="col" id="person" class="manage-column column-person">负责人</th>
+                <th scope="col" id="chairman_id" class="manage-column column-chairman_id">主席</th>
+                <th scope="col" id="secretary_id" class="manage-column column-secretary_id">秘书长</th>
+                <th scope="col" id="apply_id" class="manage-column column-apply_id">申请人</th>
+                <th scope="col" id="term_time" class="manage-column column-term_time">有效期</th>
+                <th scope="col" id="match_num" class="manage-column column-match_num">办赛次数</th>
+                <th scope="col" id="match_member_num" class="manage-column column-match_member_num">参赛人次(累计)</th>
+                <th scope="col" id="grading_num" class="manage-column column-grading_num">考级次数</th>
+                <th scope="col" id="grading_member_num" class="manage-column column-grading_member_num">考级人次(累计)</th>
+                <th scope="col" id="zone_status" class="manage-column column-zone_status">申请状态</th>
+                <th scope="col" id="options1" class="manage-column column-options1">操作</th>
+            </tr>
+            </thead>
+
+            <tbody id="the-list" data-wp-lists="list:user">
+
+            <?php
+            foreach ($rows as $row){
+//                        $usermeta = get_user_meta($row['user_id']);
+//                        $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
+                $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
+                $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
+                $secretary_real_name = get_user_meta($row['secretary_id'],'user_real_name',true);
+                $apply_real_name = get_user_meta($row['apply_id'],'user_real_name',true);
+                //负责人
+
+                $person_real_name = get_user_meta($row['center_manager_id'],'user_real_name',true);
+                //办赛次数
+                $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
+                //参赛人次
+                $match_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}match_meta_new AS mmn 
+                                           LEFT JOIN {$wpdb->prefix}order AS o ON o.match_id=mmn.match_id
+                                           WHERE mmn.created_id='{$row['user_id']}' AND o.order_type=1 AND o.pay_status IN(2,3,4)");
+                //考级次数
+                $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$row['user_id']}'");
+                //考级人次
+                $grading_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}grading_meta AS gm 
+                                           LEFT JOIN {$wpdb->prefix}order AS o ON o.match_id=gm.grading_id
+                                           WHERE gm.created_person='{$row['user_id']}' AND o.order_type=2 AND o.pay_status IN(2,3,4)");
+//                       leo_dump($wpdb->last_query);die;
+                ?>
+                <tr data-uid="<?=$row['user_id']?>" data-id="<?=$row['id']?>">
+                    <th scope="row" class="check-column">
+                        <label class="screen-reader-text" for="cb-select-407">选择<?=$row['legal_person']?></label>
+                        <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                        <div class="locked-indicator">
+                            <span class="locked-indicator-icon" aria-hidden="true"></span>
+                            <span class="screen-reader-text">“<?='IISC'.$row['zone_name'].'国际脑力训练中心'?>”已被锁定</span>
+                        </div>
+                    </th>
+                    <td class="name column-name has-row-actions column-primary" data-colname="名称">
+                        <?='IISC'.$row['zone_name'].'国际脑力训练中心'?>
+                        <br>
+                        <div class="row-actions">
+                            <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
+                            <!--                               <span class="view"><a href="">资料</a></span>-->
+                        </div>
+                        <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                    </td>
+                    <td class="zone_city column-zone_city" data-colname="所在地">
+
+                        <?php
+                       echo $row['zone_city'];
+                        ?>
+                    </td>
+                    <td class="nums column-nums" data-colname="编号"><?=$row['zone_number'];?></td>
+                    <td class="referee_id column-referee_id" data-colname="推荐人">
+                        <a href="<?=admin_url('users.php?page=users-info&ID='.$row['referee_id'])?>">
+                            <?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?>
+                        </a>
+                    </td>
+                    <td class="person column-person" data-colname="负责人">
+                        <a href="<?=admin_url('users.php?page=users-info&ID='.$row['center_manager_id'])?>">
+                            <?=isset($person_real_name['real_name'])?$person_real_name['real_name']:($row['center_manager_id']>0?get_user_by('ID',$row['center_manager_id'])->user_login:'')?>
+                        </a>
+                    </td>
+                    <td class="chairman_id column-chairman_id" data-colname="主席">
+                        <a href="<?=admin_url('users.php?page=users-info&ID='.$row['chairman_id'])?>">
+                            <?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?>
+                        </a>
+                    </td>
+                    <td class="secretary_id column-secretary_id" data-colname="秘书长">
+                        <a href="<?=admin_url('users.php?page=users-info&ID='.$row['secretary_id'])?>">
+                            <?=isset($secretary_real_name['real_name'])?$secretary_real_name['real_name']:($row['secretary_id']>0?get_user_by('ID',$row['secretary_id'])->user_login:'')?>
+                        </a>
+                    </td>
+                    <td class="apply_id column-apply_id" data-colname="申请人">
+                        <a href="<?=admin_url('users.php?page=users-info&ID='.$row['apply_id'])?>">
+                            <?=isset($apply_real_name['real_name'])?$apply_real_name['real_name']:($row['apply_id']>0?get_user_by('ID',$row['apply_id'])->user_login:'')?>
+                        </a>
+                    </td>
+
+                    <td class="term_time column-term_time" data-colname="有效期"><?=$row['term_time']?$row['term_time']:'无'?></td>
+                    <td class="match_num column-match_num" data-colname="办赛次数"><?=$match_num?></td>
+                    <td class="match_member_num column-match_member_num" data-colname="参赛人次"><?=$match_member_num?></td>
+                    <td class="grading_num column-grading_num" data-colname="考级次数"><?=$grading_num?></td>
+                    <td class="grading_member_num column-grading_member_num" data-colname="考级人次"><?=$grading_member_num?></td>
+                    <td class="zone_status column-zone_status" data-colname="申请状态">
+                        <?php
+                        if($row['user_status'] == '-1'){
+                            echo '<span style="color: #c43800">待审核</span>';
+                        } elseif ($row['user_status'] == '1'){
+                            echo '<span style="color: #0dc42b">已通过</span>';
+                        }elseif ($row['user_status'] == '-2'){
+                            echo '<span style="">已拒绝</span>';
+                        }
+                        ?>
+                    </td>
+
+                    <td class="options1 column-options1" data-colname="操作">
+
+                        <?php
+                        //操作列表
+                        $optionsArr = ["<a href='".admin_url('admin.php?page=fission-organize-statistics&id='.$row['id'])."' data-type='thaw' class=''>查看</a>"];
+                        if($row['user_status'] == '1'){
+                            switch ($row['is_able']){
+                                case 1:
+                                    array_push($optionsArr,"<a href='javascript:;' data-type='frozen' class='edit-frozen'>冻结</a>");
+                                    break;
+                                case 2:
+                                    array_push($optionsArr,"<a href='javascript:;' data-type='thaw' class='edit-thaw'>解冻</a>");
+                                    break;
+                            }
+                        }
+                        echo join(' | ',$optionsArr);
+                        ?>
+                    </td>
+                </tr>
+                <?php
+            }
+            ?>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                <th scope="col" class="manage-column column-name column-primary">训练中心名称</th>
+                <th scope="col" class="manage-column column-zone_city">所在地</th>
+                <th scope="col" class="manage-column column-nums">编号</th>
+                <th scope="col" class="manage-column column-referee_id">推荐人</th>
+                <th scope="col" class="manage-column column-person">负责人</th>
+                <th scope="col" class="manage-column column-chairman_id">主席</th>
+                <th scope="col" class="manage-column column-secretary_id">秘书长</th>
+                <th scope="col" class="manage-column column-apply_id">申请人</th>
+                <th scope="col" class="manage-column column-term_time">有效期</th>
+                <th scope="col" class="manage-column column-match_num">办赛次数</th>
+                <th scope="col" class="manage-column column-match_member_num">参赛人次(累计)</th>
+                <th scope="col" class="manage-column column-grading_num">考级次数</th>
+                <th scope="col" class="manage-column column-grading_member_num">考级人次(累计)</th>
+                <th scope="col" class="manage-column column-zone_status">申请状态</th>
+                <th scope="col" class="manage-column column-options1">操作</th>
+            </tr>
+            </tfoot>
+
+        </table>
+        <?php
+    }
+
+    /**
+     * 测评/考级中心中心列表html
+     */
+    private function gradingCenterListHtml($rows){
+
     }
 
     /**
@@ -832,8 +1035,8 @@ class Organize{
             if($bank_card_num == '') $error_msg = $error_msg==''?'请填写银行卡号':$error_msg.'<br >请填写银行卡号';
 //            if($chairman_id < 1) $error_msg = $error_msg==''?'请选择组委会主席':$error_msg.'<br >请选择组委会主席';
             //是否已存在编号
-            $number_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE zone_number='{$zone_number}'");
-            if($number_id && $number_id != $old_zm_id) $error_msg .= '<br >当前机构编号已存在';
+            $number_old = $wpdb->get_row("SELECT id,zone_number FROM {$wpdb->prefix}zone_meta WHERE zone_number='{$zone_number}'", ARRAY_A);
+            if($number_old && $number_old['id'] != $old_zm_id && $number_old['zone_number']) $error_msg .= '<br >当前机构编号已存在';
             if($parent_id > 0){
                 $old_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}'");
                 if($old_id == $parent_id) $error_msg = $error_msg==''?'上级不能是自身':$error_msg.'<br >上级不能是自身';
@@ -919,16 +1122,19 @@ class Organize{
                                     $error_msg = '更新机构所有者id失败!';
                                 }
                             }
-//                            if($error_msg == '') {
-//                                //添加机构管理员
-//                                if (!$wpdb->insert($wpdb->prefix . 'zone_manager', ['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) {
-//                                    $error_msg = '添加管理员失败!';
-//                                }
-//                            }
+                            if($error_msg == '') {
+                                //添加机构管理员
+                                if (!$wpdb->insert($wpdb->prefix . 'zone_manager', ['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) {
+                                    $error_msg = '添加管理员失败!';
+                                }
+                            }
                             if($error_msg == '') {
                                 //更新管理员/负责人
-                                if (!$wpdb->update($wpdb->prefix . 'zone_meta', ['center_manager_id' => $zmv['apply_id']], ['user_id' => $user_id])) {
-                                    $error_msg = '更新管理员失败!';
+                                $center_manager_id = $wpdb->get_var("SELECT center_manager_id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_id}'");
+                                if(!$center_manager_id){
+                                    if (!$wpdb->update($wpdb->prefix . 'zone_meta', ['center_manager_id' => $zmv['apply_id']], ['user_id' => $user_id])) {
+                                        $error_msg = '更新管理员失败!';
+                                    }
                                 }
                             }
                             //创建战队
