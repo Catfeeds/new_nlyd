@@ -111,6 +111,21 @@ jQuery(function($) {
     var posiotion_course_type1=[0];//初始化位置，高亮展示
     var posiotion_course_type2=[0];//初始化位置，高亮展示
     var posiotion_course_date=[0,0,0,0,0];//初始化位置，高亮展示
+    function getcost(post_data) {
+        $.ajax({
+            data: post_data,
+            success: function(res, textStatus, jqXHR){//获取比赛费用
+                if(res.data){
+                    $('#cost').val(res.data)
+                }
+            },
+            complete: function(jqXHR, textStatus){
+                if(textStatus=='timeout'){
+                    $.alerts("<?=__('获取比赛费用失败', 'nlyd-student')?>")
+        　　　　 }
+            }
+        })
+    }
     //---------------------------课程类型------------------------------
     if($('#course_type1').val().length>0 && $('#course_type1').val()){
         $.each(course_type1_Data,function(index,value){
@@ -136,27 +151,27 @@ jQuery(function($) {
             var old_val=$('#course_type1').val();
             var new_val=data[0]['value'];
             if(new_val!==old_val){
-                    // $('#match_type1').val(data[0]['value']);
-                    // $('#match_scene').val(data[0]['id']);
-                    $('#course_type1').val(data[0]['value']);
-                    $('#course_scene').val(data[0]['id']);
-                    var post_data={
-                        action:'get_match_cost',
-                        type:data[0]['role_alias']
-                    }
-                    $.ajax({
-                        data: post_data,
-                        success: function(res, textStatus, jqXHR){//获取比赛费用
-                            if(res.data){
-                                $('#cost').val(res.data)
-                            }
-                        },
-                        complete: function(jqXHR, textStatus){
-                            if(textStatus=='timeout'){
-                                $.alerts("<?=__('获取比赛费用失败', 'nlyd-student')?>")
-                    　　　　 }
-                        }
-                    })
+                // $('#match_type1').val(data[0]['value']);
+                // $('#match_scene').val(data[0]['id']);
+                $('#course_type1').val(data[0]['value']);
+                $('#course_scene').val(data[0]['id']);
+                // var post_data={
+                //     action:'get_match_cost',
+                //     type:data[0]['role_alias']
+                // }
+                // $.ajax({
+                //     data: post_data,
+                //     success: function(res, textStatus, jqXHR){//获取比赛费用
+                //         if(res.data){
+                //             $('#cost').val(res.data)
+                //         }
+                //     },
+                //     complete: function(jqXHR, textStatus){
+                //         if(textStatus=='timeout'){
+                //             $.alerts("<?=__('获取比赛费用失败', 'nlyd-student')?>")
+                // 　　　　 }
+                //     }
+                // })
             }
         }
     });
