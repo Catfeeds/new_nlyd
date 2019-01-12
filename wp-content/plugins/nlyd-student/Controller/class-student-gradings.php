@@ -42,28 +42,30 @@ class Student_Gradings extends Student_Home
             $entry_is_true = 0;
             $match_is_true = 0;
             foreach ($rows as $v){
+                if($v['status'] != -4){
 
-                if($v['match_switch'] == 'ON') {
-                    if($new_time < $v['entry_end_time']){
-                        //报名中
-                        $save['status'] = 1;
-                        $entry_is_true += 1;
+                    if($v['match_switch'] == 'ON') {
+                        if($new_time < $v['entry_end_time']){
+                            //报名中
+                            $save['status'] = 1;
+                            $entry_is_true += 1;
+                        }
+                        elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
+                            //等待开赛
+                            $save['status'] = -2;
+                            $match_is_true += 1;
+                        }
+                        elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
+                            //进行中
+                            $save['status'] = 2;
+                            $match_is_true += 1;
+                        }else{
+                            //已结束
+                            $save['status'] = -3;
+                        }
                     }
-                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
-                        //等待开赛
-                        $save['status'] = -2;
-                        $match_is_true += 1;
-                    }
-                    elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
-                        //进行中
-                        $save['status'] = 2;
-                        $match_is_true += 1;
-                    }else{
-                        //已结束
-                        $save['status'] = -3;
-                    }
+                    $a = $wpdb->update($wpdb->prefix.'grading_meta',$save,array('id'=>$v['id'],'grading_id'=>$v['grading_id']));
                 }
-                $a = $wpdb->update($wpdb->prefix.'grading_meta',$save,array('id'=>$v['id'],'grading_id'=>$v['grading_id']));
             }
         }
 
