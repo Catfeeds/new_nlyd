@@ -48,7 +48,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" value="<?=$match['data_entry_end_time']?>" type="text" readonly name="entry_end_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" value="<?=$match['data_entry_end_time']?>" type="text" readonly name="entry_end_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择报名截止日期', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>

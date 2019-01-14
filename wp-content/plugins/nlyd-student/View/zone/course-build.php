@@ -78,7 +78,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('结课日期', 'nlyd-student')?>：</span>
                                 <?php if(!empty($course['start_time']) && strtotime($course['start_time']) < get_time()):?>
-                                <a href="" class="c_blue pull-right"><?=__('立即结课', 'nlyd-student')?></a>
+                                <a class="c_blue pull-right" id="close_course"><?=__('立即结课', 'nlyd-student')?></a>
                                 <?php endif;?>
                             </div>
                             <div class="input_row">
@@ -92,14 +92,15 @@
                                 <textarea class="radius_input_row nl-foucs" type="text" name="course_details" placeholder="<?=__('课程简介', 'nlyd-student')?>"></textarea>
                             </div>
                         </div>
-                        <span class="details_btn flex-h">
+                        <a class="a-btn a-btn-table" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><div><?=__($_GET['id'] > 0 ? '编 辑':'发 布', 'nlyd-student')?></div></a>
+                        <!-- <span class="details_btn flex-h">
                             <div class="details-button flex1">
                                 <button class="save" type="button" class=""><?=__('存草稿', 'nlyd-student')?></button>
                             </div>
                             <div class="details-button flex1 last-btn">
                                 <button class="see_button" type="button" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><?=__($_GET['id'] > 0 ? '编 辑':'发 布', 'nlyd-student')?></button>
                             </div>
-                        </span>
+                        </span> -->
                     </form>
                     
                 </div>
@@ -130,44 +131,6 @@ jQuery(function($) {
             }
         })
     }
-    $('#close_course').click(function(){
-        var course_id=$('#course_id').val();
-        var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            $.ajax({
-                data: {id:course_id,type:'zone_close_course'},
-                beforeSend:function(XMLHttpRequest){
-                    _this.addClass('disabled')
-                },
-                success: function(res, textStatus, jqXHR){
-                    if(res.data.info){
-                        $.alerts(res.data.info)
-                    }
-                    if(res.success){
-                        if(res.data.url){
-                            setTimeout(function() {
-                                window.location.href=res.data.url
-                            }, 300);
-
-                        }else{
-                            _this.removeClass('disabled');
-                        }
-                    }else{
-                        _this.removeClass('disabled');
-                    }
-                },
-                complete: function(jqXHR, textStatus){
-                    if(textStatus=='timeout'){
-                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                        _this.removeClass('disabled');
-            　　　　 }
-                }
-            })
-        }else{
-            $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
-        }
-
-    })
     //---------------------------课程类型------------------------------
     if($('#course_type1').val().length>0 && $('#course_type1').val()){
         $.each(course_type1_Data,function(index,value){
@@ -338,40 +301,40 @@ jQuery(function($) {
         
         }
     });
-    $('.js-data-select-ajax').select2({
-        ajax: {
-            url: function(params){
-                return admin_ajax +'?action=get_manage_user'   
-                // return "https://api.github.com/search/repositories"
-            },
-            dataType: 'json',
-            delay: 250,//在多少毫秒内没有输入时则开始请求服务器
-            processResults: function (data, params) {
-                // 此处解析数据，将数据返回给select2
-                console.log(data.data)
-                var x=data.data;
-                return {
-                    results:x,// data返回数据（返回最终数据给results，如果我的数据在data.res下，则返回data.res。这个与服务器返回json有关）
-                };
-            },
-            cache: true
-        },
-        placeholder: '请输入关键字',
-        escapeMarkup: function (markup) { return markup; }, // 字符转义处理
-        templateResult: formatRepo,//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
-        templateSelection: formatRepoSelection,//选中项回调function formatRepoSelection(repo){return repo.text}
-        language:'zh-CN'
+    // $('.js-data-select-ajax').select2({
+    //     ajax: {
+    //         url: function(params){
+    //             return admin_ajax +'?action=get_manage_user'   
+    //             // return "https://api.github.com/search/repositories"
+    //         },
+    //         dataType: 'json',
+    //         delay: 250,//在多少毫秒内没有输入时则开始请求服务器
+    //         processResults: function (data, params) {
+    //             // 此处解析数据，将数据返回给select2
+    //             console.log(data.data)
+    //             var x=data.data;
+    //             return {
+    //                 results:x,// data返回数据（返回最终数据给results，如果我的数据在data.res下，则返回data.res。这个与服务器返回json有关）
+    //             };
+    //         },
+    //         cache: true
+    //     },
+    //     placeholder: '请输入关键字',
+    //     escapeMarkup: function (markup) { return markup; }, // 字符转义处理
+    //     templateResult: formatRepo,//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
+    //     templateSelection: formatRepoSelection,//选中项回调function formatRepoSelection(repo){return repo.text}
+    //     language:'zh-CN'
 
-    })
-    function formatRepo (repo) {//repo对象根据拼接返回结果
-        if (repo.loading) {
-            return repo.text;
-        }
-        return repo.text;
-    }
-    function formatRepoSelection (repo) {//根据选中的最新返回显示在选择框中的文字
-        return  repo.text;
-    }
+    // })
+    // function formatRepo (repo) {//repo对象根据拼接返回结果
+    //     if (repo.loading) {
+    //         return repo.text;
+    //     }
+    //     return repo.text;
+    // }
+    // function formatRepoSelection (repo) {//根据选中的最新返回显示在选择框中的文字
+    //     return  repo.text;
+    // }
 
 
     $('.save').click(function(){
@@ -417,7 +380,64 @@ jQuery(function($) {
             }
             return false;
         });
-      
+        $('#close_course').click(function(){//立即结课
+            var course_id=$('#course_id').val();
+            var _this=$(this);
+            layer.open({
+                type: 1
+                ,maxWidth:300
+                ,title: '<?=__("提示", "nlyd-student")?>' //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: '<div class="box-conent-wrapper"><?=__("是否立即结课", "nlyd-student")?>？</div>'
+                ,btn: [ '<?=__("按错了", "nlyd-student")?>','<?=__("提交", "nlyd-student")?>', ]
+                ,success: function(layero, index){
+                }
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    layer.closeAll();
+                    if(!_this.hasClass('disabled')){
+                        $.ajax({
+                            data: {id:course_id,action:'zone_close_course'},
+                            beforeSend:function(XMLHttpRequest){
+                                _this.addClass('disabled')
+                            },
+                            success: function(res, textStatus, jqXHR){
+                                if(res.data.info){
+                                    $.alerts(res.data.info)
+                                }
+                                if(res.success){
+                                    if(res.data.url){
+                                        setTimeout(function() {
+                                            window.location.href=res.data.url
+                                        }, 300);
+
+                                    }else{
+                                        _this.removeClass('disabled');
+                                    }
+                                }else{
+                                    _this.removeClass('disabled');
+                                }
+                            },
+                            complete: function(jqXHR, textStatus){
+                                if(textStatus=='timeout'){
+                                    $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                                    _this.removeClass('disabled');
+                        　　　　 }
+                            }
+                        })
+                    }else{
+                        $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+                    }
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        })
     });
 
 })

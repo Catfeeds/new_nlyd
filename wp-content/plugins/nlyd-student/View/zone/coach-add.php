@@ -19,13 +19,13 @@
                     <form class="layui-form">
                         <div class="coach_add_row">
                             <div class="c_red fs_14"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></div>
-                            <div class="coach_add_input">
+                            <div>
                                 <select class="js-data-select-ajax" name="coach_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                 </select>
                             </div>
                             <input type="hidden" name="action" value="add_zone_coach">
-                            <div class="coach_add_btn c_blue" lay-filter='layform' lay-submit="" ><?=__('确 定', 'nlyd-student')?></div>
                         </div>
+                        <a class="a-btn a-btn-table" lay-filter='layform' lay-submit="" ><div><?=__('添加教练', 'nlyd-student')?></div></a>
                     </form>
                 </div>
             </div>
