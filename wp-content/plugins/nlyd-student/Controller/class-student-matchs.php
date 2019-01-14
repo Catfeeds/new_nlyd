@@ -88,32 +88,34 @@ class Student_Matchs extends Student_Home
             $entry_is_true = 0;
             $match_is_true = 0;
             foreach ($rows as $v){
+                if($v['match_status'] != -4){
 
-                if($v['match_switch'] == 'ON') {
-                    if($new_time < $v['entry_end_time']){
-                        //报名中
-                        $save['match_status'] = 1;
-                        $entry_is_true += 1;
+                    if($v['match_switch'] == 'ON') {
+                        if($new_time < $v['entry_end_time']){
+                            //报名中
+                            $save['match_status'] = 1;
+                            $entry_is_true += 1;
 
+                        }
+                        elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['match_start_time']){
+                            //等待开赛
+                            $save['match_status'] = -2;
+                            $match_is_true += 1;
+
+                        }
+                        elseif ($v['match_start_time'] <= $new_time && $new_time < $v['match_end_time']){
+                            //进行中
+                            $save['match_status'] = 2;
+                            $match_is_true += 1;
+
+                        }else{
+                            //已结束
+                            $save['match_status'] = -3;
+
+                        }
                     }
-                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['match_start_time']){
-                        //等待开赛
-                        $save['match_status'] = -2;
-                        $match_is_true += 1;
-
-                    }
-                    elseif ($v['match_start_time'] <= $new_time && $new_time < $v['match_end_time']){
-                        //进行中
-                        $save['match_status'] = 2;
-                        $match_is_true += 1;
-
-                    }else{
-                        //已结束
-                        $save['match_status'] = -3;
-
-                    }
+                    $a = $wpdb->update($wpdb->prefix.'match_meta_new',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
                 }
-                $a = $wpdb->update($wpdb->prefix.'match_meta_new',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
             }
         }
 

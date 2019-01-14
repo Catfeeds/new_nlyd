@@ -6339,11 +6339,12 @@ class Student_Ajax
 
         $sql = "select a.id,a.course_title,a.const,count(c.id) entry_total,b.type_name,a.open_quota,a.is_enable,a.coach_id,
                 if(unix_timestamp(course_start_time)>0,date_format(course_start_time,'%Y-%m-%d %H:%i'),'待确认') start_time,
+                if(unix_timestamp(course_end_time)>0,date_format(course_end_time,'%Y-%m-%d %H:%i'),'待确认') end_time,
                 case a.is_enable
                 when '-3' then '已结课'
                 when '-2' then '等待开课'
                 when '1' then '报名中'
-                when '2' then '已开课'
+                when '2' then '授课中'
                 end status_cn
                 from {$wpdb->prefix}course a 
                 left join {$wpdb->prefix}course_type b on a.course_type = b.id
@@ -6375,9 +6376,9 @@ class Student_Ajax
     public function zone_close_course(){
         if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('课程id不能为空')));
         global $wpdb,$current_user;
-        $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>-4),array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
+        $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>-4,'course_end_time'=>get_time('mysql')),array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
         if($a){
-            wp_send_json_success(array('info'=>__('关闭成功')));
+            wp_send_json_success(array('info'=>__('关闭成功'),'url'=>home_url('/zone/course/')));
         }else{
             wp_send_json_error(array('info'=>'关闭失败'));
         }

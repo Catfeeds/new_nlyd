@@ -10,7 +10,7 @@
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
-                <h1 class="mui-title"><div><?=__('发布课程', 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__($_GET['id'] > 0 ? '编辑课程':'发布课程', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding layui-row width-margin-pc">
@@ -76,7 +76,11 @@
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('结课日期', 'nlyd-student')?>：</span><a id="close_course" class="c_blue pull-right"><?=__('立即结课', 'nlyd-student')?></a></div>
+                            <div class="lable_row"><span class="c_black"><?=__('结课日期', 'nlyd-student')?>：</span>
+                                <?php if(!empty($course['start_time']) && strtotime($course['start_time']) < get_time()):?>
+                                <a href="" class="c_blue pull-right"><?=__('立即结课', 'nlyd-student')?></a>
+                                <?php endif;?>
+                            </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
                                 <input class="radius_input_row nl-foucs" type="text" readonly name="course_end_time" data-time="<?=$course['data_end_time']?>"  id="course_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="<?=$course['end_time']?>">
@@ -93,7 +97,7 @@
                                 <button class="save" type="button" class=""><?=__('存草稿', 'nlyd-student')?></button>
                             </div>
                             <div class="details-button flex1 last-btn">
-                                <button class="see_button" type="button" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><?=__('发 布', 'nlyd-student')?></button>
+                                <button class="see_button" type="button" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><?=__($_GET['id'] > 0 ? '编 辑':'发 布', 'nlyd-student')?></button>
                             </div>
                         </span>
                     </form>
@@ -334,7 +338,31 @@ jQuery(function($) {
         
         }
     });
+    $('.js-data-select-ajax').select2({
+        ajax: {
+            url: function(params){
+                return admin_ajax +'?action=get_manage_user'   
+                // return "https://api.github.com/search/repositories"
+            },
+            dataType: 'json',
+            delay: 250,//在多少毫秒内没有输入时则开始请求服务器
+            processResults: function (data, params) {
+                // 此处解析数据，将数据返回给select2
+                console.log(data.data)
+                var x=data.data;
+                return {
+                    results:x,// data返回数据（返回最终数据给results，如果我的数据在data.res下，则返回data.res。这个与服务器返回json有关）
+                };
+            },
+            cache: true
+        },
+        placeholder: '请输入关键字',
+        escapeMarkup: function (markup) { return markup; }, // 字符转义处理
+        templateResult: formatRepo,//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
+        templateSelection: formatRepoSelection,//选中项回调function formatRepoSelection(repo){return repo.text}
+        language:'zh-CN'
 
+    })
     function formatRepo (repo) {//repo对象根据拼接返回结果
         if (repo.loading) {
             return repo.text;

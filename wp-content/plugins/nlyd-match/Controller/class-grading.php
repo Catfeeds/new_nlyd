@@ -739,8 +739,8 @@ class Grading
         $searchWhere = '';
         $searchJOIN = '';
         if($searchStr != ''){
-            $searchJOIN = "LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=utl.user_id AND um.meta_key='user_real_name' 
-                           LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=utl.user_id AND um2.meta_key='user_ID ' ";
+            $searchJOIN = "LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=uglh.user_id AND um.meta_key='user_real_name' 
+                           LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=uglh.user_id AND um2.meta_key='user_ID' ";
             $searchWhere = " AND (um.meta_value LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%') ";
         }
 
@@ -758,6 +758,7 @@ class Grading
                 {$categoryWhere}
                 {$searchWhere} 
                 ORDER BY uglh.created_time DESC LIMIT {$start},{$pageSize}" ,ARRAY_A);
+//        leo_dump($wpdb->last_query);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -994,9 +995,10 @@ class Grading
                     $gqv = join(',',$gqv);
                 }
                 $arr = [];
+
                 foreach ($questions_answer['examples'] as $qak => $qav){
                     $arr[$qak] = $qav;
-                    if($questions_answer['examples']['result'] == true){
+                    if($questions_answer['result'][$qak] == 'true'){
                         $my_answer[$qak] = '<span class="correct-color">'.$my_answer[$qak].'</span>';
                     }
                 }
