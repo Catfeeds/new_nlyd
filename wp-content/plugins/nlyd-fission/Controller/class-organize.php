@@ -1279,9 +1279,21 @@ class Organize{
                                     }
                                 }
                             }
+
                             //创建战队
                             if($error_msg == '') {
-                                $team_id = wp_insert_post(['post_title' => '暂未设置','post_status' => 'publish', 'comment_status' => 'close', 'ping_status' => 'close','post_type' => 'team']);
+                                if(!empty($zone_city)){
+                                    $city_arr = str2arr($zone_city,'-');
+                                    if(!empty($city_arr[2])){
+                                        $city = $city_arr[2];
+                                    }elseif ($city_arr[1] != '市辖区'){
+                                        $city = $city_arr[1];
+                                    }else{
+                                        $city = $city_arr[0];
+                                    }
+                                }
+                                $team_title = date_i18n('Y',get_time()).'脑力世界杯'.$city.'战队';
+                                $team_id = wp_insert_post(['post_title' => $team_title,'post_status' => 'publish', 'comment_status' => 'close', 'ping_status' => 'close','post_type' => 'team']);
 
                                 if($team_id > 0){
                                     $teamInsert = [
@@ -1289,7 +1301,7 @@ class Organize{
                                         'team_id' => $team_id,
                                         'team_director' => $user_id,
                                         'team_world' => '暂未设置',
-                                        'team_slogan' => '暂未设置',
+                                        'team_slogan' => '普及脑力运动,造福世界人民',
                                         'team_brief' => '暂未设置',
                                         'team_status' => 2,
                                         'created_time' => get_time('mysql'),

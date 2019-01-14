@@ -32,7 +32,7 @@
                         <!-- 审核通过 -->
                         <div class="zone_title_row  <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
                             <span class="bold fs_16 zone_title_name">
-                               <?= $row['zone_name'];?>
+                               <?= $row['zone_title'];?>
                             </span>
                             <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
                         </div>
