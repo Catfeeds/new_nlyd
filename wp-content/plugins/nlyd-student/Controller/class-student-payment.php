@@ -328,20 +328,22 @@ class Student_Payment {
                 if(!empty($row)){
                     $zone_user_id = $row['created_id'] ? $row['created_id'] : $row['created_person'];
                     //print_r($row);die;
-                    if($row['role_alias'] == 'official-match'){
-                        //获取机构赛区类型
-                        $zone_meta = $wpdb->get_row("select zone_match_type,is_double from {$wpdb->prefix}zone_meta where user_id = {$zone_user_id}",ARRAY_A);
-                        //print_r($zone_meta);die;
-                        if($zone_meta['zone_match_type'] == 1){ //战队赛
-                            $role_alias = 'tram-match';
-                        }else{  //城市赛
-                            $role_alias = $zone_meta['is_double'] == 1 ? 'double-city-match' : 'single-city-match';
-                        }
-                    }elseif ($row['role_alias'] == 'official-grading'){
-                        $role_alias = 'official-grading';
+                    $zone_meta = $wpdb->get_row("select b.zone_type_alias,a.zone_match_type,a.is_double from {$wpdb->prefix}zone_meta a 
+                                                left join {$wpdb->prefix}zone_type b on a.type_id = b.id
+                                                where user_id = {$zone_user_id}",ARRAY_A);
+                    if($zone_meta['zone_match_type'] == 1){ //战队赛
+                        $match_type = 1;
                     }
-
-                    $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$role_alias}' ";
+                    elseif ($zone_meta['is_double'] == 1){  //多区县
+                        $match_type = 2;
+                    }
+                    elseif ($zone_meta['is_double'] == 2){  //单区县
+                        $match_type = 3;
+                    }
+                    else{
+                        $match_type = 4;
+                    }
+                    $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$order['order_type']} and match_type = {$match_type}";
                     $setting = $wpdb->get_row($set_sql,ARRAY_A);
                     //print_r($setting);die;
                     if(!empty($setting)){
@@ -428,7 +430,6 @@ class Student_Payment {
 
                     }
                 }
-
 
                 /*****************收益分配end*******************/
                 echo 'SUCCESS';
@@ -592,7 +593,7 @@ class Student_Payment {
         /*****************收益分配start*******************/
 
         //获取当前比赛场景
-        if($order['order_type'] == 1){
+        /*if($order['order_type'] == 1){
             $income_type = 'match_id';
             $table = $wpdb->prefix.'match_meta_new';
             $join = "match_scene";
@@ -614,23 +615,26 @@ class Student_Payment {
         if(!empty($row)){
             $zone_user_id = $row['created_id'] ? $row['created_id'] : $row['created_person'];
             //print_r($row);die;
-            if($row['role_alias'] == 'official-match'){
-                //获取机构赛区类型
-                $zone_meta = $wpdb->get_row("select zone_match_type,is_double from {$wpdb->prefix}zone_meta where user_id = {$zone_user_id}",ARRAY_A);
-                //print_r($zone_meta);die;
-                if($zone_meta['zone_match_type'] == 1){ //战队赛
-                    $role_alias = 'tram-match';
-                }else{  //城市赛
-                    $role_alias = $zone_meta['is_double'] == 1 ? 'double-city-match' : 'single-city-match';
-                }
-            }elseif ($row['role_alias'] == 'official-grading'){
-                $role_alias = 'official-grading';
+            //获取机构赛区类型
+            $zone_meta = $wpdb->get_row("select b.zone_type_alias,a.zone_match_type,a.is_double from {$wpdb->prefix}zone_meta a 
+                                                left join {$wpdb->prefix}zone_type b on a.type_id = b.id
+                                                where user_id = {$zone_user_id}",ARRAY_A);
+            if($zone_meta['zone_match_type'] == 1){ //战队赛
+                $match_type = 1;
             }
-            $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$role_alias}' ";
+            elseif ($zone_meta['is_double'] == 1){  //多区县
+                $match_type = 2;
+            }
+            elseif ($zone_meta['is_double'] == 2){  //单区县
+                $match_type = 3;
+            }
+            else{
+                $match_type = 4;
+            }
+            $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$order['order_type']} and match_type = {$match_type}";
             //print_r($set_sql);die;
             $setting = $wpdb->get_row($set_sql,ARRAY_A);
-            //print_r($setting);
-            //die;
+            //print_r($setting);die;
             if(!empty($setting)){
                 $id = $wpdb->get_var("select id from {$wpdb->prefix}user_income_logs where user_id = {$order['user_id']} and match_id = {$order['match_id']}");
 
@@ -715,7 +719,7 @@ class Student_Payment {
                 }
 
             }
-        }
+        }*/
 
         /*****************收益分配end*******************/
 
@@ -804,23 +808,28 @@ class Student_Payment {
                             left join {$wpdb->prefix}zone_match_role b on a.{$join} = b.id
                             where a.{$income_type} = {$order['match_id']} and b.is_profit = 1 and b.status = 1";
                     $row = $wpdb->get_row($sql,ARRAY_A);
+                    //print_r($row);die;
                     if(!empty($row)){
                         $zone_user_id = $row['created_id'] ? $row['created_id'] : $row['created_person'];
                         //print_r($row);die;
-                        if($row['role_alias'] == 'official-match'){
-                            //获取机构赛区类型
-                            $zone_meta = $wpdb->get_row("select zone_match_type,is_double from {$wpdb->prefix}zone_meta where user_id = {$zone_user_id}",ARRAY_A);
-                            //print_r($zone_meta);die;
-                            if($zone_meta['zone_match_type'] == 1){ //战队赛
-                                $role_alias = 'tram-match';
-                            }else{  //城市赛
-                                $role_alias = $zone_meta['is_double'] == 1 ? 'double-city-match' : 'single-city-match';
-                            }
-                        }elseif ($row['role_alias'] == 'official-grading'){
-                            $role_alias = 'official-grading';
+                        //获取机构赛区类型
+                        $zone_meta = $wpdb->get_row("select b.zone_type_alias,a.zone_match_type,a.is_double from {$wpdb->prefix}zone_meta a 
+                                                left join {$wpdb->prefix}zone_type b on a.type_id = b.id
+                                                where user_id = {$zone_user_id}",ARRAY_A);
+                        if($zone_meta['zone_match_type'] == 1){ //战队赛
+                            $match_type = 1;
                         }
-
-                        $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$role_alias}' ";
+                        elseif ($zone_meta['is_double'] == 1){  //多区县
+                            $match_type = 2;
+                        }
+                        elseif ($zone_meta['is_double'] == 2){  //单区县
+                            $match_type = 3;
+                        }
+                        else{
+                            $match_type = 4;
+                        }
+                        $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$order['order_type']} and match_type = {$match_type}";
+                        //print_r($set_sql);die;
                         $setting = $wpdb->get_row($set_sql,ARRAY_A);
                         //print_r($setting);die;
                         if(!empty($setting)){
@@ -883,6 +892,7 @@ class Student_Payment {
                                         'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
                                     );
                                 }
+                                //print_r($insert);die;
                                 $insert['created_time'] = get_time('mysql');
 
                                 $wpdb->query('START TRANSACTION');
