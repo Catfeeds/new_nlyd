@@ -400,7 +400,7 @@ jQuery(function($) {
                     layer.closeAll();
                     if(!_this.hasClass('disabled')){
                         $.ajax({
-                            data: {id:course_id,type:'zone_close_course'},
+                            data: {id:course_id,action:'zone_close_course'},
                             beforeSend:function(XMLHttpRequest){
                                 _this.addClass('disabled')
                             },

@@ -26,8 +26,6 @@
 
 .userCenter-item{
     padding: 3px 8px;
-    /* color: rgba(38, 38, 38, 0.6); */
-    /* font-size: 0.12rem; */
     border-radius: 2px;
     font-weight: bold;
 }
@@ -302,10 +300,6 @@
     /* 个人中心 */
     .userCenter-info{
         position: relative;
-        /* background-image: url(./image/userCenter/bg.png);
-        background-size: 100% auto;
-        background-repeat: no-repeat;
-        background-color:#fff; */
         background: -webkit-linear-gradient(#68AAFE, #4394F9);
         background: -o-linear-gradient(#68AAFE, #4394F9);
         background: -moz-linear-gradient(#68AAFE, #4394F9);
@@ -330,7 +324,6 @@
         margin-top: 5px;
     }
     .userCenter-main{
-        /* position: absolute; */
         background-color:rgba(238, 238, 238, 0.15);
         width: 120px;
         height: 120px;
@@ -339,10 +332,7 @@
         border-radius: 50%;
         overflow: hidden;
         margin: auto;
-        /* left: 50%; */
-        /* margin-left: -60px; */
-        /* top: 30px; */
-        margin-top:50px; 
+        margin-top:10px; 
         z-index: 2;
     }
     .userCenter_meta{
