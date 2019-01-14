@@ -121,7 +121,8 @@ var mobileSelect1 = new MobileSelect({
             $('#match_scene').val(data[0]['id']);
             var post_data={
                 action:'get_match_cost',
-                type:data[0]['role_alias']
+                type:data[0]['role_alias'],
+                spread_type:'match'
             }
             $.ajax({
                 data: post_data,

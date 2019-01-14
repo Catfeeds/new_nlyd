@@ -19,7 +19,8 @@
 
             <?php
 
-                switch ($_GET['zone_type_alias']){
+                $zone_type_alias = isset($_GET['zone_type_alias']) ? $_GET['zone_type_alias'] : $row['zone_type_alias'];
+                switch ($zone_type_alias){
                     case 'match':
                         require_once student_view_path.CONTROLLER.'/apply-match.php';
                         break;

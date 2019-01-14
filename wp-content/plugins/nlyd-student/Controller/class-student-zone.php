@@ -67,7 +67,34 @@ class Student_Zone
 
             $role_list = $wpdb->get_results($sql,ARRAY_A);
             $data['role_list'] = $role_list;
+
+            if(!empty($row['zone_city'])){
+
+                $city_arr = str2arr($row['zone_city'],'-');
+                if(!empty($city_arr[2])){
+                    $city = $city_arr[2];
+                }elseif ($city_arr[1] != '市辖区'){
+                    $city = $city_arr[1];
+                }else{
+                    $city = $city_arr[0];
+                }
+            }
+            //print_r($city);
+            $city = !empty($city) ? '（'.$city.'）' : '';
+            if($row['zone_type_alias'] == 'match'){
+                if($row['is_double'] > 0){
+                    $match_type = $row['is_double'] == 1 ? $row['match_type']. '（多）' :  '（单）' ;
+                }else{
+                    $match_type = $row['match_type'];
+                }
+                $row['zone_title'] = $row['zone_name'].$city.$match_type.'组委会';
+            }else{
+                $row['zone_title'] = $row['zone_name'].$city.$row['zone_type_name'];
+            }
+
         }
+
+
         $data['row'] = $row;
 
         $view = student_view_path.CONTROLLER.'/index.php';

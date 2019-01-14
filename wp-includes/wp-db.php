@@ -2091,7 +2091,7 @@ class wpdb {
 
 		$this->check_current_query = false;
 
-		/*if($table == 'wp_grading_meta'){
+		/*if($table == $this->prefix.'spread_set'){
             print_r($this->prepare( $sql, $values ));die;
         }*/
 		return $this->query( $this->prepare( $sql, $values ) );
