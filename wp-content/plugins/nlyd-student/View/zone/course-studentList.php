@@ -27,7 +27,7 @@
                                 <td><?=__('推荐用户', 'nlyd-student')?></td>
                                 <td><?=__('课程情况', 'nlyd-student')?></td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <td><div class="table_content">1</div></td>
                                 <td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
                                 <td><div class="table_content">18</div></td>
@@ -42,7 +42,7 @@
                                 <td><div class="table_content c_black">男</div></td>
                                 <td><div class="table_content">刘亿亿</div></td>
                                 <td><div class="table_content"><span class="c_black6">未达标</span></div></td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                 </div>
@@ -52,10 +52,12 @@
 </div>
 <script>
 jQuery(function($) { 
+    var course_id=$.Request('id');
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
         function pagation(id,team_page){
+            
             flow.load({
                 elem: '#'+id //流加载容器
                 ,isAuto: false
@@ -63,6 +65,7 @@ jQuery(function($) {
                 ,done: function(page, next){ //加载下一页
                     var postData={
                         action:'get_course_student',
+                        id:course_id,
                         page:team_page,
                     }
                     var lis = [];

@@ -95,7 +95,7 @@
                     </a>
                     <?php } ?>
                     <?php endif;?>
-                    <a class="apply_list c_black layui-row disabled_a" href="<?=home_url('/zone/data');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/data');?>">
                         <div class="apply_list_line pull-left">
                             <div class="zone_bg bg_data"></div>
                         </div>
