@@ -110,7 +110,7 @@ switch ($type){
         <div class="nl-right-content layui-col-lg8 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <?php if(isset($_GET['back'])){ ?>
-                    <a class="mui-pull-left nl-goback"><div><i class="iconfont">&#xe610;</i></div></a>
+                    <a class="mui-pull-left nl-goback static" href="<?=home_url('/trains/history_list/')?>"><div><i class="iconfont">&#xe610;</i></div></a>
                 <?php } ?>
                 <h1 class="mui-title"><div><?=$title?> <?=__('答题记录', 'nlyd-student')?></div></h1>
             </header>
