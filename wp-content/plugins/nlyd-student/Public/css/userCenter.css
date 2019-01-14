@@ -276,12 +276,8 @@
         display: inline-block;
         vertical-align: middle;
     }
-    /* .login{
-        margin-left: 55px;
-    } */
     .userCenter-name{
         position: relative;
-        /* padding-top: 65px; */
         font-size: 0.20rem;
         line-height: 16px;
         color: #262626;
