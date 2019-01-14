@@ -585,8 +585,8 @@ class Student_Payment {
             'return_url'    => home_url('payment/zfb_returnUrl/type/alipay/serialnumber/'.$order['serialnumber']),
             'out_trade_no'  => $order['serialnumber'],
             'subject'       => '脑力中国',
-            'total_amount'  =>  0.01,
-            //'total_amount'  => $order['cost'],
+            //'total_amount'  =>  0.01,
+            'total_amount'  => $order['cost'],
             'body'  => '', //商品描述,可空
         ];
 
