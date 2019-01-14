@@ -1,20 +1,6 @@
 *{
     touch-action: manipulation;
 }
-/* @font-face {font-family: 'iconfont';
-    src: url('font/iconfont.eot');
-    src: url('font/iconfont.eot?#iefix') format('embedded-opentype'),
-    url('font/iconfont.woff') format('woff'),
-    url('font/iconfont.ttf') format('truetype'),
-    url('font/iconfont.svg#iconfont') format('svg');
-}
-.iconfont{
-    font-family:"iconfont" !important;
-    font-size:0.16rem;font-style:normal;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-stroke-width: 0;
-    -moz-osx-font-smoothing: grayscale;
-} */
 .lh_20{
     line-height: 20px;
 }
@@ -55,16 +41,12 @@ font-size:0.12rem;
     -webkit-touch-callout:none;
     -moz-touch-callout:none;
     -ms-touch-callout:none;
-    -webkit-user-select:none; /*webkit浏览器*/
-    -khtml-user-select:none; /*早期浏览器*/
-    -moz-user-select:none; /*火狐*/
-    -ms-user-select:none;  /*IE10*/
+    -webkit-user-select:none;
+    -khtml-user-select:none; 
+    -moz-user-select:none; 
+    -ms-user-select:none;
     user-select:none;
 }
-/* mobile footer */
-/* .nl-foot-nav{
-    display: none;
-} */
 
 .nl-foot-icon,.nl-foot-name{
     text-align: center;
@@ -294,7 +276,6 @@ a.a-btn:hover{
     height: 50px;
     line-height: 50px;
     text-align: center;
-    /* border-bottom: 1px solid #999; */
 }
 .selectOption i{
     position: absolute;
@@ -304,10 +285,6 @@ a.a-btn:hover{
     color: rgba(67, 148, 249, 1);
     font-size: 0.3rem;
 }
-/* 分享 */
-/* .selectBox.shareBox{
-    display: flex;
-} */
 .shareItem{
     height: 180px;
     overflow: hidden;
@@ -398,9 +375,6 @@ table .layui-flow-more{
 .form-input-row{
     position: relative;
     display: block;
-    /* height: 55px;
-    line-height: 55px;
-    text-align: center; */
     border-bottom: 1px solid rgba(241, 241, 241, 1);
     color: rgba(38, 38, 38, 0.6);
 }
@@ -414,12 +388,7 @@ a.form-input-row:hover{
     color: rgba(38, 38, 38, 0.6);
 }
 .form-input-label{
-    /* display: table;
-    float: left; */
     width: 70px;
-    /* height: 55px;
-    line-height: 55px;
-    text-align: left; */
     display: inline-block;
     vertical-align: middle;
     font-size: 0.12rem;
@@ -427,11 +396,6 @@ a.form-input-row:hover{
     padding: 15px 0;
 }
 .form-input-label div{
-    /* font-size: 0.12rem;
-    height: 55px;
-    display: table-cell;
-    vertical-align: middle;
-    line-height: 20px; */
     display: inline;
 }
 
@@ -656,15 +620,10 @@ p.no-info-text{
     font-weight: 500;
     line-height: 20px;
     height: 46px;
-    /* position: absolute;
-    display: block; */
     width: -webkit-calc(100% - 80px);
     width: calc(100% - 80px);
-    /* margin: 0 -10px;
-    padding: 0; */
     margin: auto;
     text-align: center;
-    /* white-space: nowrap; */
     color: #262626;
 }
 .mui-title div,
@@ -1063,7 +1022,6 @@ p.share-font{
             display: none;
         }
         #wpadminbar{
-            /* position: absolute; */
             display: none;
         }
         #footer{
