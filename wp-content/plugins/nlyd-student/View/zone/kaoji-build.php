@@ -140,9 +140,16 @@ var mobileSelect1 = new MobileSelect({
                 $.ajax({
                     data: post_data,
                     success: function(res, textStatus, jqXHR){//获取比赛费用
-                        if(res.data){
-                            $('#cost').val(res.data)
+                        if (res.success) {
+                            if(res.data){
+                                $('#cost').val(res.data)
+                            }else{
+                                $.alerts(res.data.info)
+                            }
+                        }else{
+                            $.alerts(res.data.info)
                         }
+
                     },
                     complete: function(jqXHR, textStatus){
                         if(textStatus=='timeout'){

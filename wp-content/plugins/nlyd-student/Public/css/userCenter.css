@@ -27,6 +27,7 @@
 .userCenter-item{
     padding: 3px 8px;
     border-radius: 2px;
+    font-size: 0.12rem;
 }
 .no-team{
     color:rgba(38, 38, 38, 0.6);;
