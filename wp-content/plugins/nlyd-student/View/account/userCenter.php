@@ -73,10 +73,10 @@
                         <!-- 用户标签 -->
                         <div class="userCenter-describe layui-row  layui-hide-lg">
 
-                            <span class="userCenter-item c_black ff_num">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : $user_info['user_id'];?></span>
+                            <span class="userCenter-item c_white ff_num">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : $user_info['user_id'];?></span>
 
                             <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
-                                <a class="userCenter-item c_black" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
+                                <a class="userCenter-item c_white" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
                                     <?=$my_team['my_team']?>
                                     <?php if($my_team['status'] != 2):?>
                                     <span>(<?=$my_team['status_cn']?>)</span>
