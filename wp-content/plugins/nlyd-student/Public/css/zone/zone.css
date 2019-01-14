@@ -16,7 +16,11 @@
 }
 .select2-container--default .select2-selection--single .select2-selection__placeholder{
     color: #b8bcbe;
-    font-size: 0.14rem;
+    font-size: 0.12rem;
+}
+.select2-container--default .select2-selection--single .select2-selection__clear{
+    color: #D20101;
+    font-size: 0.16rem;
 }
 .select2-selection:focus{
     outline: none;
