@@ -29,49 +29,11 @@ class Student_Directory
 
 
 
-    /**
-     * 名录
-     */
-    public function index(){
-        $view = student_view_path.CONTROLLER.'/directory.php';
-        load_view_template($view);
-    }
-    /**
-     * 脑力健将名录
-     */
-     public function directoryPlayer(){
-        $view = student_view_path.CONTROLLER.'/directory-player.php';
-        load_view_template($view);
-
-    }
-        /**
-     * 记忆水平认证名录
-     */
-     public function directoryRemember(){
-        $view = student_view_path.CONTROLLER.'/directory-remember.php';
-        load_view_template($view);
-
-    }
-        /**
-     * 速读水平认证名录
-     */
-     public function directoryRead(){
-        $view = student_view_path.CONTROLLER.'/directory-read.php';
-        load_view_template($view);
-
-    }
-        /**
-     * 心算水平认证名录
-     */
-     public function directoryCalculation(){
-        $view = student_view_path.CONTROLLER.'/directory-calculation.php';
-        load_view_template($view);
-
-    }
+    
     /**
      * 课程首页
      */
-     public function course(){
+     public function index(){
         $view = student_view_path.CONTROLLER.'/course-center.php';
         load_view_template($view);
     }
@@ -118,8 +80,14 @@ class Student_Directory
         wp_enqueue_style( 'my-student-userCenter' );
         wp_register_style( 'my-student-home', student_css_url.'home-student.css' );
         wp_enqueue_style( 'my-student-home' );
-        wp_register_style( 'my-student-directory', student_css_url.'directory/directory.css' );
-        wp_enqueue_style( 'my-student-directory' );
+        wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
+        wp_enqueue_script( 'student-mobileSelect' );
+        wp_localize_script('student-mobileSelect','_mobileSelect',[
+            'sure'=>__('确认','nlyd-student'),
+            'cancel'=>__('取消','nlyd-student')
+        ]);
+        wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
+        wp_enqueue_style( 'my-student-mobileSelect' );
       
         if(ACTION == 'course'){
             wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
