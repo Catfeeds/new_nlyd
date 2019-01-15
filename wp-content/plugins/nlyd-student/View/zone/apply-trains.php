@@ -2,7 +2,7 @@
 <div class="layui-row nl-border nl-content have-bottom">
     <div class="width-padding layui-row width-margin-pc">
         <form class="layui-form apply_form" lay-filter='layform'>
-            <div>
+            <!-- <div>
                 <div class="lable_row">
                     <span class="c_black"><?=__('训练中心名字', 'nlyd-student')?>：</span>
                     <span class="c_black3"><?=__('示例：', 'nlyd-student')?>
@@ -12,7 +12,7 @@
                 <div class="input_row">
                     <input class="radius_input_row nl-foucs" type="text" name="zone_name" autocomplete="off" placeholder="<?=__('绿色示例部分即为字号，最多5字', 'nlyd-student')?>" value="<?=!empty($row['id']) ? $row['zone_name'] :''?>">
                 </div>
-            </div>
+            </div> -->
             <div>
                 <div class="lable_row"><span class="c_black"><?=__('训练中心所在地', 'nlyd-student')?>：</span></div>
                 <div class="input_row">
@@ -83,7 +83,7 @@
 
             <div>
                 <div class="lable_row">
-                    <span class="c_black"><?=__('分中心总经理', 'nlyd-student')?>：</span>
+                    <span class="c_black"><?=__('训练中心总经理', 'nlyd-student')?>：</span>
                     <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                 </div>
                 <div class="input_row">

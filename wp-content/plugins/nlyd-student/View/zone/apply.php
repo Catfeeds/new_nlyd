@@ -298,7 +298,7 @@
                             fd.append('zone_name',data.field['zone_name']);
                         }
                     }else{//训练中心、测评中心字号
-                        fd.append('zone_name',data.field['zone_name']);
+                        // fd.append('zone_name',data.field['zone_name']);
                     }
                     if(data.field['center_manager']){//训练中心（分中心总经理）
                         fd.append('center_manager',data.field['center_manager']);
