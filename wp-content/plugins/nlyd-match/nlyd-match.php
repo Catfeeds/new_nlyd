@@ -937,7 +937,7 @@ if(!class_exists('MatchController')){
                 case 'team_zone':
                     $zone_name = $wpdb->get_row("SELECT zm.zone_city,zm.zone_match_type,zm.zone_name,zm.type_id FROM {$wpdb->prefix}team_meta AS tm 
                                  LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=tm.user_id
-                                 WHERE tm.team_id='{$id}'",ARRAY_A);
+                                 WHERE tm.team_id='{$id}' AND tm.user_id>0",ARRAY_A);
                     $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$zone_name['type_id']}");
                     $organizeClass = new Organize();
                     $organizeClass->echoZoneName($type_alias,$zone_name['zone_city'],$zone_name['zone_name'],$zone_name['zone_match_type']);
