@@ -6481,17 +6481,42 @@ class Student_Ajax
      */
     public function get_course_zone(){
         global $wpdb;
-
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
+        if(!empty($_POST['city'])){
+            $where = " and a.zone_city like '%{$_POST['city']}%' ";
+        }
 
-        $sql= "select from {$wpdb->prefix}zone_meta a 
-               left join {$wpdb->prefix}course b on a.zone_id = b.user_id
-               
+        $sql= "select a.user_id,a.zone_number,a.zone_name,a.zone_city,a.type_id,c.zone_type_name,
+                count(b.id) course_total
+                from {$wpdb->prefix}zone_meta a 
+                left join {$wpdb->prefix}course b on a.user_id = b.zone_id and b.is_enable = 1
+                left join {$wpdb->prefix}zone_type c on a.type_id = c.id
+                where a.user_status = 1 and c.zone_type_alias = 'trains' {$where}
+                GROUP BY user_id
+                limit $start,$pageSize
               ";
+
         $rows = $wpdb->get_results($sql ,ARRAY_A);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无训练中心', 'nlyd-student')));
+
+        foreach ($rows as $k => $val){
+            $city_arr = str2arr($val['zone_city'],'-');
+            if(!empty($city_arr[2])){
+                $city = rtrim($city_arr[2],'区');
+            }elseif ($city_arr[1] != '市辖区'){
+                $city = rtrim($city_arr[1],'市');
+            }else{
+                $city = rtrim($city_arr[0],'市');
+            }
+            $rows[$k]['content'] = '（NO.'.$val['zone_number'].'.'.$city.'）';
+        }
+        wp_send_json_success(array('info'=>$rows));
     }
 
     /*

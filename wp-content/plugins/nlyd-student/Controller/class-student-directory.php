@@ -130,7 +130,7 @@ class Student_Directory
         // ]);
         // wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
         // wp_enqueue_style( 'my-student-mobileSelect' );
-      
+
         // if(ACTION == 'course'){
         //     wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
         //     wp_enqueue_script( 'student-swiper' );
