@@ -170,7 +170,7 @@ class Student_Zone
 
         global $wpdb,$current_user;
         //获取用户今日收益
-        $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() and user_income > 0 ";
+        $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() and user_income > 0  ";
         $data['stream'] = $wpdb->get_var($sql1);
 
         //获取用户累计收益
@@ -1337,7 +1337,7 @@ class Student_Zone
      */
     public function get_stream_total(){
         global $wpdb,$current_user;
-        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type != 'undertake' ";
+        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type != 'undertake' and income_status = 2 ";
         return $wpdb->get_var($sql3);
     }
 

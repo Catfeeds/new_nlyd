@@ -84,9 +84,8 @@ class Timer
                         }else{
                             //已结束
                             $save['match_status'] = -3;
-                            //if($v['match_id'] == 57014){
                             //获取当前考级是否已经进行了收益分配
-                            $sql1 = "select a.match_id,a.match_scene,c.user_id,c.user_income
+                            /*$sql1 = "select a.match_id,a.match_scene,c.user_id,c.user_income
                                 from {$wpdb->prefix}match_meta_new a 
                                 left join {$wpdb->prefix}user_stream_logs c on a.match_id = c.match_id 
                                 where c.match_id = {$v['match_id']} AND c.user_income is null";
@@ -109,10 +108,10 @@ class Timer
                                         $str = '';
                                         $user_stream = array();  //用户收益数组
                                         $money4 = 0;
-                                        /*$money1 = 5;    //考级直接推广人
+                                        $money1 = 5;    //考级直接推广人
                                         $money2 = 5;    //考级间接推广人
                                         $money3 = 20;    //考级负责人
-                                        $money4 = 20;    //考级中心*/
+                                        $money4 = 20;    //考级中心
                                         foreach ($results as $i) {
                                             if( $i['income_status'] == 2 ){
 
@@ -193,8 +192,7 @@ class Timer
 
                                     }
                                 }
-                            }
-                            //}
+                            }*/
                         }
                         //var_dump($v['match_id']);
                         //var_dump($save);
@@ -275,8 +273,7 @@ class Timer
                         }else{
                             //已结束
                             $save['status'] = -3;
-
-                            //if($v['grading_id'] = 56987){
+                            /*
                             //获取当前考级是否已经进行了收益分配
                             $sql1 = "select a.grading_id,a.scene,c.user_id,c.user_income
                                 from {$wpdb->prefix}grading_meta a 
@@ -304,10 +301,10 @@ class Timer
                                         $str = '';
                                         $user_stream = array();  //用户收益数组
                                         $money4 = 0;
-                                        /*$money1 = 5;    //考级直接推广人
+                                        $money1 = 5;    //考级直接推广人
                                         $money2 = 5;    //考级间接推广人
                                         $money3 = 20;    //考级负责人
-                                        $money4 = 20;    //考级中心*/
+                                        $money4 = 20;    //考级中心
                                         foreach ($results as $i) {
                                             if( $i['income_status'] == 2 ){
 
@@ -383,8 +380,7 @@ class Timer
                                         }
                                     }
                                 }
-                            }
-                            //}
+                            }*/
                         }
 
                         //var_dump($v['match_id']);

@@ -4649,9 +4649,8 @@ class Student_Ajax
         $data = array(
             'apply_id'=>$current_user->ID,
             'type_id'=>$_POST['type_id'],
-            'zone_name'=>$_POST['zone_name'],
-            'zone_match_type'=>$zone_match_type,
-            'is_double'=>$is_double,
+            'zone_match_type'=>!empty($zone_match_type) ? $zone_match_type : '',
+            'is_double'=>!empty($is_double) ? $is_double : '',
             'zone_address'=>$_POST['zone_address'],
             'business_licence_url'=>$business_licence_url,
             'legal_person'=>$_POST['legal_person'],
@@ -4748,8 +4747,8 @@ class Student_Ajax
         }
 
         //获取收益列表
-        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,
-                  if(user_income <> '' ,user_income ,'待到账') user_income,
+        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,user_income,
+                  if(income_status <> 2 ,'待到账' ,'已到账') income_status,
                   case income_type
                     when 'undertake' then '承办赛事'
                     when 'match' then '比赛收益'
@@ -5453,7 +5452,7 @@ class Student_Ajax
         global $wpdb,$current_user;
         //$_POST['id'] = 148;
         //获取当前收益内容
-        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income, 
+        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income,
                                        case income_type
                                         when 'match' then '比赛收益'
                                         when 'grading' then '考级收益'
@@ -5498,7 +5497,7 @@ class Student_Ajax
                        ";
 
         }else{
-            $where = "a.sponsor_id = {$current_user->ID} ";
+            $where = "a.sponsor_id = {$current_user->ID} and a.match_id = {$row['match_id']} ";
         }
         $sql .= $where."order by id desc limit $start,$pageSize ";
 

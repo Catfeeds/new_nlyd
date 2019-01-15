@@ -38,7 +38,7 @@
                         </div>
 
                         <div class="c_black">
-                            <?=__('编 号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?>
+                            <?=__('编 号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? $row['zone_number'] : $row['user_ID']?>
                             <?php if($row['user_status'] == 1){ ?>
                                 <div class="img-box zone_pass mr_10"><img src="<?=student_css_url.'image/pass.png'?>" alt="<?=__('已认证', 'nlyd-student')?>"></div>
                                 <a class=" c_blue" href="<?=home_url('/zone/apply/zone_id/'.$row['id'].'/type_id/'.$row['zone_match_type'])?>"><?=__('更多资料', 'nlyd-student')?></a>

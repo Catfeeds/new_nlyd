@@ -593,7 +593,7 @@ class Student_Payment {
         /*****************收益分配start*******************/
 
         //获取当前比赛场景
-        /*if($order['order_type'] == 1){
+        if($order['order_type'] == 1){
             $income_type = 'match_id';
             $table = $wpdb->prefix.'match_meta_new';
             $join = "match_scene";
@@ -636,90 +636,119 @@ class Student_Payment {
             $setting = $wpdb->get_row($set_sql,ARRAY_A);
             //print_r($setting);die;
             if(!empty($setting)){
-                $id = $wpdb->get_var("select id from {$wpdb->prefix}user_income_logs where user_id = {$order['user_id']} and match_id = {$order['match_id']}");
 
-                if(empty($id)){
+                //准备数据
+                //获取直接/间接收益人
+                $sql = "select a.ID user_id,a.referee_id,b.referee_id as indirect_referee_id from {$wpdb->prefix}users a left join {$wpdb->prefix}users b on a.referee_id = b.ID where a.ID = {$order['user_id']}";
+                $user = $wpdb->get_row($sql,ARRAY_A);
 
-                    //准备数据
-                    //获取直接/间接收益人
-                    $sql = "select a.ID user_id,a.referee_id,b.referee_id as indirect_referee_id from {$wpdb->prefix}users a left join {$wpdb->prefix}users b on a.referee_id = b.ID where a.ID = {$order['user_id']}";
-                    $user = $wpdb->get_row($sql,ARRAY_A);
+                //获取比赛/考级相关信息
+                if($order['order_type'] == 1){
+                    $income_type = 'match';
+                    //准备对应的数据
+                    $money1 = $setting['direct_superior'];     //比赛直接推广人 direct_superior
+                    $money2 = $setting['indirect_superior'];    //比赛间接推广人  indirect_superior
+                    $money3 = $setting['mechanism'];   //参赛机构        mechanism
+                    $money4 = $setting['sub_center'];   //办赛机构         sub_center
 
-                    //获取比赛/考级相关信息
-                    if($order['order_type'] == 1){
-                        $income_type = 'match';
-                        //准备对应的数据
-                        $money1 = $setting['direct_superior'];     //比赛直接推广人 direct_superior
-                        $money2 = $setting['indirect_superior'];    //比赛间接推广人  indirect_superior
-                        $money3 = $setting['mechanism'];   //参赛机构        mechanism
-                        $money4 = $setting['sub_center'];   //办赛机构         sub_center
-
-                        $created_id = $wpdb->get_var("select created_id from {$wpdb->prefix}match_meta_new where match_id = {$order['match_id']}");
-                        //print_r($created_id);
-                        $insert = array(
-                            'income_type'=>$income_type,
-                            'match_id'=>$order['match_id'],
-                            'user_id'=>$order['user_id'],
-                            'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
-                            'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
-                            'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
-                            'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
-                            'person_liable_id'=>$order['sub_centres_id'] > 0 ? $order['sub_centres_id'] : '',   //参赛机构
-                            'person_liable_income'=>$order['sub_centres_id'] > 0 ? $money3 : '',  //参赛机构收益
-                            'sponsor_id'=>$created_id > 0 ? $created_id : '',  //办赛机构
-                            'sponsor_income'=>$created_id > 0 ? $money4 : '',  //办赛机构收益
-                        );
-                        //print_r($insert);die;
-                    }
-                    elseif ($order['order_type'] == 2){
-                        $income_type = 'grading';
-                        //准备对应的数据
-                        $money1 = $setting['direct_superior'];     //比赛直接推广人
-                        $money2 = $setting['indirect_superior'];    //比赛间接推广人
-                        $money3 = $setting['coach'];        //责任教练
-                        $money4 = $setting['sub_center'];   //办赛机构
-
-                        $grading = $wpdb->get_row("select person_liable,created_person from {$wpdb->prefix}grading_meta where grading_id = {$order['match_id']}",ARRAY_A);
-
-                        $insert = array(
-                            'income_type'=>$income_type,
-                            'match_id'=>$order['match_id'],
-                            'user_id'=>$order['user_id'],
-                            'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
-                            'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
-                            'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
-                            'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
-                            'person_liable_id'=>$grading['person_liable'] > 0 ? $grading['person_liable'] : '',   //责任教练
-                            'person_liable_income'=>$grading['person_liable'] > 0 ? $money3 : '',  //参赛机构收益
-                            'sponsor_id'=>$grading['created_person'] > 0 ? $grading['created_person'] : '',  //办赛机构
-                            'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
-                        );
-                    }
+                    $created_id = $wpdb->get_var("select created_id from {$wpdb->prefix}match_meta_new where match_id = {$order['match_id']}");
+                    //print_r($created_id);
+                    $insert = array(
+                        'income_type'=>$income_type,
+                        'match_id'=>$order['match_id'],
+                        'user_id'=>$order['user_id'],
+                        'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                        'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                        'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                        'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                        'person_liable_id'=>$order['sub_centres_id'] > 0 ? $order['sub_centres_id'] : '',   //参赛机构
+                        'person_liable_income'=>$order['sub_centres_id'] > 0 ? $money3 : '',  //参赛机构收益
+                        'sponsor_id'=>$created_id > 0 ? $created_id : '',  //办赛机构
+                        'sponsor_income'=>$created_id > 0 ? $money4 : '',  //办赛机构收益
+                    );
                     //print_r($insert);die;
-                    $insert['created_time'] = get_time('mysql');
+                }
+                elseif ($order['order_type'] == 2){
+                    $income_type = 'grading';
+                    //准备对应的数据
+                    $money1 = $setting['direct_superior'];     //比赛直接推广人
+                    $money2 = $setting['indirect_superior'];    //比赛间接推广人
+                    $money3 = $setting['coach'];        //责任教练
+                    $money4 = $setting['sub_center'];   //办赛机构
 
-                    $wpdb->query('START TRANSACTION');
-                    $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
+                    $grading = $wpdb->get_row("select person_liable,created_person from {$wpdb->prefix}grading_meta where grading_id = {$order['match_id']}",ARRAY_A);
 
-                    $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='undertake' and match_id = {$order['match_id']}");
+                    $insert = array(
+                        'income_type'=>$income_type,
+                        'match_id'=>$order['match_id'],
+                        'user_id'=>$order['user_id'],
+                        'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                        'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                        'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                        'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                        'person_liable_id'=>$grading['person_liable'] > 0 ? $grading['person_liable'] : '',   //责任教练
+                        'person_liable_income'=>$grading['person_liable'] > 0 ? $money3 : '',  //参赛机构收益
+                        'sponsor_id'=>$grading['created_person'] > 0 ? $grading['created_person'] : '',  //办赛机构
+                        'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
+                    );
+                }
+                //print_r($insert);die;
+                $insert['created_time'] = get_time('mysql');
+
+                $wpdb->query('START TRANSACTION');
+                $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
+
+                if(!empty($insert['sponsor_id'])){
+                    $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='undertake' and match_id = {$order['match_id']}",ARRAY_A);
                     //var_dump($stream_id);
-                    if(empty($stream_id)){
-                        $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'income_type'=>'undertake','match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                    if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == -1){
+                        $b = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$sponsor_income['user_income']+$money4),array('id'=>$sponsor_income['id']));
                     }
                     else{
-                        $b = true;
+                        $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>'undertake','match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
-                    //print_r($a .'************'. $b);die;
-                    if($a && $b){
-                        $wpdb->query('COMMIT');
+                }
+                if(!empty($user['referee_id'])){
+                    $referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                    //print_r($referee_income);
+                    if($referee_income['id'] > 0 && $referee_income['income_status'] == -1){
+                        //print_r($referee_income['user_income']+$money1);die;
+                        $c = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$referee_income['user_income']+$money1),array('id'=>$referee_income['id']));
                     }else{
-                        $wpdb->query('ROLLBACK');
+                        $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
-
+                }else{
+                    $c = true;
+                }
+                if(!empty($user['indirect_referee_id'])){
+                    $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                    if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == -1){
+                        $d = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$indirect_referee_income['user_income']+$money2),array('id'=>$indirect_referee_income['id']));
+                    }else{
+                        $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                    }
+                }else{
+                    $d = true;
+                }
+                if(!empty($insert['person_liable_id'])){
+                    $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                    if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == -1){
+                        $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
+                    }else{
+                        $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money3,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                    }
+                }else{
+                    $e = true;
                 }
 
+                //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e);die;
+                if($a && $b && $c && $d && $e){
+                    $wpdb->query('COMMIT');
+                }else{
+                    $wpdb->query('ROLLBACK');
+                }
             }
-        }*/
+        }
 
         /*****************收益分配end*******************/
 
