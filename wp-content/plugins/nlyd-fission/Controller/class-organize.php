@@ -3546,6 +3546,8 @@ class Organize{
             case 'test':
                 $name = 'IISC'. '<span style="color: #c40c0f">' .$zone_name.'</span>'.'国际脑力测评中心';
                 break;
+            default:
+                $name = '';
         }
         if($type == 'get'){
             return $name;
