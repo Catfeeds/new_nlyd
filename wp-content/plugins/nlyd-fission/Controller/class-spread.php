@@ -600,7 +600,7 @@ class Spread{
                                     echo '考级';
                                     break;
                                 case 'undertake':
-                                    $type = $wpdb->get_var("SELECT order_type {$wpdb->prefix}order WHERE match_id='{$row['match_id']}");
+                                    $type = $wpdb->get_var("SELECT order_type FROM {$wpdb->prefix}order WHERE match_id='{$row['match_id']}'");
                                     $match_type = $type == '1' ? '比赛' : ($type == '2' ? '考级' : '');
                                     echo '承办'.$match_type;
                                     break;
@@ -1060,7 +1060,10 @@ class Spread{
                                     echo '考级';
                                     break;
                                 case 'undertake':
-                                    echo '承办';
+                                    $type = $wpdb->get_var("SELECT order_type FROM {$wpdb->prefix}order WHERE match_id='{$row['match_id']}'");
+                                    $match_type = $type == '1' ? '比赛' : ($type == '2' ? '考级' : '');
+                                    echo '承办'.$match_type;
+//                                    echo '承办';
                                     break;
                                 case 'extract':
                                     echo '提现';
@@ -1286,7 +1289,7 @@ class Spread{
                                     echo '推荐'.$zone_type_name;
                                     break;
                                 case 'undertake':
-                                    $type = $wpdb->get_var("SELECT order_type {$wpdb->prefix}order WHERE match_id='{$row['match_id']}");
+                                    $type = $wpdb->get_var("SELECT order_type FROM {$wpdb->prefix}order WHERE match_id='{$row['match_id']}'");
                                     $match_type = $type == '1' ? '比赛' : ($type == '2' ? '考级' : '');
                                     echo '承办'.$match_type;
                                     break;

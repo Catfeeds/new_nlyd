@@ -354,11 +354,11 @@ class Organize{
                         <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                         <div class="locked-indicator">
                             <span class="locked-indicator-icon" aria-hidden="true"></span>
-                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],'',$row['zone_match_type'])?>”已被锁定</span>
+                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>”已被锁定</span>
                         </div>
                     </th>
                     <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                        <?=$this->echoZoneName($type_alias,$row['zone_city'],'',$row['zone_match_type'])?>
+                        <?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>
                         <br>
                         <div class="row-actions">
                             <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
@@ -3538,7 +3538,7 @@ class Organize{
                 }else{
                     $city = $city_arr[0];
                 }
-                $name = date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$city.'</span>'.($zone_match_type=='1'?'战队精英赛':'城市赛');
+                $name = date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$zone_name.$city.'</span>'.($zone_match_type=='1'?'战队精英赛':'城市赛');
                 break;
             case 'trains':
                 $name = 'IISC'. '<span style="color: #c40c0f">' .$zone_name.'</span>'.'国际脑力训练中心';
