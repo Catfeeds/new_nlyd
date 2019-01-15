@@ -67,33 +67,7 @@ class Student_Zone
 
             $role_list = $wpdb->get_results($sql,ARRAY_A);
             $data['role_list'] = $role_list;
-
-            if(!empty($row['zone_city'])){
-
-                $city_arr = str2arr($row['zone_city'],'-');
-                if(!empty($city_arr[2])){
-                    $city = $city_arr[2];
-                }elseif ($city_arr[1] != '市辖区'){
-                    $city = $city_arr[1];
-                }else{
-                    $city = $city_arr[0];
-                }
-            }
-            //print_r($city);
-            $city = !empty($city) ? '（'.$city.'）' : '';
-            if($row['zone_type_alias'] == 'match'){
-                if($row['is_double'] > 0){
-                    $match_type = $row['is_double'] == 1 ? $row['match_type']. '（多）' :  '（单）' ;
-                }else{
-                    $match_type = $row['match_type'];
-                }
-                $row['zone_title'] = $row['zone_name'].$city.$match_type.'组委会';
-            }else{
-                $row['zone_title'] = $row['zone_name'].$city.$row['zone_type_name'];
-            }
-
         }
-
 
         $data['row'] = $row;
 
@@ -1224,7 +1198,7 @@ class Student_Zone
     /*
      *机构主体信息页面
      */
-    public function account(){
+    /*public function account(){
         global $user_info;
         $row = $this->get_zone_row();
 
@@ -1236,7 +1210,7 @@ class Student_Zone
         $data['row'] = $row;
         $view = student_view_path.CONTROLLER.'/account.php';
         load_view_template($view,$data);
-    }
+    }*/
 
     /**
      * 获取机构信息
@@ -1260,12 +1234,20 @@ class Student_Zone
                 where {$where} ";
         //print_r($sql);
         $row = $wpdb->get_row($sql,ARRAY_A);
+        //print_r($row);
         $row['user_head'] = get_user_meta($current_user->ID,'user_head')[0];
         $row['user_ID'] = get_user_meta($current_user->ID,'user_ID')[0];
         if(!empty($row['id'])){
-            $city = !empty($row['zone_city']) ? '（'.$row['zone_city'].'）' : '';
-            $row['zone_title'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'赛组委会';
-            $row['zone_match_type_cn'] = $row['is_double']==1 ? $row['zone_match_type_cn'].'（多）' : $row['zone_match_type_cn'].'（单）';
+            //$city = !empty($row['zone_city']) ? '（'.$row['zone_city'].'）' : '';
+            $city_arr = str2arr($row['zone_city'],'-');
+            if(!empty($city_arr[2])){
+                $city = $city_arr[2];
+            }elseif ($city_arr[1] != '市辖区'){
+                $city = $city_arr[1];
+            }else{
+                $city = $city_arr[0];
+            }
+            $row['zone_title'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'组委会';
         }
         //获取负责人
         if(!empty($row['center_manager_id'])){

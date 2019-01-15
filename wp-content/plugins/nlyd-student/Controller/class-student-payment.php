@@ -445,7 +445,7 @@ class Student_Payment {
                             if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == -1){
                                 $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
                             }else{
-                                $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money3,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                             }
                         }else{
                             $e = true;
@@ -759,12 +759,13 @@ class Student_Payment {
                 }else{
                     $d = true;
                 }
+                //print_r($insert['person_liable_id']);die;
                 if(!empty($insert['person_liable_id'])){
                     $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
                     if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == -1){
                         $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
                     }else{
-                        $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money3,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                        $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
                 }else{
                     $e = true;
@@ -990,7 +991,7 @@ class Student_Payment {
                                 if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == -1){
                                     $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
                                 }else{
-                                    $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money3,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                    $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                                 }
                             }else{
                                 $e = true;
