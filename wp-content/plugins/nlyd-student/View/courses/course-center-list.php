@@ -8,7 +8,7 @@
 
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
                 <header class="mui-bar mui-bar-nav">
-                    <a class="mui-pull-left nl-goback nl-goback static" href="<?=home_url('/directory/course');?>">
+                    <a class="mui-pull-left nl-goback nl-goback static" href="<?=home_url('/courses/course');?>">
                         <div><i class="iconfont">&#xe610;</i></div>
                     </a>
                     <h1 class="mui-title"><div><?=__('脑博瑞国际脑力训练中心', 'nlyd-student')?></div></h1>
@@ -33,7 +33,7 @@
                                         <img src="<?=student_css_url.'image/noInfo/noCourse1043@2x.png'?>">
                                     </div>
                                     <p class="no-info-text"><?=__('该中心近期暂无可报名课程', 'nlyd-student')?></p>
-                                    <a class="a-btn a-btn-table" href="<?=home_url('/directory/course');?>"><div><?=__('查看其它中心课程', 'nlyd-student')?></div></a>
+                                    <a class="a-btn a-btn-table" href="<?=home_url('/courses/course');?>"><div><?=__('查看其它中心课程', 'nlyd-student')?></div></a>
                                 </div>
                                 <!-- <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
                                     <li class="match_row">
@@ -54,7 +54,7 @@
                                         </div>
                                         <div class="nl-match-footer flex-h">
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
                                             </div>
                                             <div class="nl-match-button flex1">
                                                 <a href="" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>
@@ -79,7 +79,7 @@
                                         </div>
                                         <div class="nl-match-footer flex-h">
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
                                             </div>
                                             <div class="nl-match-button flex1">
                                                 <a href="" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>
@@ -104,7 +104,7 @@
                                         </div>
                                         <div class="nl-match-footer flex-h">
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
                                             </div>
                                             <div class="nl-match-button flex1">
                                                 <a href="" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>
@@ -129,7 +129,7 @@
                                         </div>
                                         <div class="nl-match-footer flex-h">
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
                                             </div>
                                             <div class="nl-match-button flex1">
                                                 <a href="" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>
@@ -154,7 +154,7 @@
                                         </div>
                                         <div class="nl-match-footer flex-h">
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
                                             </div>
                                             <div class="nl-match-button flex1">
                                                 <a href="" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>
@@ -184,7 +184,7 @@
                                         </div>
                                         <div class="nl-match-footer flex-h">
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
                                             </div>
                                             <div class="nl-match-button flex1">
                                                 <a href="" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>
@@ -209,7 +209,7 @@
                                         </div>
                                         <div class="nl-match-footer flex-h">
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
                                             </div>
                                             <div class="nl-match-button flex1">
                                                 <a href="" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>
@@ -239,10 +239,10 @@
                                         </div>
                                         <div class="nl-match-footer flex-h">
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
                                             </div>
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseEnd');?>" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('结课成绩', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseEnd');?>" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('结课成绩', 'nlyd-student')?></span></a>
                                             </div>
                                         </div>
                                     </li>
@@ -264,10 +264,10 @@
                                         </div>
                                         <div class="nl-match-footer flex-h">
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
                                             </div>
                                             <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/directory/courseEnd');?>" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('结课成绩', 'nlyd-student')?></span></a>
+                                                <a href="<?=home_url('/courses/courseEnd');?>" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('结课成绩', 'nlyd-student')?></span></a>
                                             </div>
                                         </div>
                                     </li>

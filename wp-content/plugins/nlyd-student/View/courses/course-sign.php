@@ -52,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            <a href="<?=home_url('/directory/courseSignSuccess');?>" class="a-btn a-btn-table"><div><?=__('确认支付3000.00', 'nlyd-student')?></div></a>
+            <a href="<?=home_url('/courses/courseSignSuccess');?>" class="a-btn a-btn-table"><div><?=__('确认支付3000.00', 'nlyd-student')?></div></a>
         </div>           
     </div>
 </div>

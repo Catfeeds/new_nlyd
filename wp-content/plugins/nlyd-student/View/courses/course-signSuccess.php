@@ -25,7 +25,7 @@
                     <div class="success">
                         <div class="apply-success bold ta_c c_blue fs_16"><div class="nl-badge mr_10"><i class="iconfont">&#xe608;</i></div><span><?=__('报名成功', 'nlyd-student')?></span></div>
                         <div class="c_black ta_l fs_16 c_black6"><?=__('您已成功报名“乐学乐分享公益课程"', 'nlyd-student')?></div>
-                        <a href="<?=home_url('/directory/cenerCourse');?>" class="a-btn-course a-btn-border c_black dis_table"><div class="dis_cell"><?=__('返回课程列表', 'nlyd-student')?></div></a>
+                        <a href="<?=home_url('/courses/cenerCourse');?>" class="a-btn-course a-btn-border c_black dis_table"><div class="dis_cell"><?=__('返回课程列表', 'nlyd-student')?></div></a>
                     </div>
                 </div>
                 <div class="course_detail_row width-padding width-padding-pc">
