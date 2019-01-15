@@ -74,6 +74,32 @@ class Student_Directory
      * 课程首页
      */
      public function course(){
+        /*global $wpdb;
+         $sql= "select a.user_id,a.zone_number,a.zone_name,a.zone_city,a.type_id,c.zone_type_name,
+                count(b.id) course_total
+                from {$wpdb->prefix}zone_meta a 
+                left join {$wpdb->prefix}course b on a.user_id = b.zone_id and b.is_enable = 1
+                left join {$wpdb->prefix}zone_type c on a.type_id = c.id
+                where a.user_status = 1 and c.zone_type_alias = 'trains'
+                GROUP BY user_id
+              ";
+
+         $rows = $wpdb->get_results($sql ,ARRAY_A);
+         if(!empty($rows)){
+             foreach ($rows as $k => $val){
+                 $city_arr = str2arr($val['zone_city'],'-');
+                 if(!empty($city_arr[2])){
+                     $city = rtrim($city_arr[2],'区');
+                 }elseif ($city_arr[1] != '市辖区'){
+                     $city = rtrim($city_arr[1],'市');
+                 }else{
+                     $city = rtrim($city_arr[0],'市');
+                 }
+                 $rows[$k]['content'] = '（NO.'.$val['zone_number'].'.'.$city.'）';
+             }
+         }
+
+         print_r($rows);*/
         $view = student_view_path.CONTROLLER.'/course-center.php';
         load_view_template($view);
     }
