@@ -208,7 +208,7 @@ jQuery(function($) {
                                         onBtn="onBtn"
                                     }
                                     var zone=(v.zone && v.zone.length>0) ? '<div class="nl-match-detail layui-row">'
-                                                                                +'<div class="nl-match-label"><div><?=__("办赛机构", "nlyd-student")?>:</div></div>'
+                                                                                +'<div class="nl-match-label"><div><?=__("承办机构", "nlyd-student")?>:</div></div>'
                                                                                 +'<div class="nl-match-info">'
                                                                                     +'<span class="c_black">'+v.zone+'</span>'
                                                                                 +'</div>'
