@@ -4747,7 +4747,7 @@ class Student_Ajax
         }
 
         //获取收益列表
-        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,user_income,
+        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,user_income,match_id,
                   if(income_status <> 2 ,'待到账' ,'已到账') income_status,
                   case income_type
                     when 'undertake' then '承办赛事'
@@ -4804,6 +4804,14 @@ class Student_Ajax
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
+        foreach ($rows as $k =>$v){
+            if($v['income_type'] == 'undertake'){
+                $type = $wpdb->get_var("select case order_type when 1 then '开办比赛' when 2 then '开办考级' end order_type from {$wpdb->prefix}order order_type where match_id = {$v['match_id']}");
+                if(!empty($type)){
+                    $rows[$k]['income_type_title'] = $type;
+                }
+            }
+        }
 
         wp_send_json_success(array('info'=>$rows));
     }
@@ -4988,8 +4996,8 @@ class Student_Ajax
                 where a.user_mobile = '{$_POST['person_liable']}'
                 ";
         $person_liable = $wpdb->get_row($sql,ARRAY_A);
-        if(empty($person_liable)) wp_send_json_error(array('info'=>__('该教练未注册')));
-        if(empty($person_liable['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证')));
+        if(empty($person_liable)) wp_send_json_error(array('info'=>__('该责任人未注册')));
+        if(empty($person_liable['meta_value'])) wp_send_json_error(array('info'=>__('该责任人未实名认证')));
 
         /***********************准备数据**********************************/
         $arr = array(
@@ -5487,7 +5495,7 @@ class Student_Ajax
                       when 'subject' then '推荐收益'
                       else '----'
                       end income_type_cn,
-                      if(a.income_status=2,'已到账','已发放') income_status_cn
+                      if(a.income_status=2,'已到账','待到账') income_status_cn
                       from {$wpdb->prefix}user_income_logs a 
                       left join {$wpdb->prefix}posts b on a.match_id = b.ID where ";
         if(empty($zone_id)){    //
@@ -5499,7 +5507,7 @@ class Student_Ajax
             $where = "{$x} and 
                       (
                         a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID} 
-                        or a.indirect_referee_id = {$current_user->ID} or a.manager_id = {$current_user->ID}
+                        or a.person_liable_id = {$current_user->ID} or a.manager_id = {$current_user->ID}
                         ) 
                        ";
 
