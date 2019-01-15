@@ -41,11 +41,10 @@
                     <div class="swiper-pagination"></div>
                 </div>
 
-                <div>
+                <div id="flowMyAdress">
                     <div class="course_city width-padding width-padding-pc">
-                        <span class="c_black"><?=__('您所在的城市', 'nlyd-student')?>：</span>
-                        <span class="addres c_blue mr_10"><?=__('成都', 'nlyd-student')?></span>
-                        <a class="c_black"><?=__('重新定位', 'nlyd-student')?></a>
+                        <span class="c_black"><?=__('您所在的位置', 'nlyd-student')?>：</span>
+                        <a class="addres c_blue mr_10" id="areaSelect"><?=__('请选择', 'nlyd-student')?></a>
                     </div>
 
                     <a class="course_row width-padding width-padding-pc c_black6" href="<?=home_url('/directory/cenerCourse/');?>">
@@ -73,9 +72,9 @@
                     </a>
                 </div>
 
-                <div>
+                <div id="flowAllAdress">
                     <div class="course_city width-padding width-padding-pc">
-                        <span class="c_black"><?=__('其他城市', 'nlyd-student')?>：</span>
+                        <span class="c_black"><?=__('所有城市', 'nlyd-student')?>：</span>
                     </div>
 
                     <a class="course_row width-padding width-padding-pc c_black6" href="<?=home_url('/directory/cenerCourse/');?>">
@@ -109,96 +108,205 @@
 
 <script>
 jQuery(function($) { 
-    var mySwiper = new Swiper('.swiper-container', {
-        loop : true,
-        autoplay:{
-            disableOnInteraction:false
-        },//可选选项，自动滑动
-        autoplayDisableOnInteraction : false,    /* 注意此参数，默认为true */ 
-        initialSlide :0,//初始展示页
-        pagination: {
-            el: '.swiper-pagination',
-            dynamicBullets: true,
-            dynamicMainBullets: 2,
-            clickable :true,
-        },
-    }); 
-       //定义一个空的位置构造函数
-  function Location(){};
-  //定义一个可以获得经纬度的方法
-  Location.prototype.getLocation = function(callback){
-    var options = {
-      enableHighAccuracy: true,
-      maximumAge: 1000
-    };
-    this.callback = Object.prototype.toString.call(callback) =="[object Function]" ?
-        callback :
-        function(address){
-          alert(address.province + address.city);
-          console.log("getocation(callbackFunction) 可获得定位信息对象");
-        };
-    var self = this;
-    if (navigator.geolocation) {
-      //浏览器支持geolocation
-      navigator.geolocation.getCurrentPosition(function(position){
-        //经度
-        var longitude = position.coords.longitude;
-        //纬度
-        var latitude = position.coords.latitude;
-        self.loadMapApi(longitude,latitude);
-      }, self.onError, options);
-    } else {
-      //浏览器不支持geolocation
-      alert("浏览器不支持");
-    }
-  };
-  //定义一个可以解析经纬度的方法，调用百度的api
-  Location.prototype.loadMapApi = function(longitude, latitude){
-    var self = this;
-    var oHead = document.getElementsByTagName('HEAD').item(0);
-    var oScript= document.createElement("script");
-    oScript.type = "text/javascript";
-    oScript.src="https://api.map.baidu.com/getscript?v=2.0&ak=A396783ee700cfdb9ba1df281ce36862&services=&t=20140930184510";
-    oHead.appendChild(oScript);
-    oScript.onload = function(date){
-      var point = new BMap.Point(longitude, latitude);
-      var gc = new BMap.Geocoder();
-      gc.getLocation(point, function(rs) {
-        var addComp = rs.addressComponents;
-        self.callback(addComp);
-      });
-    }
-  };
-  //定义出现查询位置出现意外的方法
-  Location.prototype.onError = function(error) {
-    switch (error.code) {
-      case 1:
-        alert("位置服务被拒绝");
-        break;
-      case 2:
-        alert("暂时获取不到位置信息");
-        break;
-      case 3:
-        alert("获取信息超时");
-        break;
-      case 4:
-        alert("未知错误");
-        break;
-    }
-  };
-  //调用
-  var local = new Location();
-  local.getLocation(function(res){
-    var str=""
-    var city=res['city'];
-    var province=res['province'];
-    for(i in res ){
-      str=res[i]+str
-    }
-    // str=province+city
-    // alert(str)
-    $('.addres').text(str)
-  })
+    layui.use(['element','flow'], function(){
+        var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+        var flow = layui.flow;//流加载
+        var mySwiper = new Swiper('.swiper-container', {
+            loop : true,
+            autoplay:{
+                disableOnInteraction:false
+            },//可选选项，自动滑动
+            autoplayDisableOnInteraction : false,    /* 注意此参数，默认为true */ 
+            initialSlide :0,//初始展示页
+            pagination: {
+                el: '.swiper-pagination',
+                dynamicBullets: true,
+                dynamicMainBullets: 2,
+                clickable :true,
+            },
+        });
+        if($('#areaSelect').length>0){
+            var area=$.validationLayui.allArea.area;//省市区三级联动
+            var posiotionarea=[0,0,0];//初始化位置，高亮展示
+            if($('#areaSelect').val().length>0 && $('#areaSelect').val()){
+                var areaValue=$('#areaSelect').val().split('-');
+                $.each(area,function(index,value){
+                    if(areaValue[0]==value.value){
+                        // console.log(value)
+                        posiotionarea=[index,0,0];
+                        $.each(value.childs,function(i,v){
+                            if(areaValue[1]==v.value){
+                                posiotionarea=[index,i,0];
+                                $.each(v.childs,function(j,val){
+                                    if(areaValue[2] && areaValue[2]==val.value){
+                                        posiotionarea=[index,i,j];
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+            // console.log(JSON.stringify(area))
+            var mobileSelect3 = new MobileSelect({
+                trigger: '#areaSelect',
+                title: "<?=__('您的位置', 'nlyd-student')?>",
+                wheels: [
+                    {data: area},
+                ],
+                triggerDisplayData:false,
+                position:posiotionarea, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+                transitionEnd:function(indexArr, data){
+
+                },
+                callback:function(indexArr, data){
+                    var three=data[2]['value'].length==0 ? '' : '-'+data[2]['value']
+                    var text=data[0]['value']+'-'+data[1]['value']+three;
+                    // $('#province').val(data[0]['value']);
+                    // $('#city').val(data[1]['value']);
+                    // $('#area').val(data[2]['value']);
+                    $('#areaSelect').text(text);
+                    pagation('flowMyAdress',1)
+                }
+            });
+        }
+        function pagation(id,_page){
+            flow.load({
+                elem: '#'+id //流加载容器
+                ,isAuto: false
+                ,isLazyimg: true
+                ,done: function(page, next){ //加载下一页
+                    var areaCheck=id=='flowMyAdress' ? $('#areaSelect').text() : 'all';
+                    var postData={
+                        action:'zone_student_list',
+                        page:_page,
+                        area:areaCheck,
+                    }
+                    var lis = [];
+                    $.ajax({
+                        data: postData,
+                        success:function(res,ajaxStatu,xhr){
+                            console.log(res)
+                            _page++
+                            if(res.success){
+                                $.each(res.data.info,function(i,v){
+                                    // <?=home_url('/directory/cenerCourse/');?>
+                                    var dom= '<a class="course_row width-padding width-padding-pc c_black6" href="'+window.home_url+'/directory/cenerCourse/'+v.id+'/">'
+                                                +'<div class="course_city_icon c_blue"><i class="iconfont">&#xe659;</i></div>'
+                                                +'<div class="course_info">'
+                                                    +'<div class="course_info_row fs_16 c_black">IISC脑力训练中心（NO.0001.明德）</div>'
+                                                    +'<div class="course_info_row fs_14"><?=__("所在地", "nlyd-student")?>：四川·成都</div>'
+                                                    +'<div class="course_info_row fs_12 c_orange">1个课程抢占名额中</div>'
+                                                +'</div>'
+                                                +'<div class="course_right_icon c_black">'
+                                                    +'<i class="iconfont">&#xe727;</i>'
+                                                +'</div>'
+                                            +'</a>'
+                                    lis.push(dom) 
+                                })
+                                if (res.data.info.length<50) {
+                                    next(lis.join(''),false) 
+                                }else{
+                                    next(lis.join(''),true) 
+                                }
+                                
+                            }else{
+                                next(lis.join(''),false)
+                            }
+                            if(!$('#'+id).hasClass('flow-default')){
+                                $('#'+id).addClass('flow-default')
+                            }
+                            
+                        },
+                        complete:function(XMLHttpRequest, textStatus){
+							if(textStatus=='timeout'){
+								$.alerts("<?=__('网络质量差,请重试', 'nlyd-student')?>")
+								next(lis.join(''),true)
+							}
+                        }
+                    })       
+                }
+            });
+        }
+        pagation('flowAllAdress',1)
+
+    });
+//        //定义一个空的位置构造函数
+//   function Location(){};
+//   //定义一个可以获得经纬度的方法
+//   Location.prototype.getLocation = function(callback){
+//     var options = {
+//       enableHighAccuracy: true,
+//       maximumAge: 1000
+//     };
+//     this.callback = Object.prototype.toString.call(callback) =="[object Function]" ?
+//         callback :
+//         function(address){
+//           alert(address.province + address.city);
+//           console.log("getocation(callbackFunction) 可获得定位信息对象");
+//         };
+//     var self = this;
+//     if (navigator.geolocation) {
+//       //浏览器支持geolocation
+//       navigator.geolocation.getCurrentPosition(function(position){
+//         //经度
+//         var longitude = position.coords.longitude;
+//         //纬度
+//         var latitude = position.coords.latitude;
+//         self.loadMapApi(longitude,latitude);
+//       }, self.onError, options);
+//     } else {
+//       //浏览器不支持geolocation
+//       alert("浏览器不支持");
+//     }
+//   };
+//   //定义一个可以解析经纬度的方法，调用百度的api
+//   Location.prototype.loadMapApi = function(longitude, latitude){
+//     var self = this;
+//     var oHead = document.getElementsByTagName('HEAD').item(0);
+//     var oScript= document.createElement("script");
+//     oScript.type = "text/javascript";
+//     oScript.src="https://api.map.baidu.com/getscript?v=2.0&ak=A396783ee700cfdb9ba1df281ce36862&services=&t=20140930184510";
+//     oHead.appendChild(oScript);
+//     oScript.onload = function(date){
+//       var point = new BMap.Point(longitude, latitude);
+//       var gc = new BMap.Geocoder();
+//       gc.getLocation(point, function(rs) {
+//         var addComp = rs.addressComponents;
+//         self.callback(addComp);
+//       });
+//     }
+//   };
+//   //定义出现查询位置出现意外的方法
+//   Location.prototype.onError = function(error) {
+//     switch (error.code) {
+//       case 1:
+//         alert("位置服务被拒绝");
+//         break;
+//       case 2:
+//         alert("暂时获取不到位置信息");
+//         break;
+//       case 3:
+//         alert("获取信息超时");
+//         break;
+//       case 4:
+//         alert("未知错误");
+//         break;
+//     }
+//   };
+//   //调用
+//   var local = new Location();
+//   local.getLocation(function(res){
+//     var str=""
+//     var city=res['city'];
+//     var province=res['province'];
+//     for(i in res ){
+//       str=res[i]+str
+//     }
+//     // str=province+city
+//     // alert(str)
+//     $('.addres').text(str)
+//   })
 
 })
 </script>

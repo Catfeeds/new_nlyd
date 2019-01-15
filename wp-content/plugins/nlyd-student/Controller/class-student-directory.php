@@ -120,8 +120,16 @@ class Student_Directory
         wp_enqueue_style( 'my-student-userCenter' );
         wp_register_style( 'my-student-home', student_css_url.'home-student.css' );
         wp_enqueue_style( 'my-student-home' );
-        wp_register_style( 'my-student-directory', student_css_url.'directory/directory.css' );
+        wp_register_style( 'my-student-directory', student_css_url.'directory/directory.css' ,array('my-student'));
         wp_enqueue_style( 'my-student-directory' );
+        wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
+        wp_enqueue_script( 'student-mobileSelect' );
+        wp_localize_script('student-mobileSelect','_mobileSelect',[
+            'sure'=>__('确认','nlyd-student'),
+            'cancel'=>__('取消','nlyd-student')
+        ]);
+        wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
+        wp_enqueue_style( 'my-student-mobileSelect' );
       
         if(ACTION == 'course'){
             wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
