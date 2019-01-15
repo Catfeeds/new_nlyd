@@ -1367,21 +1367,18 @@ class Student_Zone
         wp_enqueue_style( 'my-student-mobileSelect' );
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
-        // if(ACTION == 'index'){
-        // }
-
         if(ACTION == 'team' ){
             wp_register_style( 'my-student-teamList', student_css_url.'team.css',array('my-student') );
             wp_enqueue_style( 'my-student-teamList' );
         }
-        if(ACTION == 'apply' || ACTION == 'courseBuild' || ACTION == 'kaojiBuild'  || ACTION == 'settingAdd' || ACTION == 'teamBuild' || ACTION == 'teamAddMember' || ACTION == 'coachAdd'){
-            wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
-            wp_enqueue_script( 'zone_select2_js' );
-            wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
-            wp_enqueue_script( 'zone_select2_i18n_js' );
-            wp_register_style( 'zone_select2_css',match_js_url.'select2/dist/css/select2.css','', leo_match_version  );
-            wp_enqueue_style( 'zone_select2_css' );
-        }
+        // if(){
+        //     wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
+        //     wp_enqueue_script( 'zone_select2_js' );
+        //     wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
+        //     wp_enqueue_script( 'zone_select2_i18n_js' );
+        //     wp_register_style( 'zone_select2_css',match_js_url.'select2/dist/css/select2.css','', leo_match_version  );
+        //     wp_enqueue_style( 'zone_select2_css' );
+        // }
         wp_register_style( 'my-student-zone', student_css_url.'zone/zone.css',array('my-student') );
         wp_enqueue_style( 'my-student-zone' );
     }
