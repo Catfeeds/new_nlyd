@@ -41,13 +41,15 @@
                     <div class="swiper-pagination"></div>
                 </div>
 
-                <div id="flowMyAdress">
+                <div>
                     <div class="course_city width-padding width-padding-pc">
                         <span class="c_black"><?=__('您所在的位置', 'nlyd-student')?>：</span>
                         <a class="addres c_blue mr_10" id="areaSelect"><?=__('请选择', 'nlyd-student')?></a>
                     </div>
-
-                    <a class="course_row width-padding width-padding-pc c_black6" href="<?=home_url('/directory/cenerCourse/');?>">
+                    <div id="flowMyAdress">
+                    
+                    </div>
+                    <!-- <a class="course_row width-padding width-padding-pc c_black6" href="<?=home_url('/directory/cenerCourse/');?>">
                         <div class="course_city_icon c_blue"><i class="iconfont">&#xe659;</i></div>
                         <div class="course_info">
                             <div class="course_info_row fs_16 c_black">IISC脑力训练中心（NO.0001.明德）</div>
@@ -69,15 +71,16 @@
                         <div class="course_right_icon c_black">
                             <i class="iconfont">&#xe727;</i>
                         </div>
-                    </a>
+                    </a> -->
                 </div>
 
-                <div id="flowAllAdress">
+                <div>
                     <div class="course_city width-padding width-padding-pc">
                         <span class="c_black"><?=__('所有城市', 'nlyd-student')?>：</span>
                     </div>
-
-                    <a class="course_row width-padding width-padding-pc c_black6" href="<?=home_url('/directory/cenerCourse/');?>">
+                    <div id="flowAllAdress">
+                    <div>
+                    <!-- <a class="course_row width-padding width-padding-pc c_black6" href="<?=home_url('/directory/cenerCourse/');?>">
                         <div class="course_city_icon c_blue"><i class="iconfont">&#xe659;</i></div>
                         <div class="course_info">
                             <div class="course_info_row fs_16 c_black">IISC脑力训练中心（NO.0001.明德）</div>
@@ -99,7 +102,7 @@
                         <div class="course_right_icon c_black">
                             <i class="iconfont">&#xe727;</i>
                         </div>
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
@@ -128,6 +131,14 @@ jQuery(function($) {
         if($('#areaSelect').length>0){
             var area=$.validationLayui.allArea.area;//省市区三级联动
             var posiotionarea=[0,0,0];//初始化位置，高亮展示
+            $.each(area,function(i1,v1){
+                $.each(v1.childs,function(i2,v2){
+                    v2.childs.unshift({
+                        id:'-',
+                        value:''
+                    })
+                })
+            })
             if($('#areaSelect').val().length>0 && $('#areaSelect').val()){
                 var areaValue=$('#areaSelect').val().split('-');
                 $.each(area,function(index,value){
@@ -160,13 +171,15 @@ jQuery(function($) {
 
                 },
                 callback:function(indexArr, data){
+                    var old= $('#areaSelect').text();
                     var three=data[2]['value'].length==0 ? '' : '-'+data[2]['value']
                     var text=data[0]['value']+'-'+data[1]['value']+three;
-                    // $('#province').val(data[0]['value']);
-                    // $('#city').val(data[1]['value']);
-                    // $('#area').val(data[2]['value']);
                     $('#areaSelect').text(text);
-                    pagation('flowMyAdress',1)
+                    if(old!==text){
+                        $('#flowMyAdress').empty()
+                        pagation('flowMyAdress',1)
+                    }
+                    
                 }
             });
         }
@@ -176,40 +189,45 @@ jQuery(function($) {
                 ,isAuto: false
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
-                    var areaCheck=id=='flowMyAdress' ? $('#areaSelect').text() : 'all';
+                    
                     var postData={
-                        action:'zone_student_list',
+                        action:'get_course_zone',
                         page:_page,
-                        area:areaCheck,
+                    }
+                    if(id=='flowMyAdress'){
+                        postData.city=$('#areaSelect').text()
+                        // if (_page==1) {
+                        //     $('#'+id).html('')
+                        // }
                     }
                     var lis = [];
                     $.ajax({
                         data: postData,
                         success:function(res,ajaxStatu,xhr){
-                            console.log(res)
+                            console.log(_page)
                             _page++
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    // <?=home_url('/directory/cenerCourse/');?>
-                                    var dom= '<a class="course_row width-padding width-padding-pc c_black6" href="'+window.home_url+'/directory/cenerCourse/'+v.id+'/">'
+                                    console.log(v)
+                                    var dom= '<a class="course_row width-padding width-padding-pc c_black6" href="'+window.home_url+'/courses/cenerCourse/'+v.id+'/">'
                                                 +'<div class="course_city_icon c_blue"><i class="iconfont">&#xe659;</i></div>'
                                                 +'<div class="course_info">'
-                                                    +'<div class="course_info_row fs_16 c_black">IISC脑力训练中心（NO.0001.明德）</div>'
-                                                    +'<div class="course_info_row fs_14"><?=__("所在地", "nlyd-student")?>：四川·成都</div>'
-                                                    +'<div class="course_info_row fs_12 c_orange">1个课程抢占名额中</div>'
+                                                    +'<div class="course_info_row fs_16 c_black">IISC脑力训练中心'+v.content+'</div>'
+                                                    +'<div class="course_info_row fs_14"><?=__("所在地", "nlyd-student")?>：'+v.zone_city+'</div>'
+                                                    +'<div class="course_info_row fs_12 c_orange">'+v.course_total+'个课程抢占名额中</div>'
                                                 +'</div>'
                                                 +'<div class="course_right_icon c_black">'
                                                     +'<i class="iconfont">&#xe727;</i>'
                                                 +'</div>'
                                             +'</a>'
                                     lis.push(dom) 
+
                                 })
                                 if (res.data.info.length<50) {
                                     next(lis.join(''),false) 
                                 }else{
                                     next(lis.join(''),true) 
                                 }
-                                
                             }else{
                                 next(lis.join(''),false)
                             }

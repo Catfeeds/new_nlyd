@@ -70,7 +70,7 @@
                     </a>
                 </div>
             </div>
-            <a href="<?=home_url('/directory/courseSign');?>" class="a-btn a-btn-table"><div><?=__('抢占名额', 'nlyd-student')?></div></a>
+            <a href="<?=home_url('/courses/courseSign');?>" class="a-btn a-btn-table"><div><?=__('抢占名额', 'nlyd-student')?></div></a>
         </div>           
     </div>
 </div>
