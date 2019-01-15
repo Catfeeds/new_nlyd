@@ -4747,8 +4747,8 @@ class Student_Ajax
         }
 
         //获取收益列表
-        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,
-                  if(user_income <> '' ,user_income ,'待到账') user_income,
+        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,user_income,
+                  if(income_status <> 2 ,'待到账' ,'已到账') income_status,
                   case income_type
                     when 'undertake' then '承办赛事'
                     when 'match' then '比赛收益'
@@ -5452,7 +5452,7 @@ class Student_Ajax
         global $wpdb,$current_user;
         //$_POST['id'] = 148;
         //获取当前收益内容
-        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income, 
+        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income,
                                        case income_type
                                         when 'match' then '比赛收益'
                                         when 'grading' then '考级收益'

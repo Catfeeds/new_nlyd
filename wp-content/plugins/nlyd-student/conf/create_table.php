@@ -90,8 +90,8 @@ function the_table_install () {
           `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 match grading extract subject undertake',
           `match_id`    int(20) DEFAULT NULL COMMENT '收益领取记录表(user_income_logs)',
           `user_income` decimal(10,2) DEFAULT NULL COMMENT '收益+ 收益- 两情况',
-          `extract_type` varchar(20) DEFAULT NULL COMMENT '提现类型 bank 银行卡 wallet 钱包 weChat 微信',
-          `created_time` datetime DEFAULT NULL,
+          `income_status` tinyint(1) unsigned DEFAULT 1 COMMENT '1待确认,2已确认',
+          `created_time` datetime DEFAULT NULL ,
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
