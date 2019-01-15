@@ -2091,9 +2091,9 @@ class wpdb {
 
 		$this->check_current_query = false;
 
-		/*if($table == $this->prefix.'spread_set'){
+		if($table == $this->prefix.'user_stream_logs'){
             print_r($this->prepare( $sql, $values ));die;
-        }*/
+        }
 		return $this->query( $this->prepare( $sql, $values ) );
 	}
 

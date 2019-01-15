@@ -81,13 +81,14 @@
                     <div class="lable_row"><span class="c_black"><?=__('对公账户开户号码', 'nlyd-student')?>：</span></div>
                     <div class="input_row"><input class="radius_input_row nl-foucs" type="tel" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户号码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
                 </div>
-
+                <?php if(!empty($referee_name)):?>
                 <div>
                     <div class="lable_row"><span class="c_black"><?=__('推荐人', 'nlyd-student')?>：</span></div>
                     <div class="input_row">
                         <input class="radius_input_row" disabled type="text" value="<?=$referee_name?>">
                     </div>
                 </div>
+                <?php endif;?>
                 <?php if($row['user_status'] != 1):?>
                     <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
                 <?php endif;?>

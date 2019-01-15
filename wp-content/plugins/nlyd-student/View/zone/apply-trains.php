@@ -91,12 +91,14 @@
                         <input class="radius_input_row change_num nl-foucs" name="center_manager" value="<?=$row['center_manager']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
                     </div>
                 </div>
+                <?php if(!empty($referee_name)):?>
                 <div>
                     <div class="lable_row"><span class="c_black"><?=__('事业管理员', 'nlyd-student')?>：</span></div>
                     <div class="input_row">
                         <input class="radius_input_row" disabled type="text" value="<?=$referee_name?>">
                     </div>
                 </div>
+                <?php endif;?>
                 <?php if($row['user_status'] != 1):?>
                     <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
                 <?php endif;?>

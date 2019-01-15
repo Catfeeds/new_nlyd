@@ -585,15 +585,15 @@ class Student_Payment {
             'return_url'    => home_url('payment/zfb_returnUrl/type/alipay/serialnumber/'.$order['serialnumber']),
             'out_trade_no'  => $order['serialnumber'],
             'subject'       => '脑力中国',
-            //'total_amount'  =>  0.01,
-            'total_amount'  => $order['cost'],
+            'total_amount'  =>  0.01,
+            //'total_amount'  => $order['cost'],
             'body'  => '', //商品描述,可空
         ];
 
         /*****************收益分配start*******************/
 
         //获取当前比赛场景
-        /*if($order['order_type'] == 1){
+        if($order['order_type'] == 1){
             $income_type = 'match_id';
             $table = $wpdb->prefix.'match_meta_new';
             $join = "match_scene";
@@ -670,6 +670,7 @@ class Student_Payment {
                             'sponsor_income'=>$created_id > 0 ? $money4 : '',  //办赛机构收益
                         );
                         //print_r($insert);die;
+                        $person_liable_id = $order['sub_centres_id'];
                     }
                     elseif ($order['order_type'] == 2){
                         $income_type = 'grading';
@@ -694,6 +695,7 @@ class Student_Payment {
                             'sponsor_id'=>$grading['created_person'] > 0 ? $grading['created_person'] : '',  //办赛机构
                             'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
                         );
+                        $person_liable_id = $grading['person_liable'];
                     }
                     //print_r($insert);die;
                     $insert['created_time'] = get_time('mysql');
@@ -709,8 +711,39 @@ class Student_Payment {
                     else{
                         $b = true;
                     }
-                    //print_r($a .'************'. $b);die;
-                    if($a && $b){
+                    if(!empty($user['referee_id'])){
+                        $referee_income = $wpdb->get_var("select id,user_income from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ");
+                        if($referee_income['id'] > 0){
+                            $c = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$referee_income['user_income']+$money1),array('id'=>$referee_income['id']));
+                        }else{
+                            $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                        }
+                    }else{
+                        $c = true;
+                    }
+                    if(!empty($user['indirect_referee_id'])){
+                        $indirect_referee_income = $wpdb->get_var("select id,user_income from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ");
+                        if($indirect_referee_income['id'] > 0){
+                            $d = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$indirect_referee_income['user_income']+$money1),array('id'=>$indirect_referee_income['id']));
+                        }else{
+                            $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                        }
+                    }else{
+                        $d = true;
+                    }
+                    if(!empty($person_liable_id)){
+                        $person_liable_income = $wpdb->get_var("select id,user_income from {$wpdb->prefix}user_stream_logs where user_id = {$person_liable_id} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ");
+                        if($person_liable_income['id'] > 0){
+                            $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money1),array('id'=>$person_liable_income['id']));
+                        }else{
+                            $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                        }
+                    }else{
+                        $e = true;
+                    }
+
+                    print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e);die;
+                    if($a && $b && $c && $d && $e){
                         $wpdb->query('COMMIT');
                     }else{
                         $wpdb->query('ROLLBACK');
@@ -719,7 +752,7 @@ class Student_Payment {
                 }
 
             }
-        }*/
+        }
 
         /*****************收益分配end*******************/
 

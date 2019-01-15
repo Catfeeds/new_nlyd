@@ -4649,9 +4649,8 @@ class Student_Ajax
         $data = array(
             'apply_id'=>$current_user->ID,
             'type_id'=>$_POST['type_id'],
-            'zone_name'=>$_POST['zone_name'],
-            'zone_match_type'=>$zone_match_type,
-            'is_double'=>$is_double,
+            'zone_match_type'=>!empty($zone_match_type) ? $zone_match_type : '',
+            'is_double'=>!empty($is_double) ? $is_double : '',
             'zone_address'=>$_POST['zone_address'],
             'business_licence_url'=>$business_licence_url,
             'legal_person'=>$_POST['legal_person'],
@@ -5498,7 +5497,7 @@ class Student_Ajax
                        ";
 
         }else{
-            $where = "a.sponsor_id = {$current_user->ID} ";
+            $where = "a.sponsor_id = {$current_user->ID} and a.match_id = {$row['match_id']} ";
         }
         $sql .= $where."order by id desc limit $start,$pageSize ";
 
