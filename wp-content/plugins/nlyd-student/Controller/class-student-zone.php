@@ -657,7 +657,7 @@ class Student_Zone
         $data['category_list'] = !empty($rows) ? json_encode($rows) : '';
 
         if(isset($_GET['grading_id'])){
-            //获取比赛信息
+            //获取考级信息
             $sql = "select a.post_title ,c.role_name as scene_title,c.role_alias,d.post_title as genre_title, b.* from {$wpdb->prefix}posts a 
                       left join {$wpdb->prefix}grading_meta b on a.ID = b.grading_id 
                       left join {$wpdb->prefix}zone_match_role c on b.scene = c.id 
@@ -675,8 +675,10 @@ class Student_Zone
             if(!empty($match['entry_end_time'])){
                 $match['data_entry_end_time'] = preg_replace('/\s|:/','-',$match['entry_end_time']);
             }
-            $person_liable = get_user_meta($match['person_liable'],'user_real_name')[0];
-            $match['person'] = !empty($person_liable['real_name']) ? $person_liable['real_name'] : '-';
+            if($match['person_liable']){
+                $match['person_liable_phone'] = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$match['person_liable']}");
+            }
+
             //print_r($match);
             if($match['status'] == 2 && $match['role_alias'] == 'simulate-grading'){
                 $match['allow_cancel'] = 'y';

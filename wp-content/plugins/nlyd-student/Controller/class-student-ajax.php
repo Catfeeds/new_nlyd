@@ -4568,11 +4568,11 @@ class Student_Ajax
         }
         if($_POST['zone_type_alias'] == 'match'){
             if(empty($_POST['zone_match_type'])) wp_send_json_error(array('info'=>'赛区类型必选'));
-            if($_POST['zone_match_type'] == 1){
+            /*if($_POST['zone_match_type'] == 1){
                 $zone_match_type = 1;
             }else{
                 $zone_match_type = 2;
-            }
+            }*/
             if($_POST['zone_match_type'] == 2){ //单区
                 $is_double = 2;
             }
@@ -4649,7 +4649,7 @@ class Student_Ajax
         $data = array(
             'apply_id'=>$current_user->ID,
             'type_id'=>$_POST['type_id'],
-            'zone_match_type'=>!empty($zone_match_type) ? $zone_match_type : '',
+            'zone_match_type'=>!empty($_POST['zone_match_type']) ? $_POST['zone_match_type'] : '',
             'is_double'=>!empty($is_double) ? $is_double : '',
             'zone_address'=>$_POST['zone_address'],
             'business_licence_url'=>$business_licence_url,
@@ -4979,11 +4979,18 @@ class Student_Ajax
         if(empty($_POST['post_title']) || empty($_POST['scene']) || empty($_POST['category_id']) || empty($_POST['start_time'])|| empty($_POST['end_time']) ){
             wp_send_json_error(array('info'=>'考级场景/类别/名称/时间为必填项'));
         }
-        if($_POST['start_time'] > $_POST['end_time'] )wp_send_json_error(array('info'=>'结束时间必须大于开始时间'));
-        if($_POST['entry_end_time'] > $_POST['start_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
+        if($_POST['start_time'] >= $_POST['end_time'] )wp_send_json_error(array('info'=>'结束时间必须大于开始时间'));
+        if($_POST['entry_end_time'] >= $_POST['start_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
         global $wpdb,$current_user;
+        if(reg_match('m',$_POST['person_liable'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
+        $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['person_liable']}'
+                ";
+        $person_liable = $wpdb->get_row($sql,ARRAY_A);
+        if(empty($person_liable)) wp_send_json_error(array('info'=>__('该教练未注册')));
+        if(empty($person_liable['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证')));
 
-        //print_r($_POST);die;
         /***********************准备数据**********************************/
         $arr = array(
             'post_title' => $_POST['post_title'],
@@ -5014,7 +5021,7 @@ class Student_Ajax
             'entry_end_time'=>!empty($_POST['entry_end_time']) ? $_POST['entry_end_time'] : date_i18n('Y-m-d H:i:s',strtotime('-10 minute',strtotime($_POST['start_time']))),
             'start_time'=>$_POST['start_time'],
             'end_time'=>$_POST['end_time'],
-            'person_liable'=>!empty($_POST['person_liable']) ? $_POST['person_liable'] : '',
+            'person_liable'=>!empty($person_liable['ID']) ? $person_liable['ID'] : '',
         );
         if(!empty($_POST['grading_id'])){
 
@@ -5722,14 +5729,29 @@ class Student_Ajax
             wp_send_json_error(array('info'=>__('请选择教练')));
         }
         global $wpdb,$current_user;
+
+        if(reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
+        $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['coach_id']}'
+                ";
+        $coach = $wpdb->get_row($sql,ARRAY_A);
+        if(empty($coach)) wp_send_json_error(array('info'=>__('该教练未注册')));
+        if(empty($coach['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证')));
+
+        /*******教练资格认证********/
+        /*$user = new WP_User( $coach['ID'] );
+        if(!$user->has_cap( 'coach' )){
+            wp_send_json_error(array('info'=>__('该教练未取得平台认证,请核实')));
+        }*/
+        /**********end************/
+
         //判断该教练是否被占用
-        $id = $wpdb->get_var("select id from {$wpdb->prefix}zone_join_coach where coach_id = {$_POST['coach_id']} ");
+        $id = $wpdb->get_var("select id from {$wpdb->prefix}zone_join_coach where coach_id = {$coach['ID']} ");
         if(!empty($id)) wp_send_json_error(array('info'=>__('该教练已绑定,请核实信息')));
-        $coach_name = get_user_meta($_POST['coach_id'],'user_real_name');
-        if(empty($coach_name)) wp_send_json_error(array('info'=>__('该教练未进行实名认证')));
-        $result = $wpdb->insert($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$_POST['coach_id']));
+        $result = $wpdb->insert($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$coach['ID']));
         if($result){
-            wp_send_json_success(array('info'=>__('添加成功')));
+            wp_send_json_success(array('info'=>__('添加成功'),'url'=>home_url('/zone/coach/')));
         }else{
             wp_send_json_error(array('info'=>__('添加失败')));
         }
@@ -6339,11 +6361,11 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         $map[] = " a.zone_id = {$current_user->ID} ";
-        if($_POST['course_type'] == 'history'){
+        /*if($_POST['course_type'] == 'history'){
             $map[] = " a.is_enable < -2 ";
         }elseif ($_POST['course_type'] == 'matching'){
             $map[] = " a.is_enable != -3 ";
-        }
+        }*/
         $where = join("and",$map);
 
         //判断是否有分页
@@ -6453,6 +6475,24 @@ class Student_Ajax
         wp_send_json_success(array('info'=>$rows));
     }
 
+
+    /**
+     * 获取首页课程导航下机构列表
+     */
+    public function get_course_zone(){
+        global $wpdb;
+
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        $sql= "select from {$wpdb->prefix}zone_meta a 
+               left join {$wpdb->prefix}course b on a.zone_id = b.user_id
+               
+              ";
+        $rows = $wpdb->get_results($sql ,ARRAY_A);
+    }
 
     /*
     *比较字符串不同的字符

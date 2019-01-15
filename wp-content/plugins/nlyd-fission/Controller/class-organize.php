@@ -1375,6 +1375,7 @@ class Organize{
                                                          'user_type' => $zone_type,
                                                          'match_id' => $user_income_logs_id,
                                                          'income_type' => 'subject',
+                                                         'income_status' => 2,
                                                          'user_income' => $spread_set['direct_superior'],
                                                          'created_time' => get_time('mysql'),
                                                      ];
@@ -1391,6 +1392,7 @@ class Organize{
                                                                  'user_type' => $zone_type,
                                                                  'match_id' => $user_income_logs_id,
                                                                  'income_type' => 'subject',
+                                                                 'income_status' => 2,
                                                                  'user_income' => $spread_set['indirect_superior'],
                                                                  'created_time' => get_time('mysql'),
                                                              ];
@@ -3544,6 +3546,8 @@ class Organize{
             case 'test':
                 $name = 'IISC'. '<span style="color: #c40c0f">' .$zone_name.'</span>'.'国际脑力测评中心';
                 break;
+            default:
+                $name = '';
         }
         if($type == 'get'){
             return $name;

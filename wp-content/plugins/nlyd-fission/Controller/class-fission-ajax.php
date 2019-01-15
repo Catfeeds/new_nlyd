@@ -448,12 +448,50 @@ class Fission_Ajax
 
         global $wpdb;
         //获取数据
-        $rows = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}user_income_logs WHERE income_type IN ('match','grading') AND match_id IN({$match_id}) AND income_status=1 LIMIT 1", ARRAY_A);
+        $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}user_income_logs WHERE income_type IN ('match','grading') AND match_id IN({$match_id}) AND income_status=1", ARRAY_A);
         if(!$rows) wp_send_json_error(['info' => '无待确认数据!']);
         $sql = "UPDATE {$wpdb->prefix}user_income_logs SET income_status=2 WHERE income_type IN ('match','grading') AND match_id IN({$match_id}) AND income_status=1";
+        $wpdb->query('START TRANSACTION');
         $bool = $wpdb->query($sql);
-        if($bool) wp_send_json_success(['info' => '确认成功']);
-        else wp_send_json_error(['info' => '确认失败']);
+        if(!$bool){
+            $wpdb->query('ROLLBACK');
+            wp_send_json_error(['info' => '确认失败']);
+        }
+        //添加收益流水
+        $sql2 = "INSERT INTO `{$wpdb->prefix}user_stream_logs` (`user_id`,`income_type`,`match_id`,`user_income`,`created_time`,`income_status`) VALUES";
+        $insertDataArr = [];
+        $created_time = get_time('mysql');
+        foreach ($rows as $row){
+            //直接上街
+            if($row['referee_id'] && $row['referee_income'] != '0'){
+                $insertDataArr[] = "('{$row['referee_id']}','{$row['income_type']}','{$row['match_id']}','{$row['referee_income']}','{$created_time}',2)";
+            }
+            //间接上级
+            if($row['indirect_referee_id'] && $row['indirect_referee_income'] != '0'){
+                $insertDataArr[] = "('{$row['indirect_referee_id']}','{$row['income_type']}','{$row['match_id']}','{$row['indirect_referee_income']}','{$created_time}',2)";
+            }
+            //负责人
+            if($row['person_liable_id'] && $row['person_liable_income'] != '0'){
+                $insertDataArr[] = "('{$row['person_liable_id']}','{$row['income_type']}','{$row['match_id']}','{$row['person_liable_income']}','{$created_time}',2)";
+            }
+            //主办方
+            if($row['sponsor_id'] && $row['sponsor_income'] != '0'){
+                $insertDataArr[] = "('{$row['sponsor_id']}','{$row['income_type']}','{$row['match_id']}','{$row['sponsor_income']}','{$created_time}',2)";
+            }
+            //事业员
+            if($row['manager_id'] && $row['manager_income'] != '0'){
+                $insertDataArr[] = "('{$row['manager_id']}','{$row['income_type']}','{$row['match_id']}','{$row['manager_income']}','{$created_time}',2)";
+            }
+        }
+        $sql2 .= join(',', $insertDataArr);
+        $insertBool = $wpdb->query($sql2);
+        if($insertBool){
+            $wpdb->query('COMMIT');
+            wp_send_json_success(['info' => '确认成功']);
+        }else{
+            $wpdb->query('ROLLBACK');
+            wp_send_json_error(['info' => '确认失败']);
+        }
     }
 
     /**
