@@ -1,8 +1,9 @@
 <!-- 训练中心(分中心) -->
 <div class="layui-row nl-border nl-content have-bottom">
+    <div class="zone-form-tips width-padding width-padding-pc"><i class="iconfont">&#xe65b;</i> <?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></div>
     <div class="width-padding layui-row width-margin-pc">
         <form class="layui-form apply_form" lay-filter='layform'>
-            <div>
+            <!-- <div>
                 <div class="lable_row">
                     <span class="c_black"><?=__('训练中心名字', 'nlyd-student')?>：</span>
                     <span class="c_black3"><?=__('示例：', 'nlyd-student')?>
@@ -12,7 +13,7 @@
                 <div class="input_row">
                     <input class="radius_input_row nl-foucs" type="text" name="zone_name" autocomplete="off" placeholder="<?=__('绿色示例部分即为字号，最多5字', 'nlyd-student')?>" value="<?=!empty($row['id']) ? $row['zone_name'] :''?>">
                 </div>
-            </div>
+            </div> -->
             <div>
                 <div class="lable_row"><span class="c_black"><?=__('训练中心所在地', 'nlyd-student')?>：</span></div>
                 <div class="input_row">
@@ -81,26 +82,25 @@
                 <div class="input_row"><input class="radius_input_row nl-foucs" type="tel" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户号码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
             </div>
 
-                <div>
-                    <div class="lable_row">
-                        <span class="c_black"><?=__('分中心总经理', 'nlyd-student')?>：</span>
-                        <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
-                    </div>
-                    <div class="input_row">
-                        <input class="radius_input_row change_num nl-foucs" name="center_manager" value="<?=$row['center_manager']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
-                    </div>
+            <div>
+                <div class="lable_row">
+                    <span class="c_black"><?=__('分中心总经理', 'nlyd-student')?>：</span>
                 </div>
-                <?php if(!empty($referee_name)):?>
-                <div>
-                    <div class="lable_row"><span class="c_black"><?=__('事业管理员', 'nlyd-student')?>：</span></div>
-                    <div class="input_row">
-                        <input class="radius_input_row" disabled type="text" value="<?=$referee_name?>">
-                    </div>
+                <div class="input_row">
+                    <input class="radius_input_row change_num nl-foucs" name="center_manager" value="<?=$row['center_manager']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                 </div>
-                <?php endif;?>
-                <?php if($row['user_status'] != 1):?>
-                    <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
-                <?php endif;?>
+            </div>
+            <?php if(!empty($referee_name)):?>
+            <div>
+                <div class="lable_row"><span class="c_black"><?=__('事业管理员', 'nlyd-student')?>：</span></div>
+                <div class="input_row">
+                    <input class="radius_input_row" disabled type="text" value="<?=$referee_name?>">
+                </div>
+            </div>
+            <?php endif;?>
+            <?php if($row['user_status'] != 1):?>
+                <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
+            <?php endif;?>
         </form>
     </div>
 </div>

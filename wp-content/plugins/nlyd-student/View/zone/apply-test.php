@@ -2,7 +2,7 @@
 <div class="layui-row nl-border nl-content have-bottom">
     <div class="width-padding layui-row width-margin-pc">
         <form class="layui-form apply_form" lay-filter='layform'>
-            <div>
+            <!-- <div>
                 <div class="lable_row">
                     <span class="c_black"><?=__('测评中心名字', 'nlyd-student')?>：</span>
                     <span class="c_black3"><?=__('示例：', 'nlyd-student')?>
@@ -12,7 +12,7 @@
                 <div class="input_row">
                     <input class="radius_input_row nl-foucs" type="text" name="zone_name" autocomplete="off" placeholder="<?=__('绿色示例部分即为字号，最多5字', 'nlyd-student')?>" value="<?=!empty($row['id']) ? $row['zone_name'] :''?>">
                 </div>
-            </div>
+            </div> -->
             <div>
                 <div class="lable_row"><span class="c_black"><?=__('测评中心所在地', 'nlyd-student')?>：</span></div>
                 <div class="input_row">
