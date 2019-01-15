@@ -1,5 +1,6 @@
 <!-- 赛区 -->
 <div class="layui-row nl-border nl-content have-bottom">
+    <div class="zone-form-tips width-padding width-padding-pc"><i class="iconfont">&#xe65b;</i> <?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></div>
     <div class="width-padding layui-row width-margin-pc">
         <form class="layui-form apply_form" lay-filter='layform'>
             <div>
@@ -103,29 +104,26 @@
             <div>
                 <div class="lable_row">
                     <span class="c_black"><?=__('中心负责人', 'nlyd-student')?>：</span>
-                    <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                 </div>
                 <div class="input_row">
-                    <input class="radius_input_row change_num nl-foucs" name="center_manager" value="<?=$row['center_manager']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                    <input class="radius_input_row change_num nl-foucs" name="center_manager" value="<?=$row['center_manager']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                 </div>
             </div>
 
             <div>
                 <div class="lable_row">
                     <span class="c_black"><?=__('赛事组委会主席', 'nlyd-student')?>：</span>
-                    <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                 </div>
                 <div class="input_row">
-                    <input class="radius_input_row change_num nl-foucs" name="chairman_phone" value="<?=$row['chairman_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                    <input class="radius_input_row change_num nl-foucs" name="chairman_phone" value="<?=$row['chairman_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                 </div>
             </div>
             <div>
                 <div class="lable_row">
                     <span class="c_black"><?=__('赛事组委会秘书长', 'nlyd-student')?>：</span>
-                    <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                 </div>
                 <div class="input_row">
-                    <input class="radius_input_row change_num nl-foucs" name="secretary_phone" value="<?=$row['secretary_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                    <input class="radius_input_row change_num nl-foucs" name="secretary_phone" value="<?=$row['secretary_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                 </div>
             </div>
             <?php if($row['user_status'] != 1):?>

@@ -13,16 +13,16 @@
                 <h1 class="mui-title"><div><?=__(!empty($_GET['grading_id']) ? '编辑考级' : '发布考级', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content have-bottom">
+                <div class="zone-form-tips width-padding width-padding-pc"><i class="iconfont">&#xe65b;</i> <?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></div>
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('考级责任人', 'nlyd-student')?>：</span>
-                                <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                             </div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" name="person_liable" value="<?=$match['person_liable']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
-                                <!-- <select class="js-data-select-ajax" name="person_liable" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
+                                <input class="radius_input_row nl-foucs" name="person_liable" value="<?=$match['person_liable']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                                <!-- <select class="js-data-select-ajax" name="person_liable" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" >
                                     <option value="<?=$match['person_liable']?>" selected><?=$match['person']?></option>
                                 </select> -->
                             </div>
@@ -81,17 +81,18 @@
                         </div>
                         <input type="hidden" name="action" value="zone_create_grading">
                         <input type="hidden" name="grading_id" value="<?=$_GET['grading_id']?>">
-                        <span class="details_btn flex-h">
-                            <?php if($match['allow_cancel'] == 'y'):?>
-                            <div class="details-button flex1">
-                                <button class="save" type="button" id="end_match"><?=__('取消考级', 'nlyd-student')?></button>
-                            </div>
-                            <?php endif;?>
-                            <div class="details-button flex1 last-btn">
-                                <button class="see_button" type="button" lay-filter='layform' lay-submit=""><?=__(!empty($_GET['grading_id']) ? '保存更新' :'确认发布', 'nlyd-student')?></button>
-                            </div>
-                        </span>
-                        <!-- <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__(!empty($_GET['grading_id']) ? '保存更新' :'确认发布', 'nlyd-student')?></div></a> -->
+                        <?php if($match['allow_cancel'] == 'y') { ?>
+                            <span class="details_btn flex-h">
+                                <div class="details-button flex1">
+                                    <button class="save" type="button" id="end_match"><?=__('取消考级', 'nlyd-student')?></button>
+                                </div>
+                                <div class="details-button flex1 last-btn">
+                                    <button class="see_button" type="button" lay-filter='layform' lay-submit=""><?=__(!empty($_GET['grading_id']) ? '保存更新' :'确认发布', 'nlyd-student')?></button>
+                                </div>
+                            </span>   
+                        <?php }else{ ?>
+                            <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__(!empty($_GET['grading_id']) ? '保存更新' :'确认发布', 'nlyd-student')?></div></a>
+                        <?php } ?>
                     </form>
                 </div>
             </div>
