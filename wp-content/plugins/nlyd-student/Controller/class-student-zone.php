@@ -675,15 +675,13 @@ class Student_Zone
             if(!empty($match['entry_end_time'])){
                 $match['data_entry_end_time'] = preg_replace('/\s|:/','-',$match['entry_end_time']);
             }
-            $person_liable = get_user_meta($match['person_liable'],'user_real_name')[0];
-            $match['person'] = !empty($person_liable['real_name']) ? $person_liable['real_name'] : '-';
+            if($match['person_liable']){
+                $match['person_liable_phone'] = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$match['person_liable']}");
+            }
+
             //print_r($match);
             if($match['status'] == 2 && $match['role_alias'] == 'simulate-grading'){
                 $match['allow_cancel'] = 'y';
-            }
-            print_r($match);
-            if(!empty($match['person_liable'])){
-                $match['person_liable_name'] = get_user_meta($match['person_liable'],'user_real_name')[0]['real_name'];
             }
             $data['match'] = $match;
             //print_r($match);

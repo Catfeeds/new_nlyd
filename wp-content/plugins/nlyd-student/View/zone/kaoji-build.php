@@ -21,7 +21,7 @@
                                 <span class="c_black"><?=__('考级责任人', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" name="person_liable" value="<?=$match['person_liable']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" name="person_liable" value="<?=$match['person_liable_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                                 <!-- <select class="js-data-select-ajax" name="person_liable" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" >
                                     <option value="<?=$match['person_liable']?>" selected><?=$match['person']?></option>
                                 </select> -->
