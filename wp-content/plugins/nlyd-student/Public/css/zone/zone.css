@@ -47,6 +47,16 @@
 .dis_none{
     display: none;
 }
+
+.zone-form-tips{
+    text-align: left;
+    font-size: 0.12rem;
+    background: #fff2f2;
+    color: #f94343;
+    line-height: 0.18rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 /* .apply{
     margin-top: 10px;
     background-color: #fff;
