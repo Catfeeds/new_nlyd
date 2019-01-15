@@ -154,7 +154,7 @@ class Course{
                     <th scope="col" id="seize_quota" class="manage-column column-seize_quota">已抢占名额</th>
                     <th scope="col" id="zone_user_id" class="manage-column column-zone_user_id">所属机构</th>
                     <th scope="col" id="course_type" class="manage-column column-course_type">课程类型</th>
-                    <th scope="col" id="is_share" class="manage-column column-is_share">活动</th>
+<!--                    <th scope="col" id="is_share" class="manage-column column-is_share">活动</th>-->
                     <th scope="col" id="is_enable" class="manage-column column-is_enable">状态</th>
                     <th scope="col" id="created_time" class="manage-column column-created_time">创建时间</th>
                     <th scope="col" id="options1" class="manage-column column-options1">操作</th>
@@ -201,17 +201,17 @@ class Course{
                             <?=$courseTypeList[$row['course_type']]['type_name']?>
 
                         </td>
-                        <td class="is_share column-is_share" data-colname="活动">
-                        <?php
-                        switch ($row['is_share']){
-                            case '1':
-                                echo '<span style="color: #0a8406">乐学乐分享</span>';
-                                break;
-                            default:
-                                echo '-';
-                        }
-                        ?>
-                        </td>
+<!--                        <td class="is_share column-is_share" data-colname="活动">-->
+<!--                        --><?php
+//                        switch ($row['is_share']){
+//                            case '1':
+//                                echo '<span style="color: #0a8406">乐学乐分享</span>';
+//                                break;
+//                            default:
+//                                echo '-';
+//                        }
+//                        ?>
+<!--                        </td>-->
                         <td class="is_enable column-is_enable" data-colname="状态"><?=$row['is_enable'] == '2' ? '<span style="color: #c42800;">禁用</span>':'正常'?></td>
                         <td class="created_time column-created_time" data-colname="创建时间"><?=$row['created_time']?></td>
                         <td class="options1 column-options1" data-colname="操作">
@@ -237,7 +237,7 @@ class Course{
                     <th scope="col" class="manage-column column-seize_quota">已抢占名额</th>
                     <th scope="col" class="manage-column column-zone_user_id">所属机构</th>
                     <th scope="col" class="manage-column column-course_type">课程类型</th>
-                    <th scope="col" class="manage-column column-is_share">活动</th>
+<!--                    <th scope="col" class="manage-column column-is_share">活动</th>-->
                     <th scope="col" class="manage-column column-is_enable">状态</th>
                     <th scope="col" class="manage-column column-created_time">创建时间</th>
                     <th scope="col" class="manage-column column-options1">操作</th>
@@ -370,7 +370,7 @@ class Course{
             $is_enable = isset($_POST['is_enable']) ? intval($_POST['is_enable']) : 2;
             $course_category_id = isset($_POST['course_category_id']) ? intval($_POST['course_category_id']) : 0;
             $duration = isset($_POST['duration']) ? intval($_POST['duration']) : 0;
-            $is_share = isset($_POST['is_share']) ? intval($_POST['is_share']) : 0;
+//            $is_share = isset($_POST['is_share']) ? intval($_POST['is_share']) : 0;
             $admin_mobile = isset($_POST['admin_mobile']) ? trim($_POST['admin_mobile']) : '';
 //            if($course_title == '') $error_msg = '请填写课程名称';
 //            if($coach_id < 1) $error_msg .= ($error_msg == '' ? '':'<br />').'请选择授课教练';
@@ -396,7 +396,7 @@ class Course{
                     'open_quota' => $open_quota,
                     'seize_quota' => $seize_quota,
                     'zone_id' => $zone_id,
-                    'is_share' => $is_share,
+//                    'is_share' => $is_share,
                     'course_type' => $course_type,
                     'is_enable' => $is_enable,
                     'course_category_id' => $course_category_id,
@@ -440,7 +440,7 @@ class Course{
         }
         if($id > 0){
             $row = $wpdb->get_row("SELECT cou.course_title,cou.course_img,cou.const,cou.const,cou.is_enable,cou.coach_id,cou.course_start_time,cou.course_end_time,
-                cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.course_details,cou.is_share,
+                cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.course_details,
                 zm.zone_name,um.meta_value AS coach_real_name,cou.course_category_id,cou.duration,cou.admin_mobile  
                 FROM {$wpdb->prefix}course AS cou 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
@@ -594,13 +594,13 @@ class Course{
                             <label for="is_enable_2">禁用  <input type="radio" <?=$row['is_enable'] == '2' ? 'checked="checked"':''?> id="is_enable_2" name="is_enable" value="2"></label>
                         </td>
                     </tr>
-                    <tr class="">
-                        <th scope="row"><label for="is_share">乐学乐分享 </label></th>
-                        <td>
-                            <label for="is_share_1">是  <input type="radio" <?=$row['is_share'] == '1' || !isset($row['is_share']) ? 'checked="checked"':''?> id="is_share_1" name="is_share" value="1"></label>
-                            <label for="is_share_2">否  <input type="radio" <?=$row['is_share'] == '0' ? 'checked="checked"':''?> id="is_share_2" name="is_share" value="0"></label>
-                        </td>
-                    </tr>
+<!--                    <tr class="">-->
+<!--                        <th scope="row"><label for="is_share">乐学乐分享 </label></th>-->
+<!--                        <td>-->
+<!--                            <label for="is_share_1">是  <input type="radio" --><?//=$row['is_share'] == '1' || !isset($row['is_share']) ? 'checked="checked"':''?><!-- id="is_share_1" name="is_share" value="1"></label>-->
+<!--                            <label for="is_share_2">否  <input type="radio" --><?//=$row['is_share'] == '0' ? 'checked="checked"':''?><!-- id="is_share_2" name="is_share" value="0"></label>-->
+<!--                        </td>-->
+<!--                    </tr>-->
 
 
                     </tbody>
@@ -747,7 +747,7 @@ class Course{
         <div class="wrap">
             <h1 class="wp-heading-inline">课程类型</h1>
 
-            <a href="<?=admin_url('admin.php?page=teacher-add')?>" class="page-title-action">添加课程类型</a>
+            <a href="<?=admin_url('admin.php?page=add-course-type')?>" class="page-title-action">添加课程类型</a>
 
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="31db78f456"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php?paged=1">
             <div class="tablenav top">
