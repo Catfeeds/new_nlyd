@@ -7,7 +7,7 @@
  * Date: 2018/7/16
  * Time: 14:38
  */
-class Student_Directory
+class Student_Courses
 {
 
     public $ajaxControll;
