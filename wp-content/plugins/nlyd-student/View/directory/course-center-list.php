@@ -8,7 +8,7 @@
 
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
                 <header class="mui-bar mui-bar-nav">
-                    <a class="mui-pull-left nl-goback nl-goback">
+                    <a class="mui-pull-left nl-goback nl-goback static" href="<?=home_url('/directory/course');?>">
                         <div><i class="iconfont">&#xe610;</i></div>
                     </a>
                     <h1 class="mui-title"><div><?=__('脑博瑞国际脑力训练中心', 'nlyd-student')?></div></h1>

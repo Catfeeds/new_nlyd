@@ -16,7 +16,12 @@
             </header>
             <div class="layui-row nl-border nl-content have-bottom">
                 <a class="orderDetail_title bg_gradient_blue dis_table" href="<?=home_url('orders/logistics')?>">
-                    <span class="c_white fs_16 dis_cell">交易成功(待支付,等待发货,等待收货)&nbsp;&nbsp;&nbsp;&nbsp;2017-07-24 13:20<br>物流信息&nbsp;&nbsp;&nbsp;&nbsp;已签收</span>
+                    <span class="c_white fs_16 dis_cell">
+                        <span>交易成功</span>
+                        <span class="ml_10">2017-07-24 13:20</span><br>
+                        <span>物流信息</span>
+                        <span class="ml_10">已签收</span>
+                    </span>
                     <span class="c_white dis_cell"><i class="iconfont c_white fs_22">&#xe64f;</i></span>
                 </a>
                 <div class="layui-row width-padding width-padding-pc goods_row mt_0 dis_table">
@@ -73,40 +78,33 @@
                 <!-- 交易成功(已发货) -->
                 <div class="details_btn flex-h">
                     <div class="details-button flex1">
-                        <button class="see_button" type="button" class="">删除订单</button>
+                        <button class="see_button" type="button" class=""><?=__('删除订单', 'nlyd-student')?></button>
                     </div>
                     <div class="details-button flex1 last-btn">
-                        <button class="see_button" type="button" href="<?=home_url('orders/logistics')?>">查看物流</button>
+                        <button class="see_button" type="button" href="<?=home_url('orders/logistics')?>"><?=__('查看物流', 'nlyd-student')?></button>
                     </div>
                 </div>
                 <!-- 交易成功(快件派送中) -->
                 <!-- <div class="details_btn flex-h">
                     <div class="details-button flex1">
-                        <button class="see_button" type="button" class="">删除订单</button>
+                        <button class="see_button" type="button" class=""><?=__('删除订单', 'nlyd-student')?></button>
                     </div>
                     <div class="details-button flex1 last-btn">
-                        <button class="see_button" type="button" href="<?=home_url('orders/logistics')?>">查看物流</button>
+                        <button class="see_button" type="button" href="<?=home_url('orders/logistics')?>"><?=__('查看物流', 'nlyd-student')?></button>
                     </div>
                 </div> -->
                  <!-- 交易成功(已签收) -->
-                <!-- <div class="details_btn flex-h">
-                    <div class="details-button flex1 last-btn">
-                        <button class="see_button" type="button" class="">删除订单</button>
-                    </div>
-                </div> -->
+                 <!-- <a class="a-btn a-btn-table"><div><?=__('删除订单', 'nlyd-student')?></div></a> -->
+            
                 <!-- 待发货 -->
-                <!-- <div class="details_btn flex-h">
-                    <div class="details-button flex1 last-btn">
-                        <button class="see_button" type="button" class="">提醒发货</button>
-                    </div>
-                </div> -->
+                <!-- <a class="a-btn a-btn-table"><div><?=__('提醒发货', 'nlyd-student')?></div></a> -->
                 <!-- 待支付 -->
                 <!-- <div class="details_btn flex-h">
                     <div class="details-button flex1">
-                        <button class="see_button" type="button" class="">取消订单</button>
+                        <button class="see_button" type="button" class=""><?=__('取消订单', 'nlyd-student')?></button>
                     </div>
                     <div class="details-button flex1 last-btn">
-                        <button class="see_button" type="button">支付订单</button>
+                        <button class="see_button" type="button"><?=__('支付订单', 'nlyd-student')?></button>
                     </div>
                 </div> -->
                
