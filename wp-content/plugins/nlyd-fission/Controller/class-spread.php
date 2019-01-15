@@ -600,7 +600,9 @@ class Spread{
                                     echo '考级';
                                     break;
                                 case 'undertake':
-                                    echo '承办';
+                                    $type = $wpdb->get_var("SELECT order_type {$wpdb->prefix}order WHERE match_id='{$row['match_id']}");
+                                    $match_type = $type == '1' ? '比赛' : ($type == '2' ? '考级' : '');
+                                    echo '承办'.$match_type;
                                     break;
                                 case 'extract':
                                     echo '提现';
@@ -792,7 +794,7 @@ class Spread{
                     <th scope="col" id="project" class="manage-column column-project">付款项目</th>
                     <th scope="col" id="referee" class="manage-column column-referee">直接推广</th>
                     <th scope="col" id="indirect_referee" class="manage-column column-indirect_referee">间接推广</th>
-                    <th scope="col" id="person_liable" class="manage-column column-person_liable">负责人</th>
+                    <th scope="col" id="person_liable" class="manage-column column-person_liable">教练/参赛机构</th>
                     <th scope="col" id="sponsor" class="manage-column column-sponsor">主办方</th>
                     <th scope="col" id="manager" class="manage-column column-manager">事业员</th>
                     <th scope="col" id="income_status" class="manage-column column-income_status">状态</th>
@@ -824,29 +826,25 @@ class Spread{
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
-                        <td class="project column-project" data-colname="直接推广">
+                        <td class="project column-project" data-colname="付款项目">
                             <?=$row['post_title']?>
 
                         </td>
                         <td class="referee column-referee" data-colname="直接推广">
-                            <?=!empty($row['referee_real_name'])?unserialize($row['referee_real_name'])['real_name']:get_user_by('ID',$row['referee_id'])->user_login?>
-                            (<?=$row['referee_income']?>)
+                            <?=$row['referee_income']?>
                         </td>
                         <td class="indirect_referee column-indirect_referee" data-colname="间接推广">
-                            <?=!empty($row['indirect_referee_name'])?unserialize($row['indirect_referee_name'])['real_name']:get_user_by('ID',$row['indirect_referee_id'])->user_login?>
-                            <?=$row['indirect_referee_income']>0?'('.$row['indirect_referee_income'].')':''?>
+                            <?=$row['indirect_referee_income']>0?$row['indirect_referee_income']:''?>
                         </td>
-                        <td class="person_liable column-person_liable" data-colname="负责人">
-                            <?=!empty($row['person_liable_name'])?unserialize($row['person_liable_name'])['real_name']:get_user_by('ID',$row['person_liable_id'])->user_login?>
-                            <?=$row['person_liable_income']>0?'('.$row['person_liable_income'].')':''?>
+                        <td class="person_liable column-person_liable" data-colname="教练/参赛机构">
+                            <?=$row['person_liable_income']>0?$row['person_liable_income']:''?>
                         </td>
                         <td class="sponsor column-sponsor" data-colname="主办方">
-                            <?=$row['zone_name']?>
-                            <?=$row['sponsor_income']>0?'('.$row['sponsor_income'].')':''?>
+<!--                            --><?//=$row['zone_name']?>
+                            <?=$row['sponsor_income']>0?$row['sponsor_income']:''?>
                         </td>
                         <td class="manager column-manager" data-colname="事业员">
-                            <?=!empty($row['manager_name'])?unserialize($row['manager_name'])['real_name']:get_user_by('ID',$row['manager_id'])->user_login?>
-                            <?=$row['manager_income']>0?'('.$row['manager_income'].')':''?>
+                            <?=$row['manager_income']>0?$row['manager_income']:''?>
                         </td>
                         <td class="income_status column-income_status" data-colname="状态" id="cardImg-<?=$row['user_id']?>">
                             <?=$row['income_status'] == '1'?'待确认':'已确认'?>
@@ -869,7 +867,7 @@ class Spread{
                     <th scope="col" class="manage-column column-project">付款项目</th>
                     <th scope="col" class="manage-column column-referee">直接推广</th>
                     <th scope="col" class="manage-column column-indirect_referee">间接推广</th>
-                    <th scope="col" class="manage-column column-person_liable">负责人</th>
+                    <th scope="col" class="manage-column column-person_liable">教练/参赛机构</th>
                     <th scope="col" class="manage-column column-sponsor">主办方</th>
                     <th scope="col" class="manage-column column-manager">事业员</th>
                     <th scope="col" class="manage-column column-income_status">状态</th>
@@ -1288,7 +1286,9 @@ class Spread{
                                     echo '推荐'.$zone_type_name;
                                     break;
                                 case 'undertake':
-                                    echo '承办';
+                                    $type = $wpdb->get_var("SELECT order_type {$wpdb->prefix}order WHERE match_id='{$row['match_id']}");
+                                    $match_type = $type == '1' ? '比赛' : ($type == '2' ? '考级' : '');
+                                    echo '承办'.$match_type;
                                     break;
                             }
                             ?>
