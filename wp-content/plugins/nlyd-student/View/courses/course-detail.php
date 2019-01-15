@@ -43,7 +43,7 @@
 
                 <div class="course_detail_row width-padding width-padding-pc">
                     <div class="detail_table_row"><span class="c_black bold fs_16">课程介绍</span></div>
-                    <a class="detail_table_row">
+                    <div class="detail_table_row">
                         <span class="c_black6 fs_14">
                             上课时间：周六15:00-17:00，共计32课时。 
                             <br>
@@ -53,7 +53,7 @@
                             <br>
                             报名成功以后，请自行购买教辅资料，并根据公布的上课时间 做好准备。
                         </span>
-                    </a>
+                    </div>
                 </div>
 
                 <div class="course_detail_row width-padding width-padding-pc">

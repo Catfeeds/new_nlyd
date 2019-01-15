@@ -1514,8 +1514,8 @@ class Organize{
                     <tr class="" style="">
                         <th scope="row"><label for="zone_number">机构编号 </label></th>
                         <td>
-                            <?=$row['zone_number']?>
-                            <input type="hidden" name="zone_number" id="zone_number" value="<?=$row['zone_number']?>">
+<!--                            --><?//=$row['zone_number']?>
+                            <input type="text" name="zone_number" id="zone_number" value="<?=$row['zone_number']?>">
                         </td>
                     </tr>
                     <tr class="form-field form-required">

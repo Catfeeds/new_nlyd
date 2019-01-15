@@ -1142,7 +1142,7 @@ class Spread{
         $start = ($page-1)*$pageSize;
         $where = "WHERE 1=1";
         if($searchStr != ''){
-            $where .= "  AND (u.user_login LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%' OR zm.zone_name LIKE '%{$searchStr}%')";
+            $where .= "  AND (u.user_login LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%' OR zm.zone_city LIKE '%{$searchStr}%')";
         }
         if($type_id === 1){
             $where .= " AND zm.id != ''";
@@ -1190,7 +1190,7 @@ class Spread{
                 ?>
                 <p class="search-box">
                     <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                    <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/机构名" value="<?=$searchStr?>">
+                    <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/机构城市" value="<?=$searchStr?>">
                     <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-user-log&type_id='.$type_id.'&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
                 </p>
                 <?php
@@ -1350,7 +1350,7 @@ class Spread{
         $where = "";
         $join = '';
         if($searchStr != ''){
-            $where = " WHERE (u.user_login LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%' OR zm.zone_name LIKE '%{$searchStr}%')";
+            $where = " WHERE (u.user_login LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%' OR zm.zone_city LIKE '%{$searchStr}%')";
             $join = " LEFT JOIN {$wpdb->users} AS u ON u.ID=ue.extract_id 
                       LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=ue.extract_id AND um2.meta_key='user_real_name'";
         }
@@ -1400,7 +1400,7 @@ class Spread{
                 ?>
                 <p class="search-box">
                     <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                    <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/机构名" value="<?=$searchStr?>">
+                    <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/机构城市" value="<?=$searchStr?>">
                     <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-extract-log&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
                 </p>
                   <ul class="subsubsub">

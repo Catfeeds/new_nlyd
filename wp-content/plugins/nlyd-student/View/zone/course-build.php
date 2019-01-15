@@ -93,14 +93,6 @@
                             </div>
                         </div>
                         <a class="a-btn a-btn-table" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><div><?=__($_GET['id'] > 0 ? '编 辑':'发 布', 'nlyd-student')?></div></a>
-                        <!-- <span class="details_btn flex-h">
-                            <div class="details-button flex1">
-                                <button class="save" type="button" class=""><?=__('存草稿', 'nlyd-student')?></button>
-                            </div>
-                            <div class="details-button flex1 last-btn">
-                                <button class="see_button" type="button" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><?=__($_GET['id'] > 0 ? '编 辑':'发 布', 'nlyd-student')?></button>
-                            </div>
-                        </span> -->
                     </form>
                     
                 </div>
