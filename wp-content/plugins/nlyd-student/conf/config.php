@@ -123,5 +123,11 @@ return array(
             'post_content'=>'[zone-home]',
             'url'=>'/grade',
         ),
+        array(
+            'post_title'=>'首页-课程',
+            'post_name'=>'courses',
+            'post_content'=>'[course-home]',
+            'url'=>'/course',
+        ),
     ),
 );

@@ -1097,7 +1097,9 @@ if(is_admin()){
 //require_once(ABSPATH.'wp-includes/library/RewriteRule.class.php');
 
 //引入自动加载
-require_once(leo_student_path.'library/Autoloader.class.php');
+if(defined('leo_student_path')){
+    require_once(leo_student_path.'library/Autoloader.class.php');
+}
 //var_dump(leo_student_path);
 //require_once(ABSPATH.'wp-includes/library/Autoloader.class.php');
 

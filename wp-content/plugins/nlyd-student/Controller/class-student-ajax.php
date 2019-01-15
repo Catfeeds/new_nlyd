@@ -6361,11 +6361,11 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         $map[] = " a.zone_id = {$current_user->ID} ";
-        if($_POST['course_type'] == 'history'){
+        /*if($_POST['course_type'] == 'history'){
             $map[] = " a.is_enable < -2 ";
         }elseif ($_POST['course_type'] == 'matching'){
             $map[] = " a.is_enable != -3 ";
-        }
+        }*/
         $where = join("and",$map);
 
         //判断是否有分页
@@ -6475,6 +6475,24 @@ class Student_Ajax
         wp_send_json_success(array('info'=>$rows));
     }
 
+
+    /**
+     * 获取首页课程导航下机构列表
+     */
+    public function get_course_zone(){
+        global $wpdb;
+
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        $sql= "select from {$wpdb->prefix}zone_meta a 
+               left join {$wpdb->prefix}course b on a.zone_id = b.user_id
+               
+              ";
+        $rows = $wpdb->get_results($sql ,ARRAY_A);
+    }
 
     /*
     *比较字符串不同的字符
