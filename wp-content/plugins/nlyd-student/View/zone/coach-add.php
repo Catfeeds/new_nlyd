@@ -19,13 +19,14 @@
                     <form class="layui-form">
                         <div class="coach_add_row">
                             <div class="c_red fs_14"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></div>
-                            <div class="coach_add_input">
-                                <select class="js-data-select-ajax" name="coach_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
-                                </select>
+                            <div>
+                                <input class="radius_input_row nl-foucs" name="coach_id" value="" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                <!-- <select class="js-data-select-ajax" name="coach_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
+                                </select> -->
                             </div>
                             <input type="hidden" name="action" value="add_zone_coach">
-                            <div class="coach_add_btn c_blue" lay-filter='layform' lay-submit="" ><?=__('确 定', 'nlyd-student')?></div>
                         </div>
+                        <a class="a-btn a-btn-table" lay-filter='layform' lay-submit="" ><div><?=__('添加教练', 'nlyd-student')?></div></a>
                     </form>
                 </div>
             </div>
@@ -34,24 +35,24 @@
 </div>
 <script>
 jQuery(function($) { 
-    $('.js-data-select-ajax').each(function () {
-        var _this=$(this);
-        var _placeholder = _this.attr('data-placeholder');
-        _this.select2({
-            placeholder : _placeholder,
-            allowClear:true,
-            ajax: {
-                url: admin_ajax +'?action=get_manage_user',
-                dataType: 'json',
-                delay: 600, //wait 250 milliseconds before triggering the request
-                processResults: function (res) {
-                    return {
-                        results: res.data
-                    };
-                }
-            }
-        });
-    })
+    // $('.js-data-select-ajax').each(function () {
+    //     var _this=$(this);
+    //     var _placeholder = _this.attr('data-placeholder');
+    //     _this.select2({
+    //         placeholder : _placeholder,
+    //         allowClear:true,
+    //         ajax: {
+    //             url: admin_ajax +'?action=get_manage_user',
+    //             dataType: 'json',
+    //             delay: 600, //wait 250 milliseconds before triggering the request
+    //             processResults: function (res) {
+    //                 return {
+    //                     results: res.data
+    //                 };
+    //             }
+    //         }
+    //     });
+    // })
     layui.use(['form'], function(){
         var form = layui.form
         form.render();

@@ -5,7 +5,7 @@
         require_once leo_student_public_view.'leftMenu.php';
 
         ?>
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-bottom">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
@@ -19,7 +19,8 @@
 
             <?php
 
-                switch ($_GET['zone_type_alias']){
+                $zone_type_alias = isset($_GET['zone_type_alias']) ? $_GET['zone_type_alias'] : $row['zone_type_alias'];
+                switch ($zone_type_alias){
                     case 'match':
                         require_once student_view_path.CONTROLLER.'/apply-match.php';
                         break;
@@ -297,7 +298,7 @@
                             fd.append('zone_name',data.field['zone_name']);
                         }
                     }else{//训练中心、测评中心字号
-                        fd.append('zone_name',data.field['zone_name']);
+                        // fd.append('zone_name',data.field['zone_name']);
                     }
                     if(data.field['center_manager']){//训练中心（分中心总经理）
                         fd.append('center_manager',data.field['center_manager']);

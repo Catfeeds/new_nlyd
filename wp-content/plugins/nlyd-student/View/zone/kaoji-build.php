@@ -21,9 +21,10 @@
                                 <span class="c_red fs_12"><?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></span>
                             </div>
                             <div class="input_row">
-                                <select class="js-data-select-ajax" name="person_liable" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
+                                <input class="radius_input_row nl-foucs" name="person_liable" value="<?=$match['person_liable']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>">
+                                <!-- <select class="js-data-select-ajax" name="person_liable" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入用户注册手机号码查询，未注册无法选择', 'nlyd-student')?>" >
                                     <option value="<?=$match['person_liable']?>" selected><?=$match['person']?></option>
-                                </select>
+                                </select> -->
                             </div>
                         </div>
                         <div>
@@ -57,7 +58,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" value="<?=$match['entry_end_time']?>" type="text" readonly name="entry_end_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级开始日期', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" value="<?=$match['entry_end_time']?>" type="text" readonly name="entry_end_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级报名截止日期', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
@@ -134,14 +135,22 @@ var mobileSelect1 = new MobileSelect({
                 $('#match_type1_id').val(data[0]['id']);
                 var post_data={
                     action:'get_match_cost',
-                    type:data[0]['role_alias']
+                    type:data[0]['role_alias'],
+                    spread_type:'grading'
                 }
                 $.ajax({
                     data: post_data,
                     success: function(res, textStatus, jqXHR){//获取比赛费用
-                        if(res.data){
-                            $('#cost').val(res.data)
+                        if (res.success) {
+                            if(res.data){
+                                $('#cost').val(res.data)
+                            }else{
+                                $.alerts(res.data.info)
+                            }
+                        }else{
+                            $.alerts(res.data.info)
                         }
+
                     },
                     complete: function(jqXHR, textStatus){
                         if(textStatus=='timeout'){
@@ -303,24 +312,24 @@ var mobileSelect5 = new MobileSelect({
        
     }
 });
-    $('.js-data-select-ajax').each(function () {
-        var _this=$(this);
-        var _placeholder = _this.attr('data-placeholder');
-        _this.select2({
-            placeholder : _placeholder,
-            allowClear:true,
-            ajax: {
-                url: admin_ajax +'?action=get_manage_user'  ,
-                dataType: 'json',
-                delay: 600, //wait 250 milliseconds before triggering the request
-                processResults: function (res) {
-                    return {
-                        results: res.data
-                    };
-                }
-            }
-        });
-    })
+    // $('.js-data-select-ajax').each(function () {
+    //     var _this=$(this);
+    //     var _placeholder = _this.attr('data-placeholder');
+    //     _this.select2({
+    //         placeholder : _placeholder,
+    //         allowClear:true,
+    //         ajax: {
+    //             url: admin_ajax +'?action=get_manage_user'  ,
+    //             dataType: 'json',
+    //             delay: 600, //wait 250 milliseconds before triggering the request
+    //             processResults: function (res) {
+    //                 return {
+    //                     results: res.data
+    //                 };
+    //             }
+    //         }
+    //     });
+    // })
    
     layui.use(['form'], function(){
         var form = layui.form

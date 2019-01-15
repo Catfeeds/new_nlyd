@@ -32,13 +32,13 @@
                         <!-- 审核通过 -->
                         <div class="zone_title_row  <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
                             <span class="bold fs_16 zone_title_name">
-                               <?= $row['zone_name'];?>
+                               <?= $row['zone_title'];?>
                             </span>
                             <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
                         </div>
 
                         <div class="c_black">
-                            <?=__('编 号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?>
+                            <?=__('编 号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? $row['zone_number'] : $row['user_ID']?>
                             <?php if($row['user_status'] == 1){ ?>
                                 <div class="img-box zone_pass mr_10"><img src="<?=student_css_url.'image/pass.png'?>" alt="<?=__('已认证', 'nlyd-student')?>"></div>
                                 <a class=" c_blue" href="<?=home_url('/zone/apply/zone_id/'.$row['id'].'/type_id/'.$row['zone_match_type'])?>"><?=__('更多资料', 'nlyd-student')?></a>
@@ -95,7 +95,7 @@
                     </a>
                     <?php } ?>
                     <?php endif;?>
-                    <a class="apply_list c_black layui-row disabled_a" href="<?=home_url('/zone/data');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/data');?>">
                         <div class="apply_list_line pull-left">
                             <div class="zone_bg bg_data"></div>
                         </div>

@@ -26,10 +26,8 @@
 
 .userCenter-item{
     padding: 3px 8px;
-    /* color: rgba(38, 38, 38, 0.6); */
-    /* font-size: 0.12rem; */
     border-radius: 2px;
-    font-weight: bold;
+    font-size: 0.12rem;
 }
 .no-team{
     color:rgba(38, 38, 38, 0.6);;
@@ -207,7 +205,7 @@
         background: linear-gradient(#68AAFE, #4394F9);
         color: #fff;
         position: relative;
-        padding:15px 20px;
+        padding:15px 10px;
         border: 1px solid #d4d4d4;
         border-bottom: none;
         text-align: center;
@@ -278,17 +276,14 @@
         display: inline-block;
         vertical-align: middle;
     }
-    /* .login{
-        margin-left: 55px;
-    } */
     .userCenter-name{
         position: relative;
-        /* padding-top: 65px; */
         font-size: 0.20rem;
-        line-height: 16px;
+        /* line-height: 16px; */
         color: #262626;
         font-weight: bold;
-        margin-bottom: 7px;
+        margin-top: 10px;
+        /* margin-bottom: 7px; */
     }
     .userCenter-row i{
         font-size: 0.16rem;
@@ -302,10 +297,6 @@
     /* 个人中心 */
     .userCenter-info{
         position: relative;
-        /* background-image: url(./image/userCenter/bg.png);
-        background-size: 100% auto;
-        background-repeat: no-repeat;
-        background-color:#fff; */
         background: -webkit-linear-gradient(#68AAFE, #4394F9);
         background: -o-linear-gradient(#68AAFE, #4394F9);
         background: -moz-linear-gradient(#68AAFE, #4394F9);
@@ -327,52 +318,47 @@
     }
     .radius-zoo{
         width: 100%;
-        margin-top: 5px;
+        /* margin-top: 10px; */
     }
     .userCenter-main{
-        /* position: absolute; */
         background-color:rgba(238, 238, 238, 0.15);
-        width: 120px;
-        height: 120px;
+        width: 110px;
+        height: 110px;
         margin: auto;
         display: block;
         border-radius: 50%;
         overflow: hidden;
         margin: auto;
-        /* left: 50%; */
-        /* margin-left: -60px; */
-        /* top: 30px; */
-        margin-top:50px; 
+        margin-top:20px; 
         z-index: 2;
     }
     .userCenter_meta{
-        display: inline-block;
-        color: #9A700B;
         position: relative;
-        margin-top: -31px;
+        color: #9A700B;
+        margin: auto;
+        margin-top: -14px;
         font-size: 0.12rem;
-        min-width: 90px;
-        vertical-align: middle;
+        height: 28px;
+        padding: 0 10px;
         border-radius: 14px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         background: -webkit-linear-gradient(90deg,#FBE9D4, #ECC7A2);
         background: -o-linear-gradient(90deg,#FBE9D4, #ECC7A2);
         background: -moz-linear-gradient(90deg,#FBE9D4, #ECC7A2);
         background: linear-gradient(90deg,#FBE9D4, #ECC7A2);
     }
     .userCenter-main div.img-box{
-        width: 100px;
-        height: 100px;
-        padding: 5px;
+        width: 100%;
+        height: 100%;
+        padding: 0;
         position: relative;
         border-radius: 50%;
-        top: 5px;
-        left: 5px;
+        top: 0;
+        left: 0;
         background-color: rgba(238, 238, 238, 0.30);
     }
     .userCenter-describe{
         line-height: 16px;
-        margin: 11px;
+        margin: 10px;
         text-align: center;
         color: #f6f6f6;
     }
@@ -403,7 +389,7 @@
         color: #f6f6f6;
         display: block;
         position: absolute;
-        top: 20px;
+        top: 10px;
     }
     .userCenter-message{
         left: 17px;
@@ -443,10 +429,10 @@
         margin-left: 5px;
         vertical-align: middle;
         background-image: url(./image/vip.png);
-        background-size: 122%;
+        background-size: 100%;
         background-repeat: no-repeat;
         width: 20px;
-        background-position: -3px 0;
+        background-position: -1px 2px;
         height: 20px;
     }
 }

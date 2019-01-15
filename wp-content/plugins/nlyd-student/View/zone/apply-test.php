@@ -1,8 +1,8 @@
 <!-- 测评中心(考级中心) -->
-<div class="layui-row nl-border nl-content">
+<div class="layui-row nl-border nl-content have-bottom">
     <div class="width-padding layui-row width-margin-pc">
         <form class="layui-form apply_form" lay-filter='layform'>
-            <div>
+            <!-- <div>
                 <div class="lable_row">
                     <span class="c_black"><?=__('测评中心名字', 'nlyd-student')?>：</span>
                     <span class="c_black3"><?=__('示例：', 'nlyd-student')?>
@@ -12,7 +12,7 @@
                 <div class="input_row">
                     <input class="radius_input_row nl-foucs" type="text" name="zone_name" autocomplete="off" placeholder="<?=__('绿色示例部分即为字号，最多5字', 'nlyd-student')?>" value="<?=!empty($row['id']) ? $row['zone_name'] :''?>">
                 </div>
-            </div>
+            </div> -->
             <div>
                 <div class="lable_row"><span class="c_black"><?=__('测评中心所在地', 'nlyd-student')?>：</span></div>
                 <div class="input_row">
@@ -34,19 +34,18 @@
                 <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
             </div>
             <div>
-                <div>
-                    <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
-                    <div class="input_row img-zoos img-zoos1">
-                        <?php if((!empty($row['business_licence_url']))){?>
-                            <input type="hidden" name="business_licence_url" class="business_licence_url" value="<?=$row['business_licence_url']?>">
-                            <div class="post-img no-dash">
-                                <div class="img-zoo img-box">
-                                    <img src="<?=$row['business_licence_url']?>"/>
-                                </div>
-                                <div class="del">
-                                    <i class="iconfont">&#xe633;</i>
-                                </div>
+                <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
+                <div class="input_row img-zoos img-zoos1">
+                    <?php if((!empty($row['business_licence_url']))){?>
+                        <input type="hidden" name="business_licence_url" class="business_licence_url" value="<?=$row['business_licence_url']?>">
+                        <div class="post-img no-dash">
+                            <div class="img-zoo img-box">
+                                <img src="<?=$row['business_licence_url']?>"/>
                             </div>
+                            <div class="del">
+                                <i class="iconfont">&#xe633;</i>
+                            </div>
+                        </div>
 
                         <?php }?>
                         <div class="post-img dash">
@@ -81,13 +80,14 @@
                     <div class="lable_row"><span class="c_black"><?=__('对公账户开户号码', 'nlyd-student')?>：</span></div>
                     <div class="input_row"><input class="radius_input_row nl-foucs" type="tel" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户号码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
                 </div>
-
+                <?php if(!empty($referee_name)):?>
                 <div>
                     <div class="lable_row"><span class="c_black"><?=__('推荐人', 'nlyd-student')?>：</span></div>
                     <div class="input_row">
                         <input class="radius_input_row" disabled type="text" value="<?=$referee_name?>">
                     </div>
                 </div>
+                <?php endif;?>
                 <?php if($row['user_status'] != 1):?>
                     <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
                 <?php endif;?>

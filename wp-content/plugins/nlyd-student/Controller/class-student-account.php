@@ -90,14 +90,16 @@ class Student_Account extends Student_Home
                         }
                     }
                     //print_r($city);
-                    $city = !empty($city) ? '（'.$city.'）' : '';
+                    //$city = !empty($city) ? '（'.$city.'）' : '';
+                    $city = !empty($city) ? $city : '';
                     if($value['zone_type_alias'] == 'match'){
-                        if($value['is_double'] > 0){
-                            $match_type = $value['is_double'] == 1 ? $value['match_type']. '（多）' :  '（单）' ;
+                        /*if($value['is_double'] > 0){
+                            $match_type = $value['is_double'] == 1 ? $value['match_type']. '（多）' :  $value['match_type'].'（单）' ;
                         }else{
                             $match_type = $value['match_type'];
                         }
-                        $arr[$key]['value'] = $value['zone_name'].$city.$match_type.'组委会';
+                        $arr[$key]['value'] = $value['zone_name'].$city.$match_type.'组委会';*/
+                        $arr[$key]['value'] = $value['zone_name'].$city.$value['match_type'].'组委会';
                     }else{
                         $arr[$key]['value'] = $value['zone_name'].$city.$value['zone_type_name'];
                     }

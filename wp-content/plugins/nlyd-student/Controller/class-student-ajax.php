@@ -4649,9 +4649,8 @@ class Student_Ajax
         $data = array(
             'apply_id'=>$current_user->ID,
             'type_id'=>$_POST['type_id'],
-            'zone_name'=>$_POST['zone_name'],
-            'zone_match_type'=>$zone_match_type,
-            'is_double'=>$is_double,
+            'zone_match_type'=>!empty($zone_match_type) ? $zone_match_type : '',
+            'is_double'=>!empty($is_double) ? $is_double : '',
             'zone_address'=>$_POST['zone_address'],
             'business_licence_url'=>$business_licence_url,
             'legal_person'=>$_POST['legal_person'],
@@ -4748,8 +4747,8 @@ class Student_Ajax
         }
 
         //获取收益列表
-        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,
-                  if(user_income <> '' ,user_income ,'待到账') user_income,
+        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,user_income,
+                  if(income_status <> 2 ,'待到账' ,'已到账') income_status,
                   case income_type
                     when 'undertake' then '承办赛事'
                     when 'match' then '比赛收益'
@@ -5048,24 +5047,39 @@ class Student_Ajax
         global $wpdb,$current_user;
         if(empty($_POST['type'])) wp_send_json_error(array('info'=>__('参数错误')));
 
-        if($_POST['type'] == 'official-match'){
-            //获取机构赛区类型
-            $zone_meta = $wpdb->get_row("select zone_match_type,is_double from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}",ARRAY_A);
-            if($zone_meta['zone_match_type'] == 1){ //战队赛
-                $role_alias = 'tram-match';
-            }else{  //城市赛
-                $role_alias = $zone_meta['is_double'] == 1 ? 'double-city-match' : 'single-city-match';
+        if (in_array($_POST['type'],array('official-match','official-grading'))){
+            if($_POST['type'] == 'official-match'){
+                $type = 1;
+            }else{
+                $type = 2;
             }
-        }elseif ($_POST['type'] == 'official-grading'){
-            $role_alias = 'official-grading';
-        }else{
-            $role_alias = $_POST['type'];
-        }
 
-        $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$role_alias}' ";
-        $match_cost = $wpdb->get_var($set_sql);
+            //获取机构赛区类型
+            $zone_meta = $wpdb->get_row("select b.zone_type_alias,a.zone_match_type,a.is_double from {$wpdb->prefix}zone_meta a 
+                                                left join {$wpdb->prefix}zone_type b on a.type_id = b.id
+                                                where user_id = {$current_user->ID}",ARRAY_A);
+            if($zone_meta['zone_match_type'] == 1){ //战队赛
+                $match_type = 1;
+            }
+            elseif ($zone_meta['is_double'] == 1){  //多区县
+                $match_type = 2;
+            }
+            elseif ($zone_meta['is_double'] == 2){  //单区县
+                $match_type = 3;
+            }
+            else{
+                $match_type = 4;
+            }
+            $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$type} and match_type = {$match_type}";
+            //print_r($set_sql);
+            $match_cost = $wpdb->get_var($set_sql);
+            if($match_cost < 10){
+                wp_send_json_error(array('info'=>__('未匹配到费用')));
+            }
+        }
         $match_cost = !empty($match_cost)? $match_cost :number_format(0);
         wp_send_json_success($match_cost);
+
     }
 
     /**
@@ -5438,7 +5452,7 @@ class Student_Ajax
         global $wpdb,$current_user;
         //$_POST['id'] = 148;
         //获取当前收益内容
-        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income, 
+        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income,
                                        case income_type
                                         when 'match' then '比赛收益'
                                         when 'grading' then '考级收益'
@@ -5483,7 +5497,7 @@ class Student_Ajax
                        ";
 
         }else{
-            $where = "a.sponsor_id = {$current_user->ID} ";
+            $where = "a.sponsor_id = {$current_user->ID} and a.match_id = {$row['match_id']} ";
         }
         $sql .= $where."order by id desc limit $start,$pageSize ";
 
@@ -6371,12 +6385,12 @@ class Student_Ajax
     }
 
     /**
-     * 机构关闭课程
+     * 机构结课
      */
     public function zone_close_course(){
         if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('课程id不能为空')));
         global $wpdb,$current_user;
-        $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>-4,'course_end_time'=>get_time('mysql')),array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
+        $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>-3,'course_end_time'=>get_time('mysql')),array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
         if($a){
             wp_send_json_success(array('info'=>__('关闭成功'),'url'=>home_url('/zone/course/')));
         }else{

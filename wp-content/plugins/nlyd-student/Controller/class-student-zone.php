@@ -67,7 +67,34 @@ class Student_Zone
 
             $role_list = $wpdb->get_results($sql,ARRAY_A);
             $data['role_list'] = $role_list;
+
+            if(!empty($row['zone_city'])){
+
+                $city_arr = str2arr($row['zone_city'],'-');
+                if(!empty($city_arr[2])){
+                    $city = $city_arr[2];
+                }elseif ($city_arr[1] != '市辖区'){
+                    $city = $city_arr[1];
+                }else{
+                    $city = $city_arr[0];
+                }
+            }
+            //print_r($city);
+            $city = !empty($city) ? '（'.$city.'）' : '';
+            if($row['zone_type_alias'] == 'match'){
+                if($row['is_double'] > 0){
+                    $match_type = $row['is_double'] == 1 ? $row['match_type']. '（多）' :  '（单）' ;
+                }else{
+                    $match_type = $row['match_type'];
+                }
+                $row['zone_title'] = $row['zone_name'].$city.$match_type.'组委会';
+            }else{
+                $row['zone_title'] = $row['zone_name'].$city.$row['zone_type_name'];
+            }
+
         }
+
+
         $data['row'] = $row;
 
         $view = student_view_path.CONTROLLER.'/index.php';
@@ -143,7 +170,7 @@ class Student_Zone
 
         global $wpdb,$current_user;
         //获取用户今日收益
-        $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() and user_income > 0 ";
+        $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and date_format(created_time,'%Y-%m-%d') = CURDATE() and user_income > 0  ";
         $data['stream'] = $wpdb->get_var($sql1);
 
         //获取用户累计收益
@@ -1310,7 +1337,7 @@ class Student_Zone
      */
     public function get_stream_total(){
         global $wpdb,$current_user;
-        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type != 'undertake' ";
+        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type != 'undertake' and income_status = 2 ";
         return $wpdb->get_var($sql3);
     }
 
@@ -1340,21 +1367,18 @@ class Student_Zone
         wp_enqueue_style( 'my-student-mobileSelect' );
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
-        // if(ACTION == 'index'){
-        // }
-
         if(ACTION == 'team' ){
             wp_register_style( 'my-student-teamList', student_css_url.'team.css',array('my-student') );
             wp_enqueue_style( 'my-student-teamList' );
         }
-        if(ACTION == 'apply' || ACTION == 'courseBuild' || ACTION == 'kaojiBuild'  || ACTION == 'settingAdd' || ACTION == 'teamBuild' || ACTION == 'teamAddMember' || ACTION == 'coachAdd'){
-            wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
-            wp_enqueue_script( 'zone_select2_js' );
-            wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
-            wp_enqueue_script( 'zone_select2_i18n_js' );
-            wp_register_style( 'zone_select2_css',match_js_url.'select2/dist/css/select2.css','', leo_match_version  );
-            wp_enqueue_style( 'zone_select2_css' );
-        }
+        // if(){
+        //     wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
+        //     wp_enqueue_script( 'zone_select2_js' );
+        //     wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
+        //     wp_enqueue_script( 'zone_select2_i18n_js' );
+        //     wp_register_style( 'zone_select2_css',match_js_url.'select2/dist/css/select2.css','', leo_match_version  );
+        //     wp_enqueue_style( 'zone_select2_css' );
+        // }
         wp_register_style( 'my-student-zone', student_css_url.'zone/zone.css',array('my-student') );
         wp_enqueue_style( 'my-student-zone' );
     }
