@@ -37,7 +37,7 @@ class Course{
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $type = isset($_GET['stype']) ? intval($_GET['stype']) : 0;
-        $ctype = isset($_GET['ctype']) ? intval($_GET['ctype']) : 1;
+//        $ctype = isset($_GET['ctype']) ? intval($_GET['ctype']) : 1;
         $coach_id = isset($_GET['coach_id']) ? intval($_GET['coach_id']) : 0;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
         $page < 1 && $page = 1;
@@ -53,9 +53,9 @@ class Course{
         if($coach_id > 0){
             $where .= " AND cou.coach_id='{$coach_id}'";
         }
-        if($ctype === 2){
-            $where .= " AND cou.is_share=1";
-        }
+//        if($ctype === 2){
+//            $where .= " AND cou.is_share=1";
+//        }
         $rows = $wpdb->get_results("SELECT cou.course_title,cou.course_img,cou.const,cou.const,cou.is_enable,cou.coach_id,cou.course_start_time,cou.course_end_time,
                 cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.id,cou.is_share,
                 zm.zone_name,um.meta_value AS coach_real_name  
@@ -82,6 +82,8 @@ class Course{
 //        $all_num = $wpdb->get_var($numSql);
         //课程类型
         $courseTypeList = $this->getCourseType();
+        $courseTypeList = array_column($courseTypeList,NULL,'id');
+//        leo_dump($courseTypeList);die;
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">课程列表</h1>
@@ -93,19 +95,18 @@ class Course{
             <h2 class="screen-reader-text">过滤课程列表</h2>
 
             <br class="clear">
-            <ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype='.$type.'&coach_id='.$coach_id.'&ctype=1')?>" <?=$ctype===1?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype='.$type.'&coach_id='.$coach_id.'&ctype=2')?>" <?=$ctype===2?'class="current"':''?> aria-current="page">乐学乐分享<span class="count"></span></a> |</li>
-            </ul>
+<!--            <ul class="subsubsub">-->
+<!--                <li class="all"><a href="--><?//=admin_url('admin.php?page=course&stype='.$type.'&coach_id='.$coach_id.'&ctype=1')?><!--" --><?//=$ctype===1?'class="current"':''?><!-- aria-current="page">全部<span class="count"></span></a> |</li>-->
+<!--                <li class="all"><a href="--><?//=admin_url('admin.php?page=course&stype='.$type.'&coach_id='.$coach_id.'&ctype=2')?><!--" --><?//=$ctype===2?'class="current"':''?><!-- aria-current="page">乐学乐分享<span class="count"></span></a> |</li>-->
+<!--            </ul>-->
             <br class="clear">
             <ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=0&coach_id='.$coach_id.'&cptye='.$ctype)?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=course&stype=0&coach_id='.$coach_id)?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
                 <?php
                 $subList = [];
                 foreach ($courseTypeList as $ctlv){
-                    $subList[] = '<li class="all"><a href="'.admin_url('admin.php?page=course&stype='.$ctlv['id'].'&coach_id='.$coach_id.'&cptye='.$ctype).'" '.($type==$ctlv['id']?'class="current"':"").' aria-current="page">'.$ctlv['type_name'].'<span class="count"></span></a></li>';
+                    $subList[] = '<li class="all"><a href="'.admin_url('admin.php?page=course&stype='.$ctlv['id'].'&coach_id='.$coach_id).'" '.($type==$ctlv['id']?'class="current"':"").' aria-current="page">'.$ctlv['type_name'].'<span class="count"></span></a></li>';
                     ?>
-
                 <?php
                 }
                 echo join(' | ',$subList);
@@ -196,7 +197,10 @@ class Course{
                         <td class="open_quota column-open_quota" data-colname="开放名额"><?=$row['open_quota']?></td>
                         <td class="seize_quota column-seize_quota" data-colname="已抢占名额"><?=$row['seize_quota']?></td>
                         <td class="zone_user_id column-zone_user_id" data-colname="所属机构"><?=empty($row['zone_name']) ? '平台' :$row['zone_name']?></td>
-                        <td class="course_type column-course_type" data-colname="课程类型"><?=$row['course_type'] == '1' ? '高效记忆术' :'提升应用课'?></td>
+                        <td class="course_type column-course_type" data-colname="课程类型">
+                            <?=$courseTypeList[$row['course_type']]['type_name']?>
+
+                        </td>
                         <td class="is_share column-is_share" data-colname="活动">
                         <?php
                         switch ($row['is_share']){

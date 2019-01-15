@@ -1156,6 +1156,7 @@ class Spread{
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
                 usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,zm.id AS zone_id,usl.user_type,
+                zm.zone_name,zm.zone_city,zm.zone_match_type,zm.type_id as zone_type_id,
                 um.meta_value AS user_real_name 
                 FROM {$wpdb->prefix}user_stream_logs AS usl 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=usl.user_id AND um.meta_key='user_real_name' AND um.user_id!=''
@@ -1237,13 +1238,21 @@ class Spread{
                 <?php
                 foreach ($rows as $row){
 
-                    if(empty($row['user_real_name'])){
-                        $real_name = $row['user_login'];
+                    //主体或机构
+                    $type_name = '';
+                    if($row['zone_id'] > 0){
+                        $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$row['zone_type_id']}");
+                        $organizeClass = new Organize();
+                        $real_name = $organizeClass->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],'get');
+                        $type_name = '机构';
                     }else{
-                        $real_name = unserialize($row['user_real_name'])['real_name'];
+                        if(empty($row['user_real_name'])){
+                            $real_name = $row['user_login'];
+                        }else{
+                            $real_name = unserialize($row['user_real_name'])['real_name'];
+                        }
+                        $type_name = '个人';
                     }
-                    if(!empty($row['zone_name'])) $real_name .= "({$row['zone_name']})";
-
                     ?>
                     <tr data-uid="<?=$row['id']?>">
 
@@ -1258,7 +1267,7 @@ class Spread{
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
                         <td class="role column-role" data-colname="角色">
-                            <?=$row['zone_id'] > 0 ? '机构': '用户'?>
+                            <?=$type_name?>
 
                         </td>
                         <td class="income_type column-income_type" data-colname="类型">
@@ -1446,17 +1455,8 @@ class Spread{
                     $type_name = '';
                     if($zone_meta){
                         $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$zone_meta['type_id']}");
-                        switch ($type_alias){
-                            case 'match':
-                                $real_name = date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$zone_meta['zone_city'].'</span>'.($zone_meta['zone_match_type']=='1'?'战队精英赛':'城市赛');
-                                break;
-                            case 'trains':
-                                $real_name = 'IISC'. '<span style="color: #c40c0f">' .$zone_meta['zone_name'].'</span>'.'国际脑力训练中心';
-                                break;
-                            case 'test':
-                                $real_name =  'IISC'. '<span style="color: #c40c0f">' .$zone_meta['zone_name'].'</span>'.'国际脑力测评中心';
-                                break;
-                        }
+                        $organizeClass = new Organize();
+                        $real_name = $organizeClass->echoZoneName($type_alias,$zone_meta['zone_city'],$zone_meta['zone_name'],$zone_meta['zone_match_type'],'get');
                         $type_name = '机构';
                     }else{
                         $real_name = get_user_meta($row['extract_id'],'user_real_name',true)['real_name'];

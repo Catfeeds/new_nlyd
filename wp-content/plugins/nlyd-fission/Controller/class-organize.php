@@ -189,13 +189,13 @@ class Organize{
 
             switch ($type_alias){
                 case 'match':
-                    $this->matchListHtml($rows);
+                    $this->matchListHtml($rows,$type_alias);
                     break;
                 case 'trains':
-                    $this->trainCenterListHtml($rows);
+                    $this->trainCenterListHtml($rows,$type_alias);
                     break;
                 case 'test':
-                    $this->gradingCenterListHtml($rows);
+                    $this->gradingCenterListHtml($rows,$type_alias);
                     break;
             }
             ?>
@@ -296,7 +296,7 @@ class Organize{
     /**
      * 赛区列表html
      */
-    private function matchListHtml($rows){
+    private function matchListHtml($rows,$type_alias){
         global $wpdb;
         ?>
         <table class="wp-list-table widefat fixed striped users">
@@ -354,11 +354,11 @@ class Organize{
                         <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                         <div class="locked-indicator">
                             <span class="locked-indicator-icon" aria-hidden="true"></span>
-                            <span class="screen-reader-text">“<?=date('Y').'脑力世界杯'.$row['zone_city'].($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>”已被锁定</span>
+                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],'',$row['zone_match_type'])?>”已被锁定</span>
                         </div>
                     </th>
                     <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                        <?=date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$row['zone_city'].'</span>'.($row['zone_match_type']=='1'?'战队精英赛':'城市赛')?>
+                        <?=$this->echoZoneName($type_alias,$row['zone_city'],'',$row['zone_match_type'])?>
                         <br>
                         <div class="row-actions">
                             <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
@@ -471,7 +471,7 @@ class Organize{
     /**
      * 训练中心/分中心列表html
      */
-    private function trainCenterListHtml($rows){
+    private function trainCenterListHtml($rows,$type_alias){
         global $wpdb;
         ?>
         <table class="wp-list-table widefat fixed striped users">
@@ -525,11 +525,11 @@ class Organize{
                         <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                         <div class="locked-indicator">
                             <span class="locked-indicator-icon" aria-hidden="true"></span>
-                            <span class="screen-reader-text">“<?='IISC'.$row['zone_name'].'国际脑力训练中心'?>”已被锁定</span>
+                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>”已被锁定</span>
                         </div>
                     </th>
                     <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                        <?='IISC<span style="color: #c43510">'.$row['zone_name'].'</span>国际脑力训练中心'?>
+                        <?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>
                         <br>
                         <div class="row-actions">
                         </div>
@@ -631,7 +631,7 @@ class Organize{
     /**
      * 测评/考级中心中心列表html
      */
-    private function gradingCenterListHtml($rows){
+    private function gradingCenterListHtml($rows,$type_alias){
         global $wpdb;
         ?>
         <table class="wp-list-table widefat fixed striped users">
@@ -685,11 +685,11 @@ class Organize{
                         <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                         <div class="locked-indicator">
                             <span class="locked-indicator-icon" aria-hidden="true"></span>
-                            <span class="screen-reader-text">“<?='IISC'.$row['zone_name'].'国际脑力测评中心'?>”已被锁定</span>
+                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>”已被锁定</span>
                         </div>
                     </th>
                     <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                        <?='IISC<span style="color: #c43510">'.$row['zone_name'].'</span>国际脑力测评中心'?>
+                        <?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>
                         <br>
                         <div class="row-actions">
                         </div>
@@ -1141,7 +1141,7 @@ class Organize{
             $referee_id = isset($_POST['referee_id']) ? intval($_POST['referee_id']) : 0;
 //            $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
 //            $zone_title = isset($_POST['zone_title']) ? trim($_POST['zone_title']) : '';
-            $zone_city = isset($_POST['zone_city']) ? trim($_POST['zone_city']) : '';
+//            $zone_city = isset($_POST['zone_city']) ? trim($_POST['zone_city']) : '';
             $zone_address = isset($_POST['zone_address']) ? trim($_POST['zone_address']) : '';
             $zone_title = isset($_POST['zone_title']) ? trim($_POST['zone_title']) : '';
             $business_licence = isset($_POST['business_licence']) ? trim($_POST['business_licence']) : '';
@@ -1160,6 +1160,14 @@ class Organize{
             $is_able = isset($_POST['is_able']) ? intval($_POST['is_able']) : 2;
             $term_time = isset($_POST['term_time']) ? trim($_POST['term_time']) : '';
             $zone_number = isset($_POST['zone_number']) ? trim($_POST['zone_number']) : '';
+            $whereProvicone = isset($_POST['whereProvicone']) ? trim($_POST['whereProvicone']) : '';
+            $whereCity = isset($_POST['whereCity']) ? trim($_POST['whereCity']) : '';
+            $whereArea = isset($_POST['whereArea']) ? trim($_POST['whereArea']) : '';
+            $zone_city = '';
+            if($whereProvicone != '' && $whereProvicone != '-1') $zone_city .= $whereProvicone;
+            if($whereCity != '' && $whereCity != '-1') $zone_city .= '-'.$whereCity;
+            if($whereArea != '' && $whereArea != '-1') $zone_city .= '-'.$whereArea;
+
             if($user_id < 0) $error_msg = '请选择负责人';
 //            if($zone_match_type < 0) $error_msg = $error_msg==''?'请选择赛区类型':$error_msg.'<br >请选择赛区类型';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择机构类型':$error_msg.'<br >请选择机构类型';
@@ -1171,13 +1179,17 @@ class Organize{
             if($zone_address == '' && $zone_match_type === 1) $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
 //            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
             if($legal_person == '') $error_msg = $error_msg==''?'请填写法人':$error_msg.'<br >请填写法人';
-            if($zone_city == '' && $zone_match_type == 2 && $user_status != -2) $error_msg = $error_msg==''?'请填写机构城市':$error_msg.'<br >请填写机构城市';
+            if($zone_city == '' && $zone_match_type == 2 && $user_status != -2) $error_msg = $error_msg==''?'请选择机构城市':$error_msg.'<br >请选择机构城市';
             if($opening_bank == '') $error_msg = $error_msg==''?'请填写开户行':$error_msg.'<br >请填写开户行';
             if($opening_bank_address == '') $error_msg = $error_msg==''?'请填写开户行地址':$error_msg.'<br >请填写开户行地址';
             if($bank_card_num == '') $error_msg = $error_msg==''?'请填写银行卡号':$error_msg.'<br >请填写银行卡号';
 //            if($chairman_id < 1) $error_msg = $error_msg==''?'请选择组委会主席':$error_msg.'<br >请选择组委会主席';
+            if($zone_number == '' && ($user_status == 1 || $user_status == 99)) $error_msg = $error_msg==''?'机构编号不能为空':$error_msg.'<br >机构编号不能为空';
             //是否已存在编号
-            $number_old = $wpdb->get_row("SELECT id,zone_number FROM {$wpdb->prefix}zone_meta WHERE zone_number='{$zone_number}'", ARRAY_A);
+
+
+
+            $number_old = $wpdb->get_row("SELECT id,zone_number,user_status FROM {$wpdb->prefix}zone_meta WHERE zone_number='{$zone_number}'", ARRAY_A);
             if($number_old && $number_old['id'] != $old_zm_id && $number_old['zone_number']) $error_msg .= '<br >当前机构编号已存在';
             if($parent_id > 0){
                 $old_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}'");
@@ -1424,6 +1436,7 @@ class Organize{
         }
         //类型列表
         $typeList = $this->getOrganizeTypeList();
+        $zone_citys = [];
         if($old_zm_id > 0){
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,zm.is_able,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
@@ -1440,6 +1453,7 @@ class Organize{
                    WHERE zm.id='{$old_zm_id}'", ARRAY_A);
 //            leo_dump($wpdb->last_query);die;
             $match_role_id = $row['match_role_id']; //已有赛事权限
+            $zone_citys = explode('-', $row['zone_city']);
 //            var_dump($row);die;
             $role_id = $row['role_id']; //已有课程权限
         }else{
@@ -1498,7 +1512,8 @@ class Organize{
                     <tr class="" style="">
                         <th scope="row"><label for="zone_number">机构编号 </label></th>
                         <td>
-                            <input type="text" name="zone_number" id="zone_number" value="<?=$row['zone_number']?>">
+                            <?=$row['zone_number']?>
+                            <input type="hidden" name="zone_number" id="zone_number" value="<?=$row['zone_number']?>">
                         </td>
                     </tr>
                     <tr class="form-field form-required">
@@ -1628,7 +1643,10 @@ class Organize{
                     <tr class="">
                         <th scope="row"><label for="zone_city">机构城市 </label></th>
                         <td>
-                            <input type="text" name="zone_city" value="<?=$row['zone_city']?>">
+                            <select name="whereProvicone" id="whereProvicone"></select>
+                            <select name="whereCity" id="whereCity"></select>
+                            <select name="whereArea" id="whereArea"></select>
+<!--                            <input type="text" name="zone_city" value="--><?//=$row['zone_city']?><!--">-->
                         </td>
                     </tr>
                     <tr class="">
@@ -1842,6 +1860,73 @@ class Organize{
                         $('select').prop('disabled',_ab);
                     });
                     <?php } ?>
+                    initAddress('where','<?=isset($zone_citys[0])?$zone_citys[0]:''?>',
+                        '<?=isset($zone_citys[1])?$zone_citys[1]:''?>',
+                        '<?=isset($zone_citys[2])?$zone_citys[2]:''?>');
+                    function initAddress(_name, province,city,area){
+                        var provicone_html = '<option data-index="-1" value="-1">请选择</option>'
+                        var city_html = '<option data-index="-1" value="-1">请选择</option>';
+                        var area_html = '<option data-index="-1" value="-1">请选择</option>',selectedArea='';
+                        $.each($.validationLayui.allArea.area,function(index,value){
+                            if(province == value.value){
+                                provicone_html += '<option data-index="'+index+'" selected="selected" value="'+value.value+'">'+value.value+'</option>';
+                                $.each(value.childs,function (cityIndex,cityValue) {
+                                    if(cityValue.value == city){
+                                        city_html += '<option data-index="'+index+'_'+cityIndex+'" selected="selected" value="'+cityValue.value+'">'+cityValue.value+'</option>';
+                                        $.each(cityValue.childs,function (areaIndex,areaValue) {
+                                            selectedArea = areaValue.value == area ?'selected="selected"':'';
+                                            area_html += '<option data-index="'+areaIndex+'" '+selectedArea+' value="'+areaValue.value+'">'+areaValue.value+'</option>';
+                                        });
+                                    }else{
+                                        city_html += '<option data-index="'+index+'_'+cityIndex+'"  value="'+cityValue.value+'">'+cityValue.value+'</option>';
+                                    }
+                                });
+                            }else{
+                                provicone_html += '<option data-index="'+index+'"  value="'+value.value+'">'+value.value+'</option>';
+                            }
+                        });
+                        $('#'+_name+'Provicone').html(provicone_html);
+                        $('#'+_name+'City').html(city_html);
+                        $('#'+_name+'Area').html(area_html);
+                    }
+
+                    $('#whereProvicone').on('change', function () {
+                        changeProvicone($(this),'where');
+                    });
+                    function changeProvicone(_this,_name){
+                        var val = _this.find('option:selected').attr('data-index');
+                        if(val > -1){
+                            var city_html = '<option data-index="-1" value="-1">请选择</option>';
+                            $.each($.validationLayui.allArea.area[val].childs,function (cindex,cvalue) {
+                                city_html += '<option data-index="'+val+'_'+cindex+'" value="'+cvalue.value+'">'+cvalue.value+'</option>';
+                            });
+                            $('#'+_name+'City').html(city_html);
+                            // var area_html = '';
+                            // $.each($.validationLayui.allArea.area[val].childs[0].childs,function (aindex,avalue) {
+                            //     area_html += '<option data-index="'+aindex+'" value="'+avalue.value+'">'+avalue.value+'</option>';
+                            // });
+                            // $('#'+_name+'Area').html(area_html);
+                        }else{
+                            $('#'+_name+'City').html('<option data-index="-1" value="-1">请选择</option>');
+                        }
+                        $('#'+_name+'Area').html('<option data-index="-1" value="-1">请选择</option>');
+                    }
+                    $('#whereCity').on('change', function () {
+                        changeCity($(this),'where');
+                    });
+                    function changeCity(_this,_name) {
+                        var val = _this.find('option:selected').attr('data-index');
+                        val = val.split('_');
+                        if(val[0] > -1){
+                            var area_html = '<option data-index="-1" value="-1">请选择</option>';
+                            $.each($.validationLayui.allArea.area[val[0]].childs[val[1]].childs,function (aindex,avalue) {
+                                area_html += '<option value="'+avalue.value+'">'+avalue.value+'</option>';
+                            });
+                            $('#'+_name+'Area').html(area_html);
+                        }else{
+                            $('#'+_name+'Area').html('');
+                        }
+                    }
 
                 });
             </script>
@@ -2468,17 +2553,27 @@ class Organize{
         <div class="wrap">
             <h1 class="wp-heading-inline">
                 <?php
-                switch ($type_alias){
-                    case 'match':
-                        echo date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$zone_meta['zone_city'].'</span>'.($zone_meta['zone_match_type']=='1'?'战队精英赛':'城市赛');
-                        break;
-                    case 'trains':
-                        echo 'IISC'. '<span style="color: #c40c0f">' .$zone_meta['zone_name'].'</span>'.'国际脑力训练中心';
-                        break;
-                    case 'test':
-                        echo 'IISC'. '<span style="color: #c40c0f">' .$zone_meta['zone_name'].'</span>'.'国际脑力测评中心';
-                        break;
-                }
+//                $city_arr = str2arr($zone_meta['zone_city'],'-');
+//                if(!empty($city_arr[2])){
+//                    $city = $city_arr[2];
+//                }elseif ($city_arr[1] != '市辖区'){
+//                    $city = $city_arr[1];
+//                }else{
+//                    $city = $city_arr[0];
+//                }
+//
+//                switch ($type_alias){
+//                    case 'match':
+//                        echo date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$city.'</span>'.($zone_meta['zone_match_type']=='1'?'战队精英赛':'城市赛');
+//                        break;
+//                    case 'trains':
+//                        echo 'IISC'. '<span style="color: #c40c0f">' .$zone_meta['zone_name'].'</span>'.'国际脑力训练中心';
+//                        break;
+//                    case 'test':
+//                        echo 'IISC'. '<span style="color: #c40c0f">' .$zone_meta['zone_name'].'</span>'.'国际脑力测评中心';
+//                        break;
+//                }
+                $this->echoZoneName($type_alias,$zone_meta['zone_city'],$zone_meta['zone_name'],$zone_meta['zone_match_type']);
                 ?>
                 -统计信息
             </h1>
@@ -3425,6 +3520,36 @@ class Organize{
             if($tlv['zone_type_alias'] == 'match') $tlv['zone_type_name'] = '赛区';
         }
         return $typeList;
+    }
+
+    /**
+     * 获取机构名称
+     */
+    public function echoZoneName($alias = 'match',$zone_city='',$zone_name='',$zone_match_type=0,$type=''){
+        switch ($alias){
+            case 'match':
+                $city_arr = str2arr($zone_city,'-');
+                if(!empty($city_arr[2])){
+                    $city = $city_arr[2];
+                }elseif ($city_arr[1] != '市辖区'){
+                    $city = $city_arr[1];
+                }else{
+                    $city = $city_arr[0];
+                }
+                $name = date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$city.'</span>'.($zone_match_type=='1'?'战队精英赛':'城市赛');
+                break;
+            case 'trains':
+                $name = 'IISC'. '<span style="color: #c40c0f">' .$zone_name.'</span>'.'国际脑力训练中心';
+                break;
+            case 'test':
+                $name = 'IISC'. '<span style="color: #c40c0f">' .$zone_name.'</span>'.'国际脑力测评中心';
+                break;
+        }
+        if($type == 'get'){
+            return $name;
+        }else{
+            echo $name;
+        }
     }
 
     /**
