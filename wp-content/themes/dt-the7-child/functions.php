@@ -910,6 +910,7 @@ if(is_admin()){
         $columns['mobile'] = '手机';
         $columns['email'] = '邮箱';
         $columns['roles'] = '角色';
+        $columns['types'] = '类型';
 //        $columns['posts'] = '文章';
 //        $columns['mycred_default'] = '积分';
         $columns['user_options'] = '操作';
@@ -983,6 +984,12 @@ if(is_admin()){
                 break;
             case 'roles':
                 return translate_user_role(wp_roles()->get_names()[get_user_by('ID',$user_id)->roles[0]]);
+                break;
+            case 'types':
+                $val = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_id}'");
+                if($val) return '机构账号';
+                else return '个人账号';
+//                return translate_user_role(wp_roles()->get_names()[get_user_by('ID',$user_id)->roles[0]]);
                 break;
         }
         return $value;

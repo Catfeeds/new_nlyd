@@ -547,6 +547,9 @@ class Fission_Ajax
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
         $id < 1 && wp_send_json_error(['info' => '参数错误!']);
         global  $wpdb;
+        //是否存在课程
+        $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}course WHERE course_type='{$id}'");
+        if($var) wp_send_json_error(['info' => '当前课程类型已存在课程,无法删除!']);
         $bool = $wpdb->delete($wpdb->prefix.'course_type', ['id' => $id]);
         if($bool) wp_send_json_success(['info' => '删除成功!']);
         else wp_send_json_error(['info' => '删除失败!']);
