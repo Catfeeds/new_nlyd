@@ -134,22 +134,15 @@ jQuery(function($) {
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    var right='bg_gradient_blue',
-                                    rightText="<?=__('抢占名额', 'nlyd-student')?>",
-                                    courseUrl="courseSign";
-
+                                    var rightBtn='<a href="'+window.home_url+'/courses/courseSign/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>'
                                     if(id=="-3"){
-                                        right='bg_gradient_blue',
-                                        rightText="<?=__('结课成绩', 'nlyd-student')?>";
-                                        courseUrl='courseEnd';
+                                        rightBtn='<a href="'+window.home_url+'/courses/courseEnd/id/'+v.id+'" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('结课成绩', 'nlyd-student')?></span></a>'
                                     }else{
                                         if (v.order_id) {//已报名
-                                            right='bg_grey_blue';
-                                            rightText="<?=__('您已抢占名额', 'nlyd-student')?>"
+                                            rightBtn='<a class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>'
                                         }else{
                                             if(parseInt(v.open_quota)<=parseInt(v.entry_total)){
-                                                right='bg_grey_blue';
-                                                rightText="<?=__('名额已抢光', 'nlyd-student')?>"
+                                                rightBtn='<a class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('名额已抢光', 'nlyd-student')?></span></a>'
                                             }
                                         }
                                     }
@@ -174,7 +167,7 @@ jQuery(function($) {
                                                         +'<a href="'+window.home_url+'/courses/courseDetail/id/'+v.id+'" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>'
                                                     +'</div>'
                                                     +'<div class="nl-match-button flex1">'
-                                                        +'<a href="'+window.home_url+'/courses/'+courseUrl+'/id/'+v.id+'" class="dis_table c_white '+right+'"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>'
+                                                        +rightBtn
                                                     +'</div>'
                                                 +'</div>'
                                             +'</li>'
