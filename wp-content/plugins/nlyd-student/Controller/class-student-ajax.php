@@ -505,6 +505,7 @@ class Student_Ajax
         if($_POST['order_type'] == 1){  //比赛
 
             $title = '比赛';
+            $info_url = home_url('matchs/info/match_id/'.$_POST['match_id']);
             $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ";
             $match_meta = $wpdb->get_row($sql,ARRAY_A);
             if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
@@ -520,6 +521,7 @@ class Student_Ajax
         elseif($_POST['order_type'] == 2){  //考级
 
             $title = '考级';
+            $info_url = home_url('gradings/info/grad_id/'.$_POST['match_id']);
             $sql = "select grading_id,status from {$wpdb->prefix}grading_meta where grading_id = {$_POST['match_id']} ";
             $match_meta = $wpdb->get_row($sql,ARRAY_A);
             if(empty($match_meta)) wp_send_json_error(array('info'=>__('考级信息错误', 'nlyd-student')));
@@ -534,7 +536,17 @@ class Student_Ajax
         }elseif($_POST['order_type'] == 3){   //课程
 
             $title = '课程';
-            print_r($_POST);die;
+            $info_url = home_url('courses/courseDetail/id/'.$_POST['match_id']);
+            $sql = "select id,is_enable from {$wpdb->prefix}course where id = {$_POST['match_id']} ";
+            $match_meta = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($match_meta)) wp_send_json_error(array('info'=>__('课程信息错误', 'nlyd-student')));
+            if($match_meta['is_enable'] != 1) wp_send_json_error(array('info'=>__('当前课程已禁止报名', 'nlyd-student')));
+
+            //获取当前类课程是否有教练
+            $sql_ = "select b.coach_id from {$wpdb->prefix}course a left join {$wpdb->prefix}my_coach b on a.course_category_id = b.category_id where a.id = {$_POST['match_id']} and b.user_id = {$current_user->ID} and b.apply_status = 2";
+            $coach_id = $wpdb->get_var($sql_);
+            if(empty($coach_id)) wp_send_json_error(array('info'=>__('未绑定该课程分类教练,请核实','nlyd-student')));
+            //print_r($coach_id);die;
         }
 
 
@@ -542,7 +554,8 @@ class Student_Ajax
 
         if(!empty($row)) {
             if($row->pay_status == 2 || $row->pay_status==3 || $row->pay_status==4){
-                wp_send_json_error(array('info'=>__('你已报名该'.$title, 'nlyd-student'),'url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
+
+                wp_send_json_error(array('info'=>__('你已报名该'.$title, 'nlyd-student'),'url'=>$info_url));
             }else{
                 //如果是未支付订单删除订单重新下单
                 $wpdb->delete($wpdb->prefix.'order', ['id' => $row->id]);
@@ -4971,9 +4984,9 @@ class Student_Ajax
      */
     public function end_grading(){
         global $wpdb,$current_user;
-        if(empty($_POST['grading_id'])) wp_send_json_error(array('info'=>__('参数必传')));
+        if(empty($_POST['grading_id'])) wp_send_json_error(array('info'=>__('参数必传','nlyd-student')));
         $id = $wpdb->get_var("select id from {$wpdb->prefix}grading_meta where grading_id = {$_POST['grading_id']} and created_person = {$current_user->ID} ");
-        if(empty($id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布的考级')));
+        if(empty($id)) wp_send_json_error(array('info'=>__('禁止操作非本机构发布的考级','nlyd-student')));
         $update = array(
             'revise_id'=>$current_user->ID,
             'status'=>-4,
@@ -5005,8 +5018,8 @@ class Student_Ajax
                 where a.user_mobile = '{$_POST['person_liable']}'
                 ";
         $person_liable = $wpdb->get_row($sql,ARRAY_A);
-        if(empty($person_liable)) wp_send_json_error(array('info'=>__('该责任人未注册')));
-        if(empty($person_liable['meta_value'])) wp_send_json_error(array('info'=>__('该责任人未实名认证')));
+        if(empty($person_liable)) wp_send_json_error(array('info'=>__('该责任人未注册','nlyd-student')));
+        if(empty($person_liable['meta_value'])) wp_send_json_error(array('info'=>__('该责任人未实名认证','nlyd-student')));
 
         /***********************准备数据**********************************/
         $arr = array(
@@ -5069,7 +5082,7 @@ class Student_Ajax
      */
     public function get_match_cost(){
         global $wpdb,$current_user;
-        if(empty($_POST['type'])) wp_send_json_error(array('info'=>__('参数错误')));
+        if(empty($_POST['type'])) wp_send_json_error(array('info'=>__('参数错误','nlyd-student')));
 
         if (in_array($_POST['type'],array('official-match','official-grading'))){
             if($_POST['type'] == 'official-match'){
@@ -5098,7 +5111,7 @@ class Student_Ajax
             //print_r($set_sql);
             $match_cost = $wpdb->get_var($set_sql);
             if($match_cost < 10){
-                wp_send_json_error(array('info'=>__('未匹配到费用')));
+                wp_send_json_error(array('info'=>__('未匹配到费用','nlyd-student')));
             }
         }
         $match_cost = !empty($match_cost)? $match_cost :number_format(0);
@@ -5110,8 +5123,8 @@ class Student_Ajax
      *机构比赛/考级 时间修改/编辑
      */
     public function update_match_time(){
-        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('比赛id不能为空')));
-        if(empty($_POST['data'])) wp_send_json_error(array('info'=>__('修改数据不能为空')));
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('比赛id不能为空','nlyd-student')));
+        if(empty($_POST['data'])) wp_send_json_error(array('info'=>__('修改数据不能为空','nlyd-student')));
         global $wpdb,$current_user;
         switch ($_POST['match_type']){
             case 'match':
@@ -5123,15 +5136,15 @@ class Student_Ajax
                     if($v['id'] > 0){
                         //print_r($entry_end_time.'===='.$v['start_time']);
                         if( strtotime($entry_end_time) >= strtotime($v['start_time']) ){
-                            wp_send_json_error(array('info'=>__('每轮项目开赛时间必须大于报名截止时间')));
+                            wp_send_json_error(array('info'=>__('每轮项目开赛时间必须大于报名截止时间','nlyd-student')));
                         }
                         $result = $this->contrast_time($_POST['data'],$v['start_time'],$v['end_time'],$v['id']);
                         if(!empty($result)){
-                            wp_send_json_error(array('info'=>__($v['project_title'].'第'.$v['project_more'].'轮与'.$result['project_title'].'第'.$result['project_more'].'轮时间冲突')));
+                            wp_send_json_error(array('info'=>__($v['project_title'].'第'.$v['project_more'].'轮与'.$result['project_title'].'第'.$result['project_more'].'轮时间冲突','nlyd-student')));
                         }
                     }
                     else{
-                        wp_send_json_error(array('info'=>__($v['project_title'].$v['project_more'].'未检测到项目id')));
+                        wp_send_json_error(array('info'=>__($v['project_title'].$v['project_more'].'未检测到项目id','nlyd-student')));
                     }
                     $update = array(
                         'start_time'=>$v['start_time'],
@@ -5154,10 +5167,10 @@ class Student_Ajax
 
                 break;
             default:
-                wp_send_json_error(array('info'=>__('参数错误')));
+                wp_send_json_error(array('info'=>__('参数错误','nlyd-student')));
                 break;
         }
-        wp_send_json_success(array('info'=>__('更新成功')));
+        wp_send_json_success(array('info'=>__('更新成功','nlyd-student')));
     }
 
     /**
@@ -5166,7 +5179,7 @@ class Student_Ajax
     public function add_match_time(){
         global $wpdb,$current_user;
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['project_more']) || empty($_POST['start_time']) || empty($_POST['end_time']) || empty($_POST['use_time'])){
-            wp_send_json_error(array('info'=>__('必传参数不齐全')));
+            wp_send_json_error(array('info'=>__('必传参数不齐全','nlyd-student')));
         }
         switch ($_POST['match_type']) {
             case 'match':
@@ -5175,7 +5188,7 @@ class Student_Ajax
                 $entry_end_time = $wpdb->get_var("select entry_end_time from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']}");
                 //print_r($entry_end_time);die;
                 if( strtotime($entry_end_time) >= strtotime($_POST['start_time']) ){
-                    wp_send_json_error(array('info'=>__('每轮项目开赛时间必须大于报名截止时间')));
+                    wp_send_json_error(array('info'=>__('每轮项目开赛时间必须大于报名截止时间','nlyd-student')));
                 }
                 //获取已有的比赛列表
                 $sql = "select a.*,b.post_title from {$wpdb->prefix}match_project_more a 
@@ -5188,7 +5201,7 @@ class Student_Ajax
                     $result = $this->contrast_time($rows, $_POST['start_time'], $_POST['end_time']);
                     //print_r($result);
                     if (!empty($result)) {
-                        wp_send_json_error(array('info' => _('与' . $result['post_title'] . '第' . $result['more'] . '轮时间冲突')));
+                        wp_send_json_error(array('info' => _('与' . $result['post_title'] . '第' . $result['more'] . '轮时间冲突','nlyd-student')));
                     }
                     $insert = array(
                         'match_id' => $_POST['match_id'],
@@ -5212,14 +5225,14 @@ class Student_Ajax
 
                 break;
             default:
-                wp_send_json_error(array('info' => _('参数错误')));
+                wp_send_json_error(array('info' => __('参数错误','nlyd-student')));
                 break;
         }
         //print_r($res);die;
         if($res){
-            wp_send_json_success(array('info'=>__('新增成功')));
+            wp_send_json_success(array('info'=>__('新增成功','nlyd-student')));
         }
-        wp_send_json_error(array('info'=>__('新增失败')));
+        wp_send_json_error(array('info'=>__('新增失败','nlyd-student')));
     }
 
     /**
@@ -5228,7 +5241,7 @@ class Student_Ajax
     public function remove_match_time(){
         global $wpdb,$current_user;
         if(empty($_POST['id'])){
-            wp_send_json_error(array('info'=>__('id必传')));
+            wp_send_json_error(array('info'=>__('id必传','nlyd-student')));
         }
         switch ($_POST['match_type']) {
             case 'match':
@@ -5249,9 +5262,9 @@ class Student_Ajax
                 break;
         }
         if($res){
-            wp_send_json_success(array('info'=>__('删除成功')));
+            wp_send_json_success(array('info'=>__('删除成功','nlyd-student')));
         }
-        wp_send_json_error(array('info'=>__('删除失败')));
+        wp_send_json_error(array('info'=>__('删除失败','nlyd-student')));
     }
 
     /**
@@ -5420,7 +5433,7 @@ class Student_Ajax
             case 'wallet':
                 break;
             default:
-                wp_send_json_error(array('info'=>__('提现方式错误')));
+                wp_send_json_error(array('info'=>__('提现方式错误','nlyd-student')));
                 break;
         }
         if(empty($_POST['num'])) wp_send_json_error(array('info'=>__('请输入提现金额')));
@@ -5429,7 +5442,7 @@ class Student_Ajax
         $stream_total = $wpdb->get_var("select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type != 'undertake' ");
 
         if($stream_total < $_POST['num']){
-            wp_send_json_error(array('info'=>__('可提现余额不足,无法提现')));
+            wp_send_json_error(array('info'=>__('可提现余额不足,无法提现','nlyd-student')));
         }
 
         $wpdb->query('START TRANSACTION');
@@ -5461,10 +5474,10 @@ class Student_Ajax
         //print_r($a.'----'.$b);
         if($a && $b ){
             $wpdb->query('COMMIT');
-            wp_send_json_success(array('info'=>__('提交成功'),'url'=>home_url('/zone/getCashSuccess/')));
+            wp_send_json_success(array('info'=>__('提交成功','nlyd-student'),'url'=>home_url('/zone/getCashSuccess/')));
         }else{
             $wpdb->query('ROLLBACK');
-            wp_send_json_error(array('info'=>__('提交失败')));
+            wp_send_json_error(array('info'=>__('提交失败','nlyd-student')));
         }
     }
 
@@ -5480,7 +5493,7 @@ class Student_Ajax
                                       from {$wpdb->prefix}user_stream_logs 
                                       where id = {$_POST['id']} and user_id = {$current_user->ID} ",ARRAY_A);
         if(empty($row)){
-           wp_send_json_error(array('info'=>__('数据错误')));
+           wp_send_json_error(array('info'=>__('数据错误','nlyd-student')));
         }
 
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
@@ -5753,7 +5766,7 @@ class Student_Ajax
      */
     public function add_zone_coach(){
         if(empty($_POST['coach_id'])){
-            wp_send_json_error(array('info'=>__('请选择教练')));
+            wp_send_json_error(array('info'=>__('请选择教练','nlyd-student')));
         }
         global $wpdb,$current_user;
 
@@ -5763,24 +5776,24 @@ class Student_Ajax
                 where a.user_mobile = '{$_POST['coach_id']}'
                 ";
         $coach = $wpdb->get_row($sql,ARRAY_A);
-        if(empty($coach)) wp_send_json_error(array('info'=>__('该教练未注册')));
-        if(empty($coach['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证')));
+        if(empty($coach)) wp_send_json_error(array('info'=>__('该教练未注册','nlyd-student')));
+        if(empty($coach['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证','nlyd-student')));
 
         /*******教练资格认证********/
         /*$user = new WP_User( $coach['ID'] );
         if(!$user->has_cap( 'coach' )){
-            wp_send_json_error(array('info'=>__('该教练未取得平台认证,请核实')));
+            wp_send_json_error(array('info'=>__('该教练未取得平台认证,请核实','nlyd-student')));
         }*/
         /**********end************/
 
         //判断该教练是否被占用
         $id = $wpdb->get_var("select id from {$wpdb->prefix}zone_join_coach where coach_id = {$coach['ID']} ");
-        if(!empty($id)) wp_send_json_error(array('info'=>__('该教练已绑定,请核实信息')));
+        if(!empty($id)) wp_send_json_error(array('info'=>__('该教练已绑定,请核实信息','nlyd-student')));
         $result = $wpdb->insert($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$coach['ID']));
         if($result){
-            wp_send_json_success(array('info'=>__('添加成功'),'url'=>home_url('/zone/coach/')));
+            wp_send_json_success(array('info'=>__('添加成功','nlyd-student'),'url'=>home_url('/zone/coach/')));
         }else{
-            wp_send_json_error(array('info'=>__('添加失败')));
+            wp_send_json_error(array('info'=>__('添加失败','nlyd-student')));
         }
     }
 
@@ -5829,7 +5842,7 @@ class Student_Ajax
     public function zone_coach_relieve(){
         global $wpdb,$current_user;
         if(empty($_POST['coach_id'])){
-            wp_send_json_error(array('info'=>__('教练id必传')));
+            wp_send_json_error(array('info'=>__('教练id必传','nlyd-student')));
         }
         $sql = "select a.zone_id,a.coach_id,b.user_id,b.id from {$wpdb->prefix}zone_join_coach a 
                 left join {$wpdb->prefix}my_coach b on a.coach_id = b.coach_id
@@ -5842,7 +5855,7 @@ class Student_Ajax
                       where a.zone_id = {$current_user->ID}";
             $rows_ = $wpdb->get_results($sql_,ARRAY_A);
             if(count($rows_) == 1){
-                wp_send_json_error(array('info'=>__('该机构仅有一名教练,禁止解除')));
+                wp_send_json_error(array('info'=>__('该机构仅有一名教练,禁止解除','nlyd-student')));
             }
             $list = array();
             foreach ($rows_ as $k => $v){
@@ -5864,9 +5877,9 @@ class Student_Ajax
         //print_r($rows);die;
         $result = $wpdb->delete($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$_POST['coach_id']));
         if($result){
-            wp_send_json_success(array('info'=>__('解绑成功')));
+            wp_send_json_success(array('info'=>__('解绑成功','nlyd-student')));
         }else{
-            wp_send_json_error(array('info'=>__('解绑失败')));
+            wp_send_json_error(array('info'=>__('解绑失败','nlyd-student')));
         }
     }
 
@@ -5876,7 +5889,7 @@ class Student_Ajax
      */
     public function team_apply(){
         if(empty($_POST['post_title']) || empty($_POST['team_director_phone'])){
-            wp_send_json_error(array('info'=>__('战队名字/负责人必填')));
+            wp_send_json_error(array('info'=>__('战队名字/负责人必填','nlyd-student')));
         }
         //print_r($_POST);die;
         global $wpdb,$current_user;
@@ -5888,8 +5901,8 @@ class Student_Ajax
                 where a.user_mobile = '{$_POST['team_director_phone']}'
                 ";
         $team_director = $wpdb->get_row($sql,ARRAY_A);
-        if(empty($team_director)) wp_send_json_error(array('info'=>__('该负责人未注册')));
-        if(empty($team_director['meta_value'])) wp_send_json_error(array('info'=>__('该负责人未实名认证')));
+        if(empty($team_director)) wp_send_json_error(array('info'=>__('该负责人未注册','nlyd-student')));
+        if(empty($team_director['meta_value'])) wp_send_json_error(array('info'=>__('该负责人未实名认证','nlyd-student')));
 
         //开启事务
         $wpdb->query('START TRANSACTION');
@@ -5979,7 +5992,7 @@ class Student_Ajax
      */
     public function add_team_personnel(){
         if(empty($_POST['user_phone']) || empty($_POST['team_id'])){
-           wp_send_json_error(array('info'=>__('请选择需要添加的用户')));
+           wp_send_json_error(array('info'=>__('请选择需要添加的用户','nlyd-student')));
         }
         //查看当前用户是否已有战队
         global $wpdb,$current_user;
@@ -5991,21 +6004,21 @@ class Student_Ajax
                 where a.user_mobile = '{$_POST['user_phone']}'
                 ";
         $user = $wpdb->get_row($sql,ARRAY_A);
-        if(empty($user)) wp_send_json_error(array('info'=>__('该学员未注册')));
-        if(empty($user['meta_value'])) wp_send_json_error(array('info'=>__('该学员未实名认证')));
+        if(empty($user)) wp_send_json_error(array('info'=>__('该学员未注册','nlyd-student')));
+        if(empty($user['meta_value'])) wp_send_json_error(array('info'=>__('该学员未实名认证','nlyd-student')));
 
 
         $result = $wpdb->get_var("select id from {$wpdb->prefix}match_team where user_id = {$user['ID']} and user_type = 1 and status > -2");
         if($result > 0){
-            wp_send_json_error(array('info'=>__('该用户已有战队,请核实')));
+            wp_send_json_error(array('info'=>__('该用户已有战队,请核实','nlyd-student')));
         }
 
         $res = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id'],'user_id'=>$user['ID'],'user_type'=>1,'status'=>2,'created_time'=>get_time('mysql')));
 
         if($res){
-            wp_send_json_success(array('info'=>__('添加成功')));
+            wp_send_json_success(array('info'=>__('添加成功','nlyd-student')));
         }else{
-            wp_send_json_error(array('info'=>__('添加失败')));
+            wp_send_json_error(array('info'=>__('添加失败','nlyd-student')));
         }
     }
 
@@ -6014,7 +6027,7 @@ class Student_Ajax
      */
     public function get_team_personnel(){
         /*if(empty($_POST['team_id'])){
-            wp_send_json_error(array('info'=>__('战队id必传')));
+            wp_send_json_error(array('info'=>__('战队id必传','nlyd-student')));
         }*/
         global $wpdb,$current_user;
 
@@ -6072,15 +6085,15 @@ class Student_Ajax
     public function team_personnel_operation(){
 
         if(empty($_POST['status']) || empty($_POST['id'])){
-            wp_send_json_error(array('info'=>__('参数不全')));
+            wp_send_json_error(array('info'=>__('参数不全','nlyd-student')));
         }
 
         global $wpdb;
         $result = $wpdb->update($wpdb->prefix.'match_team',array('status'=>$_POST['status']),array('id'=>$_POST['id']));
         if($result){
-            wp_send_json_success(array('info'=>__('操作成功')));
+            wp_send_json_success(array('info'=>__('操作成功','nlyd-student')));
         }else{
-            wp_send_json_error(array('info'=>__('操作失败')));
+            wp_send_json_error(array('info'=>__('操作失败','nlyd-student')));
         }
     }
 
@@ -6089,11 +6102,11 @@ class Student_Ajax
      * 战队解散
      */
     public function team_disband(){
-        if(empty($_POST['type']) || empty($_POST['team_id'])) wp_send_json_error(array('info'=>__('参数不全')));
+        if(empty($_POST['type']) || empty($_POST['team_id'])) wp_send_json_error(array('info'=>__('参数不全','nlyd-student')));
         global $wpdb,$current_user;
         //获取默认战队
         $team_id = $wpdb->get_var("select team_id from {$wpdb->prefix}team_meta where user_id = {$current_user->ID}");
-        if($team_id == $_POST['team_id']) wp_send_json_error(array('info'=>__('默认战队禁止删除')));
+        if($team_id == $_POST['team_id']) wp_send_json_error(array('info'=>__('默认战队禁止删除','nlyd-student')));
         $wpdb->query('START TRANSACTION');
         if($_POST['type']==2){
             $a = $wpdb->update($wpdb->prefix.'match_team',array('team_id'=>$team_id),array('team_id'=>$_POST['team_id']));
@@ -6207,7 +6220,7 @@ class Student_Ajax
         switch ($_POST['type']){
             case 'bank':
                     if(empty($_POST['open_name']) || empty($_POST['open_bank']) || empty($_POST['open_address']) || empty($_POST['open_card_num']) ){
-                        wp_send_json_error(array('info'=>__('所有参数必填')));
+                        wp_send_json_error(array('info'=>__('所有参数必填','nlyd-student')));
                     }
                     unset($_POST['type']);
                     unset($_POST['action']);
@@ -6230,7 +6243,7 @@ class Student_Ajax
 
                     //$result = update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
                 }else{
-                    //wp_send_json_error(array('info'=>__('请选择收款码')));
+                    //wp_send_json_error(array('info'=>__('请选择收款码','nlyd-student')));
                 }
                 $result = update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
                 break;
@@ -6250,18 +6263,18 @@ class Student_Ajax
                     //print_r($_POST['user_coin_code']);
                     //$result = update_user_meta($current_user->ID,'aliPay_coin_code',$_POST['aliPay_coin_code']);
                 }else{
-                    //wp_send_json_error(array('info'=>__('请选择收款码')));
+                    //wp_send_json_error(array('info'=>__('请选择收款码','nlyd-student')));
                 }
                 $result = update_user_meta($current_user->ID,'aliPay_coin_code',$_POST['aliPay_coin_code']);
                 break;
             default:
-                wp_send_json_error(array('info'=>__('参数错误')));
+                wp_send_json_error(array('info'=>__('参数错误','nlyd-student')));
                 break;
         }
         if($result){
-            wp_send_json_success(array('info'=>__('更新成功')));
+            wp_send_json_success(array('info'=>__('更新成功','nlyd-student')));
         }else{
-            wp_send_json_error(array('info'=>__('更新失败')));
+            wp_send_json_error(array('info'=>__('更新失败','nlyd-student')));
         }
 
     }
@@ -6277,8 +6290,8 @@ class Student_Ajax
                 where a.user_mobile = '{$_POST['mobile']}'
                 ";
         $row = $wpdb->get_row($sql,ARRAY_A);
-        if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册')));
-        if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证')));
+        if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册','nlyd-student')));
+        if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
         wp_send_json_success(array('user_id'=>$row['ID']));
     }
 
@@ -6286,7 +6299,7 @@ class Student_Ajax
      * 获取比赛签到情况
      */
     public function get_sign_list(){
-        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('参数错误')));
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>__('参数错误','nlyd-student')));
         global $wpdb,$current_user;
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
@@ -6334,10 +6347,10 @@ class Student_Ajax
      */
     public function zone_course_created(){
         if(empty($_POST['course_type']) || empty($_POST['course_category_id']) || empty($_POST['course_title']) || empty($_POST['duration']) || empty($_POST['coach_phone']) || empty($_POST['const']) ){
-            wp_send_json_error(array('info'=>__('必填项不能为空')));
+            wp_send_json_error(array('info'=>__('必填项不能为空','nlyd-student')));
         }
         if(!empty($_POST['course_start_time']) && !empty($_POST['course_end_time'])){
-            if($_POST['course_start_time'] > $_POST['course_end_time']) wp_send_json_error(array('info'=>__('开课时间不能大于结课时间')));
+            if($_POST['course_start_time'] > $_POST['course_end_time']) wp_send_json_error(array('info'=>__('开课时间不能大于结课时间','nlyd-student')));
         }
 
         global $wpdb,$current_user;
@@ -6348,8 +6361,8 @@ class Student_Ajax
                 where a.user_mobile = '{$_POST['coach_phone']}'
                 ";
             $coach = $wpdb->get_row($sql,ARRAY_A);
-            if(empty($coach)) wp_send_json_error(array('info'=>__('该教练未注册')));
-            if(empty($coach['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证')));
+            if(empty($coach)) wp_send_json_error(array('info'=>__('该教练未注册','nlyd-student')));
+            if(empty($coach['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证','nlyd-student')));
         }
 
         $data = array(
@@ -6374,9 +6387,9 @@ class Student_Ajax
             $a = $wpdb->insert($wpdb->prefix.'course',$data);
         }
         if($a){
-            wp_send_json_success(array('info'=>__('操作完成'),'url'=>home_url('/zone/course/')));
+            wp_send_json_success(array('info'=>__('操作完成','nlyd-student'),'url'=>home_url('/zone/course/')));
         }else{
-            wp_send_json_error(array('info'=>__('操作失败')));
+            wp_send_json_error(array('info'=>__('操作失败','nlyd-student')));
         }
     }
 
@@ -6463,11 +6476,11 @@ class Student_Ajax
      * 机构结课
      */
     public function zone_close_course(){
-        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('课程id不能为空')));
+        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('课程id不能为空','nlyd-student')));
         global $wpdb,$current_user;
         $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>-3,'course_end_time'=>get_time('mysql')),array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
         if($a){
-            wp_send_json_success(array('info'=>__('关闭成功'),'url'=>home_url('/zone/course/')));
+            wp_send_json_success(array('info'=>__('关闭成功','nlyd-student'),'url'=>home_url('/zone/course/')));
         }else{
             wp_send_json_error(array('info'=>'关闭失败'));
         }
@@ -6477,7 +6490,7 @@ class Student_Ajax
      * 获取课程报名学员
      */
     public function get_course_student(){
-        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('课程id不能为空')));
+        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('课程id不能为空','nlyd-student')));
         global $wpdb,$current_user;
 
         $page = isset($_POST['page']) ? $_POST['page'] : 1;

@@ -29,6 +29,9 @@ class Grading
 
             $role = 'grading_brainpower';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'grading_adopt_log';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
 
         add_submenu_page('edit.php?post_type=grading','考级选手','考级选手','grading_students','grading-students',array($this,'gradingStudents'));
@@ -36,6 +39,7 @@ class Grading
         add_submenu_page('edit.php?post_type=grading','答题记录','答题记录','grading_studentScore','grading-studentScore',array($this,'gradingStudentScore'));
         add_submenu_page('edit.php?post_type=grading','训练记录','训练记录','grading_trainLog','grading-trainLog',array($this,'gradingTrainLog'));
         add_submenu_page('edit.php?post_type=grading','考级名录','考级名录','grading_brainpower','grading-grading_brainpower',array($this,'gradingBrainpower'));
+        add_submenu_page('edit.php?post_type=grading','考级过级记录','考级过级记录','grading_adopt_log','grading-adopt-log',array($this,'gradingAdoptLog'));
         add_submenu_page('edit.php?post_type=grading','训练答题记录','训练答题记录','grading_trainLogScore','grading-trainLogScore',array($this,'trainLogScore'));
     }
 
@@ -1036,7 +1040,7 @@ class Grading
                 $p_name = $this->getProject($gav);
                 ?>
                 <li class="<?=$gav?>">
-                    <a href="<?=admin_url('edit.php?post_type=grading&page=grading-trainLogScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$gav)?>" <?=$g_type==$gav?'class="current"':''?> aria-current="page"><?=$p_name?>
+                    <a href="<?=admin_url('edit.php?post_type=grading&page=grading-trainLogScore&grading_id='.$gradingId.'&g_type='.$gav)?>" <?=$g_type==$gav?'class="current"':''?> aria-current="page"><?=$p_name?>
                         <span class="count"></span>
                     </a>
                     <?=($k+1)<$counts?'|':''?>
@@ -1206,7 +1210,18 @@ class Grading
         $page < 1 && $page = 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT user_id,`{$cate_type}` AS skill_level FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `{$cate_type}`>0 LIMIT {$start},{$pageSize}", ARRAY_A);
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS user_id,`{$cate_type}` AS skill_level FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `{$cate_type}`>0 LIMIT {$start},{$pageSize}", ARRAY_A);
+               $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+                $pageAll = ceil($count['count']/$pageSize);
+                $pageHtml = paginate_links( array(
+                    'base' => add_query_arg( 'cpage', '%#%' ),
+                    'format' => '',
+                    'prev_text' => __('&laquo;'),
+                    'next_text' => __('&raquo;'),
+                    'total' => $pageAll,
+                    'current' => $page,
+//                    'add_fragment' => '&searchCode='.$searchCode,
+                ));
         if($rows){
             foreach ($rows as $k => &$row){
                 $user_meta = get_user_meta($row['user_id']);
@@ -1214,9 +1229,13 @@ class Grading
                 $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
                 $row['user_head'] = isset($user_meta['user_head']) ? $user_meta['user_head'][0] : '';
                 $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
-                if($row['real_name'] == '') unset($row);
+                if($row['real_name'] == '') {
+                    unset($rows[$k]);
+                    --$count['count'];
+                }
             }
         }
+//        leo_dump($rows);die;
 
         ?>
         <div class="wrap">
@@ -1350,6 +1369,189 @@ class Grading
                 $name = $types;
         }
         return $name;
+    }
+
+    /**
+    * 考级过级记录
+    */
+    public function gradingAdoptLog(){
+        global $wpdb;
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $cate_type = isset($_GET['ctype']) ? intval($_GET['ctype']) : 0;
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $join = '';
+        $where = '';
+        if($searchStr != ''){
+            $join = "LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=gl.user_id AND um.meta_key='user_real_name'
+                     LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=gl.user_id AND um2.meta_key='user_ID'";
+            $where = "AND (um.meta_value LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%')";
+        }
+        if($cate_type > 0){
+         $where .= " AND gm.category_id='{$cate_type}'";
+        }
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS gl.*,ma.fullname,ma.telephone,ma.country,ma.province,ma.city,ma.area,ma.address,gm.category_id
+                FROM {$wpdb->prefix}grading_logs AS gl
+                LEFT JOIN {$wpdb->prefix}my_address AS ma ON ma.user_id=gl.user_id AND ma.is_default=1   
+                LEFT JOIN {$wpdb->prefix}grading_meta AS gm ON gm.grading_id=gl.grading_id   
+                {$join}            
+                WHERE grading_result=1 {$where}
+                ORDER BY created_time DESC
+                LIMIT {$start},{$pageSize}", ARRAY_A);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page,
+            'add_fragment' => '&s='.$searchStr,
+        ));
+        $categoryArr = getCategory();
+        $categoryArr = array_column($categoryArr, NULL, 'ID');
+//        leo_dump($categoryArr);
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">考级过级记录</h1>
+            <hr class="wp-header-end">
+
+                <p class="search-box">
+                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                    <input type="search" id="search_val" name="s" placeholder=" 姓名/ID" value="<?=$searchStr?>">
+                    <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?post_type=grading&page=grading-adopt-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                </p>
+            <ul class="subsubsub">
+                <?php
+                $caLiArr = ['<li class="all"><a href="'.admin_url('edit.php?post_type=grading&page=grading-adopt-log&ctype=0').'" '.($cate_type==0?'class="current"':'').' aria-current="page">全部<span class="count"></span></a></li>'];
+
+                foreach ($categoryArr as $clv){
+                    $caLiArr[] = '<li class="all"><a href="'.admin_url('edit.php?post_type=grading&page=grading-adopt-log&ctype='.$clv['ID']).'" '.($cate_type==$clv['ID']?'class="current"':'').' aria-current="page">'.$clv['post_title'].'<span class="count"></span></a></li>';
+                }
+                echo join(' | ',$caLiArr);
+                ?>
+            </ul>
+               <br class="clear">
+            <button class="button-primary" type="button">导出</button>
+                <div class="tablenav top">
+                    <div class="tablenav-pages">
+                        <span class="displaying-num"><?=$count['count']?>个项目</span>
+                        <?=$pageHtml?>
+                    </div>
+                    <br class="clear">
+                </div>
+                <h2 class="screen-reader-text">考级选手</h2>
+                <table class="wp-list-table widefat fixed striped users">
+                    <thead>
+                        <tr>
+                            <th scope="col" id="real_name" class="manage-column column-real_name column-primary sortable"><span>姓名/ID</span></th>
+                            <th scope="col" id="sex" class="manage-column column-sex">性别</th>
+                            <th scope="col" id="card_num" class="manage-column column-card_num">证件号码</th>
+                            <th scope="col" id="cimg" class="manage-column column-cimg">用户寸照</th>
+                            <th scope="col" id="grading_level" class="manage-column column-grading_level">考级类别</th>
+                            <th scope="col" id="coach" class="manage-column column-coach">教练</th>
+                            <th scope="col" id="created_time" class="manage-column column-created_time">过级时间</th>
+                            <th scope="col" id="address" class="manage-column column-address">收件地址</th>
+                            <th scope="col" id="prove" class="manage-column column-prove">证书</th>
+                        </tr>
+                    </thead>
+                    <tbody id="the-list" data-wp-lists="list:user">
+                    <?php foreach ($rows as $row){
+                        $user_meta = get_user_meta($row['user_id']);
+                        $coach_name = get_user_meta($row['grading_coach_id'],'user_real_name',true)['real_name'];
+
+                    ?>
+                    <tr id="user-<?=$row['user_id']?>">
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/ID">
+                            <img alt="" src="<?=$user_meta['user_head'][0]?>" class="avatar avatar-32 photo" height="32" width="32">
+                            <strong><?=unserialize($user_meta['user_real_name'][0])['real_name']?></strong>
+                            <br>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="sex column-sex" data-colname="性别"><?=$user_meta['user_gender'][0]?></td>
+                        <td class="card_num column-card_num" data-colname="证件号码"><?=unserialize($user_meta['user_real_name'][0])['real_ID']?></td>
+                        <td class="cimg column-cimg" id="cimg-<?=$row['id']?>" data-colname="用户寸照">
+                            <img src="<?=unserialize($user_meta['user_images_color'][0])[0]?>" style="height: 60px;" alt="">
+                        </td>
+                        <td class="grading_level column-grading_level" data-colname="考级类别"><?=$categoryArr[$row['category_id']]['post_title'].'<span style="color: #3573c4">'.$row['grading_lv'].'</span>'?>级</td>
+                        <td class="coach column-coach" data-colname="教练"><?=$coach_name?></td>
+                        <td class="created_time column-created_time" data-colname="过级时间"><?=$row['created_time']?></td>
+                        <td class="address column-address" data-colname="收件地址"><?=$row['fullname'].'&nbsp;'.$row['telephone'].'&nbsp;'.$row['province'].$row['city'].$row['area'].$row['address']?></td>
+                        <td class="prove column-prove" data-colname="证书">
+                        <?php if($row['prove_grant_status'] == '2'){ ?>
+                            已发放<br />
+                            <?=$row['prove_grant_time']?>
+                        <?php }else{ ?>
+                            <a href="javascript:;" class="prove_grant" data-id="<?=$row['id']?>" style="color: #5491c4">发放证书</a>
+                        <?php } ?>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                    <tfoot>
+                        <tr>
+                            <th scope="col" class="manage-column column-real_name column-primary sortable"><span>姓名/ID</span></th>
+                            <th scope="col" class="manage-column column-sex">性别</th>
+                            <th scope="col" class="manage-column column-card_num">证件号码</th>
+                            <th scope="col" class="manage-column column-cimg">用户寸照</th>
+                            <th scope="col" class="manage-column column-grading_level">考级类别</th>
+                            <th scope="col" class="manage-column column-coach">教练</th>
+                            <th scope="col" class="manage-column column-created_time">过级时间</th>
+                            <th scope="col" class="manage-column column-address">收件地址</th>
+                            <th scope="col" class="manage-column column-prove">证书</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="tablenav bottom">
+                    <div class="tablenav-pages">
+                        <span class="displaying-num"><?=$count['count']?>个项目</span>
+                        <?=$pageHtml?>
+                    </div>
+                    <br class="clear">
+                </div>
+                <script type="text/javascript">
+                jQuery(document).ready(function($) {
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        var _title = '';
+                        <?php
+                        foreach ($rows as $v){ ?>
+                        layer.photos({//图片预览
+                            photos: '#cimg-<?=$v['id']?>',
+                            move : false,
+                            title : '',
+                            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                        })
+                        <?php } ?>
+                    });
+                    $('.prove_grant').on('click',function() {
+                        var id = $(this).attr('data-id');
+                        if(id < 1) return false;
+                        if(confirm('是否确定已发放证书?')){
+                            $.ajax({
+                                url : ajaxurl,
+                                data : {'action' : 'gradingProveGrant', 'id':id},
+                                type : 'post',
+                                dataType : 'json',
+                                success : function(response) {
+                                    alert(response.data.info);
+                                    if(response['success']){
+                                        window.location.reload();
+                                    }
+                                }, error : function() {
+                                    alert('请求失败!');
+                                }
+                            });
+                        }
+                    });
+                });
+
+                </script>
+            <br class="clear">
+        </div>
+        <?php
     }
 
     /**

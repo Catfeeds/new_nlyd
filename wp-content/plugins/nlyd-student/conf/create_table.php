@@ -288,6 +288,9 @@ function the_table_install () {
           `grading_id` int(20) DEFAULT NULL COMMENT '考级id',
           `grading_result` tinyint(2) DEFAULT NULL COMMENT '考级结果 1 过级 2 失败',
           `grading_lv` tinyint(3) DEFAULT NULL COMMENT '本次考级等级',
+          `grading_coach_id` int(20) unsigned DEFAULT 0 COMMENT '此次考级的教练id',
+          `prove_grant_status` tinyint(1) DEFAULT 1 COMMENT '证书发放状态:1未发放,2已发放',
+          `prove_grant_time` datetime DEFAULT NULL COMMENT '证书发放时间',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
