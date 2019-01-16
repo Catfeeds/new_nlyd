@@ -174,7 +174,7 @@ jQuery(function($) {
                                                         +'<a href="'+window.home_url+'/courses/courseDetail/id/'+v.id+'" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>'
                                                     +'</div>'
                                                     +'<div class="nl-match-button flex1">'
-                                                        +'<a href="'+window.home_url+'/courses/'+v.courseUrl+'/id/'+v.id+'" class="dis_table c_white '+right+'"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>'
+                                                        +'<a href="'+window.home_url+'/courses/'+courseUrl+'/id/'+v.id+'" class="dis_table c_white '+right+'"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>'
                                                     +'</div>'
                                                 +'</div>'
                                             +'</li>'
