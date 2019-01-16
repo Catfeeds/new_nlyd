@@ -39,9 +39,9 @@
                         </div>
                         <?php } ?>
 
-                        <div class="c_red fs_12">
+                        <!-- <div class="c_red fs_12">
                             <?=__('*充值进平台的余额只可用于消费，无法再次提现，谨慎操作', 'nlyd-student')?>
-                        </div>
+                        </div> -->
                         <div class="enter_num">
                             <div class="danwei bold c_black fs_20">￥</div>
                             <input class="radius_input_row nl-foucs" id="num" type="text" name="num" lay-verify="number" autocomplete="off" data-max="<?=$balance?>" placeholder="<?=__('输入金额，最多可提现'.$balance, 'nlyd-student')?>">
