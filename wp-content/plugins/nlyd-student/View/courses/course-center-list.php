@@ -315,7 +315,7 @@ jQuery(function($) {
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var dom='<li class="match_row">'
-                                                +'<div class="match_header bold c_black f_16 mt_10">'+v.post_title+'</div>'
+                                                +'<div class="match_header bold c_black f_16 mt_10">'+v.course_title+'</div>'
                                                 +'<div class="match_body">'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('开课日期：', 'nlyd-student')?></div>'
@@ -327,7 +327,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('抢占名额：', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black"><span class="c_blue">21</span>/21</div>'
+                                                        +'<div class="match_body_info c_black"><span class="c_blue">21</span>/'+v.open_quota+'</div>'
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="nl-match-footer flex-h">'

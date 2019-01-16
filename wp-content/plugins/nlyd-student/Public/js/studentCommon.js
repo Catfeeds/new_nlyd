@@ -117,9 +117,6 @@ jQuery(document).ready(function($) {
         $('body').find('.nl-foot-nav').addClass('focus_none')
         $('body').find('.details_btn').addClass('focus_none')
     })
-    // $('body').on('focus','input[readonly]',function(){
-    //     $(this).trigger('blur');
-    //   });
     $('body').on('focusout','.nl-foucs',function(){
         $('body').find('.a-btn').removeClass('focus_none')
         $('body').find('.nl-foot-nav').removeClass('focus_none')
