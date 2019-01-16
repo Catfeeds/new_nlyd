@@ -5550,14 +5550,15 @@ class Student_Ajax
                     $revenue_source[] = $type;
                     $list['profit_income'] = $v['sponsor_income'];
                 }
+                $list['revenue_source'] = arr2str($revenue_source,'/');
 
                 if($v['income_type'] == 'subject'){  //裂变收益
                     //获取裂变机构类型
                     $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
-                    $revenue_source[] = '推荐'.$zone_type_name;
+                    //var_dump($zone_type_name);
+                    $list['revenue_source'] = '推荐'.$zone_type_name;
                 }
 
-                $list['revenue_source'] = arr2str($revenue_source,'/');
                 $referee_name = get_user_meta($v['user_id'],'user_real_name')[0];
                 //var_dump($referee_name);
                 $list['channel'] = $referee_name['real_name'];
