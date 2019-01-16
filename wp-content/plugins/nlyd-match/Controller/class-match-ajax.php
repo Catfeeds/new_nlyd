@@ -2311,6 +2311,23 @@ class Match_Ajax
             wp_send_json_error(['info' => '删除失败!']);
         }
     }
+    /**
+     * 获取机构的教练
+     */
+    public function get_zone_coach(){
+        $zone_user_id = isset($_GET['type']) ? intval($_GET['type']) : 0;
+        $s = isset($_GET['term']) ? trim($_GET['term']) : '';
+        if($s != '' && $zone_user_id > 0){
+            global $wpdb;
+            $rows = $wpdb->get_results("SELECT zjc.zone_id AS id,um.meta_value FROM {$wpdb->prefix}zone_join_coach AS zjc 
+                    LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zjc.coach_id AND um.meta_key='user_real_name'
+                    WHERE zjc.zone_id='{$zone_user_id}' AND zjc.coach_id!=''");
+            foreach ($rows as &$row){
+                $row->text = unserialize($row->meta_value)['real_name'];
+            }
+            wp_send_json_success($rows);
+        }
+    }
 }
 
 new Match_Ajax();
