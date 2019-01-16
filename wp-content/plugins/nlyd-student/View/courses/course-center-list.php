@@ -29,193 +29,13 @@
                             <!-- 课程报名中 -->
                             <div class="layui-tab-item layui-show">
                                 <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
-                                    <!-- <div class="no-info-page" style="top:50px">
-                                        <div class="no-info-img">
-                                            <img src="<?=student_css_url.'image/noInfo/noCourse1043@2x.png'?>">
-                                        </div>
-                                        <p class="no-info-text"><?=__('该中心近期暂无可报名课程', 'nlyd-student')?></p>
-                                        <a class="a-btn a-btn-table" href="<?=home_url('/courses/');?>"><div><?=__('查看其它中心课程', 'nlyd-student')?></div></a>
-                                    </div> -->
-                                    <li class="match_row">
-                                        <div class="match_header bold c_black f_16 mt_10">高效记忆术·G预报班·成都郫县</div>
-                                        <div class="match_body">
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('开课日期：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black">2018-04-21 15:00 <span class="c_blue ml_10">课程报名中</span></div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('授课教练：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_blue">成 炜</div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('抢占名额：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black"><span class="c_blue">21</span>/21</div>
-                                            </div>
-                                        </div>
-                                        <div class="nl-match-footer flex-h">
-                                            <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
-                                            </div>
-                                            <div class="nl-match-button flex1">
-                                                <a href="" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="match_row">
-                                        <div class="match_header bold c_black f_16 mt_10">高效记忆术·G预报班·成都郫县</div>
-                                        <div class="match_body">
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('开课日期：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black">2018-04-21 15:00 <span class="c_blue ml_10">课程报名中</span></div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('授课教练：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_blue">成 炜</div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('抢占名额：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black"><span class="c_blue">21</span>/21</div>
-                                            </div>
-                                        </div>
-                                        <div class="nl-match-footer flex-h">
-                                            <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
-                                            </div>
-                                            <div class="nl-match-button flex1">
-                                                <a href="" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="match_row">
-                                        <div class="match_header bold c_black f_16 mt_10">高效记忆术·G预报班·成都郫县</div>
-                                        <div class="match_body">
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('开课日期：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black">2018-04-21 15:00 <span class="c_blue ml_10">课程报名中</span></div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('授课教练：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_blue">成 炜</div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('抢占名额：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black"><span class="c_blue">21</span>/21</div>
-                                            </div>
-                                        </div>
-                                        <div class="nl-match-footer flex-h">
-                                            <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
-                                            </div>
-                                            <div class="nl-match-button flex1">
-                                                <a href="" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="match_row">
-                                        <div class="match_header bold c_black f_16 mt_10">高效记忆术·G预报班·成都郫县</div>
-                                        <div class="match_body">
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('开课日期：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black">2018-04-21 15:00 <span class="c_blue ml_10">课程报名中</span></div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('授课教练：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_blue">成 炜</div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('抢占名额：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black"><span class="c_blue">21</span>/21</div>
-                                            </div>
-                                        </div>
-                                        <div class="nl-match-footer flex-h">
-                                            <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
-                                            </div>
-                                            <div class="nl-match-button flex1">
-                                                <a href="" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="match_row">
-                                        <div class="match_header bold c_black f_16 mt_10">高效记忆术·G预报班·成都郫县</div>
-                                        <div class="match_body">
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('开课日期：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black">待定</div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('授课教练：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_blue">成 炜</div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('抢占名额：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black"><span class="c_blue">21</span>/21</div>
-                                            </div>
-                                        </div>
-                                        <div class="nl-match-footer flex-h">
-                                            <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
-                                            </div>
-                                            <div class="nl-match-button flex1">
-                                                <a href="" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>
-                                            </div>
-                                        </div>
-                                    </li>
+                                    
                                 </ul>
                             </div>
                             <!-- 课程进行中 -->
                             <div class="layui-tab-item">
                                 <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
-                                    <li class="match_row">
-                                        <div class="match_header bold c_black f_16 mt_10">高效记忆术·G预报班·成都郫县</div>
-                                        <div class="match_body">
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('开课日期：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black">2018-04-21 15:00 <span class="c_blue ml_10">课程进行中</span></div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('授课教练：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_blue">成 炜</div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('抢占名额：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black"><span class="c_blue">21</span>/21</div>
-                                            </div>
-                                        </div>
-                                        <div class="nl-match-footer flex-h">
-                                            <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
-                                            </div>
-                                            <div class="nl-match-button flex1">
-                                                <a href="" class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__('您已抢占名额', 'nlyd-student')?></span></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="match_row">
-                                        <div class="match_header bold c_black f_16 mt_10">高效记忆术·G预报班·成都郫县</div>
-                                        <div class="match_body">
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('开课日期：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black">待定</div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('授课教练：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_blue">成 炜</div>
-                                            </div>
-                                            <div class="match_body_row">
-                                                <div class="match_body_label"><?=__('抢占名额：', 'nlyd-student')?></div>
-                                                <div class="match_body_info c_black"><span class="c_blue">21</span>/21</div>
-                                            </div>
-                                        </div>
-                                        <div class="nl-match-footer flex-h">
-                                            <div class="nl-match-button flex1">
-                                                <a href="<?=home_url('/courses/courseDetail');?>" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>
-                                            </div>
-                                            <div class="nl-match-button flex1">
-                                                <a href="" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>
-                                            </div>
-                                        </div>
-                                    </li>
+                                    
                                 </ul>
                             </div>
                             <!-- 已结课 -->
@@ -314,20 +134,37 @@ jQuery(function($) {
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
+                                    var right='bg_gradient_blue',
+                                    rightText="<?=__('抢占名额', 'nlyd-student')?>";
+
+                                    if(id=="-3"){
+                                        right='bg_gradient_blue',
+                                        rightText="<?=__('抢占名额', 'nlyd-student')?>";
+                                    }else{
+                                        if (v.order_id) {//已报名
+                                            right='bg_grey_blue';
+                                            rightText="<?=__('您已抢占名额', 'nlyd-student')?>"
+                                        }else{
+                                            if(parseInt(v.open_quota)<=parseInt(v.entry_total)){
+                                                right='bg_grey_blue';
+                                                rightText="<?=__('名额已抢光', 'nlyd-student')?>"
+                                            }
+                                        }
+                                    }
                                     var dom='<li class="match_row">'
                                                 +'<div class="match_header bold c_black f_16 mt_10">'+v.course_title+'</div>'
                                                 +'<div class="match_body">'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('开课日期：', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black">待定</div>'
+                                                        +'<div class="match_body_info c_black">'+v.start_time+' <span class="c_blue ml_10">'+v.status_cn+'</span></div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('授课教练：', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_blue">成 炜</div>'
+                                                        +'<a class="match_body_info c_blue" href="'+window.home_url+'/teams/coachDetail/coach_id/'+v.coach_id+'/category_id/">'+v.real_name+'</a>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('抢占名额：', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black"><span class="c_blue">21</span>/'+v.open_quota+'</div>'
+                                                        +'<div class="match_body_info c_black"><span class="c_blue">'+v.entry_total+'</span>/'+v.open_quota+'</div>'
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="nl-match-footer flex-h">'
@@ -335,7 +172,7 @@ jQuery(function($) {
                                                         +'<a href="'+window.home_url+'/courses/courseDetail/id/'+v.id+'" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>'
                                                     +'</div>'
                                                     +'<div class="nl-match-button flex1">'
-                                                        +'<a href="'+window.home_url+'/courses/courseSign/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>'
+                                                        +'<a href="'+window.home_url+'/courses/courseSign/id/'+v.id+'" class="dis_table c_white '+right+'"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>'
                                                     +'</div>'
                                                 +'</div>'
                                             +'</li>'
