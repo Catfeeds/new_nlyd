@@ -1390,6 +1390,18 @@ class Organize{
                                                  $error_msg = '添加分成记录失败!';
                                              }
                                              if($error_msg == ''){
+                                                 $stream_type = '';
+                                                 switch ($this->getOrganizeTypeList($zone_type)['zone_type_alias']){
+                                                     case 'trains':
+                                                         $stream_type = 'recommend_trains_zone';
+                                                         break;
+                                                     case 'test':
+                                                         $stream_type = 'recommend_test_zone';
+                                                         break;
+                                                     case 'match':
+                                                         $stream_type = 'recommend_match_zone';
+                                                         break;
+                                                 }
                                                  $user_income_logs_id = $wpdb->insert_id;
                                                  if($referee_id1 > 0){
                                                      //添加一级上级收益流水
@@ -1397,7 +1409,7 @@ class Organize{
                                                          'user_id' => $referee_id1,
                                                          'user_type' => $zone_type,
                                                          'match_id' => $user_income_logs_id,
-                                                         'income_type' => 'subject',
+                                                         'income_type' => $stream_type,
                                                          'income_status' => 2,
                                                          'user_income' => $spread_set['direct_superior'],
                                                          'created_time' => get_time('mysql'),
@@ -1414,7 +1426,7 @@ class Organize{
                                                                  'user_id' => $referee_id2,
                                                                  'user_type' => $zone_type,
                                                                  'match_id' => $user_income_logs_id,
-                                                                 'income_type' => 'subject',
+                                                                 'income_type' => $stream_type,
                                                                  'income_status' => 2,
                                                                  'user_income' => $spread_set['indirect_superior'],
                                                                  'created_time' => get_time('mysql'),
@@ -3589,12 +3601,18 @@ class Organize{
     /**
      * 获取机构类型列表
      */
-    public function getOrganizeTypeList(){
+    public function getOrganizeTypeList($id=0){
         global $wpdb;
-        $typeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1 ORDER BY id DESC", ARRAY_A);
-        foreach ($typeList as &$tlv){
-            if($tlv['zone_type_alias'] == 'match') $tlv['zone_type_name'] = '赛区';
+        if($id > 0){
+            $typeList = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}zone_type WHERE id='{$id}'", ARRAY_A);
+            if($typeList['zone_type_alias'] == 'match') $typeList['zone_type_name'] = '赛区';
+        }else{
+            $typeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1 ORDER BY id DESC", ARRAY_A);
+            foreach ($typeList as &$tlv){
+                if($tlv['zone_type_alias'] == 'match') $tlv['zone_type_name'] = '赛区';
+            }
         }
+
         return $typeList;
     }
 
