@@ -216,7 +216,7 @@ class Teacher
                                 ?>
                             </td>
                             <td class="option column-option" data-colname="操作">
-                                <a style="color: #00aff9" href="<?php echo '?page=teacher-datum&id='.$row['id'] ?>">编辑</a>
+                                <a style="color: #00aff9" href="<?php echo '?page=teacher-datum&id='.$row['coach_id'] ?>">编辑</a>
                             </td>
                         </tr>
                     <?php } ?>
@@ -296,77 +296,105 @@ class Teacher
         $err_msg = '';
         $suc_msg = '';
         global $wpdb;
-        $id = $_GET['id'];
+        $coach_id = $_GET['id'];
         if(is_post()){
             $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
+            $new_coach_id = isset($_POST['new_coach_id']) ? intval($_POST['new_coach_id']) : 0;
+//            $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
             if($zone_user_id < 1) $err_msg .= '请选择所属主体机构';
             if($err_msg == ''){
-                //教学类别
-                $reading_value = 0;
-                $memory_value = 0;
-                $arithmetic_value = 0;
-                if(isset($_POST['categorys'])){
-                    foreach ($_POST['categorys'] as $v){
-                        $category_v = explode('_',$v);
-                        switch ($category_v[1]){
-                            case 'reading':
-                                $reading_value = $category_v[0];
-                                break;
-                            case 'memory':
-                                $memory_value = $category_v[0];
-                                break;
-                            case 'arithmetic':
-                                $arithmetic_value = $category_v[0];
-                                break;
-                        }
+                $wpdb->query('START TRANSACTION');
+                //移动学员
+                if($new_coach_id > 0 && $new_coach_id != $coach_id){
+                    $move_bool = $wpdb->update($wpdb->prefix.'my_coach', ['coach_id' => $new_coach_id], ['coach_id' => $coach_id]);
+                    if(!$move_bool) {
+                        $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}my_coach WHERE coach_id='{$coach_id}'");
+                        if($var) $err_msg.= '<br />.移动学员失败';
                     }
                 }
-                //解除取消的类别下的学员
-                $categoryArr = getCategory();
-                $coach_id = $wpdb->get_var("SELECT coach_id FROM {$wpdb->prefix}coach_skill WHERE id='{$id}'");
-                $newCategoryArr = array_reduce($categoryArr,function(&$newArray,$v){
-                    $newArray[$v['alis']] = $v;
-                    return $newArray;
-                });
-                $wpdb->query('START TRANSACTION');
-                foreach (['reading'=>$reading_value,'memory'=>$memory_value,'arithmetic'=>$arithmetic_value] AS $cateK => $cateV){
-                    if($cateV < 1){
-                        $bool = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}my_coach WHERE coach_id='{$coach_id}' AND category_id='{$newCategoryArr[$cateK]['ID']}' AND apply_status=2");
-                        if($bool){
-                            $cate_name = $cateK.'_value';
-                            $bool = $wpdb->update($wpdb->prefix.'my_coach',['apply_status'=>3],['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>2]);
-                            if(!$bool) {
-//                            $$cate_name = $newCategoryArr[$cateK]['ID'];
-                                $err_msg .= '<br> 取消'.$newCategoryArr[$cateK]['post_title'].'教学资格失败!';
+                if($err_msg == ''){
+                    //是否已有所属机构
+                    $zone_id = $wpdb->get_var("SELECT zone_id FROM {$wpdb->prefix}zone_join_coach WHERE coach_id='{$coach_id}'");
+                    if($zone_id){
+                        if($zone_user_id != $zone_id){
+                            //是否有学员
+                            $coach_student_val = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}my_coach WHERE coach_id='{$coach_id}'");
+                            if($coach_student_val){
+                                $err_msg = '当前教练存在学员,请先解除教学关系或移动到其它教练再更换所属机构';
                             }
                         }
-                        //删除申请
-                        $wpdb->delete($wpdb->prefix.'my_coach',['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>1]);
+                        if($err_msg == '') {
+                            $zone_bool = $wpdb->update("{$wpdb->prefix}zone_join_coach", ['zone_id' => $zone_user_id], ['coach_id' => $coach_id]) || $zone_user_id == $zone_id;
+                        }else{
+                            $zone_bool = false;
+                        }
+                    }else{
+                        $zone_bool = $wpdb->insert("{$wpdb->prefix}zone_join_coach",['zone_id' => $zone_user_id,'coach_id' => $coach_id]);
+                    }
+                    if(!$zone_bool) $err_msg .= '<br />更新所属机构失败!';
+                }
+                if($err_msg == ''){
+                    //教学类别
+                    $reading_value = 0;
+                    $memory_value = 0;
+                    $arithmetic_value = 0;
+                    if(isset($_POST['categorys'])){
+                        foreach ($_POST['categorys'] as $v){
+                            $category_v = explode('_',$v);
+                            switch ($category_v[1]){
+                                case 'reading':
+                                    $reading_value = $category_v[0];
+                                    break;
+                                case 'memory':
+                                    $memory_value = $category_v[0];
+                                    break;
+                                case 'arithmetic':
+                                    $arithmetic_value = $category_v[0];
+                                    break;
+                            }
+                        }
+                    }
+                    //解除取消的类别下的学员
+                    $categoryArr = getCategory();
+//                $coach_id = $wpdb->get_var("SELECT coach_id FROM {$wpdb->prefix}coach_skill WHERE coach_id='{$coach_id}'");
+                    $newCategoryArr = array_reduce($categoryArr,function(&$newArray,$v){
+                        $newArray[$v['alis']] = $v;
+                        return $newArray;
+                    });
+                    foreach (['reading'=>$reading_value,'memory'=>$memory_value,'arithmetic'=>$arithmetic_value] AS $cateK => $cateV){
+                        if($cateV < 1){
+                            $bool = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}my_coach WHERE coach_id='{$coach_id}' AND category_id='{$newCategoryArr[$cateK]['ID']}' AND apply_status=2");
+                            if($bool){
+                                $cate_name = $cateK.'_value';
+                                $bool = $wpdb->update($wpdb->prefix.'my_coach',['apply_status'=>3],['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>2]);
+                                if(!$bool) {
+//                            $$cate_name = $newCategoryArr[$cateK]['ID'];
+                                    $err_msg .= '<br> 取消'.$newCategoryArr[$cateK]['post_title'].'教学资格失败!';
+                                }
+                            }
+                            //删除申请
+                            $wpdb->delete($wpdb->prefix.'my_coach',['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>1]);
+                        }
+                    }
+                    if($err_msg == ''){
+                        $coach_skill_bool = $wpdb->update($wpdb->prefix.'coach_skill',['read'=>$reading_value,'memory'=>$memory_value,'compute'=>$arithmetic_value],['coach_id'=>$coach_id]);
+                        if(!$coach_skill_bool) {
+                            $coach_skill_row = $wpdb->get_row("SELECT `read`,`memory`,`compute` FROM {$wpdb->prefix}coach_skill WHERE coach_id='{$coach_id}'");
+                            if($coach_skill_row->read != $reading_value || $coach_skill_row->memory != $memory_value || $coach_skill_row->compute != $arithmetic_value) $err_msg .= '更新教学类别失败!';
+                        }
                     }
                 }
-                $coach_skill_bool = $wpdb->update($wpdb->prefix.'coach_skill',['read'=>$reading_value,'memory'=>$memory_value,'compute'=>$arithmetic_value],['id'=>$id]);
 
-                //所属机构
-                $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
-//            leo_dump($zone_user_id);die;
-                //是否已有
-                $zone_id = $wpdb->get_var("SELECT zone_id FROM {$wpdb->prefix}zone_join_coach WHERE coach_id='{$coach_id}'");
-//                leo_dump($wpdb->last_query);die;
-                if($zone_id){
-                    $zone_bool = $wpdb->update("{$wpdb->prefix}zone_join_coach",['zone_id' => $zone_user_id],['coach_id' => $coach_id]);
-                }else{
-                    $zone_bool = $wpdb->insert("{$wpdb->prefix}zone_join_coach",['zone_id' => $zone_user_id,'coach_id' => $coach_id]);
-                }
-                if($zone_bool || $coach_skill_bool){
+
+
+                if($err_msg == ''){
                     $wpdb->query('COMMIT');
                     $suc_msg = '更新成功';
                 }else{
                     $wpdb->query('ROLLBACK');
-                    $err_msg = '更新失败';
+                    $err_msg .= '<br />更新失败';
                 }
             }
-
-
         }
 
         $sql = "SELECT b.user_mobile,b.ID AS user_id,a.read,a.memory,a.compute,zm.zone_name,zjc.zone_id
@@ -374,7 +402,7 @@ class Teacher
                     LEFT JOIN {$wpdb->prefix}coach_skill AS  a ON a.coach_id = b.ID 
                     LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id = a.coach_id 
                     LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zjc.zone_id = zm.user_id 
-                    WHERE a.id={$id}";
+                    WHERE a.coach_id={$coach_id}";
         $row = $wpdb->get_row($sql, ARRAY_A);
 //        leo_dump($row);die;
         if(!$row) exit('未找到用户数据!');
@@ -487,6 +515,14 @@ class Teacher
                                         <option value="<?=$row['zone_id']?>" selected="selected">
                                             <?=$row['zone_name']?>
                                         </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="zone_user_id">移动学员</label></th>
+                                <td>
+                                    <select class="js-data-select-ajax" name="new_coach_id" style="width: 50%" data-action="get_zone_coach" data-type="<?=$row['zone_id']?>">
+
                                     </select>
                                 </td>
                             </tr>
