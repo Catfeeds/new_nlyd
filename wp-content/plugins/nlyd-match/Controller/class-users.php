@@ -127,7 +127,11 @@ class Users {
                             $imgArr[$coik] = $coiv;
                         }
                     }
-                    update_user_meta($user_id,'user_ID_Card',$imgArr);
+                    $imgArr4 = [];
+                    foreach ($imgArr as $iav){
+                        $imgArr4[] = $iav;
+                    }
+                    update_user_meta($user_id,'user_ID_Card',$imgArr4);
                 }
                 foreach ($unsetImgArr as $uiav){
                     $filePa = explode('uploads',$uiav);
@@ -159,7 +163,11 @@ class Users {
                             $imgArr2[$coik] = $coiv;
                         }
                     }
-                    update_user_meta($user_id,'user_images_color',$imgArr2);
+                    $imgArr3 = [];
+                    foreach ($imgArr2 as $ia2v){
+                        $imgArr3[] = $ia2v;
+                    }
+                    update_user_meta($user_id,'user_images_color',$imgArr3);
                 }
                 foreach ($unsetImgArr as $uiav){
                     $filePa = explode('uploads',$uiav);

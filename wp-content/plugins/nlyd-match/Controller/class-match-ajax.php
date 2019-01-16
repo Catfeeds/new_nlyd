@@ -2328,6 +2328,18 @@ class Match_Ajax
             wp_send_json_success($rows);
         }
     }
+
+    /**
+     * 确认考级证书发放状态
+     */
+    public function gradingProveGrant(){
+        $id = $_POST['id'] ? intval($_POST['id']) : 0;
+        $id < 1 && wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        $bool = $wpdb->update($wpdb->prefix.'grading_logs', ['prove_grant_status' => 2, 'prove_grant_time' => get_time('mysql')], ['id' => $id]);
+        if($bool) wp_send_json_success(['info' => '操作成功!']);
+        else wp_send_json_error(['info' => '操作失败!']);
+    }
 }
 
 new Match_Ajax();
