@@ -53,6 +53,7 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" id="cost" value="<?=$const?>">
             <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('确认支付'.$const, 'nlyd-student')?></div></a>
         </div>           
     </div>
@@ -105,7 +106,7 @@ jQuery(function($) {
             form.verify($.validationLayui.allRules); 
             // 监听提交
             form.on('submit(pay-formbtn)', function(data){
-                var total=111;
+                var total=$('#cost').val();
                 var _post_data={
                     order_type:3,
                     match_id:$.Request('id'),
@@ -117,7 +118,7 @@ jQuery(function($) {
                 $.ajax({
                     data:_post_data,
                     success:function(res){
-                        // console.log(res)
+                        console.log(res)
                         if(res.success){
                             //不需要支付
                             if(res.data.is_pay == 0){
