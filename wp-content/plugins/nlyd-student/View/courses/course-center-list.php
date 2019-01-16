@@ -11,7 +11,7 @@
                     <a class="mui-pull-left nl-goback nl-goback static" href="<?=home_url('/courses/');?>">
                         <div><i class="iconfont">&#xe610;</i></div>
                     </a>
-                    <h1 class="mui-title"><div><?=__('脑博瑞国际脑力训练中心', 'nlyd-student')?></div></h1>
+                    <h1 class="mui-title"><div><?=__($zone_name.'国际脑力训练中心', 'nlyd-student')?></div></h1>
                 </header>  
                 <div class="layui-row nl-border nl-content course">
                     <div class="layui-tab layui-tab-brief" lay-filter="matchList">
@@ -22,7 +22,7 @@
                             <li lay-id="2">
                                 <?=__('课程进行中', 'nlyd-student')?>
                             </li>
-                            <li lay-id="3"><?=__('已结课', 'nlyd-student')?></li>
+                            <li lay-id="-3"><?=__('已结课', 'nlyd-student')?></li>
                             <div class="nl-transform" data-y="-5"><?=__('已结课', 'nlyd-student')?></div>
                         </ul>
                         <div class="layui-tab-content width-margin width-margin-pc">
@@ -220,7 +220,7 @@
                             </div>
                             <!-- 已结课 -->
                             <div class="layui-tab-item">
-                                <ul class="flow-default layui-row layui-col-space20" id="3" style="margin:0">
+                                <ul class="flow-default layui-row layui-col-space20" id="-3" style="margin:0">
                                     <li class="match_row">
                                         <div class="match_header bold c_black f_16 mt_10">高效记忆术·G预报班·成都郫县</div>
                                         <div class="match_body">
@@ -296,14 +296,15 @@ jQuery(function($) {
                         action:'get_zone_course',
                         page:match_page,
                         id:_id,
+                        course_type:id
                     }
-                    if(parseInt(id)==1){//报名
-                        postData['course_type']="1";
-                    }else if(parseInt(id)==2){//比赛
-                        postData['course_type']="2";
-                    }else{//往期
-                        postData['course_type']="-3";
-                    }
+                    // if(parseInt(id)==1){//报名
+                    //     postData['course_type']="1";
+                    // }else if(parseInt(id)==2){//比赛
+                    //     postData['course_type']="2";
+                    // }else{//往期
+                    //     postData['course_type']="-3";
+                    // }
                     var lis = [];
                     $.ajax({
                         data: postData,

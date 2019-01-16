@@ -3277,7 +3277,7 @@ class Organize{
                 $sql = "SELECT SQL_CALC_FOUND_ROWS zm.user_id AS coach_id,b.user_mobile FROM {$wpdb->prefix}zone_manager AS zm 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'
                 LEFT JOIN {$wpdb->prefix}users b ON zm.user_id = b.ID     
-                WHERE zm.zone_id='{$id}'
+                WHERE zm.zone_id='{$id}' AND {$user_id} > 0
                 LIMIT {$start},{$pageSize}";
                 break;
             case 2:
@@ -3285,7 +3285,7 @@ class Organize{
                     FROM {$wpdb->prefix}coach_skill a 
                     LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON a.coach_id = zjc.coach_id 
                     LEFT JOIN {$wpdb->prefix}users b ON a.coach_id = b.ID         
-                    WHERE a.coach_id > 0 AND b.ID !='' AND zjc.zone_id='{$user_id}'
+                    WHERE a.coach_id > 0 AND b.ID !='' AND zjc.zone_id='{$user_id}' AND {$user_id} > 0
                     LIMIT {$start},{$pageSize}";
                 break;
             case 3:
@@ -3293,7 +3293,7 @@ class Organize{
                 FROM {$wpdb->prefix}my_coach AS zm 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'
                 LEFT JOIN {$wpdb->prefix}users b ON zm.user_id = b.ID       
-                WHERE zm.coach_id IN({$coach_ids}) AND zm.apply_status=2
+                WHERE zm.coach_id IN({$coach_ids}) AND zm.apply_status=2 AND {$user_id} > 0
                 LIMIT {$start},{$pageSize}";
                 break;
         }
@@ -3363,7 +3363,8 @@ class Organize{
                    echo ' <th scope="col" id="image" class="manage-column column-image">教练照片</th>
                 <th scope="col" id="category" class="manage-column column-category">教学类别 </th>
                 <th scope="col" id="student_num" class="manage-column column-student_num">学员数量 </th>
-                <th scope="col" id="course_num" class="manage-column column-course_num">课程数量 </th>';
+                <th scope="col" id="course_num" class="manage-column column-course_num">课程数量 </th>
+                <th scope="col" id="options" class="manage-column column-options">操作 </th>';
                }elseif ($mtype === 1){
                    ?>
                    <th scope="col" id="remove_admin" class="manage-column column-remove_admin">删除</th>
@@ -3439,6 +3440,9 @@ class Organize{
                         <td class="course_num column-course_num" data-colname="课程数量">
                             <?=$courseNum > 0 ? $courseNum :0 ?>
                         </td>
+                        <td class="options column-options" data-colname="操作">
+                            <a href="<?=admin_url('admin.php?page=teacher-datum&id='.$row['coach_id'])?>" class="view_coach">查看</a>
+                        </td>
                         <?php
                     }elseif ($mtype === 1){
                         ?>
@@ -3470,7 +3474,8 @@ class Organize{
                     echo '      <th scope="col" class="manage-column column-image"> 教练照片</th>
                 <th scope="col" class="manage-column column-category">教学类别</th>
                 <th scope="col" class="manage-column column-student_num">学员数量 </th>
-                <th scope="col" class="manage-column column-course_num">课程数量 </th>';
+                <th scope="col" class="manage-column column-course_num">课程数量 </th>
+                <th scope="col" class="manage-column column-options">操作 </th>';
                 }elseif ($mtype === 1){
                     ?>
                     <th scope="col" class="manage-column column-remove_admin">删除</th>
