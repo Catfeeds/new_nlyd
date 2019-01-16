@@ -41,7 +41,7 @@
                             <!-- 已结课 -->
                             <div class="layui-tab-item">
                                 <ul class="flow-default layui-row layui-col-space20" id="-3" style="margin:0">
-                                    <li class="match_row">
+                                    <!-- <li class="match_row">
                                         <div class="match_header bold c_black f_16 mt_10">高效记忆术·G预报班·成都郫县</div>
                                         <div class="match_body">
                                             <div class="match_body_row">
@@ -90,7 +90,7 @@
                                                 <a href="<?=home_url('/courses/courseEnd');?>" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__('结课成绩', 'nlyd-student')?></span></a>
                                             </div>
                                         </div>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </div>
                         </div>
@@ -135,11 +135,13 @@ jQuery(function($) {
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var right='bg_gradient_blue',
-                                    rightText="<?=__('抢占名额', 'nlyd-student')?>";
+                                    rightText="<?=__('抢占名额', 'nlyd-student')?>",
+                                    courseUrl="courseSign";
 
                                     if(id=="-3"){
                                         right='bg_gradient_blue',
                                         rightText="<?=__('结课成绩', 'nlyd-student')?>";
+                                        courseUrl='courseEnd';
                                     }else{
                                         if (v.order_id) {//已报名
                                             right='bg_grey_blue';
@@ -172,7 +174,7 @@ jQuery(function($) {
                                                         +'<a href="'+window.home_url+'/courses/courseDetail/id/'+v.id+'" class="dis_table c_black"><span class="dis_cell"><?=__('查看详情', 'nlyd-student')?></span></a>'
                                                     +'</div>'
                                                     +'<div class="nl-match-button flex1">'
-                                                        +'<a href="'+window.home_url+'/courses/courseSign/id/'+v.id+'" class="dis_table c_white '+right+'"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>'
+                                                        +'<a href="'+window.home_url+'/courses/'+v.courseUrl+'/id/'+v.id+'" class="dis_table c_white '+right+'"><span class="dis_cell"><?=__('抢占名额', 'nlyd-student')?></span></a>'
                                                     +'</div>'
                                                 +'</div>'
                                             +'</li>'
@@ -186,30 +188,30 @@ jQuery(function($) {
                                     
                             }else{
                                 next(lis.join(''),false)
-                                // if(match_page==1){
-                                //     var text='';
-                                //     switch (id) {
-                                //         case '1':
-                                //             text='<?=__("该中心近期暂无可报名课程", "nlyd-student")?>'
-                                //             break;
-                                //         case '2':
-                                //             text='<?=__("该中心近期暂无进行中课程", "nlyd-student")?>'
-                                //             break;
-                                //         case '3':
-                                //             text='<?=__("该中心近期暂无已结课课程", "nlyd-student")?>'
-                                //             break;
-                                //         default:
-                                //             break;
-                                //     }
-                                //     var dom='<div class="no-info-page" style="top:50px">'
-                                //                 +'<div class="no-info-img">'
-                                //                     +'<img src="'+window.plugins_url+'/nlyd-student/Public/css/image//noInfo/noCourse1043@2x.png">'
-                                //                 +'</div>'
-                                //                 +'<p class="no-info-text">'+text+'</p>'
-                                //                 +'<a class="a-btn a-btn-table" href="'+window.home_url+'/courses/"><div><?=__("查看其它中心课程", "nlyd-student")?></div></a>'
-                                //             +'</div>'
-                                //     $('#'+id).empty().append(dom);
-                                // }
+                                if(match_page==1){
+                                    var text='';
+                                    switch (id) {
+                                        case '1':
+                                            text='<?=__("该中心近期暂无可报名课程", "nlyd-student")?>'
+                                            break;
+                                        case '2':
+                                            text='<?=__("该中心近期暂无进行中课程", "nlyd-student")?>'
+                                            break;
+                                        case '-3':
+                                            text='<?=__("该中心近期暂无已结课课程", "nlyd-student")?>'
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    var dom='<div class="no-info-page" style="top:50px">'
+                                                +'<div class="no-info-img">'
+                                                    +'<img src="'+window.plugins_url+'/nlyd-student/Public/css/image//noInfo/noCourse1043@2x.png">'
+                                                +'</div>'
+                                                +'<p class="no-info-text">'+text+'</p>'
+                                                +'<a class="a-btn a-btn-table" href="'+window.home_url+'/courses/"><div><?=__("查看其它中心课程", "nlyd-student")?></div></a>'
+                                            +'</div>'
+                                    $('#'+id).empty().append(dom);
+                                }
                             }
                             match_page++
                         },
