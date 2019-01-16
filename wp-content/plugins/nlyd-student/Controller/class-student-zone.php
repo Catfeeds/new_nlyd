@@ -1238,16 +1238,20 @@ class Student_Zone
         $row['user_head'] = get_user_meta($current_user->ID,'user_head')[0];
         $row['user_ID'] = get_user_meta($current_user->ID,'user_ID')[0];
         if(!empty($row['id'])){
-            //$city = !empty($row['zone_city']) ? '（'.$row['zone_city'].'）' : '';
+
             $city_arr = str2arr($row['zone_city'],'-');
             if(!empty($city_arr[2])){
-                $city = $city_arr[2];
+                $city = rtrim($city_arr[1],'市').rtrim($city_arr[2],'区');
             }elseif ($city_arr[1] != '市辖区'){
-                $city = $city_arr[1];
+                $city = rtrim($city_arr[1],'市');
             }else{
-                $city = $city_arr[0];
+                $city = rtrim($city_arr[0],'市');
             }
-            $row['zone_title'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'组委会';
+            if(!empty($row['zone_match_type_cn'])){
+                $row['zone_title'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'组委会';
+            }else{
+                $row['zone_title'] = $city.$row['zone_type_name'];
+            }
         }
         //获取负责人
         if(!empty($row['center_manager_id'])){
@@ -1266,6 +1270,7 @@ class Student_Zone
             }
             $row['referee_user_ID'] = $meta['user_ID'];
         }
+        //print_r($row);
 
         return $row;
     }

@@ -82,11 +82,11 @@ class Student_Account extends Student_Home
 
                         $city_arr = str2arr($value['zone_city'],'-');
                         if(!empty($city_arr[2])){
-                            $city = $city_arr[2];
+                            $city = rtrim($city_arr[1],'市').rtrim($city_arr[2],'区');
                         }elseif ($city_arr[1] != '市辖区'){
-                            $city = $city_arr[1];
+                            $city = rtrim($city_arr[1],'市');
                         }else{
-                            $city = $city_arr[0];
+                            $city = rtrim($city_arr[0],'市');
                         }
                     }
                     //print_r($city);

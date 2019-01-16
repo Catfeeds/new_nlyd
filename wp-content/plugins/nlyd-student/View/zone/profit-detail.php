@@ -53,7 +53,7 @@ jQuery(function($) {
                                         default:
                                             break;
                                     }
-                                    var profit_channel = v.profit_channel ? v.profit_channel : '';
+
                                     var match_detail=v.post_title ? '<div class="profit_detail_row">'+
                                         '<div class="profit_detail_label">'+income_type+'：</div>'+
                                         '<div class="profit_detail_info c_black">'+v.post_title+'</div>'+
@@ -66,13 +66,13 @@ jQuery(function($) {
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益来源", "nlyd-student")?>：</div>'+
                                                     '<div class="profit_detail_info c_black">'+
-                                                        v.income_type_cn+
+                                                        v.revenue_source+
                                                     '</div>'+
                                                 '</div>'+
                                                     match_detail+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益途径", "nlyd-student")?>：</div>'+
-                                                    '<div class="profit_detail_info c_black">'+profit_channel+' '+v.profit_lv+' '+v.channel_ID+'</div>'+
+                                                    '<div class="profit_detail_info c_black">'+v.channel_ID+'</div>'+
                                                 '</div>'+
                                                 '<div class="profit_detail_row">'+
                                                     '<div class="profit_detail_label"><?=__("收益状态", "nlyd-student")?>：</div>'+
