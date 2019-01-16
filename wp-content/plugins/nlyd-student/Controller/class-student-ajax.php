@@ -4747,7 +4747,7 @@ class Student_Ajax
         }
 
         //获取收益列表
-        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,user_income,
+        $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,user_income,match_id,
                   if(income_status <> 2 ,'待到账' ,'已到账') income_status,
                   case income_type
                     when 'undertake' then '承办赛事'
@@ -4804,6 +4804,14 @@ class Student_Ajax
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
+        foreach ($rows as $k =>$v){
+            if($v['income_type'] == 'undertake'){
+                $type = $wpdb->get_var("select case order_type when 1 then '开设比赛' when 2 then '开设考级' end order_type from {$wpdb->prefix}order order_type where match_id = {$v['match_id']}");
+                if(!empty($type)){
+                    $rows[$k]['income_type_title'] = $type;
+                }
+            }
+        }
 
         wp_send_json_success(array('info'=>$rows));
     }
@@ -4988,8 +4996,8 @@ class Student_Ajax
                 where a.user_mobile = '{$_POST['person_liable']}'
                 ";
         $person_liable = $wpdb->get_row($sql,ARRAY_A);
-        if(empty($person_liable)) wp_send_json_error(array('info'=>__('该教练未注册')));
-        if(empty($person_liable['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证')));
+        if(empty($person_liable)) wp_send_json_error(array('info'=>__('该责任人未注册')));
+        if(empty($person_liable['meta_value'])) wp_send_json_error(array('info'=>__('该责任人未实名认证')));
 
         /***********************准备数据**********************************/
         $arr = array(
@@ -5459,13 +5467,7 @@ class Student_Ajax
         global $wpdb,$current_user;
         //$_POST['id'] = 148;
         //获取当前收益内容
-        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income,
-                                       case income_type
-                                        when 'match' then '比赛收益'
-                                        when 'grading' then '考级收益'
-                                        when 'subject' then '推荐奖励'
-                                        when 'extract' then '提现'
-                                        end income_type_title 
+        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income
                                       from {$wpdb->prefix}user_stream_logs 
                                       where id = {$_POST['id']} and user_id = {$current_user->ID} ",ARRAY_A);
         if(empty($row)){
@@ -5482,12 +5484,12 @@ class Student_Ajax
         //获取对应数据列表
         $sql = "select SQL_CALC_FOUND_ROWS a.*, b.post_title,
                       case a.income_type 
-                      when 'match' then '比赛收益'
-                      when 'grading' then '考级收益'
-                      when 'subject' then '推荐收益'
+                      when 'match' then '比赛'
+                      when 'grading' then '考级'
+                      when 'subject' then '推荐'
                       else '----'
                       end income_type_cn,
-                      if(a.income_status=2,'已到账','已发放') income_status_cn
+                      if(a.income_status=2,'已到账','待到账') income_status_cn
                       from {$wpdb->prefix}user_income_logs a 
                       left join {$wpdb->prefix}posts b on a.match_id = b.ID where ";
         if(empty($zone_id)){    //
@@ -5499,7 +5501,7 @@ class Student_Ajax
             $where = "{$x} and 
                       (
                         a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID} 
-                        or a.indirect_referee_id = {$current_user->ID} or a.manager_id = {$current_user->ID}
+                        or a.person_liable_id = {$current_user->ID} or a.manager_id = {$current_user->ID}
                         ) 
                        ";
 
@@ -5519,28 +5521,43 @@ class Student_Ajax
         if(!empty($rows)){
             $list = array();
             foreach ($rows as $k => $v){
-                if($v['income_type'] == 'subject'){  //裂变收益
-                    //获取裂变机构类型
-                    $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
-                    $list['profit_channel'] = '推荐'.$zone_type_name;
-                }
+                $list['user_id'] = $v['user_id'];
+
                 if($v['referee_id'] == $current_user->ID){
-                    $list['profit_lv'] = '直接';
                     $list['profit_income'] = $v['referee_income'];
+                    $revenue_source[] = '推荐'.$v['income_type_cn'];
                 }
                 elseif ($v['indirect_referee_id'] == $current_user->ID){
-                    $list['profit_lv'] = '间接';
                     $list['profit_income'] = $v['indirect_referee_income'];
+                    $revenue_source[] = '推荐'.$v['income_type_cn'];
                 }
-                elseif ($v['person_liable_id'] == $current_user->ID){
-                    $list['profit_lv'] = $v['income_type'] == 'match' ? '责任教练' : '参赛机构';
-                    $list['profit_income'] = $v['person_liable_income'];
+                if ($v['person_liable_id'] == $current_user->ID){
+
+                    if($v['income_type'] == 'match'){
+                        $revenue_source[] = '参赛机构';
+                    }elseif ($v['income_type'] == 'grading'){
+                        $revenue_source[] = '考级负责人';
+                    }
+
+                    if($v['person_liable_id'] == $v['referee_id'] || $v['person_liable_id'] == $v['referee_id']){
+                        $list['profit_income'] += $v['person_liable_income'];
+                    }else{
+                        $list['profit_income'] = $v['person_liable_income'];
+                    }
                 }
-                elseif ($v['sponsor_id'] == $current_user->ID){
-                    $list['profit_lv'] = '办赛机构';
+                if ($v['sponsor_id'] == $current_user->ID){
+                    $type = $wpdb->get_var("select case order_type when 1 then '开设比赛' when 2 then '开设考级' end order_type from {$wpdb->prefix}order order_type where match_id = {$v['match_id']}");
+                    $revenue_source[] = $type;
                     $list['profit_income'] = $v['sponsor_income'];
                 }
 
+                if($v['income_type'] == 'subject'){  //裂变收益
+                    //获取裂变机构类型
+                    $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
+                    $revenue_source[] = '推荐'.$zone_type_name;
+                }
+
+                $list['revenue_source'] = arr2str($revenue_source,'/');
                 $referee_name = get_user_meta($v['user_id'],'user_real_name')[0];
                 //var_dump($referee_name);
                 $list['channel'] = $referee_name['real_name'];

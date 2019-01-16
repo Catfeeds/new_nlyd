@@ -82,14 +82,15 @@ class Student_Account extends Student_Home
 
                         $city_arr = str2arr($value['zone_city'],'-');
                         if(!empty($city_arr[2])){
-                            $city = $city_arr[2];
+                            $city = rtrim($city_arr[1],'市').rtrim($city_arr[2],'区');
                         }elseif ($city_arr[1] != '市辖区'){
-                            $city = $city_arr[1];
+                            $city = rtrim($city_arr[1],'市');
                         }else{
-                            $city = $city_arr[0];
+                            $city = rtrim($city_arr[0],'市');
                         }
                     }
                     //print_r($city);
+
                     //$city = !empty($city) ? '（'.$city.'）' : '';
                     $city = !empty($city) ? $city : '';
                     if($value['zone_type_alias'] == 'match'){
@@ -100,8 +101,14 @@ class Student_Account extends Student_Home
                         }
                         $arr[$key]['value'] = $value['zone_name'].$city.$match_type.'组委会';*/
                         $arr[$key]['value'] = $value['zone_name'].$city.$value['match_type'].'组委会';
-                    }else{
-                        $arr[$key]['value'] = $value['zone_name'].$city.$value['zone_type_name'];
+                    }
+                    else{
+                        $title = 'IISC国际脑力';
+                        if($value['zone_type_alias'] == 'test'){
+                            $title .= '水平';
+                        }
+
+                        $arr[$key]['value'] = $title.$value['zone_type_name'].' • '.$city;
                     }
                     $arr[$key]['id'] = $value['id'];
                 }
