@@ -139,7 +139,7 @@ jQuery(function($) {
 
                                     if(id=="-3"){
                                         right='bg_gradient_blue',
-                                        rightText="<?=__('抢占名额', 'nlyd-student')?>";
+                                        rightText="<?=__('结课成绩', 'nlyd-student')?>";
                                     }else{
                                         if (v.order_id) {//已报名
                                             right='bg_grey_blue';
