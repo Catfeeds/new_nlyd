@@ -533,7 +533,8 @@ class Student_Ajax
                 }
             }
 
-        }elseif($_POST['order_type'] == 3){   //课程
+        }
+        elseif($_POST['order_type'] == 3){   //课程
 
             $title = '课程';
             $info_url = home_url('courses/courseDetail/id/'.$_POST['match_id']);
