@@ -41,8 +41,15 @@ class Student_Courses
      * 训练中心课程展示
      */
      public function cenerCourse(){
+        global $wpdb;
+         //获取机构名字
+         if(isset($_GET['id'])){
+             $zone_nem = $wpdb->get_var("select zone_name from {$wpdb->prefix}zone_meta where user_id = {$_GET['id']} ");
+            $data['zone_name'] = $zone_nem;
+         }
+
         $view = student_view_path.CONTROLLER.'/course-center-list.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     /**
      * 课程详情

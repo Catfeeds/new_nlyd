@@ -6427,9 +6427,25 @@ class Student_Ajax
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无课程', 'nlyd-student')));
         foreach ($rows as $k => $val){
-            $user_real_name = get_user_meta($val['coach_id'],'user_real_name')[0];
 
+            $user_real_name = get_user_meta($val['coach_id'],'user_real_name')[0];
             $rows[$k]['real_name'] = !empty($user_real_name) ? $user_real_name['real_name'] : '-';
+            if(isset($_POST['id'])){
+                //获取城市
+                $zone_city = $wpdb->get_var("select zone_city from {$wpdb->prefix}zone_meta where user_id = {$zone_user_id} ");
+                $city_arr = str2arr($zone_city,'-');
+                if(!empty($city_arr[2])){
+                    $city = rtrim($city_arr[1],'市').rtrim($city_arr[2],'区');
+                }elseif ($city_arr[1] != '市辖区'){
+                    $city = rtrim($city_arr[1],'市');
+                }else{
+                    $city = rtrim($city_arr[0],'市');
+                }
+                $rows[$k]['zone_city'] = $city;
+                //判断是否购课
+                $order_id = $wpdb->get_var("select order_id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$val['id']} and order_type = 3 and pay_status in (2,3,4)");
+                $rows[$k]['order_id'] = $order_id;
+            }
         }
         wp_send_json_success(array('info'=>$rows));
     }
