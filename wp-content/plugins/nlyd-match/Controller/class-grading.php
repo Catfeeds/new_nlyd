@@ -1435,7 +1435,7 @@ class Grading
                 ?>
             </ul>
                <br class="clear">
-            <button class="button-primary">导出</button>
+            <button class="button-primary" type="button">导出</button>
                 <div class="tablenav top">
                     <div class="tablenav-pages">
                         <span class="displaying-num"><?=$count['count']?>个项目</span>
