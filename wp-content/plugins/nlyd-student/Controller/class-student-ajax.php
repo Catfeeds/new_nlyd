@@ -5523,12 +5523,6 @@ class Student_Ajax
             foreach ($rows as $k => $v){
                 $list['user_id'] = $v['user_id'];
 
-                /*if($v['income_type'] == 'subject'){  //裂变收益
-                    //获取裂变机构类型
-                    $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
-                    $list['profit_channel'] = '推荐'.$zone_type_name;
-                }*/
-
                 if($v['referee_id'] == $current_user->ID){
                     $list['profit_income'] = $v['referee_income'];
                     $revenue_source[] = '推荐'.$v['income_type_cn'];
@@ -5541,7 +5535,7 @@ class Student_Ajax
 
                     if($v['income_type'] == 'match'){
                         $revenue_source[] = '参赛机构';
-                    }elseif ($v['income_type'] == 'match'){
+                    }elseif ($v['income_type'] == 'grading'){
                         $revenue_source[] = '考级负责人';
                     }
 
@@ -5555,6 +5549,12 @@ class Student_Ajax
                     $type = $wpdb->get_var("select case order_type when 1 then '开设比赛' when 2 then '开设考级' end order_type from {$wpdb->prefix}order order_type where match_id = {$v['match_id']}");
                     $revenue_source[] = $type;
                     $list['profit_income'] = $v['sponsor_income'];
+                }
+
+                if($v['income_type'] == 'subject'){  //裂变收益
+                    //获取裂变机构类型
+                    $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
+                    $revenue_source[] = '推荐'.$zone_type_name;
                 }
 
                 $list['revenue_source'] = arr2str($revenue_source,'/');
