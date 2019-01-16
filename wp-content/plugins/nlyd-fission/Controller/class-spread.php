@@ -1629,6 +1629,32 @@ class Spread{
     }
 
     /**
+     * 获取收益类型
+     */
+    public function getIncomeTypeName($income_type){
+        switch ($income_type){
+            case 'open_match':
+                $name = '开设比赛';
+                break;
+            case 'open_grading':
+                $name = '开设考级';
+                break;
+            case 'open_course':
+                $name = '课程渠道';
+                break;
+            case 'recommend_match':
+                $name = '推荐比赛';
+                break;
+            case 'recommend_grading':
+                $name = '推荐考级';
+                break;
+            case 'recommend_grading':
+                $name = '推荐考级';
+                break;
+        }
+    }
+
+    /**
      * 引入当前页面css/js
      */
     public function register_scripts(){
