@@ -298,11 +298,11 @@ jQuery(function($) {
                         id:_id,
                     }
                     if(parseInt(id)==1){//报名
-                        postData['course_type']="signUp";
+                        postData['course_type']="1";
                     }else if(parseInt(id)==2){//比赛
-                        postData['course_type']="matching";
+                        postData['course_type']="2";
                     }else{//往期
-                        postData['course_type']="history";
+                        postData['course_type']="-3";
                     }
                     var lis = [];
                     $.ajax({
