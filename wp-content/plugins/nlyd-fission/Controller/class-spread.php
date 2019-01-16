@@ -495,6 +495,7 @@ class Spread{
                 LEFT JOIN `{$wpdb->prefix}zone_meta` AS zm ON zm.user_id=il.sponsor_id  
                 LEFT JOIN `{$wpdb->usermeta}` AS um6 ON um6.user_id=il.manager_id AND um6.meta_key='user_real_name' 
                 {$where} AND il.income_type NOT IN('match','grading')
+                ORDER BY il.created_time DESC
                 LIMIT {$start},{$pageSize}",ARRAY_A);
 //        leo_dump($rows);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -744,7 +745,7 @@ class Spread{
                 LEFT JOIN `{$wpdb->prefix}match_meta_new` AS mmn ON il.match_id=mmn.match_id 
                 LEFT JOIN `{$wpdb->prefix}grading_meta` AS gm ON il.match_id=gm.grading_id 
                 {$where} AND il.income_type IN('match','grading') AND (mmn.id!='' OR gm.id!='')
-                GROUP BY p.ID
+                GROUP BY p.ID DESC
                 LIMIT {$start},{$pageSize}",ARRAY_A);
 //        leo_dump($rows);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
