@@ -25,34 +25,35 @@
                     <div class="detail_table_row"><span class="c_blue bold fs_16">课程信息</span></div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('课程名称：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14">高效记忆术·G预报班·成都郫县</div>
+                        <div class="detail_detail c_black fs_14"><?=$course_title?>·<?=$city?></div>
                     </div>
                     <div class="detail_table_row">
-                        <div class="detail_label c_black6 fs_14"><?=__('训练地点：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14">四川成都武侯区丰德万瑞中心A座25楼</div>
+                        <div class="detail_label c_black6 fs_14"><?=__('上课地点：', 'nlyd-student')?></div>
+                        <div class="detail_detail c_black fs_14"><?=!empty($address) ? $address : '-';?></div>
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('课程费用：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_blue fs_14">￥ 3000.00</div>
+                        <div class="detail_detail c_blue fs_14">￥ <?=$const?></div>
                     </div>
                 </div>
-
                 <div class="course_detail_row width-padding width-padding-pc">
                     <div class="detail_table_row"><span class="c_blue bold fs_16">学员信息</span></div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('姓名：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14">大大宝</div>
+                        <div class="detail_detail c_black fs_14"><?=!empty($user_name) ? $user_name : $user_mobile?></div>
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('ID：', 'nlyd-student')?></div>
                         <div class="detail_detail c_black fs_14">
-                            19875
+                            <?=$user_ID?>
+                            <?php if(!empty($user_name)):?>
                             <div class="nl-match-rz img-box"><img src="<?=student_css_url.'image/confirm/rz.png'?>"></div>
+                            <?php endif;?>
                         </div>
                     </div>
                 </div>
             </div>
-            <a href="<?=home_url('/courses/courseSignSuccess');?>" class="a-btn a-btn-table"><div><?=__('确认支付3000.00', 'nlyd-student')?></div></a>
+            <a href="<?=home_url('/courses/courseSignSuccess');?>" class="a-btn a-btn-table"><div><?=__('确认支付'.$const, 'nlyd-student')?></div></a>
         </div>           
     </div>
 </div>
