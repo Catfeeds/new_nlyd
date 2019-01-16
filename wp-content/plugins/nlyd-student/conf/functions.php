@@ -30,3 +30,24 @@ if(!function_exists('getAgeGroupNameByAge')) {
         return $group;
     }
 }
+
+/**
+ * 收入来源默认数组
+ */
+function income_stream_array(){
+    $default = array(
+        'open_match'=>array('title'=>'开设比赛'),
+        'open_grading'=>array('title'=>'开设考级'),
+        'open_course'=>array('title'=>'课程渠道'),
+        'recommend_match'=>array('title'=>'推荐比赛'),
+        'recommend_grading'=>array('title'=>'推荐考级'),
+        'director_match'=>array('title'=>'参赛机构'),
+        'director_grading'=>array('title'=>'考级负责人'),
+        'recommend_match_zone'=>array('title'=>'推荐赛区'),
+        'recommend_trains_zone'=>array('title'=>'推荐训练中心'),
+        'recommend_test_zone'=>array('title'=>'推荐测评中心'),
+        'recommend_course'=>array('title'=>'推荐购课'),
+        'recommend_qualified'=>array('title'=>'推荐达标'),
+        'grading_qualified'=>array('title'=>'考级达标'),
+    );
+}

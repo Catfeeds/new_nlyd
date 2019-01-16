@@ -307,43 +307,67 @@ class Student_Payment {
                 /*****************收益分配start*******************/
                 $order = $wpdb->get_row('SELECT match_id,user_id,sub_centres_id,order_type FROM '.$wpdb->prefix.'order WHERE serialnumber='.$serialnumber, ARRAY_A);
                 //获取当前比赛场景
-                if($order['order_type'] == 1){
-                    $income_type = 'match_id';
-                    $table = $wpdb->prefix.'match_meta_new';
-                    $join = "match_scene";
-                    $field = 'a.match_id,a.match_scene,a.created_id,';
+                if($order['order_type'] == 3){  //课程
+                    $sql = "select  a.zone_id,a.course_category_id,b.type_alias from {$wpdb->prefix}course a
+                    left join {$wpdb->prefix}course_type b on a.course_type = b.id 
+                    where a.id = {$order['match_id']} ";
+                    //print_r($sql);
                 }
-                elseif ($order['order_type'] == 2){
-                    $income_type = 'grading_id';
-                    $table = $wpdb->prefix.'grading_meta';
-                    $join = "scene";
-                    $field = 'a.grading_id,a.scene,a.created_person,';
-                }
-                $sql = "select {$field} b.role_name,
+                else{
+
+                    //获取当前比赛场景
+                    if($order['order_type'] == 1){  //比赛
+                        $income_type = 'match_id';
+                        $table = $wpdb->prefix.'match_meta_new';
+                        $join = "match_scene";
+                        $field = 'a.match_id,a.match_scene,a.created_id,';
+                    }
+                    elseif ($order['order_type'] == 2){ //考级
+                        $income_type = 'grading_id';
+                        $table = $wpdb->prefix.'grading_meta';
+                        $join = "scene";
+                        $field = 'a.grading_id,a.scene,a.created_person,';
+                    }
+                    $sql = "select {$field} b.role_name,
                             b.role_type,b.role_alias,b.is_profit,b.status
                             from {$table} a 
                             left join {$wpdb->prefix}zone_match_role b on a.{$join} = b.id
                             where a.{$income_type} = {$order['match_id']} and b.is_profit = 1 and b.status = 1";
+                }
                 $row = $wpdb->get_row($sql,ARRAY_A);
+                //print_r($row);die;
                 if(!empty($row)){
-                    $zone_user_id = $row['created_id'] ? $row['created_id'] : $row['created_person'];
-                    //print_r($row);die;
-                    $zone_meta = $wpdb->get_row("select b.zone_type_alias,a.zone_match_type,a.is_double from {$wpdb->prefix}zone_meta a 
-                                                left join {$wpdb->prefix}zone_type b on a.type_id = b.id
-                                                where user_id = {$zone_user_id}",ARRAY_A);
-                    if($zone_meta['zone_match_type'] == 1){ //战队赛
-                        $match_type = 1;
+                    switch ($order['order_type']){
+                        case 1:
+                        case 2:
+                            $zone_user_id = $row['created_id'] ? $row['created_id'] : $row['created_person'];
+                            //print_r($row);die;
+                            //获取机构赛区类型
+                            $zone_meta = $wpdb->get_row("select b.zone_type_alias,a.zone_match_type,a.is_double from {$wpdb->prefix}zone_meta a 
+                                                    left join {$wpdb->prefix}zone_type b on a.type_id = b.id
+                                                    where user_id = {$zone_user_id}",ARRAY_A);
+                            if($zone_meta['zone_match_type'] == 1){ //战队赛
+                                $match_type = 1;
+                            }
+                            elseif ($zone_meta['is_double'] == 1){  //多区县
+                                $match_type = 2;
+                            }
+                            elseif ($zone_meta['is_double'] == 2){  //单区县
+                                $match_type = 3;
+                            }
+                            else{
+                                $match_type = 4;
+                            }
+                            $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$order['order_type']} and match_type = {$match_type}";
+                            break;
+                        case 3:
+                            $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$row['type_alias']}' ";
+                            break;
+                        default:
+
+                            break;
                     }
-                    elseif ($zone_meta['is_double'] == 1){  //多区县
-                        $match_type = 2;
-                    }
-                    elseif ($zone_meta['is_double'] == 2){  //单区县
-                        $match_type = 3;
-                    }
-                    else{
-                        $match_type = 4;
-                    }
-                    $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$order['order_type']} and match_type = {$match_type}";
+                    //print_r($set_sql);die;
                     $setting = $wpdb->get_row($set_sql,ARRAY_A);
                     //print_r($setting);die;
                     if(!empty($setting)){
@@ -403,56 +427,111 @@ class Student_Payment {
                                 'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
                             );
                         }
+                        elseif ($order['order_type'] == 3){
+                            $income_type = 'course';
+                            //准备对应的数据
+                            $money1 = $setting['direct_superior'];     //比赛直接推广人
+                            $money2 = $setting['indirect_superior'];    //比赛间接推广人
+                            $money3 = $setting['coach'];        //责任教练
+                            $money4 = $setting['sub_center'];   //发布机构
+
+                            $insert = array(
+                                'income_type'=>$income_type,
+                                'match_id'=>$order['match_id'],
+                                'user_id'=>$order['user_id'],
+                                'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                                'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                                'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                                'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                                'sponsor_id'=>empty($user['referee_id']) ? $row['zone_id'] : '',  //办赛机构
+                                'sponsor_income'=>empty($user['referee_id']) ? $money4 : '',  //办赛机构收益
+                            );
+                        }
+                        //print_r($insert);die;
                         $insert['created_time'] = get_time('mysql');
 
                         $wpdb->query('START TRANSACTION');
                         $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
-                        if(!empty($insert['sponsor_id'])){
-                            $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='undertake' and match_id = {$order['match_id']}",ARRAY_A);
+                        if(!empty($insert['sponsor_id']) && $money4 > 0){
+                            $sponsor_type = 'open_'.$income_type;
+                            $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='{$sponsor_type}' and match_id = {$order['match_id']}",ARRAY_A);
                             //var_dump($stream_id);
                             if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == -1){
                                 $b = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$sponsor_income['user_income']+$money4),array('id'=>$sponsor_income['id']));
                             }
                             else{
-                                $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>'undertake','match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>$sponsor_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                             }
+                        }else{
+                            $b = true;
                         }
-                        if(!empty($user['referee_id'])){
-                            $referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                        if(!empty($user['referee_id']) && $money1 > 0){
+                            $referee_type = 'recommend_'.$income_type;
+                            $referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$referee_type}' ",ARRAY_A);
                             //print_r($referee_income);
                             if($referee_income['id'] > 0 && $referee_income['income_status'] == -1){
                                 //print_r($referee_income['user_income']+$money1);die;
                                 $c = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$referee_income['user_income']+$money1),array('id'=>$referee_income['id']));
                             }else{
-                                $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                             }
                         }else{
                             $c = true;
                         }
-                        if(!empty($user['indirect_referee_id'])){
-                            $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                        if(!empty($user['indirect_referee_id']) && $money2 > 0){
+                            $indirect_referee_type = 'recommend_'.$income_type;
+                            $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$indirect_referee_type}' ",ARRAY_A);
                             if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == -1){
                                 $d = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$indirect_referee_income['user_income']+$money2),array('id'=>$indirect_referee_income['id']));
                             }else{
-                                $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                             }
                         }else{
                             $d = true;
                         }
-                        if(!empty($insert['person_liable_id'])){
-                            $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                        //print_r($insert['person_liable_id']);die;
+                        if(!empty($insert['person_liable_id']) && $money3 > 0){
+                            $person_liable_type = 'director_'.$income_type;
+                            $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$person_liable_type}' ",ARRAY_A);
                             if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == -1){
                                 $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
                             }else{
-                                $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                             }
                         }else{
                             $e = true;
                         }
 
-                        //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e);die;
-                        if($a && $b && $c && $d && $e){
+                        if($order['order_type'] == 3 && !empty($user['referee_id'])){
+                            //判断直接推荐次数
+                            $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['id']}'");
+                            //获取推荐人教练
+                            $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
+                            if($total < 3 && $coach_id > 0){
+
+                                $insert1 = array(
+                                    'income_type'=>$income_type,
+                                    'match_id'=>$order['match_id'],
+                                    'user_id'=>$order['user_id'],
+                                    'person_liable_id'=>$coach_id,   //责任教练
+                                    'person_liable_income'=>$money3,  //参赛机构收益
+                                    'created_time'=>get_time('mysql')
+                                );
+                                $x = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert1);
+                                $id = $wpdb->insert_id;
+                                $y = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$order['user_id'],'user_income'=>$money3,'income_type'=>'recommend_qualified','match_id'=>$id,'created_time'=>get_time('mysql')));
+
+                            }
+
+                            //print_r($coach_id);die;
+                        }else{
+                            $x = true;
+                            $y = true;
+                        }
+
+                        //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e.'&&'. $x.'&&'. $y);die;
+                        if($a && $b && $c && $d && $e && $x && $y){
                             $wpdb->query('COMMIT');
                         }else{
                             $wpdb->query('ROLLBACK');
@@ -620,47 +699,67 @@ class Student_Payment {
         ];
 
         /*****************收益分配start*******************/
-        /*
-        //获取当前比赛场景
-        if($order['order_type'] == 1){
-            $income_type = 'match_id';
-            $table = $wpdb->prefix.'match_meta_new';
-            $join = "match_scene";
-            $field = 'a.match_id,a.match_scene,a.created_id,';
+
+        /*if($order['order_type'] == 3){  //课程
+            $sql = "select  a.zone_id,a.course_category_id,b.type_alias from {$wpdb->prefix}course a
+                    left join {$wpdb->prefix}course_type b on a.course_type = b.id 
+                    where a.id = {$order['match_id']} ";
+            //print_r($sql);
         }
-        elseif ($order['order_type'] == 2){
-            $income_type = 'grading_id';
-            $table = $wpdb->prefix.'grading_meta';
-            $join = "scene";
-            $field = 'a.grading_id,a.scene,a.created_person,';
-        }
-        $sql = "select {$field} b.role_name,
+        else{
+
+            //获取当前比赛场景
+            if($order['order_type'] == 1){  //比赛
+                $income_type = 'match_id';
+                $table = $wpdb->prefix.'match_meta_new';
+                $join = "match_scene";
+                $field = 'a.match_id,a.match_scene,a.created_id,';
+            }
+            elseif ($order['order_type'] == 2){ //考级
+                $income_type = 'grading_id';
+                $table = $wpdb->prefix.'grading_meta';
+                $join = "scene";
+                $field = 'a.grading_id,a.scene,a.created_person,';
+            }
+            $sql = "select {$field} b.role_name,
                             b.role_type,b.role_alias,b.is_profit,b.status
                             from {$table} a 
                             left join {$wpdb->prefix}zone_match_role b on a.{$join} = b.id
                             where a.{$income_type} = {$order['match_id']} and b.is_profit = 1 and b.status = 1";
+        }
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($row);die;
         if(!empty($row)){
-            $zone_user_id = $row['created_id'] ? $row['created_id'] : $row['created_person'];
-            //print_r($row);die;
-            //获取机构赛区类型
-            $zone_meta = $wpdb->get_row("select b.zone_type_alias,a.zone_match_type,a.is_double from {$wpdb->prefix}zone_meta a 
-                                                left join {$wpdb->prefix}zone_type b on a.type_id = b.id
-                                                where user_id = {$zone_user_id}",ARRAY_A);
-            if($zone_meta['zone_match_type'] == 1){ //战队赛
-                $match_type = 1;
+            switch ($order['order_type']){
+                case 1:
+                case 2:
+                    $zone_user_id = $row['created_id'] ? $row['created_id'] : $row['created_person'];
+                    //print_r($row);die;
+                    //获取机构赛区类型
+                    $zone_meta = $wpdb->get_row("select b.zone_type_alias,a.zone_match_type,a.is_double from {$wpdb->prefix}zone_meta a 
+                                                    left join {$wpdb->prefix}zone_type b on a.type_id = b.id
+                                                    where user_id = {$zone_user_id}",ARRAY_A);
+                    if($zone_meta['zone_match_type'] == 1){ //战队赛
+                        $match_type = 1;
+                    }
+                    elseif ($zone_meta['is_double'] == 1){  //多区县
+                        $match_type = 2;
+                    }
+                    elseif ($zone_meta['is_double'] == 2){  //单区县
+                        $match_type = 3;
+                    }
+                    else{
+                        $match_type = 4;
+                    }
+                    $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$order['order_type']} and match_type = {$match_type}";
+                    break;
+                case 3:
+                    $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$row['type_alias']}' ";
+                    break;
+                default:
+
+                    break;
             }
-            elseif ($zone_meta['is_double'] == 1){  //多区县
-                $match_type = 2;
-            }
-            elseif ($zone_meta['is_double'] == 2){  //单区县
-                $match_type = 3;
-            }
-            else{
-                $match_type = 4;
-            }
-            $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$order['order_type']} and match_type = {$match_type}";
             //print_r($set_sql);die;
             $setting = $wpdb->get_row($set_sql,ARRAY_A);
             //print_r($setting);die;
@@ -721,58 +820,111 @@ class Student_Payment {
                         'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
                     );
                 }
+                elseif ($order['order_type'] == 3){
+                    $income_type = 'course';
+                    //准备对应的数据
+                    $money1 = $setting['direct_superior'];     //比赛直接推广人
+                    $money2 = $setting['indirect_superior'];    //比赛间接推广人
+                    $money3 = $setting['coach'];        //责任教练
+                    $money4 = $setting['sub_center'];   //发布机构
+
+                    $insert = array(
+                        'income_type'=>$income_type,
+                        'match_id'=>$order['match_id'],
+                        'user_id'=>$order['user_id'],
+                        'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                        'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                        'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                        'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                        'sponsor_id'=>empty($user['referee_id']) ? $row['zone_id'] : '',  //办赛机构
+                        'sponsor_income'=>empty($user['referee_id']) ? $money4 : '',  //办赛机构收益
+                    );
+                }
                 //print_r($insert);die;
                 $insert['created_time'] = get_time('mysql');
 
                 $wpdb->query('START TRANSACTION');
                 $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
-                if(!empty($insert['sponsor_id'])){
-                    $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='undertake' and match_id = {$order['match_id']}",ARRAY_A);
+                if(!empty($insert['sponsor_id']) && $money4 > 0){
+                    $sponsor_type = 'open_'.$income_type;
+                    $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='{$sponsor_type}' and match_id = {$order['match_id']}",ARRAY_A);
                     //var_dump($stream_id);
                     if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == -1){
                         $b = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$sponsor_income['user_income']+$money4),array('id'=>$sponsor_income['id']));
                     }
                     else{
-                        $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>'undertake','match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                        $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>$sponsor_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
+                }else{
+                    $b = true;
                 }
-                if(!empty($user['referee_id'])){
-                    $referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                if(!empty($user['referee_id']) && $money1 > 0){
+                    $referee_type = 'recommend_'.$income_type;
+                    $referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$referee_type}' ",ARRAY_A);
                     //print_r($referee_income);
                     if($referee_income['id'] > 0 && $referee_income['income_status'] == -1){
                         //print_r($referee_income['user_income']+$money1);die;
                         $c = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$referee_income['user_income']+$money1),array('id'=>$referee_income['id']));
                     }else{
-                        $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                        $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
                 }else{
                     $c = true;
                 }
-                if(!empty($user['indirect_referee_id'])){
-                    $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                if(!empty($user['indirect_referee_id']) && $money2 > 0){
+                    $indirect_referee_type = 'recommend_'.$income_type;
+                    $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$indirect_referee_type}' ",ARRAY_A);
                     if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == -1){
                         $d = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$indirect_referee_income['user_income']+$money2),array('id'=>$indirect_referee_income['id']));
                     }else{
-                        $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                        $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
                 }else{
                     $d = true;
                 }
                 //print_r($insert['person_liable_id']);die;
-                if(!empty($insert['person_liable_id'])){
-                    $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                if(!empty($insert['person_liable_id']) && $money3 > 0){
+                    $person_liable_type = 'director_'.$income_type;
+                    $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$person_liable_type}' ",ARRAY_A);
                     if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == -1){
                         $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
                     }else{
-                        $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                        $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
                 }else{
                     $e = true;
                 }
 
-                //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e);die;
-                if($a && $b && $c && $d && $e){
+                if($order['order_type'] == 3 && !empty($user['referee_id'])){
+                    //判断直接推荐次数
+                    $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['id']}'");
+                    //获取推荐人教练
+                    $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
+                    if($total < 3 && $coach_id > 0){
+
+                        $insert1 = array(
+                            'income_type'=>$income_type,
+                            'match_id'=>$order['match_id'],
+                            'user_id'=>$order['user_id'],
+                            'person_liable_id'=>$coach_id,   //责任教练
+                            'person_liable_income'=>$money3,  //参赛机构收益
+                            'created_time'=>get_time('mysql')
+                        );
+                        $x = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert1);
+                        $id = $wpdb->insert_id;
+                        $y = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$order['user_id'],'user_income'=>$money3,'income_type'=>'recommend_qualified','match_id'=>$id,'created_time'=>get_time('mysql')));
+
+                    }
+
+                    //print_r($coach_id);die;
+                }else{
+                    $x = true;
+                    $y = true;
+                }
+
+                //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e.'&&'. $x.'&&'. $y);die;
+                if($a && $b && $c && $d && $e && $x && $y){
                     $wpdb->query('COMMIT');
                 }else{
                     $wpdb->query('ROLLBACK');
@@ -849,45 +1001,66 @@ class Student_Payment {
                     /*****************收益分配start*******************/
 
                     //获取当前比赛场景
-                    if($order['order_type'] == 1){
-                        $income_type = 'match_id';
-                        $table = $wpdb->prefix.'match_meta_new';
-                        $join = "match_scene";
-                        $field = 'a.match_id,a.match_scene,a.created_id,';
+                    if($order['order_type'] == 3){  //课程
+                        $sql = "select  a.zone_id,a.course_category_id,b.type_alias from {$wpdb->prefix}course a
+                                left join {$wpdb->prefix}course_type b on a.course_type = b.id 
+                                where a.id = {$order['match_id']} ";
+                        //print_r($sql);
                     }
-                    elseif ($order['order_type'] == 2){
-                        $income_type = 'grading_id';
-                        $table = $wpdb->prefix.'grading_meta';
-                        $join = "scene";
-                        $field = 'a.grading_id,a.scene,a.created_person,';
-                    }
-                    $sql = "select {$field} b.role_name,
+                    else{
+
+                        //获取当前比赛场景
+                        if($order['order_type'] == 1){  //比赛
+                            $income_type = 'match_id';
+                            $table = $wpdb->prefix.'match_meta_new';
+                            $join = "match_scene";
+                            $field = 'a.match_id,a.match_scene,a.created_id,';
+                        }
+                        elseif ($order['order_type'] == 2){ //考级
+                            $income_type = 'grading_id';
+                            $table = $wpdb->prefix.'grading_meta';
+                            $join = "scene";
+                            $field = 'a.grading_id,a.scene,a.created_person,';
+                        }
+                        $sql = "select {$field} b.role_name,
                             b.role_type,b.role_alias,b.is_profit,b.status
                             from {$table} a 
                             left join {$wpdb->prefix}zone_match_role b on a.{$join} = b.id
                             where a.{$income_type} = {$order['match_id']} and b.is_profit = 1 and b.status = 1";
+                    }
                     $row = $wpdb->get_row($sql,ARRAY_A);
                     //print_r($row);die;
                     if(!empty($row)){
-                        $zone_user_id = $row['created_id'] ? $row['created_id'] : $row['created_person'];
-                        //print_r($row);die;
-                        //获取机构赛区类型
-                        $zone_meta = $wpdb->get_row("select b.zone_type_alias,a.zone_match_type,a.is_double from {$wpdb->prefix}zone_meta a 
-                                                left join {$wpdb->prefix}zone_type b on a.type_id = b.id
-                                                where user_id = {$zone_user_id}",ARRAY_A);
-                        if($zone_meta['zone_match_type'] == 1){ //战队赛
-                            $match_type = 1;
+                        switch ($order['order_type']){
+                            case 1:
+                            case 2:
+                                $zone_user_id = $row['created_id'] ? $row['created_id'] : $row['created_person'];
+                                //print_r($row);die;
+                                //获取机构赛区类型
+                                $zone_meta = $wpdb->get_row("select b.zone_type_alias,a.zone_match_type,a.is_double from {$wpdb->prefix}zone_meta a 
+                                                    left join {$wpdb->prefix}zone_type b on a.type_id = b.id
+                                                    where user_id = {$zone_user_id}",ARRAY_A);
+                                if($zone_meta['zone_match_type'] == 1){ //战队赛
+                                    $match_type = 1;
+                                }
+                                elseif ($zone_meta['is_double'] == 1){  //多区县
+                                    $match_type = 2;
+                                }
+                                elseif ($zone_meta['is_double'] == 2){  //单区县
+                                    $match_type = 3;
+                                }
+                                else{
+                                    $match_type = 4;
+                                }
+                                $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$order['order_type']} and match_type = {$match_type}";
+                                break;
+                            case 3:
+                                $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$row['type_alias']}' ";
+                                break;
+                            default:
+
+                                break;
                         }
-                        elseif ($zone_meta['is_double'] == 1){  //多区县
-                            $match_type = 2;
-                        }
-                        elseif ($zone_meta['is_double'] == 2){  //单区县
-                            $match_type = 3;
-                        }
-                        else{
-                            $match_type = 4;
-                        }
-                        $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$order['order_type']} and match_type = {$match_type}";
                         //print_r($set_sql);die;
                         $setting = $wpdb->get_row($set_sql,ARRAY_A);
                         //print_r($setting);die;
@@ -948,57 +1121,111 @@ class Student_Payment {
                                     'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
                                 );
                             }
+                            elseif ($order['order_type'] == 3){
+                                $income_type = 'course';
+                                //准备对应的数据
+                                $money1 = $setting['direct_superior'];     //比赛直接推广人
+                                $money2 = $setting['indirect_superior'];    //比赛间接推广人
+                                $money3 = $setting['coach'];        //责任教练
+                                $money4 = $setting['sub_center'];   //发布机构
+
+                                $insert = array(
+                                    'income_type'=>$income_type,
+                                    'match_id'=>$order['match_id'],
+                                    'user_id'=>$order['user_id'],
+                                    'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                                    'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                                    'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                                    'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                                    'sponsor_id'=>empty($user['referee_id']) ? $row['zone_id'] : '',  //办赛机构
+                                    'sponsor_income'=>empty($user['referee_id']) ? $money4 : '',  //办赛机构收益
+                                );
+                            }
                             //print_r($insert);die;
                             $insert['created_time'] = get_time('mysql');
 
                             $wpdb->query('START TRANSACTION');
                             $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
-                            if(!empty($insert['sponsor_id'])){
-                                $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='undertake' and match_id = {$order['match_id']}",ARRAY_A);
+                            if(!empty($insert['sponsor_id']) && $money4 > 0){
+                                $sponsor_type = 'open_'.$income_type;
+                                $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='{$sponsor_type}' and match_id = {$order['match_id']}",ARRAY_A);
                                 //var_dump($stream_id);
                                 if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == -1){
                                     $b = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$sponsor_income['user_income']+$money4),array('id'=>$sponsor_income['id']));
                                 }
                                 else{
-                                    $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>'undertake','match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                    $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>$sponsor_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                                 }
+                            }else{
+                                $b = true;
                             }
-                            if(!empty($user['referee_id'])){
-                                $referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                            if(!empty($user['referee_id']) && $money1 > 0){
+                                $referee_type = 'recommend_'.$income_type;
+                                $referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$referee_type}' ",ARRAY_A);
                                 //print_r($referee_income);
                                 if($referee_income['id'] > 0 && $referee_income['income_status'] == -1){
                                     //print_r($referee_income['user_income']+$money1);die;
                                     $c = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$referee_income['user_income']+$money1),array('id'=>$referee_income['id']));
                                 }else{
-                                    $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                    $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                                 }
                             }else{
                                 $c = true;
                             }
-                            if(!empty($user['indirect_referee_id'])){
-                                $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                            if(!empty($user['indirect_referee_id']) && $money2 > 0){
+                                $indirect_referee_type = 'recommend_'.$income_type;
+                                $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$indirect_referee_type}' ",ARRAY_A);
                                 if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == -1){
                                     $d = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$indirect_referee_income['user_income']+$money2),array('id'=>$indirect_referee_income['id']));
                                 }else{
-                                    $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                    $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                                 }
                             }else{
                                 $d = true;
                             }
-                            if(!empty($insert['person_liable_id'])){
-                                $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$income_type}' ",ARRAY_A);
+                            //print_r($insert['person_liable_id']);die;
+                            if(!empty($insert['person_liable_id']) && $money3 > 0){
+                                $person_liable_type = 'director_'.$income_type;
+                                $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$person_liable_type}' ",ARRAY_A);
                                 if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == -1){
                                     $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
                                 }else{
-                                    $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                    $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                                 }
                             }else{
                                 $e = true;
                             }
 
-                            //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e);die;
-                            if($a && $b && $c && $d && $e){
+                            if($order['order_type'] == 3 && !empty($user['referee_id'])){
+                                //判断直接推荐次数
+                                $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['id']}'");
+                                //获取推荐人教练
+                                $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
+                                if($total < 3 && $coach_id > 0){
+
+                                    $insert1 = array(
+                                        'income_type'=>$income_type,
+                                        'match_id'=>$order['match_id'],
+                                        'user_id'=>$order['user_id'],
+                                        'person_liable_id'=>$coach_id,   //责任教练
+                                        'person_liable_income'=>$money3,  //参赛机构收益
+                                        'created_time'=>get_time('mysql')
+                                    );
+                                    $x = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert1);
+                                    $id = $wpdb->insert_id;
+                                    $y = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$order['user_id'],'user_income'=>$money3,'income_type'=>'recommend_qualified','match_id'=>$id,'created_time'=>get_time('mysql')));
+
+                                }
+
+                                //print_r($coach_id);die;
+                            }else{
+                                $x = true;
+                                $y = true;
+                            }
+
+                            //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e.'&&'. $x.'&&'. $y);die;
+                            if($a && $b && $c && $d && $e && $x && $y){
                                 $wpdb->query('COMMIT');
                             }else{
                                 $wpdb->query('ROLLBACK');
