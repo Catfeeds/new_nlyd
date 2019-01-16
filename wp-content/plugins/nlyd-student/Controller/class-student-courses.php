@@ -88,7 +88,7 @@ class Student_Courses
              $row['user_mobile'] = $current_user->data->user_mobile;
              $row['user_ID'] = $current_user->ID+10000000;
          }
-        print_r($row);
+        //print_r($row);
         $view = student_view_path.CONTROLLER.'/course-sign.php';
         load_view_template($view,$row);
     }

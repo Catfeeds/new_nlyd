@@ -501,15 +501,10 @@ class Student_Ajax
         //if(empty($_POST['fullname'])) wp_send_json_error(array('info'=>'收件人姓名不能为空'));
         //if(empty($_POST['telephone'])) wp_send_json_error(array('info'=>'联系电话不能为空'));
         //if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
-        if($_POST['order_type'] == 2){  //考级
 
-            $sql = "select grading_id,status from {$wpdb->prefix}grading_meta where grading_id = {$_POST['match_id']} ";
-            $match_meta = $wpdb->get_row($sql,ARRAY_A);
-            if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
-            if($match_meta['status'] != 1) wp_send_json_error(array('info'=>__('当前比赛已禁止报名', 'nlyd-student')));
+        if($_POST['order_type'] == 1){  //比赛
 
-        }else{
-
+            $title = '比赛';
             $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ";
             $match_meta = $wpdb->get_row($sql,ARRAY_A);
             if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
@@ -522,18 +517,32 @@ class Student_Ajax
                 }
             }
         }
+        elseif($_POST['order_type'] == 2){  //考级
 
-        if(isset($_POST['memory_lv'])){
-            if($_POST['memory_lv'] < 1){
-                wp_send_json_error(array('info'=>__('请选择考级等级', 'nlyd-student')));
+            $title = '考级';
+            $sql = "select grading_id,status from {$wpdb->prefix}grading_meta where grading_id = {$_POST['match_id']} ";
+            $match_meta = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($match_meta)) wp_send_json_error(array('info'=>__('考级信息错误', 'nlyd-student')));
+            if($match_meta['status'] != 1) wp_send_json_error(array('info'=>__('当前考级已禁止报名', 'nlyd-student')));
+
+            if(isset($_POST['memory_lv'])){
+                if($_POST['memory_lv'] < 1){
+                    wp_send_json_error(array('info'=>__('请选择考级等级', 'nlyd-student')));
+                }
             }
+
+        }elseif($_POST['order_type'] == 3){   //课程
+
+            $title = '课程';
+            print_r($_POST);die;
         }
+
 
         $row = $wpdb->get_row("select id,pay_status from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
 
         if(!empty($row)) {
             if($row->pay_status == 2 || $row->pay_status==3 || $row->pay_status==4){
-                wp_send_json_error(array('info'=>__('你已报名该比赛', 'nlyd-student'),'url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
+                wp_send_json_error(array('info'=>__('你已报名该'.$title, 'nlyd-student'),'url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
             }else{
                 //如果是未支付订单删除订单重新下单
                 $wpdb->delete($wpdb->prefix.'order', ['id' => $row->id]);
