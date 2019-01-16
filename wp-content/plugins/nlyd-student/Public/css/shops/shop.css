@@ -105,5 +105,67 @@ input[type="text"].serachInput{
     padding-top:15px;
     padding-bottom: 15px; 
     background-color: #ffffff;
+    font-size: 0;
+    line-height: 20px;
+    margin-bottom: 10px;
 }
-
+.layui-row .shops_row:last-child{
+    margin-bottom: 0;
+}
+.shops_width2{
+    width: 50%;
+}
+.shops_width3{
+    width: -webkit-calc(100%/3);
+    width: calc(100%/3);
+}
+.shops_label{
+    width:40px;
+    margin-right: 10px;
+}
+.shops_label_info{
+    width: -webkit-calc(100% - 55px);
+    width: calc(100% - 55px);
+}
+.shops_zize_btn{
+    width: 90px;
+    height: 36px;
+    border-radius: 18px;
+    border: 1px solid rgba(38, 38, 38, 1);
+    margin-right: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    font-size: 0.14rem;
+    float: left;
+}
+.shops_label_info .shops_zize_btn:last-child{
+    margin-right: 0;
+}
+.shops_zize_btn.active{
+    border: 1px solid #68AAFEFF;
+    color: #4394F9FF;
+}
+.shops_num_btn{
+    float: left;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(38, 38, 38, 1);
+    color: rgba(38, 38, 38, 1);
+    border-radius: 50%;
+    text-align: center;
+    font-size: 0.16rem;
+}
+.shops_num_btn.disabled{
+    border: 1px solid rgba(38, 38, 38, 0.3);
+    color: rgba(38, 38, 38, 0.3);
+}
+.shops_num_input{
+    float: left;
+}
+.shops_num_input input[type='tel']{
+    height: 20px;
+    width: 54px;
+    padding: 0 10px;
+    margin-bottom: 0;
+    border: none;
+}

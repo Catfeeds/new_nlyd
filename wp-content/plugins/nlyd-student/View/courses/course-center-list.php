@@ -348,30 +348,30 @@ jQuery(function($) {
                                     
                             }else{
                                 next(lis.join(''),false)
-                                if(match_page==1){
-                                    var text='';
-                                    switch (id) {
-                                        case '1':
-                                            text='<?=__("该中心近期暂无可报名课程", "nlyd-student")?>'
-                                            break;
-                                        case '2':
-                                            text='<?=__("该中心近期暂无进行中课程", "nlyd-student")?>'
-                                            break;
-                                        case '3':
-                                            text='<?=__("该中心近期暂无已结课课程", "nlyd-student")?>'
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    var dom='<div class="no-info-page" style="top:50px">'
-                                                +'<div class="no-info-img">'
-                                                    +'<img src="'+window.plugins_url+'/nlyd-student/Public/css/image//noInfo/noCourse1043@2x.png">'
-                                                +'</div>'
-                                                +'<p class="no-info-text">'+text+'</p>'
-                                                +'<a class="a-btn a-btn-table" href="'+window.home_url+'/courses/"><div><?=__("查看其它中心课程", "nlyd-student")?></div></a>'
-                                            +'</div>'
-                                    $('#'+id).empty().append(dom);
-                                }
+                                // if(match_page==1){
+                                //     var text='';
+                                //     switch (id) {
+                                //         case '1':
+                                //             text='<?=__("该中心近期暂无可报名课程", "nlyd-student")?>'
+                                //             break;
+                                //         case '2':
+                                //             text='<?=__("该中心近期暂无进行中课程", "nlyd-student")?>'
+                                //             break;
+                                //         case '3':
+                                //             text='<?=__("该中心近期暂无已结课课程", "nlyd-student")?>'
+                                //             break;
+                                //         default:
+                                //             break;
+                                //     }
+                                //     var dom='<div class="no-info-page" style="top:50px">'
+                                //                 +'<div class="no-info-img">'
+                                //                     +'<img src="'+window.plugins_url+'/nlyd-student/Public/css/image//noInfo/noCourse1043@2x.png">'
+                                //                 +'</div>'
+                                //                 +'<p class="no-info-text">'+text+'</p>'
+                                //                 +'<a class="a-btn a-btn-table" href="'+window.home_url+'/courses/"><div><?=__("查看其它中心课程", "nlyd-student")?></div></a>'
+                                //             +'</div>'
+                                //     $('#'+id).empty().append(dom);
+                                // }
                             }
                             match_page++
                         },
