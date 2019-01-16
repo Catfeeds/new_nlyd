@@ -43,7 +43,7 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('比赛费用', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" id="match_cost" name="match_cost" value="<?=$match['match_cost']?>"></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" id="match_cost" name="match_cost" value="<?=isset($match['match_cost']) ? $match['match_cost'] : 580.00;?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>

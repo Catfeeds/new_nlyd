@@ -161,7 +161,7 @@ input[type="text"].serachInput{
 }
 .shops_num_input{
     float: left;
-    width: 54px;
+    width: 30px;
     padding: 0 10px;
 }
 .shops_num_input input[type='tel']{
@@ -170,14 +170,30 @@ input[type="text"].serachInput{
     padding: 0;
     margin-bottom: 0;
     border: none;
+    text-align: center;
 }
 
 .shops_detail_footer{
     position: fixed;
     width: 100%;
-    bottom: 25px;
+    bottom: 1px;
     left: 0;
     font-size: 0;
+}
+.shops_detail_footer.shops_footer_rel{
+    position: relative;
+}
+.shops_car_footer{
+    position: fixed;
+    padding-left: 15px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    font-size: 0;
+    background: #fff;
+}
+.shops_car_footer.shops_footer_rel{
+    position: relative;
 }
 .shops_buy_car{
     /* display: inline-block; */
@@ -188,7 +204,6 @@ input[type="text"].serachInput{
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    color: #fff;
 }
 .shops_buy_car .iconfont{
     font-size: 0.3rem;
@@ -199,8 +214,8 @@ input[type="text"].serachInput{
     margin-left: -16px;
 }
 .shops_foot_bnts{
-    width:-webkit-calc(100% - 45px);
-    width:calc(100% - 45px);
+    width:-webkit-calc(100% - 75px);
+    width:calc(100% - 75px);
     float: left;
 }
 .shops_car_num{
@@ -217,4 +232,69 @@ input[type="text"].serachInput{
     margin-top: -18px;
     margin-right: -18px;
     z-index: 2;
+}
+.shops_foot_bnt{
+    height: 43px;
+    border-radius: 21.5px;
+    width: 90%;
+    margin: auto;
+    text-align: center;
+}
+.go_buy_car{
+    border: 1px solid #68AAFE;
+    background: #fff;
+}
+.go_buy{
+    height:45px;
+    border-radius: 22.5px;
+}
+.shops_img{
+    border: 1px solid rgba(38, 38, 38, 0.4);
+    border-radius: 4px;
+    margin-right: 15px;
+}
+.shops_img_box{
+    font-size: 0;
+    width: 98px;
+    height: 98px;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+img{
+    max-width: 100%;
+    max-height:100%;
+}
+.shops_checkBox{
+    margin-right: 15px!important;
+}
+.shops_details_right{
+    width:-webkit-calc(100% - 148px);
+    width:calc(100% - 148px);
+    font-size: 0;
+}
+.shops_details_right>div{
+    margin-top: 5px;
+}
+.shops_details_right>div:first-child{
+    margin-top: 0
+}
+.shops_add_compent{
+    overflow: hidden;
+}
+.shops_all_check{
+    width: 40px;
+}
+.shops_settlement{
+    width: 110px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 0.16rem;
+}
+.shops_compute{
+    width: -webkit-calc(100% - 193px);
+    width: calc(100% - 193px);
+    margin-right: 5px;
+    text-align: right;
 }
