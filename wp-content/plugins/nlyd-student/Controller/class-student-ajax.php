@@ -6377,13 +6377,23 @@ class Student_Ajax
      */
     public function get_zone_course(){
         global $wpdb,$current_user;
-
-        $map[] = " a.zone_id = {$current_user->ID} ";
-        /*if($_POST['course_type'] == 'history'){
+        if(isset($_POST['id'])){
+            $zone_user_id = $_POST['id'];
+        }else{
+            $zone_user_id = $current_user->ID;
+        }
+        $map[] = " a.zone_id = {$zone_user_id} ";
+        if($_POST['course_type'] == 'history'){
             $map[] = " a.is_enable < -2 ";
         }elseif ($_POST['course_type'] == 'matching'){
             $map[] = " a.is_enable != -3 ";
-        }*/
+        }elseif ($_POST['course_type'] == 1){
+            $map[] = " a.is_enable = 1 ";
+        }elseif ($_POST['course_type'] == 2){
+            $map[] = " a.is_enable in (2,-2) ";
+        }elseif ($_POST['course_type'] == -3){
+            $map[] = " a.is_enable = -3 ";
+        }
         $where = join("and",$map);
 
         //判断是否有分页
