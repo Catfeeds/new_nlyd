@@ -41,8 +41,15 @@ class Student_Courses
      * 训练中心课程展示
      */
      public function cenerCourse(){
+        global $wpdb;
+         //获取机构名字
+         if(isset($_GET['id'])){
+             $zone_nem = $wpdb->get_var("select zone_name from {$wpdb->prefix}zone_meta where user_id = {$_GET['id']} ");
+            $data['zone_name'] = $zone_nem;
+         }
+
         $view = student_view_path.CONTROLLER.'/course-center-list.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     /**
      * 课程详情
@@ -55,8 +62,35 @@ class Student_Courses
      * 课程报名
      */
      public function courseSign(){
+         global $wpdb,$current_user;
+         $sql = "select b.zone_city,a.course_title,a.const,a.is_enable,a.address
+                  from {$wpdb->prefix}course a 
+                  left join {$wpdb->prefix}zone_meta b on a.zone_id = b.user_id
+                  where a.id = {$_GET['id']}
+                  ";
+
+         $row = $wpdb->get_row($sql,ARRAY_A);
+         if(!empty($row)){
+             $city_arr = str2arr($row['zone_city'],'-');
+             if(!empty($city_arr[2])){
+                 $city = rtrim($city_arr[1],'市').rtrim($city_arr[2],'区');
+             }elseif ($city_arr[1] != '市辖区'){
+                 $city = rtrim($city_arr[1],'市');
+             }else{
+                 $city = rtrim($city_arr[0],'市');
+             }
+             $row['city'] = $city;
+         }
+
+         if($current_user->ID){
+             $user_name = get_user_meta($current_user->ID,'user_real_name')[0]['real_name'];
+             $row['user_name'] = $user_name;
+             $row['user_mobile'] = $current_user->data->user_mobile;
+             $row['user_ID'] = $current_user->ID+10000000;
+         }
+        //print_r($row);
         $view = student_view_path.CONTROLLER.'/course-sign.php';
-        load_view_template($view);
+        load_view_template($view,$row);
     }
     /**
      * 课程报名成功

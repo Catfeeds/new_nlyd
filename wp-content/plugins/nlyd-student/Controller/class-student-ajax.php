@@ -501,15 +501,10 @@ class Student_Ajax
         //if(empty($_POST['fullname'])) wp_send_json_error(array('info'=>'收件人姓名不能为空'));
         //if(empty($_POST['telephone'])) wp_send_json_error(array('info'=>'联系电话不能为空'));
         //if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
-        if($_POST['order_type'] == 2){  //考级
 
-            $sql = "select grading_id,status from {$wpdb->prefix}grading_meta where grading_id = {$_POST['match_id']} ";
-            $match_meta = $wpdb->get_row($sql,ARRAY_A);
-            if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
-            if($match_meta['status'] != 1) wp_send_json_error(array('info'=>__('当前比赛已禁止报名', 'nlyd-student')));
+        if($_POST['order_type'] == 1){  //比赛
 
-        }else{
-
+            $title = '比赛';
             $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ";
             $match_meta = $wpdb->get_row($sql,ARRAY_A);
             if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
@@ -522,18 +517,32 @@ class Student_Ajax
                 }
             }
         }
+        elseif($_POST['order_type'] == 2){  //考级
 
-        if(isset($_POST['memory_lv'])){
-            if($_POST['memory_lv'] < 1){
-                wp_send_json_error(array('info'=>__('请选择考级等级', 'nlyd-student')));
+            $title = '考级';
+            $sql = "select grading_id,status from {$wpdb->prefix}grading_meta where grading_id = {$_POST['match_id']} ";
+            $match_meta = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($match_meta)) wp_send_json_error(array('info'=>__('考级信息错误', 'nlyd-student')));
+            if($match_meta['status'] != 1) wp_send_json_error(array('info'=>__('当前考级已禁止报名', 'nlyd-student')));
+
+            if(isset($_POST['memory_lv'])){
+                if($_POST['memory_lv'] < 1){
+                    wp_send_json_error(array('info'=>__('请选择考级等级', 'nlyd-student')));
+                }
             }
+
+        }elseif($_POST['order_type'] == 3){   //课程
+
+            $title = '课程';
+            print_r($_POST);die;
         }
+
 
         $row = $wpdb->get_row("select id,pay_status from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
 
         if(!empty($row)) {
             if($row->pay_status == 2 || $row->pay_status==3 || $row->pay_status==4){
-                wp_send_json_error(array('info'=>__('你已报名该比赛', 'nlyd-student'),'url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
+                wp_send_json_error(array('info'=>__('你已报名该'.$title, 'nlyd-student'),'url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
             }else{
                 //如果是未支付订单删除订单重新下单
                 $wpdb->delete($wpdb->prefix.'order', ['id' => $row->id]);
@@ -5550,14 +5559,15 @@ class Student_Ajax
                     $revenue_source[] = $type;
                     $list['profit_income'] = $v['sponsor_income'];
                 }
+                $list['revenue_source'] = arr2str($revenue_source,'/');
 
                 if($v['income_type'] == 'subject'){  //裂变收益
                     //获取裂变机构类型
                     $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
-                    $revenue_source[] = '推荐'.$zone_type_name;
+                    //var_dump($zone_type_name);
+                    $list['revenue_source'] = '推荐'.$zone_type_name;
                 }
 
-                $list['revenue_source'] = arr2str($revenue_source,'/');
                 $referee_name = get_user_meta($v['user_id'],'user_real_name')[0];
                 //var_dump($referee_name);
                 $list['channel'] = $referee_name['real_name'];
@@ -6376,13 +6386,23 @@ class Student_Ajax
      */
     public function get_zone_course(){
         global $wpdb,$current_user;
-
-        $map[] = " a.zone_id = {$current_user->ID} ";
-        /*if($_POST['course_type'] == 'history'){
+        if(isset($_POST['id'])){
+            $zone_user_id = $_POST['id'];
+        }else{
+            $zone_user_id = $current_user->ID;
+        }
+        $map[] = " a.zone_id = {$zone_user_id} ";
+        if($_POST['course_type'] == 'history'){
             $map[] = " a.is_enable < -2 ";
         }elseif ($_POST['course_type'] == 'matching'){
             $map[] = " a.is_enable != -3 ";
-        }*/
+        }elseif ($_POST['course_type'] == 1){
+            $map[] = " a.is_enable = 1 ";
+        }elseif ($_POST['course_type'] == 2){
+            $map[] = " a.is_enable in (2,-2) ";
+        }elseif ($_POST['course_type'] == -3){
+            $map[] = " a.is_enable = -3 ";
+        }
         $where = join("and",$map);
 
         //判断是否有分页
@@ -6416,9 +6436,25 @@ class Student_Ajax
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无课程', 'nlyd-student')));
         foreach ($rows as $k => $val){
-            $user_real_name = get_user_meta($val['coach_id'],'user_real_name')[0];
 
+            $user_real_name = get_user_meta($val['coach_id'],'user_real_name')[0];
             $rows[$k]['real_name'] = !empty($user_real_name) ? $user_real_name['real_name'] : '-';
+            if(isset($_POST['id'])){
+                //获取城市
+                $zone_city = $wpdb->get_var("select zone_city from {$wpdb->prefix}zone_meta where user_id = {$zone_user_id} ");
+                $city_arr = str2arr($zone_city,'-');
+                if(!empty($city_arr[2])){
+                    $city = rtrim($city_arr[1],'市').rtrim($city_arr[2],'区');
+                }elseif ($city_arr[1] != '市辖区'){
+                    $city = rtrim($city_arr[1],'市');
+                }else{
+                    $city = rtrim($city_arr[0],'市');
+                }
+                $rows[$k]['zone_city'] = $city;
+                //判断是否购课
+                $order_id = $wpdb->get_var("select order_id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$val['id']} and order_type = 3 and pay_status in (2,3,4)");
+                $rows[$k]['order_id'] = $order_id;
+            }
         }
         wp_send_json_success(array('info'=>$rows));
     }

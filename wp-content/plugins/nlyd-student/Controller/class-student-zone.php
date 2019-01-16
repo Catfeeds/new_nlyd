@@ -679,7 +679,7 @@ class Student_Zone
 
         //判断课程状态
         global $wpdb,$current_user;
-        $sql = "select a.id,count(c.id) entry_total,a.open_quota,a.is_enable,unix_timestamp(course_start_time) course_start_time,unix_timestamp(course_end_time) course_end_time
+        $sql = "select a.id,count(c.id) entry_total,a.open_quota,a.is_enable,course_start_time,unix_timestamp(course_start_time) start_time,course_end_time,unix_timestamp(course_end_time) end_time
                 from {$wpdb->prefix}course a 
                 left join {$wpdb->prefix}order c on a.id = c.match_id and c.pay_status in (2,3,4)
                 where a.zone_id = {$current_user->ID}
@@ -691,7 +691,6 @@ class Student_Zone
 
             foreach ($rows as $k => $v){
                 if($v['is_enable'] != -4){
-
                     $is_enable = '';
                     if($v['course_start_time'] > 0){
                         if(get_time() < $v['course_start_time']){

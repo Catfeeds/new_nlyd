@@ -441,6 +441,7 @@ if(!class_exists('StudentController')){
                     );
 
                     $new_page_id = wp_insert_post($arr);
+                    if($new_page_id) update_post_meta($new_page_id,'_dt_sidebar_position','disabled');
                     //var_dump($new_page_id);
                 }else{
                     //var_dump($post_id);

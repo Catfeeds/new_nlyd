@@ -63,9 +63,31 @@
                 <div class="shops_row width-padding width-padding-pc">
                     <div class="dis_inlineBlock fs_14 c_black shops_label"><?=__('数 量', 'nlyd-student')?></div>
                     <div class="dis_inlineBlock c_black6 shops_label_info">
-                        <div class="shops_num_btn dis_table" data-id="reduce"><div class="dis_cell">-</div></div>
-                        <div class="shops_num_input"><input type="tel" name="total" value="1" id="total"></div>
-                        <div class="shops_num_btn dis_table" data-id="add"><div class="dis_cell">+</div></div>
+                        <div class="shops_num_btn dis_table reduce" data-id="reduce"><div class="dis_cell">-</div></div>
+                        <div class="shops_num_input"><input class="nl-foucs" type="tel" name="total" value="1" id="total"></div>
+                        <div class="shops_num_btn dis_table add" data-id="add"><div class="dis_cell">+</div></div>
+                    </div>
+                </div>
+                <div class="shops_row width-padding width-padding-pc">
+                    <div class="fs_14 c_black"><?=__('这里是商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍', 'nlyd-student')?></div>
+                </div>
+
+                <div class="shops_detail_footer width-padding width-padding-pc">
+                    <div class="shops_buy_car bg_gradient_blue dis_table">
+                        <div class="shops_car_num">1</div>
+                        <i class="iconfont">&#xe63d;</i>
+                    </div>
+                    <div class="shops_foot_bnts flex-h">
+                        <div class="flex1">
+                            <a class="go_buy_car shops_foot_bnt dis_table">
+                                <div class="dis_cell fs_16"><?=__('加入购物车', 'nlyd-student')?></div>
+                            </a>
+                        </div>
+                        <div class="flex1">
+                            <a class="go_buy shops_foot_bnt">
+                                <div class="dis_cell fs_16"><?=__('立即购买', 'nlyd-student')?></div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,6 +97,7 @@
 
 <script>
 jQuery(function($) { 
+    var max=100;
     var mySwiper = new Swiper('.swiper-container', {
         loop : true,
         autoplay:{
@@ -99,24 +122,49 @@ jQuery(function($) {
         var val=_this.val();
          if(isNaN(parseInt(val)) || parseInt(val)<=0){
             _this.val('1')
+         }else{
+             if(val>max){
+                _this.val(max)
+             }else{
+                _this.val(Math.ceil(val))
+             }
          }
+         btnActive(_this.val(),max)
     })
+    function btnActive(val,max) {
+        if(val<=1){
+            $('.reduce').addClass('disabled');
+        }else{
+            $('.reduce').removeClass('disabled');
+        }
+
+        if(val<max){
+            $('.add').removeClass('disabled');
+        }else{
+            $('.add').addClass('disabled');
+        }
+    }
     function numberPress(_this){
         var type=_this.attr('data-id');
         var val=$("#total").val();
         console.log(val)
         switch (type) {
             case 'reduce':
-                val--
+                if(val>1){
+                    val--
+                }
                 break;
             case 'add':
+            if(val<max){
                 val++
+            }
+            
                 break;
             default:
                 break;
         }
-        console.log(1)
         $("#total").val(val)
+        btnActive($("#total").val(),max)
     }
     if('ontouchstart' in window){// 移动端
         $('.shops_num_btn').each(function(){//数字键盘

@@ -199,16 +199,6 @@
         </div>           
     </div>
 </div>
-<!-- 底部弹出框 -->
-<div class="selectBottom">
-    <div class="grayLayer cancel"></div>
-    <div class="selectBox">
-        <div class="selectOption pay" id="weiChat"><i class="iconfont">&#xe63e;</i><?=__('微信', 'nlyd-student')?></div>
-        <div class="selectOption pay" id="zfb"><i class="iconfont">&#xe611;</i><?=__('支付宝', 'nlyd-student')?></div>
-        <div class="selectOption pay" id="visa"><i class="iconfont">&#xe615;</i><?=__('银联支付', 'nlyd-student')?></div>
-        <div class="selectOption cancel"><?=__('取消', 'nlyd-student')?></div>
-    </div>
-</div>
 <input type="hidden" name="_wpnonce" id="inputPay" value="<?=wp_create_nonce('student_get_ranking_code_nonce');?>">
 <script>
 jQuery(function($) { 
@@ -355,9 +345,6 @@ jQuery(function($) {
             });
         })
         
-    $('.selectBottom').on('click','.cancel',function(){
-        $(this).parents('.selectBottom').removeClass('selectBottom-show');
-    })
     <?php if($match['project_alias'] == 'memory'):?>
     var sexSelectData= [
         {id:"0",value:'请选择等级'},
