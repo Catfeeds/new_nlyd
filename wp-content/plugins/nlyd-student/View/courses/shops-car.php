@@ -252,18 +252,18 @@ jQuery(function($) {
                                 
                                 if(total_money>0){
                                     // $('.selectBottom').addClass('selectBottom-show')
-                                    var content='<div class="box-conent-wrapper"><?=__('本次共需支付', 'nlyd-student')?>￥'+total_money+'</div>'
+                                    var content='<div class="box-conent-wrapper"><?=__("本次共需支付", "nlyd-student")?>￥'+total_money+'</div>'
                                                 +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('微信', 'nlyd-student')?></div>'
                                                 +'<div style="text-align:left;margin:auto;width:100px;margin-top:10px" class="fs_14"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('支付宝', 'nlyd-student')?></div>'
                                                 //    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14 c_orange"><div id="visa" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;银联支付</div>'
                                     layer.open({
                                         type: 1
                                         ,maxWidth:300
-                                        ,title: '<?=__('选择支付方式', 'nlyd-student')?>' //不显示标题栏
+                                        ,title: "<?=__('选择支付方式', 'nlyd-student')?>" //不显示标题栏
                                         ,skin:'nl-box-skin'
                                         ,id: 'certification' //防止重复弹出
                                         ,content:content
-                                        ,btn: ['<?=__('取消支付', 'nlyd-student')?>', '<?=__('确认支付', 'nlyd-student')?>' ]
+                                        ,btn: ["<?=__('取消支付', 'nlyd-student')?>", "<?=__('确认支付', 'nlyd-student')?>" ]
                                         ,cancel:function(){
 
                                         }
