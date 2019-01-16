@@ -51,7 +51,7 @@ class Student_Shops
             wp_enqueue_script( 'student-swiper' );
             wp_register_style( 'my-student-swiper', student_css_url.'swiper/swiper-4.3.3.min.css',array('my-student') );
             wp_enqueue_style( 'my-student-swiper' );
-            wp_register_style( 'my-student-shop', student_css_url.'shop.css',array('my-student') );
+            wp_register_style( 'my-student-shop', student_css_url.'shops/shop.css',array('my-student') );
             wp_enqueue_style( 'my-student-shop' );
         }
     }

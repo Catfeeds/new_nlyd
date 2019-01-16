@@ -332,20 +332,27 @@ class Organize{
                 $secretary_real_name = get_user_meta($row['secretary_id'],'user_real_name',true);
                 $apply_real_name = get_user_meta($row['apply_id'],'user_real_name',true);
                 //负责人
-
                 $person_real_name = get_user_meta($row['center_manager_id'],'user_real_name',true);
-                //办赛次数
-                $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
-                //参赛人次
-                $match_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}match_meta_new AS mmn 
+                if($row['user_id'] > 0){
+                    //办赛次数
+                    $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
+                    //参赛人次
+                    $match_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}match_meta_new AS mmn 
                                            LEFT JOIN {$wpdb->prefix}order AS o ON o.match_id=mmn.match_id
                                            WHERE mmn.created_id='{$row['user_id']}' AND o.order_type=1 AND o.pay_status IN(2,3,4)");
-                //考级次数
-                $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$row['user_id']}'");
-                //考级人次
-                $grading_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}grading_meta AS gm 
+                    //考级次数
+                    $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$row['user_id']}'");
+                    //考级人次
+                    $grading_member_num = $wpdb->get_var("SELECT COUNT(o.id) FROM {$wpdb->prefix}grading_meta AS gm 
                                            LEFT JOIN {$wpdb->prefix}order AS o ON o.match_id=gm.grading_id
                                            WHERE gm.created_person='{$row['user_id']}' AND o.order_type=2 AND o.pay_status IN(2,3,4)");
+                }else{
+                    $match_num = 0;
+                    $match_member_num = 0;
+                    $grading_num = 0;
+                    $grading_member_num = 0;
+                }
+
 //                       leo_dump($wpdb->last_query);die;
                 ?>
                 <tr data-uid="<?=$row['user_id']?>" data-id="<?=$row['id']?>">
@@ -503,21 +510,29 @@ class Organize{
                 $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
                 //负责人/管理员
                 $person_real_name = get_user_meta($row['center_manager_id'],'user_real_name',true);
-                //办赛次数
-                $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
-                //考级次数
-                $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$row['user_id']}'");
-                //课程数量
-                $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE zone_id='{$row['user_id']}'");
-                //教练数量
-                $coach_id_str = $wpdb->get_var("SELECT GROUP_CONCAT(zjc.coach_id) FROM {$wpdb->prefix}zone_join_coach AS zjc 
+                if($row['user_id'] > 0){
+                    //办赛次数
+                    $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
+                    //考级次数
+                    $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$row['user_id']}'");
+                    //课程数量
+                    $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE zone_id='{$row['user_id']}'");
+                    //教练数量
+                    $coach_id_str = $wpdb->get_var("SELECT GROUP_CONCAT(zjc.coach_id) FROM {$wpdb->prefix}zone_join_coach AS zjc 
                      LEFT JOIN {$wpdb->prefix}coach_skill as cs ON cs.coach_id=zjc.coach_id
                      WHERE zone_id='{$row['user_id']}' AND cs.id!=''");
-                $coach_id_arr = explode(',', $coach_id_str);
-                $coach_num = count($coach_id_arr);
-                //学员数量
-                $student_num = $wpdb->get_results("SELECT COUNT(id) FROM {$wpdb->prefix}my_coach WHERE coach_id IN({$coach_id_str}) AND apply_status=2 GROUP BY user_id", ARRAY_A);
-                $student_num = count($student_num);
+                    $coach_id_arr = explode(',', $coach_id_str);
+                    $coach_num = count($coach_id_arr);
+                    //学员数量
+                    $student_num = $wpdb->get_results("SELECT COUNT(id) FROM {$wpdb->prefix}my_coach WHERE coach_id IN({$coach_id_str}) AND apply_status=2 GROUP BY user_id", ARRAY_A);
+                    $student_num = count($student_num);
+                }else{
+                    $match_num = 0;
+                    $grading_num = 0;
+                    $course_num = 0;
+                    $coach_num = 0;
+                    $student_num = 0;
+                }
                 ?>
                 <tr data-uid="<?=$row['user_id']?>" data-id="<?=$row['id']?>">
                     <th scope="row" class="check-column">
@@ -663,21 +678,29 @@ class Organize{
                 $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
                 //负责人/管理员
                 $person_real_name = get_user_meta($row['center_manager_id'],'user_real_name',true);
-                //办赛次数
-                $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
-                //考级次数
-                $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$row['user_id']}'");
-                //课程数量
-                $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE zone_id='{$row['user_id']}'");
-                //教练数量
-                $coach_id_str = $wpdb->get_var("SELECT GROUP_CONCAT(zjc.coach_id) FROM {$wpdb->prefix}zone_join_coach AS zjc 
+                if($row['user_id'] > 0){
+                    //办赛次数
+                    $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$row['user_id']}'");
+                    //考级次数
+                    $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$row['user_id']}'");
+                    //课程数量
+                    $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE zone_id='{$row['user_id']}'");
+                    //教练数量
+                    $coach_id_str = $wpdb->get_var("SELECT GROUP_CONCAT(zjc.coach_id) FROM {$wpdb->prefix}zone_join_coach AS zjc 
                      LEFT JOIN {$wpdb->prefix}coach_skill as cs ON cs.coach_id=zjc.coach_id
                      WHERE zone_id='{$row['user_id']}' AND cs.id!=''");
-                $coach_id_arr = explode(',', $coach_id_str);
-                $coach_num = count($coach_id_arr);
-                //学员数量
-                $student_num = $wpdb->get_results("SELECT COUNT(id) FROM {$wpdb->prefix}my_coach WHERE coach_id IN({$coach_id_str}) AND apply_status=2 GROUP BY user_id", ARRAY_A);
-                $student_num = count($student_num);
+                    $coach_id_arr = explode(',', $coach_id_str);
+                    $coach_num = count($coach_id_arr);
+                    //学员数量
+                    $student_num = $wpdb->get_results("SELECT COUNT(id) FROM {$wpdb->prefix}my_coach WHERE coach_id IN({$coach_id_str}) AND apply_status=2 GROUP BY user_id", ARRAY_A);
+                    $student_num = count($student_num);
+                }else{
+                    $match_num = 0;
+                    $grading_num = 0;
+                    $course_num = 0;
+                    $coach_num = 0;
+                    $student_num = 0;
+                }
                 ?>
                 <tr data-uid="<?=$row['user_id']?>" data-id="<?=$row['id']?>">
                     <th scope="row" class="check-column">
@@ -3296,17 +3319,24 @@ class Organize{
         </ul>
 
         <div class="tablenav top">
-            <?php if($mtype === 1){ ?>
+            <?php if($mtype === 1 && $user_id > 0){ ?>
             <div>
-
                 <button class="button" id="confirmAddAdmin">添加管理员</button>
-
                 <div style="margin-top: 5px;">
                     <select class="js-data-select-ajax" name="admin_id" style="width: 50%" data-action="get_base_user_list" data-type="select">
 
                     </select>
                 </div>
             </div>
+            <?php }elseif($mtype === 2 && $user_id > 0){ ?>
+                <div>
+                    <button class="button" id="confirmAddCoach">添加教练</button>
+                    <div style="margin-top: 5px;">
+                        <select class="js-data-select-ajax" name="add_coach_id" style="width: 50%" data-action="get_not_zone_coach" data-type="select">
+
+                        </select>
+                    </div>
+                </div>
             <?php } ?>
             <div class="tablenav-pages">
                 <span class="displaying-num"><?=$count['count']?>个项目</span>
@@ -3463,7 +3493,7 @@ class Organize{
             <br class="clear">
             <script>
                 jQuery(document).ready(function($) {
-                    <?php if($mtype === 1){ ?>
+                    <?php if($mtype === 1 && $user_id > 0){ ?>
                     $('#confirmAddAdmin').on('click', function () {
                         var id = $('select[name="admin_id"]').val();
                         var zid = '<?=$id?>';
@@ -3503,6 +3533,45 @@ class Organize{
                         });
                     });
                     
+                    <?php }elseif ($mtype === 2 && $user_id > 0){ ?>
+                    $('#confirmAddCoach').on('click', function () {
+                        var id = $('select[name="add_coach_id"]').val();
+                        var zid = '<?=$user_id?>';
+                        if(id < 1) return false;
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action' : 'addZoneCoach', 'zid' : zid, 'uid' : id},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            }, error : function () {
+                                alert('请求失败!');
+                            }
+                        });
+                    });
+                    $('.remove_coach_a').on('click', function () {
+                        var id = $(this).attr('data-uid');
+                        var zid = '<?=$user_id?>';
+                        if(id < 1) return false;
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action' : 'removeZoneCoach', 'zid' : zid, 'uid' : id},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            }, error : function () {
+                                alert('请求失败!');
+                            }
+                        });
+                    });
                     <?php } ?>
 
                 });

@@ -554,6 +554,40 @@ class Fission_Ajax
         if($bool) wp_send_json_success(['info' => '删除成功!']);
         else wp_send_json_error(['info' => '删除失败!']);
     }
+
+    /**
+     * 获取无机构的教练
+     */
+    public function get_not_zone_coach(){
+        global $wpdb;
+        $s = isset($_GET['term']) ? trim($_GET['term']) : '';
+        if($s != ''){
+            $rows = $wpdb->get_results("SELECT cs.coach_id AS id,um.meta_value FROM {$wpdb->prefix}coach_skill AS cs 
+                    LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id=cs.coach_id
+                    LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cs.coach_id AND um.meta_key='user_real_name'
+                    WHERE um.meta_value LIKE '%{$s}%' AND um.user_id>0 AND zjc.id IS NULL");
+            foreach ($rows as &$row){
+                $row->text = unserialize($row->meta_value)['real_name'];
+            }
+            wp_send_json_success($rows);
+        }
+    }
+
+    /**
+     * 添加机构教练
+     */
+    public function addZoneCoach(){
+        $zone_id = isset($_POST['zid']) ? intval($_POST['zid']) : 0;
+        $coach_id = isset($_POST['uid']) ? intval($_POST['uid']) : 0;
+        if($zone_id < 1 || $coach_id < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        //该教练是否已经存在机构
+        $val = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_join_coach WHERE coach_id='{$coach_id}'");
+        if($val) wp_send_json_error(['info' => '当前教练已有任职机构']);
+        $bool = $wpdb->insert($wpdb->prefix.'zone_join_coach', ['zone_id' => $zone_id, 'coach_id' => $coach_id]);
+        if($bool) wp_send_json_success(['info' => '添加成功!']);
+        else wp_send_json_error(['info' => '添加失败!']);
+    }
 }
 
 new Fission_Ajax();

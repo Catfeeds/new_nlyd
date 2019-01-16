@@ -70,48 +70,6 @@ class Student_Directory
         load_view_template($view);
 
     }
-    // /**
-    //  * 课程首页
-    //  */
-    //  public function course(){
-    //     $view = student_view_path.CONTROLLER.'/course-center.php';
-    //     load_view_template($view);
-    // }
-    // /**
-    //  * 训练中心课程展示
-    //  */
-    //  public function cenerCourse(){
-    //     $view = student_view_path.CONTROLLER.'/course-center-list.php';
-    //     load_view_template($view);
-    // }
-    // /**
-    //  * 课程详情
-    //  */
-    //  public function courseDetail(){
-    //     $view = student_view_path.CONTROLLER.'/course-detail.php';
-    //     load_view_template($view);
-    // }
-    // /**
-    //  * 课程报名
-    //  */
-    //  public function courseSign(){
-    //     $view = student_view_path.CONTROLLER.'/course-sign.php';
-    //     load_view_template($view);
-    // }
-    // /**
-    //  * 课程报名成功
-    //  */
-    //  public function courseSignSuccess(){
-    //     $view = student_view_path.CONTROLLER.'/course-signSuccess.php';
-    //     load_view_template($view);
-    // }
-    // /**
-    //  * 课程报名成功
-    //  */
-    //  public function courseEnd(){
-    //     $view = student_view_path.CONTROLLER.'/course-end.php';
-    //     load_view_template($view);
-    // }
     /**
      * 默认公用js/css引入
      */
@@ -122,22 +80,5 @@ class Student_Directory
         wp_enqueue_style( 'my-student-home' );
         wp_register_style( 'my-student-directory', student_css_url.'directory/directory.css' ,array('my-student'));
         wp_enqueue_style( 'my-student-directory' );
-        // wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
-        // wp_enqueue_script( 'student-mobileSelect' );
-        // wp_localize_script('student-mobileSelect','_mobileSelect',[
-        //     'sure'=>__('确认','nlyd-student'),
-        //     'cancel'=>__('取消','nlyd-student')
-        // ]);
-        // wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
-        // wp_enqueue_style( 'my-student-mobileSelect' );
-
-        // if(ACTION == 'course'){
-        //     wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
-        //     wp_enqueue_script( 'student-swiper' );
-        //     wp_register_style( 'my-student-swiper', student_css_url.'swiper/swiper-4.3.3.min.css',array('my-student') );
-        //     wp_enqueue_style( 'my-student-swiper' );
-        // }
-        // wp_register_style( 'my-student-course', student_css_url.'course/course.css' );
-        // wp_enqueue_style( 'my-student-course' );
     }
 }

@@ -13,7 +13,7 @@
         <a class="mui-pull-left nl-goback">
         <div><i class="iconfont">&#xe610;</i></div>
         </a>
-        <h1 class="mui-title"><div>教辅商城</div></h1>
+        <h1 class="mui-title"><div><?=__('教辅商城', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
                 <!-- <div class="title-img img-box">
@@ -41,7 +41,7 @@
                 <div class="width-margin width-margin-pc">
                     <div class="shop-search layui-row">
                         <i class="iconfont searchIcon">&#xe63b;</i>
-                        <input type="text" class="serachInput" placeholder="搜索商品">
+                        <input type="text" class="serachInput" placeholder="<?=__('搜索商品', 'nlyd-student')?>">
                         <a class="shopCar" href="<?=home_url('orders');?>">
                             <span class="layui-badge">16</span>
                             <i class="iconfont">&#xe63d;</i>
@@ -59,7 +59,7 @@
                                     <div class="goods-price">
                                         <span class="nl-dark-blue">￥<?php echo ($row['price']+$row['brain']);?></span>
                                         <br />
-                                        <span class="orange-color"><?=$row['price']?>+<?=$row['brain']?>脑币</span>
+                                        <span class="orange-color"><?=$row['price']?>+<?=$row['brain']?><?=__('脑币', 'nlyd-student')?></span>
                                         <i class="iconfont addShopCar pull-right">&#xe673;</i>
                                     </div>
                                     <div class="goods-detail"><?=$row['goods_intro']?></div>

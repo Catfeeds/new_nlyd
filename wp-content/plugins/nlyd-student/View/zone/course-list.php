@@ -96,7 +96,6 @@ jQuery(function($) {
                 ,done: function(page, next){ //加载下一页
                     var postData={
                         action:'get_zone_course',
-                        _wpnonce:$('#inputMatch').val(),
                         page:match_page,
                         match_type:'',
                     }

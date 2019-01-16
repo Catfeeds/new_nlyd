@@ -72,6 +72,35 @@ class Student_Courses
         $view = student_view_path.CONTROLLER.'/course-end.php';
         load_view_template($view);
     }
+
+    /**
+     * 商品详情
+     */
+     public function shopsDetail(){
+        $view = student_view_path.CONTROLLER.'/shops-detail.php';
+        load_view_template($view);
+    }
+    /**
+     * 购物车
+     */
+     public function shopsCar(){
+        $view = student_view_path.CONTROLLER.'/shops-car.php';
+        load_view_template($view);
+    }
+    /**
+     * 商品结算
+     */
+     public function shopsSettlement(){
+        $view = student_view_path.CONTROLLER.'/shops-settlement.php';
+        load_view_template($view);
+    }
+    /**
+     * 支付成功
+     */
+     public function shopsPaySuccess(){
+        $view = student_view_path.CONTROLLER.'/shops-paySuccess.php';
+        load_view_template($view);
+    }
     /**
      * 默认公用js/css引入
      */
@@ -89,13 +118,21 @@ class Student_Courses
         wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
         wp_enqueue_style( 'my-student-mobileSelect' );
       
-        if(ACTION == 'index'){
+        if(ACTION == 'index' || ACTION == 'shopsDetail'){
             wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-swiper' );
             wp_register_style( 'my-student-swiper', student_css_url.'swiper/swiper-4.3.3.min.css',array('my-student') );
             wp_enqueue_style( 'my-student-swiper' );
         }
-        wp_register_style( 'my-student-course', student_css_url.'course/course.css' );
-        wp_enqueue_style( 'my-student-course' );
+        if (ACTION == 'shopsDetail' || ACTION == 'shopsCar' || ACTION == 'shopsSettlement' || ACTION == 'shopsPaySuccess') {
+            wp_register_style( 'my-student-shop', student_css_url.'shops/shop.css',array('my-student') );
+            wp_enqueue_style( 'my-student-shop' );
+        }else{
+            wp_register_style( 'my-student-course', student_css_url.'course/course.css' );
+            wp_enqueue_style( 'my-student-course' );  
+        }
+ 
+    
+
     }
 }
