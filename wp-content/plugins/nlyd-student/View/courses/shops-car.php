@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="shops_row width-padding width-padding-pc">
-                        <div  class="layui-unselect layui-form-checkbox shops_checkBox single" data-price="180" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
+                        <div  class="layui-unselect layui-form-checkbox shops_checkBox single" data-price="190" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
                         <div class="dis_inlineBlock shops_img">
                             <div class="shops_img_box">
                                 <img src="<?=student_css_url.'image/noInfo/noCourse1043@2x.png'?>">
@@ -148,17 +148,15 @@ jQuery(function($) {
                     var that=$(this);
                     var price=parseInt(that.attr('data-price'));
                     total_money+=price
-                    
                 })
-                console.log(total_money)
+                
                 $('.layui-form-checkbox').addClass('layui-form-checked');
             }else{
                 total_money=0
                 $('.layui-form-checkbox').removeClass('layui-form-checked');
             }
         }
-        total_money=parseInt(total_money).toFixed(2)
-        $('#total_money').text(total_money)
+        $('#total_money').text(total_money.toFixed(2))
     }
     if('ontouchstart' in window){// 移动端
         $('.shops_num_btn').each(function(){//+-
@@ -233,10 +231,9 @@ jQuery(function($) {
             $('body').on('click','.shops_settlement',function(){
                 // var total=$('#cost').val();
                 if($('.layui-form-checked').length>0){
-                    var total=11
                     var _post_data={
                         order_type:3,
-                        cost:total,
+                        cost:total_money,
                         action:'entry_pay',
                         _wpnonce:$('#payForm').val()
                     }
@@ -253,20 +250,20 @@ jQuery(function($) {
                                 }
                                 serialnumber=res.data.serialnumber;//获取订单号
                                 
-                                if(total>0){
+                                if(total_money>0){
                                     // $('.selectBottom').addClass('selectBottom-show')
-                                    var content='<div class="box-conent-wrapper"><?=__('本次共需支付', 'nlyd-student')?>￥'+total+'</div>'
+                                    var content='<div class="box-conent-wrapper"><?=__("本次共需支付", "nlyd-student")?>￥'+total_money+'</div>'
                                                 +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('微信', 'nlyd-student')?></div>'
                                                 +'<div style="text-align:left;margin:auto;width:100px;margin-top:10px" class="fs_14"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('支付宝', 'nlyd-student')?></div>'
                                                 //    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14 c_orange"><div id="visa" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;银联支付</div>'
                                     layer.open({
                                         type: 1
                                         ,maxWidth:300
-                                        ,title: '<?=__('选择支付方式', 'nlyd-student')?>' //不显示标题栏
+                                        ,title: "<?=__('选择支付方式', 'nlyd-student')?>" //不显示标题栏
                                         ,skin:'nl-box-skin'
                                         ,id: 'certification' //防止重复弹出
                                         ,content:content
-                                        ,btn: ['<?=__('取消支付', 'nlyd-student')?>', '<?=__('确认支付', 'nlyd-student')?>' ]
+                                        ,btn: ["<?=__('取消支付', 'nlyd-student')?>", "<?=__('确认支付', 'nlyd-student')?>" ]
                                         ,cancel:function(){
 
                                         }
