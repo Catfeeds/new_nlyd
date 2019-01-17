@@ -73,7 +73,7 @@ class Student_Courses
          if(!empty($row)){
              $city_arr = str2arr($row['zone_city'],'-');
              if(!empty($city_arr[2])){
-                 $city = rtrim($city_arr[1],'市').rtrim($city_arr[2],'区');
+                 $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
              }elseif ($city_arr[1] != '市辖区'){
                  $city = rtrim($city_arr[1],'市');
              }else{

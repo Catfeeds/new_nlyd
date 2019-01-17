@@ -1416,6 +1416,11 @@ class Grading
 //        leo_dump($categoryArr);
         ?>
         <div class="wrap">
+            <style type="text/css">
+                .prove_number_div{
+                    display: none;
+                }
+            </style>
             <h1 class="wp-heading-inline">考级过级记录</h1>
             <hr class="wp-header-end">
 
@@ -1488,11 +1493,17 @@ class Grading
                         <td class="address column-address" data-colname="收件地址"><?=$row['fullname'].'&nbsp;'.$row['telephone'].'&nbsp;'.$row['province'].$row['city'].$row['area'].$row['address']?></td>
                         <td class="prove column-prove" data-colname="证书">
                         <?php if($row['prove_grant_status'] == '2'){ ?>
-                            已发放<br />
+                            <?=$row['prove_number']?><br />
                             <?=$row['prove_grant_time']?>
                         <?php }else{ ?>
-                            <a href="javascript:;" class="prove_grant" data-id="<?=$row['id']?>" style="color: #5491c4">发放证书</a>
-                        <?php } ?>
+                            <a href="javascript:;" class="prove_grant" style="color: #5491c4">发放证书</a>
+                            <div class="prove_number_div">
+                                   <input type="text" class="prove_number" data-id="<?=$row['id']?>" style="height: 28px; width: 120px;margin-right: 10px;">
+                                   <button type="button" class="button confirm_prove">确定</button>
+                                   <button type="button" class="button cancel_prove">取消</button>
+
+                            </div>
+                      <?php } ?>
                         </td>
                     </tr>
                     <?php } ?>
@@ -1533,12 +1544,23 @@ class Grading
                         <?php } ?>
                     });
                     $('.prove_grant').on('click',function() {
-                        var id = $(this).attr('data-id');
-                        if(id < 1) return false;
+                        $('.prove_number_div').show();
+                        $(this).hide();
+                    });
+                    
+                    $('.cancel_prove').on('click', function() {
+                         $(this).closest('.prove_number_div').hide();
+                        $(this).closest('.prove_number_div').prev().show();
+                    });
+
+                    $('.confirm_prove').on('click', function() {
+                        var id = $(this).prev().attr('data-id');
+                        var number = $(this).prev().val();
+                        if(id < 1 || number == '') return false;
                         if(confirm('是否确定已发放证书?')){
                             $.ajax({
                                 url : ajaxurl,
-                                data : {'action' : 'gradingProveGrant', 'id':id},
+                                data : {'action' : 'gradingProveGrant', 'id':id,'number':number},
                                 type : 'post',
                                 dataType : 'json',
                                 success : function(response) {

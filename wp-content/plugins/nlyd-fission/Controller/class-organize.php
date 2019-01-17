@@ -1218,6 +1218,8 @@ class Organize{
                 $old_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}'");
                 if($old_id == $parent_id) $error_msg = $error_msg==''?'上级不能是自身':$error_msg.'<br >上级不能是自身';
             }
+            $zone_type_row = $this->getOrganizeTypeList($zone_type);
+            if($zone_type_row['zone_type_alias'] != 'match') $zone_match_type = 0;
             if($zone_match_type !== 1) {
                 $zone_title = '';
             }else{
