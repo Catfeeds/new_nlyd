@@ -19,7 +19,7 @@
         </a>
         <h1 class="mui-title"><div><?=__('购物车（3）', 'nlyd-student')?></div></h1>
         </header>
-            <div class="layui-row nl-border nl-content">
+            <div class="layui-row nl-border nl-content have-bottom">
                     <div class="shops_row width-padding width-padding-pc">
                         <div  class="layui-unselect layui-form-checkbox shops_checkBox single" data-price="180" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
                         <div class="dis_inlineBlock shops_img">
@@ -31,16 +31,16 @@
                             <div class="c_black fs_14">名字</div>
                             <div class="c_black6 fs_14">规格</div>
                             <div class="shops_details_bottom"><span class="c_blue fs_14">￥180.00 </span><span class="c_orange fs_14">170+10脑币</span></div>
-                            <div class="shops_add_compent">
+                            <div class="shops_add_compent" data-max="10">
                                 <div class="shops_num_btn dis_table reduce disabled fs_14" data-id="reduce"><div class="dis_cell">-</div></div>
-                                <div class="shops_num_input fs_14"><input class="nl-foucs total" type="tel" name="total" value="1"></div>
+                                <div class="shops_num_input fs_14"><input class="shops_focus total" type="tel" name="total" value="1"></div>
                                 <div class="shops_num_btn dis_table add fs_14" data-id="add"><div class="dis_cell">+</div></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="shops_row width-padding width-padding-pc">
-                        <div  class="layui-unselect layui-form-checkbox shops_checkBox single" data-price="190" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
+                        <div  class="layui-unselect layui-form-checkbox shops_checkBox single" data-price="180" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
                         <div class="dis_inlineBlock shops_img">
                             <div class="shops_img_box">
                                 <img src="<?=student_css_url.'image/noInfo/noCourse1043@2x.png'?>">
@@ -50,9 +50,9 @@
                             <div class="c_black fs_14">名字</div>
                             <div class="c_black6 fs_14">规格</div>
                             <div class="shops_details_bottom"><span class="c_blue fs_14">￥180.00 </span><span class="c_orange fs_14">170+10脑币</span></div>
-                            <div class="shops_add_compent">
+                            <div class="shops_add_compent"  data-max="10">
                                 <div class="shops_num_btn dis_table reduce disabled fs_14" data-id="reduce"><div class="dis_cell">-</div></div>
-                                <div class="shops_num_input fs_14"><input class="nl-foucs total" type="tel" name="total" value="1"></div>
+                                <div class="shops_num_input fs_14"><input class="shops_focus total" type="tel" name="total" value="1"></div>
                                 <div class="shops_num_btn dis_table add fs_14" data-id="add"><div class="dis_cell">+</div></div>
                             </div>
                         </div>
@@ -71,14 +71,15 @@
 <input type="hidden" name="_wpnonce" id="inputPay" value="<?=wp_create_nonce('student_get_ranking_code_nonce');?>">
 <script>
 jQuery(function($) { 
-    var max=100;
-    var total_money=0;
+    // var max=100;
+    // var total_money=0;//总价
     $('body').on('focusin','.shops_focus',function(){
        $('.shops_car_footer').addClass('shops_footer_rel')
     })
     $("body").on('focusout','.total',function(){
         var _this=$(this);
         var val=_this.val();
+        var max=parseInt(_this.parents('.shops_add_compent').attr('data-max'));
          if(isNaN(parseInt(val)) || parseInt(val)<=0){
             _this.val('1')
          }else{
@@ -88,7 +89,9 @@ jQuery(function($) {
                 _this.val(Math.ceil(val))
              }
          }
+
          btnActive(_this.val(),max,_this)
+         getTotalPrice()
          $('.shops_car_footer').removeClass('shops_footer_rel')
     })
     function btnActive(val,max,_this) {//+-显示
@@ -107,6 +110,7 @@ jQuery(function($) {
     function numberPress(_this){
         var type=_this.attr('data-id');
         var val=_this.parent('div').find('.total').val()
+        var max=parseInt(_this.parents('.shops_add_compent').attr('data-max'));
         switch (type) {
             case 'reduce':
                 if(val>1){
@@ -124,21 +128,34 @@ jQuery(function($) {
         _this.parent('div').find('.total').val(val)
         var newVal=_this.parent('div').find('.total').val();
         btnActive(newVal,max,_this)
+        getTotalPrice()
     }
-
+    function getTotalPrice(){//获取总价
+        var total_moneys=0;
+        $('.single').each(function(){
+            var that=$(this);
+            var price=parseInt(that.attr('data-price'));
+            var num=that.parent('.shops_row').find('.total').val();
+            if (that.hasClass('layui-form-checked')) {
+                total_moneys+=price*num
+            }
+        })
+        $('#total_money').text(total_moneys.toFixed(2))
+        return total_moneys
+    }
     function checkbox(_this){
         _this.toggleClass('layui-form-checked');
         var type=_this.hasClass('single');
-        if(type){
-            var price=parseInt(_this.attr('data-price'));
+        if(type){//单选
+            var price=parseInt(_this.attr('data-price'));//单价
             var check=_this.hasClass('layui-form-checked');
             if(check){
                 if($('.single').length==$('.single.layui-form-checked').length){//全选
                     $('.all').addClass('layui-form-checked');
                 }
-                total_money+=price;
+                // total_money+=price;
             }else{
-                total_money-=price;
+                // total_money-=price;
                 $('.all').removeClass('layui-form-checked');
             }
         }else{//全选
@@ -147,16 +164,17 @@ jQuery(function($) {
                 $('.single').each(function(){
                     var that=$(this);
                     var price=parseInt(that.attr('data-price'));
-                    total_money+=price
+                    // total_money+=price
                 })
                 
                 $('.layui-form-checkbox').addClass('layui-form-checked');
             }else{
-                total_money=0
+                // total_money=0
                 $('.layui-form-checkbox').removeClass('layui-form-checked');
             }
         }
-        $('#total_money').text(total_money.toFixed(2))
+        getTotalPrice();
+        
     }
     if('ontouchstart' in window){// 移动端
         $('.shops_num_btn').each(function(){//+-
@@ -175,14 +193,6 @@ jQuery(function($) {
                 }
             })
         })
-        // $('.shops_row').each(function(){//复选
-        //     var _this=$(this);
-        //     new AlloyFinger(_this[0], {
-        //         tap:function(){
-        //             checkbox(_this.find('.layui-form-checkbox'))
-        //         }
-        //     })
-        // })
     }else{
         $('body').on('click','.shops_num_btn',function(){//+-
             var _this=$(this);
@@ -192,10 +202,6 @@ jQuery(function($) {
             var _this=$(this);
             checkbox(_this)
         })
-        // $('body').on('click','.shops_row',function(){//复选
-        //     var _this=$(this).find('.layui-form-checkbox');
-        //     checkbox(_this)
-        // })
     }
 
 
@@ -229,7 +235,7 @@ jQuery(function($) {
     layui.use(['layer'], function(){
             // 监听提交
             $('body').on('click','.shops_settlement',function(){
-                // var total=$('#cost').val();
+                var total_money=getTotalPrice()
                 if($('.layui-form-checked').length>0){
                     var _post_data={
                         order_type:3,
