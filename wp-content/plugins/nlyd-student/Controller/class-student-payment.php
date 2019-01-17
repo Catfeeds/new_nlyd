@@ -700,7 +700,7 @@ class Student_Payment {
 
         /*****************收益分配start*******************/
 
-        /*if($order['order_type'] == 3){  //课程
+        if($order['order_type'] == 3){  //课程
             $sql = "select  a.zone_id,a.course_category_id,b.type_alias from {$wpdb->prefix}course a
                     left join {$wpdb->prefix}course_type b on a.course_type = b.id 
                     where a.id = {$order['match_id']} ";
@@ -930,7 +930,7 @@ class Student_Payment {
                     $wpdb->query('ROLLBACK');
                 }
             }
-        }*/
+        }
 
         /*****************收益分配end*******************/
 
