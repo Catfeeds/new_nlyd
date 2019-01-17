@@ -55,6 +55,9 @@
 .layui-tab-bar{
     display: none;
 }
+.select_row .layui-form-select{
+    display: none;
+}
 @media screen and (max-width: 991px){
     .layui-col-space20>*{
         padding: 0;

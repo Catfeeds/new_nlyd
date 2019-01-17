@@ -292,12 +292,6 @@ if(!class_exists('StudentController')){
 
                 wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
                 wp_enqueue_style( 'my-student' );
-                // //新闻列表css
-                // wp_register_style( 'my-student-news-list', student_css_url.'news/news-list.css',array('my-student') );
-                // wp_enqueue_style( 'my-student-news-list' );
-                // //新闻详情css
-                // wp_register_style( 'my-student-news-detail', student_css_url.'news/news-detail.css',array('my-student') );
-                // wp_enqueue_style( 'my-student-news-detail' );
             }
 
 
