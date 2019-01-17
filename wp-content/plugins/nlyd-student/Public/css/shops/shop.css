@@ -102,12 +102,23 @@ input[type="text"].serachInput{
 
 
 .shops_row{
+    display: block;
     padding-top:15px;
     padding-bottom: 15px; 
     background-color: #ffffff;
     font-size: 0;
     line-height: 20px;
     margin-bottom: 10px;
+}
+.shops_row.shopsSettlement{
+    margin-bottom: 0;
+}
+.shops_row.line_bottom{
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(241, 241, 241, 1);
+}
+.layui-row .shops_row.line_bottom:last-child{
+    border-bottom:none;
 }
 .layui-row .shops_row:last-child{
     margin-bottom: 0;
@@ -123,9 +134,35 @@ input[type="text"].serachInput{
     width:40px;
     margin-right: 10px;
 }
+.shops_settlement_label{
+    width:60px;
+    margin-right: 10px;
+}
+.shops_settlement_left{
+    width: 90px;
+    margin-right: 5px;
+}
+.layui-form-switch{
+    margin-top: 0;
+}
+.shops_labelSettlement_r{
+    width: -webkit-calc(100% - 95px);
+    width: calc(100% - 95px);
+}
+.shops_settlement_middle{
+    width: -webkit-calc(100% - 145px);
+    width: calc(100% - 145px);
+}
+.shops_settlement_right{
+    width:50px;
+}
 .shops_label_info{
     width: -webkit-calc(100% - 55px);
     width: calc(100% - 55px);
+}
+.shops_labelSettlement_info{
+    width: -webkit-calc(100% - 75px);
+    width: calc(100% - 75px);
 }
 .shops_zize_btn{
     width: 90px;
@@ -138,7 +175,14 @@ input[type="text"].serachInput{
     font-size: 0.14rem;
     float: left;
 }
+.shops_zize_btn.labelSettlement{
+    width: -webkit-calc(100% / 3 - 20px / 3);
+    border: 1px solid rgba(38, 38, 38, 0.5);
+}
 .shops_label_info .shops_zize_btn:last-child{
+    margin-right: 0;
+}
+.shops_labelSettlement_info .shops_zize_btn:last-child{
     margin-right: 0;
 }
 .shops_zize_btn.active{
@@ -267,15 +311,24 @@ img{
 }
 .shops_checkBox{
     margin-right: 15px!important;
+    width: 18px;
 }
 .shops_details_right{
     width:-webkit-calc(100% - 148px);
     width:calc(100% - 148px);
     font-size: 0;
 }
+.shopsSettlement .shops_details_right{
+    width:-webkit-calc(100% - 115px);
+    width:calc(100% - 115px);
+}
 .shops_details_right>div{
     margin-top: 5px;
 }
+.shopsSettlement .shops_details_right>div{
+    margin-top: 15px;
+}
+
 .shops_details_right>div:first-child{
     margin-top: 0
 }
@@ -296,5 +349,20 @@ img{
     width: -webkit-calc(100% - 193px);
     width: calc(100% - 193px);
     margin-right: 5px;
+    text-align: right;
+}
+.shops_settlement_money{
+    width: -webkit-calc(100% - 130px);
+    width: calc(100% - 130px);
+    margin-right: 5px;
+    text-align: right;
+    line-height: 20px;
+}
+.shops_settlement_address{
+    width: -webkit-calc(100% - 30px);
+    width: calc(100% - 30px);
+}
+.shops_settlement_arrow{
+    width: 30px;
     text-align: right;
 }
