@@ -68,16 +68,18 @@
                         </div>
                         <input type="hidden" name="action" value="zone_create_match">
                         <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
-                        <span class="details_btn flex-h">
-                            <?php if($match['allow_cancel'] == 'y'):?>
-                            <div class="details-button flex1">
-                                <button class="save" type="button" id="end_match"><?=__('取消比赛', 'nlyd-student')?></button>
-                            </div>
-                            <?php endif;?>
-                            <div class="details-button flex1 last-btn">
-                                <button class="see_button" type="button" lay-filter='layform' lay-submit=""><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></button>
-                            </div>
-                        </span>
+                        <?php if($match['allow_cancel'] !== 'y'){ ?>
+                            <span class="details_btn flex-h">
+                                <div class="details-button flex1">
+                                    <button class="save" type="button" id="end_match"><?=__('取消比赛', 'nlyd-student')?></button>
+                                </div>
+                                <div class="details-button flex1 last-btn">
+                                    <button class="see_button" type="button" lay-filter='layform' lay-submit=""><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></button>
+                                </div>
+                            </span>
+                        <?php }else{ ?>
+                            <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></div></a>
+                        <?php } ?>
                         <!-- <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></div></a> -->
                     </form>
                 </div>

@@ -105,11 +105,26 @@ jQuery(document).ready(function($) {
             var height=window_height-top-padding+'px'
             $('.detail-content-wrapper').css('minHeight',height)
         }else{
-           
             var window_height=$(window).height();
-            var height=window_height-parseInt($('html').css('marginTop'))-$('#header').height()-$('.page-title').height()-2*parseInt($('#main').css('paddingTop'))-$('#footer').height()-1+'px'
+            var headH=$('.masthead').height() ? $('.masthead').height() : 0;
+            var mainPadd=$('#main').css('paddingTop') ? 2*parseInt($('#main').css('paddingTop')) : 0 ;
+            // var mainPadd=0;
+            var footerH=$('#footer').height() ? $('#footer').height() : 0;
+            var muiBarH=$('.mui-bar').height() ? $('.mui-bar').height() : 0;
+            var muiPadd=$('.mui-bar').css('paddingTop') ? 2*parseInt($('.mui-bar').css('paddingTop')) : 0 ;
+            var contentPadd=$('.nl-content').css('paddingTop') ?　parseInt($('.nl-content').css('paddingTop')):0;
+            var pageTitleH=$('.page-title').height() ? $('.page-title').height() : 0;
+            var height=window_height-headH-mainPadd-footerH-1 - muiBarH- muiPadd-contentPadd-pageTitleH+'px';
             $('.nl-content').css('minHeight',height)
-            $('.wrapper_content').css('minHeight',parseInt(height)-8+'px')
+            $('.wrapper_content').css('minHeight',parseInt(height)+'px')
+            console.log('window_height:'+window_height)
+            console.log('headH:'+headH)
+            console.log('mainPadd:'+mainPadd)
+            console.log('footerH:'+footerH)
+            console.log('muiBarH:'+muiBarH)
+            console.log('muiPadd:'+muiPadd)
+            console.log('contentPadd:'+contentPadd)
+            console.log('pageTitleH:'+pageTitleH)
         }
     };
     $('body').on('focusin','.nl-foucs',function(){

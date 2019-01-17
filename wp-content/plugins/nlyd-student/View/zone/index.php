@@ -111,10 +111,11 @@
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
-            </div>
-            <?php if(empty($_SESSION['manager_id'])):?>
-            <a class="a-btn a-btn-table" id="loginOut"><div><?=__('退出登录', 'nlyd-student')?></div></a>
-            <?php endif;?>
+                </div>
+                <?php if(empty($_SESSION['manager_id'])):?>
+                <a class="a-btn a-btn-table" id="loginOut"><div><?=__('退出登录', 'nlyd-student')?></div></a>
+                <?php endif;?>
+            </div>  
         </div>            
     </div>
 </div>
