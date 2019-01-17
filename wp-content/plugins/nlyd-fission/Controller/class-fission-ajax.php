@@ -437,6 +437,17 @@ class Fission_Ajax
                     wp_send_json_error(['info' => '事业员收益添加失败!']);
                 }
             }
+            //事业部长(二级事业员)收益
+            if($row['indirect_manager_id'] > 0 && $row['indirect_manager_income'] != null && $row['indirect_manager_income'] != 0){
+                $insertData3['user_income'] = $row['indirect_manager_income'];
+                $insertData3['user_id'] = $row['indirect_manager_id'];
+                $insertData3['user_type'] = 2;
+                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
+                if(!$stream_logs_bool){
+                    $wpdb->query('ROLLBACK');
+                    wp_send_json_error(['info' => '二级事业员收益添加失败!']);
+                }
+            }
         }
         $wpdb->query('COMMIT');
         wp_send_json_success(['info' => '修改成功!']);

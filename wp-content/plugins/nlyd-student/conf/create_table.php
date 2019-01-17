@@ -119,7 +119,7 @@ function the_table_install () {
           `manager_id` int(20) DEFAULT NULL COMMENT '事业员(主办方上级)',
           `manager_income` int(20) DEFAULT NULL COMMENT '事业员收益',
           `indirect_manager_id` int(20) DEFAULT NULL COMMENT '二级事业员(事业部长)',
-          `indirect_manager_income` int(20) DEFAULT NULL COMMENT '二级事业员收益',
+          `indirect_manager_income` int(20) DEFAULT NULL COMMENT '二级事业员 收益',
           `income_status` tinyint(1) unsigned DEFAULT 1 COMMENT '1待确认,2已确认',
           `created_time` datetime DEFAULT NULL,
           PRIMARY KEY (`id`)
