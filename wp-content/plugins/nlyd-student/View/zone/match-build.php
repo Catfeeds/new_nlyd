@@ -128,17 +128,14 @@ var mobileSelect1 = new MobileSelect({
                 data: post_data,
                 success: function(res, textStatus, jqXHR){//获取比赛费用
                     if (res.success) {
-                            if(res.data){
-                                $('#match_cost').val(res.data)
-                            }else{
-                                $.alerts(res.data.info)
-                            }
+                        if(res.data){
+                            $('#match_cost').val(res.data)
                         }else{
                             $.alerts(res.data.info)
                         }
-                    // if(res.data){
-                    //     $('#match_cost').val(res.data)
-                    // }
+                    }else{
+                        $.alerts(res.data.info)
+                    }
                 },
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
