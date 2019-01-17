@@ -5084,10 +5084,14 @@ class Student_Ajax
             }
             $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$type} and match_type = {$match_type}";
             //print_r($set_sql);
-            $match_cost = $wpdb->get_var($set_sql);
-            if($match_cost < 10){
-                wp_send_json_error(array('info'=>__('未匹配到费用','nlyd-student')));
-            }
+
+        }elseif (in_array($_POST['type'],array('basis-course','boost-course'))){
+
+            $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$_POST['type']}' ";
+        }
+        $match_cost = $wpdb->get_var($set_sql);
+        if($match_cost < 10){
+            wp_send_json_error(array('info'=>__('未匹配到费用','nlyd-student')));
         }
         $match_cost = !empty($match_cost)? $match_cost :number_format(0);
         wp_send_json_success($match_cost);
@@ -5577,10 +5581,10 @@ class Student_Ajax
 
         //获取我推荐的机构
         if($_POST['map'] == 'zone'){
-            $sql = "select SQL_CALC_FOUND_ROWS a.id ,b.zone_type_alias, 
+            $sql = "select SQL_CALC_FOUND_ROWS a.id ,b.zone_type_alias,b.zone_type_name, 
 					case a.zone_match_type
-	                when 1 then '战队精英'
-	                when 2 then '城市'
+	                when 1 then '战队精英赛'
+	                when 2 then '城市赛'
 	                end zone_match_type_cn,
 	                a.zone_city,a.zone_name,a.user_id,apply_id,
 	                date_format(a.audit_time,'%Y-%m-%d') audit_time  
@@ -5692,18 +5696,6 @@ class Student_Ajax
             //var_dump($list);
         }
         else{
-
-            $sql__ = "select ID
-                 from {$wpdb->prefix}users
-                 where referee_id = {$current_user->ID} and ID > 0 ";
-            $rows__ = $wpdb->get_results($sql__,ARRAY_A);
-
-            if(empty($rows)){
-                $rows = $rows__;
-                $map = "y";
-            }
-
-            $child_user = array();
             foreach ($rows as $k => $v) {
                 if(!empty($v['zone_city'])){
 
@@ -5731,11 +5723,13 @@ class Student_Ajax
 
                     $rows[$k]['zone_name'] = $title.$v['zone_type_name'].' • '.$city;
                 }
-                if(!in_array($v['apply_id'],$child_user)){
-                    $child_user[] = $v['apply_id'];
-                }
             }
             //获取二级推荐
+            $child_sql = "select ID
+                 from {$wpdb->prefix}users
+                 where referee_id = {$current_user->ID} ";
+            //print_r($child_sql);
+            $child_user = $wpdb->get_results($child_sql,ARRAY_A);
             if(!empty($child_user)){
                 foreach ($child_user as $x => $y) {
                     $sql1 = "select SQL_CALC_FOUND_ROWS a.id ,b.zone_type_alias,b.zone_type_name, 
@@ -5747,7 +5741,7 @@ class Student_Ajax
 				                date_format(a.audit_time,'%Y-%m-%d') audit_time  
 				                from {$wpdb->prefix}zone_meta a 
 				                left join {$wpdb->prefix}zone_type b on a.type_id = b.id 
-				                where a.referee_id = {$y} and a.user_id > 0 order by a.id desc
+				                where a.referee_id = {$y['ID']} and a.user_id > 0 order by a.id desc
 				                ";
                     $rows1 = $wpdb->get_results($sql1,ARRAY_A);
                     //print_r($sql__);
@@ -5787,7 +5781,7 @@ class Student_Ajax
 
             $list = $rows;
         }
-        wp_send_json_success(array('info'=>$list));
+        wp_send_json_success(array('info'=>$list,'child'=>$rows1));
     }
 
     /**
@@ -6378,6 +6372,7 @@ class Student_Ajax
         if(empty($_POST['course_type']) || empty($_POST['course_category_id']) || empty($_POST['course_title']) || empty($_POST['duration']) || empty($_POST['coach_phone']) || empty($_POST['const']) ){
             wp_send_json_error(array('info'=>__('必填项不能为空','nlyd-student')));
         }
+
         if(!empty($_POST['course_start_time']) && !empty($_POST['course_end_time'])){
             if($_POST['course_start_time'] > $_POST['course_end_time']) wp_send_json_error(array('info'=>__('开课时间不能大于结课时间','nlyd-student')));
         }
@@ -6408,7 +6403,7 @@ class Student_Ajax
             'duration'=>$_POST['duration'],
             'course_category_id'=>$_POST['course_category_id'],
         );
-        //print_r($_POST);die;
+        //print_r($data);die;
         if($_POST['id'] > 0){
             $a = $wpdb->update($wpdb->prefix.'course',$data,array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
         }else{
