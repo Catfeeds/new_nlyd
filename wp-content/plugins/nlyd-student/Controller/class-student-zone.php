@@ -687,15 +687,15 @@ class Student_Zone
         $rows =  $wpdb->get_results($sql,ARRAY_A);
         //print_r($rows);
         if(!empty($rows)){
-
+            $time = get_time('mysql');
             foreach ($rows as $k => $v){
                 if($v['is_enable'] != -4){
                     $is_enable = '';
                     if($v['course_start_time'] > 0){
-                        if(get_time() < $v['course_start_time']){
+                        if($time < $v['course_start_time']){
                             $is_enable = 1; //报名中
                         }
-                        elseif ( $v['course_start_time'] <= get_time() && get_time() <= $v['course_end_time']){
+                        elseif ( $v['course_start_time'] <= $time && $time <= $v['course_end_time']){
                             $is_enable = 2; //授课中
                         }
                         else{
@@ -710,6 +710,7 @@ class Student_Zone
                             $is_enable = -2;
                         }
                     }
+                    //print_r($is_enable);
                     if(!empty($is_enable)){
                         $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>$is_enable),array('id'=>$v['id']));
                     }
