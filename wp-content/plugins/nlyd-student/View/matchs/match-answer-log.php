@@ -98,7 +98,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                 <h1 class="mui-title"><div><?=$match_title?><?=__('答题记录', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
-                <div class="width-margin">
+                <div class="width-margin width-margin-pc">
                     <div class="match-subject-info">
                         <div class="subject-title">
                             <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?> <?=sprintf(__('第%s轮', 'nlyd-student'),$match_more_cn)?> </div></div>

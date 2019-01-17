@@ -14,7 +14,7 @@
                     <h1 class="mui-title"><div><?=__($zone_name.'国际脑力训练中心', 'nlyd-student')?></div></h1>
                 </header>  
                 <div class="layui-row nl-border nl-content course">
-                    <div class="layui-tab layui-tab-brief" lay-filter="matchList">
+                    <div class="layui-tab layui-tab-brief fixed_tab" lay-filter="matchList">
                         <ul style="margin-left:0;padding:0" class="layui-tab-title">
                             <li class="layui-this" lay-id="1">
                                 <?=__('课程报名中', 'nlyd-student')?>

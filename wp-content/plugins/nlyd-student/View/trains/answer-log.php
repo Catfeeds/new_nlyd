@@ -115,7 +115,7 @@ switch ($type){
                 <h1 class="mui-title"><div><?=$title?> <?=__('答题记录', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
-                <div class="width-margin">
+                <div class="width-margin width-margin-pc">
                     <div class="match-subject-info">
                         <div class="subject-title">
                             <div class="c_black match_info_font"><div><?=$title?> <?/*=__('第'.$match_more.'轮', 'nlyd-student')*/?></div></div>
@@ -176,15 +176,15 @@ switch ($type){
                     ?> 
                 </div>        
             </div>
+            <?php if(!isset($_GET['back'])){ ?>
+            <div class="a-btn two get_footer">
+                <a class="a-two left c_white" id="again" href="<?=$recur_url?>"><div><?=__('再来一局', 'nlyd-student')?></div></a>
+                <a class="a-two right c_white" href="<?=$revert_url?>"><div><?=__('返回列表', 'nlyd-student')?></div></a>
+            </div>
+            <?php } ?>
         </div>
     </div>
 </div>
-<?php if(!isset($_GET['back'])){ ?>
-<div class="a-btn two get_footer">
-    <a class="a-two left c_white" id="again" href="<?=$recur_url?>"><div><?=__('再来一局', 'nlyd-student')?></div></a>
-    <a class="a-two right c_white" href="<?=$revert_url?>"><div><?=__('返回列表', 'nlyd-student')?></div></a>
-</div>
-<?php } ?>
 <script>
 jQuery(function($) {
     $.DelSession('train_match')

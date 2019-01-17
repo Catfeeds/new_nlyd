@@ -15,7 +15,7 @@
                 require_once leo_student_public_view.'leftMenu.php';
             
         ?>
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-bottom">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-bottom no-header">
             
             <div class="layui-row nl-border nl-content">
                 <div class="zone_user width-padding layui-row layui-bg-white width-padding-pc">

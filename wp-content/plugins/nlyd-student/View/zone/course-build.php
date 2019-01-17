@@ -58,7 +58,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程费用', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" disabled type="text" id="cost" name="const" value="500.00">
+                                <input class="radius_input_row nl-foucs" disabled type="text" id="cost" name="const" value="">
                             </div>
                         </div>
                         <div>
@@ -152,23 +152,29 @@ jQuery(function($) {
                 // $('#match_scene').val(data[0]['id']);
                 $('#course_type1').val(data[0]['value']);
                 $('#course_scene').val(data[0]['id']);
-                // var post_data={
-                //     action:'get_match_cost',
-                //     type:data[0]['role_alias']
-                // }
-                // $.ajax({
-                //     data: post_data,
-                //     success: function(res, textStatus, jqXHR){//获取比赛费用
-                //         if(res.data){
-                //             $('#cost').val(res.data)
-                //         }
-                //     },
-                //     complete: function(jqXHR, textStatus){
-                //         if(textStatus=='timeout'){
-                //             $.alerts("<?=__('获取比赛费用失败', 'nlyd-student')?>")
-                // 　　　　 }
-                //     }
-                // })
+                var post_data={
+                    action:'get_match_cost',
+                    type:data[0]['role_alias']
+                }
+                $.ajax({
+                    data: post_data,
+                    success: function(res, textStatus, jqXHR){//获取比赛费用
+                        if (res.success) {
+                            if(res.data){
+                                $('#cost').val(res.data)
+                            }else{
+                                $.alerts(res.data.info)
+                            }
+                        }else{
+                            $.alerts(res.data.info)
+                        }
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('获取比赛费用失败', 'nlyd-student')?>")
+                　　　　 }
+                    }
+                })
             }
         }
     });

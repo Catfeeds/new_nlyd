@@ -41,6 +41,7 @@
 
                 </h1>
             </header>
+            <div class="nl-border nl-content">
             <pre class="width-margin width-margin-pc c_black ff_cn">
             <?php
             switch ($_GET['type']){
@@ -436,9 +437,7 @@
 
         <?php } ?>
             </pre>
-        </div>
-    </div>
-    <?php
+            <?php
         $url = home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'].'/');   //脑力世界杯训练
         switch ($_GET['type']){ //考级训练
             case 'reading':
@@ -455,6 +454,9 @@
     <?php if(isset($_GET['genre_id'])):?>
     <a class="a-btn a-btn-table" id="go" href="<?=$url?>"><div><?=__('开始训练', 'nlyd-student')?></div></a>
     <?php endif;?>
+    </div>
+        </div>
+    </div>
 </div>
 <script>
 jQuery(function($) { 
@@ -521,52 +523,8 @@ jQuery(function($) {
                 });
                 return false;
             })
-            // $('body').on('click','.go_grade',function(){
-            //     var _this=$(this);
-            //     var _that=$('.kaoji_list')
-            //     if(!_that.hasClass('disabled')){
-            //         var level=_this.attr('data-id');
-            //         var postData={
-            //             action:'set_memory_grade',
-            //             genre_id:$.Request('genre_id'),
-            //             grad_type:$.Request('grad_type'),
-            //             grade:level,
-            //         }
-            //         $.ajax({
-            //             data: postData,
-            //             beforeSend:function(XMLHttpRequest){
-            //                 _that.addClass('disabled')
-            //             },
-            //             success: function(res, textStatus, jqXHR){
-            //                 $.alerts(res.data.info)
-            //                 if(res.data.url){
-            //                     setTimeout(function() {
-            //                         window.location.href=res.data.url
-            //                     }, 300);
-            //                 }else{
-            //                     _that.removeClass('disabled');
-            //                 }
-            //             },
-            //             complete: function(jqXHR, textStatus){
-            //                 if(textStatus=='timeout'){
-            //                     $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-            //                     _that.removeClass('disabled');
-            //         　　　　}
-            //             }
-            //         })
-            //     }else{
-            //         $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
-            //     }
-            //     return false;
-            // })
         }
               
     });
-    // if(_type=='memory'){
-    //     $('#go').click(function(){
-    //         console.log(1)
-    //         return false;
-    //     })
-    // }
 })
 </script>
