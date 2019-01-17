@@ -1631,27 +1631,22 @@ class Spread{
     /**
      * 获取收益类型
      */
-    public function getIncomeTypeName($income_type){
-        switch ($income_type){
-            case 'open_match':
-                $name = '开设比赛';
-                break;
-            case 'open_grading':
-                $name = '开设考级';
-                break;
-            case 'open_course':
-                $name = '课程渠道';
-                break;
-            case 'recommend_match':
-                $name = '推荐比赛';
-                break;
-            case 'recommend_grading':
-                $name = '推荐考级';
-                break;
-            case 'recommend_grading':
-                $name = '推荐考级';
-                break;
-        }
+    public function getIncomeTypeArr(){
+        return [
+            'open_match' => '开设比赛',
+            'open_grading' => '开设考级',
+            'open_course' => '课程渠道',
+            'recommend_match' => '推荐比赛',
+            'recommend_grading' => '推荐考级',
+            'director_match' => '参赛机构',
+            'director_grading' => '考级负责人',
+            'recommend_trains_zone' => '推荐训练中心',
+            'recommend_test_zone' => '推荐测评中心',
+            'recommend_match_zone' => '推荐赛区',
+            'recommend_course' => '推荐购课',
+            'recommend_qualified' => '推荐达标',
+            'grading_qualified' => '考级达标',
+        ];
     }
 
     /**

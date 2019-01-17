@@ -374,7 +374,7 @@ class Fission_Ajax
         //添加收益记录
         foreach ($rows as $row){
             $insertData3 = [
-                'income_type' => $row['income_type'],
+//                'income_type' => $row['income_type'],
                 'match_id' => $row['id'],
                 'created_time' => get_time('mysql'),
             ];
@@ -383,6 +383,7 @@ class Fission_Ajax
                 $insertData3['user_income'] = $row['referee_income'];
                 $insertData3['user_id'] = $row['referee_id'];
                 $insertData3['user_type'] = 2;
+                $insertData3['income_type'] = $row['income_type'] == 'match' ? 'recommend_match' : 'recommend_grading';
                 $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
                 if(!$stream_logs_bool){
                     $wpdb->query('ROLLBACK');
@@ -394,6 +395,7 @@ class Fission_Ajax
                 $insertData3['user_income'] = $row['indirect_referee_income'];
                 $insertData3['user_id'] = $row['indirect_referee_id'];
                 $insertData3['user_type'] = 2;
+                $insertData3['income_type'] = $row['income_type'] == 'match' ? 'recommend_match' : 'recommend_grading';
                 $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
                 if(!$stream_logs_bool){
                     $wpdb->query('ROLLBACK');
@@ -405,6 +407,7 @@ class Fission_Ajax
                 $insertData3['user_income'] = $row['person_liable_income'];
                 $insertData3['user_id'] = $row['person_liable_id'];
                 $insertData3['user_type'] = 2;
+                $insertData3['income_type'] = $row['income_type'] == 'match' ? 'director_match' : 'director_grading';
                 $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
                 if(!$stream_logs_bool){
                     $wpdb->query('ROLLBACK');
@@ -416,6 +419,7 @@ class Fission_Ajax
                 $insertData3['user_income'] = $row['sponsor_income'];
                 $insertData3['user_id'] = $row['sponsor_id'];
                 $insertData3['user_type'] = 1;
+                $insertData3['income_type'] = $row['income_type'] == 'match' ? 'open_match' : 'open_grading';
                 $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
                 if(!$stream_logs_bool){
                     $wpdb->query('ROLLBACK');
