@@ -457,7 +457,7 @@ class Student_Payment {
                             $sponsor_type = 'open_'.$income_type;
                             $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='{$sponsor_type}' and match_id = {$order['match_id']}",ARRAY_A);
                             //var_dump($stream_id);
-                            if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == -1){
+                            if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == 1){
                                 $b = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$sponsor_income['user_income']+$money4),array('id'=>$sponsor_income['id']));
                             }
                             else{
@@ -470,7 +470,7 @@ class Student_Payment {
                             $referee_type = 'recommend_'.$income_type;
                             $referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$referee_type}' ",ARRAY_A);
                             //print_r($referee_income);
-                            if($referee_income['id'] > 0 && $referee_income['income_status'] == -1){
+                            if($referee_income['id'] > 0 && $referee_income['income_status'] == 1){
                                 //print_r($referee_income['user_income']+$money1);die;
                                 $c = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$referee_income['user_income']+$money1),array('id'=>$referee_income['id']));
                             }else{
@@ -482,7 +482,7 @@ class Student_Payment {
                         if(!empty($user['indirect_referee_id']) && $money2 > 0){
                             $indirect_referee_type = 'recommend_'.$income_type;
                             $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$indirect_referee_type}' ",ARRAY_A);
-                            if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == -1){
+                            if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == 1){
                                 $d = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$indirect_referee_income['user_income']+$money2),array('id'=>$indirect_referee_income['id']));
                             }else{
                                 $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
@@ -494,7 +494,7 @@ class Student_Payment {
                         if(!empty($insert['person_liable_id']) && $money3 > 0){
                             $person_liable_type = 'director_'.$income_type;
                             $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$person_liable_type}' ",ARRAY_A);
-                            if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == -1){
+                            if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == 1){
                                 $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
                             }else{
                                 $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
@@ -699,7 +699,7 @@ class Student_Payment {
         ];
 
         /*****************收益分配start*******************/
-
+        /*
         if($order['order_type'] == 3){  //课程
             $sql = "select  a.zone_id,a.course_category_id,b.type_alias from {$wpdb->prefix}course a
                     left join {$wpdb->prefix}course_type b on a.course_type = b.id 
@@ -850,7 +850,7 @@ class Student_Payment {
                     $sponsor_type = 'open_'.$income_type;
                     $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='{$sponsor_type}' and match_id = {$order['match_id']}",ARRAY_A);
                     //var_dump($stream_id);
-                    if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == -1){
+                    if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == 1){
                         $b = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$sponsor_income['user_income']+$money4),array('id'=>$sponsor_income['id']));
                     }
                     else{
@@ -863,7 +863,7 @@ class Student_Payment {
                     $referee_type = 'recommend_'.$income_type;
                     $referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$referee_type}' ",ARRAY_A);
                     //print_r($referee_income);
-                    if($referee_income['id'] > 0 && $referee_income['income_status'] == -1){
+                    if($referee_income['id'] > 0 && $referee_income['income_status'] == 1){
                         //print_r($referee_income['user_income']+$money1);die;
                         $c = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$referee_income['user_income']+$money1),array('id'=>$referee_income['id']));
                     }else{
@@ -875,7 +875,7 @@ class Student_Payment {
                 if(!empty($user['indirect_referee_id']) && $money2 > 0){
                     $indirect_referee_type = 'recommend_'.$income_type;
                     $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$indirect_referee_type}' ",ARRAY_A);
-                    if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == -1){
+                    if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == 1){
                         $d = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$indirect_referee_income['user_income']+$money2),array('id'=>$indirect_referee_income['id']));
                     }else{
                         $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
@@ -887,7 +887,7 @@ class Student_Payment {
                 if(!empty($insert['person_liable_id']) && $money3 > 0){
                     $person_liable_type = 'director_'.$income_type;
                     $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$person_liable_type}' ",ARRAY_A);
-                    if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == -1){
+                    if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == 1){
                         $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
                     }else{
                         $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
@@ -930,7 +930,7 @@ class Student_Payment {
                     $wpdb->query('ROLLBACK');
                 }
             }
-        }
+        }*/
 
         /*****************收益分配end*******************/
 
@@ -1151,7 +1151,7 @@ class Student_Payment {
                                 $sponsor_type = 'open_'.$income_type;
                                 $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='{$sponsor_type}' and match_id = {$order['match_id']}",ARRAY_A);
                                 //var_dump($stream_id);
-                                if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == -1){
+                                if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == 1){
                                     $b = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$sponsor_income['user_income']+$money4),array('id'=>$sponsor_income['id']));
                                 }
                                 else{
@@ -1164,7 +1164,7 @@ class Student_Payment {
                                 $referee_type = 'recommend_'.$income_type;
                                 $referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$referee_type}' ",ARRAY_A);
                                 //print_r($referee_income);
-                                if($referee_income['id'] > 0 && $referee_income['income_status'] == -1){
+                                if($referee_income['id'] > 0 && $referee_income['income_status'] == 1){
                                     //print_r($referee_income['user_income']+$money1);die;
                                     $c = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$referee_income['user_income']+$money1),array('id'=>$referee_income['id']));
                                 }else{
@@ -1176,7 +1176,7 @@ class Student_Payment {
                             if(!empty($user['indirect_referee_id']) && $money2 > 0){
                                 $indirect_referee_type = 'recommend_'.$income_type;
                                 $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$indirect_referee_type}' ",ARRAY_A);
-                                if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == -1){
+                                if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == 1){
                                     $d = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$indirect_referee_income['user_income']+$money2),array('id'=>$indirect_referee_income['id']));
                                 }else{
                                     $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
@@ -1188,7 +1188,7 @@ class Student_Payment {
                             if(!empty($insert['person_liable_id']) && $money3 > 0){
                                 $person_liable_type = 'director_'.$income_type;
                                 $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$person_liable_type}' ",ARRAY_A);
-                                if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == -1){
+                                if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == 1){
                                     $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
                                 }else{
                                     $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));

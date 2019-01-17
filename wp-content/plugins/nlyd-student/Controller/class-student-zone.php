@@ -79,7 +79,6 @@ class Student_Zone
      *个人用户控制台
      */
     public function indexUser(){
-
         global $wpdb,$current_user;
         //获取推荐ID/推荐时间/今日收益
         $sql = "select a.referee_id,a.referee_time,date_format(b.created_time,'%Y-%m-%d') date_time ,sum(b.user_income) total_income
@@ -1240,7 +1239,7 @@ class Student_Zone
 
             $city_arr = str2arr($row['zone_city'],'-');
             if(!empty($city_arr[2])){
-                $city = rtrim($city_arr[1],'市').rtrim($city_arr[2],'区');
+                $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
             }elseif ($city_arr[1] != '市辖区'){
                 $city = rtrim($city_arr[1],'市');
             }else{
