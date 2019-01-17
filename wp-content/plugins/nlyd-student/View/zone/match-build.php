@@ -174,21 +174,26 @@ var mobileSelect2 = new MobileSelect({
 });
 //---------------------------开赛日期------------------------------
 if($('#match_date').length>0 && $('#match_date').attr('data-time').length>0){
-    var timeValue=$('#match_date').attr('data-time').split('-');
+    var timeValue1=$('#match_date').attr('data-time').split('-');
+    // console.log(timeValue)
     $.each(match_date_Data,function(index,value){
-        if(parseInt(timeValue[0])==parseInt(value.value)){
+        if(parseInt(timeValue1[0])==parseInt(value.value)){
+           
             posiotion_match_date=[index,0,0,0,0];
             $.each(value.childs,function(i,v){
-                if(parseInt(timeValue[1])==parseInt(v.value)){
+                if(parseInt(timeValue1[1])==parseInt(v.value)){
+                   
                     posiotion_match_date=[index,i,0,0,0];
                     $.each(v.childs,function(j,val){
-                        if(parseInt(timeValue[2])==parseInt(val.value)){
+                        if(parseInt(timeValue1[2])==parseInt(val.value)){
+                            
                             posiotion_match_date=[index,i,j,0,0];
                             $.each(val.childs,function(k,b){
-                                if(parseInt(timeValue[3])==parseInt(b.value)){
+                                if(parseInt(timeValue1[3])==parseInt(b.value)){
+                                    
                                     posiotion_match_date=[index,i,j,k,0];
                                     $.each(b.childs,function(l,c){
-                                        if(parseInt(timeValue[4])==parseInt(c.value)){
+                                        if(parseInt(timeValue1[4])==parseInt(c.value)){
                                             posiotion_match_date=[index,i,j,k,l];
                                         }
                                     })
@@ -256,7 +261,7 @@ var mobileSelect4 = new MobileSelect({
         {data: match_date_Data}
     ],
     new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>","<?=__('时', 'nlyd-student')?>","<?=__('分', 'nlyd-student')?>"],
-    position:posiotion_match_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+    position:posiotion_match_end_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
     transitionEnd:function(indexArr, data){
         // console.log(data);
     },
