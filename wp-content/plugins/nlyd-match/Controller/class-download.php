@@ -1858,6 +1858,13 @@ class Download
     }
 
     /**
+     * 导出考级过级记录
+     */
+    public function exportGradingAdoptLog() {
+
+    }
+
+    /**
      * 公用导出方法
      */
     public function publicExport($data,$field,$title,$file_name){

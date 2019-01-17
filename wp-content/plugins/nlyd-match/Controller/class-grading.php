@@ -1435,7 +1435,13 @@ class Grading
                 ?>
             </ul>
                <br class="clear">
-            <button class="button-primary" type="button">导出</button>
+                <div>
+                    <form action="<?=admin_url('admin.php?page=download&action=exportGradingAdoptLog')?>" method="post">
+                        <input type="date" name="begin"> -
+                        <input type="date" name="end">
+                        <button class="button-primary" type="submit">导出</button>
+                    </form>
+                </div>
                 <div class="tablenav top">
                     <div class="tablenav-pages">
                         <span class="displaying-num"><?=$count['count']?>个项目</span>

@@ -524,7 +524,8 @@ class Spread{
                     <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-log&user_id='.$user_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
                 </p>
             <?php } ?>
-            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740">
+            <input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
 
                 <div class="alignleft actions bulkactions">
@@ -536,13 +537,15 @@ class Spread{
                     <input type="button" id="doaction" class="button action all_options" value="应用">
                 </div>
 
-                <div class="tablenav-pages">
+                <div class="tablenav-pages one-page">
                     <span class="displaying-num"><?=$count['count']?>个项目</span>
                     <?=$pageHtml?>
                 </div>
-                <br class="clear">
+
             </div>
-            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
+            <br class="clear">
+            <h2 class="screen-reader-text">机构列表</h2>
+            <table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
@@ -718,6 +721,7 @@ class Spread{
 
             </script>
         </div>
+
         <?php
     }
 
@@ -1238,6 +1242,7 @@ class Spread{
                 <tbody id="the-list" data-wp-lists="list:user">
 
                 <?php
+                $income_stream_array = $this->getIncomeTypeArr();
                 foreach ($rows as $row){
 
                     //主体或机构
@@ -1274,27 +1279,28 @@ class Spread{
                         </td>
                         <td class="income_type column-income_type" data-colname="类型">
                             <?php
-                            switch ($row['income_type']){
-                                case 'match':
-                                    echo  '比赛';
-                                    break;
-                                case 'grading':
-                                    echo '考级';
-                                    break;
-                                case 'extract':
-                                    echo '提现';
-                                    break;
-                                case 'subject':
-                                    $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['user_type']}'");
-                                    if($zone_type_name == '赛事') $zone_type_name = '赛区';
-                                    echo '推荐'.$zone_type_name;
-                                    break;
-                                case 'undertake':
-                                    $type = $wpdb->get_var("SELECT order_type FROM {$wpdb->prefix}order WHERE match_id='{$row['match_id']}'");
-                                    $match_type = $type == '1' ? '比赛' : ($type == '2' ? '考级' : '');
-                                    echo '承办'.$match_type;
-                                    break;
-                            }
+                            echo $income_stream_array[$row['income_type']];
+//                            switch ($row['income_type']){
+//                                case 'match':
+//                                    echo  '比赛';
+//                                    break;
+//                                case 'grading':
+//                                    echo '考级';
+//                                    break;
+//                                case 'extract':
+//                                    echo '提现';
+//                                    break;
+//                                case 'subject':
+//                                    $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['user_type']}'");
+//                                    if($zone_type_name == '赛事') $zone_type_name = '赛区';
+//                                    echo '推荐'.$zone_type_name;
+//                                    break;
+//                                case 'undertake':
+//                                    $type = $wpdb->get_var("SELECT order_type FROM {$wpdb->prefix}order WHERE match_id='{$row['match_id']}'");
+//                                    $match_type = $type == '1' ? '比赛' : ($type == '2' ? '考级' : '');
+//                                    echo '承办'.$match_type;
+//                                    break;
+//                            }
                             ?>
                         </td>
                         <td class="user_income column-user_income" data-colname="数额">
@@ -1646,6 +1652,8 @@ class Spread{
             'recommend_course' => '推荐购课',
             'recommend_qualified' => '推荐达标',
             'grading_qualified' => '考级达标',
+            'cause_manager' => '事业管理员',
+            'cause_minister' => '事业部长',
         ];
     }
 
