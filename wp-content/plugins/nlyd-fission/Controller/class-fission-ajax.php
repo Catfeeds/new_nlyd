@@ -361,7 +361,7 @@ class Fission_Ajax
 
         global $wpdb;
         //获取数据
-        $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}user_income_logs WHERE income_type NOT IN ('match','grading') AND id IN({$id}) AND income_status=1", ARRAY_A);
+        $rows = $wpdb->get_results("SELECT match_id FROM {$wpdb->prefix}user_income_logs WHERE income_type NOT IN ('match','grading') AND id IN({$id}) AND income_status=1", ARRAY_A);
         if(!$rows) wp_send_json_error(['info' => '无待确认数据!']);
         $wpdb->query('START TRANSACTION');
         $sql = "UPDATE {$wpdb->prefix}user_income_logs SET income_status='{$status}' WHERE income_type NOT IN ('match','grading') AND id IN({$id}) AND income_status=1";
@@ -371,83 +371,16 @@ class Fission_Ajax
             $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '修改失败!']);
         }
-        //添加收益记录
+        //修改收益记录状态
+        $match_id = [];
         foreach ($rows as $row){
-            $insertData3 = [
-//                'income_type' => $row['income_type'],
-                'match_id' => $row['id'],
-                'created_time' => get_time('mysql'),
-            ];
-            //直接上级
-            if($row['referee_id'] > 0 && $row['referee_income'] != null && $row['referee_income'] != 0){
-                $insertData3['user_income'] = $row['referee_income'];
-                $insertData3['user_id'] = $row['referee_id'];
-                $insertData3['user_type'] = 2;
-                $insertData3['income_type'] = $row['income_type'] == 'match' ? 'recommend_match' : 'recommend_grading';
-                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
-                if(!$stream_logs_bool){
-                    $wpdb->query('ROLLBACK');
-                    wp_send_json_error(['info' => '直接上级收益添加失败!']);
-                }
-            }
-            //间接上级
-            if($row['indirect_referee_id'] > 0 && $row['indirect_referee_income'] != null && $row['indirect_referee_income'] != 0){
-                $insertData3['user_income'] = $row['indirect_referee_income'];
-                $insertData3['user_id'] = $row['indirect_referee_id'];
-                $insertData3['user_type'] = 2;
-                $insertData3['income_type'] = $row['income_type'] == 'match' ? 'recommend_match' : 'recommend_grading';
-                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
-                if(!$stream_logs_bool){
-                    $wpdb->query('ROLLBACK');
-                    wp_send_json_error(['info' => '间接上级收益添加失败!']);
-                }
-            }
-            //负责人收益
-            if($row['person_liable_id'] > 0 && $row['person_liable_income'] != null && $row['person_liable_income'] != 0){
-                $insertData3['user_income'] = $row['person_liable_income'];
-                $insertData3['user_id'] = $row['person_liable_id'];
-                $insertData3['user_type'] = 2;
-                $insertData3['income_type'] = $row['income_type'] == 'match' ? 'director_match' : 'director_grading';
-                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
-                if(!$stream_logs_bool){
-                    $wpdb->query('ROLLBACK');
-                    wp_send_json_error(['info' => '负责人收益添加失败!']);
-                }
-            }
-            //主办方收益
-            if($row['sponsor_id'] > 0 && $row['sponsor_income'] != null && $row['sponsor_income'] != 0){
-                $insertData3['user_income'] = $row['sponsor_income'];
-                $insertData3['user_id'] = $row['sponsor_id'];
-                $insertData3['user_type'] = 1;
-                $insertData3['income_type'] = $row['income_type'] == 'match' ? 'open_match' : 'open_grading';
-                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
-                if(!$stream_logs_bool){
-                    $wpdb->query('ROLLBACK');
-                    wp_send_json_error(['info' => '主办方收益添加失败!']);
-                }
-            }
-            //事业员收益
-            if($row['manager_id'] > 0 && $row['manager_income'] != null && $row['manager_income'] != 0){
-                $insertData3['user_income'] = $row['manager_income'];
-                $insertData3['user_id'] = $row['manager_id'];
-                $insertData3['user_type'] = 2;
-                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
-                if(!$stream_logs_bool){
-                    $wpdb->query('ROLLBACK');
-                    wp_send_json_error(['info' => '事业员收益添加失败!']);
-                }
-            }
-            //事业部长(二级事业员)收益
-            if($row['indirect_manager_id'] > 0 && $row['indirect_manager_income'] != null && $row['indirect_manager_income'] != 0){
-                $insertData3['user_income'] = $row['indirect_manager_income'];
-                $insertData3['user_id'] = $row['indirect_manager_id'];
-                $insertData3['user_type'] = 2;
-                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
-                if(!$stream_logs_bool){
-                    $wpdb->query('ROLLBACK');
-                    wp_send_json_error(['info' => '二级事业员收益添加失败!']);
-                }
-            }
+            if($row['match_id'] > 0) $match_id[] = $row['match_id'];
+        }
+        $sql = "UPDATE {$wpdb->prefix}user_stream_logs SET `income_status`=2 WHERE match_id IN({$match_id}) AND income_type NOT IN ('recommend_trains_zone','recommend_test_zone','recommend_match_zone')";
+        $user_stream_logs_bool = $wpdb->query($sql);
+        if(!$user_stream_logs_bool){
+            $wpdb->query('ROLLBACK');
+            wp_send_json_error(['info' => '修改失败!']);
         }
         $wpdb->query('COMMIT');
         wp_send_json_success(['info' => '修改成功!']);
@@ -473,34 +406,46 @@ class Fission_Ajax
             wp_send_json_error(['info' => '确认失败']);
         }
         //添加收益流水
-        $sql2 = "INSERT INTO `{$wpdb->prefix}user_stream_logs` (`user_id`,`income_type`,`match_id`,`user_income`,`created_time`,`income_status`) VALUES";
-        $insertDataArr = [];
-        $created_time = get_time('mysql');
-        foreach ($rows as $row){
-            //直接上街
-            if($row['referee_id'] && $row['referee_income'] != '0'){
-                $insertDataArr[] = "('{$row['referee_id']}','{$row['income_type']}','{$row['match_id']}','{$row['referee_income']}','{$created_time}',2)";
-            }
-            //间接上级
-            if($row['indirect_referee_id'] && $row['indirect_referee_income'] != '0'){
-                $insertDataArr[] = "('{$row['indirect_referee_id']}','{$row['income_type']}','{$row['match_id']}','{$row['indirect_referee_income']}','{$created_time}',2)";
-            }
-            //负责人
-            if($row['person_liable_id'] && $row['person_liable_income'] != '0'){
-                $insertDataArr[] = "('{$row['person_liable_id']}','{$row['income_type']}','{$row['match_id']}','{$row['person_liable_income']}','{$created_time}',2)";
-            }
-            //主办方
-            if($row['sponsor_id'] && $row['sponsor_income'] != '0'){
-                $insertDataArr[] = "('{$row['sponsor_id']}','{$row['income_type']}','{$row['match_id']}','{$row['sponsor_income']}','{$created_time}',2)";
-            }
-            //事业员
-            if($row['manager_id'] && $row['manager_income'] != '0'){
-                $insertDataArr[] = "('{$row['manager_id']}','{$row['income_type']}','{$row['match_id']}','{$row['manager_income']}','{$created_time}',2)";
-            }
-        }
-        $sql2 .= join(',', $insertDataArr);
-        $insertBool = $wpdb->query($sql2);
-        if($insertBool){
+//        $sql2 = "INSERT INTO `{$wpdb->prefix}user_stream_logs` (`user_id`,`income_type`,`match_id`,`user_income`,`created_time`,`income_status`) VALUES";
+//        $insertDataArr = [];
+//        $created_time = get_time('mysql');
+//        foreach ($rows as $row){
+
+//            //直接上街
+//            if($row['referee_id'] && $row['referee_income'] != '0' && $row['referee_income'] != NULL){
+//                $income_type = $row['income_type'] == 'match' ? 'recommend_match' : 'recommend_grading';
+//                $insertDataArr[] = "('{$row['referee_id']}','{$income_type}','{$row['match_id']}','{$row['referee_income']}','{$created_time}',2)";
+//            }
+//            //间接上级
+//            if($row['indirect_referee_id'] && $row['indirect_referee_income'] != '0' && $row['indirect_referee_income'] != NULL){
+//                $income_type = $row['income_type'] == 'match' ? 'recommend_match' : 'recommend_grading';
+//                $insertDataArr[] = "('{$row['indirect_referee_id']}','{$income_type}','{$row['match_id']}','{$row['indirect_referee_income']}','{$created_time}',2)";
+//            }
+//            //负责人
+//            if($row['person_liable_id'] && $row['person_liable_income'] != '0' && $row['person_liable_income'] != NULL){
+//                $income_type = $row['income_type'] == 'match' ? 'director_match' : 'director_grading';
+//                $insertDataArr[] = "('{$row['person_liable_id']}','{$income_type}','{$row['match_id']}','{$row['person_liable_income']}','{$created_time}',2)";
+//            }
+//            //主办方
+//            if($row['sponsor_id'] && $row['sponsor_income'] != '0' && $row['sponsor_income'] != NULL){
+//                $income_type = $row['income_type'] == 'match' ? 'open_match' : 'open_grading';
+//                $insertDataArr[] = "('{$row['sponsor_id']}','{$income_type}','{$row['match_id']}','{$row['sponsor_income']}','{$created_time}',2)";
+//            }
+//            //事业员
+//            if($row['manager_id'] && $row['manager_income'] != '0' && $row['manager_income'] != NULL){
+//                $insertDataArr[] = "('{$row['manager_id']}','cause_manager','{$row['match_id']}','{$row['manager_income']}','{$created_time}',2)";
+//            }
+//            //事业管理员
+//            if($row['indirect_manager_id'] && $row['indirect_manager_income'] != '0' && $row['indirect_manager_income'] != NULL){
+//                $insertDataArr[] = "('{$row['indirect_manager_id']}','cause_minister','{$row['match_id']}','{$row['indirect_manager_income']}','{$created_time}',2)";
+//            }
+//        }
+//        $sql2 .= join(',', $insertDataArr);
+//        $insertBool = $wpdb->query($sql2);
+        //修改收益流水状态
+        $sql = "UPDATE {$wpdb->prefix}user_stream_logs SET `income_status`=2 WHERE match_id IN({$match_id}) AND income_type NOT IN ('recommend_trains_zone','recommend_test_zone','recommend_match_zone')";
+        $user_stream_logs_bool = $wpdb->query($sql);
+        if($user_stream_logs_bool){
             $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '确认成功']);
         }else{

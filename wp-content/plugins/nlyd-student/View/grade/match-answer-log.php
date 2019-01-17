@@ -103,7 +103,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 <h1 class="mui-title"><div><?=__('答题记录', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
-                <div class="width-margin">
+                <div class="width-margin width-margin-pc">
                     <div class="match-subject-info">
                         <div class="subject-title 
                         <?php if(ACTION == 'myAnswerLog'): ?>

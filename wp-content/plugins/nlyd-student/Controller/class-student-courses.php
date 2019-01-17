@@ -141,8 +141,7 @@ class Student_Courses
     public function scripts_default(){
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
-        wp_register_style( 'my-student-home', student_css_url.'home-student.css' );
-        wp_enqueue_style( 'my-student-home' );
+
         wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
         wp_enqueue_script( 'student-mobileSelect' );
         wp_localize_script('student-mobileSelect','_mobileSelect',[
@@ -151,7 +150,10 @@ class Student_Courses
         ]);
         wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
         wp_enqueue_style( 'my-student-mobileSelect' );
-      
+        if (ACTION == 'index') {
+            wp_register_style( 'my-student-home', student_css_url.'home-student.css' );
+            wp_enqueue_style( 'my-student-home' );
+        }
         if(ACTION == 'index' || ACTION == 'shopsDetail'){
             wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-swiper' );

@@ -204,11 +204,9 @@ jQuery(function($) {
                     $.ajax({
                         data: postData,
                         success:function(res,ajaxStatu,xhr){
-                            console.log(_page)
                             _page++
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    console.log(v)
                                     var dom= '<a class="course_row width-padding width-padding-pc c_black6" href="'+window.home_url+'/courses/cenerCourse/id/'+v.user_id+'/">'
                                                 +'<div class="course_city_icon c_blue"><i class="iconfont">&#xe659;</i></div>'
                                                 +'<div class="course_info">'

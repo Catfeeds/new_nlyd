@@ -646,10 +646,12 @@ p.no-info-text{
 .mui-pull-left.nl-goback{
     display: table;
     width: 44px;
-    height: 44px;
+    /* height: 44px; */
+    height: 90px;
     text-align: left;
     line-height: 20px;
-    color: #2484FE;
+    /* color: #2484FE; */
+    color: #fff;
     position: absolute;
     left: 10px;
     top: 0;
@@ -805,6 +807,9 @@ p.share-font{
     flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
 @media screen and (min-width: 1200px){
+    .no-header{
+        border-top: 1px solid #f2f2f2;
+    }
     .nl-foot-nav{
         display: none;
     }
@@ -898,6 +903,10 @@ p.share-font{
     }
 }
 @media screen and (max-width: 1199px){
+    .mui-pull-left.nl-goback{
+        height: 44px;
+        color: #2484FE;
+    }
     .have-footer{
         margin-bottom: 60px;
     }

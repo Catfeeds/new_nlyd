@@ -105,7 +105,7 @@ function the_table_install () {
 
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
-          `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 比赛 match, 考级 grading,成为主体机构subject',
+          `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 比赛 match, 考级 grading,成为主体机构subject,course',
           `match_id` int(20) DEFAULT NULL COMMENT '同order表match_id',
           `user_id` int(20) DEFAULT NULL COMMENT '付款人id',
           `referee_id` int(20) DEFAULT NULL COMMENT '直接推广人',
@@ -293,6 +293,7 @@ function the_table_install () {
           `grading_coach_id` int(20) unsigned DEFAULT 0 COMMENT '此次考级的教练id',
           `prove_grant_status` tinyint(1) DEFAULT 1 COMMENT '证书发放状态:1未发放,2已发放',
           `prove_grant_time` datetime DEFAULT NULL COMMENT '证书发放时间',
+          `prove_number` varchar(128) DEFAULT NULL COMMENT '证书编号',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
