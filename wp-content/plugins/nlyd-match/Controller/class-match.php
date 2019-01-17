@@ -935,7 +935,7 @@ class Match
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">承办单位</label>
-            <div class="layui-input-block">
+            <div class="layui-input-block select_row">
                 <?php
                 global $wpdb;
                 if(!empty($this->meta['created_id'])){
@@ -1291,7 +1291,7 @@ class Match
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">责任人</label>
-            <div class="layui-input-block">
+            <div class="layui-input-block select_row">
                 <?php
                     if(!empty($this->grading['person_liable'])){
                         $user_real_name = get_user_meta($this->grading['person_liable'],'user_real_name')[0];
@@ -1304,7 +1304,7 @@ class Match
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">承办单位</label>
-            <div class="layui-input-block">
+            <div class="layui-input-block select_row">
                 <?php
                 global $wpdb;
                 //print_r($this->grading['created_person']);

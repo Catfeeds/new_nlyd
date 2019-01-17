@@ -117,14 +117,6 @@ jQuery(document).ready(function($) {
             var height=window_height-headH-mainPadd-footerH-1 - muiBarH- muiPadd-contentPadd-pageTitleH+'px';
             $('.nl-content').css('minHeight',height)
             $('.wrapper_content').css('minHeight',parseInt(height)+'px')
-            console.log('window_height:'+window_height)
-            console.log('headH:'+headH)
-            console.log('mainPadd:'+mainPadd)
-            console.log('footerH:'+footerH)
-            console.log('muiBarH:'+muiBarH)
-            console.log('muiPadd:'+muiPadd)
-            console.log('contentPadd:'+contentPadd)
-            console.log('pageTitleH:'+pageTitleH)
         }
     };
     $('body').on('focusin','.nl-foucs',function(){
