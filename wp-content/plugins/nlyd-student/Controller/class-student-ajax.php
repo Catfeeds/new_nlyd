@@ -533,7 +533,8 @@ class Student_Ajax
                 }
             }
 
-        }elseif($_POST['order_type'] == 3){   //课程
+        }
+        elseif($_POST['order_type'] == 3){   //课程
 
             $title = '课程';
             $info_url = home_url('courses/courseDetail/id/'.$_POST['match_id']);
@@ -6465,7 +6466,7 @@ class Student_Ajax
                 }
                 $rows[$k]['zone_city'] = $city;
                 //判断是否购课
-                $order_id = $wpdb->get_var("select order_id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$val['id']} and order_type = 3 and pay_status in (2,3,4)");
+                $order_id = $wpdb->get_var("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$val['id']} and order_type = 3 and pay_status in (2,3,4)");
                 $rows[$k]['order_id'] = $order_id;
             }
         }

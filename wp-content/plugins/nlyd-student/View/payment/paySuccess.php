@@ -4,11 +4,14 @@
         <?php
             require_once leo_student_public_view.'leftMenu.php';
 
-            if($row->order_type == 2){
-                $url = home_url('gradings/info/grad_id/'.$row->match_id);
-            }else{
-                $url = home_url('matchs/info/match_id/'.$row->match_id);
+            if($row->order_type == 1){
+                $url = home_url('/matchs/info/match_id/'.$row->match_id);
+            }elseif ($row->order_type == 2){
+                $url = home_url('/gradings/info/grad_id/'.$row->match_id);
+            }elseif ($row->order_type == 3){
+                $url = home_url('/courses/courseDetail/id/'.$row->match_id);
             }
+
         ?>
 
 
