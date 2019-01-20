@@ -771,7 +771,7 @@ class Student_Ajax
                 IFNULL(b.memory,'-') as memory,
                 IFNULL(b.compute,'-') as compute
                 from {$wpdb->prefix}match_team a
-                left join {$wpdb->prefix}user_skill_rank b on a.user_id = b.user_id 
+                left join {$wpdb->prefix}user_skill_rank b on a.user_id = b.user_id and b.skill_type=1
                 where a.user_type = {$type} and a.status = 2 and a.team_id = {$team_id} 
                 limit {$start},{$pageSize}
                 ";
