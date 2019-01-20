@@ -70,18 +70,10 @@ class Student_System
         load_view_template($view);
 
     }
-
     /**
      * 合作联系
      */
     public function concatUs(){
-        $view = student_view_path.CONTROLLER.'/concatUS.php';
-        load_view_template($view);
-    }
-    /**
-     * 结课成绩
-     */
-     public function concatUs(){
         $view = student_view_path.CONTROLLER.'/concatUS.php';
         load_view_template($view);
     }
