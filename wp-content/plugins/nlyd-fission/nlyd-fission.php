@@ -15,7 +15,7 @@ if(!class_exists('FissionController')){
         {
             define( 'fission_path', plugin_dir_path( __FILE__ ) );
             define( 'fission_url', plugins_url('',__FILE__ ) );
-//            define( 'leo_match_version','V2.1.5.4' );//样式版本
+//            define( 'leo_match_version','V2.1.5.6' );//样式版本
 
             define( 'fission_css_url', fission_url.'/Public/css/' );
             define( 'fission_js_url', fission_url.'/Public/js/' );

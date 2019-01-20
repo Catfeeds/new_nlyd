@@ -11,6 +11,12 @@ class Student_Zone
 {
     public function __construct($action)
     {
+        //316751759@gjnlyd.com http://127.0.0.1/nlyd/zone/grading/
+
+        if(!is_user_logged_in()){
+
+            $_SESSION['redirect_url'] = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        }
 
         //判断是否是管理员操作面板和是否登录
         if(!is_user_logged_in()){
@@ -79,7 +85,6 @@ class Student_Zone
      *个人用户控制台
      */
     public function indexUser(){
-
         global $wpdb,$current_user;
         //获取推荐ID/推荐时间/今日收益
         $sql = "select a.referee_id,a.referee_time,date_format(b.created_time,'%Y-%m-%d') date_time ,sum(b.user_income) total_income
@@ -688,15 +693,15 @@ class Student_Zone
         $rows =  $wpdb->get_results($sql,ARRAY_A);
         //print_r($rows);
         if(!empty($rows)){
-
+            $time = get_time('mysql');
             foreach ($rows as $k => $v){
                 if($v['is_enable'] != -4){
                     $is_enable = '';
                     if($v['course_start_time'] > 0){
-                        if(get_time() < $v['course_start_time']){
+                        if($time < $v['course_start_time']){
                             $is_enable = 1; //报名中
                         }
-                        elseif ( $v['course_start_time'] <= get_time() && get_time() <= $v['course_end_time']){
+                        elseif ( $v['course_start_time'] <= $time && $time <= $v['course_end_time']){
                             $is_enable = 2; //授课中
                         }
                         else{
@@ -711,6 +716,7 @@ class Student_Zone
                             $is_enable = -2;
                         }
                     }
+                    //print_r($is_enable);
                     if(!empty($is_enable)){
                         $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>$is_enable),array('id'=>$v['id']));
                     }
@@ -1240,7 +1246,7 @@ class Student_Zone
 
             $city_arr = str2arr($row['zone_city'],'-');
             if(!empty($city_arr[2])){
-                $city = rtrim($city_arr[1],'市').rtrim($city_arr[2],'区');
+                $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
             }elseif ($city_arr[1] != '市辖区'){
                 $city = rtrim($city_arr[1],'市');
             }else{

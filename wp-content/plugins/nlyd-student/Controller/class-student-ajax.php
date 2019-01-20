@@ -2182,18 +2182,20 @@ class Student_Ajax
             $this->setUserCookie($user->ID);
 
             //do_action( 'wp_login', $user->user_login, $user );
-            if(isset($_SESSION['redirect_url'])){
-                $url = $_SESSION['redirect_url'];
-                unset($_SESSION['redirect_url']);
-            }else{
-                $url = home_url('account');
-            }
 
             //判断是否为机构
             $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$user->ID} ");
             if($zone_id){
                 $url = home_url('/zone/');
+            }else{
+                $url = home_url('account');
             }
+
+            if(isset($_SESSION['redirect_url'])){
+                $url = $_SESSION['redirect_url'];
+                unset($_SESSION['redirect_url']);
+            }
+
 
             //添加推广人
             if($_POST['referee_id'] > 0){
@@ -4773,54 +4775,28 @@ class Student_Ajax
         $sql = " select id,date_format(created_time,'%Y/%m/%d %H:%i') created_time,income_type,user_income,match_id,
                   if(income_status <> 2 ,'待到账' ,'已到账') income_status,
                   case income_type
-                    when 'undertake' then '承办赛事'
-                    when 'match' then '比赛收益'
-                    when 'grading' then '考级收益'
-                    when 'subject' then '推荐奖励'
+                    when 'open_match' then '开设比赛'
+                    when 'open_grading' then '开设考级'
+                    when 'open_course' then '课程渠道'
+                    when 'recommend_match' then '推荐比赛'
+                    when 'recommend_grading' then '推荐考级'
+                    when 'director_match' then '参赛机构'
+                    when 'director_grading' then '考级负责人'
+                    when 'recommend_match_zone' then '推荐赛区'
+                    when 'recommend_trains_zone' then '推荐训练中心'
+                    when 'recommend_test_zone' then '推荐测评中心'
+                    when 'recommend_course' then '推荐购课'
+                    when 'recommend_qualified' then '推荐达标'
+                    when 'grading_qualified' then '考级达标'
+                    when 'cause_manager' then '事业管理员'
+                    when 'cause_minister' then '事业部长'
                     when 'extract' then '提现'
+                    else '数据测试'
                   end income_type_title
                   from {$wpdb->prefix}user_stream_logs 
                   where {$where}
                   order by created_time desc limit $start,$pageSize 
                   ";
-
-//        /print_r($sql);
-        //判断用户是否为机构单位
-        /*$zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
-
-        if($_POST['map'] == 'profit' && empty($zone_id)){
-
-            $sql = "select id,if(referee_id > 0,referee_income,indirect_referee_income) user_income ,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
-                    case income_type
-                    when 'match' then '比赛收益'
-                    when 'grading' then '考级收益'
-                    when 'subject' then '推荐补贴'
-                    end income_type_title
-                    from {$wpdb->prefix}income_logs 
-                    where referee_id = {$current_user->ID} or indirect_referee_id = {$current_user->ID}
-                    order by created_time desc limit $start,$pageSize 
-                    ";
-        }else{
-
-            if($_POST['map'] == 'all'){ //全部
-                $where = "user_id = {$current_user->ID}";
-            }elseif ($_POST['map'] == 'extract'){ //提现
-                $where = "user_id = {$current_user->ID} and user_income < 0 ";
-            }else{  //收益
-                $where = "user_id = {$current_user->ID} and user_income > 0 ";
-            }
-            $sql = "select SQL_CALC_FOUND_ROWS *,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
-                if(income_type = 'extract','bg_reduce', 'bg_add') as income_type_class,
-                case income_type
-                when 'match' then '比赛收益'
-                when 'match' then '比赛收益'
-                when 'grading' then '考级收益'
-                when 'extract' then '比赛提现'
-                when 'subject' then '推荐补贴'
-                end income_type_title
-                from {$wpdb->prefix}user_stream_logs where {$where} order by created_time desc limit $start,$pageSize ";
-        }*/
-        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
@@ -5110,10 +5086,14 @@ class Student_Ajax
             }
             $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$zone_meta['zone_type_alias']}' and  match_grading = {$type} and match_type = {$match_type}";
             //print_r($set_sql);
-            $match_cost = $wpdb->get_var($set_sql);
-            if($match_cost < 10){
-                wp_send_json_error(array('info'=>__('未匹配到费用','nlyd-student')));
-            }
+
+        }elseif (in_array($_POST['type'],array('basis-course','boost-course'))){
+
+            $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$_POST['type']}' ";
+        }
+        $match_cost = $wpdb->get_var($set_sql);
+        if($match_cost < 10){
+            wp_send_json_error(array('info'=>__('未匹配到费用','nlyd-student')));
         }
         $match_cost = !empty($match_cost)? $match_cost :number_format(0);
         wp_send_json_success($match_cost);
@@ -5490,50 +5470,63 @@ class Student_Ajax
         global $wpdb,$current_user;
         //$_POST['id'] = 148;
         //获取当前收益内容
-        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income
-                                      from {$wpdb->prefix}user_stream_logs 
-                                      where id = {$_POST['id']} and user_id = {$current_user->ID} ",ARRAY_A);
+        $row = $wpdb->get_row("select match_id,income_type,user_type,user_income,
+        						if(income_status=2,'已到账','待到账') income_status_cn,
+					        	case income_type
+				                    when 'open_match' then '开设比赛'
+				                    when 'open_grading' then '开设考级'
+				                    when 'open_course' then '课程渠道'
+				                    when 'recommend_match' then '推荐比赛'
+				                    when 'recommend_grading' then '推荐考级'
+				                    when 'director_match' then '参赛机构'
+				                    when 'director_grading' then '考级负责人'
+				                    when 'recommend_match_zone' then '推荐赛区'
+				                    when 'recommend_trains_zone' then '推荐训练中心'
+				                    when 'recommend_test_zone' then '推荐测评中心'
+				                    when 'recommend_course' then '推荐购课'
+				                    when 'recommend_qualified' then '推荐达标'
+				                    when 'grading_qualified' then '考级达标'
+				                    when 'cause_manager' then '事业管理员'
+				                    when 'cause_minister' then '事业部长'
+				                    when 'extract' then '提现'
+				                    else '数据测试'
+				                  end income_type_title
+                              from {$wpdb->prefix}user_stream_logs 
+                              where id = {$_POST['id']} and user_id = {$current_user->ID} ",ARRAY_A);
+
+        //print_r($row);die;
+
         if(empty($row)){
-           wp_send_json_error(array('info'=>__('数据错误','nlyd-student')));
+            wp_send_json_error(array('info'=>__('数据错误','nlyd-student')));
         }
 
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
+        if(in_array($row['income_type'],array('recommend_match_zone','recommend_trains_zone','recommend_test_zone'))){
+            $where = "  a.id = {$row['match_id']} and a.income_type = 'subject' ";
+        }else if(in_array($row['income_type'],array('open_match','open_grading','recommend_match','recommend_grading','director_match','director_grading','cause_manager','cause_minister'))){
+            $where = " a.match_id = {$row['match_id']} and (a.income_type in ('match','grading')) ";
+            if(in_array($row['income_type'],array('recommend_match','recommend_grading'))){
+                $where .= " and (a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID}) ";
+            }
+        }elseif (in_array($row['income_type'],array('open_course','recommend_course','recommend_qualified','recommend_qualified'))) {
+            $where = "  a.match_id = {$row['match_id']} and a.income_type = 'course' ";
+        }
+
         //判断是否为机构
         $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
 
         //获取对应数据列表
-        $sql = "select SQL_CALC_FOUND_ROWS a.*, b.post_title,
-                      case a.income_type 
-                      when 'match' then '比赛'
-                      when 'grading' then '考级'
-                      when 'subject' then '推荐'
-                      else '----'
-                      end income_type_cn,
+        $sql = "select SQL_CALC_FOUND_ROWS a.*,
                       if(a.income_status=2,'已到账','待到账') income_status_cn
                       from {$wpdb->prefix}user_income_logs a 
-                      left join {$wpdb->prefix}posts b on a.match_id = b.ID where ";
-        if(empty($zone_id)){    //
-            if($row['income_type'] == 'subject'){
-                $x = " a.id = {$row['match_id']} ";
-            }else{
-                $x = " a.match_id = {$row['match_id']} ";
-            }
-            $where = "{$x} and 
-                      (
-                        a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID} 
-                        or a.person_liable_id = {$current_user->ID} or a.manager_id = {$current_user->ID}
-                        ) 
-                       ";
-
-        }else{
-            $where = "a.sponsor_id = {$current_user->ID} and a.match_id = {$row['match_id']} ";
-        }
-        $sql .= $where."order by id desc limit $start,$pageSize ";
-
-        //print_r($sql);
+                      left join {$wpdb->prefix}posts b on a.match_id = b.ID 
+                      where {$where}
+                      order by id desc limit $start,$pageSize
+                      ";
+        //print_r($sql);die;
         $rows = $wpdb->get_results($sql,ARRAY_A);
         //print_r($rows);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -5545,41 +5538,20 @@ class Student_Ajax
             $list = array();
             foreach ($rows as $k => $v){
                 $list['user_id'] = $v['user_id'];
-
+                $list['revenue_source'] = $row['income_type_title'];
                 if($v['referee_id'] == $current_user->ID){
                     $list['profit_income'] = $v['referee_income'];
-                    $revenue_source[] = '推荐'.$v['income_type_cn'];
                 }
                 elseif ($v['indirect_referee_id'] == $current_user->ID){
                     $list['profit_income'] = $v['indirect_referee_income'];
-                    $revenue_source[] = '推荐'.$v['income_type_cn'];
                 }
-                if ($v['person_liable_id'] == $current_user->ID){
-
-                    if($v['income_type'] == 'match'){
-                        $revenue_source[] = '参赛机构';
-                    }elseif ($v['income_type'] == 'grading'){
-                        $revenue_source[] = '考级负责人';
-                    }
-
-                    if($v['person_liable_id'] == $v['referee_id'] || $v['person_liable_id'] == $v['referee_id']){
-                        $list['profit_income'] += $v['person_liable_income'];
-                    }else{
+                if($row['income_type'] == 'director_grading'){
+                    if ($v['person_liable_id'] == $current_user->ID){
                         $list['profit_income'] = $v['person_liable_income'];
                     }
                 }
                 if ($v['sponsor_id'] == $current_user->ID){
-                    $type = $wpdb->get_var("select case order_type when 1 then '开设比赛' when 2 then '开设考级' end order_type from {$wpdb->prefix}order order_type where match_id = {$v['match_id']}");
-                    $revenue_source[] = $type;
                     $list['profit_income'] = $v['sponsor_income'];
-                }
-                $list['revenue_source'] = arr2str($revenue_source,'/');
-
-                if($v['income_type'] == 'subject'){  //裂变收益
-                    //获取裂变机构类型
-                    $zone_type_name = $wpdb->get_var("select if(zone_type_alias='match','赛区',zone_type_name ) from {$wpdb->prefix}zone_type where id = {$row['user_type']} ");
-                    //var_dump($zone_type_name);
-                    $list['revenue_source'] = '推荐'.$zone_type_name;
                 }
 
                 $referee_name = get_user_meta($v['user_id'],'user_real_name')[0];
@@ -5587,7 +5559,6 @@ class Student_Ajax
                 $list['channel'] = $referee_name['real_name'];
                 $list['channel_ID'] = $v['user_id']+10000000;
                 $list['post_title'] = $v['post_title'];
-                $list['income_type_cn'] = $v['income_type_cn'];
                 $list['income_type'] = $v['income_type'];
                 $list['income_status_cn'] = $v['income_status_cn'];
                 $list['created_time'] = $v['created_time'];
@@ -5612,10 +5583,16 @@ class Student_Ajax
 
         //获取我推荐的机构
         if($_POST['map'] == 'zone'){
-            $sql = "select SQL_CALC_FOUND_ROWS id , case zone_match_type
-                when 1 then '战队精英'
-                when 2 then '城市'
-                end zone_match_type_cn,zone_city,zone_name,user_id,apply_id,date_format(audit_time,'%Y-%m-%d') as audit_time  from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID} and user_id > 0 order by id desc limit $start,$pageSize ";
+            $sql = "select SQL_CALC_FOUND_ROWS a.id ,b.zone_type_alias,b.zone_type_name, 
+					case a.zone_match_type
+	                when 1 then '战队精英赛'
+	                when 2 then '城市赛'
+	                end zone_match_type_cn,
+	                a.zone_city,a.zone_name,a.user_id,apply_id,
+	                date_format(a.audit_time,'%Y-%m-%d') audit_time  
+	                from {$wpdb->prefix}zone_meta a 
+	                left join {$wpdb->prefix}zone_type b on a.type_id = b.id 
+	                where a.referee_id = {$current_user->ID} and a.user_id > 0 order by a.id desc limit $start,$pageSize";
             //print_r($sql);die;
         }
         else{   //获取我推荐的用户
@@ -5667,99 +5644,146 @@ class Student_Ajax
 
                 $order_id = $wpdb->get_var("select id from {$wpdb->prefix}order b where user_id = {$current_user->ID} and order_type = 3 ");
                 $list[$k]['is_shop'] = $order_id > 0 ? 'y' : 'n';
+            }
 
-                //获取二级推荐
-                $sql_ = "select a.ID ,a.user_nicename,b.meta_value as user_real_name from {$wpdb->prefix}users a 
-                         left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                         left join {$wpdb->prefix}zone_meta c on a.ID = c.user_id 
-                         where a.referee_id = {$v['ID']} and c.id is null
-                        ";
-                //print_r($sql_);
-                $childs = $wpdb->get_results($sql_,ARRAY_A);
-                if(!empty($childs)){
-                    $child = array();
-                    foreach ($childs as $key => $value) {
-                        if(!empty($v['user_real_name'])){
-                            $user_real_name = unserialize($value['user_real_name']);
-                            $child[$key]['real_age'] = $user_real_name['real_age'];
-                            $child[$key]['real_name'] = $user_real_name['real_name'];
-                        }else{
-                            $child[$key]['real_age'] = '-';
-                            $child[$key]['real_name'] = $value['user_nicename'];
+            //获取二级推荐
+            $child_sql = "select ID
+                 from {$wpdb->prefix}users
+                 where referee_id = {$current_user->ID} ";
+            //print_r($child_sql);
+            $child_user = $wpdb->get_results($child_sql,ARRAY_A);
+            if(!empty($child_user)){
+                foreach ($child_user as $x => $y) {
+                    $sql_ = "select SQL_CALC_FOUND_ROWS a.ID ,a.user_nicename,b.meta_value as user_real_name,referee_time 
+			                from {$wpdb->prefix}users a 
+			                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+			                left join {$wpdb->prefix}zone_meta c on a.ID = c.user_id 
+			                where a.referee_id = {$y['ID']} and c.id is null
+			                order by a.ID desc 
+			                ";
+                    //print_r($sql_);
+                    $rows1 = $wpdb->get_results($sql_,ARRAY_A);
+                    //print_r($sql__);
+                    //print_r($rows1);
+                    if(!empty($rows1)){
+                        foreach ($rows1 as $k1 => $v1) {
+                            if(!empty($v1['user_real_name'])){
+                                $user_real_name = unserialize($v1['user_real_name']);
+                                $rows1[$k1]['real_age'] = $user_real_name['real_age'];
+                                $rows1[$k1]['real_name'] = $user_real_name['real_name'];
+                            }else{
+                                $rows1[$k1]['real_age'] = '-';
+                                $rows1[$k1]['real_name'] = $v1['user_nicename'];
+                            }
+                            $rows1[$k1]['referee_time'] = !empty($v1['referee_time']) ? $v1['referee_time'] : '-';
+
+                            //获取学号/性别/是否购课
+                            $sql2 = "select meta_key,meta_value from {$wpdb->prefix}usermeta 
+		                            where user_id = {$v1['ID']} and meta_key in ('user_ID','user_gender')
+		                             ";
+                            $rows2 = $wpdb->get_results($sql2,ARRAY_A);
+                            if(!empty($rows1)){
+                                $meta_value_ = array_column($rows2,'meta_value','meta_key');
+                                $rows1[$k1]['user_ID'] = $meta_value_['user_ID'];
+                                $rows1[$k1]['user_gender'] = !empty($meta_value_['user_gender']) ? $meta_value_['user_gender'] : '-';
+
+                            }
+
+                            $order_id = $wpdb->get_var("select id from {$wpdb->prefix}order b where user_id = {$current_user->ID} and order_type = 3 ");
+                            $rows1[$k1]['is_shop'] = $order_id > 0 ? 'y' : 'n';
                         }
-                        $child[$key]['referee_time'] = !empty($value['referee_time']) ? $value['referee_time'] : '-';
-
-                        //获取学号/性别/是否购课
-                        $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta 
-                                where user_id = {$value['ID']} and meta_key in ('user_ID','user_gender')
-                                 ";
-                        $rows1 = $wpdb->get_results($sql1,ARRAY_A);
-                        if(!empty($rows1)){
-                            $meta_value_ = array_column($rows1,'meta_value','meta_key');
-                            $child[$key]['user_ID'] = $meta_value_['user_ID'];
-                            $child[$key]['user_gender'] = !empty($meta_value_['user_gender']) ? $meta_value_['user_gender'] : '-';
-
-                        }
-
-                        $order_id = $wpdb->get_var("select id from {$wpdb->prefix}order b where user_id = {$current_user->ID} and order_type = 3 ");
-                        $child[$key]['is_shop'] = $order_id > 0 ? 'y' : 'n';
-
                     }
-                    //print_r($child);
-                    $list[$k]['child'] = $child;
                 }
             }
             //var_dump($list);
         }
         else{
-
-            $sql__ = "select ID
-                 from {$wpdb->prefix}users
-                 where referee_id = {$current_user->ID} and ID > 0 ";
-            $rows__ = $wpdb->get_results($sql__,ARRAY_A);
-
-            if(empty($rows)){
-                $rows = $rows__;
-                $map = "y";
-            }
-
             foreach ($rows as $k => $v) {
-                $child = array();
-                if($map ==  'y'){
-                    $where = " referee_id = {$v['ID']} ";
-                }else{
-                    $city = !empty($v['zone_city']) ? '（'.$v['zone_city'].'）' : '';
-                    $rows[$k]['zone_name'] = $v['zone_name'].$city.$v['zone_match_type_cn'].'赛组委会';
-                    $where = " referee_id = {$v['ID']} ";
-                }
-                //print_r($v);
-                
-                $where = $map ==  'y' ? "referee_id = {$v['ID']}" : " referee_id = {$v['apply_id']} "; 
-                $sql1 = "select id,case zone_match_type
-                when 1 then '战队精英'
-                when 2 then '城市'
-                end zone_match_type_cn,zone_city,zone_name,user_id,referee_id,date_format(audit_time,'%Y-%m-%d') as audit_time from {$wpdb->prefix}zone_meta where {$where} and user_id > 0 order by id desc  ";
-                //print_r($sql1);
-                $rows1 = $wpdb->get_results($sql1,ARRAY_A);
-                if(!empty($rows1)){
-                    foreach ($rows1 as $key1 => $value1) {
-                        $city1 = !empty($value1['zone_city']) ? '（'.$value1['zone_city'].'）' : '';
-                        $rows1[$key1]['zone_name'] = $value1['zone_name'].$city1.$value1['zone_match_type_cn'].'赛组委会';
-                        
+                if(!empty($v['zone_city'])){
+
+                    $city_arr = str2arr($v['zone_city'],'-');
+                    if(!empty($city_arr[2])){
+                        $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
+                    }elseif ($city_arr[1] != '市辖区'){
+                        $city = rtrim($city_arr[1],'市');
+                    }else{
+                        $city = rtrim($city_arr[0],'市');
                     }
-                    $child = $rows1;
                 }
-                if($map != 'y'){
-                    $rows[$k]['child'] = $child;
+                //print_r($city);
+
+                //$city = !empty($city) ? '（'.$city.'）' : '';
+                $city = !empty($city) ? $city : '';
+                if($v['zone_type_alias'] == 'match'){
+                    $rows[$k]['zone_name'] = $v['zone_name'].$city.$v['zone_match_type_cn'].'组委会';
+                }
+                else{
+                    $title = 'IISC脑力';
+                    if($v['zone_type_alias'] == 'test'){
+                        $title .= '水平';
+                    }
+
+                    $rows[$k]['zone_name'] = $title.$v['zone_type_name'].' • '.$city;
                 }
             }
-            if($map == 'y'){
-                    $rows = $child;
+            //获取二级推荐
+            $child_sql = "select ID
+                 from {$wpdb->prefix}users
+                 where referee_id = {$current_user->ID} ";
+            //print_r($child_sql);
+            $child_user = $wpdb->get_results($child_sql,ARRAY_A);
+            if(!empty($child_user)){
+                foreach ($child_user as $x => $y) {
+                    $sql1 = "select SQL_CALC_FOUND_ROWS a.id ,b.zone_type_alias,b.zone_type_name, 
+								case a.zone_match_type
+				                when 1 then '战队精英赛'
+				                when 2 then '城市赛'
+				                end zone_match_type_cn,
+				                a.zone_city,a.zone_name,a.user_id,apply_id,
+				                date_format(a.audit_time,'%Y-%m-%d') audit_time  
+				                from {$wpdb->prefix}zone_meta a 
+				                left join {$wpdb->prefix}zone_type b on a.type_id = b.id 
+				                where a.referee_id = {$y['ID']} and a.user_id > 0 order by a.id desc
+				                ";
+                    $rows1 = $wpdb->get_results($sql1,ARRAY_A);
+                    //print_r($sql__);
+                    //print_r($rows1);
+                    if(!empty($rows1)){
+                        foreach ($rows1 as $k1 => $v1) {
+                            # code...
+                            if(!empty($v1['zone_city'])){
+
+                                $city_arr = str2arr($v1['zone_city'],'-');
+                                if(!empty($city_arr[2])){
+                                    $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
+                                }elseif ($city_arr[1] != '市辖区'){
+                                    $city = rtrim($city_arr[1],'市');
+                                }else{
+                                    $city = rtrim($city_arr[0],'市');
+                                }
+                            }
+                            //print_r($city);
+
+                            $city = !empty($city) ? $city : '';
+                            if($v1['zone_type_alias'] == 'match'){
+                                $rows1[$k1]['zone_name'] = $v1['zone_name'].$city.$v1['zone_match_type_cn'].'组委会';
+                            }
+                            else{
+                                $title = 'IISC脑力';
+                                if($v1['zone_type_alias'] == 'test'){
+                                    $title .= '水平';
+                                }
+
+                                $rows1[$k1]['zone_name'] = $title.$v1['zone_type_name'].' • '.$city;
+                            }
+                        }
+                    }
                 }
+            }
 
             $list = $rows;
         }
-        wp_send_json_success(array('info'=>$list));
+        wp_send_json_success(array('info'=>$list,'child'=>$rows1));
     }
 
     /**
@@ -6350,6 +6374,7 @@ class Student_Ajax
         if(empty($_POST['course_type']) || empty($_POST['course_category_id']) || empty($_POST['course_title']) || empty($_POST['duration']) || empty($_POST['coach_phone']) || empty($_POST['const']) ){
             wp_send_json_error(array('info'=>__('必填项不能为空','nlyd-student')));
         }
+
         if(!empty($_POST['course_start_time']) && !empty($_POST['course_end_time'])){
             if($_POST['course_start_time'] > $_POST['course_end_time']) wp_send_json_error(array('info'=>__('开课时间不能大于结课时间','nlyd-student')));
         }
@@ -6380,7 +6405,7 @@ class Student_Ajax
             'duration'=>$_POST['duration'],
             'course_category_id'=>$_POST['course_category_id'],
         );
-        //print_r($_POST);die;
+        //print_r($data);die;
         if($_POST['id'] > 0){
             $a = $wpdb->update($wpdb->prefix.'course',$data,array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
         }else{
@@ -6458,7 +6483,7 @@ class Student_Ajax
                 $zone_city = $wpdb->get_var("select zone_city from {$wpdb->prefix}zone_meta where user_id = {$zone_user_id} ");
                 $city_arr = str2arr($zone_city,'-');
                 if(!empty($city_arr[2])){
-                    $city = rtrim($city_arr[1],'市').rtrim($city_arr[2],'区');
+                    $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
                 }elseif ($city_arr[1] != '市辖区'){
                     $city = rtrim($city_arr[1],'市');
                 }else{

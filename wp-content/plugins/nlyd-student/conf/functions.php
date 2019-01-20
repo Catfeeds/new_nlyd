@@ -51,5 +51,6 @@ function income_stream_array(){
         'grading_qualified'=>array('title'=>'考级达标'),
         'cause_manager'=>array('title'=>'事业管理员'),
         'cause_minister'=>array('title'=>'事业部长'),
+        'extract'=>array('title'=>'提现'),
     );
 }

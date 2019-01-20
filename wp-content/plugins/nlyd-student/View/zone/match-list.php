@@ -5,7 +5,6 @@
             
         ?>
 
-        <?php if(!$row){ ?>
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/')?>">
@@ -45,30 +44,10 @@
                             </ul>
                         </div>
                     </div>
-                </div>    
+                </div>  
+                <a class="a-btn" href="<?=home_url('/zone/matchBuild/');?>"><?=__('发布新的比赛', 'nlyd-student')?></a>   
             </div>
         </div>  
-        <?php }else{ ?>
-        <style>
-            @media screen and (max-width: 1199px){
-                #page {
-                    top: 0;
-                }
-            }
-
-        </style>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper layui-bg-white">
-                <div class="layui-row nl-border nl-content">
-                    <div class="no-info-page">
-                        <div class="no-info-img">
-                            <img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">
-                        </div>
-                        <p class="no-info-text"><?=__('无比赛信息', 'nlyd-student')?></p>
-                    </div>
-                </div>
-            </div>
-        <?php } ?>  
-        <a class="a-btn" href="<?=home_url('/zone/matchBuild/');?>"><?=__('发布新的比赛', 'nlyd-student')?></a>   
     </div>
 </div>
 <script>

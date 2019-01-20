@@ -286,11 +286,24 @@ input[type="text"].serachInput{
 }
 .go_buy_car{
     border: 1px solid #68AAFE;
+    color: #2484FE;
     background: #fff;
 }
+.go_buy_car.disabled{
+    border: 1px solid #919191;
+    color: #919191!important;
+}
+
 .go_buy{
     height:45px;
     border-radius: 22.5px;
+}
+.go_buy.disabled{
+    background: -webkit-linear-gradient(90deg,#919191,#b8bcbe);
+    background: -o-linear-gradient(90deg,#919191,#b8bcbe);
+    background: -moz-linear-gradient(90deg,#919191,#b8bcbe);
+    background: linear-gradient(90deg,#919191,#b8bcbe);
+    border: none;
 }
 .shops_img{
     border: 1px solid rgba(38, 38, 38, 0.4);
@@ -344,6 +357,16 @@ img{
     line-height: 50px;
     text-align: center;
     font-size: 0.16rem;
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);  
+}
+.shops_settlement.disabled{
+    background: -webkit-linear-gradient(90deg,#b8bcbe,#919191);
+    background: -o-linear-gradient(90deg,#b8bcbe,#919191);
+    background: -moz-linear-gradient(90deg,#b8bcbe,#919191);
+    background: linear-gradient(90deg,#b8bcbe,#919191);
 }
 .shops_compute{
     width: -webkit-calc(100% - 193px);

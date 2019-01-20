@@ -251,9 +251,9 @@
         border: none;
         overflow: hidden;
     }
-    /* .apply{
-        display: none;
-    } */
+    .userCenter_meta{
+        display: none!important;
+    } 
 }
 @media screen and (max-width: 1199px){
     .menuImg-wrapper{

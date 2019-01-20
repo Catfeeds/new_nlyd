@@ -48,7 +48,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" value="<?=$match['data_entry_end_time']?>" type="text" readonly name="entry_end_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择报名截止日期', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" value="<?=$match['entry_end_time']?>" type="text" readonly name="entry_end_time" data-time="<?=$match['data_entry_end_time']?>" id="entry_end_time" lay-verify="required" autocomplete="off" placeholder="<?=__('选择报名截止日期', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
@@ -68,16 +68,18 @@
                         </div>
                         <input type="hidden" name="action" value="zone_create_match">
                         <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
-                        <span class="details_btn flex-h">
-                            <?php if($match['allow_cancel'] == 'y'):?>
-                            <div class="details-button flex1">
-                                <button class="save" type="button" id="end_match"><?=__('取消比赛', 'nlyd-student')?></button>
-                            </div>
-                            <?php endif;?>
-                            <div class="details-button flex1 last-btn">
-                                <button class="see_button" type="button" lay-filter='layform' lay-submit=""><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></button>
-                            </div>
-                        </span>
+                        <?php if($match['allow_cancel'] !== 'y'){ ?>
+                            <span class="details_btn flex-h">
+                                <div class="details-button flex1">
+                                    <button class="save" type="button" id="end_match"><?=__('取消比赛', 'nlyd-student')?></button>
+                                </div>
+                                <div class="details-button flex1 last-btn">
+                                    <button class="see_button" type="button" lay-filter='layform' lay-submit=""><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></button>
+                                </div>
+                            </span>
+                        <?php }else{ ?>
+                            <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></div></a>
+                        <?php } ?>
                         <!-- <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></div></a> -->
                     </form>
                 </div>
@@ -172,21 +174,26 @@ var mobileSelect2 = new MobileSelect({
 });
 //---------------------------开赛日期------------------------------
 if($('#match_date').length>0 && $('#match_date').attr('data-time').length>0){
-    var timeValue=$('#match_date').attr('data-time').split('-');
+    var timeValue1=$('#match_date').attr('data-time').split('-');
+    // console.log(timeValue)
     $.each(match_date_Data,function(index,value){
-        if(parseInt(timeValue[0])==parseInt(value.value)){
+        if(parseInt(timeValue1[0])==parseInt(value.value)){
+           
             posiotion_match_date=[index,0,0,0,0];
             $.each(value.childs,function(i,v){
-                if(parseInt(timeValue[1])==parseInt(v.value)){
+                if(parseInt(timeValue1[1])==parseInt(v.value)){
+                   
                     posiotion_match_date=[index,i,0,0,0];
                     $.each(v.childs,function(j,val){
-                        if(parseInt(timeValue[2])==parseInt(val.value)){
+                        if(parseInt(timeValue1[2])==parseInt(val.value)){
+                            
                             posiotion_match_date=[index,i,j,0,0];
                             $.each(val.childs,function(k,b){
-                                if(parseInt(timeValue[3])==parseInt(b.value)){
+                                if(parseInt(timeValue1[3])==parseInt(b.value)){
+                                    
                                     posiotion_match_date=[index,i,j,k,0];
                                     $.each(b.childs,function(l,c){
-                                        if(parseInt(timeValue[4])==parseInt(c.value)){
+                                        if(parseInt(timeValue1[4])==parseInt(c.value)){
                                             posiotion_match_date=[index,i,j,k,l];
                                         }
                                     })
@@ -254,7 +261,7 @@ var mobileSelect4 = new MobileSelect({
         {data: match_date_Data}
     ],
     new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>","<?=__('时', 'nlyd-student')?>","<?=__('分', 'nlyd-student')?>"],
-    position:posiotion_match_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+    position:posiotion_match_end_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
     transitionEnd:function(indexArr, data){
         // console.log(data);
     },

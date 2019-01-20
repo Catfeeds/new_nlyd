@@ -968,4 +968,13 @@ input[type="text"].coach_form_input{
         margin-top: 30px;
         margin-bottom: 30px;
     }
+    .details_btn{
+        position: relative;
+        margin-left: 0;
+        bottom: 0;
+        left: 0;
+        float: right;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
 }
