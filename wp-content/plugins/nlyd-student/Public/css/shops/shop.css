@@ -286,11 +286,24 @@ input[type="text"].serachInput{
 }
 .go_buy_car{
     border: 1px solid #68AAFE;
+    color: #2484FE;
     background: #fff;
+}
+.go_buy_car.disabled{
+    border: 1px solid #919191;
+    /* background: #fff; */
+    color: #919191;
 }
 .go_buy{
     height:45px;
     border-radius: 22.5px;
+}
+.go_buy.disabled{
+    background: -webkit-linear-gradient(90deg,#919191,#b8bcbe);
+    background: -o-linear-gradient(90deg,#919191,#b8bcbe);
+    background: -moz-linear-gradient(90deg,#919191,#b8bcbe);
+    background: linear-gradient(90deg,#919191,#b8bcbe);
+    border: none;
 }
 .shops_img{
     border: 1px solid rgba(38, 38, 38, 0.4);
