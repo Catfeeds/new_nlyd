@@ -758,7 +758,7 @@ class Grading
                 FROM `{$wpdb->prefix}user_grade_log_history` AS uglh 
                 LEFT JOIN `{$wpdb->users}` AS u ON u.ID=uglh.user_id AND u.ID!='' 
                 {$searchJOIN} 
-                WHERE 1=1 
+                WHERE uglh.grade_result!=0 
                 {$categoryWhere}
                 {$searchWhere} 
                 ORDER BY uglh.created_time DESC LIMIT {$start},{$pageSize}" ,ARRAY_A);
@@ -1549,7 +1549,7 @@ class Grading
                         <?php } ?>
                     });
                     $('.prove_grant').on('click',function() {
-                        $('.prove_number_div').show();
+                        $(this).closest('td').find('.prove_number_div').show();
                         $(this).hide();
                     });
                     
