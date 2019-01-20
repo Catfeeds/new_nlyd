@@ -49,7 +49,7 @@ if(!class_exists('FissionController')){
                 $wp_roles->add_cap('administrator', $role);
             }
 
-            add_menu_page('裂变中心', '裂变中心', 'fission', 'fission',array(new Organize(true),'organizeList'),'dashicons-businessman',100);
+            add_menu_page('机构管理', '机构管理', 'fission', 'fission',array(new Organize(true),'organizeList'),'dashicons-businessman',100);
         }
         public function fissionIndex(){
 

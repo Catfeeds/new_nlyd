@@ -1861,7 +1861,56 @@ class Download
      * 导出考级过级记录
      */
     public function exportGradingAdoptLog() {
+        $start_date = isset($_POST['begin']) ? trim($_POST['begin']) : '';
+        $end_date1 = isset($_POST['end']) ? trim($_POST['end']) : '';
+        $cate_type = isset($_POST['type_id']) ? intval($_POST['type_id']) : 0;
+        if($start_date == '' || $end_date1 == '') exit;
+        $start_date = date("Y-m-d",strtotime($start_date));
+        $end_date = date("Y-m-d",strtotime("+1 day",strtotime($end_date1)));
+        $where = '';
+        if($cate_type > 0){
+            $where .= " AND gm.category_id='{$cate_type}'";
+        }
+        global $wpdb;
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS gl.*,ma.fullname,ma.telephone,ma.country,ma.province,ma.city,ma.area,ma.address,gm.category_id
+                FROM {$wpdb->prefix}grading_logs AS gl
+                LEFT JOIN {$wpdb->prefix}my_address AS ma ON ma.user_id=gl.user_id AND ma.is_default=1   
+                LEFT JOIN {$wpdb->prefix}grading_meta AS gm ON gm.grading_id=gl.grading_id   
+                WHERE gl.grading_result=1{$where} AND gl.created_time BETWEEN '{$start_date}' AND '{$end_date}'
+                ORDER BY gl.created_time DESC", ARRAY_A);
+        $title = $start_date.'_'.$end_date.'GradingAdoptLog';
+        $field = [
+            ['letter' => 'A','width' => 30, 'title_key' => 'real_name', 'title' => '姓名/ID'],
+            ['letter' => 'B','width' => 15, 'title_key' => 'user_gender', 'title' => '性别'],
+            ['letter' => 'C','width' => 30, 'title_key' => 'card_num', 'title' => '证件号码'],
+            ['letter' => 'D','width' => 15, 'title_key' => 'cimg', 'title' => '用户寸照'],
+            ['letter' => 'E','width' => 20, 'title_key' => 'grading_level', 'title' => '考级类别'],
+            ['letter' => 'F','width' => 20, 'title_key' => 'coach', 'title' => '教练'],
+            ['letter' => 'G','width' => 20, 'title_key' => 'created_time', 'title' => '过级时间'],
+            ['letter' => 'H','width' => 60, 'title_key' => 'address', 'title' => '收件地址'],
+            ['letter' => 'I','width' => 30, 'title_key' => 'prove', 'title' => '证书'],
+//            ['letter' => 'J','width' => 30, 'title_key' => 'prove_time', 'title' => '发放时间'],
+        ];
+        $categoryArr = getCategory();
+        $categoryArr = array_column($categoryArr, NULL, 'ID');
+        foreach ($rows as &$row){
+            $user_meta = get_user_meta($row['user_id']);
+            $coach_name = get_user_meta($row['grading_coach_id'],'user_real_name',true)['real_name'];
+            $row['real_name'] = unserialize($user_meta['user_real_name'][0])['real_name'].'/'.$user_meta['user_ID'][0];
+            $row['user_gender'] = $user_meta['user_gender'][0];
+            $row['card_num'] = unserialize($user_meta['user_real_name'][0])['real_ID'];
+            $row['link'] = unserialize($user_meta['user_images_color'][0])[0];
+            $row['link_key'] = 'cimg';
+            $row['link_name'] = '查看';
+            $row['grading_level'] = $categoryArr[$row['category_id']]['post_title'].$row['grading_lv'].'级';
+            $row['coach'] = $coach_name;
+            $row['address'] = $row['fullname'].'  '.$row['telephone'].'  '.$row['province'].$row['city'].$row['area'].$row['address'];
+            $row['prove'] = $row['prove_grant_status'] == '2' ? "{$row['prove_number']}\n{$row['prove_grant_time']}" : '未发放';
+//            $row['prove_time'] = $row['prove_grant_time'];
 
+        }
+
+        $this->publicExport($rows,$field,$title,$start_date.'_'.$end_date1.'GradingAdoptLog');
     }
 
     /**
@@ -1887,16 +1936,20 @@ class Download
         $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical('center');
 
         //行高
-        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(20);
+        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(40);
         $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(50);
         $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(30);
-
+        $a = 'A';
         foreach ($field as $fv){
             $objPHPExcel->getActiveSheet()->getColumnDimension($fv['letter'])->setWidth($fv['width']);
+
         }
+        $c = count($field)-1;
+        for ($i = 0; $i < $c; ++$i){
+            ++$a;
+        };
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:'.$a.'1');//合并行
 
-
-        $objPHPExcel->getActiveSheet()->getStyle('A1:C1')->getAlignment()->setWrapText(true);
 
         $titleObjRichText = new \PHPExcel_RichText();
         $titlePayable = $titleObjRichText->createTextRun($title);
@@ -1914,7 +1967,7 @@ class Download
         foreach ($field as $fv3){
             $objPHPExcel->getActiveSheet()->getStyle($fv3['letter'].'2')->getFont()->setBold(true);
         }
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:C1');
+
         //自动换行
         foreach ($field as $fv4){
             $objPHPExcel->getActiveSheet()->getStyle($fv4['letter'].'2')->getFont()->setBold(true);
@@ -1923,6 +1976,7 @@ class Download
 
         foreach ($data as $k => $dataV){
             foreach ($field as $fv5){
+                $objPHPExcel->getActiveSheet()->getStyle($fv5['letter'].($k+3))->getAlignment()->setWrapText(true);//自动换行
                 if(isset($dataV['link_key']) && $dataV['link_key'] == $fv5['title_key'] && $dataV['link']){
                     //超链接
                     $path_bonusObjRichText = new \PHPExcel_RichText();

@@ -2337,6 +2337,8 @@ class Match_Ajax
         $number = $_POST['number'] ? trim($_POST['number']) : 0;
         ($id < 1 || $number == '') && wp_send_json_error(['info' => '参数错误!']);
         global $wpdb;
+        $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}grading_logs WHERE prove_number='{$number}'");
+        if($var) wp_send_json_error(['info' => '证书编号已存在!']);
         $bool = $wpdb->update($wpdb->prefix.'grading_logs', ['prove_grant_status' => 2, 'prove_number' => $number, 'prove_grant_time' => get_time('mysql')], ['id' => $id]);
         if($bool) wp_send_json_success(['info' => '操作成功!']);
         else wp_send_json_error(['info' => '操作失败!']);
