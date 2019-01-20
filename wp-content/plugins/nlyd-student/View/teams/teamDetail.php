@@ -107,10 +107,11 @@
                     </div>
                 </div>
 
-                <?php if(!in_array($team['status'],array(-1,1,2))): ?>
+                <?php if(!in_array($team['status'],array(-1,1,2))){ ?>
                 <a class="a-btn a-btn-table" id="team-join" data-id="<?=$team['ID']?>"><div><?=__('加入战队', 'nlyd-student')?></div></a>
-                <?php endif;?>
-                <!-- <a class="a-btn a-btn-table" href="<?=home_url('/teams/');?>"><div><?=__('其他战队', 'nlyd-student')?></div></a> -->
+                <?php }else{?>
+                 <a class="a-btn a-btn-table" href="<?=home_url('/teams/');?>"><div><?=__('其他战队', 'nlyd-student')?></div></a>
+                <?php }?>
             </div>
         </div>
     </div>

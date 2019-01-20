@@ -22,22 +22,22 @@
             </header>    
             <div class="layui-row nl-border nl-content have-bottom">
                 <div class="course_detail_row width-padding width-padding-pc">
-                    <div class="detail_table_row"><span class="c_black bold fs_16">高效记忆术·G预报班·成都郫县</span></div>
+                    <div class="detail_table_row"><span class="c_black bold fs_16"><?=$course_title?>·<?=$city?></span></div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('训练中心：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14">IISC脑博睿脑力训练中心</div>
+                        <div class="detail_detail c_black fs_14"><?=$zone_title?></div>
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('开课时间：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14">2018-04-21 15:00</div>
+                        <div class="detail_detail c_black fs_14"><?=$course_start_time?></div>
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('授课教练：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_blue fs_14">成 炜</div>
+                        <div class="detail_detail c_blue fs_14"><?=$user_name?></div>
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('抢占名额：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14"><span class="c_blue">18</span>/18</div>
+                        <div class="detail_detail c_black fs_14"><span class="c_blue"><?=$order_total?></span>/<?=$open_quota?></div>
                     </div>
                 </div>
 
@@ -45,13 +45,14 @@
                     <div class="detail_table_row"><span class="c_black bold fs_16">课程介绍</span></div>
                     <div class="detail_table_row">
                         <span class="c_black6 fs_14">
-                            上课时间：周六15:00-17:00，共计32课时。 
+                            <!--上课时间：周六15:00-17:00，共计32课时。
                             <br>
                             第一次上课时间：2018-04-21 15:00-17:00。
                             <br>
-                            点此阅读“乐学乐分享大型奖励活动”介绍。 
+                            点此阅读“乐学乐分享大型奖励活动”介绍。
                             <br>
-                            报名成功以后，请自行购买教辅资料，并根据公布的上课时间 做好准备。
+                            报名成功以后，请自行购买教辅资料，并根据公布的上课时间 做好准备。-->
+                            <?=!empty($course_details) ? $course_details : '暂无';?>
                         </span>
                     </div>
                 </div>
@@ -70,7 +71,9 @@
                     </a>
                 </div>
             </div>
-            <a href="<?=home_url('/courses/courseSign');?>" class="a-btn a-btn-table"><div><?=__('抢占名额', 'nlyd-student')?></div></a>
+            <?php if(empty($is_entered)):?>
+            <a href="<?=home_url('/course/courseSign');?>" class="a-btn a-btn-table"><div><?=__('抢占名额', 'nlyd-student')?></div></a>
+            <?php endif;?>
         </div>           
     </div>
 </div>

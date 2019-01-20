@@ -248,7 +248,6 @@ jQuery(function($) {
             form.on('submit(pay-formbtn)', function(data){
                 $.ajax({
                     data:data.field,success:function(res){
-                        // console.log(res)
                         if(res.success){
                             //不需要支付
                             if(res.data.is_pay == 0){
@@ -258,11 +257,9 @@ jQuery(function($) {
                             serialnumber=res.data.serialnumber;//获取订单号
                              var total=<?=$match['cost']?>;
                             if(total>0){
-                                // $('.selectBottom').addClass('selectBottom-show')
                                 var content='<div class="box-conent-wrapper"><?=__('本次共需支付', 'nlyd-student')?>￥'+total+'</div>'
                                             +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('微信', 'nlyd-student')?></div>'
                                             +'<div style="text-align:left;margin:auto;width:100px;margin-top:10px" class="fs_14"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('支付宝', 'nlyd-student')?></div>'
-                                            //    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14 c_orange"><div id="visa" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;银联支付</div>'
                                 layer.open({
                                     type: 1
                                     ,maxWidth:300
@@ -370,7 +367,6 @@ jQuery(function($) {
             // console.log(data);
         },
         callback:function(indexArr, data){
-            // $('#trigger3').val(data[0]['value'])
             $('#trigger4').val(data[0]['id'])
         }
     });
