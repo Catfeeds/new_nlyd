@@ -367,12 +367,12 @@ class Course{
             $seize_quota = isset($_POST['seize_quota']) ? intval($_POST['seize_quota']) : 0;
             $zone_id = isset($_POST['zone_id']) ? intval($_POST['zone_id']) : 0;
             $course_type = isset($_POST['course_type']) ? intval($_POST['course_type']) : 1;
-            $is_enable = isset($_POST['is_enable']) ? intval($_POST['is_enable']) : 2;
+            $is_enable = isset($_POST['is_enable']) ? intval($_POST['is_enable']) : 0;
             $course_category_id = isset($_POST['course_category_id']) ? intval($_POST['course_category_id']) : 0;
             $duration = isset($_POST['duration']) ? intval($_POST['duration']) : 0;
 //            $is_share = isset($_POST['is_share']) ? intval($_POST['is_share']) : 0;
             $admin_mobile = isset($_POST['admin_mobile']) ? trim($_POST['admin_mobile']) : '';
-//            if($course_title == '') $error_msg = '请填写课程名称';
+            if($course_title == '') $error_msg = '请填写课程名称';
 //            if($coach_id < 1) $error_msg .= ($error_msg == '' ? '':'<br />').'请选择授课教练';
 //            if($course_start_time == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择开课时间';
 //            if($province == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择省份';
@@ -380,6 +380,8 @@ class Course{
 //            if($area == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择区县';
 //            if($address == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请填写详细地址';
 //            if($open_quota < 0) $error_msg .= ($error_msg == '' ? '':'<br />').'请填写开放名额';
+            if($is_enable == 0) $error_msg .= '<br >请选择课程状态';
+            $address = $province.$city.$area.$address;
             if($course_end_time == '0100-01-01 00:00:00') $course_end_time = '';
             if($error_msg == ''){
                 $insertData = [
@@ -551,17 +553,21 @@ class Course{
                     </tr>
                     <tr class="">
                         <th scope="row"><label for="address">上课地址 </label></th>
-                        <td>
-                            <select name="province" id="province">
-                                <option value="">请选择</option>
-                            </select>
-                            <select name="city" id="city">
-                                <option value="">请选择</option>
-                            </select>
-                            <select name="area" id="area">
-                                <option value="">请选择</option>
-                            </select>
-                            <input type="text" style="padding: 3px 5px;" name="address" value="<?=isset($row['address']) ? $row['address'] : ''?>">
+                        <td id="address-td">
+                            <?php if($id > 0){ ?>
+                                <?=$row['address']?><br />
+                            <?php }else{ ?>
+                                <select name="province" id="province">
+                                    <option value="">请选择</option>
+                                </select>
+                                <select name="city" id="city">
+                                    <option value="">请选择</option>
+                                </select>
+                                <select name="area" id="area">
+                                    <option value="">请选择</option>
+                                </select>
+                                <input type="text" style="padding: 3px 5px;" name="address" value="">
+                            <?php }?>
                         </td>
                     </tr>
                     <tr class="">
@@ -590,8 +596,10 @@ class Course{
                     <tr class="">
                         <th scope="row"><label for="is_enable">状态 </label></th>
                         <td>
-                            <label for="is_enable_1">正常  <input type="radio" <?=$row['is_enable'] == '1' || !isset($row['is_enable']) ? 'checked="checked"':''?> id="is_enable_1" name="is_enable" value="1"></label>
-                            <label for="is_enable_2">禁用  <input type="radio" <?=$row['is_enable'] == '2' ? 'checked="checked"':''?> id="is_enable_2" name="is_enable" value="2"></label>
+                            <label for="is_enable_-3">  <input type="radio" <?=$row['is_enable'] == '-3' || !isset($row['is_enable']) ? 'checked="checked"':''?> id="is_enable_-3" name="is_enable" value="-3">已结课 </label>
+                            <label for="is_enable_-2">  <input type="radio" <?=$row['is_enable'] == '-2' ? 'checked="checked"':''?> id="is_enable_-2" name="is_enable" value="-2">等待开课 </label>
+                            <label for="is_enable_1">  <input type="radio" <?=$row['is_enable'] == '1' ? 'checked="checked"':''?> id="is_enable_1" name="is_enable" value="1">报名中 </label>
+                            <label for="is_enable_2">  <input type="radio" <?=$row['is_enable'] == '2' ? 'checked="checked"':''?> id="is_enable_2" name="is_enable" value="2">已开课 </label>
                         </td>
                     </tr>
 <!--                    <tr class="">-->
@@ -607,7 +615,11 @@ class Course{
                 </table>
 
 
-                <p class="submit"><input type="submit" name="createuser" id="createusersub" class="button button-primary" value="提交"></p>
+                <p class="submit"><input type="submit" name="createuser" id="createusersub" class="button button-primary" value="提交">
+                <?php if($id > 0){ ?>
+                    <button type="button" id="editForm" data-type="edit" class="button">编辑</button>
+                <?php } ?>
+                </p>
             </form>
             <?php
             wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
@@ -641,74 +653,79 @@ class Course{
                             });
                         })
                     })
-                    initAddress('<?=isset($row['province'])?$row['province']:''?>',
-                        '<?=isset($row['city'])?$row['city']:''?>',
-                        '<?=isset($row['area'])?$row['area']:''?>');
-                    function initAddress(province,city,area){
-                        var provicone_html = '<option data-index="" value="">请选择</option>'
-                        var city_html = '<option data-index="" value="">请选择</option>';
-                        var area_html = '',selectedArea='';
-                        $.each($.validationLayui.allArea.area,function(index,value){
-                            if(province == value.value){
-                                provicone_html += '<option data-index="'+index+'" selected="selected" value="'+value.value+'">'+value.value+'</option>';
-                                $.each(value.childs,function (cityIndex,cityValue) {
-                                    if(cityValue.value == city){
-                                        city_html += '<option data-index="'+index+'_'+cityIndex+'" selected="selected" value="'+cityValue.value+'">'+cityValue.value+'</option>';
-                                        $.each(cityValue.childs,function (areaIndex,areaValue) {
-                                            selectedArea = areaValue.value == area ?'selected="selected"':'';
-                                            area_html += '<option data-index="'+areaIndex+'" '+selectedArea+' value="'+areaValue.value+'">'+areaValue.value+'</option>';
-                                        });
-                                    }else{
-                                        city_html += '<option data-index="'+index+'_'+cityIndex+'"  value="'+cityValue.value+'">'+cityValue.value+'</option>';
-                                    }
-                                });
-                            }else{
-                                provicone_html += '<option data-index="'+index+'"  value="'+value.value+'">'+value.value+'</option>';
-                            }
-                        });
-                        $('#province').html(provicone_html);
-                        $('#city').html(city_html);
-                        $('#area').html(area_html);
-                    }
-
-                    $('#province').on('change', function () {
-                        changeProvicone($(this));
-                    });
-                    function changeProvicone(_this){
-                        var val = _this.find('option:selected').attr('data-index');
-                        if(val > -1){
-                            var city_html = '';
-                            $.each($.validationLayui.allArea.area[val].childs,function (cindex,cvalue) {
-                                city_html += '<option data-index="'+val+'_'+cindex+'" value="'+cvalue.value+'">'+cvalue.value+'</option>';
+                    function addressC(){
+                        // initAddress('',
+                        //     '',
+                        //     '');
+                        initAddress('<?=isset($row['province'])?$row['province']:''?>',
+                            '<?=isset($row['city'])?$row['city']:''?>',
+                            '<?=isset($row['area'])?$row['area']:''?>');
+                        function initAddress(province,city,area){
+                            var provicone_html = '<option data-index="" value="">请选择</option>'
+                            var city_html = '<option data-index="" value="">请选择</option>';
+                            var area_html = '',selectedArea='';
+                            $.each($.validationLayui.allArea.area,function(index,value){
+                                if(province == value.value){
+                                    provicone_html += '<option data-index="'+index+'" selected="selected" value="'+value.value+'">'+value.value+'</option>';
+                                    $.each(value.childs,function (cityIndex,cityValue) {
+                                        if(cityValue.value == city){
+                                            city_html += '<option data-index="'+index+'_'+cityIndex+'" selected="selected" value="'+cityValue.value+'">'+cityValue.value+'</option>';
+                                            $.each(cityValue.childs,function (areaIndex,areaValue) {
+                                                selectedArea = areaValue.value == area ?'selected="selected"':'';
+                                                area_html += '<option data-index="'+areaIndex+'" '+selectedArea+' value="'+areaValue.value+'">'+areaValue.value+'</option>';
+                                            });
+                                        }else{
+                                            city_html += '<option data-index="'+index+'_'+cityIndex+'"  value="'+cityValue.value+'">'+cityValue.value+'</option>';
+                                        }
+                                    });
+                                }else{
+                                    provicone_html += '<option data-index="'+index+'"  value="'+value.value+'">'+value.value+'</option>';
+                                }
                             });
+                            $('#province').html(provicone_html);
                             $('#city').html(city_html);
-                            var area_html = '';
-                            $.each($.validationLayui.allArea.area[val].childs[0].childs,function (aindex,avalue) {
-                                area_html += '<option data-index="'+aindex+'" value="'+avalue.value+'">'+avalue.value+'</option>';
-                            });
                             $('#area').html(area_html);
-                        }else{
-                            $('#city').html('');
-                            $('#area').html('');
                         }
-                    }
-                    $('#city').on('change', function () {
-                        changeCity($(this));
-                    });
-                    function changeCity(_this) {
-                        var val = _this.find('option:selected').attr('data-index');
-                        val = val.split('_');
-                        if(val[0] > -1){
-                            var area_html = '';
-                            $.each($.validationLayui.allArea.area[val[0]].childs[val[1]].childs,function (aindex,avalue) {
-                                area_html += '<option value="'+avalue.value+'">'+avalue.value+'</option>';
-                            });
-                            $('#area').html(area_html);
-                        }else{
-                            $('#area').html('');
-                        }
-                    }
 
+                        $('#province').on('change', function () {
+                            changeProvicone($(this));
+                        });
+                        function changeProvicone(_this){
+                            var val = _this.find('option:selected').attr('data-index');
+                            if(val > -1){
+                                var city_html = '';
+                                $.each($.validationLayui.allArea.area[val].childs,function (cindex,cvalue) {
+                                    city_html += '<option data-index="'+val+'_'+cindex+'" value="'+cvalue.value+'">'+cvalue.value+'</option>';
+                                });
+                                $('#city').html(city_html);
+                                var area_html = '';
+                                $.each($.validationLayui.allArea.area[val].childs[0].childs,function (aindex,avalue) {
+                                    area_html += '<option data-index="'+aindex+'" value="'+avalue.value+'">'+avalue.value+'</option>';
+                                });
+                                $('#area').html(area_html);
+                            }else{
+                                $('#city').html('');
+                                $('#area').html('');
+                            }
+                        }
+                        $('#city').on('change', function () {
+                            changeCity($(this));
+                        });
+                        function changeCity(_this) {
+                            var val = _this.find('option:selected').attr('data-index');
+                            val = val.split('_');
+                            if(val[0] > -1){
+                                var area_html = '';
+                                $.each($.validationLayui.allArea.area[val[0]].childs[val[1]].childs,function (aindex,avalue) {
+                                    area_html += '<option value="'+avalue.value+'">'+avalue.value+'</option>';
+                                });
+                                $('#area').html(area_html);
+                            }else{
+                                $('#area').html('');
+                            }
+                        }
+
+                    }
                     $('#zone_type').on('change', function () {
                         var val = $(this).val();
                         $.ajax({
@@ -729,6 +746,40 @@ class Course{
                             }
                         });
                     });
+                    <?php if($id > 0){ ?>
+                        var address_old = '<?=$row['address']?>';//显示的带地区的详细地址
+                        var old_area = '<?=isset($row['province'])?$row['province']:''?>'+'<?=isset($row['city'])?$row['city']:''?>'+'<?=isset($row['area'])?$row['area']:''?>';
+                        var old_address = address_old.replace(old_area, '');//去除地区只留详细地址
+                        $('input').prop('disabled','disabled');
+                        $('select').prop('disabled','disabled');
+                        $('#editForm').on('click', function () {
+                            var _type = $(this).attr('data-type');
+                            var _ab = '';
+                            if(_type == 'edit'){
+                                $(this).text('取消编辑');
+                                $(this).attr('data-type','disable');
+                                $('#address-td').html('    <select name="province" id="province">\n' +
+                                    '                                    <option value="">请选择</option>\n' +
+                                    '                                </select>\n' +
+                                    '                                <select name="city" id="city">\n' +
+                                    '                                    <option value="">请选择</option>\n' +
+                                    '                                </select>\n' +
+                                    '                                <select name="area" id="area">\n' +
+                                    '                                    <option value="">请选择</option>\n' +
+                                    '                                </select>\n' +
+                                    '                                <input type="text" style="padding: 3px 5px;" name="address" value="'+old_address+'">');
+                                addressC();
+                            }else if(_type == 'disable'){
+                                $(this).text('编辑');
+                                $(this).attr('data-type','edit');
+                                $('#address-td').html(address_old);
+                                _ab = 'disabled';
+                            }
+                            $('input').prop('disabled',_ab);
+                            $('select').prop('disabled',_ab);
+                        });
+                        <?php } ?>
+
                 });
             </script>
         </div>

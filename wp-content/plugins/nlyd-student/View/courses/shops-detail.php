@@ -79,7 +79,7 @@
                     </a>
                     <div class="shops_foot_bnts flex-h">
                         <div class="flex1">
-                            <a class="go_buy_car shops_foot_bnt dis_table" data-type="car">
+                            <a class="go_buy_car shops_foot_bnt dis_table c_blue" data-type="car">
                                 <div class="dis_cell fs_16"><?=__('加入购物车', 'nlyd-student')?></div>
                             </a>
                         </div>
@@ -171,147 +171,163 @@ jQuery(function($) {
         $("#total").val(val)
         btnActive($("#total").val(),max)
     }
-    function submit(_this){//加入购物车
-        var type=_this.attr('data-type');//加入购物车
-        var total=$('#total').val();//数量
-        var size=$('.shops_zize_btn.active').attr('data-size');//规格
-        var _post_data={
-            type:type,
-            total:total,
-            size:size,
-            order_type:3,
-            cost:'11',
-            action:'entry_pay',
-            _wpnonce:$('#payForm').val()
-        }
-        console.log(_post_data)
-        $.ajax({
-            data:_post_data,
-            success:function(res){
-                console.log(res)
-                if(res.success){
-                    if(type=="buy"){//立即购买
-                        //不需要支付
-                        if(res.data.is_pay == 0){
-                            window.location.href=res.data.url;
-                            return false;
-                        }
-                        serialnumber=res.data.serialnumber;//获取订单号
-                        if(total_money>0){
-                            var content='<div class="box-conent-wrapper"><?=__("本次共需支付", "nlyd-student")?>￥'+total_money+'</div>'
-                                        +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('微信', 'nlyd-student')?></div>'
-                                        +'<div style="text-align:left;margin:auto;width:100px;margin-top:10px" class="fs_14"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('支付宝', 'nlyd-student')?></div>'
-                            layer.open({
-                                type: 1
-                                ,maxWidth:300
-                                ,title: "<?=__('选择支付方式', 'nlyd-student')?>" //不显示标题栏
-                                ,skin:'nl-box-skin'
-                                ,id: 'certification' //防止重复弹出
-                                ,content:content
-                                ,btn: ["<?=__('取消支付', 'nlyd-student')?>", "<?=__('确认支付', 'nlyd-student')?>" ]
-                                ,cancel:function(){
+    layui.use(['layer'], function(){
+        function submit(_this){//加入购物车
+            if(!_this.hasClass('disabled')){
+                var type=_this.attr('data-type');//加入购物车
+                var total=$('#total').val();//数量
+                var single=180;
+                var total_money=single*total;
+                var size=$('.shops_zize_btn.active').attr('data-size');//规格
+                var _post_data={
+                    type:type,
+                    total:total,
+                    size:size,
+                    order_type:3,
+                    cost:'11',
+                    action:'entry_pay',
+                    _wpnonce:$('#payForm').val(),
+                    total_money:total_money
+                }
+                console.log(_post_data)
+                $.ajax({
+                    data:_post_data,
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success:function(res){
+                        console.log(res)
+                        if(res.success){
+                            if(type=="buy"){//立即购买
+                                //不需要支付
+                                if(res.data.is_pay == 0){
+                                    window.location.href=res.data.url;
+                                    return false;
+                                }
+                                serialnumber=res.data.serialnumber;//获取订单号
+                                if(total_money>0){
+                                    var content='<div class="box-conent-wrapper"><?=__("本次共需支付", "nlyd-student")?>￥'+total_money+'</div>'
+                                                +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('微信', 'nlyd-student')?></div>'
+                                                +'<div style="text-align:left;margin:auto;width:100px;margin-top:10px" class="fs_14"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('支付宝', 'nlyd-student')?></div>'
+                                    layer.open({
+                                        type: 1
+                                        ,maxWidth:300
+                                        ,title: "<?=__('选择支付方式', 'nlyd-student')?>" //不显示标题栏
+                                        ,skin:'nl-box-skin'
+                                        ,id: 'certification' //防止重复弹出
+                                        ,content:content
+                                        ,btn: ["<?=__('取消支付', 'nlyd-student')?>", "<?=__('确认支付', 'nlyd-student')?>" ]
+                                        ,cancel:function(){
 
-                                }
-                                ,success: function(layero, index){
-                                    
-                                }
-                                ,yes: function(index, layero){
-                                    layer.closeAll();
-                                }
-                                ,btn2: function(index, layero){
-                                    var id=$('.layui-form-checked').attr('id')
-                                    var pay_type=''
-                                    if(id=='weiChat'){//微信支付
-                                        pay_type='wxh5pay'
-                                    }else if(id=='zfb'){//支付宝支付
-                                        pay_type='alipay'
-                                    }else{
-                                        pay_type=null;
-                                    }
+                                        }
+                                        ,success: function(layero, index){
+                                            
+                                        }
+                                        ,yes: function(index, layero){
+                                            layer.closeAll();
+                                        }
+                                        ,btn2: function(index, layero){
+                                            var id=$('.layui-form-checked').attr('id')
+                                            var pay_type=''
+                                            if(id=='weiChat'){//微信支付
+                                                pay_type='wxh5pay'
+                                            }else if(id=='zfb'){//支付宝支付
+                                                pay_type='alipay'
+                                            }else{
+                                                pay_type=null;
+                                            }
 
-                                    var datas={
-                                        action:'pay',
-                                        pay_type:pay_type,
-                                        _wpnonce:$('#inputPay').val(),
-                                        serialnumber:serialnumber,
-                                        match_id:$.Request('grad_id')
-                                    }
-                                    // alert(pay_type)
-                                    if(pay_type){
-                                        $.ajax({
-                                            data:datas,success:function(response){
-                                                if(response.success){
-                                                    if(response.data.info){
-                                                        window.location.href=response.data.info;
-                                                    }else{//微信公众号支付
-                                                        if(response.data.params){
-                                                            prams=response.data.params;
-                                                            jsApiCall()
+                                            var datas={
+                                                action:'pay',
+                                                pay_type:pay_type,
+                                                _wpnonce:$('#inputPay').val(),
+                                                serialnumber:serialnumber,
+                                                match_id:$.Request('grad_id')
+                                            }
+                                            // alert(pay_type)
+                                            if(pay_type){
+                                                $.ajax({
+                                                    data:datas,success:function(response){
+                                                        if(response.success){
+                                                            if(response.data.info){
+                                                                window.location.href=response.data.info;
+                                                            }else{//微信公众号支付
+                                                                if(response.data.params){
+                                                                    prams=response.data.params;
+                                                                    jsApiCall()
+                                                                }
+                                                            }
+                                                            
+                                                        }else{
+                                                            $.alerts(response.data.info)
                                                         }
                                                     }
-                                                    
-                                                }else{
-                                                    $.alerts(response.data.info)
-                                                }
+                                                })
                                             }
-                                        })
-                                    }
+                                        }
+                                        ,closeBtn:2
+                                        ,btnAagn: 'c' //按钮居中
+                                        ,shade: 0.3 //遮罩
+                                        ,isOutAnim:true//关闭动画
+                                    });
+                                }else{
+                                    window.location.href=window.home_url+'/courses/shopsPaySuccess/';
                                 }
-                                ,closeBtn:2
-                                ,btnAagn: 'c' //按钮居中
-                                ,shade: 0.3 //遮罩
-                                ,isOutAnim:true//关闭动画
-                            });
+                            }else{//加入购物车
+                                alert('加入购物车')
+                                _this.removeClass('disabled');
+                            }
                         }else{
-                            window.location.href=window.home_url+'/courses/shopsPaySuccess/';
+                            if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
+                                setTimeout(function(){
+                                    window.location.href=window.home_url+'/courses/shopsPaySuccess/';
+                                }, 1000);
+                            }else{
+                                $.alerts(res.data.info)
+                            }
                         }
-                    }else{//加入购物车
-                        alert('加入购物车')
+                        _this.removeClass('disabled');
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                            _this.removeClass('disabled');
+                        }
+                        
                     }
-                }else{
-                    if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
-                        setTimeout(function(){
-                            window.location.href=window.home_url+'/courses/shopsPaySuccess/';
-                        }, 1000);
-                    }else{
-                        $.alerts(res.data.info)
+                })
+            }else{
+                $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+            }
+            return false;
+        }
+        var serialnumber='';//订单号
+        var prams=''
+        function jsApiCall()
+        {
+            WeixinJSBridge.invoke(
+                'getBrandWCPayRequest',
+                prams,
+                function(res){
+                    if(res.err_msg=='get_brand_wcpay_request:ok'){
+                        window.location.href=window.home_url+'/courses/courseDetail/id/'+$.Request('id')
                     }
-
                 }
-            }
-        })
-        return false;
-    }
-    var serialnumber='';//订单号
-    var prams=''
-    function jsApiCall()
-    {
-        WeixinJSBridge.invoke(
-            'getBrandWCPayRequest',
-            prams,
-            function(res){
-                if(res.err_msg=='get_brand_wcpay_request:ok'){
-                    window.location.href=window.home_url+'/courses/courseDetail/id/'+$.Request('id')
+            );
+        }
+        function callpay()
+        {
+            if (typeof WeixinJSBridge == "undefined"){
+                if( document.addEventListener ){
+                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                }else if (document.attachEvent){
+                    document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
                 }
+            }else{
+                jsApiCall();
             }
-        );
-    }
-	function callpay()
-	{
-		if (typeof WeixinJSBridge == "undefined"){
-		    if( document.addEventListener ){
-		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-		    }else if (document.attachEvent){
-		        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
-		        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-		    }
-		}else{
-		    jsApiCall();
-		}
-    }
-    layui.use(['layer'], function(){
-
-      
+        }
         if('ontouchstart' in window){// 移动端
             $('.shops_num_btn').each(function(){//数字键盘
                 var _this=$(this);

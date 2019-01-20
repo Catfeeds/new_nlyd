@@ -758,7 +758,7 @@ class Grading
                 FROM `{$wpdb->prefix}user_grade_log_history` AS uglh 
                 LEFT JOIN `{$wpdb->users}` AS u ON u.ID=uglh.user_id AND u.ID!='' 
                 {$searchJOIN} 
-                WHERE 1=1 
+                WHERE uglh.grade_result!=0 
                 {$categoryWhere}
                 {$searchWhere} 
                 ORDER BY uglh.created_time DESC LIMIT {$start},{$pageSize}" ,ARRAY_A);
@@ -1211,17 +1211,18 @@ class Grading
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS user_id,`{$cate_type}` AS skill_level FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `{$cate_type}`>0 LIMIT {$start},{$pageSize}", ARRAY_A);
-               $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
-                $pageAll = ceil($count['count']/$pageSize);
-                $pageHtml = paginate_links( array(
-                    'base' => add_query_arg( 'cpage', '%#%' ),
-                    'format' => '',
-                    'prev_text' => __('&laquo;'),
-                    'next_text' => __('&raquo;'),
-                    'total' => $pageAll,
-                    'current' => $page,
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page,
 //                    'add_fragment' => '&searchCode='.$searchCode,
-                ));
+        ));
+//        leo_dump($rows);
         if($rows){
             foreach ($rows as $k => &$row){
                 $user_meta = get_user_meta($row['user_id']);
@@ -1285,17 +1286,19 @@ class Grading
 
                     <tbody id="the-list" data-wp-lists="list:user">
 
-                    <?php foreach ($rows as $row){?>
-                    <tr id="user-<?=$row['user_id']?>"><td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名">
-                            <img alt="" src="<?=$row['user_head']?>" class="avatar avatar-32 photo" height="32" width="32">
-                            <strong><?=$row['real_name']?></strong>
+                    <?php
+
+                    foreach ($rows as $row2){?>
+                    <tr id="user-<?=$row2['user_id']?>"><td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名">
+                            <img alt="" src="<?=$row2['user_head']?>" class="avatar avatar-32 photo" height="32" width="32">
+                            <strong><?=$row2['real_name']?></strong>
                             <br>
 
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
-                        <td class="ID column-ID" data-colname="ID"><?=$row['user_ID']?></td>
-                        <td class="sex column-sex" data-colname="性别"><?=$row['user_sex']?></td>
-                        <td class="grading_level column-grading_level" data-colname="级别"><?=$row['skill_level']?></td>
+                        <td class="ID column-ID" data-colname="ID"><?=$row2['user_ID']?></td>
+                        <td class="sex column-sex" data-colname="性别"><?=$row2['user_sex']?></td>
+                        <td class="grading_level column-grading_level" data-colname="级别"><?=$row2['skill_level']?></td>
                         <td class="cate_type column-cate_type" data-colname="类型">
                             <?=$categoryList[$cate_type]['post_title']?>
                         </td>
@@ -1413,7 +1416,6 @@ class Grading
         ));
         $categoryArr = getCategory();
         $categoryArr = array_column($categoryArr, NULL, 'ID');
-//        leo_dump($categoryArr);
         ?>
         <div class="wrap">
             <style type="text/css">
@@ -1437,13 +1439,16 @@ class Grading
                     $caLiArr[] = '<li class="all"><a href="'.admin_url('edit.php?post_type=grading&page=grading-adopt-log&ctype='.$clv['ID']).'" '.($cate_type==$clv['ID']?'class="current"':'').' aria-current="page">'.$clv['post_title'].'<span class="count"></span></a></li>';
                 }
                 echo join(' | ',$caLiArr);
+
                 ?>
+
             </ul>
                <br class="clear">
                 <div>
                     <form action="<?=admin_url('admin.php?page=download&action=exportGradingAdoptLog')?>" method="post">
                         <input type="date" name="begin"> -
                         <input type="date" name="end">
+                        <input type="hidden" name="type_id" value="<?=$cate_type?>">
                         <button class="button-primary" type="submit">导出</button>
                     </form>
                 </div>
@@ -1478,7 +1483,7 @@ class Grading
                     <tr id="user-<?=$row['user_id']?>">
                         <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/ID">
                             <img alt="" src="<?=$user_meta['user_head'][0]?>" class="avatar avatar-32 photo" height="32" width="32">
-                            <strong><?=unserialize($user_meta['user_real_name'][0])['real_name']?></strong>
+                            <strong><?=unserialize($user_meta['user_real_name'][0])['real_name'].'/'.$user_meta['user_ID'][0]?></strong>
                             <br>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
@@ -1544,7 +1549,7 @@ class Grading
                         <?php } ?>
                     });
                     $('.prove_grant').on('click',function() {
-                        $('.prove_number_div').show();
+                        $(this).closest('td').find('.prove_number_div').show();
                         $(this).hide();
                     });
                     
