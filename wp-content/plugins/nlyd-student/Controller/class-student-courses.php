@@ -55,8 +55,18 @@ class Student_Courses
      * 课程详情
      */
      public function courseDetail(){
-        $view = student_view_path.CONTROLLER.'/course-detail.php';
-        load_view_template($view);
+
+         global $wpdb;
+         $sql = "select a.id,a.course_title,a.open_quota,b.zone_name,b.zone_city,c.zone_type_name from {$wpdb->prefix}course a 
+                 left join {$wpdb->prefix}zone_meta b on a.zone_id = b.user_id 
+                 left join {$wpdb->prefix}zone_type c on b.type_id = c.id 
+                 where a.id = {$_GET['id']}
+                 ";
+         //print_r($sql);die;
+         $row = $wpdb->get_row($sql,ARRAY_A);
+         print_r($row);
+         $view = student_view_path.CONTROLLER.'/course-detail.php';
+         load_view_template($view);
     }
     /**
      * 课程报名
