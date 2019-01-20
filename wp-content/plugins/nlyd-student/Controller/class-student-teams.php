@@ -212,8 +212,6 @@ class Student_Teams
 
         global $wpdb,$current_user;
 
-
-
         //获取战队信息
         $sql = "select a.ID,a.post_title,a.post_content,c.user_id,c.status,
                 if(b.team_world != '',b.team_world,'--') as team_world,
@@ -222,7 +220,7 @@ class Student_Teams
                 if(b.team_leader != '',b.team_leader,'--') as team_leader
                 from {$wpdb->prefix}posts a 
                 left join {$wpdb->prefix}team_meta b on a.ID = b.team_id 
-                left join {$wpdb->prefix}match_team c on a.ID = c.team_id and b.user_id = {$current_user->ID} 
+                left join {$wpdb->prefix}match_team c on a.ID = c.team_id and c.user_id = {$current_user->ID} 
                 where a.ID = {$_GET['team_id']} 
                 ";
         //print_r($sql);

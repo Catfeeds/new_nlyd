@@ -56,17 +56,53 @@ class Student_Courses
      */
      public function courseDetail(){
 
-         global $wpdb;
-         $sql = "select a.id,a.course_title,a.open_quota,b.zone_name,b.zone_city,c.zone_type_name from {$wpdb->prefix}course a 
+         global $wpdb,$current_user;
+         $sql = "select a.id,a.course_title,a.coach_id,a.course_start_time,a.open_quota,a.course_details,b.zone_name,b.zone_city,c.zone_type_name,
+                 c.zone_type_alias,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type
+                 from {$wpdb->prefix}course a 
                  left join {$wpdb->prefix}zone_meta b on a.zone_id = b.user_id 
                  left join {$wpdb->prefix}zone_type c on b.type_id = c.id 
                  where a.id = {$_GET['id']}
                  ";
-         //print_r($sql);die;
+         //print_r($sql);
          $row = $wpdb->get_row($sql,ARRAY_A);
-         print_r($row);
+         if(!empty($row)){
+             $city_arr = str2arr($row['zone_city'],'-');
+             if(!empty($city_arr[2])){
+                 $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
+             }elseif ($city_arr[1] != '市辖区'){
+                 $city = rtrim($city_arr[1],'市');
+             }else{
+                 $city = rtrim($city_arr[0],'市');
+             }
+             $city = !empty($city) ? $city : '';
+             $row['city'] = $city;
+             if($row['zone_type_alias'] == 'match'){
+                 $zone_title = $row['zone_name'].$city.$row['match_type'].'组委会';
+             }
+             else{
+                 $title = 'IISC';
+                 if($row['zone_type_alias'] == 'test'){
+                     $title .= '水平';
+                 }
+
+                 $zone_title = $title.$city.$row['zone_type_name'];
+             }
+             $row['zone_title'] = $zone_title;
+         }
+         if(!empty($row['coach_id'])){
+             $user_name = get_user_meta($row['coach_id'],'user_real_name')[0]['real_name'];
+             $row['user_name'] = $user_name;
+         }
+         //获取报名人数
+         $row['order_total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order where match_id = {$_GET['id']} and order_type = 3 and pay_status in(2,3,4)");
+         //判断是否报名
+         if($current_user->ID){
+             $row['is_entered'] = $wpdb->get_var("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} ");
+         }
+         //print_r($row);
          $view = student_view_path.CONTROLLER.'/course-detail.php';
-         load_view_template($view);
+         load_view_template($view,$row);
     }
     /**
      * 课程报名
