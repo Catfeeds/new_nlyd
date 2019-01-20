@@ -2182,18 +2182,20 @@ class Student_Ajax
             $this->setUserCookie($user->ID);
 
             //do_action( 'wp_login', $user->user_login, $user );
-            if(isset($_SESSION['redirect_url'])){
-                $url = $_SESSION['redirect_url'];
-                unset($_SESSION['redirect_url']);
-            }else{
-                $url = home_url('account');
-            }
 
             //判断是否为机构
             $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$user->ID} ");
             if($zone_id){
                 $url = home_url('/zone/');
+            }else{
+                $url = home_url('account');
             }
+
+            if(isset($_SESSION['redirect_url'])){
+                $url = $_SESSION['redirect_url'];
+                unset($_SESSION['redirect_url']);
+            }
+
 
             //添加推广人
             if($_POST['referee_id'] > 0){
@@ -4985,7 +4987,7 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'考级场景/类别/名称/时间为必填项'));
         }
         if($_POST['start_time'] >= $_POST['end_time'] )wp_send_json_error(array('info'=>'结束时间必须大于开始时间'));
-        if($_POST['start_time'] >= $_POST['entry_end_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
+        if($_POST['entry_end_time'] >= $_POST['start_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
         global $wpdb,$current_user;
         if(reg_match('m',$_POST['person_liable'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 

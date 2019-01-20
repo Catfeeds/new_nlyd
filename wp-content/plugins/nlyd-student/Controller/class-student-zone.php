@@ -11,6 +11,12 @@ class Student_Zone
 {
     public function __construct($action)
     {
+        //316751759@gjnlyd.com http://127.0.0.1/nlyd/zone/grading/
+
+        if(!is_user_logged_in()){
+
+            $_SESSION['redirect_url'] = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        }
 
         //判断是否是管理员操作面板和是否登录
         if(!is_user_logged_in()){
