@@ -2983,7 +2983,9 @@ class Organize{
      */
     public function getOrganizeStatisticsIncome($user_id,$id,$zone_meta){
         global $wpdb;
-        $itype = isset($_GET['itype']) ? trim($_GET['itype']) : 'match';
+        $spreadClass = new Spread();
+        $typeArr = $spreadClass->getIncomeTypeArr();
+//        $itype = isset($_GET['itype']) ? trim($_GET['itype']) : key($typeArr);
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
         $page < 1 && $page = 1;
@@ -3007,21 +3009,24 @@ class Organize{
         ));
 //        leo_dump($rows);
         //各种收益数量
-        $sql = "SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$zone_meta['user_id']}' AND income_type=";
-        $match_income = $wpdb->get_var($sql."'match'");
-        $grading_income = $wpdb->get_var($sql."'grading'");
-        $subject_income = $wpdb->get_var($sql."'subject'");
-        $extract_income = $wpdb->get_var($sql."'extract'");
-        $undertake_income = $wpdb->get_var($sql."'undertake'");
+//        $sql = "SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$zone_meta['user_id']}' AND income_type=";
+//        $match_income = $wpdb->get_var($sql."'match'");
+//        $grading_income = $wpdb->get_var($sql."'grading'");
+//        $subject_income = $wpdb->get_var($sql."'subject'");
+//        $extract_income = $wpdb->get_var($sql."'extract'");
+//        $undertake_income = $wpdb->get_var($sql."'undertake'");
 //        leo_dump($wpdb->last_query);die;
+
+        $typeLiArr = [];
+//        foreach ($typeArr as $tak => $tav){
+//            $incom_num = $wpdb->get_var($sql."'{$tak}'");
+//            $typeLiArr[] = '<li class="all"><a href="'.admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype='.$tak).'" '.($itype==$tak?'class="current"':"").' aria-current="page">'.$tav.'<span class="count">（'.($incom_num != false ? $incom_num : 0).'）</span></a></li>';
+//        }
+//        leo_dump($typeArr);die;
         ?>
         <ul class="subsubsub">
-            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=match')?>" <?=$itype==='match'?'class="current"':''?> aria-current="page">比赛<span class="count">（<?=$match_income != false ? $match_income : 0?>）</span></a> | </li>
-            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=grading')?>" <?=$itype==='grading'?'class="current"':''?> aria-current="page">考级<span class="count">（<?=$grading_income != false? $grading_income : 0?>）</span></a> | </li>
-            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=subject')?>" <?=$itype==='subject'?'class="current"':''?> aria-current="page">申请机构<span class="count">（<?=$subject_income != false ? $subject_income : 0?>）</span></a> | </li>
-            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=extract')?>" <?=$itype==='extract'?'class="current"':''?> aria-current="page">提现<span class="count">（<?=$extract_income != false ? $extract_income : 0?>）</span></a>  </li>
-            <li class="all"><a href="<?=admin_url('admin.php?page=fission-organize-statistics&id='.$id.'&type=5&itype=undertake')?>" <?=$itype==='undertake'?'class="current"':''?> aria-current="page">承办<span class="count">（<?=$undertake_income != false ? $undertake_income : 0?>）</span></a>  </li>
-          </ul>
+<!--            --><?//=join(' | ',$typeLiArr)?>
+        </ul>
         <div class="tablenav top">
             <div class="tablenav-pages">
                 <span class="displaying-num"><?=$count['count']?>个项目</span>
@@ -3068,24 +3073,25 @@ class Organize{
                     </td>
                     <td class="match_status column-match_status" data-colname="类型">
                         <?php
-                        switch ($row['income_type']){
-                            case 'match':
-                                echo '比赛';
-                                break;
-                            case 'grading':
-                                echo '考级';
-                                break;
-                            case 'extract':
-                                echo '提现';
-                                break;
-                            case 'subject':
-                                $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['user_type']}'");
-                                echo '申请'.$zone_type_name;
-                                break;
-                            case 'undertake':
-                                echo '承办';
-                                break;
-                        }
+                        echo $typeArr[$row['income_type']];
+//                        switch ($row['income_type']){
+//                            case 'match':
+//                                echo '比赛';
+//                                break;
+//                            case 'grading':
+//                                echo '考级';
+//                                break;
+//                            case 'extract':
+//                                echo '提现';
+//                                break;
+//                            case 'subject':
+//                                $zone_type_name = $wpdb->get_var("SELECT zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$row['user_type']}'");
+//                                echo '申请'.$zone_type_name;
+//                                break;
+//                            case 'undertake':
+//                                echo '承办';
+//                                break;
+//                        }
                         ?>
                     </td>
                     <td class="date_time column-date_time" data-colname="时间">
