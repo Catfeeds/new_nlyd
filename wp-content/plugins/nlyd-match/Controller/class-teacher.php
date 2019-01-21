@@ -556,8 +556,9 @@ class Teacher
         $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
         $type = isset($_GET['type']) ? intval($_GET['type']) : 2;
         $coach_id = isset($_GET['id']) ? intval($_GET['id']) : $current_user->ID;
-        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' and post_title not like '%自测%' order by menu_order asc  ";
-        $postsRows = $wpdb->get_results($sql,ARRAY_A);
+//        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' and post_title not like '%自测%' and post_title not like '%训练%' order by menu_order asc  ";
+//        $postsRows = $wpdb->get_results($sql,ARRAY_A);
+        $postsRows = getCategory();
 
         $catArr = [];
         //类别
@@ -686,7 +687,7 @@ class Teacher
                             <option value="3">解除教学</option>
                         </select>
                         <?php foreach ($postsRows as $prv){ ?>
-                            <label for="all_category_<?=$prv['ID']?>"><?=$prv['post_title']?></label><input id="all_category_<?=$prv['ID']?>" type="checkbox" name="all_category[]" value="<?=$prv['ID']?>">
+                            <label for="all_category_1_<?=$prv['ID']?>"><?=$prv['post_title']?></label><input id="all_category_1_<?=$prv['ID']?>" type="checkbox" name="all_category[]" value="<?=$prv['ID']?>">
                         <?php } ?>
                         <input type="button" id="doaction" class="button action batch-btn" value="应用">
                     </div>
@@ -806,7 +807,7 @@ class Teacher
                             <option value="3">解除教学</option>
                         </select>
                         <?php foreach ($postsRows as $prv){ ?>
-                            <label for="all_category_<?=$prv['ID']?>"><?=$prv['post_title']?></label><input id="all_category_<?=$prv['ID']?>" type="checkbox" name="all_category[]" value="<?=$prv['ID']?>">
+                            <label for="all_category_2_<?=$prv['ID']?>"><?=$prv['post_title']?></label><input id="all_category_2_<?=$prv['ID']?>" type="checkbox" name="all_category[]" value="<?=$prv['ID']?>">
                         <?php } ?>
                         <input type="button" id="doaction3" class="button action batch-btn" value="应用">
                     </div>
