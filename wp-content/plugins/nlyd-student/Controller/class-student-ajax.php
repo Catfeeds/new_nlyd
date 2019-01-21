@@ -6621,40 +6621,73 @@ class Student_Ajax
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $sql = "select match_id from {$wpdb->prefix}order where match_id = {$_POST['id']} and order_type = 3 and pay_status in (2,3,4) limit $start,$pageSize ";
+
+        $sql = "select a.match_id,a.user_id,b.course_category_id,a.cost 
+                 from {$wpdb->prefix}order a 
+                 left join {$wpdb->prefix}course b on a.match_id = b.id
+                 where a.match_id = {$_POST['id']} and a.order_type = 3 and a.pay_status in (2,3,4) ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
-        //print_r($sql);
+
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无学员', 'nlyd-student')));
         if(!empty($rows)){
-
-            foreach ($rows as $k => $v){
-                $rows[$k]['order'] =  $start+$k+1;
-
-                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','user_images_color','user_head') and user_id = {$v['user_id']}";
-                $res = $wpdb->get_results($sql_,ARRAY_A);
-                $user_info = array_column($res,'meta_value','meta_key');
-                //print_r($user_info);
-                $rows[$k]['user_ID'] = !empty($user_info['user_ID']) ? $user_info['user_ID'] : $v['coach_id']+10000000;
-                $rows[$k]['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-' ;
-                $user_real_name = unserialize($user_info['user_real_name']);
-                $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
-                $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
-                $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$v['user_id']} ");
-                $rows[$k]['referee_id'] = !empty($referee_id > 0 ) ? $referee_id+10000000 : '-' ;
-                //获取考级是否达标
-                $project_alias = get_post_meta($v['course_category_id'],'project_alias');
-                if($project_alias == 'reading'){
-
+            foreach ($rows as $k => $val){
+                //判断考级是否达标
+                $sql_ = "select compute,memory,`read` from {$wpdb->prefix}user_skill_rank where user_id = {$val['user_id']} and skill_type = 1";
+                $row = $wpdb->get_row($sql_,ARRAY_A);
+                //print_r($row);die;
+                if(!empty($row)){
+                    $project_alias = get_post_meta($val['course_category_id'],'project_alias')[0];
+                    //print_r($project_alias);
+                    switch ($project_alias){
+                        case 'arithmetic': //算
+                            $rows[$k]['is_skill'] = $row['compute'] > 2 ? 'y' : 'n';
+                            break;
+                        case 'memory': //记
+                            $rows[$k]['is_skill'] = $row['memory'] > 2 ? 'y' : 'n';
+                            break;
+                        case 'reading': //读
+                            $rows[$k]['is_skill'] = $row['read'] > 2 ? 'y' : 'n';
+                            break;
+                        default:
+                            $rows[$k]['is_skill'] = 'n';
+                            break;
+                    }
+                }else{
+                    $rows[$k]['is_skill'] = 'n';
                 }
-                elseif ($project_alias == 'memory'){
+                //判断推荐是否达标
+                $referee_sql = "select count(*) from {$wpdb->prefix}users a 
+                                 left join {$wpdb->prefix}order b on a.ID = b.user_id
+                                 where a.referee_id = {$val['user_id']} and b.match_id = {$_POST['id']} and b.order_type = 3 and b.pay_status in (2,3,4) 
+                                ";
+                //print_r($referee_sql);die;
+                $referee_total = $wpdb->get_var($referee_sql);
+                //$referee_total = 8;
+                $rows[$k]['is_share'] = $referee_total > 3 ? 'y' : 'n';
 
+                //学费补贴
+                $rows[$k]['tuition_subsidy'] = $rows[$k]['is_share'] =='y' && $rows[$k]['is_skill'] =='y' ? $val['cost'] : '-';
+
+                if($referee_total > 0){
+                    $course_sql = "select c.direct_superior from {$wpdb->prefix}course a 
+                                    left join {$wpdb->prefix}course_type b on a.course_type = b.id 
+                                    left join {$wpdb->prefix}spread_set c on b.type_alias = c.spread_type 
+                                    where a.id = {$val['match_id']}";
+                    $direct_superior = $wpdb->get_var($course_sql);
+                    //print_r($direct_superior);
+                    //print_r($course_sql);die;
+                    //推荐奖励
+                    $rows[$k]['referee_reward'] = $referee_total > 0 && $direct_superior > 0 ? $referee_total*$direct_superior : '-';
                 }
-                else{
-                    //arithmetic
+
+                if($val['user_id'] > 0){
+                    $real_name = get_user_meta($val['user_id'],'user_real_name')[0]['real_name'];
+                    $rows[$k]['real_name'] = !empty($real_name) ? $real_name : '-';
                 }
+                $rows[$k]['user_ID'] = $val['user_id'] + 10000000;
             }
         }
         //print_r($rows);
