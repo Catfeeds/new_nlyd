@@ -141,7 +141,7 @@ class Student_Courses
          $row['order_total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order where match_id = {$_GET['id']} and order_type = 3 and pay_status in(2,3,4)");
          //判断是否报名
          if($current_user->ID){
-             $row['is_entered'] = $wpdb->get_var("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} ");
+             $row['is_entered'] = $wpdb->get_var("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_GET['id']} and order_type = 3 and pay_status in(2,3,4) ");
          }
          //print_r($row);
          $view = student_view_path.CONTROLLER.'/course-detail.php';
