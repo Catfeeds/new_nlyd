@@ -26,20 +26,6 @@
                                 <td><?=__('学费补贴', 'nlyd-student')?></td>
                                 <td><?=__('奖 励', 'nlyd-student')?></td>
                             </tr>
-                            <tr>
-                                <td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
-                                <td><div class="table_content c_green"><?=__('达标', 'nlyd-student')?></td>
-                                <td><div class="table_content c_green"><?=__('达标', 'nlyd-student')?></div></td>
-                                <td><div class="table_content c_orange">3000.00</div></td>
-                                <td><div class="table_content c_black">500.00</div></td>
-                            </tr>
-                            <tr>
-                                <td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
-                                <td><div class="table_content"><?=__('未达标', 'nlyd-student')?></td>
-                                <td><div class="table_content"><?=__('未达标', 'nlyd-student')?></div></td>
-                                <td><div class="table_content">--</div></td>
-                                <td><div class="table_content">--</div></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -72,12 +58,16 @@ jQuery(function($) {
                             console.log(res)
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
+                                    var is_skill=v.is_skill=='y' ?　'<div class="table_content c_green"><?=__("达标", "nlyd-student")?>' : '<div class="table_content"><?=__("未达标", "nlyd-student")?>';
+                                    var is_share=v.is_share=='y' ?　'<div class="table_content c_green"><?=__("达标", "nlyd-student")?>' : '<div class="table_content"><?=__("未达标", "nlyd-student")?>';
+                                    var cost=v.cost || '-';
+                                    var tuition_subsidy=v.tuition_subsidy || '-'
                                     var dom='<tr>'
-                                                +'<td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>'
-                                                +'<td><div class="table_content c_green"><?=__('达标', 'nlyd-student')?></td>'
-                                                +'<td><div class="table_content c_green"><?=__('达标', 'nlyd-student')?></div></td>'
-                                                +'<td><div class="table_content c_orange">3000.00</div></td>'
-                                                +'<td><div class="table_content c_black">500.00</div></td>'
+                                                +'<td><div class="table_content"><span class="c_black">'+v.real_name+'</span><br><span class="ff_num fs_12">'+v.user_ID+'</span></div></td>'
+                                                +'<td>'+is_skill+'</td>'
+                                                +'<td>'+is_share+'</td>'
+                                                +'<td><div class="table_content c_orange">'+cost+'</div></td>'
+                                                +'<td><div class="table_content c_black">'+tuition_subsidy+'</div></td>'
                                             +'</tr>'
                                     lis.push(dom) 
                                 })
