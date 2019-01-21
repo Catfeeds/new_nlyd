@@ -16,7 +16,7 @@
             </header>    
             <div class="layui-row nl-border nl-content have-bottom">
                 <div class="nl-table-wapper">
-                    <div class="c_black width-padding width-padding-pc bold fs_16 courseEnd_title"><?=__('高效记忆术·G预报班·成都郫县学员结课成绩', 'nlyd-student')?></div>
+                    <div class="c_black width-padding width-padding-pc bold fs_16 courseEnd_title"><?=__($course_title.$city.'学员结课成绩', 'nlyd-student')?></div>
                     <table class="nl-table">
                         <tbody id="course_end">
                             <tr class='table-head'>

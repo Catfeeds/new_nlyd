@@ -1264,8 +1264,22 @@ class Student_Gradings extends Student_Home
     // }
 
     public function matchRule(){//规则
+        switch ($_GET['type']){
+            case 'memory':
+                $title = '记忆';
+                break;
+            case 'reading':
+                $title = '速读';
+                break;
+            case 'arithmetic':
+                $title = '心算';
+                break;
+            default:
+                $title = '';
+                break;
+        }
         $view = student_view_path.CONTROLLER.'/match-Rule.php';
-        load_view_template($view);
+        load_view_template($view,array('title'=>$title));
     }
 
 
