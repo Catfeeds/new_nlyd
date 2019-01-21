@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="course_detail_row width-padding width-padding-pc">
-                    <div class="detail_table_row"><span class="c_black bold fs_16">课程介绍</span></div>
+                    <div class="detail_table_row"><span class="c_black bold fs_16"><?=__('课程介绍', 'nlyd-student')?></span></div>
                     <div class="detail_table_row">
                         <span class="c_black6 fs_14">
                             <!--上课时间：周六15:00-17:00，共计32课时。
@@ -58,14 +58,14 @@
                 </div>
 
                 <div class="course_detail_row width-padding width-padding-pc">
-                    <div class="detail_table_row"><span class="c_black bold fs_16">配套教材</span></div>
+                    <div class="detail_table_row"><span class="c_black bold fs_16"><?=__('配套教材', 'nlyd-student')?></span></div>
                     <a class="detail_table_row">
                         <div class="course_detail_img img-box img-z">
                             <img src="<?=student_css_url.'image/course/course_pic.png'?>">
                         </div>
                         <div class="course_img_info">
-                            <div class="c_black bold fs_16">乐学乐分享学员专享教材</div>
-                            <div class="c_black6 fs_14">乐学乐分享”教辅资料（仅限“乐学乐分享”学员购买）。</div>
+                            <div class="c_black bold fs_16"><?=__('乐学乐分享学员专享教材', 'nlyd-student')?></div>
+                            <div class="c_black6 fs_14"><?=__('乐学乐分享”教辅资料（仅限“乐学乐分享”学员购买）。', 'nlyd-student')?></div>
                             <div class="c_blue fs_14">¥ 100.00</div>
                         </div>
                     </a>
