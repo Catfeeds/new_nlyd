@@ -910,7 +910,7 @@ function the_table_install () {
           `course_details` mediumtext,
           `course_img` varchar(255) DEFAULT NULL,
           `const` decimal(10,2) unsigned NOT NULL,
-          `is_enable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '-3:已结课 -2等待开课 1:报名中 2:已开课',
+          `is_enable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '-3:已结课 -2等待开课 1:报名中 2:已开课',
           `coach_id` int(10) unsigned NOT NULL,
           `course_start_time` datetime DEFAULT NULL COMMENT '开课时间',
           `course_end_time` datetime DEFAULT NULL COMMENT '课程结束时间',

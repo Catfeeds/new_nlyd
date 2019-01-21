@@ -48,6 +48,49 @@ class Student_Courses
             $data['zone_name'] = $zone_nem;
          }
 
+         //判断课程状态
+         global $wpdb,$current_user;
+         $sql = "select a.id,count(c.id) entry_total,a.open_quota,a.is_enable,course_start_time,unix_timestamp(course_start_time) start_time,course_end_time,unix_timestamp(course_end_time) end_time
+                from {$wpdb->prefix}course a 
+                left join {$wpdb->prefix}order c on a.id = c.match_id and c.pay_status in (2,3,4)
+                where a.zone_id = {$_GET['id']}
+                group by a.id
+                order by a.course_start_time desc ,a.is_enable desc";
+         $rows =  $wpdb->get_results($sql,ARRAY_A);
+         //print_r($sql);
+         if(!empty($rows)){
+             $time = get_time('mysql');
+             foreach ($rows as $k => $v){
+                 if($v['is_enable'] != -4){
+                     $is_enable = '';
+                     if($v['start_time'] > 0){
+                         if($time < $v['course_start_time']){
+                             $is_enable = 1; //报名中
+                         }
+                         elseif ( $v['course_start_time'] <= $time && $time <= $v['course_end_time']){
+                             $is_enable = 2; //授课中
+                         }
+                         else{
+
+                             $is_enable = -3;    //已结课
+                         }
+                         //print_r($v['id'].'===='.$is_enable);
+                     }else{
+                         if($v['entry_total'] < $v['open_quota']){
+                             $is_enable = 1;
+                         }
+                         elseif ($v['entry_total'] >= $v['open_quota']){
+                             $is_enable = -2;
+                         }
+                     }
+                     //print_r($is_enable);
+                     if(!empty($is_enable)){
+                         $a = $wpdb->update($wpdb->prefix.'course',array('is_enable'=>$is_enable),array('id'=>$v['id']));
+                     }
+                 }
+             }
+         }
+
         $view = student_view_path.CONTROLLER.'/course-center-list.php';
         load_view_template($view,$data);
     }
@@ -98,7 +141,7 @@ class Student_Courses
          $row['order_total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order where match_id = {$_GET['id']} and order_type = 3 and pay_status in(2,3,4)");
          //判断是否报名
          if($current_user->ID){
-             $row['is_entered'] = $wpdb->get_var("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} ");
+             $row['is_entered'] = $wpdb->get_var("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_GET['id']} and order_type = 3 and pay_status in(2,3,4) ");
          }
          //print_r($row);
          $view = student_view_path.CONTROLLER.'/course-detail.php';
@@ -149,8 +192,43 @@ class Student_Courses
      * 课程报名成功
      */
      public function courseEnd(){
+         global $wpdb,$current_user;
+         $sql = "select a.id,a.course_title,a.coach_id,a.course_start_time,a.open_quota,a.course_details,b.zone_name,b.zone_city,c.zone_type_name,
+                 c.zone_type_alias,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type
+                 from {$wpdb->prefix}course a 
+                 left join {$wpdb->prefix}zone_meta b on a.zone_id = b.user_id 
+                 left join {$wpdb->prefix}zone_type c on b.type_id = c.id 
+                 where a.id = {$_GET['id']}
+                 ";
+         //print_r($sql);
+         $row = $wpdb->get_row($sql,ARRAY_A);
+         if(!empty($row)){
+             $city_arr = str2arr($row['zone_city'],'-');
+             if(!empty($city_arr[2])){
+                 $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
+             }elseif ($city_arr[1] != '市辖区'){
+                 $city = rtrim($city_arr[1],'市');
+             }else{
+                 $city = rtrim($city_arr[0],'市');
+             }
+             $city = !empty($city) ? $city : '';
+             $row['city'] = $city;
+             if($row['zone_type_alias'] == 'match'){
+                 $zone_title = $row['zone_name'].$city.$row['match_type'].'组委会';
+             }
+             else{
+                 $title = 'IISC';
+                 if($row['zone_type_alias'] == 'test'){
+                     $title .= '水平';
+                 }
+
+                 $zone_title = $title.$city.$row['zone_type_name'];
+             }
+             $row['zone_title'] = $zone_title;
+         }
+
         $view = student_view_path.CONTROLLER.'/course-end.php';
-        load_view_template($view);
+        load_view_template($view,$row);
     }
 
     /**
