@@ -22,7 +22,7 @@
                 </a>
                 <h1 class="mui-title">
                     <div>
-                        <?=__('记忆项目考级规程', 'nlyd-student')?>
+                        <?=__($title.'项目考级规程', 'nlyd-student')?>
                     </div>
 
                 </h1>
