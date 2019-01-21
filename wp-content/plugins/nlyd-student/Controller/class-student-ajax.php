@@ -544,9 +544,9 @@ class Student_Ajax
             if($match_meta['is_enable'] != 1) wp_send_json_error(array('info'=>__('当前课程已禁止报名', 'nlyd-student')));
 
             //获取当前类课程是否有教练
-            $sql_ = "select b.coach_id from {$wpdb->prefix}course a left join {$wpdb->prefix}my_coach b on a.course_category_id = b.category_id where a.id = {$_POST['match_id']} and b.user_id = {$current_user->ID} and b.apply_status = 2";
+            /*$sql_ = "select b.coach_id from {$wpdb->prefix}course a left join {$wpdb->prefix}my_coach b on a.course_category_id = b.category_id where a.id = {$_POST['match_id']} and b.user_id = {$current_user->ID} and b.apply_status = 2";
             $coach_id = $wpdb->get_var($sql_);
-            if(empty($coach_id)) wp_send_json_error(array('info'=>__('未绑定该课程分类教练,请核实','nlyd-student')));
+            if(empty($coach_id)) wp_send_json_error(array('info'=>__('未绑定该课程分类教练,请核实','nlyd-student')));*/
             //print_r($coach_id);die;
         }
 

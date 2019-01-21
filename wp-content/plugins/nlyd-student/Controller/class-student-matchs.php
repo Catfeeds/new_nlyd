@@ -74,6 +74,14 @@ class Student_Matchs extends Student_Home
      * 列表
      */
     public function index(){
+        $str1 = '["K","U","X","Y","T","U","J","D","L","N","G","L","U","D","R","F","A","N","M","X","C","F","Q","A","D","U","K","C","H","K"]';
+        $str2 = '["K","U","X","Y","T","U","J","D","L","N","G","L","U","D","R","F","A","N","M","X","C","F","Q","A","D","U","K","C","H","K"]';
+        $arr1 = json_decode($str1,true);
+        $arr2 = json_decode($str2,true);
+        $len = count($arr1);
+
+        $error_len = count(array_diff_assoc($arr1,$arr2));
+        $correct_rate = ($len-$error_len)/$len;
 
         global $wpdb;
 
