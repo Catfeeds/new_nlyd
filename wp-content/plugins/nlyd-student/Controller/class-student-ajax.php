@@ -2694,12 +2694,13 @@ class Student_Ajax
                 //判断是否是微信浏览器
                 if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
                     //jsapi支付需要一个单独的页面获取openid
-                    $url = '';
-                    if($order['order_type'] == '1'){
-                        $url = home_url('payment/wx_js_pay/type/wxpay/id/'.$order['id'].'/match_id/'.$_POST['match_id']);
-                    }elseif($order['order_type'] == '2'){
-                        $url = home_url('payment/wx_js_pay/type/wxpay/id/'.$order['id'].'/grad_id/'.$_POST['match_id']);
+                    $url = 'payment/wx_js_pay/type/wxpay/id/'.$order['id'].'/match_id/'.$_POST['match_id'];
+                    if($order['order_type'] == '2'){
+                        $url .= '/grad_id/'.$_POST['match_id'];
+                    }elseif ($order['order_type'] == '3'){
+                        $url .= '/id/'.$_POST['match_id'];
                     }
+                    $url = home_url($url);
                     $result = ['status' => true, 'data' => $url];
 
 //                    $params['notify_url'] = home_url('payment/wxpay/type/wx_notifyUrl/jspai/y'); //商品描述

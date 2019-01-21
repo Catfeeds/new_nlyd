@@ -81,7 +81,7 @@ jQuery(function($) {
             prams,
             function(res){
                 if(res.err_msg=='get_brand_wcpay_request:ok'){
-                    window.location.href=window.home_url+'/courses/courseDetail/id/'+$.Request('id')
+                    window.location.href=window.home_url+'/courses/courseDetail/id/'+$.Request('course_id')
                 }
             }
         );
