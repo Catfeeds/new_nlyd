@@ -267,13 +267,13 @@ if(!class_exists('MatchController')){
          * 增加查询语句join
          */
         public function filter_request_join($join){
+            global $wpdb;
             if($this->post_type == 'match'){
-                global $wpdb;
                 $join .= " LEFT JOIN {$wpdb->prefix}match_meta_new AS mm ON mm.match_id={$wpdb->posts}.ID";
-            }
-            if($this->post_type == 'question' && isset($_GET['questions_status'])){
-                global $wpdb;
+            }elseif($this->post_type == 'question' && isset($_GET['questions_status'])){
                 $join .= " LEFT JOIN {$wpdb->term_relationships} AS tr ON tr.object_id={$wpdb->posts}.ID";
+            }elseif ($this->post_type == 'grading'){
+                $join .= " LEFT JOIN {$wpdb->prefix}grading_meta AS gm ON gm.grading_id={$wpdb->posts}.ID";
             }
             return $join;
         }
@@ -295,7 +295,7 @@ if(!class_exists('MatchController')){
             return $where;
           }
         /**
-         * 增加查询语句where
+         * 增加查询语句order by
          */
         public function filter_request_orderby($orderby){
             if( !is_admin() ){
@@ -303,6 +303,8 @@ if(!class_exists('MatchController')){
             }
             if($this->post_type == 'match'){
                 $orderby = ' mm.match_start_time DESC';
+            }elseif ($this->post_type == 'grading'){
+                $orderby = ' gm.start_time DESC';
             }
             return $orderby;
           }
