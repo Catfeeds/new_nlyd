@@ -1499,12 +1499,18 @@ class Grading
                         <td class="prove column-prove" data-colname="证书">
                         <?php if($row['prove_grant_status'] == '2'){ ?>
                             <?=$row['prove_number']?><br />
-                            <?=$row['prove_grant_time']?>
+                            <?=$row['prove_grant_time']?><br />
+                            <a href="javascript:;" data-id="<?=$row['id']?>" class="prove_grant" style="color: #5491c4">修改</a>
+                            <div class="prove_number_div">
+                                <input type="text" class="prove_number" data-id="<?=$row['id']?>" style="height: 28px; width: 120px;margin-right: 10px;">
+                                <button type="button" data-type="edit" class="button confirm_prove">确定</button>
+                                <button type="button" class="button cancel_prove">取消</button>
+                            </div>
                         <?php }else{ ?>
                             <a href="javascript:;" class="prove_grant" style="color: #5491c4">发放证书</a>
                             <div class="prove_number_div">
                                    <input type="text" class="prove_number" data-id="<?=$row['id']?>" style="height: 28px; width: 120px;margin-right: 10px;">
-                                   <button type="button" class="button confirm_prove">确定</button>
+                                   <button type="button" data-type="add" class="button confirm_prove">确定</button>
                                    <button type="button" class="button cancel_prove">取消</button>
 
                             </div>
@@ -1559,13 +1565,14 @@ class Grading
                     });
 
                     $('.confirm_prove').on('click', function() {
+                        var _type = $(this).attr('data-type');
                         var id = $(this).prev().attr('data-id');
                         var number = $(this).prev().val();
                         if(id < 1 || number == '') return false;
                         if(confirm('是否确定已发放证书?')){
                             $.ajax({
                                 url : ajaxurl,
-                                data : {'action' : 'gradingProveGrant', 'id':id,'number':number},
+                                data : {'action' : 'gradingProveGrant', 'id':id,'number':number, 'type':_type},
                                 type : 'post',
                                 dataType : 'json',
                                 success : function(response) {

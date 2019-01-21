@@ -2334,12 +2334,20 @@ class Match_Ajax
      */
     public function gradingProveGrant(){
         $id = $_POST['id'] ? intval($_POST['id']) : 0;
-        $number = $_POST['number'] ? trim($_POST['number']) : 0;
+        $number = $_POST['number'] ? trim($_POST['number']) : '';
+        $type = $_POST['type'] ? trim($_POST['type']) : '';
         ($id < 1 || $number == '') && wp_send_json_error(['info' => '参数错误!']);
+        if($type == 'edit'){
+            $arr = ['prove_number' => $number];
+        }elseif($type == 'add'){
+            $arr = ['prove_grant_status' => 2, 'prove_number' => $number, 'prove_grant_time' => get_time('mysql')];
+        }else{
+            wp_send_json_error(['info' => '参数错误!']);
+        }
         global $wpdb;
         $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}grading_logs WHERE prove_number='{$number}'");
         if($var) wp_send_json_error(['info' => '证书编号已存在!']);
-        $bool = $wpdb->update($wpdb->prefix.'grading_logs', ['prove_grant_status' => 2, 'prove_number' => $number, 'prove_grant_time' => get_time('mysql')], ['id' => $id]);
+        $bool = $wpdb->update($wpdb->prefix.'grading_logs', $arr, ['id' => $id]);
         if($bool) wp_send_json_success(['info' => '操作成功!']);
         else wp_send_json_error(['info' => '操作失败!']);
     }
