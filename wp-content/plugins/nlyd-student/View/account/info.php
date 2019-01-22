@@ -77,7 +77,7 @@
                             </div>
                         </div>
                         <div class="form-input-row img-zoos img-zoos2" style="padding:0">
-                            <div class="form-input-label pull-left"><div><?=__('上传彩色1寸照', 'nlyd-student')?></div></div>
+                            <div class="form-input-label pull-left"><div><?=__('上传彩色寸照', 'nlyd-student')?></div></div>
                             <?php if(!empty($user_info['user_images_color'])){ ?>
                                 <?php foreach ($user_info['user_images_color'] as $value){ ?>
                                 <div class="post-img no-dash"  style="top:3px">
@@ -97,7 +97,7 @@
                                     <div class="vertical"></div>
                                 </div>
                             </div>
-                            <span class="c_red fs_12">（*<?=__('考级用户和机构任职人员需上传', 'nlyd-student')?>）</span>
+                            <span class="c_red fs_12">（*<?=__('考级用户和机构任职人员需上传1寸或2寸照）', 'nlyd-student')?>）</span>
                         </div>
                         <!-- <div class="layui-bg-white img-zoos img-zoos2">
                             <p class="tps"><?=__('上传彩色1寸照', 'nlyd-student')?><span class="c_red fs_12">（*<?=__('考级用户和机构任职人员需上传', 'nlyd-student')?>）</span></p>
@@ -122,7 +122,7 @@
                             </div>
                         </div> -->
                         <div class="form-input-row">
-                            <div class="form-input-label"><div><?=__('国家地区', 'nlyd-student')?></div></div>
+                            <div class="form-input-label"><div><span class="c_red">*</span><?=__('国家地区', 'nlyd-student')?></div></div>
                             <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
                             <input type="hidden" name="nationality_pic" value='<?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>'  id="src">
                             <input type="hidden" name="nationality_short" value='<?=empty($user_info['user_nationality_short']) ? 'CHN' : $user_info['user_nationality_short']?>'  id="short">
@@ -131,7 +131,7 @@
                             
                         </div>
                         <div class="form-input-row">
-                            <div class="form-input-label"><div><?=__('所在城市', 'nlyd-student')?></div></div>
+                            <div class="form-input-label"><div><span class="c_red">*</span><?=__('所在城市', 'nlyd-student')?></div></div>
                             <input readonly id="areaSelect" type="text" placeholder="<?=__('所在城市', 'nlyd-student')?>" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'].$user_info['user_address']['city'].$user_info['user_address']['area'] : ''?>" class="nl-input" lay-verify="required">
                             <input  type="hidden" id="province" name="user_address[province]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'] : ''?>"/>
                             <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
