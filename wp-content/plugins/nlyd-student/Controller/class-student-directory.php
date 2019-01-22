@@ -78,15 +78,49 @@ class Student_Directory
         load_view_template($view);
 
     }
+
+    /**
+     * 名录脑力健将pc
+     */
+     public function directory_pc(){
+        $view = student_view_path.CONTROLLER.'/directory_pc.php';
+        load_view_template($view);
+    }
+    /**
+     * 名录速读pc
+     */
+     public function directoryRead_pc(){
+        $view = student_view_path.CONTROLLER.'/directory-read_pc.php';
+        load_view_template($view);
+    }
+    /**
+     * 名录记忆pc
+     */
+     public function directoryRemember_pc(){
+        $view = student_view_path.CONTROLLER.'/directory-remember_pc.php';
+        load_view_template($view);
+    }
+    /**
+     * 名录心算pc
+     */
+     public function directoryCalculation_pc(){
+        $view = student_view_path.CONTROLLER.'/directory-calculation_pc.php';
+        load_view_template($view);
+    }
     /**
      * 默认公用js/css引入
      */
     public function scripts_default(){
-        wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
-        wp_enqueue_style( 'my-student-userCenter' );
-        wp_register_style( 'my-student-home', student_css_url.'home-student.css' );
-        wp_enqueue_style( 'my-student-home' );
-        wp_register_style( 'my-student-directory', student_css_url.'directory/directory.css' ,array('my-student'));
-        wp_enqueue_style( 'my-student-directory' );
+        if (ACTION == 'directory_pc' || ACTION == 'directoryRead_pc' || ACTION == 'directoryRemember_pc' || ACTION == 'directoryCalculation_pc') {
+            wp_register_style( 'my-student-directory_pc', student_css_url.'directory/directory_pc.css',array('my-student') );
+            wp_enqueue_style( 'my-student-directory_pc' );
+        }else{
+            wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
+            wp_enqueue_style( 'my-student-userCenter' );
+            wp_register_style( 'my-student-home', student_css_url.'home-student.css' );
+            wp_enqueue_style( 'my-student-home' );
+            wp_register_style( 'my-student-directory', student_css_url.'directory/directory.css' ,array('my-student'));
+            wp_enqueue_style( 'my-student-directory' ); 
+        }
     }
 }
