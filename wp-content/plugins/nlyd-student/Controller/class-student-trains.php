@@ -156,40 +156,59 @@ class Student_Trains extends Student_Home
         }
         global $wpdb,$current_user;
         $post_id = '';
-        switch ($_GET['type']){
+        switch ($_GET['type']) {
             case 'wzsd':
 
+                if(!isset($_SESSION['trains_post_id'])){
+                    //获取已训练文章
+                    $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 2";
+                    //print_r($sql1);
+                    $post_str = $wpdb->get_var($sql1);
+                    if (!empty($post_str)) {
+                        $where = " and b.object_id not in($post_str) ";
+                    }
+                    //判断语言
+                    $language = get_user_meta($current_user->ID, 'locale')[0];
+                    $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
+                    //获取文章速读考题
+                    $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
+                            left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
+                            left join {$wpdb->prefix}posts c on b.object_id = c.ID
+                            where a.slug = '{$locale}-test-question' and c.post_status = 'publish' {$where}";
+                    //print_r($sql);
 
-                //获取已训练文章
-                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 2";
-                //print_r($sql1);
-                $post_str = $wpdb->get_var($sql1);
-                if(!empty($post_str)){
-                    $where = " and b.object_id not in($post_str) ";
+                    $rows = $wpdb->get_results($sql, ARRAY_A);
+
+                    if (empty($rows)) {
+                        $this->get_404(array('message' => __('恭喜您已训练完题库内所有文章，建议您再利用其他渠道来进行文章速读训练。题库更新后欢迎您回来继续挑战！', 'nlyd-student'), 'match_url' => home_url('trains')));
+                        return;
+                    }
+                    $result = array_column($rows, 'object_id');
+
+                    //print_r($result);
+                    $post_id = $result[array_rand($result)];
+
+                    //print_r($result);
+                    $post_id = $result[array_rand($result)];
+
+                    //保存已使用文章
+                    $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 2";
+                    $use_id = $wpdb->get_var($sql1);
+                    //print_r($use_id);die;
+                    if ($use_id) {
+                        $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$post_id},CONCAT_WS(',',post_id,{$post_id})) WHERE user_id = {$current_user->ID} and type = 2";
+                        //print_r($sql2);
+                        $a = $wpdb->query($sql2);
+                        //print_r($a);die;
+                    } else {
+                        $wpdb->insert($wpdb->prefix . 'user_post_use', array('user_id' => $current_user->ID, 'post_id' => $post_id, 'type' => 2));
+                    }
+
+                    $_SESSION['trains_post_id'] = $post_id;
                 }
-                //判断语言
-                $language = get_user_meta($current_user->ID,'locale')[0];
-                $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
-                //获取文章速读考题
-                $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
-                        left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
-                        left join {$wpdb->prefix}posts c on b.object_id = c.ID
-                        where a.slug = '{$locale}-test-question' and c.post_status = 'publish' {$where}";
-                //print_r($sql);
-
-                $rows = $wpdb->get_results($sql,ARRAY_A);
-
-                if(empty($rows)){
-                    $this->get_404(array('message'=>__('恭喜您已训练完题库内所有文章，建议您再利用其他渠道来进行文章速读训练。题库更新后欢迎您回来继续挑战！', 'nlyd-student'),'match_url'=>home_url('trains')));
-                    return;
+                else{
+                    $post_id = $_SESSION['trains_post_id'];
                 }
-                $result = array_column($rows,'object_id');
-
-                //print_r($result);
-                $post_id = $result[array_rand($result)];
-
-                //print_r($result);
-                $post_id = $result[array_rand($result)];
 
                 //获取文章
                 $content = get_post($post_id );

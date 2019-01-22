@@ -71,7 +71,7 @@
                             </div>
                         </div>
 
-                        <div class="matching-keyboard layui-row match_zimu"  style="display:none">
+                        <!-- <div class="matching-keyboard layui-row match_zimu"  style="display:none">
                             <div class="matching-keyboard-row">
                                 <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="A"><div>A</div></div>
                                 <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="B"><div>B</div></div>
@@ -109,6 +109,46 @@
                                 <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="X"><div>X</div></div>
                                 <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="Y"><div>Y</div></div>
                                 <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="Z"><div>Z</div></div>
+                            </div>
+                        </div> -->
+                        <div class="matching-keyboard layui-row match_zimu"  style="display:none">
+                            <div class="matching-keyboard-row">
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="a"><div>a</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="b"><div>b</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="c"><div>c</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="d"><div>d</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="e"><div>e</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="f"><div>f</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="g"><div>g</div></div>
+                                
+                            </div>
+                            <div class="matching-keyboard-row">
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="h"><div>h</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="i"><div>i</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="j"><div>j</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="k"><div>k</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="l"><div>l</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="m"><div>m</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="n"><div>n</div></div>
+
+                            </div>
+                            <div class="matching-keyboard-row">
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="o"><div>o</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="p"><div>p</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="q"><div>q</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="r"><div>r</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="s"><div>s</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="t"><div>t</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="u"><div>u</div></div>
+                                
+                            </div>
+                            <div class="matching-keyboard-row">
+                                <div class="bg_orange matching-key fs_16 c_white _del"><div><?=__('删除', 'nlyd-student')?></div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="v"><div>v</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="w"><div>w</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="x"><div>x</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="y"><div>y</div></div>
+                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="z"><div>z</div></div>
                             </div>
                         </div>
                     </div>
@@ -245,7 +285,8 @@ jQuery(function($) {
        
     }
     function randZF() {//生成随即字符
-        var arr=["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+        // var arr=["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+        var arr=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
         var pos = Math.round(Math.random() * (arr.length - 1));
         return arr[pos];
     }

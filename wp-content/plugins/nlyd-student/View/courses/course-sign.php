@@ -62,7 +62,6 @@
 <input type="hidden" name="_wpnonce" id="inputPay" value="<?=wp_create_nonce('student_get_ranking_code_nonce');?>">
 <script>
 jQuery(function($) { 
-    var serialnumber='';//订单号
     $('body').on('click','.layui-form-checkbox',function(){
         var _this=$(this);
         $('.layui-form-checkbox').each(function(){
@@ -73,6 +72,7 @@ jQuery(function($) {
         })
         _this.toggleClass('layui-form-checked');
     })
+    var serialnumber='';//订单号
     var prams=''
     function jsApiCall()
     {
@@ -81,7 +81,7 @@ jQuery(function($) {
             prams,
             function(res){
                 if(res.err_msg=='get_brand_wcpay_request:ok'){
-                    window.location.href=window.home_url+'/courses/courseDetail/id/'+$.Request('course_id')
+                    window.location.href=window.home_url+'/courses/courseDetail/center_id/'+$.Request('center_id')+'/id/'+$.Request('id')
                 }
             }
         );
@@ -100,119 +100,118 @@ jQuery(function($) {
 		}
     }
     layui.use(['form'], function(){
-            var form = layui.form
-            form.render();
-            // 自定义验证规则
-            form.verify($.validationLayui.allRules); 
-            // 监听提交
-            form.on('submit(pay-formbtn)', function(data){
-                var total=$('#cost').val();
-                var _post_data={
-                    order_type:3,
-                    match_id:$.Request('id'),
-                    cost:total,
-                    action:'entry_pay',
-                    _wpnonce:$('#payForm').val()
-                }
-                console.log(_post_data)
-                $.ajax({
-                    data:_post_data,
-                    success:function(res){
-                        console.log(res)
-                        if(res.success){
-                            //不需要支付
-                            if(res.data.is_pay == 0){
-                                window.location.href=res.data.url;
-                                return false;
-                            }
-                            serialnumber=res.data.serialnumber;//获取订单号
-                             
-                            if(total>0){
-                                // $('.selectBottom').addClass('selectBottom-show')
-                                var content='<div class="box-conent-wrapper"><?=__('本次共需支付', 'nlyd-student')?>￥'+total+'</div>'
-                                            +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('微信', 'nlyd-student')?></div>'
-                                            +'<div style="text-align:left;margin:auto;width:100px;margin-top:10px" class="fs_14"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('支付宝', 'nlyd-student')?></div>'
-                                            //    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14 c_orange"><div id="visa" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;银联支付</div>'
-                                layer.open({
-                                    type: 1
-                                    ,maxWidth:300
-                                    ,title: '<?=__('选择支付方式', 'nlyd-student')?>' //不显示标题栏
-                                    ,skin:'nl-box-skin'
-                                    ,id: 'certification' //防止重复弹出
-                                    ,content:content
-                                    ,btn: ['<?=__('取消支付', 'nlyd-student')?>', '<?=__('确认支付', 'nlyd-student')?>' ]
-                                    ,cancel:function(){
+        var form = layui.form
+        form.render();
+        // 自定义验证规则
+        form.verify($.validationLayui.allRules); 
+        // 监听提交
+        form.on('submit(pay-formbtn)', function(data){
+            var total=$('#cost').val();
+            var _post_data={
+                order_type:3,
+                match_id:$.Request('id'),
+                cost:total,
+                action:'entry_pay',
+                _wpnonce:$('#payForm').val()
+            }
+            console.log(_post_data)
+            $.ajax({
+                data:_post_data,
+                success:function(res){
+                    console.log(res)
+                    if(res.success){
+                        //不需要支付
+                        if(res.data.is_pay == 0){
+                            window.location.href=res.data.url;
+                            return false;
+                        }
+                        serialnumber=res.data.serialnumber;//获取订单号
+                            
+                        if(total>0){
+                            // $('.selectBottom').addClass('selectBottom-show')
+                            var content='<div class="box-conent-wrapper"><?=__('本次共需支付', 'nlyd-student')?>￥'+total+'</div>'
+                                        +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('微信', 'nlyd-student')?></div>'
+                                        +'<div style="text-align:left;margin:auto;width:100px;margin-top:10px" class="fs_14"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('支付宝', 'nlyd-student')?></div>'
+                                        //    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14 c_orange"><div id="visa" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;银联支付</div>'
+                            layer.open({
+                                type: 1
+                                ,maxWidth:300
+                                ,title: '<?=__('选择支付方式', 'nlyd-student')?>' //不显示标题栏
+                                ,skin:'nl-box-skin'
+                                ,id: 'certification' //防止重复弹出
+                                ,content:content
+                                ,btn: ['<?=__('取消支付', 'nlyd-student')?>', '<?=__('确认支付', 'nlyd-student')?>' ]
+                                ,cancel:function(){
 
+                                }
+                                ,success: function(layero, index){
+                                    
+                                }
+                                ,yes: function(index, layero){
+                                    layer.closeAll();
+                                }
+                                ,btn2: function(index, layero){
+                                    var id=$('.layui-form-checked').attr('id')
+                                    var pay_type=''
+                                    if(id=='weiChat'){//微信支付
+                                        pay_type='wxh5pay'
+                                    }else if(id=='zfb'){//支付宝支付
+                                        pay_type='alipay'
+                                    }else{
+                                        pay_type=null;
                                     }
-                                    ,success: function(layero, index){
-                                        
-                                    }
-                                    ,yes: function(index, layero){
-                                        layer.closeAll();
-                                    }
-                                    ,btn2: function(index, layero){
-                                        var id=$('.layui-form-checked').attr('id')
-                                        var pay_type=''
-                                        if(id=='weiChat'){//微信支付
-                                            pay_type='wxh5pay'
-                                        }else if(id=='zfb'){//支付宝支付
-                                            pay_type='alipay'
-                                        }else{
-                                            pay_type=null;
-                                        }
 
-                                        var datas={
-                                            action:'pay',
-                                            pay_type:pay_type,
-                                            _wpnonce:$('#inputPay').val(),
-                                            serialnumber:serialnumber,
-                                            match_id:$.Request('grad_id')
-                                        }
-                                        // alert(pay_type)
-                                        if(pay_type){
-                                        
-                                                $.ajax({
-                                                    data:datas,success:function(response){
-                                                        if(response.success){
-                                                            if(response.data.info){
-                                                                window.location.href=response.data.info;
-                                                            }else{//微信公众号支付
-                                                                if(response.data.params){
-                                                                    prams=response.data.params;
-                                                                    jsApiCall()
-                                                                }
-                                                            }
-                                                            
-                                                        }else{
-                                                            $.alerts(response.data.info)
+                                    var datas={
+                                        action:'pay',
+                                        pay_type:pay_type,
+                                        _wpnonce:$('#inputPay').val(),
+                                        serialnumber:serialnumber,
+                                        match_id:$.Request('grad_id')
+                                    }
+                                    // alert(pay_type)
+                                    if(pay_type){
+                                    
+                                        $.ajax({
+                                            data:datas,success:function(response){
+                                                if(response.success){
+                                                    if(response.data.info){
+                                                        window.location.href=response.data.info;
+                                                    }else{//微信公众号支付
+                                                        if(response.data.params){
+                                                            prams=response.data.params;
+                                                            jsApiCall()
                                                         }
                                                     }
-                                                })
-                                        }
+                                                }else{
+                                                    $.alerts(response.data.info)
+                                                }
+                                            }
+                                        })
                                     }
-                                    ,closeBtn:2
-                                    ,btnAagn: 'c' //按钮居中
-                                    ,shade: 0.3 //遮罩
-                                    ,isOutAnim:true//关闭动画
-                                });
-                            }else{
-                                window.location.href=window.home_url+'/gradings/info/grad_id/'+$.Request('grad_id')
-                            }
+                                }
+                                ,closeBtn:2
+                                ,btnAagn: 'c' //按钮居中
+                                ,shade: 0.3 //遮罩
+                                ,isOutAnim:true//关闭动画
+                            });
                         }else{
-                            // if(res.data.info=="请先实名认证"){
-                            if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
-                                setTimeout(function(){
-                                    window.location.href=window.home_url+'/account/info/grad_id/'+$.Request('grad_id');
-                                }, 1000);
-                            }else{
-                                $.alerts(res.data.info)
-                            }
-
+                            window.location.href=window.home_url+'/courses/courseDetail/center_id/'+$.Request('center_id')+'/id/'+$.Request('id');
                         }
+                    }else{
+                        // if(res.data.info=="请先实名认证"){
+                        if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
+                            setTimeout(function(){
+                                window.location.href=window.home_url+'/account/info/course_id/'+$.Request('id');
+                            }, 1000);
+                        }else{
+                            $.alerts(res.data.info)
+                        }
+
                     }
-                })
-                return false;
-            });
-        })
+                }
+            })
+            return false;
+        });
+    })
 })
 </script>

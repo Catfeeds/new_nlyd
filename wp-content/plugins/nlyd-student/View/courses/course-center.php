@@ -49,29 +49,6 @@
                     <div id="flowMyAdress">
                     
                     </div>
-                    <!-- <a class="course_row width-padding width-padding-pc c_black6" href="<?=home_url('/directory/cenerCourse/');?>">
-                        <div class="course_city_icon c_blue"><i class="iconfont">&#xe659;</i></div>
-                        <div class="course_info">
-                            <div class="course_info_row fs_16 c_black">IISC脑力训练中心（NO.0001.明德）</div>
-                            <div class="course_info_row fs_14">所在地：四川·成都</div>
-                            <div class="course_info_row fs_12 c_orange">1个课程抢占名额中</div>
-                        </div>
-                        <div class="course_right_icon c_black">
-                            <i class="iconfont">&#xe727;</i>
-                        </div>
-                    </a>
-
-                    <a class="course_row width-padding width-padding-pc c_black6" href="<?=home_url('/directory/cenerCourse/');?>">
-                        <div class="course_city_icon c_blue"><i class="iconfont">&#xe659;</i></div>
-                        <div class="course_info">
-                            <div class="course_info_row fs_16 c_black">IISC脑力训练中心（NO.0001.明德）</div>
-                            <div class="course_info_row fs_14">所在地：郫县</div>
-                            <div class="course_info_row fs_12 c_orange">1个课程抢占名额中</div>
-                        </div>
-                        <div class="course_right_icon c_black">
-                            <i class="iconfont">&#xe727;</i>
-                        </div>
-                    </a> -->
                 </div>
 
                 <div>
@@ -79,30 +56,7 @@
                         <span class="c_black"><?=__('所有城市', 'nlyd-student')?>：</span>
                     </div>
                     <div id="flowAllAdress">
-                    <div>
-                    <!-- <a class="course_row width-padding width-padding-pc c_black6" href="<?=home_url('/directory/cenerCourse/');?>">
-                        <div class="course_city_icon c_blue"><i class="iconfont">&#xe659;</i></div>
-                        <div class="course_info">
-                            <div class="course_info_row fs_16 c_black">IISC脑力训练中心（NO.0001.明德）</div>
-                            <div class="course_info_row fs_14">所在地：重庆</div>
-                            <div class="course_info_row fs_12 c_orange">1个课程抢占名额中</div>
-                        </div>
-                        <div class="course_right_icon c_black">
-                            <i class="iconfont">&#xe727;</i>
-                        </div>
-                    </a>
-
-                    <a class="course_row width-padding width-padding-pc c_black6" href="<?=home_url('/directory/cenerCourse/');?>">
-                        <div class="course_city_icon c_blue"><i class="iconfont">&#xe659;</i></div>
-                        <div class="course_info">
-                            <div class="course_info_row fs_16 c_black">IISC脑力训练中心（NO.0001.明德）</div>
-                            <div class="course_info_row fs_14">所在地：重庆</div>
-                            <div class="course_info_row fs_12 c_orange">1个课程抢占名额中</div>
-                        </div>
-                        <div class="course_right_icon c_black">
-                            <i class="iconfont">&#xe727;</i>
-                        </div>
-                    </a> -->
+                    </div>
                 </div>
             </div>
         </div>

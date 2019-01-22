@@ -446,6 +446,15 @@ class Student_Payment {
                                 'sponsor_id'=>empty($user['referee_id']) ? $row['zone_id'] : '',  //办赛机构
                                 'sponsor_income'=>empty($user['referee_id']) ? $money4 : '',  //办赛机构收益
                             );
+
+                            //设置教练
+                            $coach_sql = "select id from {$wpdb->prefix}my_coach where user_id = {$order['user_id']} and category_id = {$row['course_category_id']} ";
+                            $coach_id = $wpdb->get_var($coach_sql);
+                            if($coach_id){
+                                $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$row['coach_id'],'apply_status'=>2),array('id'=>$coach_id));
+                            }else{
+                                $wpdb->insert(array('user_id'=>$coach_id,'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
+                            }
                         }
                         //print_r($insert);die;
                         $insert['created_time'] = get_time('mysql');
@@ -705,7 +714,7 @@ class Student_Payment {
         /*****************收益分配start*******************/
 
         /*if($order['order_type'] == 3){  //课程
-            $sql = "select  a.zone_id,a.course_category_id,b.type_alias from {$wpdb->prefix}course a
+            $sql = "select  a.zone_id,a.course_category_id,a.coach_id,b.type_alias from {$wpdb->prefix}course a
                     left join {$wpdb->prefix}course_type b on a.course_type = b.id
                     where a.id = {$order['match_id']} ";
             //print_r($sql);
@@ -843,6 +852,15 @@ class Student_Payment {
                         'sponsor_id'=>empty($user['referee_id']) ? $row['zone_id'] : '',  //办赛机构
                         'sponsor_income'=>empty($user['referee_id']) ? $money4 : '',  //办赛机构收益
                     );
+                    //设置教练
+                    $coach_sql = "select id from {$wpdb->prefix}my_coach where user_id = {$order['user_id']} and category_id = {$row['course_category_id']} ";
+                    $coach_id = $wpdb->get_var($coach_sql);
+                    if($coach_id){
+                        $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$row['coach_id'],'apply_status'=>2),array('id'=>$coach_id));
+                    }else{
+                        $wpdb->insert(array('user_id'=>$coach_id,'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
+                    }
+                    //print_r($coach_id);die;
                 }
                 //print_r($insert);die;
                 $insert['created_time'] = get_time('mysql');
@@ -938,8 +956,8 @@ class Student_Payment {
                     $wpdb->query('ROLLBACK');
                 }
             }
-        }
-        */
+        }*/
+
         /*****************收益分配end*******************/
 
         $this->payClass->pay($param);
@@ -1148,6 +1166,15 @@ class Student_Payment {
                                     'sponsor_id'=>empty($user['referee_id']) ? $row['zone_id'] : '',  //办赛机构
                                     'sponsor_income'=>empty($user['referee_id']) ? $money4 : '',  //办赛机构收益
                                 );
+
+                                //设置教练
+                                $coach_sql = "select id from {$wpdb->prefix}my_coach where user_id = {$order['user_id']} and category_id = {$row['course_category_id']} ";
+                                $coach_id = $wpdb->get_var($coach_sql);
+                                if($coach_id){
+                                    $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$row['coach_id'],'apply_status'=>2),array('id'=>$coach_id));
+                                }else{
+                                    $wpdb->insert(array('user_id'=>$coach_id,'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
+                                }
                             }
                             //print_r($insert);die;
                             $insert['created_time'] = get_time('mysql');
