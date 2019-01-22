@@ -91,3 +91,26 @@ table tr:nth-child(even){
 .dir_nav_content.active{
     display: block;
 }
+@media screen and (max-width: 1199px){
+    #page{
+        top: 0;
+    }
+    .page-title{
+        display: block;
+    }
+    #header{
+        display: block;
+    }
+    #wpadminbar{
+        display: block;
+    }
+    #footer{
+        display: block;
+    }
+    .masthead,.mobile-header-space,.mobile-header-bar{
+            display: block!important;
+    }
+    .page-title{
+        display: block!important;
+    }
+}  

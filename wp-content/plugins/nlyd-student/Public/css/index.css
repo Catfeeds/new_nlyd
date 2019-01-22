@@ -928,9 +928,6 @@ p.share-font{
         min-height: auto;
         border: none;
     }
-    #page{
-        top:46px;
-    }
     .userCenter-wrapper{
         display: none;
     }
@@ -1007,6 +1004,9 @@ p.share-font{
 }
 
 @media screen and (max-width: 1199px){
+    #page{
+        top:46px;
+    }
     #page.boxed{
         -webkit-box-shadow: none!important;
         -moz-box-shadow: none!important;
