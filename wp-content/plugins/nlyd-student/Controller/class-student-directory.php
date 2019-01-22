@@ -30,16 +30,6 @@ class Student_Directory
     }
 
     /**
-     * PC名录
-     */
-    public function pc_index(){
-        $dtype = 'reading';
-
-//        $view = student_view_path.CONTROLLER.'/directory.php';
-//        load_view_template($view);
-    }
-
-    /**
      * 名录
      */
     public function index(){
@@ -50,9 +40,45 @@ class Student_Directory
      * 脑力健将名录
      */
      public function directoryPlayer(){
-        $view = student_view_path.CONTROLLER.'/directory-player.php';
-        load_view_template($view);
-
+         if(is_mobile()){
+             $view = student_view_path.CONTROLLER.'/directory-player.php';
+             load_view_template($view);
+         }else{
+             $level = isset($_POST['level']) ? intval($_POST['level']) : 0;
+//             $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+//             $page < 1 && $page = 1;
+//             $pageSize = 50;
+//             $start = ($page-1)*$pageSize;
+             $where = '';
+             if($level > 0){
+                 $where = " AND d.level='{$level}'";
+             }
+             global $wpdb;
+             $res = $wpdb->get_results("SELECT d.user_id,d.level,d.certificate,p.post_title,
+                    CASE d.range 
+                    WHEN 1 THEN '中国' 
+                    WHEN 2 THEN '国际' 
+                    ELSE '未知' 
+                    END AS ranges  
+                    FROM '.$wpdb->prefix.'directories AS d 
+                    LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=d.category_id 
+                    WHERE d.is_show=1 AND (d.range=1 or d.range=2) {$where}
+                    ORDER BY d.id DESC
+                     ", ARRAY_A);
+             foreach ($res as &$v){
+                 $usermeta = get_user_meta($v['user_id'],'', true);
+                 $user_real_name = unserialize($usermeta['user_real_name'][0]);
+                 if(!$user_real_name){
+                     $user_real_name['real_name'] = $usermeta['last_name'][0].$usermeta['first_name'][0];
+                 }
+                 $v['header_img'] = $usermeta['user_head'][0];
+                 $v['userID'] = $usermeta['user_ID'][0];
+                 $v['real_name'] = $user_real_name['real_name'];
+                 $v['sex'] = $usermeta['user_gender'][0];
+             }
+             $view = student_view_path.CONTROLLER.'/directory-pc.php';
+             load_view_template($view,['rows'=>$res]);
+         }
     }
         /**
      * 记忆水平认证名录
