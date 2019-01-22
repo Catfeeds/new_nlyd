@@ -7,7 +7,7 @@
  * Time: 9:48
  */
 $setting = get_option('default_setting');
-
+//print_r($setting);
 ?>
 
 <div class="wrap">
@@ -17,6 +17,14 @@ $setting = get_option('default_setting');
         <input type="hidden" name="action" value="update_default_setting">
         <table class="form-table">
             <tbody>
+            <tr>
+                <th scope="row"><label for="blogname">考级字母</label></th>
+                <td>
+                    <input type="radio" name="default_grading_letter" value="1" <?= $setting['default_grading_letter']==1  ? 'checked' : '';?>/>大写&nbsp;
+                    <input type="radio" name="default_grading_letter" value="2" <?= $setting['default_grading_letter']==2  ? 'checked' : '';?>/>小写&nbsp;
+                    <input type="radio" name="default_grading_letter" value="3" <?= $setting['default_grading_letter']==3  ? 'checked' : '';?>/>混合
+                </td>
+            </tr>
             <tr>
                 <th scope="row"><label for="blogname">定时器开关</label></th>
                 <td><input name="default_timer" type="checkbox" value="1" <?= $setting['default_timer']  ? 'checked' : '';?> class="regular-text"></td>

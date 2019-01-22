@@ -231,7 +231,7 @@ class Student_Grade extends Student_Home
         }
         elseif ($_GET['grad_type'] == 'reading'){
 
-            if(!isset($_SESSION['test_post_id'])){
+            if(!isset($_SESSION['grad_post_id'])){
                 //获取已比赛文章
                 $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 2";
                 //print_r($sql1);
@@ -261,11 +261,24 @@ class Student_Grade extends Student_Home
 
                 //print_r($post_id);
 
-                $_SESSION['test_post_id'] = $post_id;
+                //保存已使用文章
+                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 2";
+                $use_id = $wpdb->get_var($sql1);
+                //print_r($use_id);die;
+                if($use_id){
+                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$post_id},CONCAT_WS(',',post_id,{$post_id})) WHERE user_id = {$current_user->ID} and type = 2";
+                    //print_r($sql2);
+                    $a = $wpdb->query($sql2);
+                    //print_r($a);die;
+                }else{
+                    $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$post_id,'type'=>2));
+                }
+
+                $_SESSION['grad_post_id'] = $post_id;
 
             }
             else{
-                $post_id = $_SESSION['test_post_id'];
+                $post_id = $_SESSION['grad_post_id'];
             }
 
             //获取文章
@@ -291,13 +304,16 @@ class Student_Grade extends Student_Home
                     //if($val['problem_answer'] == 1) $answer_total += 1;
                 }
                 $match_questions = array_unique(array_column($rows,'post_title','ID'));
+
             }
+
             $row['questions'] = $question;
             $row['post_id'] = $post_id;
             $row['questions_answer'] = $questions_answer;
             $row['match_questions'] = $match_questions;
             $row['redirect_url'] = home_url(CONTROLLER.'/answerMatch/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['grad_type'].'/post_id/'.$post_id.'/history_id/'.$_GET['history_id']);
             //print_r($row);
+
         }
         //print_r($num);die;
         $row['history_id'] = $_GET['history_id'];

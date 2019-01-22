@@ -61,7 +61,6 @@ class Student_Logins
     }*/
 
     public function index(){
-
         $setting = get_option('default_setting');
         $view = student_view_path.CONTROLLER.'/login.php';
         load_view_template($view,$setting);

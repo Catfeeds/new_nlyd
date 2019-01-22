@@ -321,7 +321,7 @@ class Student_Gradings extends Student_Home
         }
         elseif ($_GET['grad_type'] == 'reading'){
 
-            if(!isset($_SESSION['match_post_id'])){
+            if(!isset($_SESSION['grading_post_id'])){
                 //获取已比赛文章
                 $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1";
                 //print_r($sql1);
@@ -351,10 +351,10 @@ class Student_Gradings extends Student_Home
 
                 //print_r($post_id);
 
-                $_SESSION['match_post_id'] = $post_id;
+                $_SESSION['grading_post_id'] = $post_id;
 
             }else{
-                $post_id = $_SESSION['match_post_id'];
+                $post_id = $_SESSION['grading_post_id'];
             }
 
 
