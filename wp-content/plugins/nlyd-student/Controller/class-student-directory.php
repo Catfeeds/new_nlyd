@@ -29,7 +29,15 @@ class Student_Directory
         add_shortcode('directory-home',array($this,$action));
     }
 
+    /**
+     * PC名录
+     */
+    public function pc_index(){
+        $dtype = 'reading';
 
+//        $view = student_view_path.CONTROLLER.'/directory.php';
+//        load_view_template($view);
+    }
 
     /**
      * 名录
