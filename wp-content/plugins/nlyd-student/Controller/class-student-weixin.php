@@ -235,7 +235,7 @@ class Student_Weixin
             if($referee_id != $user_id){
                 $bool = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_SESSION['referee_id_wx'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user_id));
             }
-            unset($_SESSION['referee_id_wx']);
+
             if($bool){
                 $wpdb->query('COMMIT');
             }else{
@@ -261,8 +261,13 @@ class Student_Weixin
             if(isset($_SESSION['redirect_url'])){
                 $url = $_SESSION['redirect_url'];
                 unset($_SESSION['redirect_url']);
-            }else{
+            }
+            else{
                 $url = home_url('account');
+            }
+            if(isset($_SESSION['referee_id_wx']) && $bool){
+                $url = home_url('/zone/indexUser/');
+                unset($_SESSION['referee_id_wx']);
             }
 
             wp_redirect($url);//跳转到用户中心

@@ -26,7 +26,11 @@ class Student_Logins
                         //添加推广人
                         $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_GET['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$current_user->ID));
                         //var_dump($a);die;
+                        if($a){
+                            wp_redirect(home_url('zone/indexUser/'));
+                        }
                     }
+
                 }
 
                 wp_redirect(home_url('account'));

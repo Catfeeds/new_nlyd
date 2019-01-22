@@ -72,7 +72,7 @@
                 </div>
             </div>
             <?php if(empty($is_entered)):?>
-            <a href="<?=home_url('/course/courseSign');?>" class="a-btn a-btn-table" id="submit"><div><?=__('抢占名额', 'nlyd-student')?></div></a>
+            <a href="<?=home_url('/courses/courseSign/id/'.$_GET['id']);?>" class="a-btn a-btn-table" id="submit"><div><?=__('抢占名额', 'nlyd-student')?></div></a>
             <?php endif;?>
         </div>           
     </div>

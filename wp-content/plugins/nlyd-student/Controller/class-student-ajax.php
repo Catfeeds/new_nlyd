@@ -2204,7 +2204,10 @@ class Student_Ajax
 
                 if(empty($user->referee_id) && $_POST['referee_id'] != $user->ID && $referee_id != $user->ID){
 
-                    $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user->ID));
+                    $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user->ID));
+                    if($a){
+                        $url = home_url('/zone/indexUser/');
+                    }
                 }
             }
 
@@ -2240,6 +2243,9 @@ class Student_Ajax
 
                             $a=$wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$result));
                             //var_dump($a);die;
+                            if($a){
+                                $url = home_url('/zone/indexUser/');
+                            }
                         }
                     }
 
@@ -2295,12 +2301,17 @@ class Student_Ajax
             unset($_SESSION['smtp']);
             $this->setUserCookie($result);
 
+            $url = home_url('account');
+
             //添加推广人
             if($_POST['referee_id'] > 0){
-                $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$result));
+                $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$result));
+                if($a){
+                    $url = home_url('/zone/indexUser/');
+                }
             }
 
-            wp_send_json_success(array('info'=>__('注册成功', 'nlyd-student'),'url'=>home_url('account')));
+            wp_send_json_success(array('info'=>__('注册成功', 'nlyd-student'),'url'=>$url));
         }else{
             wp_send_json_error(array('info'=>__('注册失败', 'nlyd-student')));
         }
@@ -3188,19 +3199,23 @@ class Student_Ajax
 
         //if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
             $user_id = $user->ID;
-            //添加推广人
+            $url = home_url('account');
 
+            //添加推广人
             if(isset($_SESSION['referee_id_wx']) && !(get_user_by('ID',$user_id)->referee_id) && $user_id != $_SESSION['referee_id_wx'] && get_user_by('ID',$_SESSION['referee_id_wx'])->referee_id != $user_id){
                 $bool = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_SESSION['referee_id_wx'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user_id));
-                unset($_SESSION['referee_id_wx']);
                 if(!$bool) wp_send_json_error(array('info'=>__('添加推荐人失败!', 'nlyd-student')));
+                if(isset($_SESSION['referee_id_wx'])){
+                    $url = home_url('/zone/indexUser/');
+                }
+                unset($_SESSION['referee_id_wx']);
             }
             $this->setUserCookie($user_id);
             //wp_send_json_success(['info' => '登录成功', 'url' => home_url('account')]);
             if(isset($_POST['loginType']) && $_POST['loginType'] == 'sign'){
                 wp_send_json_success(array('info'=>__('登录成功,即将跳转', 'nlyd-student'), 'url' => home_url('account/certification/type/sign/sign_match_id/'.$_POST['match_id'])));
             }else{
-                wp_send_json_success(array('info'=>__('登录成功', 'nlyd-student'), 'url' => home_url('account')));
+                wp_send_json_success(array('info'=>__('登录成功', 'nlyd-student'), 'url' => $url));
             }
         }
 
