@@ -92,6 +92,9 @@ table tr:nth-child(even){
     display: block;
 }
 @media screen and (max-width: 1199px){
+    #main, .wf-wrap{
+        padding: 20px!important;
+    }
     #page{
         top: 0;
     }
