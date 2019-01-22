@@ -15,7 +15,7 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback nl-goback">
+                <a class="mui-pull-left nl-goback nl-goback static" href="<?=home_url('/courses/cenerCourse/id/'.$_GET['center_id']);?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__('课程详情', 'nlyd-student')?></div></h1>
@@ -72,7 +72,7 @@
                 </div>
             </div>
             <?php if(empty($is_entered)):?>
-            <a href="<?=home_url('/courses/courseSign/id/'.$_GET['id']);?>" class="a-btn a-btn-table"><div><?=__('抢占名额', 'nlyd-student')?></div></a>
+            <a href="<?=home_url('/courses/courseSign/center_id'.$_GET['center_id'].'/id/'.$_GET['id']);?>" class="a-btn a-btn-table"><div><?=__('抢占名额', 'nlyd-student')?></div></a>
             <?php endif;?>
         </div>           
     </div>
