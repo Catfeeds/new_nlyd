@@ -4153,12 +4153,10 @@ class Student_Ajax
                     case 'tl':
                     case 'zm':
                         if(!empty($_POST['my_answer'])){
-
+                            //print_r($_POST['questions_answer']);die;
                             $len = count($_POST['questions_answer']);
-                            $error_len = count(array_diff_assoc($_POST['questions_answer'],$_POST['my_answer']));
-                            //$correct_rate = ($len-$error_len)/$len;
-                            $success_len = bcsub($left=$len, $right=$error_len);
-                            $correct_rate = bcdiv($left=$success_len, $right=$len, 3);
+                            $error_len = count(array_diff_assoc($_POST['questions_answer'],$_POST['my_answer']));   //$_POST['my_answer']
+                            $correct_rate = ($len-$error_len)/$len;
                         }
                         break;
                     case 'rm':
@@ -4173,8 +4171,7 @@ class Student_Ajax
                                     $success_len += 1;
                                 }
                             }
-                            //$correct_rate = $success_len/$len;
-                            $correct_rate = bcdiv($left=$success_len, $right=$len, 3);
+                            $correct_rate = $success_len/$len;
                         }
                         break;
                     case 'wz':
@@ -4189,9 +4186,7 @@ class Student_Ajax
                         $_POST['grading_questions'] = array_column($questions_answer,'question');
                         $_POST['questions_answer'] = array_column($questions_answer,'rights');
                         $_POST['my_answer'] = array_column($questions_answer,'yours');
-                        //$correct_rate = ($len-$error_len)/$len;
-                        $success_len = bcsub($left=$len, $right=$error_len);
-                        $correct_rate = bcdiv($left=$success_len, $right=$len, 3);
+                        $correct_rate = ($len-$error_len)/$len;
                         break;
                 }
                 break;
@@ -4213,8 +4208,7 @@ class Student_Ajax
                         if(arr2str($arr) == arr2str($_POST['my_answer'][$k])) ++$success_len;
                     }
                 }
-                //$correct_rate = $success_len/$len;
-                $correct_rate = bcdiv($left=$success_len, $right=$len, 3);
+                $correct_rate = $success_len/$len;
                 //print_r($success_len);die;
                 break;
             case 'arithmetic':
@@ -4251,13 +4245,13 @@ class Student_Ajax
                 //print_r($my_score);die;
                 $_POST['grading_questions'] = $match_questions;
                 $_POST['questions_answer'] = $questions_answer;
-                //$correct_rate = $success_len/$len;
-                $correct_rate = bcdiv($left=$success_len, $right=$len, 3);
+                $correct_rate = $success_len/$len;
                 //var_dump($_POST);die;
                 break;
         }
         //zlin_user_skill_rank 技能表
-
+        //print_r($correct_rate);die;
+        //$correct_rate = 1;
         $insert = array(
             'user_id'=>$current_user->ID,
             'grading_id'=>$_POST['grading_id'],
@@ -4350,9 +4344,7 @@ class Student_Ajax
 
                             $len = count($_POST['questions_answer']);
                             $error_len = count(array_diff_assoc($_POST['questions_answer'],$_POST['my_answer']));
-                            //$correct_rate = ($len-$error_len)/$len;
-                            $success_len = bcsub($left=$len, $right=$error_len);
-                            $correct_rate = bcdiv($left=$success_len, $right=$len, 3);
+                            $correct_rate = ($len-$error_len)/$len;
                         }
                         break;
                     case 'rm':
@@ -4367,8 +4359,7 @@ class Student_Ajax
                                     $success_len += 1;
                                 }
                             }
-                            //$correct_rate = $success_len/$len;
-                            $correct_rate = bcdiv($left=$success_len, $right=$len, 3);
+                            $correct_rate = $success_len/$len;
                         }
                         break;
                     case 'wz':
@@ -4384,9 +4375,7 @@ class Student_Ajax
                         $_POST['grading_questions'] = array_column($questions_answer,'question');
                         $_POST['questions_answer'] = array_column($questions_answer,'rights');
                         $_POST['my_answer'] = array_column($questions_answer,'yours');
-                        //$correct_rate = ($len-$error_len)/$len;
-                        $success_len = bcsub($left=$len, $right=$error_len);
-                        $correct_rate = bcdiv($left=$success_len, $right=$len, 3);
+                        $correct_rate = ($len-$error_len)/$len;
                         break;
                 }
                 break;
@@ -4408,8 +4397,7 @@ class Student_Ajax
                         if(arr2str($arr) == arr2str($_POST['my_answer'][$k])) ++$success_len;
                     }
                 }
-                //$correct_rate = $success_len/$len;
-                $correct_rate = bcdiv($left=$success_len, $right=$len, 3);
+                $correct_rate = $success_len/$len;
                 //print_r($success_len);die;
                 break;
             case 'arithmetic':
@@ -4447,7 +4435,6 @@ class Student_Ajax
                 $_POST['grading_questions'] = $match_questions;
                 $_POST['questions_answer'] = $questions_answer;
                 $correct_rate = $success_len/$len;
-                $correct_rate = bcdiv($left=$success_len, $right=$len, 3);
                 //var_dump($_POST);die;
                 break;
         }

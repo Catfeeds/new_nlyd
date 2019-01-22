@@ -11,7 +11,7 @@
             }elseif ($row->order_type == 3){
                 $url = home_url('/courses/courseDetail/id/'.$row->match_id);
                 if(!empty($zone_id)){
-                    $url .= '/zone_id/'.$zone_id;
+                    $url .= '/center_id/'.$zone_id;
                 }
             }
 
