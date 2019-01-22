@@ -1,6 +1,17 @@
 *{
     touch-action: manipulation;
 }
+input[type="text"], 
+input[type="tel"], 
+input[type="url"], 
+input[type="email"], 
+input[type="number"], 
+input[type="date"], 
+input[type="range"], 
+input[type="password"], 
+select, textarea{
+    font:normal normal normal 0.14rem / 0.28rem "PingFang SC"!important;
+}
 .lh_20{
     line-height: 20px;
 }
