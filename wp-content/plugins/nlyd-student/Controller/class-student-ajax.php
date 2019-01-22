@@ -2709,7 +2709,7 @@ class Student_Ajax
                     if($order['order_type'] == '2'){
                         $url .= '/grad_id/'.$_POST['match_id'];
                     }elseif ($order['order_type'] == '3'){
-                        $url .= '/id/'.$_POST['match_id'];
+                        $url .= '/course_id/'.$_POST['match_id'];
                     }
                     $url = home_url($url);
                     $result = ['status' => true, 'data' => $url];
