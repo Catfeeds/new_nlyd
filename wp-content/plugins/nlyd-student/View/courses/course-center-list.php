@@ -77,9 +77,9 @@ jQuery(function($) {
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    var rightBtn='<a href="'+window.home_url+'/courses/courseSign/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("抢占名额", "nlyd-student")?></span></a>'
+                                    var rightBtn='<a href="'+window.home_url+'/courses/courseSign/center_id/'+$.Request('id')+'id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("抢占名额", "nlyd-student")?></span></a>'
                                     if(id=="-3"){
-                                        rightBtn='<a href="'+window.home_url+'/courses/courseEnd/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("结课成绩", "nlyd-student")?></span></a>'
+                                        rightBtn='<a href="'+window.home_url+'/courses/courseEnd/center_id/'+$.Request('id')+'id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("结课成绩", "nlyd-student")?></span></a>'
                                     }else{
                                         if (v.order_id) {//已报名
                                             rightBtn='<a class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__("您已抢占名额", "nlyd-student")?></span></a>'
@@ -107,7 +107,7 @@ jQuery(function($) {
                                                 +'</div>'
                                                 +'<div class="nl-match-footer flex-h">'
                                                     +'<div class="nl-match-button flex1">'
-                                                        +'<a href="'+window.home_url+'/courses/courseDetail/id/'+v.id+'" class="dis_table c_black"><span class="dis_cell"><?=__("查看详情", "nlyd-student")?></span></a>'
+                                                        +'<a href="'+window.home_url+'/courses/courseDetail/center_id/'+$.Request('id')+'/id/'+v.id+'" class="dis_table c_black"><span class="dis_cell"><?=__("查看详情", "nlyd-student")?></span></a>'
                                                     +'</div>'
                                                     +'<div class="nl-match-button flex1">'
                                                         +rightBtn
@@ -141,7 +141,7 @@ jQuery(function($) {
                                     }
                                     var dom='<div class="no-info-page" style="top:50px">'
                                                 +'<div class="no-info-img">'
-                                                    +'<img src="'+window.plugins_url+'/nlyd-student/Public/css/image//noInfo/noCourse1043@2x.png">'
+                                                    +'<img src="'+window.plugins_url+'/nlyd-student/Public/css/image/noInfo/noCourse1043@2x.png">'
                                                 +'</div>'
                                                 +'<p class="no-info-text">'+text+'</p>'
                                                 +'<a class="a-btn a-btn-table" href="'+window.home_url+'/courses/"><div><?=__("查看其它中心课程", "nlyd-student")?></div></a>'

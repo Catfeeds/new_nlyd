@@ -81,7 +81,7 @@ jQuery(function($) {
             prams,
             function(res){
                 if(res.err_msg=='get_brand_wcpay_request:ok'){
-                    window.location.href=window.home_url+'/courses/courseDetail/id/'+$.Request('course_id')
+                    window.location.href=window.home_url+'/courses/courseDetail/center_id/'+$.Request('center_id')+'/id/'+$.Request('id')
                 }
             }
         );
@@ -171,23 +171,22 @@ jQuery(function($) {
                                     // alert(pay_type)
                                     if(pay_type){
                                     
-                                            $.ajax({
-                                                data:datas,success:function(response){
-                                                    if(response.success){
-                                                        if(response.data.info){
-                                                            window.location.href=response.data.info;
-                                                        }else{//微信公众号支付
-                                                            if(response.data.params){
-                                                                prams=response.data.params;
-                                                                jsApiCall()
-                                                            }
+                                        $.ajax({
+                                            data:datas,success:function(response){
+                                                if(response.success){
+                                                    if(response.data.info){
+                                                        window.location.href=response.data.info;
+                                                    }else{//微信公众号支付
+                                                        if(response.data.params){
+                                                            prams=response.data.params;
+                                                            jsApiCall()
                                                         }
-                                                        
-                                                    }else{
-                                                        $.alerts(response.data.info)
                                                     }
+                                                }else{
+                                                    $.alerts(response.data.info)
                                                 }
-                                            })
+                                            }
+                                        })
                                     }
                                 }
                                 ,closeBtn:2
@@ -196,13 +195,13 @@ jQuery(function($) {
                                 ,isOutAnim:true//关闭动画
                             });
                         }else{
-                            window.location.href=window.home_url+'/gradings/info/grad_id/'+$.Request('grad_id')
+                            window.location.href=window.home_url+'/courses/courseDetail/center_id/'+$.Request('center_id')+'/id/'+$.Request('id');
                         }
                     }else{
                         // if(res.data.info=="请先实名认证"){
                         if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
                             setTimeout(function(){
-                                window.location.href=window.home_url+'/account/info/grad_id/'+$.Request('grad_id');
+                                window.location.href=window.home_url+'/account/info/course_id/'+$.Request('id');
                             }, 1000);
                         }else{
                             $.alerts(res.data.info)
