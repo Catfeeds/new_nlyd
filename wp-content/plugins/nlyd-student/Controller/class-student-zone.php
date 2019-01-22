@@ -1169,8 +1169,8 @@ class Student_Zone
                                                             left join {$wpdb->prefix}grading_meta b on a.match_id = b.grading_id
                                                             where a.order_type = 2 and b.created_person = {$current_user->ID} ");
             //获取考级/比赛收益
-            $data['match_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type = 'match' ");
-            $data['grading_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type = 'grading' ");
+            $data['match_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and (income_type = 'open_match' or income_type = 'recommend_match') ");
+            $data['grading_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and (income_type = 'open_grading' or income_type = 'recommend_grading') ");
 
             //获取累计收益/提现
             $data['user_income'] = $wpdb->get_var("select sum(user_income) from {$wpdb->prefix}user_stream_logs where  user_id = {$current_user->ID} and user_income > 0 ");

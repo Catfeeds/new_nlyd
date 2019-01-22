@@ -25,7 +25,7 @@ if(!class_exists('StudentController')){
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );
-            define( 'leo_student_version','V2.1.5.6' );
+            define( 'leo_student_version','V2.1.5.8' );
 
             define( 'student_css_url', leo_student_url.'/Public/css/' );
             define( 'student_js_url', leo_student_url.'/Public/js/' );
@@ -243,8 +243,7 @@ if(!class_exists('StudentController')){
          */
         public function scripts_default(){
 
-
-            if (!is_front_page() && !is_single()) {
+            if (!is_front_page() && !is_single() && CONTROLLER != 'news') {
                 wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-cookie' );
                 //序列化form表单Json对象
