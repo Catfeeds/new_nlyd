@@ -458,6 +458,7 @@ class Student_Payment {
                         $insert['created_time'] = get_time('mysql');
 
                         $wpdb->query('START TRANSACTION');
+
                         $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
                         if(!empty($insert['sponsor_id']) && $money4 > 0){
@@ -1181,6 +1182,7 @@ class Student_Payment {
 
 
                             $wpdb->query('START TRANSACTION');
+
                             $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
                             if(!empty($insert['sponsor_id']) && $money4 > 0){
