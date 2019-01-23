@@ -121,18 +121,18 @@ class Student_Directory
                      $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
                      if($row['real_name'] == '') continue;
                      if(isset($rows[$row['memory']])){
-                         $rows[$row['memory']][] = $row;
+                         $rows[intval($row['memory'])][] = $row;
                      }else{
-                         $rows[$row['memory']] = [0 => $row];
+                         $rows[intval($row['memory'])] = [0 => $row];
                      }
                      if($row['memory'] > $max) $max = $row['memory'];
                  }
-                 sort($rows);
-                 ob_start();//启动ob缓存
 
+                 ksort($rows);
+                 ob_start();//启动ob缓存
                  ob_clean();
                  $view = student_view_path.CONTROLLER.'/directory-remember_pc.php';
-                 load_view_template($view);
+                 load_view_template($view, ['rows' => $rows]);
                  $ob_str=ob_get_contents();
                  if(!is_dir(student_view_path.CONTROLLER.'/static')){
                     mkdir(student_view_path.CONTROLLER.'/static');

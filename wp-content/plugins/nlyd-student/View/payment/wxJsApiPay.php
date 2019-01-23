@@ -48,7 +48,7 @@
                         }else if(orderType=="2"){
                             window.location.href=window.home_url+'/gradings/info/grad_id/'+$.Request('grad_id')
                         }else if(orderType=="3"){
-                            
+                            window.location.href=window.home_url+'/courses/courseSign/id/'+$.Request('course_id')
                         }
                         
                     }else{//失败
