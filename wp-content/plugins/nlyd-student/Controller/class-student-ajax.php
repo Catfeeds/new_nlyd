@@ -4803,7 +4803,7 @@ class Student_Ajax
                     when 'recommend_trains_zone' then '推荐训练中心'
                     when 'recommend_test_zone' then '推荐测评中心'
                     when 'recommend_course' then '推荐购课'
-                    when 'recommend_qualified' then '推荐达标'
+                    when 'recommend_qualified' then '购课补贴'
                     when 'grading_qualified' then '考级达标'
                     when 'cause_manager' then '事业管理员'
                     when 'cause_minister' then '事业部长'
@@ -5501,7 +5501,7 @@ class Student_Ajax
 				                    when 'recommend_trains_zone' then '推荐训练中心'
 				                    when 'recommend_test_zone' then '推荐测评中心'
 				                    when 'recommend_course' then '推荐购课'
-				                    when 'recommend_qualified' then '推荐达标'
+				                    when 'recommend_qualified' then '购课补贴'
 				                    when 'grading_qualified' then '考级达标'
 				                    when 'cause_manager' then '事业管理员'
 				                    when 'cause_minister' then '事业部长'
@@ -6609,6 +6609,18 @@ class Student_Ajax
               ";
 
         $rows = $wpdb->get_results($sql ,ARRAY_A);
+        if(empty($rows)){
+            $sql= "select a.user_id,a.zone_number,a.zone_name,a.zone_city,a.type_id,c.zone_type_name,
+                count(b.id) course_total
+                from {$wpdb->prefix}zone_meta a 
+                left join {$wpdb->prefix}course b on a.user_id = b.zone_id and b.is_enable = 1
+                left join {$wpdb->prefix}zone_type c on a.type_id = c.id
+                where a.user_status = 1 and c.zone_type_alias = 'trains' 
+                GROUP BY user_id
+                limit $start,$pageSize
+              ";
+            $rows = $wpdb->get_results($sql ,ARRAY_A);
+        }
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
