@@ -1017,7 +1017,7 @@ class Student_Payment {
             global $wpdb;
             $order = $wpdb->get_row('SELECT id,order_type,match_id,user_id,sub_centres_id,pay_status,cost,order_type FROM '.$wpdb->prefix.'order WHERE serialnumber='.$data['out_trade_no'], ARRAY_A);
             //file_put_contents('aaa.txt', json_decode($order, JSON_UNESCAPED_UNICODE));
-            if($order && $order['pay_status'] == 1 && $order['cost'] == $data['total_amount']){
+            if($order && $order['pay_status'] == 1 && $order['cost'] == $data['total_amount'] && $order['order_type']){
                 //TODO 更新订单支付状态
                 switch ($order['order_type']){
                     case 1://比赛订单
@@ -1035,6 +1035,7 @@ class Student_Payment {
                     'pay_type' => 'zfb',
                     'pay_lowdown' => serialize($data)
                 ];
+                $wpdb->query('START TRANSACTION');
                 $result = $wpdb->update($wpdb->prefix.'order', $updateData, array('id' => $order['id']));
                 if($result){
                     /*****************收益分配start*******************/
@@ -1192,7 +1193,7 @@ class Student_Payment {
                             //print_r($insert);die;
                             $insert['created_time'] = get_time('mysql');
 
-                            $wpdb->query('START TRANSACTION');
+
                             $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
                             if(!empty($insert['sponsor_id']) && $money4 > 0){
@@ -1279,13 +1280,16 @@ class Student_Payment {
                             //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e.'&&'. $x.'&&'. $y);die;
                             if($a && $b && $c && $d && $e && $x && $y){
                                 $wpdb->query('COMMIT');
+                                return true;
                             }else{
                                 $wpdb->query('ROLLBACK');
+                                return false;
                             }
                         }
                     }
 
                     /*****************收益分配end*******************/
+                    $wpdb->query('COMMIT');
                     return $result;
                 }
             }else{
