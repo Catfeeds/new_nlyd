@@ -166,7 +166,8 @@ jQuery(function($) {
                                         pay_type:pay_type,
                                         _wpnonce:$('#inputPay').val(),
                                         serialnumber:serialnumber,
-                                        match_id:$.Request('id')
+                                        match_id:$.Request('id'),
+                                        center_id:$.Request('center_id'),
                                     }
                                     // alert(pay_type)
                                     if(pay_type){
@@ -201,7 +202,7 @@ jQuery(function($) {
                         // if(res.data.info=="请先实名认证"){
                         if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
                             setTimeout(function(){
-                                window.location.href=window.home_url+'/account/info/course_id/'+$.Request('id');
+                                window.location.href=window.home_url+'/account/info/courses_id/'+$.Request('id');
                             }, 1000);
                         }else{
                             $.alerts(res.data.info)

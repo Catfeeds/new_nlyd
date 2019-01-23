@@ -10,7 +10,7 @@
         <?php if($row){ ?>
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback static" onclick="window.location.href = '<?=home_url('account')?>' ">
+                <a class="mui-pull-left nl-goback static" href="<?=home_url('/account/')?>">    
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__('我的考级', 'nlyd-student')?></div></h1>
@@ -30,7 +30,7 @@
         <?php }else{ ?>
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper layui-bg-white">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback">
+                <a class="mui-pull-left nl-goback static" href="<?=home_url('/account/')?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__('我的考级', 'nlyd-student')?></div></h1>

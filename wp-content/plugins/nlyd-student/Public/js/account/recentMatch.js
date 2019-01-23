@@ -31,6 +31,7 @@ jQuery(function($) {
                         console.log(res)
                             var _must=$.Request('type')==2 ? _recentMatch.must_kaoji : _recentMatch.must;
                             var _address=$.Request('type')==2 ? _recentMatch.address_kaoji : _recentMatch.address;
+                            var _date=$.Request('type')==2 ? _recentMatch.date_kaoji : _recentMatch.date;
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>';//标签
@@ -39,7 +40,7 @@ jQuery(function($) {
                                     var match_notice_url="";//参赛须知
                                     if(v.match_status==2){//比赛进行中
                                         match_status='c_orange';   
-                                    }
+                                     }
                                     if(v.right_url.length>0){
                                         rightBtn='<div class="nl-match-button flex1 last-btn">'
                                             +'<button type="button" href="'+v.right_url+'">'+v.button_title+'</button>'
@@ -71,7 +72,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="nl-match-body">'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label"><div>'+_recentMatch.date+':</div></div>'
+                                                            +'<div class="nl-match-label"><div>'+_date+':</div></div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<div class="c_black">'+v.match_start_time+'</div>'
                                                                 +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
