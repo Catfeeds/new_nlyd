@@ -10,6 +10,9 @@
                 $url = home_url('/gradings/info/grad_id/'.$row->match_id);
             }elseif ($row->order_type == 3){
                 $url = home_url('/courses/courseDetail/id/'.$row->match_id);
+                if(!empty($zone_id)){
+                    $url .= '/center_id/'.$zone_id;
+                }
             }
 
         ?>
