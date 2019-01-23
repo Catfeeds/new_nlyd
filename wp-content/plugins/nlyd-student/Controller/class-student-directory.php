@@ -103,42 +103,42 @@ class Student_Directory
             $view = student_view_path.CONTROLLER.'/directory-remember.php';
             load_view_template($view);
         }else{
-         $file_name = student_view_path.CONTROLLER.'/static/remember_static.html';
-         // && filemtime($file_name)+30>=time()
-         if(file_exists($file_name)){
-             echo file_get_contents($file_name);
-             exit;
-         }else{
-             global $wpdb;
-             $res = $wpdb->get_results("SELECT user_id,`memory` FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `memory`>0", ARRAY_A);
-             $rows = [];
-             $max = 1;
-             foreach ($res as $k => $row){
-                 $user_meta = get_user_meta($row['user_id']);
-                 $row['userID'] = isset($user_meta['user_ID']) ? $user_meta['user_ID'][0] : '';
-                 $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
-                 $row['user_head'] = isset($user_meta['user_head']) ? $user_meta['user_head'][0] : '';
-                 $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
-                 if($row['real_name'] == '') continue;
-                 if(isset($rows[$row['memory']])){
-                     $rows[$row['memory']][] = $row;
-                 }else{
-                     $rows[$row['memory']] = [0 => $row];
+             $file_name = student_view_path.CONTROLLER.'/static/remember_static.html';
+             // && filemtime($file_name)+30>=time()
+             if(file_exists($file_name)){
+                 echo file_get_contents($file_name);
+                 exit;
+             }else{
+                 global $wpdb;
+                 $res = $wpdb->get_results("SELECT user_id,`memory` FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `memory`>0", ARRAY_A);
+                 $rows = [];
+                 $max = 1;
+                 foreach ($res as $k => $row){
+                     $user_meta = get_user_meta($row['user_id']);
+                     $row['userID'] = isset($user_meta['user_ID']) ? $user_meta['user_ID'][0] : '';
+                     $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
+                     $row['user_head'] = isset($user_meta['user_head']) ? $user_meta['user_head'][0] : '';
+                     $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
+                     if($row['real_name'] == '') continue;
+                     if(isset($rows[$row['memory']])){
+                         $rows[$row['memory']][] = $row;
+                     }else{
+                         $rows[$row['memory']] = [0 => $row];
+                     }
+                     if($row['memory'] > $max) $max = $row['memory'];
                  }
-                 if($row['memory'] > $max) $max = $row['memory'];
-             }
-             sort($rows);
-             ob_start();//启动ob缓存
+                 sort($rows);
+                 ob_start();//启动ob缓存
 
-             ob_clean();
-             $view = student_view_path.CONTROLLER.'/directory-remember_pc.php';
-             load_view_template($view);
-             $ob_str=ob_get_contents();
-             if(!is_dir(student_view_path.CONTROLLER.'/static')){
-                mkdir(student_view_path.CONTROLLER.'/static');
+                 ob_clean();
+                 $view = student_view_path.CONTROLLER.'/directory-remember_pc.php';
+                 load_view_template($view);
+                 $ob_str=ob_get_contents();
+                 if(!is_dir(student_view_path.CONTROLLER.'/static')){
+                    mkdir(student_view_path.CONTROLLER.'/static');
+                 }
+    //             file_put_contents($file_name,$ob_str);
              }
-//             file_put_contents($file_name,$ob_str);
-         }
 
         }
     }
