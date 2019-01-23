@@ -520,7 +520,7 @@ class Student_Payment {
 
                         if($order['order_type'] == 3 && !empty($user['referee_id'])){
                             //判断直接推荐次数
-                            $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['id']}'");
+                            $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
                             //获取推荐人教练
                             $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
                             //print_r("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 " );die;
@@ -933,9 +933,10 @@ class Student_Payment {
 
                 if($order['order_type'] == 3 && !empty($user['referee_id'])){
                     //判断直接推荐次数
-                    $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['id']}'");
+                    $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
+                    //print_r("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");die;
                     //获取推荐人教练
-                    $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
+                    $coach_id = $row['coach_id'];
                     //print_r("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 " );die;
                     if($total < 3 && $coach_id > 0){
 
@@ -1248,7 +1249,7 @@ class Student_Payment {
 
                             if($order['order_type'] == 3 && !empty($user['referee_id'])){
                                 //判断直接推荐次数
-                                $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['id']}'");
+                                $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
                                 //获取推荐人教练
                                 $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
                                 //print_r("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 " );die;

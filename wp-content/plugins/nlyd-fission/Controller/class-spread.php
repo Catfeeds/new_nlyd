@@ -1650,7 +1650,7 @@ class Spread{
             'recommend_test_zone' => '推荐测评中心',
             'recommend_match_zone' => '推荐赛区',
             'recommend_course' => '推荐购课',
-            'recommend_qualified' => '推荐达标',
+            'recommend_qualified' => '购课补贴',
             'grading_qualified' => '考级达标',
             'cause_manager' => '事业管理员',
             'cause_minister' => '事业部长',
