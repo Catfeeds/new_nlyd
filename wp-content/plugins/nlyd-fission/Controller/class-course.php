@@ -443,11 +443,16 @@ class Course{
         if($id > 0){
             $row = $wpdb->get_row("SELECT cou.course_title,cou.course_img,cou.const,cou.const,cou.is_enable,cou.coach_id,cou.course_start_time,cou.course_end_time,
                 cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.course_details,
-                zm.zone_name,um.meta_value AS coach_real_name,cou.course_category_id,cou.duration,cou.admin_mobile  
+                zm.type_id AS zone_type_id,zm.zone_city,um.meta_value AS coach_real_name,cou.course_category_id,cou.duration,cou.admin_mobile,zm.zone_name,zm.zone_match_type  
                 FROM {$wpdb->prefix}course AS cou 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
-                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.id=cou.zone_id 
+                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=cou.zone_id 
                 WHERE cou.id='{$id}'", ARRAY_A);
+            if($row['zone_id'] > 0){
+                $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$row['zone_type_id']}");
+                $organizeClass = new Organize();
+                $row['zone_name'] = $organizeClass->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'], 'get');
+            }
         }
 
         //课程类型

@@ -98,61 +98,94 @@ class Student_Directory
         /**
      * 记忆水平认证名录
      */
-     public function directoryRemember(){
-        $view = student_view_path.CONTROLLER.'/directory-remember.php';
-        load_view_template($view);
+    public function directoryRemember(){
+        if(is_mobile()){
+            $view = student_view_path.CONTROLLER.'/directory-remember.php';
+            load_view_template($view);
+        }else{
+         $file_name = student_view_path.CONTROLLER.'/static/remember_static.html';
+         // && filemtime($file_name)+30>=time()
+         if(file_exists($file_name)){
+             echo file_get_contents($file_name);
+             exit;
+         }else{
+             global $wpdb;
+             $res = $wpdb->get_results("SELECT user_id,`memory` FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `memory`>0", ARRAY_A);
+             $rows = [];
+             $max = 1;
+             foreach ($res as $k => $row){
+                 $user_meta = get_user_meta($row['user_id']);
+                 $row['userID'] = isset($user_meta['user_ID']) ? $user_meta['user_ID'][0] : '';
+                 $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
+                 $row['user_head'] = isset($user_meta['user_head']) ? $user_meta['user_head'][0] : '';
+                 $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
+                 if($row['real_name'] == '') continue;
+                 if(isset($rows[$row['memory']])){
+                     $rows[$row['memory']][] = $row;
+                 }else{
+                     $rows[$row['memory']] = [0 => $row];
+                 }
+                 if($row['memory'] > $max) $max = $row['memory'];
+             }
+             sort($rows);
+             ob_start();//启动ob缓存
 
+             ob_clean();
+             $view = student_view_path.CONTROLLER.'/directory-remember_pc.php';
+             load_view_template($view);
+             $ob_str=ob_get_contents();
+             if(!is_dir(student_view_path.CONTROLLER.'/static')){
+                mkdir(student_view_path.CONTROLLER.'/static');
+             }
+//             file_put_contents($file_name,$ob_str);
+         }
+
+        }
     }
         /**
      * 速读水平认证名录
      */
-     public function directoryRead(){
-        $view = student_view_path.CONTROLLER.'/directory-read.php';
-        load_view_template($view);
+    public function directoryRead(){
+        if(is_mobile()){
+            $view = student_view_path.CONTROLLER.'/directory-read.php';
+            load_view_template($view);
 
+        }else{
+            $view = student_view_path.CONTROLLER.'/directory-read_pc.php';
+            load_view_template($view);
+        }
     }
         /**
      * 心算水平认证名录
      */
-     public function directoryCalculation(){
-        $view = student_view_path.CONTROLLER.'/directory-calculation.php';
-        load_view_template($view);
-
+    public function directoryCalculation(){
+         if(is_mobile()){
+             $view = student_view_path.CONTROLLER.'/directory-calculation.php';
+             load_view_template($view);
+         }else{
+             $view = student_view_path.CONTROLLER.'/directory-calculation_pc.php';
+             load_view_template($view);
+         }
     }
 
     /**
-     * 名录脑力健将pc
+     * 静态页生成
      */
-     public function directory_pc(){
-        $view = student_view_path.CONTROLLER.'/directory_pc.php';
-        load_view_template($view);
+    public function makStaticHtml($dir, $file_name, $data){
+        ob_start();//启动ob缓存
+        load_view_template($file_name.'/'.$file_name,['data' => $data]);
+        $ob_str=ob_get_contents();
+        if(!is_dir($dir)){
+            mkdir($dir);
+        }
+        file_put_contents($file_name.'/'.$file_name,$ob_str);
     }
-    /**
-     * 名录速读pc
-     */
-     public function directoryRead_pc(){
-        $view = student_view_path.CONTROLLER.'/directory-read_pc.php';
-        load_view_template($view);
-    }
-    /**
-     * 名录记忆pc
-     */
-     public function directoryRemember_pc(){
-        $view = student_view_path.CONTROLLER.'/directory-remember_pc.php';
-        load_view_template($view);
-    }
-    /**
-     * 名录心算pc
-     */
-     public function directoryCalculation_pc(){
-        $view = student_view_path.CONTROLLER.'/directory-calculation_pc.php';
-        load_view_template($view);
-    }
+
     /**
      * 默认公用js/css引入
      */
     public function scripts_default(){
-        if (ACTION == 'directoryPlayer' || ACTION == 'directoryRead_pc' || ACTION == 'directoryRemember_pc' || ACTION == 'directoryCalculation_pc') {
+        if ((ACTION == 'directoryPlayer' || ACTION == 'directoryRead' || ACTION == 'directoryRemember' || ACTION == 'directoryCalculation') && !is_mobile()) {
             wp_register_style( 'my-student-directory_pc', student_css_url.'directory/directory_pc.css',array('my-student') );
             wp_enqueue_style( 'my-student-directory_pc' );
         }else{
