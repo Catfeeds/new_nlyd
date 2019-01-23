@@ -4814,6 +4814,7 @@ class Student_Ajax
                   where {$where}
                   order by created_time desc limit $start,$pageSize 
                   ";
+        //print_r($sql);die;
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
@@ -5406,14 +5407,17 @@ class Student_Ajax
             case 'weChat':
                 //获取收款二维码
                 $extract_code_img = get_user_meta($current_user->ID,'user_coin_code')[0];
+                if(empty($user_cheques_bank)) wp_send_json_error(array('info'=>__('请先设置微信收款码')));
                 break;
             case 'aliPay':
                 //获取收款二维码
                 $extract_code_img = get_user_meta($current_user->ID,'aliPay_coin_code')[0];
+                if(empty($user_cheques_bank)) wp_send_json_error(array('info'=>__('请先设置支付宝收款码')));
                 break;
             case 'user_bank':
                 //获取收款账户
                 $user_cheques_bank = get_user_meta($current_user->ID,'user_cheques_bank')[0];
+                if(empty($user_cheques_bank)) wp_send_json_error(array('info'=>__('请先设置银行收款账户')));
                 $opening_user = $user_cheques_bank['open_name'];
                 $opening_bank = $user_cheques_bank['open_bank'];
                 $opening_bank_address = $user_cheques_bank['open_address'];
@@ -5521,19 +5525,42 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
-        if(in_array($row['income_type'],array('recommend_match_zone','recommend_trains_zone','recommend_test_zone'))){
+        if(in_array($row['income_type'],array('recommend_match_zone','recommend_trains_zone','recommend_test_zone'))){  //推荐赛区/推荐训练中心/推荐测评中心
             $where = "  a.id = {$row['match_id']} and a.income_type = 'subject' ";
-        }else if(in_array($row['income_type'],array('open_match','open_grading','recommend_match','recommend_grading','director_match','director_grading','cause_manager','cause_minister'))){
-            $where = " a.match_id = {$row['match_id']} and (a.income_type in ('match','grading')) ";
-            if(in_array($row['income_type'],array('recommend_match','recommend_grading'))){
-                $where .= " and (a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID}) ";
-            }
-        }elseif (in_array($row['income_type'],array('open_course','recommend_course','recommend_qualified','recommend_qualified'))) {
-            $where = "  a.match_id = {$row['match_id']} and a.income_type = 'course' ";
         }
-
-        //判断是否为机构
-        $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
+        elseif (in_array($row['income_type'],array('open_match'))){     //开设比赛
+            $where = " a.income_type = 'match' and a.match_id = {$row['match_id']} and a.sponsor_id = {$current_user->ID} ";
+        }
+        elseif (in_array($row['income_type'],array('open_grading'))){   //开设考级
+            $where = " a.income_type = 'grading' and a.match_id = {$row['match_id']} and a.sponsor_id = {$current_user->ID} ";
+        }
+        elseif (in_array($row['income_type'],array('open_course'))){    //课程渠道
+            $where = " a.income_type = 'course' and a.match_id = {$row['match_id']} and a.sponsor_id = {$current_user->ID} ";
+        }
+        elseif (in_array($row['income_type'],array('recommend_match'))){    //推荐比赛
+            $where = " a.income_type = 'match' and a.match_id = {$row['match_id']} and (a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID}) ";
+        }
+        elseif (in_array($row['income_type'],array('recommend_match','recommend_grading'))){    //推荐考级
+            $where = " a.income_type = 'grading' and a.match_id = {$row['match_id']} and (a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID}) ";
+        }
+        elseif (in_array($row['income_type'],array('director_match','director_grading'))){  //参赛机构/考级负责人
+            $where = " a.match_id = {$row['match_id']} and a.person_liable_id = {$current_user->ID}  ";
+        }
+        elseif (in_array($row['income_type'],array('recommend_course'))){    //推荐购课
+            $where = " a.income_type = 'course' and a.match_id = {$row['match_id']} and (a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID})   ";
+        }
+        elseif (in_array($row['income_type'],array('recommend_qualified'))){    //购课补贴
+            $where = " a.income_type = 'course' and a.id = {$row['match_id']} and a.person_liable_id = {$current_user->ID}  ";
+        }
+        elseif (in_array($row['income_type'],array('grading_qualified'))){  //考级达标
+            $where = " a.income_type = 'grading' and a.id = {$row['match_id']} and a.referee_id = {$current_user->ID}  ";
+        }
+        elseif (in_array($row['income_type'],array('cause_manager'))){  //事业管理员
+            $where = " a.income_type = 'course' and a.match_id = {$row['match_id']} and a.manager_id = {$current_user->ID}  ";
+        }
+        elseif (in_array($row['income_type'],array('cause_minister'))){ //事业部长
+            $where = " a.match_id = {$row['match_id']} and a.indirect_manager_id = {$current_user->ID}  ";
+        }
 
         //获取对应数据列表
         $sql = "select SQL_CALC_FOUND_ROWS a.*,
@@ -5562,7 +5589,7 @@ class Student_Ajax
                 elseif ($v['indirect_referee_id'] == $current_user->ID){
                     $list['profit_income'] = $v['indirect_referee_income'];
                 }
-                if($row['income_type'] == 'director_grading'){
+                if(in_array($row['income_type'],array('director_grading','director_match','recommend_qualified'))){
                     if ($v['person_liable_id'] == $current_user->ID){
                         $list['profit_income'] = $v['person_liable_income'];
                     }

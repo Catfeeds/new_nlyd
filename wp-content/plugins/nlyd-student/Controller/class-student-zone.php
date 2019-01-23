@@ -1331,7 +1331,9 @@ class Student_Zone
      */
     public function get_stream_total(){
         global $wpdb,$current_user;
-        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type != 'undertake' and income_status = 2 ";
+        $where = "user_id = {$current_user->ID} and income_type not in ('open_course','open_grading','cause_manager','cause_minister','extract') and income_status = 1  ";
+        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where {$where} ";
+        //print_r($sql3);
         return $wpdb->get_var($sql3);
     }
 
