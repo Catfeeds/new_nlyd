@@ -166,7 +166,7 @@ jQuery(function($) {
                                         pay_type:pay_type,
                                         _wpnonce:$('#inputPay').val(),
                                         serialnumber:serialnumber,
-                                        match_id:$.Request('grad_id')
+                                        match_id:$.Request('id')
                                     }
                                     // alert(pay_type)
                                     if(pay_type){
