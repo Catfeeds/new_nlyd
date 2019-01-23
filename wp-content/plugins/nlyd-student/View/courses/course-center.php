@@ -44,7 +44,7 @@
                 <div>
                     <div class="course_city width-padding width-padding-pc">
                         <span class="c_black"><?=__('您所在的位置', 'nlyd-student')?>：</span>
-                        <a class="addres c_blue mr_10" id="areaSelect"><?=__('请选择', 'nlyd-student')?></a>
+                        <a class="addres c_blue mr_10" id="areaSelect"><?=__($city, 'nlyd-student')?></a>
                     </div>
                     <div id="flowMyAdress">
                     
@@ -62,13 +62,11 @@
         </div>
     </div>
 </div>
-<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
 <script>
 jQuery(function($) { 
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
-        var userAddress=returnCitySN["cname"] || "<?=__('请选择', 'nlyd-student')?>";
         var mySwiper = new Swiper('.swiper-container', {
             loop : true,
             autoplay:{
@@ -141,7 +139,7 @@ jQuery(function($) {
                 }
             });
         }
-        pagation('flowMyAdress',1,userAddress)
+        pagation('flowMyAdress',1,'')
 
     
         // //定义一个空的位置构造函数
@@ -210,7 +208,6 @@ jQuery(function($) {
 
         var area=$.validationLayui.allArea.area;//省市区三级联动
         var posiotionarea=[0,0,0];//初始化位置，高亮展示
-        $('#areaSelect').text(userAddress)
         if($('#areaSelect').length>0){
             $.each(area,function(i1,v1){
                 $.each(v1.childs,function(i2,v2){
@@ -236,6 +233,7 @@ jQuery(function($) {
                     var old= $('#areaSelect').text();
                     var three=data[2]['value'].length==0 ? '' : '-'+data[2]['value']
                     var text=data[0]['value']+'-'+data[1]['value']+three;
+                    var dataText=data[0]['value']+data[1]['value']+data[2]['value'];
                     $('#areaSelect').text(text);
                     if(old!==text){
                         $('#flowMyAdress').empty()

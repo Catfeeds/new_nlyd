@@ -34,8 +34,14 @@ class Student_Courses
      * 课程首页
      */
      public function index(){
-        $view = student_view_path.CONTROLLER.'/course-center.php';
-        load_view_template($view);
+         $location = get_area();
+         if(!empty($location['data']['ip'] != '127.0.0.1')){
+             $location = $location['data'];
+             $city = $location['region'] ? $location['region'] : $location['region'].$location['city'];
+         }
+
+         $view = student_view_path.CONTROLLER.'/course-center.php';
+         load_view_template($view,array('city'=>$city));
     }
     /**
      * 训练中心课程展示
