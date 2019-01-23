@@ -451,7 +451,7 @@ class Student_Payment {
                             if($coach_id){
                                 $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$row['coach_id'],'apply_status'=>2),array('id'=>$coach_id));
                             }else{
-                                $wpdb->insert(array('user_id'=>$coach_id,'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
+                                $wpdb->insert($wpdb->prefix.'my_coach',array('user_id'=>$order['user_id'],'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
                             }
                         }
                         //print_r($insert);die;
@@ -857,7 +857,7 @@ class Student_Payment {
                     if($coach_id){
                         $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$row['coach_id'],'apply_status'=>2),array('id'=>$coach_id));
                     }else{
-                        $wpdb->insert(array('user_id'=>$coach_id,'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
+                        $wpdb->insert($wpdb->prefix.'my_coach',array('user_id'=>$order['user_id'],'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
                     }
                     //print_r($coach_id);die;
                 }
@@ -1173,7 +1173,7 @@ class Student_Payment {
                                 if($coach_id){
                                     $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$row['coach_id'],'apply_status'=>2),array('id'=>$coach_id));
                                 }else{
-                                    $wpdb->insert(array('user_id'=>$coach_id,'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
+                                    $wpdb->insert($wpdb->prefix.'my_coach',array('user_id'=>$order['user_id'],'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
                                 }
                             }
                             //print_r($insert);die;

@@ -27,8 +27,6 @@ class Student_Courses
         add_shortcode('course-home',array($this,$action));
     }
 
-
-
     
     /**
      * 课程首页
@@ -38,6 +36,8 @@ class Student_Courses
          if(!empty($location['data']['ip'] != '127.0.0.1')){
              $location = $location['data'];
              $city = $location['region'] ? $location['region'] : $location['region'].$location['city'];
+         }else{
+             $city = '请选择';
          }
 
          $view = student_view_path.CONTROLLER.'/course-center.php';
