@@ -208,7 +208,6 @@ class Student_Account extends Student_Home
         load_view_template($view, array('row' => $row));
 
     }
-
     /**
      *地址列表
      */
@@ -333,11 +332,12 @@ class Student_Account extends Student_Home
             wp_localize_script('student-recentMatch','_recentMatch',[
                 'stop'=>__('报名结束','nlyd-student'),
                 'date'=>__('开赛日期','nlyd-student'),
+                'date_kaoji'=>__('考级日期','nlyd-student'),
                 'address'=>__('比赛地点','nlyd-student'),
                 'address_kaoji'=>__('考级地点','nlyd-student'),
                 'money'=>__('报名费用','nlyd-student'),
                 'end'=>__('报名截止','nlyd-student'),
-                'player'=>__('已报选手','nlyd-student'),
+                'player'=>__('已报人数','nlyd-student'),
                 'look'=>__('查看详情','nlyd-student'),
                 'must'=>__('参赛须知','nlyd-student'),
                 'must_kaoji'=>__('考级须知','nlyd-student'),
@@ -347,7 +347,10 @@ class Student_Account extends Student_Home
             wp_register_style( 'my-student-matchList', student_css_url.'matchList.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchList' );
         }
-
+        if(ACTION=='course'){//我的比赛
+            wp_register_style( 'my-student-matchList', student_css_url.'matchList.css',array('my-student') );
+            wp_enqueue_style( 'my-student-matchList' );
+        }
         if(ACTION=='address'){//地址列表
             // wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
             // wp_enqueue_script( 'student-mTouch' );
@@ -386,12 +389,6 @@ class Student_Account extends Student_Home
             wp_register_style( 'my-student-match', student_css_url.'match.css',array('my-student') );
             wp_enqueue_style( 'my-student-match' );
         }
-
-        if(ACTION == 'course'){//我的课程
-            // wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
-            // wp_enqueue_script( 'student-mTouch' );
-        }
-
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
     }

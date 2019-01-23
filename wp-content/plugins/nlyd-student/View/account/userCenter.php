@@ -474,8 +474,8 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
         var canvas;
         if (cropper) {
         canvas = cropper.getCroppedCanvas({
-            width: 160,
-            height: 160,
+            width: 600,
+            height: 600,
         });
         avatar.src = canvas.toDataURL();
         if (!HTMLCanvasElement.prototype.toBlob) {//针对ios不兼容toBlob（）

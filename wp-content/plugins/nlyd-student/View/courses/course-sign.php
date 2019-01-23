@@ -202,7 +202,7 @@ jQuery(function($) {
                         // if(res.data.info=="请先实名认证"){
                         if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
                             setTimeout(function(){
-                                window.location.href=window.home_url+'/account/info/course_id/'+$.Request('id');
+                                window.location.href=window.home_url+'/account/info/courses_id/'+$.Request('id');
                             }, 1000);
                         }else{
                             $.alerts(res.data.info)

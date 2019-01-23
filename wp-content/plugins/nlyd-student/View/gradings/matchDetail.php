@@ -114,14 +114,18 @@
                             <a class="a-btn a-btn-table get_footer" href="javascript:void(0);"></div><?=__('考级中', 'nlyd-student')?></div></a>
                             <?php } ?>
                         <?php }else{ ?>
-                            <div class="a-btn two get_footer">
-                                <?php if($match['status'] == -3 || $match['status'] == 2):?>
+                            
+                                
+                            <?php if( $match['status'] == 2):?>
+                                <div class="a-btn two get_footer">
                                     <a class="a-two left c_white" href="<?=home_url('/gradings/record/grad_id/'.$_GET['grad_id']);?>"><div><?=__('查看成绩', 'nlyd-student')?></div></a>
-                                <?php endif;?>
-                                <?php if( $match['status'] == 2):?>
                                     <a class="a-two right c_white" href="<?=home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id']);?>"><div><?=__('进入考级', 'nlyd-student')?></div></a>
-                                <?php endif;?>
-                            </div>
+                                </div>
+                            <?php endif;?>
+                           
+                            <?php if($match['status'] == -3):?>
+                            <a class="a-btn a-btn-table get_footer" href="<?=home_url('/gradings/record/grad_id/'.$_GET['grad_id']);?>"><div><?=__('查看成绩', 'nlyd-student')?></div></a>
+                            <?php endif;?>
                         <?php } ?>
 
                         <?php if($match['is_me'] == 'y' && $match['status'] == -2 && $match['down_time'] > 0):?>
