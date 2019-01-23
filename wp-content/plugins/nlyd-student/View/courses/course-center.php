@@ -62,7 +62,6 @@
         </div>
     </div>
 </div>
-
 <script>
 jQuery(function($) { 
     layui.use(['element','flow'], function(){
@@ -234,6 +233,7 @@ jQuery(function($) {
                     var old= $('#areaSelect').text();
                     var three=data[2]['value'].length==0 ? '' : '-'+data[2]['value']
                     var text=data[0]['value']+'-'+data[1]['value']+three;
+                    var dataText=data[0]['value']+data[1]['value']+data[2]['value'];
                     $('#areaSelect').text(text);
                     if(old!==text){
                         $('#flowMyAdress').empty()
