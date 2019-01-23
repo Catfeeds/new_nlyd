@@ -1,3 +1,12 @@
+<div class="nl-cropper-bg">
+    <div class="img-container">
+        <img id="image" src="">
+    </div>
+    <div class="nl-cropper-footer">
+        <button type="button" class="pull-left" id='crop-cancel'><?=__('取消', 'nlyd-student')?></button>
+        <button type="button" class="pull-right" id="crop"><?=__('确认', 'nlyd-student')?></button>
+    </div>
+</div>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -136,7 +145,7 @@
     </div>
 </div>
 <input style="display:none;" type="file" id="img-zoos0" data-this="img-zoos0" value="" accept="image/*"/>
-<input style="display:none;" type="file" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
+<!-- <input style="display:none;" type="file" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/> -->
 <input style="display:none;" type="file" id="img-zoos2" data-this="img-zoos2" value="" accept="image/*"/>
 <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
 <script>
@@ -370,19 +379,15 @@ jQuery(document).ready(function($) {
             $('#'+id).click()
         })
         var imgs=[];//身份证
-        var imgs1=[];//收款账户
         var imgs2=[];//寸照
         $('.img-zoos').each(function(){
             var _this=$(this);
-            if(_this.hasClass('img-zoos1')){//微信
-                if(_this.find('.post-img.no-dash').length>=1){
-                    _this.find('.post-img.dash').css('display','none')
-                }
-            }else if(_this.hasClass('img-zoos0')){//身份证
+            if(_this.hasClass('img-zoos0')){//身份证
                 if(_this.find('.post-img.no-dash').length>=2){
                     _this.find('.post-img.dash').css('display','none')
                 }
-            }else if(_this.hasClass('img-zoos2')){//寸照
+            }
+            else if(_this.hasClass('img-zoos2')){//寸照
                 if(_this.find('.post-img.no-dash').length>=1){
                     _this.find('.post-img.dash').css('display','none')
                 }
@@ -418,15 +423,6 @@ jQuery(document).ready(function($) {
                     if($('.'+className+' .post-img.no-dash').length>=2){
                         $('.'+className+' .post-img.dash').css('display','none')
                     }
-                }else if(className=="img-zoos1"){
-                    if($('.'+className+' .post-img.no-dash').length>=1){
-                        $('.'+className+' .post-img.dash').css('display','none')
-                    }
-                }
-                else if(className=="img-zoos2"){
-                    if($('.'+className+' .post-img.no-dash').length>=1){
-                        $('.'+className+' .post-img.dash').css('display','none')
-                    }
                 }
                 $(e.target).val('')
             });
@@ -435,12 +431,6 @@ jQuery(document).ready(function($) {
         $("#img-zoos0").change(function(e) {
             changes(e,$("#img-zoos0"),imgs)
         });
-        $("#img-zoos1").change(function(e) {
-            changes(e,$("#img-zoos1"),imgs1)
-        });
-        $("#img-zoos2").change(function(e) {
-            changes(e,$("#img-zoos2"),imgs2)
-        });
         $('.img-zoos').on('click','.del',function(){//删除图片
             var _this=$(this);
             var index =_this.parents('.post-img').index();
@@ -448,9 +438,11 @@ jQuery(document).ready(function($) {
             _this.parents('.post-img').remove()
             if(_this.parents('.img-zoos').hasClass('img-zoos0')){
                 imgs.splice(index, 1);
-            }else if(_this.parents('.img-zoos').hasClass('img-zoos1')){
-                imgs1.splice(index, 1);
-            }else if(_this.parents('.img-zoos').hasClass('img-zoos1')){
+            }
+            // else if(_this.parents('.img-zoos').hasClass('img-zoos1')){
+            //     imgs1.splice(index, 1);
+            // }
+            else if(_this.parents('.img-zoos').hasClass('img-zoos2')){
                 imgs2.splice(index, 1);
             }
             layer.photos({//图片预览
@@ -458,6 +450,76 @@ jQuery(document).ready(function($) {
                 anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
             }) 
         })
+//-------------------------------------剪裁寸照-------------------------------------------
+    var avatar = $('#avatar');
+    var image = $('#image');
+    var input = $('#img-zoos2');
+    var bg=$('.nl-cropper-bg');
+    var cropper;
+    input.change(function (e) {
+        var files = e.target.files;
+        var done = function (url) {
+            input.val('');
+            image.attr('src',url);
+            bg.addClass('bg-show')
+            cropper = new Cropper(image[0], {
+                aspectRatio: 1,
+            });
+        };
+        var reader;
+        var file;
+        var url;
+
+        if (files && files.length > 0) {
+            file = files[0];
+            reader = new FileReader();
+            reader.onload = function (ev) {
+                done(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    $('body').on('click','#crop-cancel',function(){
+            bg.removeClass('bg-show')
+            cropper.destroy();
+            cropper = null;
+    })
+    $('body').on('click','#crop',function(){
+        var canvas;
+        if (cropper) {
+        canvas = cropper.getCroppedCanvas({
+            width: 160,
+            height: 160,
+        });
+        avatar.src = canvas.toDataURL();
+        var imgBase64 = canvas.toDataURL();;    //存储转换的base64编码
+            imgs2.unshift(imgBase64)
+                // console.log(imgBase64);  
+                var dom='<div class="post-img no-dash" style="top:3px">'
+                        +'<div class="img-zoo img-box">'
+                            +'<img src="'+imgBase64+'"/>'
+                        +'</div>'
+                        +'<div class="del">'
+                            +'<i class="iconfont">&#xe633;</i>'
+                        +'</div>'
+                    +'</div>'
+                $('.img-zoos2 .form-input-label').after(dom)
+                layer.photos({//图片预览
+                    photos: '.img-zoos',
+                    anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                })
+               
+                if($('.img-zoos2 .post-img.no-dash').length>=1){
+                    $('.img-zoos2 .post-img.dash').css('display','none')
+                }
+                
+                $("#img-zoos2").val('')
+                bg.removeClass('bg-show')
+                cropper.destroy();
+                cropper = null;
+        }
+    });
         layui.use(['form'], function(){
             var form = layui.form
             form.render();

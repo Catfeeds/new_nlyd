@@ -17,7 +17,6 @@
         <button type="button" class="pull-left" id='crop-cancel'><?=__('取消', 'nlyd-student')?></button>
         <button type="button" class="pull-right" id="crop"><?=__('确认', 'nlyd-student')?></button>
     </div>
-
 </div>
 <div class="layui-fluid">
     <div class="layui-row">
