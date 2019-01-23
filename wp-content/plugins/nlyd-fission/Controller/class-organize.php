@@ -1186,6 +1186,7 @@ class Organize{
             $whereProvicone = isset($_POST['whereProvicone']) ? trim($_POST['whereProvicone']) : '';
             $whereCity = isset($_POST['whereCity']) ? trim($_POST['whereCity']) : '';
             $whereArea = isset($_POST['whereArea']) ? trim($_POST['whereArea']) : '';
+            $bank_card_name = isset($_POST['bank_card_name']) ? trim($_POST['bank_card_name']) : '';
             $zone_city = '';
             if($whereProvicone != '' && $whereProvicone != '-1') $zone_city .= $whereProvicone;
             if($whereCity != '' && $whereCity != '-1') $zone_city .= '-'.$whereCity;
@@ -1228,7 +1229,13 @@ class Organize{
             if($zone_match_type !== 2) {
                 $is_double = 0;
             }else{
-                if($is_double < 1) $error_msg .= '<br >请填选择区县';
+//                if($is_double < 1) $error_msg .= '<br >请填选择区县';
+            }
+            if($zone_match_type === 0){
+                $is_double = 0;
+                $zone_title = '';
+            }else{
+                $error_msg .= '<br >请填选择区县';
             }
             if($error_msg == ''){
                 $insertData = [
@@ -1236,6 +1243,7 @@ class Organize{
                     'user_id' => $user_id,
                     'referee_id' => $referee_id,
                     'zone_name' => $zone_title,
+                    'bank_card_name' => $bank_card_name,
                     'zone_address' => $zone_address,
                     'zone_city' => $zone_city,
                     'business_licence' => $business_licence,
@@ -1483,7 +1491,7 @@ class Organize{
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,zm.is_able,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
                    zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,um3.meta_value AS chairman_real_name,um4.meta_value AS secretary_real_name,zm.apply_id,zm.created_time,
-                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city,zm.term_time,zm.is_double,zm.zone_number 
+                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city,zm.term_time,zm.is_double,zm.zone_number,zm.bank_card_name 
                    FROM {$wpdb->prefix}zone_meta AS zm 
                    LEFT JOIN {$wpdb->users} AS u ON u.ID=zm.user_id AND u.ID!='' 
                    LEFT JOIN {$wpdb->users} AS u2 ON u2.ID=zm.referee_id AND u2.ID!='' 
@@ -1666,6 +1674,7 @@ class Organize{
                             <select name="zone_match_type" id="zone_match_type">
                                 <option <?=$row['zone_match_type']=='1'?'selected="selected"':''?> value="1">战队精英赛</option>
                                 <option <?=$row['zone_match_type']=='2'?'selected="selected"':''?> value="2">城市赛</option>
+                                <option <?=$row['zone_match_type']=='0'?'selected="selected"':''?> value="0">其它</option>
                             </select>
                         </td>
                     </tr>
@@ -1740,6 +1749,12 @@ class Organize{
                         <th scope="row"><label for="opening_bank">开户行 </label></th>
                         <td>
                             <input type="text" name="opening_bank" value="<?=$row['opening_bank']?>">
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="bank_card_name">开户行名称 </label></th>
+                        <td>
+                            <input type="text" name="bank_card_name" value="<?=$row['bank_card_name']?>">
                         </td>
                     </tr>
                     <tr class="">
@@ -3630,7 +3645,9 @@ class Organize{
     /**
      * 获取机构名称
      */
-    public function echoZoneName($alias = 'match',$zone_city='',$zone_name='',$zone_match_type=0,$type=''){
+    public function echoZoneName($alias = 'match',$zone_city='',$zone_name='',$zone_match_type=0,$type='',$color = true){
+        $span1 = $color ? '<span style="color: #c40c0f">':'';
+        $span2 = $color ? '</span>':'';
         switch ($alias){
             case 'match':
                 $city_arr = str2arr($zone_city,'-');
@@ -3641,13 +3658,13 @@ class Organize{
                 }else{
                     $city = $city_arr[0];
                 }
-                $name = date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$zone_name.$city.'</span>'.($zone_match_type=='1'?'战队精英赛':'城市赛');
+                $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
                 break;
             case 'trains':
-                $name = 'IISC'. '<span style="color: #c40c0f">' .$zone_name.'</span>'.'国际脑力训练中心';
+                $name = 'IISC'. $span1 .$zone_name.$span2.'国际脑力训练中心';
                 break;
             case 'test':
-                $name = 'IISC'. '<span style="color: #c40c0f">' .$zone_name.'</span>'.'国际脑力测评中心';
+                $name = 'IISC'. $span1 .$zone_name.$span2.'国际脑力测评中心';
                 break;
             default:
                 $name = '';

@@ -258,9 +258,14 @@ class Fission_Ajax
         $rows = [];
         if($searchStr != ''){
             global $wpdb;
-            $rows = $wpdb->get_results("SELECT zm.user_id AS id,zm.zone_name AS text FROM {$wpdb->prefix}zone_meta AS zm
-                    LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.chairman_id AND um.meta_key='user_real_name'
-                    WHERE (zm.zone_name LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%') AND zm.user_id!='' AND zm.user_status=1");
+            $rows = $wpdb->get_results("SELECT zm.user_id AS id,zm.zone_city AS text,zt.zone_type_alias,zm.zone_name,zm.zone_match_type FROM {$wpdb->prefix}zone_meta AS zm
+                    LEFT JOIN {$wpdb->prefix}zone_type AS zt ON zt.id=zm.type_id
+                    WHERE (zm.zone_city LIKE '%{$searchStr}%' OR zm.zone_number LIKE '%{$searchStr}%') AND zm.user_id!='' AND zm.user_status=1", ARRAY_A);
+        }
+//        require_once WP_CONTENT_DIR.'/plugins/nlyd-fission/Controller/class-organize.php';
+        $organizeClass = new \Organize();
+        foreach ($rows as &$row){
+            $row['text'] = $organizeClass->echoZoneName($row['zone_type_alias'], $row['zone_city'],$row['zone_name'],$row['zone_match_type'], 'get', false);
         }
         if($type == 'all_base'){
             $rows[] = ['id' => 0, 'text' => '平台'];

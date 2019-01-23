@@ -280,7 +280,7 @@ class Student_Payment {
             }
         });
 
-        if($queryRes && $queryRes['data']['trade_state'] == 'SUCCESS'){
+        if($queryRes && $queryRes['data']['trade_state'] == 'SUCCESS' && $queryRes['order']['order_type']){
 
             // TODO 处理业务逻辑
             $serialnumber = $queryRes['notifyData']['out_trade_no'];
@@ -296,12 +296,18 @@ class Student_Payment {
                 case 3://课程订单
                     $pay_status = 4;
                     break;
+                default :
+                    $pay_status = 99;
+            }
+            if($pay_status == 99){
+                $this->payClass->writeLog(json_encode($queryRes['order']), 'order_type异常');
             }
             $updateData = [
                 'pay_status' => $pay_status,
                 'pay_type' => 'wx',
                 'pay_lowdown' => serialize($queryRes['notifyData'])
             ];
+            $wpdb->query('START TRANSACTION');
             $bool = $wpdb->update($wpdb->prefix.'order', $updateData, array('serialnumber' => $serialnumber));
             if($bool){
                 /*****************收益分配start*******************/
@@ -459,7 +465,7 @@ class Student_Payment {
                         //print_r($insert);die;
                         $insert['created_time'] = get_time('mysql');
 
-                        $wpdb->query('START TRANSACTION');
+
                         $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
                         if(!empty($insert['sponsor_id']) && $money4 > 0){
@@ -546,18 +552,25 @@ class Student_Payment {
                         //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e.'&&'. $x.'&&'. $y);die;
                         if($a && $b && $c && $d && $e && $x && $y){
                             $wpdb->query('COMMIT');
+                            echo 'SUCCESS';
+                            exit;
                         }else{
                             $wpdb->query('ROLLBACK');
+                            echo 'FALL';
+                            exit;
                         }
                     }
                 }
 
                 /*****************收益分配end*******************/
+                $wpdb->query('COMMIT');
                 echo 'SUCCESS';
             }else{
+                $wpdb->query('ROLLBACK');
                 echo 'FALL';
             }
-        }else{
+        }
+        else{
             echo 'FALL';
         }
     }
