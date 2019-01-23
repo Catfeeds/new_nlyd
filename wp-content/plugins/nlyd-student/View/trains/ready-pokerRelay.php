@@ -161,11 +161,6 @@ jQuery(function($) {
         }
     // var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
     function submit(time){//提交答案
-        // $('#load').css({
-        //         'display':'block',
-        //         'opacity': '1',
-        //         'visibility': 'visible',
-        //     })
         var my_answer=[];
         var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
         var data={
