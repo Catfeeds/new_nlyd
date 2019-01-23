@@ -77,9 +77,9 @@ jQuery(function($) {
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    var rightBtn='<a href="'+window.home_url+'/courses/courseSign/center_id/'+$.Request('id')+'id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("抢占名额", "nlyd-student")?></span></a>'
+                                    var rightBtn='<a href="'+window.home_url+'/courses/courseSign/center_id/'+$.Request('id')+'/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("抢占名额", "nlyd-student")?></span></a>'
                                     if(id=="-3"){
-                                        rightBtn='<a href="'+window.home_url+'/courses/courseEnd/center_id/'+$.Request('id')+'id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("结课成绩", "nlyd-student")?></span></a>'
+                                        rightBtn='<a href="'+window.home_url+'/courses/courseEnd/center_id/'+$.Request('id')+'/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("结课成绩", "nlyd-student")?></span></a>'
                                     }else{
                                         if (v.order_id) {//已报名
                                             rightBtn='<a class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__("您已抢占名额", "nlyd-student")?></span></a>'

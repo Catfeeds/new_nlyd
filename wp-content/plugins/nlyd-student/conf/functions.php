@@ -47,7 +47,7 @@ function income_stream_array(){
         'recommend_trains_zone'=>array('title'=>'推荐训练中心'),
         'recommend_test_zone'=>array('title'=>'推荐测评中心'),
         'recommend_course'=>array('title'=>'推荐购课'),
-        'recommend_qualified'=>array('title'=>'推荐达标'),
+        'recommend_qualified'=>array('title'=>'购课补贴'),
         'grading_qualified'=>array('title'=>'考级达标'),
         'cause_manager'=>array('title'=>'事业管理员'),
         'cause_minister'=>array('title'=>'事业部长'),
