@@ -166,7 +166,8 @@ jQuery(function($) {
                                         pay_type:pay_type,
                                         _wpnonce:$('#inputPay').val(),
                                         serialnumber:serialnumber,
-                                        match_id:$.Request('id')
+                                        match_id:$.Request('id'),
+                                        center_id:$.Request('center_id')
                                     }
                                     // alert(pay_type)
                                     if(pay_type){

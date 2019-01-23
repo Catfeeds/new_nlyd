@@ -103,43 +103,27 @@ class Student_Directory
             $view = student_view_path.CONTROLLER.'/directory-remember.php';
             load_view_template($view);
         }else{
-             $file_name = student_view_path.CONTROLLER.'/static/remember_static.html';
-             // && filemtime($file_name)+30>=time()
-             if(file_exists($file_name)){
-                 echo file_get_contents($file_name);
-                 exit;
-             }else{
-                 global $wpdb;
-                 $res = $wpdb->get_results("SELECT user_id,`memory` FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `memory`>0", ARRAY_A);
-                 $rows = [];
-                 $max = 1;
-                 foreach ($res as $k => $row){
-                     $user_meta = get_user_meta($row['user_id']);
-                     $row['userID'] = isset($user_meta['user_ID']) ? $user_meta['user_ID'][0] : '';
-                     $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
-                     $row['user_head'] = isset($user_meta['user_head']) ? $user_meta['user_head'][0] : '';
-                     $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
-                     if($row['real_name'] == '') continue;
-                     if(isset($rows[$row['memory']])){
-                         $rows[intval($row['memory'])][] = $row;
-                     }else{
-                         $rows[intval($row['memory'])] = [0 => $row];
-                     }
-                     if($row['memory'] > $max) $max = $row['memory'];
-                 }
-
-                 ksort($rows);
-                 ob_start();//启动ob缓存
-                 ob_clean();
-                 $view = student_view_path.CONTROLLER.'/directory-remember_pc.php';
-                 load_view_template($view, ['rows' => $rows]);
-                 $ob_str=ob_get_contents();
-                 if(!is_dir(student_view_path.CONTROLLER.'/static')){
-                    mkdir(student_view_path.CONTROLLER.'/static');
-                 }
-    //             file_put_contents($file_name,$ob_str);
-             }
-
+            $this->makStaticHtml('remember_static.html', 'directory-remember_pc.php', 'memory', 'directoryRememberTime', function (){
+                global $wpdb;
+                $res = $wpdb->get_results("SELECT user_id,`memory` FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `memory`>0", ARRAY_A);
+                $rows = [];
+                foreach ($res as $k => $row){
+                    $user_meta = get_user_meta($row['user_id']);
+                    $row['userID'] = isset($user_meta['user_ID']) ? $user_meta['user_ID'][0] : '';
+                    $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
+                    $row['real_age'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_age'])?unserialize($user_meta['user_real_name'][0])['real_age']:'') : '';
+                    $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
+                    $row['user_nationality'] = $user_meta['user_nationality_pic'][0];
+                    if($row['real_name'] == '') continue;
+                    if(isset($rows[$row['memory']])){
+                        $rows[intval($row['memory'])][] = $row;
+                    }else{
+                        $rows[intval($row['memory'])] = [0 => $row];
+                    }
+                }
+                ksort($rows);
+                return ['rows' => $rows];
+            });
         }
     }
         /**
@@ -149,10 +133,23 @@ class Student_Directory
         if(is_mobile()){
             $view = student_view_path.CONTROLLER.'/directory-read.php';
             load_view_template($view);
-
         }else{
-            $view = student_view_path.CONTROLLER.'/directory-read_pc.php';
-            load_view_template($view);
+            $this->makStaticHtml('read_static.html', 'directory-read_pc.php', 'reading', 'readRememberTime', function (){
+                global $wpdb;
+                $res = $wpdb->get_results("SELECT user_id,`read` FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `read`>0", ARRAY_A);
+                $rows = [];
+                foreach ($res as $k => $row){
+                    $user_meta = get_user_meta($row['user_id']);
+                    $row['userID'] = isset($user_meta['user_ID']) ? $user_meta['user_ID'][0] : '';
+                    $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
+                    $row['real_age'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_age'])?unserialize($user_meta['user_real_name'][0])['real_age']:'') : '';
+                    $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
+                    $row['user_nationality'] = $user_meta['user_nationality_pic'][0];
+                    if($row['real_name'] == '') continue;
+                    $rows[] = $row;
+                }
+                return ['rows' => $rows];
+            });
         }
     }
         /**
@@ -163,22 +160,68 @@ class Student_Directory
              $view = student_view_path.CONTROLLER.'/directory-calculation.php';
              load_view_template($view);
          }else{
-             $view = student_view_path.CONTROLLER.'/directory-calculation_pc.php';
-             load_view_template($view);
+             $this->makStaticHtml('calculation_static.html', 'directory-calculation_pc.php', 'arithmetic', 'calculationRememberTime', function (){
+                 global $wpdb;
+                 $res = $wpdb->get_results("SELECT user_id,`compute` FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `compute`>0", ARRAY_A);
+                 $rows = [];
+                 foreach ($res as $k => $row){
+                     $user_meta = get_user_meta($row['user_id']);
+                     $row['userID'] = isset($user_meta['user_ID']) ? $user_meta['user_ID'][0] : '';
+                     $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
+                     $row['real_age'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_age'])?unserialize($user_meta['user_real_name'][0])['real_age']:'') : '';
+                     $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
+                     $row['user_nationality'] = $user_meta['user_nationality_pic'][0];
+                     if($row['real_name'] == '') continue;
+                     $rows[] = $row;
+                 }
+                 return ['rows' => $rows];
+             });
          }
     }
 
     /**
+     * $cate_alias memory(记) reading(读) arithmetic(算)
      * 静态页生成
      */
-    public function makStaticHtml($dir, $file_name, $data){
-        ob_start();//启动ob缓存
-        load_view_template($file_name.'/'.$file_name,['data' => $data]);
-        $ob_str=ob_get_contents();
+    public function makStaticHtml($file_name,$view_name, $cate_alias, $conf_name,$getDataCollback){
+        $dir = student_view_path.CONTROLLER.'/static';
         if(!is_dir($dir)){
             mkdir($dir);
         }
-        file_put_contents($file_name.'/'.$file_name,$ob_str);
+        $file_name = $dir.'/'.$file_name;
+        // && filemtime($file_name)+30>=time()
+        $json_file = $dir.'/directory.json';
+        global $wpdb;
+        $cate_id = 0;
+        $categoryArr = getCategory();
+        foreach ($categoryArr as $cv){
+            if($cv['alis'] == $cate_alias){
+                $cate_id = $cv['ID'];
+                break;
+            }
+        }
+        //查询最后一次过级时间
+        $last_time = $wpdb->get_var("SELECT MAX(gl.created_time) FROM {$wpdb->prefix}grading_logs AS gl
+                         LEFT JOIN {$wpdb->prefix}grading_meta AS gm ON gm.grading_id=gl.grading_id 
+                         WHERE gl.grading_result=1 AND gm.category_id='{$cate_id}'");
+        if(file_exists($json_file)){
+            $conf = json_decode(file_get_contents($json_file), true);
+        }else{
+            $conf[$conf_name] = '';
+        }
+        if($conf[$conf_name] == $last_time && file_exists($file_name)){
+            echo file_get_contents($file_name);
+            exit;
+        }else{
+            $data = $getDataCollback();
+            ob_start();//启动ob缓存
+            ob_clean();
+            load_view_template(student_view_path.CONTROLLER.'/'.$view_name, $data);
+            $ob_str=ob_get_contents();
+            $conf[$conf_name] = $last_time;
+            file_put_contents($file_name,$ob_str);
+            file_put_contents($json_file, json_encode($conf));
+        }
     }
 
     /**
