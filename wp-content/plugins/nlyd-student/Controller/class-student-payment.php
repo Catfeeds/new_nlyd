@@ -262,7 +262,6 @@ class Student_Payment {
 //  <trade_type><![CDATA[JSAPI]]></trade_type>
 //  <transaction_id><![CDATA[1004400740201409030005092168]]></transaction_id>
 //</xml>';
-
         global $wpdb;
         $queryRes = $this->payClass->notify(file_get_contents("php://input"), function ($out_trade_no){
             //获取订单信息回调,用于验证签名
@@ -271,7 +270,6 @@ class Student_Payment {
                 'SELECT serialnumber,match_id,user_id,fullname,sub_centres_id,telephone,order_type,address,pay_type,cost,pay_status,created_time FROM '
                 .$wpdb->prefix.'order WHERE serialnumber='.$out_trade_no.' AND pay_status=1', ARRAY_A);
             if($order){
-
                 $param = $this->getWxParam($order);
                 $param['order_type'] = $order['order_type'];
                 return $param;
@@ -279,9 +277,7 @@ class Student_Payment {
                 return false;
             }
         });
-
         if($queryRes && $queryRes['data']['trade_state'] == 'SUCCESS' && $queryRes['order']['order_type']){
-
             // TODO 处理业务逻辑
             $serialnumber = $queryRes['notifyData']['out_trade_no'];
 //            file_put_contents('aax.txt',json_encode($queryRes['order']));
@@ -299,15 +295,11 @@ class Student_Payment {
                 default :
                     $pay_status = 99;
             }
-            if($pay_status == 99){
-                $this->payClass->writeLog(json_encode($queryRes['order']), 'order_type异常');
-            }
             $updateData = [
                 'pay_status' => $pay_status,
                 'pay_type' => 'wx',
                 'pay_lowdown' => serialize($queryRes['notifyData'])
             ];
-            $wpdb->query('START TRANSACTION');
             $bool = $wpdb->update($wpdb->prefix.'order', $updateData, array('serialnumber' => $serialnumber));
             if($bool){
                 /*****************收益分配start*******************/
@@ -465,7 +457,7 @@ class Student_Payment {
                         //print_r($insert);die;
                         $insert['created_time'] = get_time('mysql');
 
-
+                        $wpdb->query('START TRANSACTION');
                         $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
                         if(!empty($insert['sponsor_id']) && $money4 > 0){
@@ -552,21 +544,15 @@ class Student_Payment {
                         //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e.'&&'. $x.'&&'. $y);die;
                         if($a && $b && $c && $d && $e && $x && $y){
                             $wpdb->query('COMMIT');
-                            echo 'SUCCESS';
-                            exit;
                         }else{
                             $wpdb->query('ROLLBACK');
-                            echo 'FALL';
-                            exit;
                         }
                     }
                 }
 
                 /*****************收益分配end*******************/
-                $wpdb->query('COMMIT');
                 echo 'SUCCESS';
             }else{
-                $wpdb->query('ROLLBACK');
                 echo 'FALL';
             }
         }
@@ -1036,7 +1022,6 @@ class Student_Payment {
                     'pay_type' => 'zfb',
                     'pay_lowdown' => serialize($data)
                 ];
-                $wpdb->query('START TRANSACTION');
                 $result = $wpdb->update($wpdb->prefix.'order', $updateData, array('id' => $order['id']));
                 if($result){
                     /*****************收益分配start*******************/
@@ -1195,6 +1180,7 @@ class Student_Payment {
                             $insert['created_time'] = get_time('mysql');
 
 
+                            $wpdb->query('START TRANSACTION');
                             $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
                             if(!empty($insert['sponsor_id']) && $money4 > 0){
@@ -1281,16 +1267,13 @@ class Student_Payment {
                             //print_r($a .'&&'. $b .'&&'. $c .'&&'. $d .'&&'. $e.'&&'. $x.'&&'. $y);die;
                             if($a && $b && $c && $d && $e && $x && $y){
                                 $wpdb->query('COMMIT');
-                                return true;
                             }else{
                                 $wpdb->query('ROLLBACK');
-                                return false;
                             }
                         }
                     }
 
                     /*****************收益分配end*******************/
-                    $wpdb->query('COMMIT');
                     return $result;
                 }
             }else{
