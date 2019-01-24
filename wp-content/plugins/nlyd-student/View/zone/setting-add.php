@@ -45,7 +45,7 @@
                 var _this=$(this);
                 if(!_this.hasClass('disabled')){
                     $.ajax({
-                        data: data.filed,
+                        data: data.field,
                         beforeSend:function(XMLHttpRequest){
                             _this.addClass('disabled')
                         },
