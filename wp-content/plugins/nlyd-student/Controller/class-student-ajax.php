@@ -6621,6 +6621,9 @@ class Student_Ajax
         $page = isset($_POST['page'])?$_POST['page']:1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
+
+        //if($_POST['city'])
+
         if(!empty($_POST['city'])){
             $where = " and a.zone_city like '%{$_POST['city']}%' ";
         }

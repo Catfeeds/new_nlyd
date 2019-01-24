@@ -7,6 +7,7 @@
  * Date: 2018/7/16
  * Time: 14:38
  */
+use library\IpLocation;
 class Student_Courses
 {
 
@@ -32,10 +33,15 @@ class Student_Courses
      * 课程首页
      */
      public function index(){
-         $location = get_area();
-         if(!empty($location['data']['ip'] != '127.0.0.1')){
-             $location = $location['data'];
-             $city = $location['region'] ? $location['region'] : $location['region'].$location['city'];
+
+         //$ip='14.106.228.94';
+         $ip = GetIp();
+         if($ip != '127.0.0.1'){
+             $location = convertip($ip);
+         }
+         //print_r($location);
+         if(preg_match('/省|市|区|县/',$location)){
+             $city = $location;
          }else{
              $city = '请选择';
          }
