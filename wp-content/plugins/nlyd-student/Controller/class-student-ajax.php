@@ -6777,7 +6777,7 @@ class Student_Ajax
                 left join {$wpdb->prefix}course b on a.match_id = b.id
                 LEFT JOIN {$wpdb->prefix}course_type c on b.course_type = c.id
                 WHERE a.user_id = {$current_user->ID} and a.pay_status in (2,3,4)
-                order by a.is_enable desc
+                order by b.is_enable desc
                 limit $start,$pageSize
                 ";
         //print_r($sql);
