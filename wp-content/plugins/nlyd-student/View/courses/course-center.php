@@ -67,6 +67,7 @@ jQuery(function($) {
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
+        var initAddress=$('#areaSelect').text();
         var mySwiper = new Swiper('.swiper-container', {
             loop : true,
             autoplay:{
@@ -140,7 +141,7 @@ jQuery(function($) {
             });
         }
         //初始化
-        pagation('flowMyAdress',1,$('#areaSelect').text())
+        pagation('flowMyAdress',1,initAddress)
 
         var area=$.validationLayui.allArea.area;//省市区三级联动
         var posiotionarea=[0,0,0];//初始化位置，高亮展示
@@ -153,6 +154,27 @@ jQuery(function($) {
                     })
                 })
             })
+            
+            if (initAddress && initAddress.length>0 && initAddress!="<?=__('请选择', 'nlyd-student')?>") {
+                var areaValue=initAddress;
+                $.each(area,function(index,value){
+                    // console.log(value.value.indexOf(areaValue))
+                    if(value.value.indexOf(areaValue)!=-1){
+                        console.log(index)
+                        posiotionarea=[index,0,0];
+                        $.each(value.childs,function(i,v){
+                            if(v.value.indexOf(areaValue)!=-1){
+                                posiotionarea=[index,i,0];
+                                $.each(v.childs,function(j,val){
+                                    if(val.value.indexOf(areaValue)!=-1){
+                                        posiotionarea=[index,i,j];
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
             // console.log(JSON.stringify(area))
             var mobileSelect3 = new MobileSelect({
                 trigger: '#areaSelect',
