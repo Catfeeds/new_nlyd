@@ -42,7 +42,7 @@
 <script>
     jQuery(function($) {
         layui.use(['layer'], function(){
-            $('.clear').click(function(){
+            $('body').on('click','.clear',function(){
                 var _this=$(this);
                 var admin=_this.prev('input').val()
                 layer.open({
@@ -60,8 +60,39 @@
                     }
                     ,btn2: function(index, layero){
                         //按钮【按钮二】的回调
+                        
+                        // submit(time,1)
+                        if(!_this.hasClass('disabled')){
+                            var postData={
+                               action:'set_zone_manager',
+                               type:'delete',
+                               id:_this.attr('data-id'),     
+                            }
+                            $.ajax({
+                                data: postData,
+                                beforeSend:function(XMLHttpRequest){
+                                    _this.addClass('disabled')
+                                },
+                                success: function(res, textStatus, jqXHR){
+                                    // console.log(res)
+                                    $.alerts(res.data.info)
+                                    if(res.data.url){
+                                        setTimeout(function() {
+                                            window.location.href=res.data.url
+                                        }, 300);
+                                    }
+                                },
+                                complete: function(jqXHR, textStatus){
+                                    if(textStatus=='timeout'){
+                                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                                    }
+                                    _this.removeClass('disabled');
+                                }
+                            })
+                        }else{
+                            $.alerts("<?=__('正在解除绑定关系', 'nlyd-student')?>")
+                        }
                         layer.closeAll();
-                        submit(time,1)
                     }
                     ,closeBtn:2
                     ,btnAagn: 'c' //按钮居中
