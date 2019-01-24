@@ -52,11 +52,11 @@
                         success: function(res, textStatus, jqXHR){
                             console.log(res)
                             $.alerts(res.data.info)
-                            // if(res.data.url){
-                            //     setTimeout(function() {
-                            //          window.location.href=res.data.url
-                            //     }, 300);
-                            // }
+                            if(res.data.url){
+                                setTimeout(function() {
+                                     window.location.href=res.data.url
+                                }, 300);
+                            }
                         },
                         complete: function(jqXHR, textStatus){
                             if(textStatus=='timeout'){
