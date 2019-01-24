@@ -6466,7 +6466,7 @@ class Student_Ajax
 
 
     /**
-     * 获取机构发布课程
+     * 获取机构发布的课程
      */
     public function get_zone_course(){
         global $wpdb,$current_user;
@@ -6751,6 +6751,61 @@ class Student_Ajax
             }
         }
         //print_r($rows);
+        wp_send_json_success(array('info'=>$rows));
+    }
+
+    //获取我的课程
+    public function get_my_course(){
+
+        global $wpdb,$current_user;
+
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        $sql = "select a.id order_id,a.user_id,b.id course_id,b.course_title,b.const,b.open_quota,b.is_enable,b.coach_id,c.type_name,
+                if(unix_timestamp(b.course_start_time)>0,date_format(b.course_start_time,'%Y-%m-%d %H:%i'),'待确认') start_time,
+                if(unix_timestamp(b.course_end_time)>0,date_format(b.course_end_time,'%Y-%m-%d %H:%i'),'待确认') end_time,
+                case b.is_enable
+                when '-3' then '已结课'
+                when '-2' then '等待开课'
+                when '1' then '报名中'
+                when '2' then '授课中'
+                end status_cn
+                from {$wpdb->prefix}order a 
+                left join {$wpdb->prefix}course b on a.match_id = b.id
+                LEFT JOIN {$wpdb->prefix}course_type c on b.course_type = c.id
+                WHERE a.user_id = {$current_user->ID} and a.pay_status in (2,3,4)
+                order by a.is_enable desc
+                limit $start,$pageSize
+                ";
+        //print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        //print_r($rows);
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无课程', 'nlyd-student')));
+        foreach ($rows as $k => $val){
+
+            $user_real_name = get_user_meta($val['coach_id'],'user_real_name')[0];
+            $rows[$k]['real_name'] = !empty($user_real_name) ? $user_real_name['real_name'] : '-';
+            if(isset($_POST['id'])){
+                //获取城市
+                $zone_city = $wpdb->get_var("select zone_city from {$wpdb->prefix}zone_meta where user_id = {$zone_user_id} ");
+                $city_arr = str2arr($zone_city,'-');
+                if(!empty($city_arr[2])){
+                    $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
+                }elseif ($city_arr[1] != '市辖区'){
+                    $city = rtrim($city_arr[1],'市');
+                }else{
+                    $city = rtrim($city_arr[0],'市');
+                }
+                $rows[$k]['zone_city'] = $city;
+            }
+        }
         wp_send_json_success(array('info'=>$rows));
     }
 
