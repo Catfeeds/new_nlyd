@@ -161,6 +161,17 @@ p.long-name{
     .nl-transform{
         display: none;
     }
+    .nl-match-info,.nl-match-header{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .nl-match-header{
+        min-height: 60px;
+    }
+    .nl-match-body{
+        min-height:200px ;
+    }
 }
 @media screen and (max-width: 1199px){
     #content{

@@ -1376,6 +1376,7 @@ class Spread{
                 LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=ue.extract_id
                 {$join}
                 {$where} 
+                ORDER BY ue.apply_time DESC
                 LIMIT {$start},{$pageSize}",ARRAY_A);
 //        leo_dump($rows);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);

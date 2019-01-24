@@ -339,11 +339,12 @@ class Fission_Ajax
 //                'extract_type'=> $user_extract_logs['extract_type'],
 //                'created_time' => get_time('mysql')
 //            ];
-            $bool = $wpdb->update($wpdb->prefix.'user_stream_logs',['extract_type' => $user_extract_logs['extract_type']], ['id' => $user_extract_logs['stream_log_id']]);
+            $bool = $wpdb->update($wpdb->prefix.'user_stream_logs',['income_status' => 2], ['id' => $user_extract_logs['stream_log_id']]);
+//            leo_dump($wpdb->last_query);die;
 //            leo_dump($wpdb->last_query);die;
             if(!$bool){
                 $wpdb->query('ROLLBACK');
-                wp_send_json_error(['info' => '添加流水记录失败!']);
+                wp_send_json_error(['info' => '修改流水记录失败!']);
             }
         }
         $bool = $wpdb->update($wpdb->prefix.'user_extract_logs',['censor_user_id'=>$current_user->ID,'extract_status'=>$status,'censor_time'=>get_time('mysql')],['id'=>$id]);
