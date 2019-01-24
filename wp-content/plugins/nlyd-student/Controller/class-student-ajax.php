@@ -5840,7 +5840,7 @@ class Student_Ajax
         }
         global $wpdb,$current_user;
 
-        if(!reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
+        if(!reg_match('m',$_POST['coach_id'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['coach_id']}'
