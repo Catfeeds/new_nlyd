@@ -15,7 +15,7 @@
                 require_once leo_student_public_view.'leftMenu.php';
             
         ?>
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper no-header">
             <a class="mui-pull-left nl-goback">
                 <div><i class="iconfont">&#xe610;</i></div>
             </a>

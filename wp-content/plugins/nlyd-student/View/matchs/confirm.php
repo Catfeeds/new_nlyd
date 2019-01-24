@@ -75,7 +75,7 @@
                                             ?>
                                             &nbsp;&nbsp;&nbsp;
                                         </span>
-                                        <span class="nl-see-link"><?=__('主训教练', 'nlyd-student')?>:</span>
+                                        <span class="nl-see-link"><?=__('教练', 'nlyd-student')?>:</span>
                                         <?php if(isset($val['major_coach']) && isset($val['coach_id'])){ ?>
                                         <input type="hidden" name="major_coach[]" value="<?=$val['coach_id']?>"/>
                                         <?=$val['major_coach']?>
