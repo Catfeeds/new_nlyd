@@ -3263,7 +3263,7 @@ class Student_Ajax
         END AS ranges  
         FROM '.$wpdb->prefix.'directories AS d 
         LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=d.category_id 
-        WHERE d.is_show=1 ORDER BY d.id DESC LIMIT '.$start.','.$pageSize);
+        WHERE d.is_show=1 ORDER BY d.id ASC LIMIT '.$start.','.$pageSize);
         foreach ($res as &$v){
             $usermeta = get_user_meta($v->user_id,'', true);
             $user_real_name = unserialize($usermeta['user_real_name'][0]);

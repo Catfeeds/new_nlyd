@@ -2603,17 +2603,25 @@ class Organize{
         global $wpdb;
         //查询机构信息
         $zone_meta = $wpdb->get_row("SELECT zone_name,user_id,zone_city,zone_match_type,type_id FROM {$wpdb->prefix}zone_meta WHERE id='{$id}'", ARRAY_A);
-        //各种数量
-        //比赛数量
-        $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$zone_meta['user_id']}'");
+        if($zone_meta['user_id'] > 0){
+            //各种数量
+            //比赛数量
+            $match_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}match_meta_new WHERE created_id='{$zone_meta['user_id']}'");
 
-        //考级数量
-        $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$zone_meta['user_id']}'");
-        //课程数量
-        $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE zone_id='{$zone_meta['user_id']}'");
+            //考级数量
+            $grading_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}grading_meta WHERE created_person='{$zone_meta['user_id']}'");
+            //课程数量
+            $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE zone_id='{$zone_meta['user_id']}'");
 
-        //总收益
-        $stream_all = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$zone_meta['user_id']}'");
+            //总收益
+            $stream_all = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$zone_meta['user_id']}'");
+        }else{
+            $match_num = 0;
+            $grading_num = 0;
+            $course_num = 0;
+            $stream_all = 0;
+        }
+
 //        $rows = [];
         //获取数据
 
@@ -3168,7 +3176,7 @@ class Organize{
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS cou.*,um.meta_value AS coach_real_name
                 FROM {$wpdb->prefix}course AS cou
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
-                WHERE cou.zone_id='{$user_id}'
+                WHERE cou.zone_id='{$user_id}' AND {$user_id}>0
                 LIMIT {$start},{$pageSize}", ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
@@ -3659,9 +3667,13 @@ class Organize{
     /**
      * 获取机构名称
      */
-    public function echoZoneName($alias = 'match',$zone_city='',$zone_name='',$zone_match_type=0,$type='',$color = true){
-        $span1 = $color ? '<span style="color: #c40c0f">':'';
-        $span2 = $color ? '</span>':'';
+    public function echoZoneName($alias = 'match',$zone_city='',$zone_name='',$zone_match_type=0,$type='',$color = '#c40c0f'){
+        $span1 = '';
+        $span2 = '';
+        if($color != false){
+            $span1 = '<span style="color: '.$color.'">';
+            $span2 = '</span>';
+        }
         switch ($alias){
             case 'match':
                 $city_arr = str2arr($zone_city,'-');

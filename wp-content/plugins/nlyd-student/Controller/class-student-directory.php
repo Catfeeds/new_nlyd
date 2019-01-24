@@ -39,9 +39,54 @@ class Student_Directory
     /**
      * 2019赛区名录
      */
-     public function directoryZone_pc(){
-        $view = student_view_path.CONTROLLER.'/directory-zone_pc.php';
-        load_view_template($view);
+    public function directoryZone_pc(){
+        $dir = student_view_path.CONTROLLER.'/static';
+        if(!is_dir($dir)){
+            mkdir($dir);
+        }
+        $json_file = $dir.'/directory.json';
+        $file_name = $dir.'/zone_match.html';
+        if(file_exists($json_file)){
+            $conf = json_decode(file_get_contents($json_file), true);
+        }else{
+            $conf['zoneMatchTime'] = '';
+            $conf['zoneMatchTermTime'] = '';
+        }
+        global $wpdb;
+        $type_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_type WHERE zone_type_alias='match'");
+        $current_time = get_time('mysql');
+        $last_time = $wpdb->get_var("SELECT MAX(audit_time) FROM {$wpdb->prefix}zone_meta WHERE type_id='{$type_id}' AND user_id>0 AND user_status=1 AND is_able=1 AND (term_time>'{$current_time}' OR term_time='')");
+
+        if($conf['zoneMatchTime'] == $last_time && $conf['zoneMatchTermTime'] > $current_time && file_exists($file_name)){
+            echo file_get_contents($file_name);
+            exit;
+        }else{
+            $res = $wpdb->get_results("SELECT zm.zone_number,zm.bank_card_name,zm.chairman_id,zm.secretary_id,zm.zone_city,zm.zone_name,zt.zone_type_alias,zm.zone_match_type 
+                   FROM {$wpdb->prefix}zone_meta AS zm 
+                   LEFT JOIN {$wpdb->prefix}zone_type AS zt ON zt.id=zm.type_id 
+                   WHERE zm.type_id='{$type_id}' AND zm.user_id>0 AND zm.user_status=1 AND zm.is_able=1 AND (zm.term_time>'{$current_time}' OR zm.term_time='')", ARRAY_A);
+            $rows = [];
+            $organizeClass = new Organize();
+            foreach ($res as $re){
+                $re['zone_title_name'] = $organizeClass->echoZoneName($re['zone_type_alias'], $re['zone_city'], $re['zone_name'], $re['zone_match_type'], 'get', '#ffb536');
+                $re['chairman_name'] = get_user_meta($re['chairman_id'], 'user_real_name', true)['real_name'];
+                $re['secretary_name'] = get_user_meta($re['secretary_id'], 'user_real_name', true)['real_name'];
+                $rows[] = $re;
+            }
+//            leo_dump($rows);die;
+            ob_start();//启动ob缓存
+            ob_clean();
+            $view = student_view_path.CONTROLLER.'/directory-zone_pc.php';
+            load_view_template($view, ['rows' => $rows]);
+
+            $ob_str=ob_get_contents();
+            if($rows) {
+                file_put_contents($file_name,$ob_str);
+                $conf['zoneMatchTime'] = $last_time;
+                $conf['zoneMatchTermTime'] = get_time()+3600*24*30;
+            }
+            file_put_contents($json_file, json_encode($conf));
+        }
     }
     /**
      * 脑力健将名录
@@ -72,7 +117,7 @@ class Student_Directory
                     FROM {$wpdb->prefix}directories AS d 
                     LEFT JOIN {$wpdb->posts} AS p ON p.ID=d.category_id 
                     WHERE d.is_show=1 AND (d.range=1 or d.range=2) {$where}
-                    ORDER BY d.id DESC
+                    ORDER BY d.id ASC
                      ", ARRAY_A);
              $rows = [];
              foreach ($res as &$v){
@@ -225,8 +270,12 @@ class Student_Directory
             ob_clean();
             load_view_template(student_view_path.CONTROLLER.'/'.$view_name, $data);
             $ob_str=ob_get_contents();
-            $conf[$conf_name] = $last_time;
-            file_put_contents($file_name,$ob_str);
+            if($data) {
+                file_put_contents($file_name,$ob_str);
+                $conf[$conf_name] = $last_time;
+            }else{
+                $conf[$conf_name] = '';
+            }
             file_put_contents($json_file, json_encode($conf));
         }
     }
