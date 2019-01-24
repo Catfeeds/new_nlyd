@@ -114,7 +114,7 @@
             <div class="layui-row dir_nav_content">
                 <?php if(isset($rows[2])) foreach ($rows[2] as $rowk2 => $row2){ ?>
                     <div class="dir_table">
-                        <div class="dir_table_name"><?php printf(__('中国%s级脑力健将（%s）', 'nlyd-student'), $current_level, $cateArr[$rowk2]['post_title'])?></div>
+                        <div class="dir_table_name"><?php printf(__('国际%s级脑力健将（%s）', 'nlyd-student'), $current_level, $cateArr[$rowk2]['post_title'])?></div>
                         <table>
                             <tr>
                                 <td><?=__('序号', 'nlyd-student')?></td>

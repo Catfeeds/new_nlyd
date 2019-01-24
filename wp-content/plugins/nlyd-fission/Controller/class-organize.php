@@ -1159,7 +1159,7 @@ class Organize{
         if(is_post()){
             $success_msg = '';
             $error_msg = '';
-            $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+//            $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
             $zone_type = isset($_POST['zone_type']) ? intval($_POST['zone_type']) : 0;
             $referee_id = isset($_POST['referee_id']) ? intval($_POST['referee_id']) : 0;
 //            $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
@@ -1187,15 +1187,17 @@ class Organize{
             $whereCity = isset($_POST['whereCity']) ? trim($_POST['whereCity']) : '';
             $whereArea = isset($_POST['whereArea']) ? trim($_POST['whereArea']) : '';
             $bank_card_name = isset($_POST['bank_card_name']) ? trim($_POST['bank_card_name']) : '';
+            $center_manager_id = isset($_POST['center_manager_id']) ? intval($_POST['center_manager_id']) : 0;
+            $apply_id = isset($_POST['apply_id']) ? intval($_POST['apply_id']) : 0;
             $zone_city = '';
             if($whereProvicone != '' && $whereProvicone != '-1') $zone_city .= $whereProvicone;
             if($whereCity != '' && $whereCity != '-1') $zone_city .= '-'.$whereCity;
             if($whereArea != '' && $whereArea != '-1') $zone_city .= '-'.$whereArea;
 
-            if($user_id < 0) $error_msg = '请选择负责人';
+//            if($user_id < 0) $error_msg = '请选择负责人';
 //            if($zone_match_type < 0) $error_msg = $error_msg==''?'请选择赛区类型':$error_msg.'<br >请选择赛区类型';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择机构类型':$error_msg.'<br >请选择机构类型';
-            if($user_id == $referee_id && $user_status !==1 && $user_status !== -2 && $user_status !== 99) $error_msg = $error_msg==''?'推荐人不能为机构账号':$error_msg.'<br >推荐人不能为机构账号';
+//            if($user_id == $referee_id && $user_status !==1 && $user_status !== -2 && $user_status !== 99) $error_msg = $error_msg==''?'推荐人不能为机构账号':$error_msg.'<br >推荐人不能为机构账号';
             if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($admin_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
             if($user_status !== 1 && $user_status !== -2 && $user_status !== 99) $error_msg = $error_msg==''?'审核状态错误':$error_msg.'<br >审核状态错误';
@@ -1209,9 +1211,10 @@ class Organize{
             if($bank_card_num == '') $error_msg = $error_msg==''?'请填写银行卡号':$error_msg.'<br >请填写银行卡号';
 //            if($chairman_id < 1) $error_msg = $error_msg==''?'请选择组委会主席':$error_msg.'<br >请选择组委会主席';
             if($zone_number == '' && ($user_status == 1 || $user_status == 99)) $error_msg = $error_msg==''?'机构编号不能为空':$error_msg.'<br >机构编号不能为空';
+            if($old_zm_id < 1){
+                if($center_manager_id === 0) $error_msg .= '<br >请选择负责人';
+            }
             //是否已存在编号
-
-
 
             $number_old = $wpdb->get_row("SELECT id,zone_number,user_status FROM {$wpdb->prefix}zone_meta WHERE zone_number='{$zone_number}'", ARRAY_A);
             if($number_old && $number_old['id'] != $old_zm_id && $number_old['zone_number']) $error_msg .= '<br >当前机构编号已存在';
@@ -1221,26 +1224,18 @@ class Organize{
             }
             $zone_type_row = $this->getOrganizeTypeList($zone_type);
             if($zone_type_row['zone_type_alias'] != 'match') $zone_match_type = 0;
-            if($zone_match_type !== 1) {
-                $zone_title = '';
-            }else{
-//                if($zone_title == '') $error_msg .= '<br >请填写字号';
-            }
-            if($zone_match_type !== 2) {
-                $is_double = 0;
-            }else{
-//                if($is_double < 1) $error_msg .= '<br >请填选择区县';
-            }
+            if($zone_match_type !== 1) $zone_title = '';
+
+            if($zone_match_type !== 2) $is_double = 0;
+
             if($zone_match_type === 0){
                 $is_double = 0;
                 $zone_title = '';
-            }else{
-                $error_msg .= '<br >请填选择区县';
             }
             if($error_msg == ''){
                 $insertData = [
                     'type_id' => $zone_type,
-                    'user_id' => $user_id,
+//                    'user_id' => $user_id,
                     'referee_id' => $referee_id,
                     'zone_name' => $zone_title,
                     'bank_card_name' => $bank_card_name,
@@ -1274,20 +1269,27 @@ class Organize{
                         $insertData['business_licence_url'] = $upload_dir['baseurl'].$dir.$file;
                     }
                 }
-
-                $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND (user_status='-1' OR user_status='-2')",ARRAY_A);
                 $wpdb->query('START TRANSACTION');
                 if($old_zm_id>0){
+                    $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id,center_manager_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND (user_status='-1' OR user_status='-2')",ARRAY_A);
                     $bool = $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['id'=>$old_zm_id]);
                 }else{
                     $insertData['created_time'] = get_time('mysql');
+                    $insertData['center_manager_id'] = $center_manager_id;
+                    $insertData['apply_id'] = $apply_id;
                     $insertData['audit_time'] = get_time('mysql');
                     $bool = $wpdb->insert($wpdb->prefix.'zone_meta',$insertData);
+                    $zmv = [
+                        'user_id' => 0,
+                        'type_id' => $insertData['type_id'],
+                        'id' =>$wpdb->insert_id,
+                        'apply_id' =>$apply_id,
+                        'center_manager_id' =>$center_manager_id,
+                    ];
                 }
                 if(!$bool){
                     $wpdb->query('ROLLBACK');
                     $error_msg = '操作失败!';
-
                     is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
                 }else{
                     //收益和机构
@@ -1311,11 +1313,12 @@ class Organize{
                             }
                             if($error_msg == '') {
                                 //添加机构管理员
-                                if (!$wpdb->insert($wpdb->prefix . 'zone_manager', ['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) {
+                                $zone_manager_user_id = $old_zm_id > 0?$zmv['apply_id']:$zmv['center_manager_id'];
+                                if (!$wpdb->insert($wpdb->prefix . 'zone_manager', ['zone_id' => $zmv['id'], 'user_id' => $zone_manager_user_id])) {
                                     $error_msg = '添加管理员失败!';
                                 }
                             }
-                            if($error_msg == '') {
+                            if($error_msg == '' && $old_zm_id > 0) {
                                 //更新管理员/负责人
                                 $center_manager_id = $wpdb->get_var("SELECT center_manager_id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$user_id}'");
                                 if(!$center_manager_id){
@@ -1361,7 +1364,7 @@ class Organize{
 
 
                             //============
-                            if($error_msg == ''){
+                            if($error_msg == '' && $zmv['apply_id'] > 0){
                                 $orgType = $wpdb->get_row("SELECT zone_type_alias,zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'", ARRAY_A);
                                 if($orgType['zone_type_alias'] == 'match') $orgType['zone_type_name'] = '赛区';
                                 $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType['zone_type_alias']}' AND spread_status=1", ARRAY_A);
@@ -1566,27 +1569,35 @@ class Organize{
                             <input type="text" name="zone_number" id="zone_number" value="<?=$row['zone_number']?>">
                         </td>
                     </tr>
+                     <?php if($old_zm_id > 0){?>
                     <tr class="form-field form-required">
                         <th scope="row"><label for="user_id">赛区账号 </label></th>
                         <td>
-
-                            <?php if($old_zm_id > 0){?>
-                                <input type="hidden" name="user_id" value="<?=$row['user_id']?>">
-                                <?=($real_name = isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']) ? $real_name : '无'?>
-                                <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
-                            <?php }else{ ?>
-                                <select class="js-data-select-ajax" name="user_id" data-action="get_base_user_list" data-type="base">
-                                    <option value="<?=$row['user_id']?>" selected="selected">
-                                        <?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']?>
-                                        <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
-                                    </option>
-                                </select>
-
-                            <?php
-                           }
-                           ?>
+                            <input type="hidden" name="user_id" value="<?=$row['user_id']?>">
+                            <?=($real_name = isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']) ? $real_name : '无'?>
+                            <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
                         </td>
                     </tr>
+                     <?php }else{ ?>
+                         <tr class="form-field form-required">
+                             <th scope="row"><label for="center_manager_id">负责人 </label></th>
+                             <td>
+                                 <select class="js-data-select-ajax" name="center_manager_id" data-action="get_base_user_list" data-type="base">
+
+                                 </select>
+                             </td>
+                         </tr>
+                         <tr class="form-field form-required">
+                             <th scope="row"><label for="apply_id">申请人 </label></th>
+                             <td>
+                                 <select class="js-data-select-ajax" name="apply_id" data-action="get_base_user_list" data-type="base">
+
+                                 </select>
+                             </td>
+                         </tr>
+                         <?php
+                     }
+                     ?>
                     <tr class="form-field form-required">
                         <th scope="row"><label for="zone_type">机构类型</label></th>
                         <td>
@@ -1619,32 +1630,30 @@ class Organize{
                             ?>
                         </td>
                     </tr>
-                    <tr class="form-field">
-                        <th scope="row"><label for="referee_id">推荐人 </label></th>
-                        <td>
-                            <?php
-                            if($old_zm_id > 0){
-                                ?>
-                                <input type="hidden" name="referee_id" value="<?=$row['referee_id']?>">
-                                <?=($referee_name = isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']) ? $referee_name : '无'?>
-                                <?=!empty($row['referee_mobile'])?'('.$row['referee_mobile'].')':''?>
-                                <?php
-                            }else{
-                                ?>
-                                <select class="js-data-select-ajax" name="referee_id" data-action="get_base_user_list" data-type="all">
-                                    <option value="<?=$row['referee_id']?>" selected="selected">
-                                        <?=isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']?>
-                                        <?=!empty($row['referee_mobile'])?'('.$row['referee_mobile'].')':''?>
-                                    </option>
-                                </select>
-                                <?php
-
-                            }
-                            ?>
-
-
-                        </td>
-                    </tr>
+<!--                    <tr class="form-field">-->
+<!--                        <th scope="row"><label for="referee_id">推荐人 </label></th>-->
+<!--                        <td>-->
+<!--                            --><?php
+//                            if($old_zm_id > 0){
+//                                ?>
+<!--                                <input type="hidden" name="referee_id" value="--><?//=$row['referee_id']?><!--">-->
+<!--                                --><?//=($referee_name = isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']) ? $referee_name : '无'?>
+<!--                                --><?//=!empty($row['referee_mobile'])?'('.$row['referee_mobile'].')':''?>
+<!--                                --><?php
+//                            }else{
+//                                ?>
+<!--                                <select class="js-data-select-ajax" name="referee_id" data-action="get_base_user_list" data-type="all">-->
+<!--                                    <option value="--><?//=$row['referee_id']?><!--" selected="selected">-->
+<!--                                        --><?//=isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']?>
+<!--                                        --><?//=!empty($row['referee_mobile'])?'('.$row['referee_mobile'].')':''?>
+<!--                                    </option>-->
+<!--                                </select>-->
+<!--                                --><?php
+//
+//                            }
+//                            ?>
+<!--                        </td>-->
+<!--                    </tr>-->
                     <tr class="form-field">
                         <th scope="row"><label for="parent_id">上级机构 </label></th>
                         <td>
@@ -1882,6 +1891,11 @@ class Organize{
                     });
                     $('#zone_match_type').on('change', function () {
                         var val = $(this).val();
+                        if(val == '0'){
+                            $('#is_double_tr').hide();
+                            $('#zone_title_tr').hide();
+                            return false;
+                        }
                         if(val == '1'){
                             $('#zone_title_tr').show();
                             $('#is_double_tr').hide();
