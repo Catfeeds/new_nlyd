@@ -463,7 +463,7 @@ jQuery(document).ready(function($) {
             image.attr('src',url);
             bg.addClass('bg-show')
             cropper = new Cropper(image[0], {
-                aspectRatio:0,
+                aspectRatio: 1,
             });
         };
         var reader;
@@ -489,8 +489,8 @@ jQuery(document).ready(function($) {
         var canvas;
         if (cropper) {
         canvas = cropper.getCroppedCanvas({
-            width: 600,
-            height: 600,
+            width: 160,
+            height: 160,
         });
         avatar.src = canvas.toDataURL();
         var imgBase64 = canvas.toDataURL();;    //存储转换的base64编码
