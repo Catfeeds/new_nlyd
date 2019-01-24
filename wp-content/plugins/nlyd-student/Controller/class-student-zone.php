@@ -1027,8 +1027,17 @@ class Student_Zone
      * 机构账号密码设置
      */
     public function setting(){
+
+        global $wpdb,$current_user;
+        $data['user_login'] = $current_user->data->user_email;
+        $sql = "select b.id ,c.user_mobile 
+                  from {$wpdb->prefix}zone_meta a 
+                  left join {$wpdb->prefix}zone_manager b on a.id = b.zone_id 
+                  left join {$wpdb->prefix}users c on b.user_id = c.ID 
+                  where a.user_id = {$current_user->ID}";
+        $data['list'] = $wpdb->get_results($sql,ARRAY_A);
         $view = student_view_path.CONTROLLER.'/setting.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     /**
      * 机构账号添加关联账号
@@ -1331,7 +1340,9 @@ class Student_Zone
      */
     public function get_stream_total(){
         global $wpdb,$current_user;
-        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and income_type != 'undertake' and income_status = 2 ";
+        $where = "user_id = {$current_user->ID} and income_type not in ('open_course','open_grading','cause_manager','cause_minister','extract') and income_status = 1  ";
+        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where {$where} ";
+        //print_r($sql3);
         return $wpdb->get_var($sql3);
     }
 

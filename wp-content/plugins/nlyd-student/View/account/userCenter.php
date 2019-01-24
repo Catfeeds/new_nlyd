@@ -155,7 +155,7 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('训练记录', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/course/');?>">
+                    <a class="c_black8"  href="<?=home_url('/account/course/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-course">
                             </div>

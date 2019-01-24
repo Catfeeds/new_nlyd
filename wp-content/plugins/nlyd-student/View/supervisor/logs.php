@@ -32,7 +32,7 @@
                     <?php  } }else{ ?>
                         <p class="no-info"><?=__('暂未上传任何监赛记录', 'nlyd-student')?></p>
                     <?php } ?>
-                <a class="a-btn a-btn-table" href="<?=home_url('supervisor/')?>"><div><?=__('新增监赛记录', 'nlyd-student')?></div></a>
+                <a class="a-btn a-btn-table relative" href="<?=home_url('supervisor/')?>"><div><?=__('新增监赛记录', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>

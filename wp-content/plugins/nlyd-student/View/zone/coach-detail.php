@@ -68,8 +68,9 @@
                             <img src="<?=$work_photo?>">
                         </div>
                     </div>
+                    <a class="a-btn a-btn-table coachClear relative"><div><?=__('解除关系', 'nlyd-student')?></div></a>
                 </div>
-                <a class="a-btn a-btn-table coachClear"><div><?=__('解除关系', 'nlyd-student')?></div></a>
+               
             </div>
         </div>           
     </div>

@@ -581,11 +581,12 @@ a.form-input-row:hover{
 /* 缺省页面 */
 
 .no-info-page{
-    position: absolute;
-    top: 25%;
+    /* position: absolute; */
+    /* top: 25%;
     left: 25%;
+    width: 50%; */
     width: 50%;
-    margin: auto;
+    margin: 50px auto auto auto;
     text-align: center;
 }
 .no-info-img img{
@@ -836,13 +837,14 @@ p.share-font{
     .form-page,.main-page{
         top: 90px;
     }
-    .nl-page-form .a-btn{
+    .nl-page-form .a-btn,.a-btn.relative{
         position: relative;
         margin-left: 0;
         bottom: 0;
-        left: 0;
+        left: -15px;
         float: right;
         margin-top: 30px;
+        margin-bottom: 30px;
     }
     .form-inputs{
         width: 92%;

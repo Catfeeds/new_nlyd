@@ -969,7 +969,7 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         if(mb_strlen($_POST['fullname']) < 1 || mb_strlen($_POST['fullname']) > 100) wp_send_json_error(array(__('收件人长度为1-100个字符', 'nlyd-student')));
-        if(reg_match('m',$_POST['telephone'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
+        if(reg_match('m',$_POST['telephone'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
 
         if(empty($_POST['province']) || empty($_POST['city']) || empty($_POST['area']) || empty($_POST['address'])) wp_send_json_error(array('info'=>__('请确认地址信息的完整性', 'nlyd-student')));
 
@@ -4633,7 +4633,7 @@ class Student_Ajax
 
         if(!empty($_POST['center_manager'])){
             $manager = $_POST['zone_type_alias'] == 'match' ? '中心负责人' : '总经理';
-            if(reg_match('m',$_POST['center_manager'])) wp_send_json_error(array(__($manager.'手机格式不正确', 'nlyd-student')));
+            if(reg_match('m',$_POST['center_manager'])) wp_send_json_error(array('info'=>__($manager.'手机格式不正确', 'nlyd-student')));
             $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['center_manager']}'
@@ -4648,8 +4648,8 @@ class Student_Ajax
                 wp_send_json_error(array('info'=>'组委会主席或者秘书长为必选项'));
             }
 
-            if(reg_match('m',$_POST['chairman_phone'])) wp_send_json_error(array(__('组委会主席手机格式不正确', 'nlyd-student')));
-            if(reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array(__('秘书长手机格式不正确', 'nlyd-student')));
+            if(reg_match('m',$_POST['chairman_phone'])) wp_send_json_error(array('info'=>__('组委会主席手机格式不正确', 'nlyd-student')));
+            if(reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array('info'=>__('秘书长手机格式不正确', 'nlyd-student')));
             $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['chairman_phone']}'
@@ -4697,6 +4697,7 @@ class Student_Ajax
             'business_licence_url'=>$business_licence_url,
             'legal_person'=>$_POST['legal_person'],
             'zone_city'=>$_POST['zone_match_address'],
+            'zone_name'=>!empty($_POST['zone_name']) ? $_POST['zone_name']:'',
             'bank_card_name'=>$_POST['bank_card_name'],
             'opening_bank'=>$_POST['opening_bank'],
             'opening_bank_address'=>$_POST['opening_bank_address'],
@@ -4814,6 +4815,7 @@ class Student_Ajax
                   where {$where}
                   order by created_time desc limit $start,$pageSize 
                   ";
+        //print_r($sql);die;
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
@@ -5006,7 +5008,7 @@ class Student_Ajax
         if($_POST['start_time'] >= $_POST['end_time'] )wp_send_json_error(array('info'=>'结束时间必须大于开始时间'));
         if($_POST['entry_end_time'] >= $_POST['start_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
         global $wpdb,$current_user;
-        if(reg_match('m',$_POST['person_liable'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
+        if(reg_match('m',$_POST['person_liable'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['person_liable']}'
@@ -5108,9 +5110,11 @@ class Student_Ajax
 
             $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$_POST['type']}' ";
         }
-        $match_cost = $wpdb->get_var($set_sql);
-        if($match_cost < 10){
-            wp_send_json_error(array('info'=>__('未匹配到费用','nlyd-student')));
+        if(in_array($_POST['type'],array('official-match','official-grading','basis-course','boost-course'))){
+            $match_cost = $wpdb->get_var($set_sql);
+            if($match_cost < 10){
+                wp_send_json_error(array('info'=>__('未匹配到费用','nlyd-student')));
+            }
         }
         $match_cost = !empty($match_cost)? $match_cost :number_format(0);
         wp_send_json_success($match_cost);
@@ -5406,14 +5410,17 @@ class Student_Ajax
             case 'weChat':
                 //获取收款二维码
                 $extract_code_img = get_user_meta($current_user->ID,'user_coin_code')[0];
+                if(empty($user_cheques_bank)) wp_send_json_error(array('info'=>__('请先设置微信收款码')));
                 break;
             case 'aliPay':
                 //获取收款二维码
                 $extract_code_img = get_user_meta($current_user->ID,'aliPay_coin_code')[0];
+                if(empty($user_cheques_bank)) wp_send_json_error(array('info'=>__('请先设置支付宝收款码')));
                 break;
             case 'user_bank':
                 //获取收款账户
                 $user_cheques_bank = get_user_meta($current_user->ID,'user_cheques_bank')[0];
+                if(empty($user_cheques_bank)) wp_send_json_error(array('info'=>__('请先设置银行收款账户')));
                 $opening_user = $user_cheques_bank['open_name'];
                 $opening_bank = $user_cheques_bank['open_bank'];
                 $opening_bank_address = $user_cheques_bank['open_address'];
@@ -5521,19 +5528,42 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
-        if(in_array($row['income_type'],array('recommend_match_zone','recommend_trains_zone','recommend_test_zone'))){
+        if(in_array($row['income_type'],array('recommend_match_zone','recommend_trains_zone','recommend_test_zone'))){  //推荐赛区/推荐训练中心/推荐测评中心
             $where = "  a.id = {$row['match_id']} and a.income_type = 'subject' ";
-        }else if(in_array($row['income_type'],array('open_match','open_grading','recommend_match','recommend_grading','director_match','director_grading','cause_manager','cause_minister'))){
-            $where = " a.match_id = {$row['match_id']} and (a.income_type in ('match','grading')) ";
-            if(in_array($row['income_type'],array('recommend_match','recommend_grading'))){
-                $where .= " and (a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID}) ";
-            }
-        }elseif (in_array($row['income_type'],array('open_course','recommend_course','recommend_qualified','recommend_qualified'))) {
-            $where = "  a.match_id = {$row['match_id']} and a.income_type = 'course' ";
         }
-
-        //判断是否为机构
-        $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
+        elseif (in_array($row['income_type'],array('open_match'))){     //开设比赛
+            $where = " a.income_type = 'match' and a.match_id = {$row['match_id']} and a.sponsor_id = {$current_user->ID} ";
+        }
+        elseif (in_array($row['income_type'],array('open_grading'))){   //开设考级
+            $where = " a.income_type = 'grading' and a.match_id = {$row['match_id']} and a.sponsor_id = {$current_user->ID} ";
+        }
+        elseif (in_array($row['income_type'],array('open_course'))){    //课程渠道
+            $where = " a.income_type = 'course' and a.match_id = {$row['match_id']} and a.sponsor_id = {$current_user->ID} ";
+        }
+        elseif (in_array($row['income_type'],array('recommend_match'))){    //推荐比赛
+            $where = " a.income_type = 'match' and a.match_id = {$row['match_id']} and (a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID}) ";
+        }
+        elseif (in_array($row['income_type'],array('recommend_match','recommend_grading'))){    //推荐考级
+            $where = " a.income_type = 'grading' and a.match_id = {$row['match_id']} and (a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID}) ";
+        }
+        elseif (in_array($row['income_type'],array('director_match','director_grading'))){  //参赛机构/考级负责人
+            $where = " a.match_id = {$row['match_id']} and a.person_liable_id = {$current_user->ID}  ";
+        }
+        elseif (in_array($row['income_type'],array('recommend_course'))){    //推荐购课
+            $where = " a.income_type = 'course' and a.match_id = {$row['match_id']} and (a.referee_id = {$current_user->ID} or a.indirect_referee_id = {$current_user->ID})   ";
+        }
+        elseif (in_array($row['income_type'],array('recommend_qualified'))){    //购课补贴
+            $where = " a.income_type = 'course' and a.id = {$row['match_id']} and a.person_liable_id = {$current_user->ID}  ";
+        }
+        elseif (in_array($row['income_type'],array('grading_qualified'))){  //考级达标
+            $where = " a.income_type = 'grading' and a.id = {$row['match_id']} and a.referee_id = {$current_user->ID}  ";
+        }
+        elseif (in_array($row['income_type'],array('cause_manager'))){  //事业管理员
+            $where = " a.income_type = 'course' and a.match_id = {$row['match_id']} and a.manager_id = {$current_user->ID}  ";
+        }
+        elseif (in_array($row['income_type'],array('cause_minister'))){ //事业部长
+            $where = " a.match_id = {$row['match_id']} and a.indirect_manager_id = {$current_user->ID}  ";
+        }
 
         //获取对应数据列表
         $sql = "select SQL_CALC_FOUND_ROWS a.*,
@@ -5562,7 +5592,7 @@ class Student_Ajax
                 elseif ($v['indirect_referee_id'] == $current_user->ID){
                     $list['profit_income'] = $v['indirect_referee_income'];
                 }
-                if($row['income_type'] == 'director_grading'){
+                if(in_array($row['income_type'],array('director_grading','director_match','recommend_qualified'))){
                     if ($v['person_liable_id'] == $current_user->ID){
                         $list['profit_income'] = $v['person_liable_income'];
                     }
@@ -5812,7 +5842,7 @@ class Student_Ajax
         }
         global $wpdb,$current_user;
 
-        if(reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
+        if(reg_match('m',$_POST['coach_id'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['coach_id']}'
@@ -6438,7 +6468,7 @@ class Student_Ajax
 
 
     /**
-     * 获取机构发布课程
+     * 获取机构发布的课程
      */
     public function get_zone_course(){
         global $wpdb,$current_user;
@@ -6594,6 +6624,9 @@ class Student_Ajax
         $page = isset($_POST['page'])?$_POST['page']:1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
+
+        //if($_POST['city'])
+
         if(!empty($_POST['city'])){
             $where = " and a.zone_city like '%{$_POST['city']}%' ";
         }
@@ -6721,6 +6754,97 @@ class Student_Ajax
         }
         //print_r($rows);
         wp_send_json_success(array('info'=>$rows));
+    }
+
+    //获取我的课程
+    public function get_my_course(){
+
+        global $wpdb,$current_user;
+
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        $sql = "select a.id order_id,a.user_id,b.id course_id,b.course_title,b.const,b.open_quota,b.is_enable,b.coach_id,b.zone_id,c.type_name,
+                if(unix_timestamp(b.course_start_time)>0,date_format(b.course_start_time,'%Y-%m-%d %H:%i'),'待确认') start_time,
+                if(unix_timestamp(b.course_end_time)>0,date_format(b.course_end_time,'%Y-%m-%d %H:%i'),'待确认') end_time,
+                case b.is_enable
+                when '-3' then '已结课'
+                when '-2' then '等待开课'
+                when '1' then '报名中'
+                when '2' then '授课中'
+                end status_cn
+                from {$wpdb->prefix}order a 
+                left join {$wpdb->prefix}course b on a.match_id = b.id
+                LEFT JOIN {$wpdb->prefix}course_type c on b.course_type = c.id
+                WHERE a.user_id = {$current_user->ID} and a.pay_status in (2,3,4)
+                order by b.is_enable desc
+                limit $start,$pageSize
+                ";
+        //print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        //print_r($rows);
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无课程', 'nlyd-student')));
+        foreach ($rows as $k => $val){
+
+            $user_real_name = get_user_meta($val['coach_id'],'user_real_name')[0];
+            $rows[$k]['real_name'] = !empty($user_real_name) ? $user_real_name['real_name'] : '-';
+            if(isset($_POST['id'])){
+                //获取城市
+                $zone_city = $wpdb->get_var("select zone_city from {$wpdb->prefix}zone_meta where user_id = {$val['zone_id']} ");
+                $city_arr = str2arr($zone_city,'-');
+                if(!empty($city_arr[2])){
+                    $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
+                }elseif ($city_arr[1] != '市辖区'){
+                    $city = rtrim($city_arr[1],'市');
+                }else{
+                    $city = rtrim($city_arr[0],'市');
+                }
+                $rows[$k]['zone_city'] = $city;
+            }
+        }
+        wp_send_json_success(array('info'=>$rows));
+    }
+
+    //机构管理员的添加/删除
+    public function set_zone_manager(){
+
+        if(empty($_POST['type'])){
+            wp_send_json_error(array('info'=>__('参数不全')));
+        }
+        global $wpdb,$current_user;
+        if($_POST['type'] == 'set'){
+
+            if(reg_match('m',$_POST['user_phone'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
+            $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['user_phone']}'
+                ";
+            $manager = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($manager)) wp_send_json_error(array('info'=>__('该用户未注册','nlyd-student')));
+            if(empty($manager['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
+
+            $manager_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_manager where zone_id = {$current_user->ID} and user_id = {$manager['ID']}");
+            if($manager_id){
+                wp_send_json_error(array('info'=>__('该用户已是该机构管理员')));
+            }
+            $a = $wpdb->insert($wpdb->prefix.'zone_manager',array('zone_id'=>$current_user->ID,'user_id'=>$manager['ID']));
+        }else{
+            if(empty($_POST['id'])){
+                wp_send_json_error(array('info'=>__('id不能为空')));
+            }
+            $a = $wpdb->delete($wpdb->prefix.'zone_manager',array('id'=>$_POST['id']));
+        }
+        if($a){
+            wp_send_json_success(array('info'=>__('操作成功'),'url'=>home_url('/zone/setting/')));
+        }else{
+            wp_send_json_error(array('info'=>__('操作失败')));
+        }
     }
 
     /*

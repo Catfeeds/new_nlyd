@@ -47,9 +47,9 @@
                     </div>
                     <?php } ?>
                     <?php endif;?>
+                    <a class="a-btn a-btn-table submit relative"><div><?=__('保存更新', 'nlyd-student')?></div></a>
                 </div>
             </div>
-            <a class="a-btn a-btn-table submit"><div><?=__('保存更新', 'nlyd-student')?></div></a>
         </div>            
     </div>
 </div>

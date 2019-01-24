@@ -15,17 +15,19 @@
             <div class="layui-row nl-border nl-content">
                 <div class="layui-row width-padding width-padding-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
+                        <input type="hidden" name="action" value="student_savePass">
+                        <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_savePass_code_nonce');?>">
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('输入旧密码', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="password" name="old_psw" lay-verify="required" autocomplete="off" placeholder="<?=__('输入旧密码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="password" name="old_pass" lay-verify="required" autocomplete="off" placeholder="<?=__('输入旧密码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('输入新密码', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="password" name="new_psw" lay-verify="required" autocomplete="off" placeholder="<?=__('输入新密码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="password" name="password" lay-verify="required" autocomplete="off" placeholder="<?=__('输入新密码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('确认新密码', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="password" name="confirm_psw" lay-verify="required" autocomplete="off" placeholder="<?=__('确认新密码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="password" name="confirm_password" lay-verify="required" autocomplete="off" placeholder="<?=__('确认新密码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
                         </div>
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认修改密码', 'nlyd-student')?></div></a>
                     </form>
@@ -44,30 +46,31 @@
             // 监听提交
             form.on('submit(layform)', function(data){
                 var _this=$(this);
-                console.log(data.field)
-                // if(!_this.hasClass('disabled')){
-                //     $.ajax({
-                //         data: data,
-                //         beforeSend:function(XMLHttpRequest){
-                //             _this.addClass('disabled')
-                //         },
-                //         success: function(res, textStatus, jqXHR){
-                //             $.alerts(res.data.info)
-                //             if(res.data.url){
-                //                 setTimeout(function() {
-                //                      window.location.href=res.data.url
-                //                 }, 300);
-                //             }
-                //         },
-                //         complete: function(jqXHR, textStatus){
-                //             if(textStatus=='timeout'){
-                //                 $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                //             }
-                //             _this.removeClass('disabled');
-                //         }
-                //     })
-                // }
-                return false;
+                
+                if(!_this.hasClass('disabled')){
+                    $.ajax({
+                        data: data.field,
+                        beforeSend:function(XMLHttpRequest){
+                            _this.addClass('disabled')
+                        },
+                        success: function(res, textStatus, jqXHR){
+                            // console.log(res)
+                            $.alerts(res.data.info)
+                            if(res.data.url){
+                                setTimeout(function() {
+                                     window.location.href=res.data.url
+                                }, 300);
+                            }
+                        },
+                        complete: function(jqXHR, textStatus){
+                            if(textStatus=='timeout'){
+                                $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                            }
+                            _this.removeClass('disabled');
+                        }
+                    })
+                }
+                // return false;
             });
         });
     })

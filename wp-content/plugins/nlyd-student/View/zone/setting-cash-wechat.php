@@ -11,7 +11,7 @@
                     <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/settingCash/');?>">
                         <div><i class="iconfont">&#xe610;</i></div>
                     </a>
-                    <h1 class="mui-title"><div><?=__('上传收款二维码', 'nlyd-student')?></div></h1>
+                    <h1 class="mui-title"><div><?=__('上传微信收款二维码', 'nlyd-student')?></div></h1>
                 </header>
             <div class="layui-row nl-border nl-content">
                 <form class="nl-page-form layui-form width-margin-pc have-bottom">   
@@ -36,7 +36,7 @@
                         
                     </div>
                     <div class="input_row ta_c mt_10">
-                    <?=__('上传不设金额的收款二维码', 'nlyd-student')?>
+                    <?=__('上传不设金额的微信收款二维码', 'nlyd-student')?>
                     </div>
                     <a class="a-btn a-btn-table" id="layuiForm" lay-filter="layuiForm" lay-submit=""><div><?=__('保 存', 'nlyd-student')?></div></a>
                 </form>

@@ -169,7 +169,7 @@
             var year=[];
             var hour=[];
             var minites=[]
-            for(var i=0;i<=60;i++){
+            for(var i=0;i<=59;i++){
                 if(i<10){
                     i='0'+i;
                 }
