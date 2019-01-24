@@ -969,7 +969,7 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         if(mb_strlen($_POST['fullname']) < 1 || mb_strlen($_POST['fullname']) > 100) wp_send_json_error(array(__('收件人长度为1-100个字符', 'nlyd-student')));
-        if(reg_match('m',$_POST['telephone'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
+        if(!reg_match('m',$_POST['telephone'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
 
         if(empty($_POST['province']) || empty($_POST['city']) || empty($_POST['area']) || empty($_POST['address'])) wp_send_json_error(array('info'=>__('请确认地址信息的完整性', 'nlyd-student')));
 
@@ -4633,7 +4633,7 @@ class Student_Ajax
 
         if(!empty($_POST['center_manager'])){
             $manager = $_POST['zone_type_alias'] == 'match' ? '中心负责人' : '总经理';
-            if(reg_match('m',$_POST['center_manager'])) wp_send_json_error(array(__($manager.'手机格式不正确', 'nlyd-student')));
+            if(!reg_match('m',$_POST['center_manager'])) wp_send_json_error(array('info'=>__($manager.'手机格式不正确', 'nlyd-student')));
             $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['center_manager']}'
@@ -4648,8 +4648,8 @@ class Student_Ajax
                 wp_send_json_error(array('info'=>'组委会主席或者秘书长为必选项'));
             }
 
-            if(reg_match('m',$_POST['chairman_phone'])) wp_send_json_error(array(__('组委会主席手机格式不正确', 'nlyd-student')));
-            if(reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array(__('秘书长手机格式不正确', 'nlyd-student')));
+            if(!reg_match('m',$_POST['chairman_phone'])) wp_send_json_error(array('info'=>__('组委会主席手机格式不正确', 'nlyd-student')));
+            if(!reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array('info'=>__('秘书长手机格式不正确', 'nlyd-student')));
             $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['chairman_phone']}'
@@ -5008,7 +5008,7 @@ class Student_Ajax
         if($_POST['start_time'] >= $_POST['end_time'] )wp_send_json_error(array('info'=>'结束时间必须大于开始时间'));
         if($_POST['entry_end_time'] >= $_POST['start_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
         global $wpdb,$current_user;
-        if(reg_match('m',$_POST['person_liable'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
+        if(!reg_match('m',$_POST['person_liable'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['person_liable']}'
@@ -5840,7 +5840,7 @@ class Student_Ajax
         }
         global $wpdb,$current_user;
 
-        if(reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
+        if(!reg_match('m',$_POST['coach_id'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['coach_id']}'
@@ -6807,6 +6807,39 @@ class Student_Ajax
             }
         }
         wp_send_json_success(array('info'=>$rows));
+    }
+
+    //机构管理员的添加/删除
+    public function set_zone_manager(){
+
+        if(empty($_POST['user_phone']) || empty($_POST['type'])){
+            wp_send_json_error(array('info'=>__('参数不全')));
+        }
+        global $wpdb,$current_user;
+        if($_POST['type'] == 'set'){
+            if(!reg_match('m',$_POST['user_phone'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
+            $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
+                where a.user_mobile = '{$_POST['user_phone']}'
+                ";
+            $manager = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($manager)) wp_send_json_error(array('info'=>__('该教练未注册','nlyd-student')));
+            if(empty($manager['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证','nlyd-student')));
+
+            $manager_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_manager where zone_id = {$current_user->ID} and user_id = {$manager['ID']}");
+            if($manager_id){
+                wp_send_json_error(array('info'=>__('该用户已是该机构管理员')));
+            }
+            $a = $wpdb->insert($wpdb->prefix.'zone_manager',array('zone_id'=>$current_user->ID,'user_id'=>$manager['ID']));
+        }else{
+
+            $a = $wpdb->delete($wpdb->prefix.'zone_manager',array('zone_id'=>$current_user->ID,'id'=>$_POST['id']));
+        }
+        if($a){
+            wp_send_json_success(array('info'=>__('操作成功')));
+        }else{
+            wp_send_json_error(array('info'=>__('操作失败')));
+        }
     }
 
     /*
