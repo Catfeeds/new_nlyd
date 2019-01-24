@@ -4697,6 +4697,7 @@ class Student_Ajax
             'business_licence_url'=>$business_licence_url,
             'legal_person'=>$_POST['legal_person'],
             'zone_city'=>$_POST['zone_match_address'],
+            'zone_name'=>!empty($_POST['zone_name']) ? $_POST['zone_name']:'',
             'bank_card_name'=>$_POST['bank_card_name'],
             'opening_bank'=>$_POST['opening_bank'],
             'opening_bank_address'=>$_POST['opening_bank_address'],
