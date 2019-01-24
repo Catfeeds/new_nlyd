@@ -37,6 +37,13 @@ class Student_Directory
         load_view_template($view);
     }
     /**
+     * 2019赛区名录
+     */
+     public function directoryZone_pc(){
+        $view = student_view_path.CONTROLLER.'/directory-zone_pc.php';
+        load_view_template($view);
+    }
+    /**
      * 脑力健将名录
      */
      public function directoryPlayer(){
@@ -228,7 +235,7 @@ class Student_Directory
      * 默认公用js/css引入
      */
     public function scripts_default(){
-        if ((ACTION == 'directoryPlayer' || ACTION == 'directoryRead' || ACTION == 'directoryRemember' || ACTION == 'directoryCalculation') && !is_mobile()) {
+        if ((ACTION == 'directoryZone_pc' || ACTION == 'directoryPlayer' || ACTION == 'directoryRead' || ACTION == 'directoryRemember' || ACTION == 'directoryCalculation') && !is_mobile()) {
             wp_register_style( 'my-student-directory_pc', student_css_url.'directory/directory_pc.css',array('my-student') );
             wp_enqueue_style( 'my-student-directory_pc' );
         }else{
