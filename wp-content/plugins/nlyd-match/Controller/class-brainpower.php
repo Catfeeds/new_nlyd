@@ -354,9 +354,10 @@ class Brainpower
             if($range != 1 && $range !=2 ) exit('<h3>参数错误</h3>');
             //清除当前比赛已有脑力健将
             $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}directories WHERE `match` LIKE '%({$match_id})%'", ARRAY_A);
+            $wpdb->query('START TRANSACTION');
             foreach ($rows as $row2){
                 if($row2['level'] == false || $row2['level'] <= 1){
-                    $wpdb->delete($wpdb->prefix.'directories', ['id' => $row2['id']]);
+                    $bool = $wpdb->delete($wpdb->prefix.'directories', ['id' => $row2['id']]);
                 }else{
                     $level = $row2['level']-1;
                     $matchArr = explode(',', $row2['match']);
@@ -367,32 +368,47 @@ class Brainpower
                         }
                     }
                     $matchStr = join(',', $matchArr);
-                    $wpdb->update($wpdb->prefix.'directories', ['level' => $level,'match' => $matchStr], ['id' => $row2['id']]);
+                    $bool = $wpdb->update($wpdb->prefix.'directories', ['level' => $level,'match' => $matchStr], ['id' => $row2['id']]);
+                }
+                if(!$bool){
+                    $wpdb->query('ROLLBACK');
+                    $msg = '清除当前比赛已有记录失败';
+                    break;
                 }
             }
+            if($msg == ''){
+                foreach ($categoryArr as $cav1){
+                    foreach ($cav1['data'] as $caDataV){
+                        $row = $wpdb->get_row('SELECT id,`level`,`match` FROM '.$wpdb->prefix.'directories WHERE `category_id`="'.$cav1['parent_id'].'" AND `user_id`='.$caDataV['user_id'].' AND `range`='.$range, ARRAY_A);
 
-            foreach ($categoryArr as $cav1){
-                foreach ($cav1['data'] as $caDataV){
-                    $row = $wpdb->get_row('SELECT id,`level`,`match` FROM '.$wpdb->prefix.'directories WHERE `category_name`="'.$cav1['alias'].'" AND `user_id`='.$caDataV['user_id'].' AND `range`='.$range, ARRAY_A);
-
-                    if($row){
-                        if(!in_array('('.$match_id.')', explode(',', $row['match']))){
-                            $level = $row['level']+1;
-                            $match = $row['match'].',('.$match_id.')';
-                            $sql = "UPDATE {$wpdb->prefix}directories SET `level`={$level},`match`='{$match}' WHERE id={$row['id']}";
+                        if($row){
+                            if(!in_array('('.$match_id.')', explode(',', $row['match']))){
+                                $level = $row['level']+1;
+                                $match = $row['match'] != '' ? $row['match'].',('.$match_id.')' : '('.$match_id.')';
+                                $sql = "UPDATE {$wpdb->prefix}directories SET `level`={$level},`match`='{$match}' WHERE id={$row['id']}";
+                                $bool = $wpdb->query($sql);
+                            }
+                        }else{
+                            $sql = "INSERT INTO {$wpdb->prefix}directories (`user_id`,`category_id`,`level`,`match`,`range`,`type_name`) 
+                                VALUES ('{$caDataV['user_id']}','{$cav1['parent_id']}',1,'({$match_id})',{$range},'{$cav1['name']}脑力健将')";
                             $bool = $wpdb->query($sql);
                         }
-                    }else{
-                        $sql = "INSERT INTO {$wpdb->prefix}directories (`user_id`,`category_id`,`level`,`match`,`range`,`type_name`) 
-                                VALUES ('{$caDataV['user_id']}','{$cav1['parent_id']}',1,'({$match_id})',{$range},'{$cav1['name']}脑力健将')";
-                        $bool = $wpdb->query($sql);
-                    }
-                    if($bool){
-                        $msg = '生成成功';
+                        if(!$bool){
+                            $wpdb->query('ROLLBACK');
+                            $msg = '生成失败';
+                            break 2;
+                        }
                     }
                 }
             }
-            if($msg == '') $msg = '生成失败';
+
+            if($msg == '') {
+                $wpdb->query('COMMIT');
+                $msg = '生成成功';
+                //TODO 删除静态文件
+            }else{
+                $wpdb->query('ROLLBACK');
+            }
         }
 
         //是否已有数据
@@ -434,8 +450,8 @@ class Brainpower
                     </style>
                     <div id="dra_set_name" class="">
                         <span style="font-weight: bold">名录类型:</span>
-                        <input type="radio" name="range" <?=intval($range) === 1 ? 'checked="checked"' : ''?> value="1">中国
-                        <input type="radio" name="range" <?=intval($range) === 2 ? 'checked="checked"' : ''?> value="2">国际
+                        <label for="range_1"><input type="radio" id="range_1" name="range" <?=intval($range) === 1 ? 'checked="checked"' : ''?> value="1">中国</label>
+                        <label for="range_2"><input type="radio" id="range_2" name="range" <?=intval($range) === 2 ? 'checked="checked"' : ''?> value="2">国际</label>
 
                     </div>
 
