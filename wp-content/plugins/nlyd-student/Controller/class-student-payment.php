@@ -306,7 +306,7 @@ class Student_Payment {
                 $order = $wpdb->get_row('SELECT match_id,user_id,sub_centres_id,order_type FROM '.$wpdb->prefix.'order WHERE serialnumber='.$serialnumber, ARRAY_A);
                 //获取当前比赛场景
                 if($order['order_type'] == 3){  //课程
-                    $sql = "select  a.zone_id,a.course_category_id,b.type_alias from {$wpdb->prefix}course a
+                    $sql = "select  a.zone_id,a.course_category_id,a.coach_id,b.type_alias from {$wpdb->prefix}course a
                     left join {$wpdb->prefix}course_type b on a.course_type = b.id 
                     where a.id = {$order['match_id']} ";
                     //print_r($sql);
@@ -451,13 +451,14 @@ class Student_Payment {
                             if($coach_id){
                                 $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$row['coach_id'],'apply_status'=>2),array('id'=>$coach_id));
                             }else{
-                                $wpdb->insert(array('user_id'=>$coach_id,'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
+                                $wpdb->insert($wpdb->prefix.'my_coach',array('user_id'=>$order['user_id'],'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
                             }
                         }
                         //print_r($insert);die;
                         $insert['created_time'] = get_time('mysql');
 
                         $wpdb->query('START TRANSACTION');
+
                         $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
                         if(!empty($insert['sponsor_id']) && $money4 > 0){
@@ -514,7 +515,7 @@ class Student_Payment {
                             //判断直接推荐次数
                             $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
                             //获取推荐人教练
-                            $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
+                            $coach_id = $row['coach_id'];
                             //print_r("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 " );die;
                             if($total < 3 && $coach_id > 0){
 
@@ -528,7 +529,7 @@ class Student_Payment {
                                 );
                                 $x = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert1);
                                 $id = $wpdb->insert_id;
-                                $y = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$order['user_id'],'user_income'=>$money3,'income_type'=>'recommend_qualified','match_id'=>$id,'created_time'=>get_time('mysql')));
+                                $y = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'recommend_qualified','match_id'=>$id,'created_time'=>get_time('mysql')));
 
                             }else{
                                 $x = true;
@@ -712,7 +713,7 @@ class Student_Payment {
 
         /*****************收益分配start*******************/
 
-        /*if($order['order_type'] == 3){  //课程
+        if($order['order_type'] == 3){  //课程
             $sql = "select  a.zone_id,a.course_category_id,a.coach_id,b.type_alias from {$wpdb->prefix}course a
                     left join {$wpdb->prefix}course_type b on a.course_type = b.id
                     where a.id = {$order['match_id']} ";
@@ -857,7 +858,7 @@ class Student_Payment {
                     if($coach_id){
                         $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$row['coach_id'],'apply_status'=>2),array('id'=>$coach_id));
                     }else{
-                        $wpdb->insert(array('user_id'=>$coach_id,'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
+                        $wpdb->insert($wpdb->prefix.'my_coach',array('user_id'=>$order['user_id'],'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
                     }
                     //print_r($coach_id);die;
                 }
@@ -872,7 +873,7 @@ class Student_Payment {
                     $sponsor_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['sponsor_id']} and income_type='{$sponsor_type}' and match_id = {$order['match_id']}",ARRAY_A);
                     //var_dump($stream_id);
                     if($sponsor_income['id'] > 0 && $sponsor_income['income_status'] == 1){
-                        $b = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$sponsor_income['user_income']+$money4),array('id'=>$sponsor_income['id']));
+                        $b = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$sponsor_income['user_income']+$money4,'created_time'=>get_time('mysql')),array('id'=>$sponsor_income['id']));
                     }
                     else{
                         $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>$sponsor_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
@@ -886,7 +887,7 @@ class Student_Payment {
                     //print_r($referee_income);
                     if($referee_income['id'] > 0 && $referee_income['income_status'] == 1){
                         //print_r($referee_income['user_income']+$money1);die;
-                        $c = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$referee_income['user_income']+$money1),array('id'=>$referee_income['id']));
+                        $c = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$referee_income['user_income']+$money1,'created_time'=>get_time('mysql')),array('id'=>$referee_income['id']));
                     }else{
                         $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['referee_id'],'user_income'=>$money1,'income_type'=>$referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
@@ -897,7 +898,7 @@ class Student_Payment {
                     $indirect_referee_type = 'recommend_'.$income_type;
                     $indirect_referee_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$user['indirect_referee_id']} and match_id = '{$order['match_id']}' and income_type = '{$indirect_referee_type}' ",ARRAY_A);
                     if($indirect_referee_income['id'] > 0 && $indirect_referee_income['income_status'] == 1){
-                        $d = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$indirect_referee_income['user_income']+$money2),array('id'=>$indirect_referee_income['id']));
+                        $d = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$indirect_referee_income['user_income']+$money2,'created_time'=>get_time('mysql')),array('id'=>$indirect_referee_income['id']));
                     }else{
                         $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
@@ -909,7 +910,7 @@ class Student_Payment {
                     $person_liable_type = 'director_'.$income_type;
                     $person_liable_income = $wpdb->get_row("select id,user_income,income_status from {$wpdb->prefix}user_stream_logs where user_id = {$insert['person_liable_id']} and match_id = '{$order['match_id']}' and income_type = '{$person_liable_type}' ",ARRAY_A);
                     if($person_liable_income['id'] > 0 && $person_liable_income['income_status'] == 1){
-                        $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3),array('id'=>$person_liable_income['id']));
+                        $e = $wpdb->update($wpdb->prefix.'user_stream_logs',array('user_income'=>$person_liable_income['user_income']+$money3,'created_time'=>get_time('mysql')),array('id'=>$person_liable_income['id']));
                     }else{
                         $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                     }
@@ -936,7 +937,7 @@ class Student_Payment {
                         );
                         $x = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert1);
                         $id = $wpdb->insert_id;
-                        $y = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$order['user_id'],'user_income'=>$money3,'income_type'=>'recommend_qualified','match_id'=>$id,'created_time'=>get_time('mysql')));
+                        $y = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'recommend_qualified','match_id'=>$id,'created_time'=>get_time('mysql')));
 
                     }else{
                     	$x = true;
@@ -956,7 +957,7 @@ class Student_Payment {
                     $wpdb->query('ROLLBACK');
                 }
             }
-        }*/
+        }
 
         /*****************收益分配end*******************/
 
@@ -1028,7 +1029,7 @@ class Student_Payment {
 
                     //获取当前比赛场景
                     if($order['order_type'] == 3){  //课程
-                        $sql = "select  a.zone_id,a.course_category_id,b.type_alias from {$wpdb->prefix}course a
+                        $sql = "select  a.zone_id,a.course_category_id,a.coach_id,b.type_alias from {$wpdb->prefix}course a
                                 left join {$wpdb->prefix}course_type b on a.course_type = b.id 
                                 where a.id = {$order['match_id']} ";
                         //print_r($sql);
@@ -1173,7 +1174,7 @@ class Student_Payment {
                                 if($coach_id){
                                     $wpdb->update($wpdb->prefix.'my_coach',array('coach_id'=>$row['coach_id'],'apply_status'=>2),array('id'=>$coach_id));
                                 }else{
-                                    $wpdb->insert(array('user_id'=>$coach_id,'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
+                                    $wpdb->insert($wpdb->prefix.'my_coach',array('user_id'=>$order['user_id'],'category_id'=>$row['course_category_id'],'coach_id'=>$row['coach_id'],'apply_status'=>2));
                                 }
                             }
                             //print_r($insert);die;
@@ -1181,6 +1182,7 @@ class Student_Payment {
 
 
                             $wpdb->query('START TRANSACTION');
+
                             $a = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
 
                             if(!empty($insert['sponsor_id']) && $money4 > 0){
@@ -1237,7 +1239,7 @@ class Student_Payment {
                                 //判断直接推荐次数
                                 $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
                                 //获取推荐人教练
-                                $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
+                                $coach_id = $row['coach_id'];
                                 //print_r("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 " );die;
                                 if($total < 3 && $coach_id > 0){
 
@@ -1251,7 +1253,7 @@ class Student_Payment {
                                     );
                                     $x = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert1);
                                     $id = $wpdb->insert_id;
-                                    $y = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$order['user_id'],'user_income'=>$money3,'income_type'=>'recommend_qualified','match_id'=>$id,'created_time'=>get_time('mysql')));
+                                    $y = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'recommend_qualified','match_id'=>$id,'created_time'=>get_time('mysql')));
 
                                 }else{
                                     $x = true;
