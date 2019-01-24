@@ -5110,9 +5110,11 @@ class Student_Ajax
 
             $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$_POST['type']}' ";
         }
-        $match_cost = $wpdb->get_var($set_sql);
-        if($match_cost < 10){
-            wp_send_json_error(array('info'=>__('未匹配到费用','nlyd-student')));
+        if(in_array($_POST['type'],array('official-match','official-grading','basis-course','boost-course'))){
+            $match_cost = $wpdb->get_var($set_sql);
+            if($match_cost < 10){
+                wp_send_json_error(array('info'=>__('未匹配到费用','nlyd-student')));
+            }
         }
         $match_cost = !empty($match_cost)? $match_cost :number_format(0);
         wp_send_json_success($match_cost);
@@ -6812,19 +6814,20 @@ class Student_Ajax
     //机构管理员的添加/删除
     public function set_zone_manager(){
 
-        if(empty($_POST['user_phone']) || empty($_POST['type'])){
+        if(empty($_POST['type'])){
             wp_send_json_error(array('info'=>__('参数不全')));
         }
         global $wpdb,$current_user;
         if($_POST['type'] == 'set'){
+
             if(reg_match('m',$_POST['user_phone'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
             $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.user_mobile = '{$_POST['user_phone']}'
                 ";
             $manager = $wpdb->get_row($sql,ARRAY_A);
-            if(empty($manager)) wp_send_json_error(array('info'=>__('该教练未注册','nlyd-student')));
-            if(empty($manager['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证','nlyd-student')));
+            if(empty($manager)) wp_send_json_error(array('info'=>__('该用户未注册','nlyd-student')));
+            if(empty($manager['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
 
             $manager_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_manager where zone_id = {$current_user->ID} and user_id = {$manager['ID']}");
             if($manager_id){
@@ -6832,8 +6835,10 @@ class Student_Ajax
             }
             $a = $wpdb->insert($wpdb->prefix.'zone_manager',array('zone_id'=>$current_user->ID,'user_id'=>$manager['ID']));
         }else{
-
-            $a = $wpdb->delete($wpdb->prefix.'zone_manager',array('zone_id'=>$current_user->ID,'id'=>$_POST['id']));
+            if(empty($_POST['id'])){
+                wp_send_json_error(array('info'=>__('id不能为空')));
+            }
+            $a = $wpdb->delete($wpdb->prefix.'zone_manager',array('id'=>$_POST['id']));
         }
         if($a){
             wp_send_json_success(array('info'=>__('操作成功'),'url'=>home_url('/zone/setting/')));
