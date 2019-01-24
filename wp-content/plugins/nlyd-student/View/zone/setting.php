@@ -25,7 +25,7 @@
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('管理员', 'nlyd-student')?></div></div>
                                 <input type="text" name="" readonly value="13982242710" class="nl-input nl-foucs">
-                                <a class="form-input-right c_blue clear"><div><?=__('解除关联', 'nlyd-student')?></div></a>
+                                <a class="form-input-right c_blue clear" data-id="1"><div><?=__('解除关联', 'nlyd-student')?></div></a>
                             </div>
                             <div class="fs_12 ta_c mt_10">
                                 <?=__('*管理员必须是使用手机号在本平台注册并已完成实名认证的用户', 'nlyd-student')?>
