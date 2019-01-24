@@ -158,15 +158,13 @@ jQuery(function($) {
             if (initAddress && initAddress.length>0 && initAddress!="<?=__('请选择', 'nlyd-student')?>") {
                 var areaValue=initAddress;
                 $.each(area,function(index,value){
-                    // console.log(value.value.indexOf(areaValue))
-                    if(value.value.indexOf(areaValue)!=-1){
-                        console.log(index)
+                    if(areaValue.indexOf(value.value)!=-1){
                         posiotionarea=[index,0,0];
                         $.each(value.childs,function(i,v){
-                            if(v.value.indexOf(areaValue)!=-1){
+                            if(areaValue.indexOf(v.value)!=-1){
                                 posiotionarea=[index,i,0];
                                 $.each(v.childs,function(j,val){
-                                    if(val.value.indexOf(areaValue)!=-1){
+                                    if(areaValue.indexOf(val.value)!=-1){
                                         posiotionarea=[index,i,j];
                                     }
                                 })

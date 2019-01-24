@@ -581,11 +581,12 @@ a.form-input-row:hover{
 /* 缺省页面 */
 
 .no-info-page{
-    position: absolute;
-    top: 25%;
+    /* position: absolute; */
+    /* top: 25%;
     left: 25%;
+    width: 50%; */
     width: 50%;
-    margin: auto;
+    margin: 20px auto auto auto;
     text-align: center;
 }
 .no-info-img img{
