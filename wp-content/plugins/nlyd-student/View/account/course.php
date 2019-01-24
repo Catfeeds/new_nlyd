@@ -7,7 +7,7 @@
             
         ?>
 
-        <?php if(!$row){ ?>
+        <?php if($row){ ?>
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback static" href="<?=home_url('/account/')?>">
@@ -77,16 +77,14 @@ jQuery(function($) {
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
-        var _type = $.Request('type');
         flow.load({
             elem: '#flow-list' //流加载容器
             ,isAuto: true
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
                 var postData={
-                    action:'get_my_match_list',
+                    action:'get_my_course',
                     page:page,
-                    type:_type
                 };
                 var lis = [];
                 $.ajax({
