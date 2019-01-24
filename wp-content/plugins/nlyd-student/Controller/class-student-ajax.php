@@ -6764,7 +6764,7 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
-        $sql = "select a.id order_id,a.user_id,b.id course_id,b.course_title,b.const,b.open_quota,b.is_enable,b.coach_id,c.type_name,
+        $sql = "select a.id order_id,a.user_id,b.id course_id,b.course_title,b.const,b.open_quota,b.is_enable,b.coach_id,b.zone_id,c.type_name,
                 if(unix_timestamp(b.course_start_time)>0,date_format(b.course_start_time,'%Y-%m-%d %H:%i'),'待确认') start_time,
                 if(unix_timestamp(b.course_end_time)>0,date_format(b.course_end_time,'%Y-%m-%d %H:%i'),'待确认') end_time,
                 case b.is_enable
@@ -6794,7 +6794,7 @@ class Student_Ajax
             $rows[$k]['real_name'] = !empty($user_real_name) ? $user_real_name['real_name'] : '-';
             if(isset($_POST['id'])){
                 //获取城市
-                $zone_city = $wpdb->get_var("select zone_city from {$wpdb->prefix}zone_meta where user_id = {$zone_user_id} ");
+                $zone_city = $wpdb->get_var("select zone_city from {$wpdb->prefix}zone_meta where user_id = {$val['zone_id']} ");
                 $city_arr = str2arr($zone_city,'-');
                 if(!empty($city_arr[2])){
                     $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
