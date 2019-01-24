@@ -17,8 +17,7 @@
                 <div class="layui-row width-padding width-padding-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <input type="hidden" name="action" value="set_zone_manager">
-                        <input type="hidden" name="type" value="delete">
-                        <input type="hidden" name="id" value="<?=$_GET['id']?>">
+                        <input type="hidden" name="type" value="set">
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('关联账号', 'nlyd-student')?>：</span>
