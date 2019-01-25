@@ -57,9 +57,9 @@
                     </div>
                 </div>
 
-                <div class="course_detail_row width-padding width-padding-pc">
+                <!-- <div class="course_detail_row width-padding width-padding-pc">
                     <div class="detail_table_row"><span class="c_black bold fs_16"><?=__('配套教材', 'nlyd-student')?></span></div>
-                    <a class="detail_table_row">
+                    <a class="detail_table_row" href="<?=home_url('/courses/shopsDetail/');?>">
                         <div class="course_detail_img img-box img-z">
                             <img src="<?=student_css_url.'image/course/course_pic.png'?>">
                         </div>
@@ -69,7 +69,7 @@
                             <div class="c_blue fs_14">¥ 100.00</div>
                         </div>
                     </a>
-                </div>
+                </div> -->
             </div>
             <?php if(empty($is_entered)){?>
             <a href="<?=home_url('/courses/courseSign/center_id/'.$_GET['center_id'].'/id/'.$_GET['id']);?>" class="a-btn a-btn-table"><div><?=__('抢占名额', 'nlyd-student')?></div></a>

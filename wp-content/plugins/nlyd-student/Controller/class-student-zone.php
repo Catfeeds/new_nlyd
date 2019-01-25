@@ -1036,6 +1036,7 @@ class Student_Zone
                   left join {$wpdb->prefix}users c on b.user_id = c.ID 
                   where a.user_id = {$current_user->ID}";
         $data['list'] = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($sql);
         $view = student_view_path.CONTROLLER.'/setting.php';
         load_view_template($view,$data);
     }
