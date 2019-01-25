@@ -354,6 +354,7 @@ if(!class_exists('StudentController')){
             <script>window.plugins_url  = '<?= plugins_url('',dirname(__FILE__));?>';</script>
             <script>window.home_url  = '<?= home_url();?>';</script>
             <script>window.wait_match  = '<?= !empty($this->wait_match) ? json_encode($this->wait_match) : '';?>';</script>
+            <script>window.onload=function(){(function(){var child=document.getElementById('nav');var parent=document.getElementById("login");if(child && parent){parent.removeChild(child);}}())}</script>
             <?php
         }
 
