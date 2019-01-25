@@ -334,6 +334,7 @@ jQuery(document).ready(function($) {
 
 if($("#console").length>0){
     var consoleData=<?=empty($zones) ? [] : $zones;?>;
+    console.log(consoleData)
     var mobileSelect1 = new MobileSelect({
         trigger: '#console',
         title: "<?=__('选择机构账户', 'nlyd-student')?>",

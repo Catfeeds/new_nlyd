@@ -27,22 +27,6 @@
                                 <td><?=__('推荐用户', 'nlyd-student')?></td>
                                 <td><?=__('课程情况', 'nlyd-student')?></td>
                             </tr>
-                            <!-- <tr>
-                                <td><div class="table_content">1</div></td>
-                                <td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
-                                <td><div class="table_content">18</div></td>
-                                <td><div class="table_content c_black">男</div></td>
-                                <td><div class="table_content c_black">刘亿亿</div></td>
-                                <td><div class="table_content"><span class="c_green">达标</span></div></td>
-                            </tr>
-                            <tr>
-                                <td><div class="table_content">1</div></td>
-                                <td><div class="table_content "><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
-                                <td><div class="table_content c_black">18</div></td>
-                                <td><div class="table_content c_black">男</div></td>
-                                <td><div class="table_content">刘亿亿</div></td>
-                                <td><div class="table_content"><span class="c_black6">未达标</span></div></td>
-                            </tr> -->
                         </tbody>
                     </table>
                 </div>
