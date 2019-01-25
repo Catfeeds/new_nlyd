@@ -1761,7 +1761,7 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row"><label for="bank_card_name">开户行名称 </label></th>
+                        <th scope="row"><label for="bank_card_name">机构开户名称 </label></th>
                         <td>
                             <input type="text" name="bank_card_name" value="<?=$row['bank_card_name']?>">
                         </td>
