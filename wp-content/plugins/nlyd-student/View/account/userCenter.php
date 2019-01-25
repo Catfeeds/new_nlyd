@@ -130,6 +130,15 @@
                     <span class="pull-right">我的脑币:<?=$user_info['mycred_default_total'] > 0 ? $user_info['mycred_default_total'] : 0 ;?></span>
                 </a> -->
                 <div class="userCenter-detail width-padding layui-row layui-bg-white width-margin-pc">
+                    <?php if(!empty($user_info['user_roles'] == 'president')):?>
+                        <a class="c_black8"  href="<?=home_url('/controls/');?>">
+                            <div class="userCenter-detail-head">
+                                <div class="menuImg-wrapper my-console">
+                                </div>
+                            </div>
+                            <div class="userCenter-detail-foot"><?=__('控制台', 'nlyd-student')?></div>
+                        </a>
+                    <?php endif;?>
                     <?php if(!empty($zones)):?>
                     <a class="c_black8" id="console">
                         <div class="userCenter-detail-head">
@@ -138,7 +147,6 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('机构管理', 'nlyd-student')?></div>
                     </a>
-                    
                     <?php endif;?>
                     <a class="c_black8" href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
