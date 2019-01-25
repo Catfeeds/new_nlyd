@@ -52,12 +52,11 @@ class Teacher
      * 教练列表
      */
     public function teacher(){
-        
+        global $wpdb;
         $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
         $searchStr = isset($_GET['search']) ? trim($_GET['search']) : '';
         $serachWhere = '';
         $join = '';
-        global $wpdb;
         if($searchStr != ''){
             $join = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name' 
                 LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=a.coach_id AND um2.meta_key='user_ID' ";
@@ -66,16 +65,18 @@ class Teacher
 
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID,zm.zone_city,zm.zone_match_type,zm.type_id,zm.zone_name 
-                    FROM {$wpdb->prefix}coach_skill a 
-                    LEFT JOIN {$wpdb->prefix}users b ON a.coach_id = b.ID 
+        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,b.ID AS coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID,zm.zone_city,zm.zone_match_type,zm.type_id,zm.zone_name 
+                    FROM {$wpdb->prefix}users b
+                    LEFT JOIN {$wpdb->usermeta} AS uml ON uml.user_id = b.ID AND uml.meta_key='{$wpdb->prefix}capabilities'
+                    LEFT JOIN {$wpdb->prefix}coach_skill a  ON a.coach_id = b.ID 
                     LEFT JOIN {$wpdb->usermeta} AS um_id ON um_id.user_id = a.coach_id AND um_id.meta_key='user_ID' 
                     LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id=a.coach_id 
                     LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=zjc.zone_id 
                     {$join} 
-                    WHERE a.coach_id > 0 AND b.ID !='' {$serachWhere} 
+                    WHERE uml.meta_value LIKE '%coach%' AND b.ID !='' {$serachWhere} 
                     LIMIT {$start},{$pageSize}";
         $rows = $wpdb->get_results($sql, ARRAY_A);
+
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -405,7 +406,18 @@ class Teacher
                     WHERE a.coach_id={$coach_id}";
         $row = $wpdb->get_row($sql, ARRAY_A);
 //        leo_dump($row);die;
-        if(!$row) exit('未找到用户数据!');
+        if(!$row) {
+            //查询是否有user数据
+            $var = $wpdb->get_var("SELECT user_id FROM {$wpdb->usermeta} WHERE user_id='{$coach_id}' AND meta_key='{$wpdb->prefix}capabilities' AND meta_value LIKE '%coach%'");
+            if($var){
+                //添加教练技能表记录
+                $bool = $wpdb->insert($wpdb->prefix.'coach_skill', ['coach_id' => $coach_id]);
+                if(!$bool) exit('未找到用户数据,插入教练技能失败!');
+                $row = $wpdb->get_row($sql, ARRAY_A);
+            }else{
+                exit('未找到用户数据!');
+            }
+        }
         $postsRows = getCategory();
         $usermeta = get_user_meta($row['user_id']);
         $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
@@ -463,13 +475,13 @@ class Teacher
                                 <th><label for="surname">账户ID</label></th>
                                 <td><?=isset($usermeta['user_ID']) ? $usermeta['user_ID'][0]: ''?></td>
                             </tr>
-                            <tr class="user-last-name-wrap">
-                                <th><label for="surname">教练照片</label></th>
-                                <td>
-                                    <img src="" alt="">
-                                    <input type="file">
-                                </td>
-                            </tr>
+<!--                            <tr class="user-last-name-wrap">-->
+<!--                                <th><label for="surname">教练照片</label></th>-->
+<!--                                <td>-->
+<!--                                    <img src="" alt="">-->
+<!--                                    <input type="file">-->
+<!--                                </td>-->
+<!--                            </tr>-->
                             <tr class="user-last-name-wrap">
                                 <th><label for="">教学类别</label></th>
                                 <td>
