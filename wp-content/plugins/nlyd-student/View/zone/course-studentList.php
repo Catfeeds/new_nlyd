@@ -16,7 +16,7 @@
             </header>    
             <div class="layui-row nl-border nl-content ">
                 <div class="nl-table-wapper have-bottom-footer" style="min-height:145px;">
-                    <div class="c_black width-padding width-padding-pc bold fs_16 student_title"><?=__('高效记忆术·G第2期·12214·12241学员列表', 'nlyd-student')?></div>
+                    <div class="c_black width-padding width-padding-pc bold fs_16 student_title"><?=$course_title?></div>
                     <table class="nl-table">
                         <tbody id="course_row">
                             <tr class='table-head'>
