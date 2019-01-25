@@ -6818,6 +6818,9 @@ class Student_Ajax
             wp_send_json_error(array('info'=>__('参数不全')));
         }
         global $wpdb,$current_user;
+        //获取机构id
+        $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+        if(empty($zone_id)) wp_send_json_error(array('info'=>__('机构信息错误')));
         if($_POST['type'] == 'set'){
 
             if(reg_match('m',$_POST['user_phone'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
@@ -6833,12 +6836,12 @@ class Student_Ajax
             if($manager_id){
                 wp_send_json_error(array('info'=>__('该用户已是该机构管理员')));
             }
-            $a = $wpdb->insert($wpdb->prefix.'zone_manager',array('zone_id'=>$current_user->ID,'user_id'=>$manager['ID']));
+            $a = $wpdb->insert($wpdb->prefix.'zone_manager',array('zone_id'=>$zone_id,'user_id'=>$manager['ID']));
         }else{
             if(empty($_POST['id'])){
                 wp_send_json_error(array('info'=>__('id不能为空')));
             }
-            $a = $wpdb->delete($wpdb->prefix.'zone_manager',array('id'=>$_POST['id']));
+            $a = $wpdb->delete($wpdb->prefix.'zone_manager',array('id'=>$_POST['id'],'zone_id'=>$zone_id));
         }
         if($a){
             wp_send_json_success(array('info'=>__('操作成功'),'url'=>home_url('/zone/setting/')));

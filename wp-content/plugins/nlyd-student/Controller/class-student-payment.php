@@ -516,7 +516,7 @@ class Student_Payment {
                             $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
                             //获取推荐人教练
                             $coach_id = $row['coach_id'];
-                            //print_r("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 " );die;
+                            $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
                             if($total < 3 && $coach_id > 0){
 
                                 $insert1 = array(
@@ -923,8 +923,8 @@ class Student_Payment {
                     $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
                     //print_r("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");die;
                     //获取推荐人教练
-                    $coach_id = $row['coach_id'];
-                    //print_r("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 " );die;
+                    //$coach_id = $row['coach_id'];
+                    $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
                     if($total < 3 && $coach_id > 0){
 
                         $insert1 = array(
@@ -1240,7 +1240,7 @@ class Student_Payment {
                                 $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
                                 //获取推荐人教练
                                 $coach_id = $row['coach_id'];
-                                //print_r("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 " );die;
+                                $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
                                 if($total < 3 && $coach_id > 0){
 
                                     $insert1 = array(
