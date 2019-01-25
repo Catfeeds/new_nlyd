@@ -9,10 +9,16 @@
  */
 class Teacher
 {
-
+    private $coachRole;
     public function __construct()
     {
         //add_action( 'init', array($this,'add_wp_roles'));
+        $ip = $_SERVER['REMOTE_ADDR'];
+        if($ip == '127.0.0.1'){
+            $this->coachRole  = 'editor';
+        }else{
+            $this->coachRole  = 'coach';
+        }
 
         add_action( 'admin_menu', array($this,'register_teacher_menu_page') );
         add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
@@ -73,7 +79,7 @@ class Teacher
                     LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id=a.coach_id 
                     LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=zjc.zone_id 
                     {$join} 
-                    WHERE uml.meta_value LIKE '%coach%' AND b.ID !='' {$serachWhere} 
+                    WHERE uml.meta_value LIKE '%{$this->coachRole}%' AND b.ID !='' {$serachWhere} 
                     LIMIT {$start},{$pageSize}";
         $rows = $wpdb->get_results($sql, ARRAY_A);
 
@@ -302,7 +308,7 @@ class Teacher
             $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
             $new_coach_id = isset($_POST['new_coach_id']) ? intval($_POST['new_coach_id']) : 0;
 //            $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
-            if($zone_user_id < 1) $err_msg .= '请选择所属主体机构';
+//            if($zone_user_id < 1) $err_msg .= '请选择所属主体机构';
             if($err_msg == ''){
                 $wpdb->query('START TRANSACTION');
                 //移动学员
@@ -408,7 +414,7 @@ class Teacher
 //        leo_dump($row);die;
         if(!$row) {
             //查询是否有user数据
-            $var = $wpdb->get_var("SELECT user_id FROM {$wpdb->usermeta} WHERE user_id='{$coach_id}' AND meta_key='{$wpdb->prefix}capabilities' AND meta_value LIKE '%coach%'");
+            $var = $wpdb->get_var("SELECT user_id FROM {$wpdb->usermeta} WHERE user_id='{$coach_id}' AND meta_key='{$wpdb->prefix}capabilities' AND meta_value LIKE '%{$this->coachRole}%'");
             if($var){
                 //添加教练技能表记录
                 $bool = $wpdb->insert($wpdb->prefix.'coach_skill', ['coach_id' => $coach_id]);
@@ -523,10 +529,21 @@ class Teacher
                             <tr class="user-last-name-wrap">
                                 <th><label for="zone_user_id">所属机构</label></th>
                                 <td>
-                                    <select class="js-data-select-ajax" name="zone_user_id" style="width: 50%" data-action="get_base_zone_list" data-type="teacher">
-                                        <option value="<?=$row['zone_id']?>" selected="selected">
-                                            <?=$row['zone_name']?>
-                                        </option>
+                                    <select class="js-data-select-ajax" name="zone_user_id" style="width: 50%" data-action="get_base_zone_list" data-type="all_base">
+                                        <?php if($row['zone_id'] > 0){
+                                            ?>
+                                            <option value="<?=$row['zone_id']?>" selected="selected">
+                                                <?=$row['zone_name']?>
+                                            </option>
+                                            <?php
+                                        }else{
+                                            ?>
+                                            <option value="0" selected="selected">
+                                                平台
+                                            </option>
+                                            <?php
+                                        } ?>
+
                                     </select>
                                 </td>
                             </tr>

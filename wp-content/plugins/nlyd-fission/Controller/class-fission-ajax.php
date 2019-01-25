@@ -258,7 +258,7 @@ class Fission_Ajax
         $rows = [];
         if($searchStr != ''){
             global $wpdb;
-            $rows = $wpdb->get_results("SELECT zm.user_id AS id,zm.zone_city AS text,zt.zone_type_alias,zm.zone_name,zm.zone_match_type FROM {$wpdb->prefix}zone_meta AS zm
+            $rows = $wpdb->get_results("SELECT zm.user_id AS id,zm.zone_city,zt.zone_type_alias,zm.zone_name,zm.zone_match_type FROM {$wpdb->prefix}zone_meta AS zm
                     LEFT JOIN {$wpdb->prefix}zone_type AS zt ON zt.id=zm.type_id
                     WHERE (zm.zone_city LIKE '%{$searchStr}%' OR zm.zone_number LIKE '%{$searchStr}%') AND zm.user_id!='' AND zm.user_status=1", ARRAY_A);
         }
