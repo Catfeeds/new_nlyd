@@ -6571,7 +6571,7 @@ class Student_Ajax
         $start = ($page-1)*$pageSize;
         $sql = "select a.match_id,a.user_id,b.course_category_id from {$wpdb->prefix}order a 
                 left join {$wpdb->prefix}course b on a.match_id = b.id
-                left join {$wpdb->prefix}users c on b.user_id = c.ID
+                left join {$wpdb->prefix}users c on a.user_id = c.ID
                 where b.zone_id = {$current_user->ID} and a.match_id = {$_POST['id']} 
                 and a.order_type = 3 and pay_status in (2,3,4)
                 limit $start,$pageSize";

@@ -2,9 +2,12 @@
 <div class="layui-fluid nl-content">
     <div class="layui-row">
         <div class="layui-row dir_nav">
-            <?php for($i = 1; $i <= $max_level; $i++){ ?>
+            <?php
 
-                <a href="<?=home_url('directory/directoryPlayer/level/'.$i)?>" class="c_black <?=$i==$current_level?'active':''?>"><?php printf(__('%s级脑力健将', 'nlyd-student'), $i)?></a>
+            for($i = 1; $i <= $max_level; $i++){
+                ?>
+
+                <a href="<?=home_url('directory_brain/level/'.$i)?>" class="c_black <?=$i==$current_level?'active':''?>"><?php printf(__('%s级脑力健将', 'nlyd-student'), $i)?></a>
             <?php } ?>
         </div>
         <div class="layui-row flex-h">

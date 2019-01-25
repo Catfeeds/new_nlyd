@@ -785,8 +785,14 @@ class Student_Zone
      * 课程学员
      */
     public function courseStudent(){
+        global $wpdb,$current_user;
+        $course_title = $wpdb->get_var("select course_title from {$wpdb->prefix}course where id = {$_GET['id']} and zone_id = {$current_user->ID}");
+        if(empty($course_title)){
+            $this->get_404($this->get_404(array('message'=>__('数据错误', 'nlyd-student'),'return_url'=>home_url('/zone/course/'))));
+            return;
+        }
         $view = student_view_path.CONTROLLER.'/course-studentList.php';
-        load_view_template($view);
+        load_view_template($view,array('course_title'=>$course_title));
     }
 
     /**
