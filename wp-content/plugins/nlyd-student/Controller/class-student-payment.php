@@ -515,9 +515,9 @@ class Student_Payment {
                             //判断直接推荐次数
                             $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
                             //获取推荐人教练
-                            $coach_id = $row['coach_id'];
+                            //$coach_id = $row['coach_id'];
                             $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
-                            if($total < 3 && $coach_id > 0){
+                            if($total < 4 && $coach_id > 0){
 
                                 $insert1 = array(
                                     'income_type'=>$income_type,
@@ -920,14 +920,15 @@ class Student_Payment {
 
                 if($order['order_type'] == 3 && !empty($user['referee_id'])){
                     //判断直接推荐次数
-                    $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
-                    //print_r("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");die;
+                    $total = $wpdb->get_var("select count(*) from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
+                    //print_r($total_);die;
                     //获取推荐人教练
                     //$coach_id = $row['coach_id'];
                     $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
-                    if($total < 3 && $coach_id > 0){
+                    //print_r($total);die;
+                    if($total < 4 && $coach_id > 0){
 
-                        $insert1 = array(
+                        $insert1_ = array(
                             'income_type'=>$income_type,
                             'match_id'=>$order['match_id'],
                             'user_id'=>$order['user_id'],
@@ -935,7 +936,7 @@ class Student_Payment {
                             'person_liable_income'=>$money3,  //参赛机构收益
                             'created_time'=>get_time('mysql')
                         );
-                        $x = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert1);
+                        $x = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert1_);
                         $id = $wpdb->insert_id;
                         $y = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'recommend_qualified','match_id'=>$id,'created_time'=>get_time('mysql')));
 
@@ -1239,9 +1240,9 @@ class Student_Payment {
                                 //判断直接推荐次数
                                 $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}user_income_logs where income_type = 'course' and referee_id = '{$user['referee_id']}'");
                                 //获取推荐人教练
-                                $coach_id = $row['coach_id'];
+                                //$coach_id = $row['coach_id'];
                                 $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$user['referee_id']} and category_id = {$row['course_category_id']} and apply_status =2 ");
-                                if($total < 3 && $coach_id > 0){
+                                if($total < 4 && $coach_id > 0){
 
                                     $insert1 = array(
                                         'income_type'=>$income_type,
