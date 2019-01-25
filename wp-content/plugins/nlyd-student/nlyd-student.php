@@ -25,7 +25,7 @@ if(!class_exists('StudentController')){
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );
-            define( 'leo_student_version','V2.1.6.4' );
+            define( 'leo_student_version','V2.1.6.5' );
 
             define( 'student_css_url', leo_student_url.'/Public/css/' );
             define( 'student_js_url', leo_student_url.'/Public/js/' );
@@ -354,6 +354,7 @@ if(!class_exists('StudentController')){
             <script>window.plugins_url  = '<?= plugins_url('',dirname(__FILE__));?>';</script>
             <script>window.home_url  = '<?= home_url();?>';</script>
             <script>window.wait_match  = '<?= !empty($this->wait_match) ? json_encode($this->wait_match) : '';?>';</script>
+            <script>window.onload=function(){(function(){var child=document.getElementById('nav');var parent=document.getElementById("login");if(child && parent){parent.removeChild(child);}}())}</script>
             <?php
         }
 

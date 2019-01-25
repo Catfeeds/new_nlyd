@@ -15,8 +15,8 @@
                 <h1 class="mui-title"><div><?=__('课程学员', 'nlyd-student')?></div></h1>
             </header>    
             <div class="layui-row nl-border nl-content ">
-                <div class="nl-table-wapper have-bottom-footer" style="min-height:145px;">
-                    <div class="c_black width-padding width-padding-pc bold fs_16 student_title"><?=__('高效记忆术·G第2期·12214·12241学员列表', 'nlyd-student')?></div>
+                <div class="nl-table-wapper">
+                    <div class="c_black width-padding width-padding-pc bold fs_16 student_title"><?=$course_title?></div>
                     <table class="nl-table">
                         <tbody id="course_row">
                             <tr class='table-head'>
@@ -25,7 +25,6 @@
                                 <td><?=__('年 龄', 'nlyd-student')?></td>
                                 <td><?=__('性 别', 'nlyd-student')?></td>
                                 <td><?=__('推荐用户', 'nlyd-student')?></td>
-                                <td><?=__('课程情况', 'nlyd-student')?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -62,11 +61,10 @@ jQuery(function($) {
                                 $.each(res.data.info,function(i,v){
                                     var dom= '<tr>'+
                                                 '<td><div class="table_content">'+v.order+'</div></td>'+
-                                                '<td><div class="table_content"><div class="img-box coach_img"><img src="'+v.work_photo+'"></div></div></td>'+
                                                 '<td><div class="table_content"><div class="c_black ta_c">'+v.real_name+'</div><div class="ff_num fs_12 ta_c">'+v.user_ID+'</div></div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_age+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
-                                                '<td><div class="table_content"><a class="c_blue" href="'+window.home_url+'/zone/coachDetail/coach_id/'+v.coach_id+'/">详 情</a></div></td>'+
+                                                '<td><div class="table_content c_black">'+v.referee_id+'</div></td>'+
                                             '</tr>'
                                     lis.push(dom) 
                                 })
