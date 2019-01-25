@@ -59,7 +59,11 @@ class Users {
                 update_user_meta($user_id,'user_nationality_short',$nationality[1]) && true;
                 update_user_meta($user_id,'user_nationality',$nationality[2]) && true;
             }
+            $cardVar = $wpdb->get_var("SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key='user_real_name' AND meta_value LIKE '%{$card_num}%' AND user_id!='{$user_id}'");
 
+            if($cardVar){
+                exit('证件号已存在!');
+            }
             //实名信息
             update_user_meta($user_id,'user_real_name',['real_type'=>$card_type,'real_name'=>$real_name,'real_ID'=>$card_num,'real_age'=>$age]) && true;
 
