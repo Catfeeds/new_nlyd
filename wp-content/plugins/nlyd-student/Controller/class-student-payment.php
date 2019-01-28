@@ -428,10 +428,9 @@ class Student_Payment {
 
                         if(($user['referee_id'] > 0 || !empty($row['zone_id'])) && $money1 > 0){
                             $referee_type = 'recommend_'.$income_type;
-                            if(!empty($user['referee_id'])){
+                            if($user['referee_id'] > 0){
                                 $referee_id = $user['referee_id'];
-                            }
-                            if(!empty($row['zone_id'])){
+                            }else{
                                 $referee_id = $row['zone_id'];
                             }
                             $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$referee_id,'user_income'=>$money1,'income_type'=>$referee_type,'created_time'=>get_time('mysql')));
@@ -663,7 +662,7 @@ class Student_Payment {
 
         /*****************收益分配start*******************/
 
-        if($order['order_type'] == 3){  //课程
+        /*if($order['order_type'] == 3){  //课程
             $sql = "select  a.zone_id,a.course_category_id,a.coach_id,b.type_alias from {$wpdb->prefix}course a
                     left join {$wpdb->prefix}course_type b on a.course_type = b.id
                     where a.id = {$order['match_id']} ";
@@ -857,7 +856,7 @@ class Student_Payment {
                     $wpdb->query('ROLLBACK');
                 }
             }
-        }
+        }*/
 
         /*****************收益分配end*******************/
 
@@ -1050,10 +1049,9 @@ class Student_Payment {
 
                             if(($user['referee_id'] > 0 || !empty($row['zone_id'])) && $money1 > 0){
                                 $referee_type = 'recommend_'.$income_type;
-                                if(!empty($user['referee_id'])){
+                                if($user['referee_id'] > 0){
                                     $referee_id = $user['referee_id'];
-                                }
-                                if(!empty($row['zone_id'])){
+                                }else{
                                     $referee_id = $row['zone_id'];
                                 }
                                 $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$referee_id,'user_income'=>$money1,'income_type'=>$referee_type,'created_time'=>get_time('mysql')));
