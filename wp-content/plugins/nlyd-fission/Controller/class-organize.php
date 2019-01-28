@@ -1384,21 +1384,21 @@ class Organize{
                                              if($referee_id1 > 0) $referee_id2 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$referee_id1}'");
                                              if($spread_set['direct_superior'] > 0 || $spread_set['indirect_superior'] > 0){
                                                  //添加分成记录
-                                                 $insertData3 = [
-                                                     'income_type' => 'subject',
-                                                     'user_id' => $zmv['apply_id'],
-                                                     'referee_id' => $referee_id1,
-                                                     'referee_income' => $spread_set['direct_superior'],
-                                                     'indirect_referee_id' => $referee_id2 > 0 ? $referee_id2 : 0,
-                                                     'indirect_referee_income' => $referee_id2 > 0 ? $spread_set['indirect_superior'] : 0,
-                                                     'income_status' => 2,
-                                                     'match_id' => $zone_type,
-                                                     'created_time' => get_time('mysql'),
-                                                 ];
-                                                 $bool = $wpdb->insert($wpdb->prefix.'user_income_logs',$insertData3);
-                                                 if(!$bool) {
-                                                     $error_msg = '添加分成记录失败!';
-                                                 }
+//                                                 $insertData3 = [
+//                                                     'income_type' => 'subject',
+//                                                     'user_id' => $zmv['apply_id'],
+//                                                     'referee_id' => $referee_id1,
+//                                                     'referee_income' => $spread_set['direct_superior'],
+//                                                     'indirect_referee_id' => $referee_id2 > 0 ? $referee_id2 : 0,
+//                                                     'indirect_referee_income' => $referee_id2 > 0 ? $spread_set['indirect_superior'] : 0,
+//                                                     'income_status' => 2,
+//                                                     'match_id' => $zone_type,
+//                                                     'created_time' => get_time('mysql'),
+//                                                 ];
+//                                                 $bool = $wpdb->insert($wpdb->prefix.'user_income_logs',$insertData3);
+//                                                 if(!$bool) {
+//                                                     $error_msg = '添加分成记录失败!';
+//                                                 }
                                                  if($error_msg == ''){
                                                      $stream_type = '';
                                                      switch ($this->getOrganizeTypeList($zone_type)['zone_type_alias']){
@@ -1412,13 +1412,13 @@ class Organize{
                                                              $stream_type = 'recommend_match_zone';
                                                              break;
                                                      }
-                                                     $user_income_logs_id = $wpdb->insert_id;
+//                                                     $user_income_logs_id = $wpdb->insert_id;
                                                      if($referee_id1 > 0 && $spread_set['direct_superior'] > 0){
                                                          //添加一级上级收益流水
                                                          $insertData1 = [
                                                              'user_id' => $referee_id1,
                                                              'user_type' => $zone_type,
-                                                             'match_id' => $user_income_logs_id,
+                                                             'match_id' => 0,
                                                              'income_type' => $stream_type,
                                                              'income_status' => 2,
                                                              'user_income' => $spread_set['direct_superior'],
@@ -1435,7 +1435,7 @@ class Organize{
                                                                  $insertData2 = [
                                                                      'user_id' => $referee_id2,
                                                                      'user_type' => $zone_type,
-                                                                     'match_id' => $user_income_logs_id,
+                                                                     'match_id' => 0,
                                                                      'income_type' => $stream_type,
                                                                      'income_status' => 2,
                                                                      'user_income' => $spread_set['indirect_superior'],
@@ -3025,6 +3025,7 @@ class Organize{
      * 机构统计信息收益数据
      */
     public function getOrganizeStatisticsIncome($user_id,$id,$zone_meta){
+        exit('暂未开发');
         global $wpdb;
         $spreadClass = new Spread();
         $typeArr = $spreadClass->getIncomeTypeArr();
