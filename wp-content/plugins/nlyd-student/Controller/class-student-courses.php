@@ -112,7 +112,7 @@ class Student_Courses
      public function courseDetail(){
 
          global $wpdb,$current_user;
-         $sql = "select a.id,a.course_title,a.coach_id,a.course_start_time,a.open_quota,a.course_details,b.zone_name,b.zone_city,c.zone_type_name,
+         $sql = "select a.id,a.course_title,a.coach_id,a.course_start_time,a.open_quota,a.course_details,if(a.address != '',a.address,'-') address,a.const,b.zone_name,b.zone_city,c.zone_type_name,
                  c.zone_type_alias,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type
                  from {$wpdb->prefix}course a 
                  left join {$wpdb->prefix}zone_meta b on a.zone_id = b.user_id 
@@ -168,7 +168,7 @@ class Student_Courses
      */
      public function courseSign(){
          global $wpdb,$current_user;
-         $sql = "select b.zone_city,a.course_title,a.const,a.is_enable,a.address
+         $sql = "select b.zone_city,a.course_title,a.const,a.is_enable,a.address,if(unix_timestamp(a.course_start_time) > 1,a.course_start_time,'-') start_time
                   from {$wpdb->prefix}course a 
                   left join {$wpdb->prefix}zone_meta b on a.zone_id = b.user_id
                   where a.id = {$_GET['id']}
