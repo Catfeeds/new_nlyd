@@ -206,24 +206,43 @@ class Brainpower
      * 编辑脑力健将
      */
     public function editBrainpower(){
-        $msg = '';
+        $err_msg = '';
+        $suc_msg = '';
         $id = isset($_GET['data_id']) ? intval($_GET['data_id']) : 0;
         $id < 1 && exit('参数错误');
+        $cateGoryArr = getCategory();
+        $cateGoryArr = array_column($cateGoryArr, null, 'ID');
         global $wpdb;
         if(is_post()){
             $level = isset($_POST['level']) ? intval($_POST['level']) : 0;
             $range = isset($_POST['range']) ? intval($_POST['range']) : 0;
-            if($level < 1 || ($range!==1 && $range!==2)){
-                $msg = '<span style="color: #a80000">参数错误</span>';
-            }else{
-                $bool = $wpdb->update($wpdb->prefix.'directories', ['level' => $level,'range'=>$range], ['id'=>$id]);
-                if($bool) $msg = '<span style="color: #20a831">修改成功</span>';
-                else $msg = '<span style="color: #a80000">修改失败</span>';
+            $category_id = isset($_POST['category_id']) ? intval($_POST['category_id']) : 0;
+
+            if($category_id < 1) $err_msg .= '<br >请选择类别!';
+            if($level<1) $err_msg .= '<br >请输入脑力等级!';
+            if($range !== 1 && $range !== 2) $err_msg .= '<br >请选择区域!';
+            if($err_msg == ''){
+                //查询用户是否已有当前区域的名录
+                $user_id = intval($_POST['user_id']);
+                if($user_id < 1) $err_msg .= '<br />user_id 参数错误!';
+                if($err_msg == ''){
+                    $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}directories WHERE user_id='{$user_id}' AND `range`='{$range}' AND category_id='{$category_id}'");
+
+                    $type_name = $cateGoryArr[$category_id]['post_title'].'脑力健将';
+                    if($var && $var!=$id){
+                        $err_msg .= '<br />当前用户已存已存在'.$cateGoryArr[$category_id]['post_title'].($range===1?'中国':'国际').'脑力健将';
+                    }
+                    $bool = $wpdb->update($wpdb->prefix.'directories', ['level' => $level,'range'=>$range,'category_id'=>$category_id,'type_name'=>$type_name], ['id'=>$id]);
+                    if($bool) $suc_msg = '修改成功';
+                    else $err_msg = '修改失败';
+                }
+
             }
 
         }
-        $row = $wpdb->get_row("SELECT d.id,d.user_id,d.level,d.is_show,d.range,d.type_name,d.certificate,d.range,um.meta_value AS user_real_name FROM {$wpdb->prefix}directories AS d 
-              LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=d.user_id AND um.meta_key='user_real_name'
+        $row = $wpdb->get_row("SELECT d.id,d.user_id,d.level,d.is_show,d.range,d.type_name,d.certificate,d.range,um.meta_value AS user_real_name,d.category_id 
+               FROM {$wpdb->prefix}directories AS d 
+               LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=d.user_id AND um.meta_key='user_real_name'
                WHERE d.id={$id}", ARRAY_A);
         if(!$row){
             exit('未查询到数据');
@@ -233,13 +252,8 @@ class Brainpower
 
 
         ?>
-
-
         <div class="wrap" id="profile-page">
-
-
             <hr class="wp-header-end">
-
             <form id="your-profile" action="" method="post" novalidate="novalidate">
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="9699f260f1"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">	<input type="hidden" name="wp_http_referer" value="/nlyd/wp-admin/users.php">
                 <p>
@@ -248,52 +262,50 @@ class Brainpower
                 </p>
 
                 <h2><?=$row['user_real_name']['real_name']?> - 脑力健将</h2>
-                <h2><?=$msg?></h2>
-
+                <h2 style="color:#14c410;"><?=$suc_msg?></h2>
+                <h2 style="color: #c41c05"><?=$err_msg?></h2>
 
                 <hr>
 
-
-                <table class="form-table">
-
-                </table>
-
                 <h2>姓名</h2>
-
                 <table class="form-table">
                     <tbody>
-                    <tr class="user-user-login-wrap">
-                        <th>
-                            <label for="real_name">姓名</label>
-                        </th>
-                        <td><input type="text" name="real_name" id="real_name" value="<?=$row['user_real_name']['real_name']?>" disabled="disabled" class="regular-text"> </td>
-                    </tr>
-                    <tr class="user-user-login-wrap">
-                        <th>
-                            <label for="type_name">荣誉名称</label>
-                        </th>
-                        <td><input type="text" name="type_name" id="type_name" value="<?=$row['type_name']?>" disabled="disabled" class="regular-text"> </td>
-                    </tr>
+                        <tr class="user-user-login-wrap">
+                            <th>
+                                <label for="real_name">姓名</label>
+                            </th>
+                            <td><input type="text" name="real_name" id="real_name" value="<?=$row['user_real_name']['real_name']?>" disabled="disabled" class="regular-text"> </td>
+                        </tr>
+                        <tr class="user-user-login-wrap">
+                            <th>
+                                <label for="type_name">类别</label>
+                            </th>
+                            <td>
+                                <select name="category_id" id="category_id">
+                                    <?php foreach ($cateGoryArr as $cgav){ ?>
+                                        <option value="<?=$cgav['ID']?>" <?=$row['category_id']==$cgav['ID']?'selected="selected"':''?>><?=$cgav['post_title']?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                        </tr>
 
+                        <tr class="">
+                            <th><label for="">区域</label></th>
+                            <td>
+                                <label for="range_1">中国<input type="radio" name="range" id="range_1" <?=$row['range'] == '1' ? 'checked="checked"':''?> value="1" class="regular-radio"></label>
+                                <label for="range_2">国际<input type="radio" name="range" id="range_2" <?=$row['range'] == '2' ? 'checked="checked"':''?> value="2" class="regular-radio"></label>
+                            </td>
+                        </tr>
 
-
-                    <tr class="">
-                        <th><label for="">区域</label></th>
-                        <td>
-                            <label for="range_1">中国<input type="radio" name="range" id="range_1" <?=$row['range'] == '1' ? 'checked="checked"':''?> value="1" class="regular-radio"></label>
-                            <label for="range_2">国际<input type="radio" name="range" id="range_2" <?=$row['range'] == '2' ? 'checked="checked"':''?> value="2" class="regular-radio"></label>
-                        </td>
-                    </tr>
-
-                    <tr class="user-first-name-wrap">
-                        <th><label for="level">等级</label></th>
-                        <td><input type="text" name="level" id="level" value="<?=$row['level']?>" class="regular-text"></td>
-                    </tr>
+                        <tr class="user-first-name-wrap">
+                            <th><label for="level">等级</label></th>
+                            <td><input type="text" name="level" id="level" value="<?=$row['level']?>" class="regular-text"></td>
+                        </tr>
 
                     </tbody>
                 </table>
                 <input type="hidden" name="action" value="update">
-                <input type="hidden" name="data_id" id="user_id" value="<?=$id?>">
+                <input type="hidden" name="user_id" id="user_id" value="<?=$row['user_id']?>">
 
                 <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="更新"></p>
             </form>
@@ -590,24 +602,33 @@ class Brainpower
         $err_msg = '';
         $suc_msg = '';
         global $wpdb;
+        $cateGoryArr = getCategory();
+        $cateGoryArr = array_column($cateGoryArr, null, 'ID');
         if(is_post()){
-        $level = isset($_POST['level']) ? intval($_POST['level']) : 0;
-        $range = isset($_POST['range']) ? intval($_POST['range']) : 0;
-        $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
-        $type_name = isset($_POST['type_name']) ? trim($_POST['type_name']) : '';
-        if($user_id < 1) $err_msg = '请选择用户!';
-        if('' == $type_name) $err_msg .= '<br >请输入类别名称!';
-        if($level < 1 || ($range!==1 && $range!==2)){
-            $msg = '<span style="color: #a80000">参数错误</span>';
-        }else{
-            $bool = $wpdb->update($wpdb->prefix.'directories', ['level' => $level,'range'=>$range], ['id'=>$id]);
-            if($bool) $msg = '<span style="color: #20a831">修改成功</span>';
-            else $msg = '<span style="color: #a80000">修改失败</span>';
+            $level = isset($_POST['level']) ? intval($_POST['level']) : 0;
+            $range = isset($_POST['range']) ? intval($_POST['range']) : 0;
+            $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+            $category_id = isset($_POST['category_id']) ? intval($_POST['category_id']) : 0;
+            if($user_id < 1) $err_msg = '请选择用户!';
+            if($category_id < 1) $err_msg .= '<br >请选择类别!';
+            if($level<1) $err_msg .= '<br >请输入脑力等级!';
+            if($range !== 1 && $range !== 2) $err_msg .= '<br >请选择区域!';
+            if($err_msg == ''){
+                $type_name = $cateGoryArr[$category_id]['post_title'].'脑力健将';
+                //查询用户是否已有当前区域的名录
+                $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}directories WHERE user_id='{$user_id}' AND `range`='{$range}' AND category_id='{$category_id}'");
+                if($var){
+                    $err_msg .= '<br />当前用户已存已存在'.$cateGoryArr[$category_id]['post_title'].($range===1?'中国':'国际').'脑力健将';
+                }
+                if($err_msg == ''){
+                    $bool = $wpdb->insert($wpdb->prefix.'directories', ['level' => $level,'user_id'=>$user_id,'range'=>$range, 'category_id'=>$category_id,'type_name'=>$type_name,'is_show'=>'1']);
+                    if($bool) $suc_msg = '添加成功!';
+                    else $err_msg = '添加失败!';
+
+                }
+
+            }
         }
-
-        }
-
-
         ?>
 
 
@@ -637,9 +658,15 @@ class Brainpower
                     </tr>
                     <tr class="user-user-login-wrap">
                         <th>
-                            <label for="type_name">荣誉名称</label>
+                            <label for="category_id">类别</label>
                         </th>
-                        <td><input type="text" name="type_name" id="type_name" value="" class="regular-text"> </td>
+                        <td>
+                            <select name="category_id" id="category_id">
+                                <?php foreach ($cateGoryArr as $cgav){ ?>
+                                    <option value="<?=$cgav['ID']?>"><?=$cgav['post_title']?></option>
+                                <?php } ?>
+                            </select>
+                        </td>
                     </tr>
                     <tr class="">
                         <th><label for="">区域</label></th>
@@ -658,7 +685,7 @@ class Brainpower
                 </table>
                 <input type="hidden" name="action" value="update">
 
-                <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="更新"></p>
+                <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="提交"></p>
             </form>
         </div>
         <?php
