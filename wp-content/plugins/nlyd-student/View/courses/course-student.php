@@ -14,7 +14,7 @@
             </header>    
             <div class="layui-row nl-border nl-content">
                 <div class="nl-table-wapper">
-                    <div class="c_black width-padding width-padding-pc bold fs_16 student_title"><?=$course_title?>111</div>
+                    <div class="c_black width-padding width-padding-pc bold fs_16 student_title"><?=$course_title?></div>
                     <table class="nl-table">
                         <tbody id="course_row">
                             <tr class='table-head'>
@@ -37,7 +37,6 @@ jQuery(function($) {
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
         function pagation(id,team_page){
-            
             flow.load({
                 elem: '#'+id //流加载容器
                 ,isAuto: false
