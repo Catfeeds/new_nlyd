@@ -91,8 +91,9 @@ jQuery(function($) {
                                             }
                                         }
                                     }
+                                    var category_title=v.category_title ? '（'+v.category_title+'）' : '';
                                     var dom='<li class="match_row">'
-                                                +'<div class="match_header mt_10"><span class="bold c_black f_16">'+v.course_title+'</span><br><span class="c_black8 f_12">'+v.type_name+'</span></div>'
+                                                +'<div class="match_header mt_10"><span class="bold c_black f_16">'+v.course_title+category_title+'</span><br><span class="c_black8 f_12">'+v.type_name+'</span></div>'
                                                 +'<div class="match_body">'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__("开课日期：", "nlyd-student")?></div>'
