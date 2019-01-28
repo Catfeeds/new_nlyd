@@ -414,7 +414,7 @@ class Student_Gradings extends Student_Home
      */
     public function answerMatch(){
 
-        unset($_SESSION['match_post_id']);
+        unset($_SESSION['grading_post_id']);
 
         if(empty($_GET['grad_id']) || empty($_GET['post_id'])){
             $this->get_404(__('参数错误', 'nlyd-student'));

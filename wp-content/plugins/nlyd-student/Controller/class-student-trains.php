@@ -285,7 +285,7 @@ class Student_Trains extends Student_Home
     public function answer(){
         global $wpdb;
         //var_dump(json_decode(stripslashes($_COOKIE['questions_answer']),true));
-
+        unset($_SESSION['trains_post_id']);
         switch ($_GET['type']){
             case 'wzsd':
                 if(empty($_GET['post_id'])){

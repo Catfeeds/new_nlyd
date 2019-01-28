@@ -270,7 +270,6 @@ class Student_Ajax
 
 
         unset($_SESSION['count_down']);
-
         unset($_SESSION['match_post_id']);
 
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) ) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
@@ -3563,6 +3562,8 @@ class Student_Ajax
      */
     public function trains_submit(){
 
+        unset($_SESSION['trains_post_id']);
+
         if(empty($_POST['genre_id']) || empty($_POST['project_type'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
         global $wpdb,$current_user;
 
@@ -4114,7 +4115,7 @@ class Student_Ajax
      */
     public function grading_answer_submit(){
         unset($_SESSION['count_down']);
-        unset($_SESSION['match_post_id']);
+        unset($_SESSION['grading_post_id']);
         if($_POST['questions_type'] == 'wz'){
             if(empty($_POST['questions_answer'])) wp_send_json_error(array('数据信息不能为空'));
         }else{
@@ -4306,7 +4307,7 @@ class Student_Ajax
      */
     public function grade_answer_submit(){
         unset($_SESSION['count_down']);
-        unset($_SESSION['match_post_id']);
+        unset($_SESSION['grade_post_id']);
         if($_POST['questions_type'] == 'wz'){
             if(empty($_POST['questions_answer'])) wp_send_json_error(array('数据信息不能为空'));
         }else{
@@ -6540,6 +6541,9 @@ class Student_Ajax
                 //判断是否购课
                 $order_id = $wpdb->get_var("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$val['id']} and order_type = 3 and pay_status in (2,3,4)");
                 $rows[$k]['order_id'] = $order_id;
+                if($val['open_quota'] <= $val['entry_total']){
+                    $rows[$k]['is_full'] = 'y';
+                }
             }
         }
         wp_send_json_success(array('info'=>$rows));

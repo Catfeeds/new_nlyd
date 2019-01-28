@@ -231,7 +231,7 @@ class Student_Grade extends Student_Home
         }
         elseif ($_GET['grad_type'] == 'reading'){
 
-            if(!isset($_SESSION['grad_post_id'])){
+            if(!isset($_SESSION['grade_post_id'])){
                 //获取已比赛文章
                 $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 2";
                 //print_r($sql1);
@@ -274,11 +274,11 @@ class Student_Grade extends Student_Home
                     $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$post_id,'type'=>2));
                 }
 
-                $_SESSION['grad_post_id'] = $post_id;
+                $_SESSION['grade_post_id'] = $post_id;
 
             }
             else{
-                $post_id = $_SESSION['grad_post_id'];
+                $post_id = $_SESSION['grade_post_id'];
             }
 
             //获取文章
@@ -329,7 +329,7 @@ class Student_Grade extends Student_Home
      */
     public function answerMatch(){
 
-        unset($_SESSION['match_post_id']);
+        unset($_SESSION['grade_post_id']);
 
         if(empty($_GET['post_id'])){
             $this->get_404(__('参数错误', 'nlyd-student'));
