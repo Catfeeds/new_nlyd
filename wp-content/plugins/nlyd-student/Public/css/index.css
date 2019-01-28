@@ -1016,7 +1016,7 @@ p.share-font{
     }
 }
 
-@media screen and (max-width: 1199px){
+/* @media screen and (max-width: 1199px){
     #page{
         top:46px;
     }
@@ -1058,7 +1058,7 @@ p.share-font{
         .scroll-top.on{
             bottom: 70px;
         }
-}  
+}   */
 .f32 {
     background: url('./image/flags/sprite_gj.png') no-repeat top left;
     width: 32px;

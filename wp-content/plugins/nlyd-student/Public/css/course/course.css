@@ -269,6 +269,11 @@
     padding-top: 15px;
     padding-bottom: 15px;
 }
+.student_title{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    word-wrap:break-word;
+}
 @media screen and (min-width: 1200px){
     .course .layui-tab{
         margin-top: 0;

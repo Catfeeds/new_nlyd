@@ -80,6 +80,25 @@ class Student_Directory_Brain
                 $rows[$v['range']] = [$v['category_id'] => [0 => $v]];
             }
         }
+        //死数据
+        $moreJson = student_view_path.'directory/static/brainMoreData.json';
+        if(file_exists($moreJson)){
+            $moreData = json_decode(file_get_contents($moreJson), true);
+        }else{
+            $moreData = [];
+        }
+        foreach ($moreData as $mdv){
+            if(isset($rows[$mdv['range']])){
+                if(isset($rows[$mdv['range']][$mdv['category_id']])){
+                    $rows[$mdv['range']][$mdv['category_id']][] = $mdv;
+                }else{
+                    $rows[$mdv['range']][$mdv['category_id']] = [0 => $mdv];
+                }
+            }else{
+                $rows[$mdv['range']] = [$mdv['category_id'] => [0 => $mdv]];
+            }
+        }
+//        leo_dump($moreRows);die;
         $view = $this->template_dir.'/directory_pc.php';
         load_view_template($view,['rows'=>$rows, 'max_level' => $level_max, 'current_level' => $level, 'cateArr' => $cateArr]);
 

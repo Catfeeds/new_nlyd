@@ -166,11 +166,6 @@ jQuery(function($) {
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    // 已结束-3
-                                    // 等待开赛-2
-                                    // 未开始-1
-                                    // 报名中1
-                                    // 进行中2
                                     var dom='<li class="match_row">'
                                                 +'<div class="match_header bold c_black f_16 mt_10">'+v.post_title+'</div>'
                                                 +'<div class="match_body">'

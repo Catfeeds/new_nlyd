@@ -37,7 +37,6 @@ jQuery(function($) {
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
         function pagation(id,team_page){
-            
             flow.load({
                 elem: '#'+id //流加载容器
                 ,isAuto: false
