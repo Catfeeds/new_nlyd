@@ -32,12 +32,20 @@
                         <div class="detail_detail c_black fs_14"><?=$course_start_time?></div>
                     </div>
                     <div class="detail_table_row">
+                        <div class="detail_label c_black6 fs_14"><?=__('开课地址：', 'nlyd-student')?></div>
+                        <div class="detail_detail c_black fs_14"><?=$course_address?></div>
+                    </div>
+                    <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('授课教练：', 'nlyd-student')?></div>
                         <div class="detail_detail c_blue fs_14"><?=$user_name?></div>
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('抢占名额：', 'nlyd-student')?></div>
                         <div class="detail_detail c_black fs_14"><span class="c_blue"><?=$order_total?></span>/<?=$open_quota?></div>
+                    </div>
+                    <div class="detail_table_row">
+                        <div class="detail_label c_black6 fs_14"><?=__('课程费用：', 'nlyd-student')?></div>
+                        <div class="detail_detail c_black fs_14">￥<?=$course_const?></div>
                     </div>
                 </div>
 

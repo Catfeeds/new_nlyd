@@ -37,14 +37,13 @@ jQuery(function($) {
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
         function pagation(id,team_page){
-            
             flow.load({
                 elem: '#'+id //流加载容器
                 ,isAuto: false
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'get_course_student',
+                        action:'get_course_student_list',
                         id:course_id,
                         page:team_page,
                     }

@@ -64,7 +64,16 @@ jQuery(function($) {
             window.location.href=href;
         }
     })
-    layui.use(['element','flow'], function(){
+    function savaFile(data,filename)
+    {
+        var save_link=document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+        save_link.href=data;
+        save_link.download=filename;
+        var event=document.createEvent('MouseEvents');
+        event.initMouseEvent('click',true,false,window,0,0,0,0,0,false,false,false,false,0,null);
+        save_link.dispatchEvent(event);
+    };
+    layui.use(['element','flow','layer'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
         $('body').on('click','.get_sign_code',function(){
@@ -108,7 +117,7 @@ jQuery(function($) {
                                     $('.layui-layer-shade').append(_tips);
                                     new AlloyFinger(_layerImg[0], {
                                         longTap:function(){
-                                            savaFile(url,course_name+"<?=__('签到二维码', 'nlyd-student')?>")
+                                            savaFile(url,course_name+"<?=__('报名二维码', 'nlyd-student')?>")
                                         }
                                     })
                                 },100)
@@ -155,11 +164,6 @@ jQuery(function($) {
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    // 已结束-3
-                                    // 等待开课-2
-                                    // 未开始-1
-                                    // 报名中1
-                                    // 进行中2
                                     var dom='<li class="match_row">'
                                                 +'<div class="match_header bold c_black f_16 mt_10">'+v.course_title+'</div>'
                                                 +'<div class="match_body">'
