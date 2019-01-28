@@ -5,8 +5,6 @@
                 require_once leo_student_public_view.'leftMenu.php';
             
         ?>
-
-
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback nl-goback static" href="<?=home_url('/courses/cenerCourse/id/'.$_GET['center_id']);?>">
