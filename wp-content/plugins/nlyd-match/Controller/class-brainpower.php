@@ -618,7 +618,7 @@ class Brainpower
                 //查询用户是否已有当前区域的名录
                 $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}directories WHERE user_id='{$user_id}' AND `range`='{$range}' AND category_id='{$category_id}'");
                 if($var){
-                    $err_msg .= '<br />当前用户已存已存在'.$cateGoryArr[$category_id]['post_title'].($range===1?'中国':'国际').'脑力健将';
+                    $err_msg .= '<br />当前用户已存已存在'.$cateGoryArr[$category_id]['post_title'].($range===1?'中国':'国际').'脑力健将! 您可 <a href="'.admin_url('admin.php?page=brainpower-edit_brainpower&data_id='.$var).'">前往编辑</a>';
                 }
                 if($err_msg == ''){
                     $bool = $wpdb->insert($wpdb->prefix.'directories', ['level' => $level,'user_id'=>$user_id,'range'=>$range, 'category_id'=>$category_id,'type_name'=>$type_name,'is_show'=>'1']);
