@@ -6540,6 +6540,9 @@ class Student_Ajax
                 //判断是否购课
                 $order_id = $wpdb->get_var("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$val['id']} and order_type = 3 and pay_status in (2,3,4)");
                 $rows[$k]['order_id'] = $order_id;
+                if($val['open_quota'] <= $val['entry_total']){
+                    $rows[$k]['is_full'] = 'y';
+                }
             }
         }
         wp_send_json_success(array('info'=>$rows));

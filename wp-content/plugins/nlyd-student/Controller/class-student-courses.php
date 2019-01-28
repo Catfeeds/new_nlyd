@@ -149,11 +149,15 @@ class Student_Courses
              $user_name = get_user_meta($row['coach_id'],'user_real_name')[0]['real_name'];
              $row['user_name'] = $user_name;
          }
+         //print_r($row);
          //获取报名人数
          $row['order_total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order where match_id = {$_GET['id']} and order_type = 3 and pay_status in(2,3,4)");
          //判断是否报名
          if($current_user->ID){
              $row['is_entered'] = $wpdb->get_var("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_GET['id']} and order_type = 3 and pay_status in(2,3,4) ");
+         }
+         if($row['open_quota'] <= $row['order_total'] ){
+             $row['is_full'] = 'y';
          }
          //print_r($row);
          $view = student_view_path.CONTROLLER.'/course-detail.php';

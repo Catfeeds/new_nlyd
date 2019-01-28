@@ -29,7 +29,6 @@ class Student_Account extends Student_Home
      */
     public function index(){
 
-
         global $user_info,$wpdb;
         if($user_info){
 
