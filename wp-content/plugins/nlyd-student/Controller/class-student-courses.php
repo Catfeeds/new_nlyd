@@ -242,7 +242,13 @@ class Student_Courses
         $view = student_view_path.CONTROLLER.'/course-end.php';
         load_view_template($view,$row);
     }
-
+    /**
+     * 课程学员查看
+     */
+     public function courseStudent(){
+        $view = student_view_path.CONTROLLER.'/course-student.php';
+        load_view_template($view);
+    }
     /**
      * 商品详情
      */
