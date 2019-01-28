@@ -103,7 +103,7 @@ jQuery(function($) {
                                                         +'<div class="match_body_info c_black">'+v.address+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
-                                                        +'<div class="match_body_label"><?=__("责任人：", "nlyd-student")?>：</div>'
+                                                        +'<div class="match_body_label"><?=__("责任人：", "nlyd-student")?></div>'
                                                         +'<div class="match_body_info c_black">'+v.person_liable+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
