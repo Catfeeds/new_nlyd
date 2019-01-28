@@ -56,6 +56,14 @@
                             </div>
                         </div>
                         <div>
+                            <div class="lable_row"><span class="c_black">
+                                <?=__('授课地点', 'nlyd-student')?>：</span>
+                            </div>
+                            <div class="input_row">
+                                <input class="radius_input_row nl-foucs" type="text" lay-verify="required" autocomplete="off" name="address" placeholder="<?=__('输入授课地点', 'nlyd-student')?>" value="<?=$course['address']?>">
+                            </div>
+                        </div>
+                        <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程费用', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <input class="radius_input_row nl-foucs" disabled type="text" id="cost" name="const" value="<?=$course['const'] > 0 ? $course['const'] : 3000.00 ?>">
