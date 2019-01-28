@@ -250,8 +250,10 @@ class Student_Courses
      * 课程学员查看
      */
      public function courseStudent(){
-        $view = student_view_path.CONTROLLER.'/course-student.php';
-        load_view_template($view);
+         global $wpdb,$current_user;
+         $title = $wpdb->get_var("select course_title from {$wpdb->prefix}course where id = {$_GET['id']}");
+         $view = student_view_path.CONTROLLER.'/course-student.php';
+         load_view_template($view,array('course_title'=>$title));
     }
     /**
      * 商品详情
