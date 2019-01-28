@@ -28,20 +28,28 @@ class Student_Logins
                         $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_GET['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$current_user->ID));
                         if($a){
                             $url = home_url('zone/indexUser/');
-                            $title = '绑定成功';
+                        ?>
+                            <script type="text/javascript">
+                                alert("<?=__('绑定成功', 'nlyd-student')?>");
+                                setTimeout(function(){
+                                    window.location.href='<?=$url?>';
+                                    return false;
+                                },50)
+                            </script>
+                        <?php
+                            //wp_redirect(home_url('zone/indexUser/'));
+                            //exit;
                         }else{
                             $url = home_url('/account/');
-                            $title = '绑定失败';
-                        }
                         ?>
-                        <script type="text/javascript">
-                            alert("<?=__($title, 'nlyd-student')?>");
-                            setTimeout(function(){
-                                window.location.href='<?=$url?>';
-                                return false;
-                            },50)
-                        </script>
-                        <?php
+                            <script type="text/javascript">
+                                alert("<?=__('绑定失败', 'nlyd-student')?>");
+                                setTimeout(function(){
+                                    window.location.href='<?=$url?>';
+                                    return false;
+                                },50)
+                            </script>
+                        <?php }
                         exit;
                     }
 

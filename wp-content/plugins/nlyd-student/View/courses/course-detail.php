@@ -32,8 +32,12 @@
                         <div class="detail_detail c_black fs_14"><?=$course_start_time?></div>
                     </div>
                     <div class="detail_table_row">
+                        <div class="detail_label c_black6 fs_14"><?=__('课程类型：', 'nlyd-student')?></div>
+                        <div class="detail_detail c_black fs_14"><?=$category_title?></div>
+                    </div>
+                    <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('开课地址：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14"><?=$course_address?></div>
+                        <div class="detail_detail c_black fs_14"><?=$address?></div>
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('授课教练：', 'nlyd-student')?></div>
@@ -45,7 +49,7 @@
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('课程费用：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14">￥<?=$course_const?></div>
+                        <div class="detail_detail c_black fs_14">￥<?=$const?></div>
                     </div>
                 </div>
 
