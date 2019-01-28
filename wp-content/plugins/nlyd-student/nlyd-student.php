@@ -241,9 +241,9 @@ if(!class_exists('StudentController')){
         /**
          * 默认公用js/css引入
          */
-        public function scripts_default(){
+         public function scripts_default(){
 
-            if (!is_front_page() && !is_single() && CONTROLLER != 'news') {
+            if (!is_front_page() && !is_single() && CONTROLLER != 'news' && CONTROLLER != 'class' && CONTROLLER != '国际脑力运动推广大使名录' && CONTROLLER != 'shizitixi' && CONTROLLER != 'directory_brain' && CONTROLLER != 'directory_j' && CONTROLLER != 'directory_d' && CONTROLLER != 'directory_s' && CONTROLLER != 'directory_zone_match' && CONTROLLER != '国际脑力水平测试评价体系') {
                 wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-cookie' );
                 //序列化form表单Json对象
@@ -292,6 +292,21 @@ if(!class_exists('StudentController')){
 
                 wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
                 wp_enqueue_style( 'my-student' );
+                wp_register_style( 'my-student-mobile', student_css_url.'index_mobile.css',array('style'), leo_student_version);
+                wp_enqueue_style( 'my-student-mobile' );
+            }else{
+                if (CONTROLLER == 'news' || CONTROLLER == 'class' || CONTROLLER == 'shizitixi'|| CONTROLLER == '国际脑力水平测试评价体系' || CONTROLLER == '国际脑力运动推广大使名录') {
+                    wp_register_style( 'my-student', student_css_url.'index_self.css',array('style'),leo_student_version);
+                    wp_enqueue_style( 'my-student' );
+                }
+                if(CONTROLLER == 'directory_brain' || CONTROLLER == 'directory_j' || CONTROLLER == 'directory_d' || CONTROLLER == 'directory_s'|| CONTROLLER == 'directory_zone_match' ){//名录
+                    wp_register_style( 'my-layui-css-home', student_css_url.'layui.css',array('style'),leo_student_version);
+                    wp_enqueue_style( 'my-layui-css-home' );
+                    wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
+                    wp_enqueue_style( 'my-student' );
+                    wp_register_style( 'my-student', student_css_url.'index_self.css',array('style'),leo_student_version);
+                    wp_enqueue_style( 'my-student' );
+                }
             }
 
 

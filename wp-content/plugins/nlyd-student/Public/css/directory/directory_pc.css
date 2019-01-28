@@ -134,7 +134,7 @@ table tr:nth-child(even){
 .dir_nav_content.active{
     display: block;
 }
-@media screen and (max-width: 1199px){
+/* @media screen and (max-width: 1199px){
     #main, .wf-wrap{
         padding: 20px!important;
     }
@@ -159,4 +159,7 @@ table tr:nth-child(even){
     .page-title{
         display: block!important;
     }
-}  
+    .header-bar{
+        display: none;
+    }
+}   */
