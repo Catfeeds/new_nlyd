@@ -663,7 +663,7 @@ class Student_Payment {
 
         /*****************收益分配start*******************/
 
-        /*if($order['order_type'] == 3){  //课程
+        if($order['order_type'] == 3){  //课程
             $sql = "select  a.zone_id,a.course_category_id,a.coach_id,b.type_alias from {$wpdb->prefix}course a
                     left join {$wpdb->prefix}course_type b on a.course_type = b.id
                     where a.id = {$order['match_id']} ";
@@ -784,15 +784,15 @@ class Student_Payment {
 
                 $wpdb->query('START TRANSACTION');
 
-                if(($user['referee_id'] > 0 || !empty($row['zone_id'])) && $money1 > 0){
+                if(($user['referee_id'] > 0 || $row['zone_id'] > 0) && $money1 > 0){
                     $referee_type = 'recommend_'.$income_type;
-                    if(!empty($user['referee_id'])){
+                    if($user['referee_id'] > 0){
                         $referee_id = $user['referee_id'];
-                    }
-                    if(!empty($row['zone_id'])){
+                    }else{
                         $referee_id = $row['zone_id'];
                     }
-                    $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$referee_id,'user_income'=>$money1,'income_type'=>$referee_type,'created_time'=>get_time('mysql')));
+
+                    $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$referee_id,'user_income'=>$money1,'income_type'=>$referee_type,'created_time'=>get_time('mysql')));
 
                 }else{
                     $a = true;
@@ -800,21 +800,21 @@ class Student_Payment {
 
                 if($user['indirect_referee_id'] > 0 && $money2 > 0){
                     $indirect_referee_type = 'recommend_'.$income_type;
-                    $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$user['referee_id'],'user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'created_time'=>get_time('mysql')));
+                    $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$user['referee_id'],'match_id'=>$order['match_id'],'user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'created_time'=>get_time('mysql')));
 
                 }else{
                     $b = true;
                 }
                 if($person_liable_id > 0 && $money3 > 0){
                     $person_liable_type = 'director_'.$income_type;
-                    $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'created_time'=>get_time('mysql')));
+                    $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'created_time'=>get_time('mysql')));
                 }else{
                     $c = true;
                 }
 
                 if($sponsor_id > 0 && $money4 > 0){
                     $sponsor_type = 'open_'.$income_type;
-                    $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>$sponsor_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                    $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>$sponsor_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                 }else{
                     $d = true;
                 }
@@ -857,7 +857,7 @@ class Student_Payment {
                     $wpdb->query('ROLLBACK');
                 }
             }
-        }*/
+        }
 
         /*****************收益分配end*******************/
 
