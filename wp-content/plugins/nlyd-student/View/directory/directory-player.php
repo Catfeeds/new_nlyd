@@ -30,10 +30,10 @@
                                     <td><div class="table_content"><?=__('头像', 'nlyd-student')?></div></td>
                                     <td><div class="table_content"><?=__('姓名', 'nlyd-student')?></div></td>
                                     <td><div class="table_content"><?=__('ID', 'nlyd-student')?></div></td>
-                                    <td><div class="table_content"><?=__('性 别', 'nlyd-student')?></div></td>
-                                    <td><div class="table_content"><?=__('类&nbsp;&nbsp;&nbsp;&nbsp;别', 'nlyd-student')?></div></td>
-                                    <td><div class="table_content"><?=__('级 别', 'nlyd-student')?></div></td>
-                                    <td><div class="table_content"><?=__('国 籍', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('性别', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('类别', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('级别', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('国籍', 'nlyd-student')?></div></td>
                                 </tr>
                             </thead>
                             <tbody id="flow-table">
