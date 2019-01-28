@@ -113,10 +113,11 @@ class Student_Courses
 
          global $wpdb,$current_user;
          $sql = "select a.id,a.course_title,a.coach_id,a.course_start_time,a.open_quota,a.course_details,if(a.address != '',a.address,'-') address,a.const,b.zone_name,b.zone_city,c.zone_type_name,
-                 c.zone_type_alias,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type
+                 c.zone_type_alias,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type,d.post_title category_title
                  from {$wpdb->prefix}course a 
                  left join {$wpdb->prefix}zone_meta b on a.zone_id = b.user_id 
                  left join {$wpdb->prefix}zone_type c on b.type_id = c.id 
+                 left join {$wpdb->prefix}posts d on a.course_category_id = d.ID 
                  where a.id = {$_GET['id']}
                  ";
          //print_r($sql);
@@ -168,9 +169,10 @@ class Student_Courses
      */
      public function courseSign(){
          global $wpdb,$current_user;
-         $sql = "select b.zone_city,a.course_title,a.const,a.is_enable,a.address,if(unix_timestamp(a.course_start_time) > 1,a.course_start_time,'-') start_time
+         $sql = "select b.zone_city,a.course_title,a.const,a.coach_id,a.is_enable,a.address,if(unix_timestamp(a.course_start_time) > 1,a.course_start_time,'-') start_time,d.post_title category_title
                   from {$wpdb->prefix}course a 
                   left join {$wpdb->prefix}zone_meta b on a.zone_id = b.user_id
+                  left join {$wpdb->prefix}posts d on a.course_category_id = d.ID 
                   where a.id = {$_GET['id']}
                   ";
 
@@ -185,6 +187,11 @@ class Student_Courses
                  $city = rtrim($city_arr[0],'市');
              }
              $row['city'] = $city;
+         }
+
+         if(!empty($row['coach_id'])){
+             $user_name = get_user_meta($row['coach_id'],'user_real_name')[0]['real_name'];
+             $row['coach_name'] = $user_name;
          }
 
          if($current_user->ID){
