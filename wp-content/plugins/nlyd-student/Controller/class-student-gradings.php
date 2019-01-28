@@ -880,11 +880,11 @@ class Student_Gradings extends Student_Home
                     array_multisort($arr, SORT_ASC, $rows);
                     array_shift($rows);
                     array_pop($rows);
-                    $row = $rows[0];
+                    $row_ = $rows[0];
 
                     $grading_result = 2;
-                    if($row['correct_rate'] >= 0.7){
-                        $rate = $row['post_str_length']/($row['use_time']/60);
+                    if($row_['correct_rate'] >= 0.7){
+                        $rate = $row_['post_str_length']/($row_['use_time']/60);
                         $lv = floor($rate/1000);
                         if($lv > 0){
                             $grading_result = 1;
@@ -991,7 +991,7 @@ class Student_Gradings extends Student_Home
             'next_project_url'=>$next_project_url,
             'match_row'=>$row,
         );
-        //print_r($data);
+
         if($grading_result == 1){
             $grade_result = $lv.'级'.'已达标';
         }else{

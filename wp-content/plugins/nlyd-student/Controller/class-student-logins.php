@@ -13,6 +13,7 @@ class Student_Logins
     public $action;
     public function __construct($action)
     {
+        add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
         //引入当前页面css/js
         if($_SESSION['user_openid'] == false){
@@ -25,15 +26,29 @@ class Student_Logins
                     if(empty($current_user->data->referee_id) && $_GET['referee_id'] != $current_user->ID && $referee_id != $current_user->ID){
                         //添加推广人
                         $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_GET['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$current_user->ID));
-                        //var_dump($a);die;
                         if($a){
-                            wp_redirect(home_url('zone/indexUser/'));
+                            $url = home_url('zone/indexUser/');
+                            $title = '绑定成功';
+                        }else{
+                            $url = home_url('/account/');
+                            $title = '绑定失败';
                         }
+                        ?>
+                        <script type="text/javascript">
+                            alert("<?=__($title, 'nlyd-student')?>");
+                            setTimeout(function(){
+                                window.location.href='<?=$url?>';
+                                return false;
+                            },50)
+                        </script>
+                        <?php
+                        exit;
                     }
 
                 }
 
                 wp_redirect(home_url('account'));
+                exit;
             }
 
 
@@ -48,7 +63,6 @@ class Student_Logins
             }
             $this->action = $action;
         }
-        add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
         //添加短标签
         add_shortcode('student-login',array($this,$action));

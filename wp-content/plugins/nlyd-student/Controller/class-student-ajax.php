@@ -2206,6 +2206,9 @@ class Student_Ajax
                     $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user->ID));
                     if($a){
                         $url = home_url('/zone/indexUser/');
+                        wp_send_json_success( array('info'=>__('绑定成功', 'nlyd-student'),'url'=>$url));
+                    }else{
+                        wp_send_json_success( array('info'=>__('绑定失败', 'nlyd-student'),'url'=>$url));
                     }
                 }
             }
@@ -2244,6 +2247,9 @@ class Student_Ajax
                             //var_dump($a);die;
                             if($a){
                                 $url = home_url('/zone/indexUser/');
+                                wp_send_json_success( array('info'=>__('绑定成功', 'nlyd-student'),'url'=>$url));
+                            }else{
+                                wp_send_json_success( array('info'=>__('绑定失败', 'nlyd-student'),'url'=>$url));
                             }
                         }
                     }
@@ -2307,6 +2313,9 @@ class Student_Ajax
                 $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$result));
                 if($a){
                     $url = home_url('/zone/indexUser/');
+                    wp_send_json_success( array('info'=>__('绑定成功', 'nlyd-student'),'url'=>$url));
+                }else{
+                    wp_send_json_success( array('info'=>__('绑定失败', 'nlyd-student'),'url'=>$url));
                 }
             }
 
@@ -3203,7 +3212,9 @@ class Student_Ajax
             //添加推广人
             if(isset($_SESSION['referee_id_wx']) && !(get_user_by('ID',$user_id)->referee_id) && $user_id != $_SESSION['referee_id_wx'] && get_user_by('ID',$_SESSION['referee_id_wx'])->referee_id != $user_id){
                 $bool = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_SESSION['referee_id_wx'],'referee_time'=>date_i18n('Y-m-d',get_time())),array('ID'=>$user_id));
-                if(!$bool) wp_send_json_error(array('info'=>__('添加推荐人失败!', 'nlyd-student')));
+                if(!$bool){
+                    wp_send_json_error(array('info'=>__('添加推荐人失败!', 'nlyd-student')));
+                }
                 if(isset($_SESSION['referee_id_wx'])){
                     $url = home_url('/zone/indexUser/');
                 }
@@ -6437,6 +6448,12 @@ class Student_Ajax
             $coach = $wpdb->get_row($sql,ARRAY_A);
             if(empty($coach)) wp_send_json_error(array('info'=>__('该教练未注册','nlyd-student')));
             if(empty($coach['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证','nlyd-student')));
+
+            //判断教练是否有机构或者教练是否是特派教练
+            $coach_zone_id = $wpdb->get_var("select zone_id from {$wpdb->prefix}zone_join_coach where coach_id = {$coach['ID']}");
+            if(!empty($coach_zone_id) && $coach_zone_id != $current_user->ID){
+                wp_send_json_error(array('info'=>__('该教练已有机构','nlyd-student')));
+            }
         }
 
         $data = array(
@@ -6450,15 +6467,21 @@ class Student_Ajax
             'open_quota'=>$_POST['open_quota'] > 0 ? $_POST['open_quota'] : '',
             'zone_id'=>$current_user->ID,
             'course_type'=>$_POST['course_type'],
+            'address'=>!empty($_POST['address']) ? $_POST['address'] : '',
             'duration'=>$_POST['duration'],
             'course_category_id'=>$_POST['course_category_id'],
         );
-        //print_r($data);die;
+
         if($_POST['id'] > 0){
             $a = $wpdb->update($wpdb->prefix.'course',$data,array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
         }else{
             $data['created_time'] = get_time('mysql');
             $a = $wpdb->insert($wpdb->prefix.'course',$data);
+
+        }
+        if(empty($coach_zone_id)){
+            //添加教练
+            $wpdb->insert($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$coach['ID']));
         }
         if($a){
             wp_send_json_success(array('info'=>__('操作完成','nlyd-student'),'url'=>home_url('/zone/course/')));

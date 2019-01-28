@@ -67,6 +67,67 @@ jQuery(function($) {
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
+        $('body').on('click','.get_sign_code',function(){
+            var _this=$(this);
+            var course_id=_this.attr('data-id');
+            var course_name=_this.attr('data-name');
+            if(!_this.hasClass('disabled')){
+                var post_data={
+                    action:'course_sign_code',
+                    course_id:course_id,
+                }
+                $.ajax({
+                    data: post_data,
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success: function(res, textStatus, jqXHR){
+                        if(res.success){
+                            if(res.data && res.data.length>0){
+                                var url=res.data;
+                                var json={
+                                    "title": "<?=__('签到二维码', 'nlyd-student')?>", //相册标题
+                                    "id": course_id, //相册id
+                                    "start": 0, //初始显示的图片序号，默认0
+                                    "data": [   //相册包含的图片，数组格式
+                                        {
+                                        "alt": "<?=__('签到二维码', 'nlyd-student')?>",
+                                        "pid": course_id, //图片id
+                                        "src": url, //原图地址
+                                        "thumb": url //缩略图地址
+                                        }
+                                    ]
+                                    }
+                                layer.photos({//图片预览
+                                    photos: json,
+                                    anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                                })
+                                setTimeout(function(){
+                                    var _layerImg=$('.layui-layer-phimg');
+                                    var _tips='<div class="ta_c c_white" style="position: absolute;width: 100%;bottom: 40px;"><?=__("长按下载图片", "nlyd-student")?></div>'
+                                    $('.layui-layer-shade').append(_tips);
+                                    new AlloyFinger(_layerImg[0], {
+                                        longTap:function(){
+                                            savaFile(url,course_name+"<?=__('签到二维码', 'nlyd-student')?>")
+                                        }
+                                    })
+                                },100)
+                            }
+                        }
+                        _this.removeClass('disabled');
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                            _this.removeClass('disabled');
+                        }
+                        
+                    }
+                })
+            }else{
+                $.alerts("<?=__('正在处理您的请求..', 'nlyd-student')?>")
+            }
+        })
         function pagation(id,match_page){
             flow.load({
                 elem: '#'+id //流加载容器
@@ -120,7 +181,10 @@ jQuery(function($) {
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="match_footer flex-h">'
-                                                    +'<div class="edit_match c_black6 flex1 ta_l get_sign_code"></div>'
+                                                    +'<a data-id="'+v.id+'" data-name="'+v.course_title+'" class="edit_match c_black6 flex1 ta_l get_sign_code">'
+                                                        +'<div class="zone_bg bg_qr_code dis_inlineBlock"></div>'
+                                                        +'<span class=" dis_inlineBlock"> <?=__("查看二维码", "nlyd-student")?></span>'
+                                                    +'</a>'
                                                     +'<div class="edit_match c_black6 flex1 ta_c"></div>'
                                                     +'<a href="'+window.home_url+'/zone/courseBuild/id/'+v.id+'" class="edit_match c_black6">'
                                                         +'<div class="zone_bg bg_edit dis_inlineBlock"></div>'

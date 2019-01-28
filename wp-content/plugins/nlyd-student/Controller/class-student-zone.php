@@ -17,7 +17,6 @@ class Student_Zone
 
             $_SESSION['redirect_url'] = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         }
-
         //判断是否是管理员操作面板和是否登录
         if(!is_user_logged_in()){
             wp_redirect(home_url('logins'));
@@ -131,7 +130,7 @@ class Student_Zone
        // print_r($sql_);
         $rows = $wpdb->get_results($sql_,ARRAY_A);*/
         $row['list'] = $rows;
-        //print_r($rows);
+
         $view = student_view_path.CONTROLLER.'/index-user.php';
         load_view_template($view,$row);
     }

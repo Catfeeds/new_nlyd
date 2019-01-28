@@ -16,10 +16,11 @@
             
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper no-header">
-            <a class="mui-pull-left nl-goback">
-                <div><i class="iconfont">&#xe610;</i></div>
-            </a>
-            <div class="layui-row nl-border nl-content">
+            <div class="zone-form-tips width-padding width-padding-pc"><i class="iconfont">&#xe65b;</i> <?=__('所有收益数据的有效性，以后台审核数据结果为准。', 'nlyd-student')?></div>
+            <div class="layui-row nl-border nl-content" style="position: relative;">
+                <a class="mui-pull-left nl-goback">
+                    <div><i class="iconfont">&#xe610;</i></div>
+                </a>
                 <div class="apply profit_title layui-row layui-bg-white">
                     <div class="ta_c c_black"><?=__('可提现金额(元)', 'nlyd-student')?></div>
                     <div class="ta_c c_green bold  fs_22 profit_money_">¥ <?=$balance?></div>
