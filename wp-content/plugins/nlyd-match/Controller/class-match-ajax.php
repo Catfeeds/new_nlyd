@@ -2398,6 +2398,7 @@ class Match_Ajax
         }else{
             $datas = [];
         }
+        $nationalityArr = explode(',',$nationality);
         $datas[] = [
             'real_name' => $real_name,
             'level' => $level,
@@ -2405,7 +2406,8 @@ class Match_Ajax
             'range' => $range,
             'age' => $age,
             'category_id' => $cate_id,
-            'user_nationality' => $nationality,
+            'user_nationality' => $nationalityArr[0],
+            'nationality_name' => $nationalityArr[1],
         ];
         if(file_put_contents($dataFilePath, json_encode($datas))){
             wp_send_json_success(['info' => '操作成功!']);
@@ -2428,6 +2430,70 @@ class Match_Ajax
         }
         unset($datas[$k]);
         if(file_put_contents($dataFilePath, json_encode($datas))){
+            wp_send_json_success(['info' => '操作成功!']);
+        }else{
+            wp_send_json_error(['info' => '操作失败!']);
+        }
+    }
+
+    /**
+     * 添加考级名录死数据
+     */
+    public function addGradingMoreData(){
+        $level = isset($_POST['level_add']) ? intval($_POST['level_add']) : 0;
+        $cate_id = isset($_POST['cate_add']) ? intval($_POST['cate_add']) : 0;
+        $age = isset($_POST['age_add']) ? intval($_POST['age_add']) : 0;
+        $real_name = isset($_POST['real_name_add']) ? trim($_POST['real_name_add']) : '';
+        $sex = isset($_POST['sex_add']) ? trim($_POST['sex_add']) : '';
+        $nationality = isset($_POST['nationality_add']) ? trim($_POST['nationality_add']) : '';
+        if($level < 1 || $real_name == '' || $sex == '' || $nationality == '' || $cate_id < 1){
+            wp_send_json_error(['info' => '数据不完整!']);
+        }
+        $staticPath = PLUGINS_PATH.'nlyd-student/view/directory/static/';
+        $dataFileName = 'gradingMoreData.json';
+        $dataFilePath = $staticPath.$dataFileName;
+        if(file_exists($dataFilePath)){
+            $datas = json_decode(file_get_contents($dataFilePath), true);
+        }else{
+            $datas = [];
+        }
+        $nationalityArr = explode(',',$nationality);
+        $datas[] = [
+            'real_name' => $real_name,
+            'level' => $level,
+            'sex' => $sex,
+            'age' => $age,
+            'category_id' => $cate_id,
+            'user_nationality' => $nationalityArr[0],
+            'nationality_name' => $nationalityArr[1],
+        ];
+        if(file_put_contents($dataFilePath, json_encode($datas))){
+            if(file_exists($staticPath.'remember_static.html')) unlink($staticPath.'remember_static.html');
+            if(file_exists($staticPath.'read_static.html')) unlink($staticPath.'read_static.html');
+            if(file_exists($staticPath.'calculation_static.html')) unlink($staticPath.'calculation_static.html');
+            wp_send_json_success(['info' => '操作成功!']);
+        }else{
+            wp_send_json_error(['info' => '操作失败!']);
+        }
+    }
+    /**
+     * 删除考级名录死数据
+     */
+    public function delGradingMore(){
+        $k = isset($_POST['k']) ? intval($_POST['k']) : 0;
+        $staticPath = PLUGINS_PATH.'nlyd-student/view/directory/static/';
+        $dataFileName = 'gradingMoreData.json';
+        $dataFilePath = $staticPath.$dataFileName;
+        if(file_exists($dataFilePath)){
+            $datas = json_decode(file_get_contents($dataFilePath),true);
+        }else{
+            wp_send_json_error(['info' => '未获取到数据!']);
+        }
+        unset($datas[$k]);
+        if(file_put_contents($dataFilePath, json_encode($datas))){
+            if(file_exists($staticPath.'remember_static.html')) unlink($staticPath.'remember_static.html');
+            if(file_exists($staticPath.'read_static.html')) unlink($staticPath.'read_static.html');
+            if(file_exists($staticPath.'calculation_static.html')) unlink($staticPath.'calculation_static.html');
             wp_send_json_success(['info' => '操作成功!']);
         }else{
             wp_send_json_error(['info' => '操作失败!']);

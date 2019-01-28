@@ -739,7 +739,7 @@ class Brainpower
                         <label for="nationality_add">国籍:</label>
                         <select name="nationality_add" id="nationality_add">
                             <?php foreach ($nationalityArr as $nav){ ?>
-                                <option value="<?=$nav['short']?>"><?=$nav['value']?></option>
+                                <option value="<?=$nav['short'].','.$nav['value']?>"><?=$nav['value']?></option>
                             <?php } ?>
                         </select>
 
@@ -783,6 +783,9 @@ class Brainpower
                             <span>姓名</span><span class="sorting-indicator"></span>
                         </th>
                         <th scope="col" id="cates" class="manage-column column-cates">类别</th>
+                        <th scope="col" id="sex" class="manage-column column-sex">性别</th>
+                        <th scope="col" id="age" class="manage-column column-age">年龄</th>
+                        <th scope="col" id="nationality" class="manage-column column-nationality">国籍</th>
                         <th scope="col" id="options" class="manage-column column-options">操作</th>
                     </tr>
 
@@ -799,7 +802,10 @@ class Brainpower
                                 <br>
                                 <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                             </td>
-                            <td class="cates column-cates line-c" data-colname="类别"><?=$data['range']?> <?=$data['level']?>级 <?=$cateArr[$data['category_id']]['post_title'].'脑力健将'?></td>
+                            <td class="cates column-cates line-c" data-colname="类别"><?=$data['range']=='1'?'中国':'国际'?> <?=$data['level']?>级 <?=$cateArr[$data['category_id']]['post_title'].'脑力健将'?></td>
+                            <td class="sex column-sex line-c" data-colname="性别"><?=$data['sex']?></td>
+                            <td class="age column-age line-c" data-colname="年龄"><?=$data['age']?></td>
+                            <td class="nationality column-nationality line-c" data-colname="国籍"><?=$data['nationality_name']?></td>
                             <td class="options column-options line-c" data-colname="操作">
                                 <a href="javascript:;" data-k="<?=$k?>" class="del_more">删除</a>
                             </td>
@@ -815,6 +821,9 @@ class Brainpower
                             <span>姓名</span><span class="sorting-indicator"></span>
                         </th>
                         <th scope="col" class="manage-column column-cates">类别</th>
+                        <th scope="col" class="manage-column column-sex">性别</th>
+                        <th scope="col" class="manage-column column-age">年龄</th>
+                        <th scope="col" class="manage-column column-nationality">国籍</th>
                         <th scope="col" class="manage-column column-options">操作</th>
                     </tr>
                     </tfoot>

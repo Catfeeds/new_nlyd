@@ -38,6 +38,37 @@ class Student_Directory_J
                     $rows[intval($row['memory'])] = [0 => $row];
                 }
             }
+            //死数据
+            $moreJson = student_view_path.'directory/static/gradingMoreData.json';
+            if(file_exists($moreJson)){
+                $moreData = json_decode(file_get_contents($moreJson), true);
+            }else{
+                $moreData = [];
+            }
+            $cateArr = getCategory();
+            $cateId = 0;
+            foreach ($cateArr as $a){
+                if($a['alis'] == 'memory') {
+                    $cateId = $a['ID'];
+                    break;
+                }
+            }
+            foreach ($moreData as $mdv){
+                if($cateId != $mdv['category_id']) continue;
+                $mdv2 = [
+                    'memory' => $mdv['level'],
+                    'real_name' => $mdv['real_name'],
+                    'real_age' => $mdv['age'],
+                    'user_sex' => $mdv['sex'],
+                    'user_nationality' => $mdv['user_nationality'],
+                ];
+                if(isset($rows[$mdv2['memory']])){
+                    $rows[intval($mdv2['memory'])][] = $mdv2;
+                }else{
+                    $rows[intval($mdv2['memory'])] = [0 => $mdv2];
+                }
+
+            }
             ksort($rows);
             return ['rows' => $rows];
         });
