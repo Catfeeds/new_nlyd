@@ -4847,7 +4847,8 @@ class Student_Ajax
                     when 'recommend_trains_zone' then '推荐训练中心'
                     when 'recommend_test_zone' then '推荐测评中心'
                     when 'recommend_course' then '推荐购课'
-                    when 'recommend_qualified' then '购课补贴'
+                    when 'recommend_qualified_coach' then '学员分享'
+                    when 'recommend_qualified_zone' then '学员分享'
                     when 'grading_qualified' then '考级达标'
                     when 'cause_manager' then '事业管理员'
                     when 'cause_minister' then '事业部长'
@@ -5551,7 +5552,8 @@ class Student_Ajax
 				                    when 'recommend_trains_zone' then '推荐训练中心'
 				                    when 'recommend_test_zone' then '推荐测评中心'
 				                    when 'recommend_course' then '推荐购课'
-				                    when 'recommend_qualified' then '购课补贴'
+				                    when 'recommend_qualified_coach' then '学员分享'
+				                    when 'recommend_qualified_zone' then '学员分享'
 				                    when 'grading_qualified' then '考级达标'
 				                    when 'cause_manager' then '事业管理员'
 				                    when 'cause_minister' then '事业部长'
@@ -6553,7 +6555,7 @@ class Student_Ajax
 
         $sql = "select a.id,a.course_title,a.const,count(c.id) entry_total,b.type_name,a.open_quota,a.is_enable,a.coach_id,
                 if(unix_timestamp(course_start_time)>0,date_format(course_start_time,'%Y-%m-%d %H:%i'),'待确认') start_time,
-                if(unix_timestamp(course_end_time)>0,date_format(course_end_time,'%Y-%m-%d %H:%i'),'待确认') end_time,
+                if(unix_timestamp(course_end_time)>0,date_format(course_end_time,'%Y-%m-%d %H:%i'),'待确认') end_time,d.post_title category_title,
                 case a.is_enable
                 when '-3' then '已结课'
                 when '-2' then '等待开课'
@@ -6563,6 +6565,7 @@ class Student_Ajax
                 from {$wpdb->prefix}course a 
                 left join {$wpdb->prefix}course_type b on a.course_type = b.id
                 left join {$wpdb->prefix}order c on a.id = c.match_id and c.pay_status in (2,3,4)
+                left join {$wpdb->prefix}posts d on a.course_category_id = d.ID 
                 where {$where} 
                 group by a.id
                 order by a.course_start_time desc ,a.is_enable desc

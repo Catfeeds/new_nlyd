@@ -86,9 +86,10 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `user_id` int(20) DEFAULT NULL COMMENT '收益人id',
+          `provide_id` int(20) DEFAULT NULL COMMENT '付款人id',
+          `match_id` int(20) DEFAULT NULL COMMENT 'order表match_id',
           `user_type` int(10) DEFAULT NULL COMMENT '推荐机构时的机构类型id',
-          `income_type` varchar(128) DEFAULT NULL COMMENT '收益类型 match grading extract subject undertake',
-          `match_id`    int(20) DEFAULT NULL COMMENT '收益领取记录表(user_income_logs)',
+          `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 match grading extract subject undertake',
           `user_income` decimal(10,2) DEFAULT NULL COMMENT '收益+ 收益- 两情况',
           `income_status` tinyint(1) unsigned DEFAULT 1 COMMENT '1待确认,2已确认',
           `created_time` datetime DEFAULT NULL ,

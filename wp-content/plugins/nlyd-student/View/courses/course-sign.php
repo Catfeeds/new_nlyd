@@ -29,11 +29,11 @@
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('课程类型：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14"></div>
+                        <div class="detail_detail c_black fs_14"><?=$category_title?></div>
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('开课时间：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14"></div>
+                        <div class="detail_detail c_black fs_14"><?=$start_time?></div>
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('开课地点：', 'nlyd-student')?></div>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('授课教练：', 'nlyd-student')?></div>
-                        <div class="detail_detail c_black fs_14"><?=$user_name?></div>
+                        <div class="detail_detail c_black fs_14"><?=!empty($coach_name) ? $coach_name : '-';?></div>
                     </div>
                     <div class="detail_table_row">
                         <div class="detail_label c_black6 fs_14"><?=__('课程费用：', 'nlyd-student')?></div>
