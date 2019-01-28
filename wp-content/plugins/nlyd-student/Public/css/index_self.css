@@ -1,0 +1,13 @@
+@media screen and (max-width: 1199px){
+    .masthead,
+    .page-title,
+    .mobile-header-space,
+    #footer{
+        display: none!important;
+    }
+} 
+@media screen and (max-width: 990px){
+    .sticky-mobile-header:not(.transparent):not(.hidden-header) .mobile-header-space {
+        display: none!important;
+    }
+}
