@@ -1148,14 +1148,16 @@ class Student_Payment {
             load_view_template($view,$data);
             return;
         }
-        if($row->order_type == 3){
-            //获取
-            $zone_id = $wpdb->get_var("select zone_id from {$wpdb->prefix}course where id = {$row->match_id} ");
-        }
+
         // TODO 查询比赛详情和订单详情
 
         //获取比赛名字
         $match_title = $wpdb->get_var("select post_title as match_title from {$wpdb->prefix}posts where ID = {$row->match_id}");
+        if($row->order_type == 3){
+            //获取
+            $zone_id = $wpdb->get_var("select zone_id from {$wpdb->prefix}course where id = {$row->match_id} ");
+            $match_title = $wpdb->get_var("select course_title as match_title from {$wpdb->prefix}course where id = {$row->match_id}");
+        }
         $view = student_view_path.CONTROLLER.'/paySuccess.php';
 //        load_view_template($view);
         load_view_template($view,array('row'=>$row,'match_title'=>$match_title,'zone_id'=>$zone_id));
