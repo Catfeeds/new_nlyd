@@ -12,7 +12,7 @@
                 </a>
                 <h1 class="mui-title"><div><?=__(!empty($_GET['grading_id']) ? '编辑考级' : '发布考级', 'nlyd-student')?></div></h1>
             </header>
-            <div class="layui-row nl-border nl-content have-bottom">
+            <div class="layui-row nl-border nl-content"  style="padding-bottom: 333px;">
                 <div class="zone-form-tips width-padding width-padding-pc"><i class="iconfont">&#xe65b;</i> <?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></div>
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>

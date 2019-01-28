@@ -12,7 +12,7 @@
                 </a>
                 <h1 class="mui-title"><div><?=__('关联账号设置', 'nlyd-student')?></div></h1>
             </header>
-            <div class="layui-row nl-border nl-content">
+            <div class="layui-row nl-border nl-content" style="padding-bottom: 333px;">
                 <div class="layui-row width-padding width-padding-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <input type="hidden" name="action" value="student_savePass">
