@@ -58,13 +58,14 @@ class Course{
 //        }
         $rows = $wpdb->get_results("SELECT cou.course_title,cou.course_img,cou.const,cou.const,cou.is_enable,cou.coach_id,cou.course_start_time,cou.course_end_time,
                 cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.id,cou.is_share,
-                zm.zone_name,um.meta_value AS coach_real_name  
+                zm.zone_name,um.meta_value AS coach_real_name,zt.zone_type_alias,zm.zone_city,zm.zone_match_type,zm.zone_number 
                 FROM {$wpdb->prefix}course AS cou 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
                 LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=cou.zone_id AND zm.user_id!=0
+                LEFT JOIN {$wpdb->prefix}zone_type AS zt ON zm.type_id=zt.id
                 {$where}
+                ORDER BY cou.created_time DESC 
                 LIMIT {$start},{$pageSize}",ARRAY_A);
-//        leo_dump($rows);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -164,7 +165,10 @@ class Course{
                 <tbody id="the-list" data-wp-lists="list:user">
 
                 <?php
+                $organizeClass = new Organize();
                 foreach ($rows as $row){
+                    $seize_quota = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}order WHERE order_type=3 AND match_id='{$row['id']}' AND pay_status IN(2,3,4)");
+                    $zone_name = $row['zone_id'] > 0 ? $organizeClass->echoZoneName($row['zone_type_alias'],$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row,['zone_number'],'get') : '平台';
                     ?>
                     <tr data-id="<?=$row['id']?>">
                         <th scope="row" class="check-column">
@@ -195,8 +199,8 @@ class Course{
                         <td class="course_end_time column-course_end_time" data-colname="结课时间"><?=$row['course_end_time'] == '0000-00-00 00:00:00' ? '待定' : $row['course_end_time']?></td>
                         <td class="address column-address" data-colname="授课地址"><?=$row['province'].$row['city'].$row['area'].$row['address']?></td>
                         <td class="open_quota column-open_quota" data-colname="开放名额"><?=$row['open_quota']?></td>
-                        <td class="seize_quota column-seize_quota" data-colname="已抢占名额"><?=$row['seize_quota']?></td>
-                        <td class="zone_user_id column-zone_user_id" data-colname="所属机构"><?=empty($row['zone_name']) ? '平台' :$row['zone_name']?></td>
+                        <td class="seize_quota column-seize_quota" data-colname="已抢占名额"><?=$seize_quota?></td>
+                        <td class="zone_user_id column-zone_user_id" data-colname="所属机构"><?=$zone_name?></td>
                         <td class="course_type column-course_type" data-colname="课程类型">
                             <?=$courseTypeList[$row['course_type']]['type_name']?>
 
@@ -364,7 +368,7 @@ class Course{
             $area = isset($_POST['area']) ? trim($_POST['area']) : '';
             $address = isset($_POST['address']) ? trim($_POST['address']) : '';
             $open_quota = isset($_POST['open_quota']) ? intval($_POST['open_quota']) : 0;
-            $seize_quota = isset($_POST['seize_quota']) ? intval($_POST['seize_quota']) : 0;
+//            $seize_quota = isset($_POST['seize_quota']) ? intval($_POST['seize_quota']) : 0;
             $zone_id = isset($_POST['zone_id']) ? intval($_POST['zone_id']) : 0;
             $course_type = isset($_POST['course_type']) ? intval($_POST['course_type']) : 1;
             $is_enable = isset($_POST['is_enable']) ? intval($_POST['is_enable']) : 0;
@@ -396,7 +400,7 @@ class Course{
                     'area' => $area,
                     'address' => $address,
                     'open_quota' => $open_quota,
-                    'seize_quota' => $seize_quota,
+//                    'seize_quota' => $seize_quota,
                     'zone_id' => $zone_id,
 //                    'is_share' => $is_share,
                     'course_type' => $course_type,
@@ -442,7 +446,7 @@ class Course{
         }
         if($id > 0){
             $row = $wpdb->get_row("SELECT cou.course_title,cou.course_img,cou.const,cou.const,cou.is_enable,cou.coach_id,cou.course_start_time,cou.course_end_time,
-                cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.course_details,
+                cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.course_type,cou.zone_id,cou.course_details,zm.zone_number,
                 zm.type_id AS zone_type_id,zm.zone_city,um.meta_value AS coach_real_name,cou.course_category_id,cou.duration,cou.admin_mobile,zm.zone_name,zm.zone_match_type  
                 FROM {$wpdb->prefix}course AS cou 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
@@ -451,7 +455,7 @@ class Course{
             if($row['zone_id'] > 0){
                 $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$row['zone_type_id']}");
                 $organizeClass = new Organize();
-                $row['zone_name'] = $organizeClass->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'], 'get');
+                $row['zone_name'] = $organizeClass->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'], 'get');
             }
         }
 
@@ -517,7 +521,7 @@ class Course{
                         <td>
                             <select class="js-data-select-ajax" name="zone_id" style="width: 50%" data-action="get_base_zone_list" data-type="all_base">
                                 <option value="<?=isset($row['zone_id']) ? $row['zone_id'] : 0?>" selected="selected">
-                                    <?=empty($row['zone_name']) ? '平台' :$row['zone_name']?>
+                                    <?=$row['zone_name']?>
                                 </option>
                             </select>
                         </td>
@@ -581,12 +585,12 @@ class Course{
                             <input type="text" style="padding: 3px 5px;" name="open_quota" id="open_quota" value="<?=isset($row['open_quota']) ? $row['open_quota'] : 0?>">
                         </td>
                     </tr>
-                    <tr class="">
-                        <th scope="row"><label for="seize_quota">已抢占名额 </label></th>
-                        <td>
-                            <input type="text" style="padding: 3px 5px;" name="seize_quota" id="seize_quota" value="<?=isset($row['seize_quota']) ? $row['seize_quota'] : 0?>">
-                        </td>
-                    </tr>
+<!--                    <tr class="">-->
+<!--                        <th scope="row"><label for="seize_quota">已抢占名额 </label></th>-->
+<!--                        <td>-->
+<!--                            <input type="text" style="padding: 3px 5px;" name="seize_quota" id="seize_quota" value="--><?//=isset($row['seize_quota']) ? $row['seize_quota'] : 0?><!--">-->
+<!--                        </td>-->
+<!--                    </tr>-->
 
                     <tr class="">
                         <th scope="row"><label for="course_type">课程类型 </label></th>
