@@ -1569,22 +1569,22 @@ class Grading
                         var id = $(this).prev().attr('data-id');
                         var number = $(this).prev().val();
                         if(id < 1 || number == '') return false;
-                        if(confirm('是否确定已发放证书?')){
-                            $.ajax({
-                                url : ajaxurl,
-                                data : {'action' : 'gradingProveGrant', 'id':id,'number':number, 'type':_type},
-                                type : 'post',
-                                dataType : 'json',
-                                success : function(response) {
-                                    alert(response.data.info);
-                                    if(response['success']){
-                                        window.location.reload();
-                                    }
-                                }, error : function() {
-                                    alert('请求失败!');
+
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action' : 'gradingProveGrant', 'id':id,'number':number, 'type':_type},
+                            type : 'post',
+                            dataType : 'json',
+                            success : function(response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
                                 }
-                            });
-                        }
+                            }, error : function() {
+                                alert('请求失败!');
+                            }
+                        });
+
                     });
                 });
 

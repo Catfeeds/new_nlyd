@@ -361,11 +361,11 @@ class Organize{
                         <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                         <div class="locked-indicator">
                             <span class="locked-indicator-icon" aria-hidden="true"></span>
-                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>”已被锁定</span>
+                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'])?>”已被锁定</span>
                         </div>
                     </th>
                     <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                        <?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>
+                        <?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'])?>
                         <br>
                         <div class="row-actions">
                             <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
@@ -540,11 +540,11 @@ class Organize{
                         <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                         <div class="locked-indicator">
                             <span class="locked-indicator-icon" aria-hidden="true"></span>
-                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>”已被锁定</span>
+                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'])?>”已被锁定</span>
                         </div>
                     </th>
                     <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                        <?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>
+                        <?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'])?>
                         <br>
                         <div class="row-actions">
                         </div>
@@ -708,11 +708,11 @@ class Organize{
                         <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                         <div class="locked-indicator">
                             <span class="locked-indicator-icon" aria-hidden="true"></span>
-                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>”已被锁定</span>
+                            <span class="screen-reader-text">“<?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'])?>”已被锁定</span>
                         </div>
                     </th>
                     <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                        <?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'])?>
+                        <?=$this->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'])?>
                         <br>
                         <div class="row-actions">
                         </div>
@@ -1224,14 +1224,10 @@ class Organize{
             }
             $zone_type_row = $this->getOrganizeTypeList($zone_type);
             if($zone_type_row['zone_type_alias'] != 'match') $zone_match_type = 0;
-            if($zone_match_type !== 1) $zone_title = '';
 
-            if($zone_match_type !== 2) $is_double = 0;
-
-            if($zone_match_type === 0){
-                $is_double = 0;
-                $zone_title = '';
-            }
+            if($zone_match_type !== 1 && $zone_type_row['zone_type_alias'] != 'trains' && $zone_type_row['zone_type_alias'] != 'test') $zone_title = '';
+            if($zone_match_type !== 2 || $zone_match_type === 0) $is_double = 0;
+            if($zone_match_type === 0 && $zone_type_row['zone_type_alias'] != 'trains' && $zone_type_row['zone_type_alias'] != 'test') $zone_title = '';
             if($error_msg == ''){
                 $insertData = [
                     'type_id' => $zone_type,
@@ -1495,8 +1491,10 @@ class Organize{
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,zm.is_able,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
                    zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,um3.meta_value AS chairman_real_name,um4.meta_value AS secretary_real_name,zm.apply_id,zm.created_time,
-                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city,zm.term_time,zm.is_double,zm.zone_number,zm.bank_card_name 
+                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id,zm.zone_match_type,zm.zone_city,zm.term_time,zm.is_double,zm.zone_number,zm.bank_card_name, 
+                   zt.zone_type_alias
                    FROM {$wpdb->prefix}zone_meta AS zm 
+                   LEFT JOIN {$wpdb->prefix}zone_type AS zt ON zt.id=zm.type_id 
                    LEFT JOIN {$wpdb->users} AS u ON u.ID=zm.user_id AND u.ID!='' 
                    LEFT JOIN {$wpdb->users} AS u2 ON u2.ID=zm.referee_id AND u2.ID!='' 
                    LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name' 
@@ -1508,7 +1506,6 @@ class Organize{
 //            leo_dump($wpdb->last_query);die;
             $match_role_id = $row['match_role_id']; //已有赛事权限
             $zone_citys = explode('-', $row['zone_city']);
-//            var_dump($row);die;
             $role_id = $row['role_id']; //已有课程权限
         }else{
             $role_id = $wpdb->get_row("SELECT role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$typeList[0]['id']}'",ARRAY_A);
@@ -1604,7 +1601,7 @@ class Organize{
                         <td>
                             <select name="zone_type" id="zone_type" <?=$old_zm_id < 1 ? 'id="zone_type"':''?>>
                                 <?php foreach ($typeList as $tlv){ ?>
-                                    <option value="<?=$tlv['id']?>" <?=$row['type_id']==$tlv['id']?'selected="selected"':''?> ><?=$tlv['zone_type_name']?></option>
+                                    <option value="<?=$tlv['id']?>" data-alias="<?=$tlv['zone_type_alias']?>" <?=$row['type_id']==$tlv['id']?'selected="selected"':''?> ><?=$tlv['zone_type_name']?></option>
                                 <?php } ?>
                             </select>
                         </td>
@@ -1688,7 +1685,7 @@ class Organize{
                             </select>
                         </td>
                     </tr>
-                    <tr class="" style="<?=isset($row) && $row['zone_match_type'] != '1' ? 'display: none':''?>" id="zone_title_tr">
+                    <tr class="" style="<?=isset($row) && $row['zone_match_type'] != '1' && $row['zone_type_alias'] != 'trains' && $row['zone_type_alias'] != 'test' ? 'display: none':''?>" id="zone_title_tr">
                         <th scope="row"><label for="zone_title">字号 </label></th>
                         <td>
                             <input type="text" name="zone_title" id="zone_title" value="<?=$row['zone_name']?>">
@@ -1854,6 +1851,11 @@ class Organize{
                     })
                     $('#zone_type').on('change', function () {
                         var val = $(this).val();
+                        var alias = $(this).find('option:selected').attr('data-alias');
+
+                        if(alias == 'trains' || alias == 'test'){
+                            $('#zone_title_tr').show();
+                        }
                         $.ajax({
                             url : ajaxurl,
                             data : {'action':'getPowerListByType','val':val},
@@ -1892,17 +1894,20 @@ class Organize{
                     });
                     $('#zone_match_type').on('change', function () {
                         var val = $(this).val();
-                        if(val == '0'){
-                            $('#is_double_tr').hide();
-                            $('#zone_title_tr').hide();
-                            return false;
-                        }
+                        var alias  = $('#zone_type').find('option:selected').attr('data-alias');
+
                         if(val == '1'){
                             $('#zone_title_tr').show();
                             $('#is_double_tr').hide();
+                        }else if(val == '0'){
+                            $('#is_double_tr').hide();
+                            $('#zone_title_tr').hide();
                         }else{
                             $('#zone_title_tr').hide();
                             $('#is_double_tr').show();
+                        }
+                        if(alias == 'trains' || alias == 'test'){
+                            $('#zone_title_tr').show();
                         }
                     });
                     $('.term_time_radio').on('click',function () {
@@ -2603,7 +2608,7 @@ class Organize{
         $id < 1 && exit('参数错误!');
         global $wpdb;
         //查询机构信息
-        $zone_meta = $wpdb->get_row("SELECT zone_name,user_id,zone_city,zone_match_type,type_id FROM {$wpdb->prefix}zone_meta WHERE id='{$id}'", ARRAY_A);
+        $zone_meta = $wpdb->get_row("SELECT zone_name,user_id,zone_city,zone_match_type,type_id,zone_number FROM {$wpdb->prefix}zone_meta WHERE id='{$id}'", ARRAY_A);
         if($zone_meta['user_id'] > 0){
             //各种数量
             //比赛数量
@@ -2653,7 +2658,7 @@ class Organize{
 //                        echo 'IISC'. '<span style="color: #c40c0f">' .$zone_meta['zone_name'].'</span>'.'国际脑力测评中心';
 //                        break;
 //                }
-                $this->echoZoneName($type_alias,$zone_meta['zone_city'],$zone_meta['zone_name'],$zone_meta['zone_match_type']);
+                $this->echoZoneName($type_alias,$zone_meta['zone_city'],$zone_meta['zone_name'],$zone_meta['zone_match_type'],$zone_meta['zone_number']);
                 ?>
                 -统计信息
             </h1>
@@ -3668,7 +3673,7 @@ class Organize{
     /**
      * 获取机构名称
      */
-    public function echoZoneName($alias = 'match',$zone_city='',$zone_name='',$zone_match_type=0,$type='',$color = '#c40c0f'){
+    public function echoZoneName($alias = 'match',$zone_city='',$zone_name='',$zone_match_type=0,$zone_number = '',$type='',$color = '#c40c0f'){
         $span1 = '';
         $span2 = '';
         if($color != false){
@@ -3688,10 +3693,10 @@ class Organize{
                 $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
                 break;
             case 'trains':
-                $name = 'IISC'. $span1 .$zone_name.$span2.'国际脑力训练中心';
+                $name = $span1 .$zone_name.$span2.'训练中心 ('.$zone_number.')';
                 break;
             case 'test':
-                $name = 'IISC'. $span1 .$zone_name.$span2.'国际脑力测评中心';
+                $name = $span1 .$zone_name.$span2.'测评中心 ('.$zone_number.')';
                 break;
             default:
                 $name = '';

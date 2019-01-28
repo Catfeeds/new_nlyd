@@ -44,14 +44,14 @@ class Student_Directory_Zone_Test
             load_view_template($view, ['html' => $html]);
             exit;
         }else{
-            $res = $wpdb->get_results("SELECT zm.zone_number,zm.bank_card_name,zm.chairman_id,zm.secretary_id,zm.zone_city,zm.zone_name,zt.zone_type_alias,zm.zone_match_type 
+            $res = $wpdb->get_results("SELECT zm.zone_number,zm.bank_card_name,zm.chairman_id,zm.secretary_id,zm.zone_city,zm.zone_name,zt.zone_type_alias,zm.zone_match_type,zm.zone_number 
                    FROM {$wpdb->prefix}zone_meta AS zm 
                    LEFT JOIN {$wpdb->prefix}zone_type AS zt ON zt.id=zm.type_id 
                    WHERE zm.type_id='{$type_id}' AND zm.user_id>0 AND zm.user_status=1 AND zm.is_able=1 AND (zm.term_time>'{$current_time}' OR zm.term_time='')", ARRAY_A);
             $rows = [];
             $organizeClass = new Organize();
             foreach ($res as $re){
-                $re['zone_title_name'] = $organizeClass->echoZoneName($re['zone_type_alias'], $re['zone_city'], $re['zone_name'], $re['zone_match_type'], 'get', '#ffb536');
+                $re['zone_title_name'] = $organizeClass->echoZoneName($re['zone_type_alias'], $re['zone_city'], $re['zone_name'], $re['zone_match_type'],$re['zone_number'], 'get', '#ffb536');
                 $re['chairman_name'] = get_user_meta($re['chairman_id'], 'user_real_name', true)['real_name'];
                 $re['secretary_name'] = get_user_meta($re['secretary_id'], 'user_real_name', true)['real_name'];
                 $rows[] = $re;

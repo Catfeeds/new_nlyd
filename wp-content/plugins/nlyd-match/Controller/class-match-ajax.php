@@ -2351,6 +2351,30 @@ class Match_Ajax
         if($bool) wp_send_json_success(['info' => '操作成功!']);
         else wp_send_json_error(['info' => '操作失败!']);
     }
+
+    /**
+     * 搜索所有用户
+     */
+    public function search_all_user(){
+        $s = isset($_GET['term']) ? trim($_GET['term']) : '';
+        if($s != ''){
+            global $wpdb;
+            $res = $wpdb->get_results("SELECT u.ID AS id,um.meta_value FROM {$wpdb->users} AS u 
+                   LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=u.ID AND um.meta_key='user_real_name'
+                   LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=u.ID AND um2.meta_key='user_ID'
+                   WHERE um.meta_value LIKE '%{$s}%' OR um2.meta_value LIKE '%{$s}%' OR u.user_mobile LIKE '%{$s}%'");
+            $rows = [];
+            foreach ($res AS $r){
+                if($r->meta_value){
+                    $rows[] = [
+                        'id' => $r->id,
+                        'text' => unserialize($r->meta_value)['real_name']
+                    ];
+                }
+            }
+            wp_send_json_success($rows);
+        }
+    }
 }
 
 new Match_Ajax();
