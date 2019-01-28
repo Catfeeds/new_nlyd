@@ -4601,6 +4601,37 @@ class Student_Ajax
     }
 
     /**
+     * 生成课程码
+     */
+    public function course_sign_code(){
+
+        if(empty($_POST['course_id'])) wp_send_json_error(array('info'=>__('id不能为空')));
+        global $current_user;
+        $upload_dir = wp_upload_dir();
+
+        $dir = '/course-code/'.$_POST['course_id'].'/';
+        $path = $upload_dir['basedir'].$dir;
+        $filename = 'sign-'.$_POST['course_id'].'.jpg';          //定义图片名字及格式
+
+        if(file_exists($path.$filename)){
+            wp_send_json_success($upload_dir['baseurl'].$dir.$filename);
+        }
+        include_once leo_student_path."library/Vendor/phpqrcode/phpqrcode.php"; //引入PHP QR库文件
+        $value=home_url('courses/courseDetail/center_id/'.$current_user->ID.'/id/'.$_POST['course_id']);
+
+
+        if(!file_exists($path)){
+            mkdir($path,0755,true);
+        }
+        $qrcode_path = $path.$filename;
+
+        $errorCorrectionLevel = "L"; //容错级别
+        $matrixPointSize = "6"; //生成图片大小
+        QRcode::png($value, $qrcode_path, $errorCorrectionLevel, $matrixPointSize, 2);
+        wp_send_json_success($upload_dir['baseurl'].$dir.$filename);
+    }
+
+    /**
      * 机构申请资料提交
      */
     public function zone_apply_submit(){
@@ -6635,6 +6666,50 @@ class Student_Ajax
                 else{
                     //arithmetic
                 }
+            }
+        }
+        //print_r($rows);
+        wp_send_json_success(array('info'=>$rows));
+    }
+
+    /**
+     * 获取课程报名学员
+     */
+    public function get_course_student_list(){
+        if(empty($_POST['id'])) wp_send_json_error(array('info'=>__('课程id不能为空','nlyd-student')));
+        global $wpdb;
+
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        $sql = "select a.match_id,a.user_id,b.course_category_id from {$wpdb->prefix}order a 
+                left join {$wpdb->prefix}course b on a.match_id = b.id
+                left join {$wpdb->prefix}users c on a.user_id = c.ID
+                where a.match_id = {$_POST['id']} 
+                and a.order_type = 3 and pay_status in (2,3,4)
+                limit $start,$pageSize";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($sql);
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无学员', 'nlyd-student')));
+        if(!empty($rows)){
+
+            foreach ($rows as $k => $v){
+                $rows[$k]['order'] =  $start+$k+1;
+
+                $sql_ = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_real_name','user_ID','user_gender','user_images_color','user_head') and user_id = {$v['user_id']}";
+                $res = $wpdb->get_results($sql_,ARRAY_A);
+                $user_info = array_column($res,'meta_value','meta_key');
+                //print_r($user_info);
+                $rows[$k]['user_ID'] = !empty($user_info['user_ID']) ? $user_info['user_ID'] : $v['coach_id']+10000000;
+                $rows[$k]['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-' ;
+                $user_real_name = unserialize($user_info['user_real_name']);
+                $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
+                $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
+                $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$v['user_id']} ");
+                $rows[$k]['referee_id'] = !empty($referee_id > 0 ) ? $referee_id+10000000 : '-' ;
             }
         }
         //print_r($rows);

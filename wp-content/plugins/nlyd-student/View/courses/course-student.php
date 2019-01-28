@@ -44,7 +44,7 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'get_course_student',
+                        action:'get_course_student_list',
                         id:course_id,
                         page:team_page,
                     }
