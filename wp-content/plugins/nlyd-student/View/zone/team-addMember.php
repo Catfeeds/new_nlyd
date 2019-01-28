@@ -20,13 +20,10 @@
                     <form class="layui-form">
                         <div class="coach_add_row">
                             <div>
-                                <!--<select class="js-data-select-ajax" name="user_id" style="width: 100%" data-action="get_manage_user" data-placeholder="<?/*=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')*/?>" >
-                                </select>-->
                                 <input class="radius_input_row nl-foucs" name="user_phone" value="<?=$row['user_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                             </div>
                             <input type="hidden" name="action" value="add_team_personnel">
                             <input type="hidden" name="team_id" value="<?=$_GET['team_id']?>">
-                            <!-- <div class="coach_add_btn c_blue" lay-filter='layform' lay-submit="" ><?=__('确 定', 'nlyd-student')?></div> -->
                         </div>
                         <a class="a-btn a-btn-table" lay-filter='layform' lay-submit="" ><div><?=__('添加战队成员', 'nlyd-student')?></div></a>
                     </form>
@@ -37,24 +34,6 @@
 </div>
 <script>
 jQuery(function($) { 
-    // $('.js-data-select-ajax').each(function () {
-    //     var _this=$(this);
-    //     var _placeholder = _this.attr('data-placeholder');
-    //     _this.select2({
-    //         placeholder : _placeholder,
-    //         allowClear:true,
-    //         ajax: {
-    //             url: admin_ajax +'?action=get_manage_user',
-    //             dataType: 'json',
-    //             delay: 600, //wait 250 milliseconds before triggering the request
-    //             processResults: function (res) {
-    //                 return {
-    //                     results: res.data
-    //                 };
-    //             }
-    //         }
-    //     });
-    // })
     layui.use(['form'], function(){
         var form = layui.form
         form.render();

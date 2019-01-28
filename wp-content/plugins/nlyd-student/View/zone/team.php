@@ -1,4 +1,10 @@
-
+<style>
+    @media screen and (max-width: 1199px){
+        #page{
+            background-color:#f6f6f6!important;
+        }
+    }
+</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -15,63 +21,46 @@
                 </h1>
             </header>
             <div class="layui-row nl-border nl-content">
-                <?php if(!empty($id)){?>
-                    <style>
-                        @media screen and (max-width: 1199px){
-                            #page{
-                                background-color:#f6f6f6!important;
-                            }
-                        }
-                    </style>
-                    <div class="team_row width-padding layui-row layui-bg-white width-margin-pc" style="margin-top: 0;">
-                        <div class="team_row_title">
-                            <span class="bold fs_16 c_black"><?=$post_title?> </span>
-                            <a class="fs_12 c_blue" href="<?=home_url('/zone/teamBuild/team_id/'.$team_id);?>"><?=__('编辑资料', 'nlyd-student')?></a>
-                            <input type="hidden" name="team_id" id="team_id" value="<?=$team_id;?>"/>
-                        </div>
-                        <div class="team_row_tag"><span class="c_yellow mr_10"><i class="iconfont">&#xe658;</i></span><?=__($team_slogan, 'nlyd-student')?></div>
-                        <div class="c_black fs_14 ti_28 mt_10">
-                            <?=$team_brief?>
-                        </div>
+                <div class="team_row width-padding layui-row layui-bg-white width-margin-pc" style="margin-top: 0;">
+                    <div class="team_row_title">
+                        <span class="bold fs_16 c_black"><?=$post_title?> </span>
+                        <a class="fs_12 c_blue" href="<?=home_url('/zone/teamBuild/team_id/'.$team_id);?>"><?=__('编辑资料', 'nlyd-student')?></a>
+                        <input type="hidden" name="team_id" id="team_id" value="<?=$team_id;?>"/>
                     </div>
+                    <div class="team_row_tag"><span class="c_yellow mr_10"><i class="iconfont">&#xe658;</i></span><?=__($team_slogan, 'nlyd-student')?></div>
+                    <div class="c_black fs_14 ti_28 mt_10">
+                        <?=$team_brief?>
+                    </div>
+                </div>
 
-                    <div class="team_row width-padding layui-row layui-bg-white width-margin-pc">
-                        <div class="team_row_title">
-                            <span>
-                                <span class="bold fs_16 c_black"><?=__('战队成员', 'nlyd-student')?>（<?=$total[2] > 0 ? $total[2] : 0;?>）</span>
-                                <?php if($total[-1]+$total[1]>0):?>
-                                <a class="c_orange fs_12" href="<?=home_url('/zone/teamApply/map/hide/team_id/'.$_GET['team_id']);?>"><?=__('新的申请', 'nlyd-student')?>（<?=$total[-1]+$total[1];?>）</a>
-                                <?php endif;?>
-                            </span>
-                            <a class="fs_12 c_blue" href="<?=home_url('/zone/teamAddMember/team_id/'.$_GET['team_id']);?>"><?=__('添加成员', 'nlyd-student')?></a>
-                        </div>
+                <div class="team_row width-padding layui-row layui-bg-white width-margin-pc">
+                    <div class="team_row_title">
+                        <span>
+                            <span class="bold fs_16 c_black"><?=__('战队成员', 'nlyd-student')?>（<?=$total[2] > 0 ? $total[2] : 0;?>）</span>
+                            <?php if($total[-1]+$total[1]>0):?>
+                            <a class="c_orange fs_12" href="<?=home_url('/zone/teamApply/map/hide/team_id/'.$_GET['team_id']);?>"><?=__('新的申请', 'nlyd-student')?>（<?=$total[-1]+$total[1];?>）</a>
+                            <?php endif;?>
+                        </span>
+                        <a class="fs_12 c_blue" href="<?=home_url('/zone/teamAddMember/team_id/'.$_GET['team_id']);?>"><?=__('添加成员', 'nlyd-student')?></a>
                     </div>
-                    <div class="layui-row layui-bg-white">
-                        <div class="nl-table-wapper">
-                            <table class="nl-table">
-                           
-                                <tbody id="team_flow">
-                                    <tr class='table-head'>
-                                        <td><?=__('序 号', 'nlyd-student')?></td>
-                                        <td><?=__('姓名/编号', 'nlyd-student')?></td>
-                                        <td><?=__('年 龄', 'nlyd-student')?></td>
-                                        <td><?=__('性 别', 'nlyd-student')?></td>
-                                        <td><?=__('联系方式', 'nlyd-student')?></td>
-                                        <td><?=__('操 作', 'nlyd-student')?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>    
-                    </div>
-                <?php }else{ ?>
-                    <div class="no-info-page layui-row">
-                        <div class="no-info-img">
-                            <img src="<?=student_css_url.'image/noInfo/noTeam1094@2x.png'?>">
-                        </div>
-                        <p class="no-info-text"><?=__('您还没有战队', 'nlyd-student')?></p>
-                        <a href="<?=home_url('/zone/teamBuild/');?>" class="a-btn a-btn-table"><div><?=__('创建战队', 'nlyd-student')?></div></a>
-                    </div>
-                <?php } ?>
+                </div>
+                <div class="layui-row layui-bg-white">
+                    <div class="nl-table-wapper">
+                        <table class="nl-table">
+                        
+                            <tbody id="team_flow">
+                                <tr class='table-head'>
+                                    <td><?=__('序 号', 'nlyd-student')?></td>
+                                    <td><?=__('姓名/编号', 'nlyd-student')?></td>
+                                    <td><?=__('年 龄', 'nlyd-student')?></td>
+                                    <td><?=__('性 别', 'nlyd-student')?></td>
+                                    <td><?=__('联系方式', 'nlyd-student')?></td>
+                                    <td><?=__('操 作', 'nlyd-student')?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>    
+                </div>
             </div>
         </div>           
     </div>

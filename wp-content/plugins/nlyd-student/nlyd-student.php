@@ -25,7 +25,7 @@ if(!class_exists('StudentController')){
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );
-            define( 'leo_student_version','V2.1.6.5' );
+            define( 'leo_student_version','V2.1.6.7' );
 
             define( 'student_css_url', leo_student_url.'/Public/css/' );
             define( 'student_js_url', leo_student_url.'/Public/js/' );

@@ -15,7 +15,7 @@
                 </a>
                 <h1 class="mui-title"><div><?=__('我的课程', 'nlyd-student')?></div></h1>
             </header>
-            <div class="layui-row nl-border nl-content">
+            <div class="layui-row nl-border nl-content have-bottom">
                 <div class="layui-tab layui-tab-brief width-margin width-margin-pc" lay-filter="tabs">
                     <div class="layui-tab-content" style="padding: 0;">
                         <div class="layui-tab-item layui-show">
@@ -25,6 +25,8 @@
                         </div>
                     </div>
                 </div>
+                <a class="a-btn a-btn-table" href="<?=home_url('/courses/');?>"><div><?=__('看看最近课程', 'nlyd-student')?></div></a>
+                <!-- <a href="<?=home_url('/courses/')?>" class="a-btn a-btn-table"><div></div><?=__('前往课程中心', 'nlyd-student')?></a> -->
             </div>
         </div>
     </div>
@@ -139,7 +141,7 @@ jQuery(function($) {
                                                 +'<img src="<?=student_css_url.'image/noInfo/noCourse1043@2x.png'?>">'
                                             +'</div>'
                                             +'<p class="no-info-text"><?=__('您暂未参加任何课程', 'nlyd-student')?></p>'
-                                            +'<a class="a-btn a-btn-table" href="<?=home_url('/courses/');?>"><div><?=__('看看最近课程', 'nlyd-student')?></div></a>'
+                                            // +'<a class="a-btn a-btn-table" href="<?=home_url('/courses/');?>"><div><?=__('看看最近课程', 'nlyd-student')?></div></a>'
                                         +'</div>'
                                         $('#flow-list').empty().append(dom);
                                 }

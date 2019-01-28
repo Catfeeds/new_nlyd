@@ -73,7 +73,10 @@
             </div>
             <?php if(empty($is_entered)){?>
             <a href="<?=home_url('/courses/courseSign/center_id/'.$_GET['center_id'].'/id/'.$_GET['id']);?>" class="a-btn a-btn-table"><div><?=__('抢占名额', 'nlyd-student')?></div></a>
-            <?php }else{ ?>
+            <?php }elseif ($is_full == 'y'){ ?>
+                <div class="a-btn a-btn-table disabled"><div><?=__('已满员', 'nlyd-student')?></div></div>
+            <?php
+            }else{ ?>
                 <div class="a-btn a-btn-table disabled"><div><?=__('已报名', 'nlyd-student')?></div></div>
             <?php } ?>
         </div>           

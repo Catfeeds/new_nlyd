@@ -14,7 +14,7 @@
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="zone-form-tips width-padding width-padding-pc"><i class="iconfont">&#xe65b;</i> <?=__('任职人员需在平台注册并实名认证，否则审核无法通过', 'nlyd-student')?></div>
-                <div class="width-padding layui-row width-margin-pc  have-bottom">
+                <div class="width-padding layui-row width-margin-pc "  style="padding-bottom: 333px;">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <input type="hidden" name="action" value="team_apply" />
                         <input type="hidden" name="team_id" value="<?=$_GET['team_id']?>" />

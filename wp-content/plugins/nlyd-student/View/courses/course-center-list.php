@@ -73,7 +73,6 @@ jQuery(function($) {
                         data: postData,
                         success:function(res,ajaxStatu,xhr){
                             console.log(res)
-                            
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
@@ -102,7 +101,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__("抢占名额：", "nlyd-student")?></div>'
-                                                        +'<div class="match_body_info c_black"><span class="c_blue">'+v.entry_total+'</span>/'+v.open_quota+'</div>'
+                                                        +'<div class="match_body_info c_black"><span class="c_blue">'+v.entry_total+'</span>/'+v.open_quota+'<a href="'+window.home_url+'/courses/courseStudent/id/'+v.id+'/center_id/'+$.Request('id')+'" class="c_blue ml_10">查看</a></div>'
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="nl-match-footer flex-h">'

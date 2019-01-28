@@ -5,7 +5,7 @@
                 require_once leo_student_public_view.'leftMenu.php';
             
         ?>
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-bottom">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper"  style="padding-bottom: 333px;" >
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
@@ -283,7 +283,7 @@ jQuery(function($) {
     }
     var mobileSelect4 = new MobileSelect({
         trigger: '#course_end_date',
-        title: "<?=__('开课日期', 'nlyd-student')?>",
+        title: "<?=__('结课日期', 'nlyd-student')?>",
         wheels: [
             {data: course_date_Data}
         ],
@@ -299,42 +299,6 @@ jQuery(function($) {
         
         }
     });
-    // $('.js-data-select-ajax').select2({
-    //     ajax: {
-    //         url: function(params){
-    //             return admin_ajax +'?action=get_manage_user'   
-    //             // return "https://api.github.com/search/repositories"
-    //         },
-    //         dataType: 'json',
-    //         delay: 250,//在多少毫秒内没有输入时则开始请求服务器
-    //         processResults: function (data, params) {
-    //             // 此处解析数据，将数据返回给select2
-    //             console.log(data.data)
-    //             var x=data.data;
-    //             return {
-    //                 results:x,// data返回数据（返回最终数据给results，如果我的数据在data.res下，则返回data.res。这个与服务器返回json有关）
-    //             };
-    //         },
-    //         cache: true
-    //     },
-    //     placeholder: '请输入关键字',
-    //     escapeMarkup: function (markup) { return markup; }, // 字符转义处理
-    //     templateResult: formatRepo,//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
-    //     templateSelection: formatRepoSelection,//选中项回调function formatRepoSelection(repo){return repo.text}
-    //     language:'zh-CN'
-
-    // })
-    // function formatRepo (repo) {//repo对象根据拼接返回结果
-    //     if (repo.loading) {
-    //         return repo.text;
-    //     }
-    //     return repo.text;
-    // }
-    // function formatRepoSelection (repo) {//根据选中的最新返回显示在选择框中的文字
-    //     return  repo.text;
-    // }
-
-
     $('.save').click(function(){
         var data=$(".layui-form").serializeArray();
         // serialize

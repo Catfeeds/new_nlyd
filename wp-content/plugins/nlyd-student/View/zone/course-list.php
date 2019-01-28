@@ -116,7 +116,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('已占名额', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black">'+v.entry_total+' <a href="'+window.home_url+'/zone/courseStudent/id/'+v.id+'" class="c_blue ml_10">查看</a></div>'
+                                                        +'<div class="match_body_info c_black"><span class="c_blue">'+v.entry_total+'</span>/'+v.open_quota+ '<a href="'+window.home_url+'/zone/courseStudent/id/'+v.id+'" class="c_blue ml_10">查看</a></div>'
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="match_footer flex-h">'
