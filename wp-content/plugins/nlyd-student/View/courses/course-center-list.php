@@ -92,7 +92,7 @@ jQuery(function($) {
                                         }
                                     }
                                     var dom='<li class="match_row">'
-                                                +'<div class="match_header bold c_black f_16 mt_10">'+v.course_title+'</div>'
+                                                +'<div class="match_header mt_10"><span class="bold c_black f_16">'+v.course_title+'</span><br><span class="c_black8 f_12">'+v.type_name+'</span></div>'
                                                 +'<div class="match_body">'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__("开课日期：", "nlyd-student")?></div>'
@@ -101,6 +101,10 @@ jQuery(function($) {
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__("授课教练：", "nlyd-student")?></div>'
                                                         +'<a class="match_body_info c_blue" href="'+window.home_url+'/teams/coachDetail/coach_id/'+v.coach_id+'/category_id/">'+v.real_name+'</a>'
+                                                    +'</div>'
+                                                    +'<div class="match_body_row">'
+                                                        +'<div class="match_body_label"><?=__("课程费用", "nlyd-student")?></div>'
+                                                        +'<div class="match_body_info c_black">￥'+v.const+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__("抢占名额：", "nlyd-student")?></div>'
