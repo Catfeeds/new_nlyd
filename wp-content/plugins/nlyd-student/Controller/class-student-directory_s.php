@@ -34,6 +34,31 @@ class Student_Directory_S
                 if($row['real_name'] == '') continue;
                 $rows[] = $row;
             }
+            //死数据
+            $moreJson = student_view_path.'directory/static/gradingMoreData.json';
+            if(file_exists($moreJson)){
+                $moreData = json_decode(file_get_contents($moreJson), true);
+            }else{
+                $moreData = [];
+            }
+            $cateArr = getCategory();
+            $cateId = 0;
+            foreach ($cateArr as $a){
+                if($a['alis'] == 'arithmetic') {
+                    $cateId = $a['ID'];
+                    break;
+                }
+            }
+            foreach ($moreData as $mdv){
+                if($cateId != $mdv['category_id']) continue;
+                $rows[] = [
+                    'compute' => $mdv['level'],
+                    'real_name' => $mdv['real_name'],
+                    'real_age' => $mdv['age'],
+                    'user_sex' => $mdv['sex'],
+                    'user_nationality' => $mdv['user_nationality'],
+                ];
+            }
             return ['rows' => $rows];
         });
     }

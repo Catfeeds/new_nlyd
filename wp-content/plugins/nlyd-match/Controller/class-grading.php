@@ -38,6 +38,9 @@ class Grading
 
             $role = 'grading_edit_brainpower';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'grading_add_brainpower';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
 
         add_submenu_page('edit.php?post_type=grading','考级选手','考级选手','grading_students','grading-students',array($this,'gradingStudents'));
@@ -45,8 +48,9 @@ class Grading
         add_submenu_page('edit.php?post_type=grading','答题记录','答题记录','grading_studentScore','grading-studentScore',array($this,'gradingStudentScore'));
         add_submenu_page('edit.php?post_type=grading','训练记录','训练记录','grading_trainLog','grading-trainLog',array($this,'gradingTrainLog'));
         add_submenu_page('edit.php?post_type=grading','考级名录','考级名录','grading_brainpower','grading-grading_brainpower',array($this,'gradingBrainpower'));
-        add_submenu_page('edit.php?post_type=grading','编辑考级名录','编辑考级名录','grading_edit_brainpower','grading-edit_brainpower',array($this,'editGradingBrainpower'));
         add_submenu_page('edit.php?post_type=grading','录入考级名录','录入考级名录','grading_input','grading-grading_input',array($this,'gradingInput'));
+        add_submenu_page('edit.php?post_type=grading','添加更多名录','添加更多名录','grading_add_brainpower','grading-add_brainpower',array($this,'addBrainpower'));
+        add_submenu_page('edit.php?post_type=grading','编辑考级名录','编辑考级名录','grading_edit_brainpower','grading-edit_brainpower',array($this,'editGradingBrainpower'));
         add_submenu_page('edit.php?post_type=grading','考级过级记录','考级过级记录','grading_adopt_log','grading-adopt-log',array($this,'gradingAdoptLog'));
         add_submenu_page('edit.php?post_type=grading','训练答题记录','训练答题记录','grading_trainLogScore','grading-trainLogScore',array($this,'trainLogScore'));
     }
@@ -1508,6 +1512,207 @@ class Grading
 
                 <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="提交"></p>
             </form>
+        </div>
+        <?php
+    }
+
+    /**
+    * 添加名录死数据
+     */
+    public function addBrainpower(){
+           $staticPath = PLUGINS_PATH.'nlyd-student/view/directory/static/';
+        $dataFileName = 'gradingMoreData.json';
+        $dataFilePath = $staticPath.$dataFileName;
+        if(file_exists($dataFilePath)){
+            $datas = json_decode(file_get_contents($dataFilePath),true);
+        }else{
+            $datas = [];
+        }
+        $cateArr = getCategory();
+        $cateArr = array_column($cateArr, NULL, 'ID');
+        $str = file_get_contents(leo_student_path."conf/nationality_array.json");
+        $nationalityArr = json_decode($str, true);
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">考级名录</h1>
+
+            <hr class="wp-header-end">
+            <style type="text/css">
+                #add-box{
+                    width: <?=is_mobile()?'100%':'800px'?>;
+                    display: none;
+                    /*height: 300px;*/
+                }
+                #add-box label{
+                    font-weight: bold;
+                    margin-right: 5px;
+                }
+                #add-box .box-mini{
+                    padding-top: 5px;
+                }
+                #add-box .button-box{
+                    padding-top: 20px;
+                }
+            </style>
+            <h2 class="screen-reader-text">过滤考级名录</h2>
+            <button type="button" class="button-primary" id="add-data">添加数据</button>
+            <div id="add-box">
+                <form method="post" id="addDataForm" onsubmit="return false">
+                    <div class="box-mini">
+                        <label for="real_name_add">姓名:</label>
+                        <input type="text" name="real_name_add" id="real_name_add" value="">
+                    </div>
+                    <div class="box-mini">
+                        <label for="sex_add">性别:</label>
+                        <input type="text" name="sex_add" id="sex_add" value="">
+                    </div>
+                    <div class="box-mini">
+                        <label for="age_add">年龄:</label>
+                        <input type="text" name="age_add" id="age_add" value="">
+                    </div>
+                    <div class="box-mini">
+                        <label for="nationality_add">国籍:</label>
+                        <select name="nationality_add" id="nationality_add">
+                            <?php foreach ($nationalityArr as $nav){ ?>
+                                <option value="<?=$nav['short'].','.$nav['value']?>"><?=$nav['value']?></option>
+                            <?php } ?>
+                        </select>
+
+                    </div>
+                    <div class="box-mini">
+                        <label for="cate_add">类别:</label>
+                        <select name="cate_add" id="cate_add">
+                            <?php foreach ($cateArr as $cv){ ?>
+                                <option value="<?=$cv['ID']?>"><?=$cv['post_title']?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="box-mini">
+                        <label for="level_add">等级:</label>
+                        <input type="text" name="level_add" id="level_add" value="">
+                    </div>
+                    <div class="box-mini button-box">
+                        <input type="hidden" name="action" value="addGradingMoreData">
+                        <button class="button-primary" id="confirmAddData" type="button">确认添加</button>
+                        <button class="button-cancel button" id="cancelAddData" type="button">取消</button>
+                    </div>
+                </form>
+            </div>
+            <form method="get">
+
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="5740170b35"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+                <div class="tablenav top">
+
+                    <br class="clear">
+                </div>
+                <h2 class="screen-reader-text">考级名录列表</h2>
+                <table class="wp-list-table widefat fixed striped users">
+                    <thead>
+                    <tr>
+                        <th scope="col" id="real_name" class="manage-column column-real_name column-primary">
+                            <span>姓名</span><span class="sorting-indicator"></span>
+                        </th>
+                        <th scope="col" id="cates" class="manage-column column-cates">类别</th>
+                        <th scope="col" id="level" class="manage-column column-level">等级</th>
+                        <th scope="col" id="sex" class="manage-column column-sex">性别</th>
+                        <th scope="col" id="age" class="manage-column column-age">年龄</th>
+                        <th scope="col" id="nationality" class="manage-column column-nationality">国籍</th>
+                        <th scope="col" id="options" class="manage-column column-options">操作</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="the-list" data-wp-lists="list:user">
+
+                    <?php foreach ($datas as $k => $data){
+
+                        ?>
+                        <tr class="data-list">
+                            <td class="real_name column-real_name has-row-actions column-primary line-c" style="vertical-align: center" data-colname="姓名">
+                                <strong><?=$data['real_name']?></strong>
+                                <br>
+                                <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                            </td>
+                            <td class="cates column-cates line-c" data-colname="类别"><?=$cateArr[$data['category_id']]['post_title']?></td>
+                            <td class="level column-level line-c" data-colname="等级"><?=$data['level']?></td>
+                            <td class="sex column-sex line-c" data-colname="性别"><?=$data['sex']?></td>
+                            <td class="age column-age line-c" data-colname="年龄"><?=$data['age']?></td>
+                            <td class="nationality column-nationality line-c" data-colname="国籍"><?=$data['nationality_name']?></td>
+                            <td class="options column-options line-c" data-colname="操作">
+                                <a href="javascript:;" data-k="<?=$k?>" class="del_more">删除</a>
+                            </td>
+
+                        </tr>
+                    <?php } ?>
+
+                    </tbody>
+
+                    <tfoot>
+                    <tr>
+                        <th scope="col" class="manage-column column-real_name column-primary">
+                            <span>姓名</span><span class="sorting-indicator"></span>
+                        </th>
+                        <th scope="col" class="manage-column column-cates">类别</th>
+                        <th scope="col" class="manage-column column-level">等级</th>
+                        <th scope="col" class="manage-column column-sex">性别</th>
+                        <th scope="col" class="manage-column column-age">年龄</th>
+                        <th scope="col" class="manage-column column-nationality">国籍</th>
+                        <th scope="col" class="manage-column column-options">操作</th>
+                    </tr>
+                    </tfoot>
+
+                </table>
+                <div class="tablenav bottom">
+
+                </div>
+            </form>
+
+            <br class="clear">
+            <script>
+                jQuery(document).ready(function($) {
+                    $('#add-data').on('click', function () {
+                        $(this).hide();
+                        $('#add-box').show();
+                    });
+                    $('#cancelAddData').on('click', function () {
+                        $('#add-data').show();
+                        $('#add-box').hide();
+                    });
+                    $('#confirmAddData').on('click', function () {
+                        var data = $('#addDataForm').serialize();
+                        $.ajax({
+                            url : ajaxurl,
+                            data : data,
+                            type : 'post',
+                            dataType : 'json',
+                            success : function (response) {
+                                alert(response.data.info);
+                            }, error : function () {
+                                alert('请求失败!');
+                            }
+                        });
+                    });
+                    $('.del_more').on('click', function () {
+                        var k = $(this).attr('data-k');
+                        var _tr = $(this).closest('tr');
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action':'delGradingMore', 'k':k},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                if(response['success']){
+                                    _tr.remove();
+                                }else{
+                                    alert(response.data.info);
+                                }
+                            }, error : function () {
+                                alert('请求失败!');
+                            }
+                        });
+                    });
+                })
+            </script>
         </div>
         <?php
     }
