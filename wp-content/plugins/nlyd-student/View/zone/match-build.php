@@ -12,7 +12,7 @@
                 </a>
                 <h1 class="mui-title"><div><?=__(isset($_GET['match_id']) ? '编辑比赛' : '发布比赛', 'nlyd-student')?></div></h1>
             </header> 
-            <div class="layui-row nl-border nl-content have-bottom">
+            <div class="layui-row nl-border nl-content"  style="padding-bottom: 333px;">
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <?php if(!empty($scene_list)):?>

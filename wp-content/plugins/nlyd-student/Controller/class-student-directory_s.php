@@ -70,6 +70,7 @@ class Student_Directory_S
         }
         if($conf[$conf_name] == $last_time && file_exists($file_name)){
             echo file_get_contents($file_name);
+//            load_view_template($file_name);
             exit;
         }else{
             $data = $getDataCollback();

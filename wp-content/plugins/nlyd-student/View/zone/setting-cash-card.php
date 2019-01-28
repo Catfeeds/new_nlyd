@@ -13,8 +13,8 @@
                     </a>
                     <h1 class="mui-title"><div><?=__('添加银行账户', 'nlyd-student')?></div></h1>
                 </header>
-            <div class="layui-row nl-border nl-content">
-                <form class="nl-page-form layui-form width-margin-pc have-bottom">
+            <div class="layui-row nl-border nl-content"  style="padding-bottom: 333px;">
+                <form class="nl-page-form layui-form width-margin-pc">
                     <input type="hidden" name="action" value="set_receivables"/>
                     <input type="hidden" name="type" value="bank"/>
                     <div class="form-inputs">
