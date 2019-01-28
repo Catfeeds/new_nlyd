@@ -77,9 +77,12 @@ jQuery(function($) {
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var rightBtn='<a href="'+window.home_url+'/courses/courseSign/center_id/'+$.Request('id')+'/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("抢占名额", "nlyd-student")?></span></a>'
-                                    if(id=="-3"){
+                                    if(id=="-3"){//课程报名中
                                         rightBtn='<a href="'+window.home_url+'/courses/courseEnd/center_id/'+$.Request('id')+'/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("结课成绩", "nlyd-student")?></span></a>'
                                     }else{
+                                        if(id=="2"){//进行中
+                                            rightBtn='<a class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__("课程进行中...", "nlyd-student")?></span></a>'
+                                        }
                                         if (v.order_id) {//已报名
                                             rightBtn='<a class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__("您已抢占名额", "nlyd-student")?></span></a>'
                                         }else{

@@ -672,6 +672,7 @@ textarea.radius_input_row{
 .student_title{
     padding-top: 15px;
     padding-bottom: 15px;
+    word-wrap:break-word;
 }
 
 .details_btn{

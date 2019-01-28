@@ -14,7 +14,7 @@
             </header>    
             <div class="layui-row nl-border nl-content">
                 <div class="nl-table-wapper">
-                    <div class="c_black width-padding width-padding-pc bold fs_16 student_title"><?=$course_title?></div>
+                    <div class="c_black width-padding width-padding-pc bold fs_16 student_title"><?=$course_title?>111</div>
                     <table class="nl-table">
                         <tbody id="course_row">
                             <tr class='table-head'>
