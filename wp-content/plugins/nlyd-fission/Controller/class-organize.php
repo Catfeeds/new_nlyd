@@ -1480,7 +1480,8 @@ class Organize{
 
                         }
 
-                    }else{
+                    }
+                    else{
                         $wpdb->query('COMMIT');
                         $success_msg = '操作成功';
                     }
