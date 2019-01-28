@@ -32,6 +32,12 @@ class Grading
 
             $role = 'grading_adopt_log';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'grading_input';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'grading_edit_brainpower';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
 
         add_submenu_page('edit.php?post_type=grading','考级选手','考级选手','grading_students','grading-students',array($this,'gradingStudents'));
@@ -39,6 +45,8 @@ class Grading
         add_submenu_page('edit.php?post_type=grading','答题记录','答题记录','grading_studentScore','grading-studentScore',array($this,'gradingStudentScore'));
         add_submenu_page('edit.php?post_type=grading','训练记录','训练记录','grading_trainLog','grading-trainLog',array($this,'gradingTrainLog'));
         add_submenu_page('edit.php?post_type=grading','考级名录','考级名录','grading_brainpower','grading-grading_brainpower',array($this,'gradingBrainpower'));
+        add_submenu_page('edit.php?post_type=grading','编辑考级名录','编辑考级名录','grading_edit_brainpower','grading-edit_brainpower',array($this,'editGradingBrainpower'));
+        add_submenu_page('edit.php?post_type=grading','录入考级名录','录入考级名录','grading_input','grading-grading_input',array($this,'gradingInput'));
         add_submenu_page('edit.php?post_type=grading','考级过级记录','考级过级记录','grading_adopt_log','grading-adopt-log',array($this,'gradingAdoptLog'));
         add_submenu_page('edit.php?post_type=grading','训练答题记录','训练答题记录','grading_trainLogScore','grading-trainLogScore',array($this,'trainLogScore'));
     }
@@ -1210,7 +1218,7 @@ class Grading
         $page < 1 && $page = 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS user_id,`{$cate_type}` AS skill_level FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `{$cate_type}`>0 LIMIT {$start},{$pageSize}", ARRAY_A);
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS user_id,`{$cate_type}` AS skill_level,id FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `{$cate_type}`>0 LIMIT {$start},{$pageSize}", ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -1292,8 +1300,9 @@ class Grading
                     <tr id="user-<?=$row2['user_id']?>"><td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名">
                             <img alt="" src="<?=$row2['user_head']?>" class="avatar avatar-32 photo" height="32" width="32">
                             <strong><?=$row2['real_name']?></strong>
-                            <br>
-
+                           <div class="row-actions">
+                                <span class="view"><a href="<?=admin_url('edit.php?post_type=grading&page=grading-edit_brainpower&id='.$row['id'])?>" aria-label="">编辑</a></span>
+                            </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
                         <td class="ID column-ID" data-colname="ID"><?=$row2['user_ID']?></td>
@@ -1332,6 +1341,173 @@ class Grading
 
 
             <br class="clear">
+        </div>
+        <?php
+    }
+
+    /**
+    * 编辑考级名录
+     */
+    public function editGradingBrainpower(){
+        $err_msg = '';
+        $suc_msg = '';
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        $id < 1 && exit('参数错误!');
+        global $wpdb;
+        if(is_post()){
+            $compute = isset($_POST['compute']) ? intval($_POST['compute']) : 0;
+            $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
+            $read = isset($_POST['read']) ? intval($_POST['read']) : 0;
+            $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+            if($read < 1 && $memory < 1 && $compute < 1){
+                $err_msg = '请至少输入一个类别的等级!';
+            }
+            if($user_id < 1) $err_msg .= '<br >user_id 参数错误!';
+            if($err_msg == ''){
+                global $wpdb;
+
+                if($err_msg == ''){
+                      //获取国籍
+                    $bool = $wpdb->update($wpdb->prefix.'user_skill_rank', ['user_id'=>$user_id,'read'=>$read,'memory'=>$memory,'compute'=>$compute],['id'=>$id]);
+                    if($bool) $suc_msg = '编辑成功!';
+                    else $err_msg = '编辑失败!';
+                }
+            }
+        }
+        $row = $wpdb->get_row("SELECT user_id,memory,`read`,compute FROM {$wpdb->prefix}user_skill_rank WHERE id='{$id}'", ARRAY_A);
+        ?>
+             <div class="wrap" id="profile-page">
+            <hr class="wp-header-end">
+            <form id="your-profile" action="" method="post" novalidate="novalidate">
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="9699f260f1"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">	<input type="hidden" name="wp_http_referer" value="/nlyd/wp-admin/users.php">
+                <p>
+                    <input type="hidden" name="from" value="profile">
+                    <input type="hidden" name="checkuser_id" value="1">
+                </p>
+                <h2>编辑考级名录</h2>
+                <h2 style="color:#14c410;"><?=$suc_msg?></h2>
+                <h2 style="color: #c41c05"><?=$err_msg?></h2>
+                <hr>
+                <table class="form-table">
+                    <tbody>
+                    <tr class="user-user-login-wrap">
+                        <th>
+                            <label for="real_name">姓名</label>
+                        </th>
+                        <td>
+                            <?=get_user_meta($row['user_id'], 'user_real_name', true)['real_name']?>
+                        </td>
+                    </tr>
+                    <tr class="user-user-login-wrap">
+                        <th>
+                            <label for="memory">记忆等级</label>
+                        </th>
+                        <td><input type="text" id="memory" name="memory" value="<?=$row['memory']?>"> </td>
+                    </tr>
+                    <tr class="user-user-login-wrap">
+                        <th>
+                            <label for="read">速读等级</label>
+                        </th>
+                        <td><input type="text" id="read" name="read" value="<?=$row['read']?>"> </td>
+                    </tr>
+                    <tr class="user-user-login-wrap">
+                        <th>
+                            <label for="compute">心算等级</label>
+                        </th>
+                        <td><input type="text" id="compute" name="compute" value="<?=$row['compute']?>"> </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="user_id" value="<?=$row['user_id']?>">
+
+                <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="提交"></p>
+            </form>
+        </div>
+        <?php
+    }
+
+    /**
+    * 录入考级名录
+    */
+    public function gradingInput(){
+        $err_msg = '';
+        $suc_msg = '';
+        if(is_post()){
+            $compute = isset($_POST['compute']) ? intval($_POST['compute']) : 0;
+            $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
+            $read = isset($_POST['read']) ? intval($_POST['read']) : 0;
+            $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+            if($read < 1 && $memory < 1 && $compute < 1){
+                $err_msg = '请至少输入一个类别的等级!';
+            }
+            if($user_id < 1) $err_msg .= '<br >请选择用户!';
+            if($err_msg == ''){
+                global $wpdb;
+                //当前用户如果有名录则不添加并提醒去编辑
+                $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}user_skill_rank WHERE user_id='{$user_id}' AND skill_type=1");
+                if($var) $err_msg = '<br > 当前用户已有名录! 您可 <a href="'.admin_url('edit.php?post_type=grading&page=grading-edit_brainpower&id='.$var).'">前往编辑</a>';
+                if($err_msg == ''){
+                      //获取国籍
+                    $nationality = get_user_meta($user_id, 'user_nationality',true);
+                    $bool = $wpdb->insert($wpdb->prefix.'user_skill_rank', ['user_id'=>$user_id,'read'=>$read,'memory'=>$memory,'compute'=>$compute,'nationality'=>$nationality,'skill_type'=>'1']);
+                    if($bool) $suc_msg = '录入成功!';
+                    else $err_msg = '录入失败!';
+                }
+            }
+        }
+
+        ?>
+           <div class="wrap" id="profile-page">
+            <hr class="wp-header-end">
+            <form id="your-profile" action="" method="post" novalidate="novalidate">
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="9699f260f1"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">	<input type="hidden" name="wp_http_referer" value="/nlyd/wp-admin/users.php">
+                <p>
+                    <input type="hidden" name="from" value="profile">
+                    <input type="hidden" name="checkuser_id" value="1">
+                </p>
+                <h2>录入考级名录</h2>
+                <h2 style="color:#14c410;"><?=$suc_msg?></h2>
+                <h2 style="color: #c41c05"><?=$err_msg?></h2>
+                <hr>
+                <table class="form-table">
+                    <tbody>
+                    <tr class="user-user-login-wrap">
+                        <th>
+                            <label for="real_name">用户</label>
+                        </th>
+                        <td>
+                            <select class="js-data-select-ajax" name="user_id" style="width: 50%" data-action="search_all_user" data-type="base">
+
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="user-user-login-wrap">
+                        <th>
+                            <label for="memory">记忆等级</label>
+                        </th>
+                        <td><input type="text" id="memory" name="memory" value=""> </td>
+                    </tr>
+                    <tr class="user-user-login-wrap">
+                        <th>
+                            <label for="read">速读等级</label>
+                        </th>
+                        <td><input type="text" id="read" name="read" value=""> </td>
+                    </tr>
+                    <tr class="user-user-login-wrap">
+                        <th>
+                            <label for="compute">心算等级</label>
+                        </th>
+                        <td><input type="text" id="compute" name="compute" value=""> </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <input type="hidden" name="action" value="update">
+
+                <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="提交"></p>
+            </form>
         </div>
         <?php
     }
