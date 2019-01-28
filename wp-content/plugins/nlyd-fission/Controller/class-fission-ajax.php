@@ -73,130 +73,7 @@ class Fission_Ajax
         else wp_send_json_error(['info' => '删除失败!']);
     }
 
-    /**
-     * 通过/拒绝机构账号申请
-     */
-    public function editOrganizeApply(){
-        die;
-        $id = isset($_POST['id']) ? trim($_POST['id']) : '';
-        if($id == '') wp_send_json_error(['info' => '参数错误!']);
-        $type = isset($_POST['request_type']) ? trim($_POST['request_type']) : '';
 
-        global $wpdb;
-        $wpdb->query('START TRANSACTION');
-        //查询原数据
-        $zone_meta = $wpdb->get_results("SELECT user_id,type_id,id,apply_id FROM {$wpdb->prefix}zone_meta WHERE id IN({$id}) AND user_status=-1",ARRAY_A);
-        if(!$zone_meta) wp_send_json_error(['info' => '未找到申请记录!']);
-        if($type == 'agree'){//同意申请
-            $user_status = 1;
-            $sendMsgArr = [];
-            foreach ($zone_meta as $zmv){
-                //创建新账号
-                $user_email = $zmv['apply_id'].rand(000,999).date('is', get_time()).'@gjnlyd.com';
-                $user_password = '123456';
-                $user_id = wp_create_user($user_email,$user_password,$user_email);
-                if(!$user_id) wp_send_json_error(['info' => '创建账号失败!']);
-                //更新新账号推荐人和推荐时间
-                $apply_user = $wpdb->get_row("SELECT referee_id,user_mobile FROM {$wpdb->users} WHERE ID='{$zmv['apply_id']}'", ARRAY_A);
-                $referee_id = $apply_user['referee_id'];
-                if($referee_id > 0){
-                    if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id,'referee_time'=>get_time('mysql')],['ID' => $user_id])) wp_send_json_error(['info' => '更新机构推荐人失败!']);
-                }
-                //跟新机构所有者
-                if(!$wpdb->update($wpdb->prefix.'zone_meta',['user_id' => $user_id],['id'=>$zmv['id']])) wp_send_json_error(['info' => '更新机构所有者id失败!']);
-//                $wpdb->update($wpdb->users,['referee_id' => ])
-                //添加机构管理员
-                if(!$wpdb->insert($wpdb->prefix.'zone_manager',['zone_id' => $zmv['id'], 'user_id' => $zmv['apply_id']])) wp_send_json_error(['info' => '添加管理员失败!']);
-                //机构类型
-                $orgType = $wpdb->get_row("SELECT zone_type_alias,zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'", ARRAY_A);
-                $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType['zone_type_alias']}' AND spread_status=1", ARRAY_A);
-                if($spread_set){
-                    //添加上级收益
-                    //获取一级上级
-                    $referee_id1 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$user_id}'");
-                    $referee_id2 = 0;
-                    if($referee_id1 > 0) $referee_id2 = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$referee_id1}'");
-                    //添加分成记录
-                    $insertData3 = [
-                        'income_type' => 'subject',
-                        'user_id' => $zmv['apply_id'],
-                        'referee_id' => $referee_id1,
-                        'referee_income' => $spread_set['direct_superior'],
-                        'indirect_referee_id' => $referee_id2 > 0 ? $referee_id2 : 0,
-                        'indirect_referee_income' => $referee_id2 > 0 ? $spread_set['indirect_superior'] : 0,
-                        'income_status' => 2,
-                        'created_time' => get_time('mysql'),
-                    ];
-                    $bool = $wpdb->insert($wpdb->prefix.'user_income_logs',$insertData3);
-                    if(!$bool) {
-                        $wpdb->query('ROLLBACK');
-                        wp_send_json_error(['info' => '添加分成记录失败!']);
-                    }
-                    $user_income_logs_id = $wpdb->insert_id;
-
-                    if($referee_id1 > 0){
-                        //添加一级上级收益流水
-                        $insertData1 = [
-                            'user_id' => $referee_id1,
-//                            'user_type' => 2,
-                            'match_id' => $user_income_logs_id,
-                            'income_type' => 'subject',
-                            'user_income' => $spread_set['direct_superior'],
-                            'created_time' => get_time('mysql'),
-                        ];
-                        $bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData1);
-                        if(!$bool) {
-                            $wpdb->query('ROLLBACK');
-                            wp_send_json_error(['info' => '添加直接上级收益失败!']);
-                        }
-
-                        //获取二级上级
-                        if($referee_id2 > 0){
-                            //添加二级上级收益流水
-                            $insertData2 = [
-                                'user_id' => $referee_id2,
-//                                'user_type' => 2,
-                                'match_id' => $user_income_logs_id,
-                                'income_type' => 'subject',
-                                'user_income' => $spread_set['indirect_superior'],
-                                'created_time' => get_time('mysql'),
-                            ];
-                            $bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData2);
-                            if(!$bool) {
-                                $wpdb->query('ROLLBACK');
-                                wp_send_json_error(['info' => '添加间接上级收益失败!']);
-                            }
-                        }
-                    }
-                }
-                //发送短信通知申请人并给出机构的账号密码
-                $sendMsgArr[] = ['user_mobile'=>$apply_user['user_mobile'],'type_name'=>$orgType['zone_type_name'],'user_login'=>$user_email,'password'=>$user_password];
-            }
-        }elseif ($type == 'refuse'){//拒绝申请
-            $user_status = -2;
-        }else{
-            $wpdb->query('ROLLBACK');
-            wp_send_json_error(['info' => '参数错误!']);
-        }
-
-        //审核时间
-        $apply_date = get_time('mysql');
-        $bool = $wpdb->query("UPDATE `{$wpdb->prefix}zone_meta` SET `user_status` = '{$user_status}',`audit_time` = '{$apply_date}' WHERE id IN({$id}) AND user_status=-1");
-        if($bool) {
-            $wpdb->query('COMMIT');
-            if(isset($sendMsgArr) && $sendMsgArr != []){
-                $ali = new AliSms();
-                foreach ($sendMsgArr as $smav){
-                    $ali->sendSms($smav['user_mobile'], 6, array('type_name'=>$smav['type_name'], 'user_login' => $smav['user_login'], 'password' => $smav['password']));
-                }
-            }
-            wp_send_json_success(['info' => '操作成功!']);
-        }else{
-            $wpdb->query('ROLLBACK');
-            wp_send_json_error(['info' => '操作失败!']);
-        }
-
-    }
     /**
      * 冻结/解冻机构账号
      */
@@ -366,40 +243,19 @@ class Fission_Ajax
         if($status !== 2 || $id == '') wp_send_json_error(['info' => '参数错误!']);
 
         global $wpdb;
-        //获取数据
-        $rows = $wpdb->get_results("SELECT match_id FROM {$wpdb->prefix}user_income_logs WHERE income_type NOT IN ('match','grading') AND id IN({$id}) AND income_status=1", ARRAY_A);
-        if(!$rows) wp_send_json_error(['info' => '无待确认数据!']);
-        $wpdb->query('START TRANSACTION');
-        $sql = "UPDATE {$wpdb->prefix}user_income_logs SET income_status='{$status}' WHERE income_type NOT IN ('match','grading') AND id IN({$id}) AND income_status=1";
-        $bool = $wpdb->query($sql);
-//        echo $wpdb->last_query;
-        if(!$bool) {
-            $wpdb->query('ROLLBACK');
-            wp_send_json_error(['info' => '修改分成失败!']);
-        }
-        //修改收益记录状态
-        $match_id = [];
-        foreach ($rows as $row){
-            if($row['match_id'] > 0) $match_id[] = $row['match_id'];
-        }
-        $match_id = join(',',$match_id);
-        $sql = "UPDATE {$wpdb->prefix}user_stream_logs SET `income_status`=2 WHERE match_id IN({$match_id}) AND income_type NOT IN ('recommend_trains_zone','recommend_test_zone','recommend_match_zone')";
+
+        $sql = "UPDATE {$wpdb->prefix}user_stream_logs SET `income_status`=2 WHERE id='{$id}' AND income_type NOT IN('open_match','open_grading','recommend_match','director_match','director_grading')";
         $user_stream_logs_bool = $wpdb->query($sql);
 //        echo $wpdb->last_query;
-        if(!$user_stream_logs_bool){
-            $wpdb->query('ROLLBACK');
-            if(!$wpdb->get_var("SELECT id FROM {$wpdb->prefix}user_stream_logs WHERE match_id IN({$match_id}) AND income_type NOT IN ('recommend_trains_zone','recommend_test_zone','recommend_match_zone') AND income_status!=2")){
-                wp_send_json_error(['info' => '修改失败! 无可修改收益流水']);
-            }else{
-                wp_send_json_error(['info' => '修改收益失败!']);
-            }
+        if($user_stream_logs_bool){
+            wp_send_json_success(['info' => '修改成功!']);
+        }else{
+            wp_send_json_error(['info' => '修改失败!']);
         }
-        $wpdb->query('COMMIT');
-        wp_send_json_success(['info' => '修改成功!']);
     }
 
     /**
-     * 修改赛事考级收益记录确认状态
+     * 修改赛事收益记录确认状态
      */
     public function updateMatchIncomeLogsStatus(){
         $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
@@ -408,60 +264,32 @@ class Fission_Ajax
 
         global $wpdb;
         //获取数据
-        $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}user_income_logs WHERE income_type IN ('match','grading') AND match_id IN({$match_id}) AND income_status=1", ARRAY_A);
-        if(!$rows) wp_send_json_error(['info' => '无待确认数据!']);
-        $sql = "UPDATE {$wpdb->prefix}user_income_logs SET income_status=2 WHERE income_type IN ('match','grading') AND match_id IN({$match_id}) AND income_status=1";
-        $wpdb->query('START TRANSACTION');
-        $bool = $wpdb->query($sql);
-        if(!$bool){
-            $wpdb->query('ROLLBACK');
-            wp_send_json_error(['info' => '确认失败']);
-        }
-        //添加收益流水
-//        $sql2 = "INSERT INTO `{$wpdb->prefix}user_stream_logs` (`user_id`,`income_type`,`match_id`,`user_income`,`created_time`,`income_status`) VALUES";
-//        $insertDataArr = [];
-//        $created_time = get_time('mysql');
-//        foreach ($rows as $row){
-
-//            //直接上街
-//            if($row['referee_id'] && $row['referee_income'] != '0' && $row['referee_income'] != NULL){
-//                $income_type = $row['income_type'] == 'match' ? 'recommend_match' : 'recommend_grading';
-//                $insertDataArr[] = "('{$row['referee_id']}','{$income_type}','{$row['match_id']}','{$row['referee_income']}','{$created_time}',2)";
-//            }
-//            //间接上级
-//            if($row['indirect_referee_id'] && $row['indirect_referee_income'] != '0' && $row['indirect_referee_income'] != NULL){
-//                $income_type = $row['income_type'] == 'match' ? 'recommend_match' : 'recommend_grading';
-//                $insertDataArr[] = "('{$row['indirect_referee_id']}','{$income_type}','{$row['match_id']}','{$row['indirect_referee_income']}','{$created_time}',2)";
-//            }
-//            //负责人
-//            if($row['person_liable_id'] && $row['person_liable_income'] != '0' && $row['person_liable_income'] != NULL){
-//                $income_type = $row['income_type'] == 'match' ? 'director_match' : 'director_grading';
-//                $insertDataArr[] = "('{$row['person_liable_id']}','{$income_type}','{$row['match_id']}','{$row['person_liable_income']}','{$created_time}',2)";
-//            }
-//            //主办方
-//            if($row['sponsor_id'] && $row['sponsor_income'] != '0' && $row['sponsor_income'] != NULL){
-//                $income_type = $row['income_type'] == 'match' ? 'open_match' : 'open_grading';
-//                $insertDataArr[] = "('{$row['sponsor_id']}','{$income_type}','{$row['match_id']}','{$row['sponsor_income']}','{$created_time}',2)";
-//            }
-//            //事业员
-//            if($row['manager_id'] && $row['manager_income'] != '0' && $row['manager_income'] != NULL){
-//                $insertDataArr[] = "('{$row['manager_id']}','cause_manager','{$row['match_id']}','{$row['manager_income']}','{$created_time}',2)";
-//            }
-//            //事业管理员
-//            if($row['indirect_manager_id'] && $row['indirect_manager_income'] != '0' && $row['indirect_manager_income'] != NULL){
-//                $insertDataArr[] = "('{$row['indirect_manager_id']}','cause_minister','{$row['match_id']}','{$row['indirect_manager_income']}','{$created_time}',2)";
-//            }
-//        }
-//        $sql2 .= join(',', $insertDataArr);
-//        $insertBool = $wpdb->query($sql2);
         //修改收益流水状态
-        $sql = "UPDATE {$wpdb->prefix}user_stream_logs SET `income_status`=2 WHERE match_id IN({$match_id}) AND income_type NOT IN ('recommend_trains_zone','recommend_test_zone','recommend_match_zone')";
+        $sql = "UPDATE {$wpdb->prefix}user_stream_logs SET `income_status`=2 WHERE match_id IN({$match_id}) AND income_type IN ('open_match','recommend_match','director_match')";
         $user_stream_logs_bool = $wpdb->query($sql);
         if($user_stream_logs_bool){
-            $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '确认成功']);
         }else{
-            $wpdb->query('ROLLBACK');
+            wp_send_json_error(['info' => '确认失败']);
+        }
+    }
+
+    /**
+     * 修改考级收益记录确认状态
+     */
+    public function updateGradingIncomeLogsStatus(){
+        $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
+        $match_id = isset($_POST['id']) ? trim($_POST['id']) : '';
+        if($status !== 2 || $match_id == '') wp_send_json_error(['info' => '参数错误!']);
+
+        global $wpdb;
+        //获取数据
+        //修改收益流水状态
+        $sql = "UPDATE {$wpdb->prefix}user_stream_logs SET `income_status`=2 WHERE match_id IN({$match_id}) AND income_type IN('open_grading','recommend_grading','director_grading')";
+        $user_stream_logs_bool = $wpdb->query($sql);
+        if($user_stream_logs_bool){
+            wp_send_json_success(['info' => '确认成功']);
+        }else{
             wp_send_json_error(['info' => '确认失败']);
         }
     }

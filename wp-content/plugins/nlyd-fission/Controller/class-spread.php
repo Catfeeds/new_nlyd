@@ -17,7 +17,7 @@ class Spread{
             $role = 'add_profit_set';//权限名
             $wp_roles->add_cap('administrator', $role);
 
-            $role = 'profit_log';//权限名
+            $role = 'profit_match_log';//权限名
             $wp_roles->add_cap('administrator', $role);
 
             $role = 'profit_user_log';//权限名
@@ -26,7 +26,7 @@ class Spread{
 //            $role = 'profit_extract_log';//权限名
 //            $wp_roles->add_cap('administrator', $role);
 
-            $role = 'profit_match_log';//权限名
+            $role = 'profit_grading_log';//权限名
             $wp_roles->add_cap('administrator', $role);
 
             $role = 'profit_match_log_detail';//权限名
@@ -34,11 +34,11 @@ class Spread{
         }
         add_submenu_page('fission','收益设置','收益设置','profit_set','fission-profit-set',array($this,'profitSet'));
         add_submenu_page('fission','新增收益设置','新增收益设置','add_profit_set','fission-add-profit-set',array($this,'addProfitSet'));
-        add_submenu_page('fission','用户分成记录','用户分成记录','profit_log','fission-profit-log',array($this,'profitLog'));
-        add_submenu_page('fission','赛事分成记录','赛事分成记录','profit_match_log','fission-profit-match-log',array($this,'profitMatchLog'));
+        add_submenu_page('fission','比赛收益流水','比赛收益流水','profit_match_log','fission-profit-match-log',array($this,'profitMatchLog'));
+        add_submenu_page('fission','考级收益流水','考级收益流水','profit_grading_log','fission-profit-grading-log',array($this,'profitGradingLog'));
         add_submenu_page('fission','用户收益流水','用户收益流水','profit_user_log','fission-profit-user-log',array($this,'profitUserLog'));
         add_submenu_page('fission','提现记录','提现记录','profit_extract_log','fission-profit-extract-log',array($this,'profitExtractLog'));
-        add_submenu_page('fission','赛事分成记录详情','赛事分成记录详情','profit_match_log_detail','fission-profit-match-log-detail',array($this,'profitMatchLogDetail'));
+//        add_submenu_page('fission','赛事分成记录详情','赛事分成记录详情','profit_match_log_detail','fission-profit-match-log-detail',array($this,'profitMatchLogDetail'));
     }
 
     /**
@@ -726,7 +726,7 @@ class Spread{
     }
 
     /**
-     * 赛事/考级分成记录
+     * 比赛收益流水
      */
     public function profitMatchLog(){
         global $wpdb;
@@ -740,18 +740,32 @@ class Spread{
         if($searchStr != ''){
             $where .= " AND (p.post_title LIKE '%{$searchStr}%')";
         }
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
-                SUM(il.referee_income) AS referee_income,SUM(il.indirect_referee_income) AS indirect_referee_income,
-                SUM(il.person_liable_income) AS person_liable_income,SUM(il.sponsor_income) AS sponsor_income,SUM(il.manager_income) AS manager_income,
-                il.income_status,p.post_title,il.match_id,gm.grading_id,mmn.match_status,gm.status 
-                FROM {$wpdb->prefix}user_income_logs AS il 
-                LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=il.match_id 
-                LEFT JOIN `{$wpdb->prefix}match_meta_new` AS mmn ON il.match_id=mmn.match_id 
-                LEFT JOIN `{$wpdb->prefix}grading_meta` AS gm ON il.match_id=gm.grading_id 
-                {$where} AND il.income_type IN('match','grading') AND (mmn.id!='' OR gm.id!='')
-                GROUP BY p.ID DESC
-                LIMIT {$start},{$pageSize}",ARRAY_A);
-//        leo_dump($rows);
+        $sql = "SELECT usl.income_status,mmn.match_status,p.post_title,mmn.match_id 
+                FROM {$wpdb->prefix}user_stream_logs AS usl 
+                LEFT JOIN {$wpdb->prefix}match_meta_new AS mmn ON mmn.match_id=usl.match_id 
+                LEFT JOIN {$wpdb->posts} AS p ON p.ID=usl.match_id 
+                WHERE usl.income_type IN('open_match','recommend_match','director_match')
+                GROUP BY usl.match_id
+                ORDER BY p.ID DESC
+                LIMIT {$start},{$pageSize}";
+//        return [
+//            'open_match' => '开设比赛',
+//            'open_grading' => '开设考级',
+//            'open_course' => '课程渠道',
+//            'recommend_match' => '推荐比赛',
+//            'recommend_grading' => '推荐考级',
+//            'director_match' => '参赛机构',
+//            'director_grading' => '考级负责人',
+//            'recommend_trains_zone' => '推荐训练中心',
+//            'recommend_test_zone' => '推荐测评中心',
+//            'recommend_match_zone' => '推荐赛区',
+//            'recommend_course' => '推荐购课',
+//            'recommend_qualified' => '购课补贴',
+//            'grading_qualified' => '考级达标',
+//            'cause_manager' => '事业管理员',
+//            'cause_minister' => '事业部长',
+//        ];
+        $rows = $wpdb->get_results($sql,ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -764,14 +778,14 @@ class Spread{
         ));
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">赛事/考级分成列表</h1>
+            <h1 class="wp-heading-inline">赛事收益流水</h1>
             <hr class="wp-header-end">
 
             <h2 class="screen-reader-text">过滤列表</h2>
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="赛事/考级名称" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-match-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                <input type="search" id="search_val" name="search_val" placeholder="赛事名称" value="<?=$searchStr?>">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-match-log&s=')?>'+document.getElementById('search_val').value" value="搜索">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
@@ -795,13 +809,10 @@ class Spread{
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">赛事考级名称</th>
-                    <th scope="col" id="project" class="manage-column column-project">付款项目</th>
-                    <th scope="col" id="referee" class="manage-column column-referee">直接推广</th>
-                    <th scope="col" id="indirect_referee" class="manage-column column-indirect_referee">间接推广</th>
-                    <th scope="col" id="person_liable" class="manage-column column-person_liable">教练/参赛机构</th>
-                    <th scope="col" id="sponsor" class="manage-column column-sponsor">主办方</th>
-                    <th scope="col" id="manager" class="manage-column column-manager">事业员</th>
+                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">比赛名称</th>
+                    <th scope="col" id="open_match" class="manage-column column-open_match">开设比赛</th>
+                    <th scope="col" id="recommend_match" class="manage-column column-recommend_match">推荐比赛</th>
+                    <th scope="col" id="director_match" class="manage-column column-director_match">参赛机构</th>
                     <th scope="col" id="income_status" class="manage-column column-income_status">状态</th>
                     <th scope="col" id="options1" class="manage-column column-options1">操作</th>
                 </tr>
@@ -811,6 +822,9 @@ class Spread{
 
                 <?php
                 foreach ($rows as $row){
+                    $open_match = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE match_id='{$row['match_id']}' AND income_type='open_match'");
+                    $recommend_match = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE match_id='{$row['match_id']}' AND income_type='recommend_match'");
+                    $director_match = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE match_id='{$row['match_id']}' AND income_type='director_match'");
                     ?>
                     <tr data-id="<?=$row['match_id']?>">
                         <th scope="row" class="check-column">
@@ -821,7 +835,7 @@ class Spread{
                                 <span class="screen-reader-text">“<?=$row['post_title']?>”已被锁定</span>
                             </div>
                         </th>
-                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="付款人">
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="比赛名称">
                             <?=$row['post_title']?>
                             <br>
                             <div class="row-actions">
@@ -831,34 +845,25 @@ class Spread{
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
-                        <td class="project column-project" data-colname="付款项目">
-                            <?=$row['post_title']?>
+                        <td class="open_match column-open_match" data-colname="开设比赛">
+                            <?=$open_match?>
 
                         </td>
-                        <td class="referee column-referee" data-colname="直接推广">
-                            <?=$row['referee_income']?>
+                        <td class="recommend_match column-recommend_match" data-colname="推荐比赛">
+                            <?=$recommend_match?>
                         </td>
-                        <td class="indirect_referee column-indirect_referee" data-colname="间接推广">
-                            <?=$row['indirect_referee_income']>0?$row['indirect_referee_income']:''?>
+                        <td class="director_match column-director_match" data-colname="参赛机构">
+                            <?=$director_match?>
                         </td>
-                        <td class="person_liable column-person_liable" data-colname="教练/参赛机构">
-                            <?=$row['person_liable_income']>0?$row['person_liable_income']:''?>
-                        </td>
-                        <td class="sponsor column-sponsor" data-colname="主办方">
-<!--                            --><?//=$row['zone_name']?>
-                            <?=$row['sponsor_income']>0?$row['sponsor_income']:''?>
-                        </td>
-                        <td class="manager column-manager" data-colname="事业员">
-                            <?=$row['manager_income']>0?$row['manager_income']:''?>
-                        </td>
+
                         <td class="income_status column-income_status" data-colname="状态" id="cardImg-<?=$row['user_id']?>">
                             <?=$row['income_status'] == '1'?'待确认':'已确认'?>
                         </td>
                         <td class="options1 column-options1" data-colname="操作">
                             <?php if($row['match_status'] == '-3' || $row['status'] == '-3'){ ?>
-                            <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a> |':''?>
+                            <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a> ':''?>
                             <?php } ?>
-                            <a href="<?=admin_url('admin.php?page=fission-profit-match-log-detail&match_id='.$row['match_id'])?>">查看详情</a>
+<!--                            <a href="--><?//=admin_url('admin.php?page=fission-profit-match-log-detail&match_id='.$row['match_id'])?><!--">查看详情</a>-->
                        </td>
                     </tr>
                     <?php
@@ -868,13 +873,10 @@ class Spread{
                 <tfoot>
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                    <th scope="col" class="manage-column column-real_name column-primary">赛事考级名称</th>
-                    <th scope="col" class="manage-column column-project">付款项目</th>
-                    <th scope="col" class="manage-column column-referee">直接推广</th>
-                    <th scope="col" class="manage-column column-indirect_referee">间接推广</th>
-                    <th scope="col" class="manage-column column-person_liable">教练/参赛机构</th>
-                    <th scope="col" class="manage-column column-sponsor">主办方</th>
-                    <th scope="col" class="manage-column column-manager">事业员</th>
+                    <th scope="col" class="manage-column column-real_name column-primary">比赛名称</th>
+                    <th scope="col" class="manage-column column-open_match">开设比赛</th>
+                    <th scope="col" class="manage-column column-recommend_match">推荐比赛</th>
+                    <th scope="col" class="manage-column column-director_match">参赛机构</th>
                     <th scope="col" class="manage-column column-income_status">状态</th>
                     <th scope="col" class="manage-column column-options1">操作</th>
                 </tr>
@@ -924,6 +926,226 @@ class Spread{
                         $.ajax({
                             url : ajaxurl,
                             data : {'action':'updateMatchIncomeLogsStatus', 'status':status,'id':_id},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            }, error : function () {
+                                alert('请求失败');
+                            }
+                        });
+                    }
+                });
+
+            </script>
+        </div>
+        <?php
+    }
+
+    /**
+     * 考级收益流水
+     */
+    public function profitGradingLog(){
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $where = "WHERE 1=1";
+        if($searchStr != ''){
+            $where .= " AND (p.post_title LIKE '%{$searchStr}%')";
+        }
+        $sql = "SELECT usl.income_status,mmn.match_status,p.post_title,mmn.match_id 
+                FROM {$wpdb->prefix}user_stream_logs AS usl 
+                LEFT JOIN {$wpdb->prefix}match_meta_new AS mmn ON mmn.match_id=usl.match_id 
+                LEFT JOIN {$wpdb->posts} AS p ON p.ID=usl.match_id 
+                WHERE usl.income_type IN('open_grading','recommend_grading','director_grading')
+                GROUP BY usl.match_id
+                ORDER BY p.ID DESC
+                LIMIT {$start},{$pageSize}";
+//        return [
+//            'open_match' => '开设比赛',
+//            'open_grading' => '开设考级',
+//            'open_course' => '课程渠道',
+//            'recommend_match' => '推荐比赛',
+//            'recommend_grading' => '推荐考级',
+//            'director_match' => '参赛机构',
+//            'director_grading' => '考级负责人',
+//            'recommend_trains_zone' => '推荐训练中心',
+//            'recommend_test_zone' => '推荐测评中心',
+//            'recommend_match_zone' => '推荐赛区',
+//            'recommend_course' => '推荐购课',
+//            'recommend_qualified' => '购课补贴',
+//            'grading_qualified' => '考级达标',
+//            'cause_manager' => '事业管理员',
+//            'cause_minister' => '事业部长',
+//        ];
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page
+        ));
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">考级收益列表</h1>
+            <hr class="wp-header-end">
+
+            <h2 class="screen-reader-text">过滤列表</h2>
+            <p class="search-box">
+                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                <input type="search" id="search_val" name="search_val" placeholder="考级名称" value="<?=$searchStr?>">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-match-log&s=')?>'+document.getElementById('search_val').value" value="搜索">
+            </p>
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+            <div class="tablenav top">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
+                    <select name="action" id="bulk-action-selector-top">
+                        <option value="-1">批量操作</option>
+                        <option value="2">改为已确认</option>
+                    </select>
+                    <input type="button" id="doaction" class="button action all_options" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+            <h2 class="screen-reader-text">机构列表</h2><table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">考级名称</th>
+                    <th scope="col" id="open_match" class="manage-column column-open_match">开设考级</th>
+                    <th scope="col" id="recommend_match" class="manage-column column-recommend_match">推荐考级</th>
+                    <th scope="col" id="director_match" class="manage-column column-director_match">考级负责人</th>
+                    <th scope="col" id="income_status" class="manage-column column-income_status">状态</th>
+                    <th scope="col" id="options1" class="manage-column column-options1">操作</th>
+                </tr>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+
+                <?php
+                foreach ($rows as $row){
+                    $open_match = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE match_id='{$row['match_id']}' AND income_type='open_match'");
+                    $recommend_match = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE match_id='{$row['match_id']}' AND income_type='recommend_match'");
+                    $director_match = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE match_id='{$row['match_id']}' AND income_type='director_match'");
+                    ?>
+                    <tr data-id="<?=$row['match_id']?>">
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text" for="cb-select-407">选择<?=$row['post_title']?></label>
+                            <input id="cb-select-<?=$row['match_id']?>" class="check_list" type="checkbox" name="post[]" value="<?=$row['match_id']?>">
+                            <div class="locked-indicator">
+                                <span class="locked-indicator-icon" aria-hidden="true"></span>
+                                <span class="screen-reader-text">“<?=$row['post_title']?>”已被锁定</span>
+                            </div>
+                        </th>
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="比赛名称">
+                            <?=$row['post_title']?>
+                            <br>
+                            <div class="row-actions">
+                                <!--                                <span class="edit"><a href="">编辑</a></span>-->
+                                <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
+                                <!--                               <span class="view"><a href="">资料</a></span>-->
+                            </div>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="open_match column-open_match" data-colname="开设比赛">
+                            <?=$open_match?>
+
+                        </td>
+                        <td class="recommend_match column-recommend_match" data-colname="推荐比赛">
+                            <?=$recommend_match?>
+                        </td>
+                        <td class="director_match column-director_match" data-colname="参赛机构">
+                            <?=$director_match?>
+                        </td>
+
+                        <td class="income_status column-income_status" data-colname="状态" id="cardImg-<?=$row['user_id']?>">
+                            <?=$row['income_status'] == '1'?'待确认':'已确认'?>
+                        </td>
+                        <td class="options1 column-options1" data-colname="操作">
+                            <?php if($row['match_status'] == '-3' || $row['status'] == '-3'){ ?>
+                                <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a> ':''?>
+                            <?php } ?>
+                            <!--                            <a href="--><?//=admin_url('admin.php?page=fission-profit-match-log-detail&match_id='.$row['match_id'])?><!--">查看详情</a>-->
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                    <th scope="col" class="manage-column column-real_name column-primary">考级名称</th>
+                    <th scope="col" class="manage-column column-open_match">开设考级</th>
+                    <th scope="col" class="manage-column column-recommend_match">推荐考级</th>
+                    <th scope="col" class="manage-column column-director_match">考级负责人</th>
+                    <th scope="col" class="manage-column column-income_status">状态</th>
+                    <th scope="col" class="manage-column column-options1">操作</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                    <select name="action2" id="bulk-action-selector-bottom">
+                        <option value="-1">批量操作</option>
+                        <option value="2">改为已确认</option>
+                    </select>
+                    <input type="button" id="doaction2" class="button action all_options" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+
+            <br class="clear">
+            <script>
+                jQuery(document).ready(function($) {
+                    //修改确认状态
+                    $('.update_status').on('click',function () {
+                        var status = $(this).attr('data-status');
+                        var _id = $(this).closest('tr').attr('data-id');
+                        postAjax(status,_id);
+                    });
+
+                    $('.all_options').on('click', function () {
+                        var status = $(this).prev().val();
+                        var _id = [];
+                        $.each($('#the-list').find('.check_list:checked'),function (i,v) {
+                            _id.push($(v).val());
+                        });
+                        _id = _id.join(',');
+                        postAjax(status,_id);
+                    });
+                    function postAjax(status,_id) {
+                        if(status != '2') return false;
+                        if(_id == '' || _id == undefined) return false;
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action':'updateGradingIncomeLogsStatus', 'status':status,'id':_id},
                             dataType : 'json',
                             type : 'post',
                             success : function (response) {
@@ -1161,16 +1383,17 @@ class Spread{
             $where .= " AND usl.user_id='{$user_id}'";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
-                usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,zm.id AS zone_id,usl.user_type,
+                usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,zm.id AS zone_id,usl.user_type,usl.income_status,
                 zm.zone_name,zm.zone_city,zm.zone_match_type,zm.type_id as zone_type_id,zm.zone_number,
                 um.meta_value AS user_real_name 
                 FROM {$wpdb->prefix}user_stream_logs AS usl 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=usl.user_id AND um.meta_key='user_real_name' AND um.user_id!=''
                 LEFT JOIN {$wpdb->users} AS u ON u.ID=usl.user_id 
                 LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=usl.user_id 
-                {$where} 
+                {$where} AND usl.income_type NOT IN('open_match','open_grading','recommend_match','director_match','director_grading')
                 ORDER BY usl.created_time DESC
                 LIMIT {$start},{$pageSize}",ARRAY_A);
+
 //        leo_dump($wpdb->last_query);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
@@ -1236,6 +1459,7 @@ class Spread{
 <!--                    <th scope="col" id="match_id" class="manage-column column-match_id">项目</th>-->
                     <th scope="col" id="user_income" class="manage-column column-user_income">数额</th>
                     <th scope="col" id="created_time" class="manage-column column-created_time">时间</th>
+                    <th scope="col" id="options1" class="manage-column column-options1">操作</th>
                 </tr>
                 </thead>
 
@@ -1261,7 +1485,7 @@ class Spread{
                         $type_name = '个人';
                     }
                     ?>
-                    <tr data-uid="<?=$row['id']?>">
+                    <tr data-id="<?=$row['id']?>">
 
                         <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/用户名(机构名称)">
                             <?=$real_name?>
@@ -1308,7 +1532,11 @@ class Spread{
 
                         </td>
                         <td class="created_time column-created_time" data-colname="时间"><?=$row['created_time']?> </td>
+                        <td class="options1 column-options1" data-colname="操作">
+                            <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a>':''?>
 
+<!--                            <a href="--><?//=admin_url('admin.php?page=fission-profit-match-log-detail&match_id='.$row['match_id'])?><!--">查看详情</a>-->
+                        </td>
                     </tr>
                     <?php
                 }
@@ -1322,6 +1550,7 @@ class Spread{
 <!--                    <th scope="col" class="manage-column column-match_id">项目</th>-->
                     <th scope="col" class="manage-column column-user_income">数额</th>
                     <th scope="col" class="manage-column column-created_time">时间</th>
+                    <th scope="col" class="manage-column column-options1">操作</th>
                 </tr>
                 </tfoot>
 
@@ -1338,7 +1567,30 @@ class Spread{
             <br class="clear">
             <script>
                 jQuery(document).ready(function($) {
+                    $('.update_status').on('click',function () {
+                        var status = $(this).attr('data-status');
+                        var _id = $(this).closest('tr').attr('data-id');
+                        postAjax(status,_id);
+                    });
 
+                    function postAjax(status,_id) {
+                        if(status != '2') return false;
+                        if(_id == '' || _id == undefined) return false;
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action':'updateIncomeLogsStatus', 'status':status,'id':_id},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            }, error : function () {
+                                alert('请求失败');
+                            }
+                        });
+                    }
                 });
             </script>
         </div>
