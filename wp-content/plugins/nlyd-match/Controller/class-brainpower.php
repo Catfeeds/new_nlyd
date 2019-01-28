@@ -26,25 +26,15 @@ class Brainpower
             $role = 'brainpower_input';//权限名
             $wp_roles->add_cap('administrator', $role);
 
+            $role = 'brainpower_add';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
-        global $wp_roles;
-
-        $role = 'brainpower';//权限名
-        $wp_roles->add_cap('administrator', $role);
-
-        $role = 'brainpower_join_directory';//权限名
-        $wp_roles->add_cap('administrator', $role);
-
-        $role = 'brainpower_edit_brainpower';//权限名
-        $wp_roles->add_cap('administrator', $role);
-
-        $role = 'brainpower_input';//权限名
-        $wp_roles->add_cap('administrator', $role);
 
         add_menu_page('脑力健将', '脑力健将', 'brainpower', 'brainpower', array($this, 'index'), 'dashicons-businessman', 99);
         add_submenu_page('brainpower', '加入名录', '加入名录', 'brainpower_join_directory', 'brainpower-join_directory', array($this, 'joinDirectory'));
         add_submenu_page('brainpower', '编辑脑力健将', '编辑脑力健将', 'brainpower_edit_brainpower', 'brainpower-edit_brainpower', array($this, 'editBrainpower'));
         add_submenu_page('brainpower', '录入脑力健将', '录入脑力健将', 'brainpower_input', 'brainpower-input', array($this, 'inputBrainpower'));
+        add_submenu_page('brainpower', '添加更多名录', '添加更多名录', 'brainpower_add', 'brainpower-add', array($this, 'addBrainpower'));
     }
     /**
      * 所有脑力健将
@@ -687,6 +677,200 @@ class Brainpower
 
                 <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="提交"></p>
             </form>
+        </div>
+        <?php
+    }
+
+    /**
+     * 添加更多名录
+     */
+    public function addBrainpower(){
+        $staticPath = PLUGINS_PATH.'nlyd-student/view/directory/static/';
+        $dataFileName = 'brainMoreData.json';
+        $dataFilePath = $staticPath.$dataFileName;
+        if(file_exists($dataFilePath)){
+            $datas = json_decode(file_get_contents($dataFilePath),true);
+        }else{
+            $datas = [];
+        }
+        $cateArr = getCategory();
+        $cateArr = array_column($cateArr, NULL, 'ID');
+        $str = file_get_contents(leo_student_path."conf/nationality_array.json");
+        $nationalityArr = json_decode($str, true);
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">脑力健将</h1>
+
+            <hr class="wp-header-end">
+            <style type="text/css">
+                #add-box{
+                    width: <?=is_mobile()?'100%':'800px'?>;
+                    display: none;
+                    /*height: 300px;*/
+                }
+                #add-box label{
+                    font-weight: bold;
+                    margin-right: 5px;
+                }
+                #add-box .box-mini{
+                    padding-top: 5px;
+                }
+                #add-box .button-box{
+                    padding-top: 20px;
+                }
+            </style>
+            <h2 class="screen-reader-text">过滤脑力健将列表</h2>
+            <button type="button" class="button-primary" id="add-data">添加数据</button>
+            <div id="add-box">
+                <form method="post" id="addDataForm" onsubmit="return false">
+                    <div class="box-mini">
+                        <label for="real_name_add">姓名:</label>
+                        <input type="text" name="real_name_add" id="real_name_add" value="">
+                    </div>
+                    <div class="box-mini">
+                        <label for="sex_add">性别:</label>
+                        <input type="text" name="sex_add" id="sex_add" value="">
+                    </div>
+                    <div class="box-mini">
+                        <label for="age_add">年龄:</label>
+                        <input type="text" name="age_add" id="age_add" value="">
+                    </div>
+                    <div class="box-mini">
+                        <label for="nationality_add">国籍:</label>
+                        <select name="nationality_add" id="nationality_add">
+                            <?php foreach ($nationalityArr as $nav){ ?>
+                                <option value="<?=$nav['short']?>"><?=$nav['value']?></option>
+                            <?php } ?>
+                        </select>
+
+                    </div>
+                    <div class="box-mini">
+                        <label for="cate_add">类别:</label>
+                        <select name="cate_add" id="cate_add">
+                            <?php foreach ($cateArr as $cv){ ?>
+                                <option value="<?=$cv['ID']?>"><?=$cv['post_title']?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="box-mini">
+                        <label for="level_add">等级:</label>
+                        <input type="text" name="level_add" id="level_add" value="">
+                    </div>
+                    <div class="box-mini">
+                        <label for="range_add">区域:</label>
+                        <label for="range_add_1">中国<input type="radio" name="range_add" id="range_add_1" value="1"></label>
+                        <label for="range_add_2">国际<input type="radio" name="range_add" id="range_add_2" value="2"></label>
+                    </div>
+                    <div class="box-mini button-box">
+                        <input type="hidden" name="action" value="addBrainMoreData">
+                        <button class="button-primary" id="confirmAddData" type="button">确认添加</button>
+                        <button class="button-cancel button" id="cancelAddData" type="button">取消</button>
+                    </div>
+                </form>
+            </div>
+            <form method="get">
+
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="5740170b35"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+                <div class="tablenav top">
+
+                    <br class="clear">
+                </div>
+                <h2 class="screen-reader-text">脑力健将列表</h2>
+                <table class="wp-list-table widefat fixed striped users">
+                    <thead>
+                    <tr>
+                        <th scope="col" id="real_name" class="manage-column column-real_name column-primary">
+                            <span>姓名</span><span class="sorting-indicator"></span>
+                        </th>
+                        <th scope="col" id="cates" class="manage-column column-cates">类别</th>
+                        <th scope="col" id="options" class="manage-column column-options">操作</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="the-list" data-wp-lists="list:user">
+
+                    <?php foreach ($datas as $k => $data){
+
+                        ?>
+                        <tr class="data-list">
+                            <td class="real_name column-real_name has-row-actions column-primary line-c" style="vertical-align: center" data-colname="姓名">
+                                <strong><?=$data['real_name']?></strong>
+                                <br>
+                                <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                            </td>
+                            <td class="cates column-cates line-c" data-colname="类别"><?=$data['range']?> <?=$data['level']?>级 <?=$cateArr[$data['category_id']]['post_title'].'脑力健将'?></td>
+                            <td class="options column-options line-c" data-colname="操作">
+                                <a href="javascript:;" data-k="<?=$k?>" class="del_more">删除</a>
+                            </td>
+
+                        </tr>
+                    <?php } ?>
+
+                    </tbody>
+
+                    <tfoot>
+                    <tr>
+                        <th scope="col" class="manage-column column-real_name column-primary">
+                            <span>姓名</span><span class="sorting-indicator"></span>
+                        </th>
+                        <th scope="col" class="manage-column column-cates">类别</th>
+                        <th scope="col" class="manage-column column-options">操作</th>
+                    </tr>
+                    </tfoot>
+
+                </table>
+                <div class="tablenav bottom">
+
+                </div>
+            </form>
+
+            <br class="clear">
+            <script>
+                jQuery(document).ready(function($) {
+                    $('#add-data').on('click', function () {
+                        $(this).hide();
+                        $('#add-box').show();
+                    });
+                    $('#cancelAddData').on('click', function () {
+                        $('#add-data').show();
+                        $('#add-box').hide();
+                    });
+                    $('#confirmAddData').on('click', function () {
+                        var data = $('#addDataForm').serialize();
+                        $.ajax({
+                            url : ajaxurl,
+                            data : data,
+                            type : 'post',
+                            dataType : 'json',
+                            success : function (response) {
+                                alert(response.data.info);
+                            }, error : function () {
+                                alert('请求失败!');
+                            }
+                        });
+                    });
+                    $('.del_more').on('click', function () {
+                        var k = $(this).attr('data-k');
+                        var _tr = $(this).closest('tr');
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action':'delBrainMore', 'k':k},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                if(response['success']){
+                                    _tr.remove();
+                                }else{
+                                    alert(response.data.info);
+                                }
+                            }, error : function () {
+                                alert('请求失败!');
+                            }
+                        });
+                    });
+                })
+            </script>
         </div>
         <?php
     }
