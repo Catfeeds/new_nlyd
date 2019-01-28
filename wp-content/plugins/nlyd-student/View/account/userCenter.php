@@ -124,19 +124,14 @@
                     <a class="c_black6" href="<?=home_url('/logins')?>"><?=__('登录后可查看认证脑力等级', 'nlyd-student')?></a>
                 </div>
                 <?php } ?>
-                <!-- 我的钱包 -->
-                <!-- <a class="userCenter-row layui-row layui-bg-white  layui-hide-lg" href="<?=home_url('wallet')?>">
-                    <span class="pull-left">我的余额:<i class="iconfont">&#xe61e;</i>3200.00</span>
-                    <span class="pull-right">我的脑币:<?=$user_info['mycred_default_total'] > 0 ? $user_info['mycred_default_total'] : 0 ;?></span>
-                </a> -->
                 <div class="userCenter-detail width-padding layui-row layui-bg-white width-margin-pc">
-                    <?php if(!empty($user_info['user_roles'] == 'president')):?>
+                    <?php if(in_array($user_info['user_roles'],array('president','administrator'))):?>
                         <a class="c_black8"  href="<?=home_url('/controls/');?>">
                             <div class="userCenter-detail-head">
                                 <div class="menuImg-wrapper my-console">
                                 </div>
                             </div>
-                            <div class="userCenter-detail-foot"><?=__('控制台', 'nlyd-student')?></div>
+                            <div class="userCenter-detail-foot"><?=__('超级控制台', 'nlyd-student')?></div>
                         </a>
                     <?php endif;?>
                     <?php if(!empty($zones)):?>
@@ -305,8 +300,6 @@ jQuery(document).ready(function($) {
         }
     });
     // 模拟手机下拉列表，选择性别
-    // var selectData= [{id:'zh_CN',value:'中文'},{id:'',value:'English'},]
-    //var selectData= <?//=json_encode($select)?>//;
     var mobileSelect2 = new MobileSelect({
         trigger: '#checked_lan',
         title: '语言 language',
