@@ -13,13 +13,41 @@
                 <h1 class="mui-title"><div><?=__('收益详情', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content flow-default"  id="profit_flow">
-         
+                <div class="layui-row width-margin width-margin-pc profit_detail_item">
+                    <?php if(!empty($post_title)){ ?>
+                    <div class="profit_detail_row">
+                        <div class="profit_detail_label"><?=__('比赛详情', 'nlyd-student')?>：</div>
+                        <div class="profit_detail_info c_black"><?=$post_title?></div>
+                    </div>
+                    <?php } ?>
+                    <div class="profit_detail_row">
+                        <div class="profit_detail_label"><?=__('收益金额', 'nlyd-student')?>：</div>
+                        <div class="profit_detail_info c_black">¥ <?=$user_income?></div>
+                    </div>
+                    <div class="profit_detail_row">
+                        <div class="profit_detail_label"><?=__('收益来源', 'nlyd-student')?>：</div>
+                        <div class="profit_detail_info c_black"><?=$income_type_title?></div>
+                    </div>
+                    <div class="profit_detail_row">
+                        <div class="profit_detail_label"><?=__('收益途径', 'nlyd-student')?>：</div>
+                        <div class="profit_detail_info c_black"><?=$channel_ID?></div>
+                    </div>
+                    <div class="profit_detail_row">
+                        <div class="profit_detail_label"><?=__('收益状态', 'nlyd-student')?>：</div>
+                        <div class="profit_detail_info c_green"><?=$income_status_cn?></div>
+                    </div>
+                    <div class="profit_detail_row">
+                        <div class="profit_detail_label"><?=__('到账时间', 'nlyd-student')?>：</div>
+                        <div class="profit_detail_info c_black"><?=$created_time?></div>
+                    </div>
+                </div>
             </div>
         </div>            
     </div>
 </div>
 <script>
-jQuery(function($) { 
+jQuery(function($) {
+    return false;
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
