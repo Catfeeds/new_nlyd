@@ -5,16 +5,14 @@
                 require_once leo_student_public_view.'leftMenu.php';
             
         ?>
-
-
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback nl-goback static" href="<?=home_url('/zone/course/')?>">
+                <a class="mui-pull-left nl-goback nl-goback static" href="<?=home_url('/courses/cenerCourse/id/'.$_GET['center_id']);?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__('课程学员', 'nlyd-student')?></div></h1>
             </header>    
-            <div class="layui-row nl-border nl-content ">
+            <div class="layui-row nl-border nl-content">
                 <div class="nl-table-wapper">
                     <div class="c_black width-padding width-padding-pc bold fs_16 student_title"><?=$course_title?></div>
                     <table class="nl-table">
@@ -24,7 +22,6 @@
                                 <td><?=__('姓名/编号', 'nlyd-student')?></td>
                                 <td><?=__('年 龄', 'nlyd-student')?></td>
                                 <td><?=__('性 别', 'nlyd-student')?></td>
-                                <td><?=__('推荐用户', 'nlyd-student')?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -64,7 +61,6 @@ jQuery(function($) {
                                                 '<td><div class="table_content"><div class="c_black ta_c">'+v.real_name+'</div><div class="ff_num fs_12 ta_c">'+v.user_ID+'</div></div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_age+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
-                                                '<td><div class="table_content c_black">'+v.referee_id+'</div></td>'+
                                             '</tr>'
                                     lis.push(dom) 
                                 })

@@ -258,14 +258,14 @@ class Fission_Ajax
         $rows = [];
         if($searchStr != ''){
             global $wpdb;
-            $rows = $wpdb->get_results("SELECT zm.user_id AS id,zm.zone_city,zt.zone_type_alias,zm.zone_name,zm.zone_match_type FROM {$wpdb->prefix}zone_meta AS zm
+            $rows = $wpdb->get_results("SELECT zm.user_id AS id,zm.zone_city,zt.zone_type_alias,zm.zone_name,zm.zone_match_type,zone_number FROM {$wpdb->prefix}zone_meta AS zm
                     LEFT JOIN {$wpdb->prefix}zone_type AS zt ON zt.id=zm.type_id
                     WHERE (zm.zone_city LIKE '%{$searchStr}%' OR zm.zone_number LIKE '%{$searchStr}%') AND zm.user_id!='' AND zm.user_status=1", ARRAY_A);
         }
 //        require_once WP_CONTENT_DIR.'/plugins/nlyd-fission/Controller/class-organize.php';
         $organizeClass = new \Organize();
         foreach ($rows as &$row){
-            $row['text'] = $organizeClass->echoZoneName($row['zone_type_alias'], $row['zone_city'],$row['zone_name'],$row['zone_match_type'], 'get', false);
+            $row['text'] = $organizeClass->echoZoneName($row['zone_type_alias'], $row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'], 'get', false);
         }
         if($type == 'all_base'){
             $rows[] = ['id' => 0, 'text' => '平台'];
@@ -375,18 +375,24 @@ class Fission_Ajax
 //        echo $wpdb->last_query;
         if(!$bool) {
             $wpdb->query('ROLLBACK');
-            wp_send_json_error(['info' => '修改失败!']);
+            wp_send_json_error(['info' => '修改分成失败!']);
         }
         //修改收益记录状态
         $match_id = [];
         foreach ($rows as $row){
             if($row['match_id'] > 0) $match_id[] = $row['match_id'];
         }
+        $match_id = join(',',$match_id);
         $sql = "UPDATE {$wpdb->prefix}user_stream_logs SET `income_status`=2 WHERE match_id IN({$match_id}) AND income_type NOT IN ('recommend_trains_zone','recommend_test_zone','recommend_match_zone')";
         $user_stream_logs_bool = $wpdb->query($sql);
+//        echo $wpdb->last_query;
         if(!$user_stream_logs_bool){
             $wpdb->query('ROLLBACK');
-            wp_send_json_error(['info' => '修改失败!']);
+            if(!$wpdb->get_var("SELECT id FROM {$wpdb->prefix}user_stream_logs WHERE match_id IN({$match_id}) AND income_type NOT IN ('recommend_trains_zone','recommend_test_zone','recommend_match_zone') AND income_status!=2")){
+                wp_send_json_error(['info' => '修改失败! 无可修改收益流水']);
+            }else{
+                wp_send_json_error(['info' => '修改收益失败!']);
+            }
         }
         $wpdb->query('COMMIT');
         wp_send_json_success(['info' => '修改成功!']);

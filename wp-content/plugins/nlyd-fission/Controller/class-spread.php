@@ -1162,7 +1162,7 @@ class Spread{
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
                 usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,zm.id AS zone_id,usl.user_type,
-                zm.zone_name,zm.zone_city,zm.zone_match_type,zm.type_id as zone_type_id,
+                zm.zone_name,zm.zone_city,zm.zone_match_type,zm.type_id as zone_type_id,zm.zone_number,
                 um.meta_value AS user_real_name 
                 FROM {$wpdb->prefix}user_stream_logs AS usl 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=usl.user_id AND um.meta_key='user_real_name' AND um.user_id!=''
@@ -1250,7 +1250,7 @@ class Spread{
                     if($row['zone_id'] > 0){
                         $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$row['zone_type_id']}");
                         $organizeClass = new Organize();
-                        $real_name = $organizeClass->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],'get');
+                        $real_name = $organizeClass->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'],'get');
                         $type_name = '机构';
                     }else{
                         if(empty($row['user_real_name'])){
@@ -1462,12 +1462,12 @@ class Spread{
                 <?php
                 foreach ($rows as $row){
                     //主体或机构
-                    $zone_meta = $wpdb->get_row("SELECT zone_name,zone_city,zone_match_type,type_id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$row['extract_id']}'", ARRAY_A);
+                    $zone_meta = $wpdb->get_row("SELECT zone_name,zone_city,zone_match_type,type_id,zone_number FROM {$wpdb->prefix}zone_meta WHERE user_id='{$row['extract_id']}'", ARRAY_A);
                     $type_name = '';
                     if($zone_meta){
                         $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$zone_meta['type_id']}");
                         $organizeClass = new Organize();
-                        $real_name = $organizeClass->echoZoneName($type_alias,$zone_meta['zone_city'],$zone_meta['zone_name'],$zone_meta['zone_match_type'],'get');
+                        $real_name = $organizeClass->echoZoneName($type_alias,$zone_meta['zone_city'],$zone_meta['zone_name'],$zone_meta['zone_match_type'],$row['zone_number'],'get');
                         $type_name = '机构';
                     }else{
                         $real_name = get_user_meta($row['extract_id'],'user_real_name',true)['real_name'];
