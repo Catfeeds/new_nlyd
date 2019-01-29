@@ -22,9 +22,10 @@
                             <div class="lable_row">
                                 <span class="c_black"><?=__('关联账号', 'nlyd-student')?>：</span>
                             </div>
-                            <div class="input_row">
-                            <input class="radius_input_row change_num nl-foucs" value="" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
-                            <input type="hidden" name="user_phone">
+                            <div class="input_row change_num_row">
+                                <input class="radius_input_row change_num nl-foucs" value="" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                                <a class="coach_add_btn c_blue">确认</a> 
+                                <input type="hidden" name="user_phone">
                             </div>
                         </div>
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('添加关联账号', 'nlyd-student')?></div></a>
@@ -36,9 +37,9 @@
 </div>
 <script>
     jQuery(function($) {
-        $('body').on('change','.change_num',function(){
+        $('body').on('click','.coach_add_btn',function(){
             var _this=$(this);
-            var val=_this.val();
+            var val=_this.prev('input').val();
             _this.next('input').val('');
             $.ajax({
                 data: {
@@ -48,7 +49,7 @@
                 success: function(res, textStatus, jqXHR){
                     if(res.success){
                         _this.next('input').val(res.data.user_id);
-                        _this.val(res.data.user_name)
+                        _this.prev('input').val(res.data.user_name)
                     }else{
                         $.alerts(res.data.info)
                     }

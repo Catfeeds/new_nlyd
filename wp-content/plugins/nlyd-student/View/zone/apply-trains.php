@@ -75,9 +75,9 @@
                 <div class="lable_row">
                     <span class="c_black"><?=__('分中心总经理', 'nlyd-student')?>：</span>
                 </div>
-                <div class="input_row">
-                    <input class="radius_input_row change_num nl-foucs coach_add_input" value="<?=$row['center_manager']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
-                    <span class="coach_add_btn">确认</span>    
+                <div class="input_row change_num_row">
+                    <input class="radius_input_row change_num nl-foucs" value="<?=$row['center_manager']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                    <a class="coach_add_btn c_blue">确认</a>    
                     <input type="hidden" name="center_manager">    
                 </div>
             </div>
