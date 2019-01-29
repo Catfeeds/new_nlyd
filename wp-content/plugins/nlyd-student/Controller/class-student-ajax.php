@@ -6400,6 +6400,7 @@ class Student_Ajax
      * 通过手机获取用户
      */
     public function get_mobile_user(){
+
         global $wpdb;
         if(reg_match('m',$_POST['mobile'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
@@ -6409,7 +6410,9 @@ class Student_Ajax
         $row = $wpdb->get_row($sql,ARRAY_A);
         if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册','nlyd-student')));
         if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
-        wp_send_json_success(array('user_id'=>$row['ID'],'user_name'=>$row['meta_value']));
+        $real_name = unserialize($row['meta_value']);
+
+        wp_send_json_success(array('user_id'=>$row['ID'],'user_name'=>$real_name['real_name']));
     }
 
     /**

@@ -22,7 +22,7 @@ class Student_Student
     public function index(){
         global $wpdb;
         //获取推荐课程
-        $sql = "select a.id,a.course_title,c.zone_city
+        $course_sql = "select a.id,a.course_title,c.zone_city,zone_number
                 from {$wpdb->prefix}course a 
                 left join {$wpdb->prefix}course_type b on a.course_type = b.id
                 left join {$wpdb->prefix}zone_meta c on a.zone_id = c.user_id
@@ -30,10 +30,9 @@ class Student_Student
                 order by a.id desc 
                 limit 4
                ";
-        print_r($sql);
-        $rows = $wpdb->get_results($sql,ARRAY_A);
-        if(!empty($rows)){
-            foreach ($rows as $k => $val){
+        $course_rows = $wpdb->get_results($course_sql,ARRAY_A);
+        if(!empty($course_rows)){
+            foreach ($course_rows as $k => $val){
 
                 if(!empty($val['zone_city'])){
                     //获取城市
@@ -45,11 +44,31 @@ class Student_Student
                     }else{
                         $city = rtrim($city_arr[0],'市');
                     }
-                    $rows[$k]['zone_city'] = $city;
+                    $course_rows[$k]['zone_city'] = $city;
                 }
             }
-            $data['course_list'] = $rows;
+            $data['course_list'] = $course_rows;
         }
+
+        //获取教练
+        $coach_sql = "select a.id,a.coach_id,b.meta_value from {$wpdb->prefix}coach_skill a 
+                      left join {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key = 'user_real_name' 
+                      where b.meta_value is not null
+                      order by a.id desc limit 5 ";
+        $coach_rows = $wpdb->get_results($coach_sql,ARRAY_A);
+        if(!empty($coach_rows)){
+            foreach ($coach_rows as $key => $v){
+                $real_name = unserialize($v['meta_value']);
+                $coach_rows[$key]['coach_name'] = $real_name['real_name'];
+                $work_photo = get_user_meta($v['coach_id'],'user_images_color')[0];
+                $coach_rows[$key]['work_photo'] = !empty($work_photo[0]) ? $work_photo[0] : student_css_url.'image/nlyd.png' ;
+            }
+
+            $data['coach_list'] = $coach_rows;
+        }
+
+        //获取赛事回顾
+
 
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view,$data);
