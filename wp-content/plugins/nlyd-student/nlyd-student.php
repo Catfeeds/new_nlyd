@@ -304,8 +304,8 @@ if(!class_exists('StudentController')){
                     wp_enqueue_style( 'my-layui-css-home' );
                     wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
                     wp_enqueue_style( 'my-student' );
-                    wp_register_style( 'my-student', student_css_url.'index_self.css',array('style'),leo_student_version);
-                    wp_enqueue_style( 'my-student' );
+                    wp_register_style( 'my-student-self', student_css_url.'index_self.css',array('style'),leo_student_version);
+                    wp_enqueue_style( 'my-student-self' );
                 }
             }
 
