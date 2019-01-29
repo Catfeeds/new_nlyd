@@ -119,7 +119,11 @@
                             <?php if( $match['status'] == 2):?>
                                 <div class="a-btn two get_footer">
                                     <a class="a-two left c_white" href="<?=home_url('/gradings/record/grad_id/'.$_GET['grad_id']);?>"><div><?=__('查看成绩', 'nlyd-student')?></div></a>
+                                    <?php if(in_array($match['pay_status'],array(2,3,4))){ ?>
                                     <a class="a-two right c_white" href="<?=home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id']);?>"><div><?=__('进入考级', 'nlyd-student')?></div></a>
+                                    <?php }else{ ?>
+                                        <div class="a-two right c_white"><div><?=__('未付款', 'nlyd-student')?></div></div>
+                                    <?php } ?>
                                 </div>
                             <?php endif;?>
                            

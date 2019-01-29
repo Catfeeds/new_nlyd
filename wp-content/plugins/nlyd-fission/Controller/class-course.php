@@ -391,20 +391,10 @@ class Course{
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
                 <input type="search" id="search_val" name="search_val" placeholder="姓名/ID" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('page=course-student&course_id'.$course_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=course-student&course_id='.$course_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
-
-                <div class="alignleft actions bulkactions">
-                    <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
-                    <select name="action" id="bulk-action-selector-top">
-                        <option value="-1">批量操作</option>
-                        <option value="1">启用</option>
-                        <option value="2">禁用</option>
-                    </select>
-                    <input type="button" id="doaction" data-type="all_options" class="button action all_options" value="应用">
-                </div>
 
                 <div class="tablenav-pages">
                     <span class="displaying-num"><?=$count['count']?>个项目</span>
@@ -428,10 +418,13 @@ class Course{
                 <tbody id="the-list" data-wp-lists="list:user">
 
                 <?php
-                $organizeClass = new Organize();
                 foreach ($rows as $row){
                     $user_meta = get_user_meta($row['user_id']);
                     $real_name = unserialize($user_meta['user_real_name'][0])['real_name'];
+                    $user_meta_id = $user_meta['user_ID'][0];
+                    $sex = $user_meta['user_gender'][0];
+                    $age = unserialize($user_meta['user_real_name'][0])['real_age'];
+                    $referee_name = get_user_meta($row['referee_id'],'user_real_name',true) ? get_user_meta($row['referee_id'],'user_real_name',true)['real_name'] : '';
                     ?>
                     <tr data-id="<?=$row['id']?>">
                         <th scope="row" class="check-column">
@@ -448,11 +441,11 @@ class Course{
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
 
-                        <td class="ID column-ID" data-colname="ID"><?=$row['course_start_time']?></td>
-                        <td class="sex column-sex" data-colname="性别"><?=$row['course_start_time']?></td>
-                        <td class="age column-age" data-colname="年龄"><?=$row['course_start_time']?></td>
+                        <td class="ID column-ID" data-colname="ID"><?=$user_meta_id?></td>
+                        <td class="sex column-sex" data-colname="性别"><?=$sex?></td>
+                        <td class="age column-age" data-colname="年龄"><?=$age?></td>
                         <td class="created_time column-created_time" data-colname="报名时间"><?=$row['created_time']?></td>
-                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=$row['created_time']?></td>
+                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=$referee_name?></td>
 
                     </tr>
                     <?php
@@ -474,15 +467,6 @@ class Course{
             </table>
             <div class="tablenav bottom">
 
-                <div class="alignleft actions bulkactions">
-                    <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
-                    <select name="action2" id="bulk-action-selector-bottom">
-                        <option value="-1">批量操作</option>
-                        <option value="1">启用</option>
-                        <option value="2">禁用</option>
-                    </select>
-                    <input type="button" id="doaction2 " class="button action all_options" value="应用">
-                </div>
 
                 <div class="tablenav-pages">
                     <span class="displaying-num"><?=$count['count']?>个项目</span>
