@@ -24,6 +24,7 @@ class Student_Index
     }
 
     public function index(){
+
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view);
 

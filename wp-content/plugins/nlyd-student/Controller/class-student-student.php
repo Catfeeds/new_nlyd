@@ -20,7 +20,39 @@ class Student_Student
     }
 
     public function index(){
+        global $wpdb;
+        //获取推荐课程
+        $sql = "select a.id,a.course_title,c.zone_city
+                from {$wpdb->prefix}course a 
+                left join {$wpdb->prefix}course_type b on a.course_type = b.id
+                left join {$wpdb->prefix}zone_meta c on a.zone_id = c.user_id
+                where a.is_enable = 1 
+                order by a.id desc 
+                limit 4
+               ";
+        print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($rows)){
+            foreach ($rows as $k => $val){
 
+                $user_real_name = get_user_meta($val['coach_id'],'user_real_name')[0];
+                $rows[$k]['real_name'] = !empty($user_real_name) ? $user_real_name['real_name'] : '-';
+                if(isset($_POST['id'])){
+                    //获取城市
+                    $zone_city = $wpdb->get_var("select zone_city from {$wpdb->prefix}zone_meta where user_id = {$zone_user_id} ");
+                    $city_arr = str2arr($zone_city,'-');
+                    if(!empty($city_arr[2])){
+                        $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
+                    }elseif ($city_arr[1] != '市辖区'){
+                        $city = rtrim($city_arr[1],'市');
+                    }else{
+                        $city = rtrim($city_arr[0],'市');
+                    }
+                    $rows[$k]['zone_city'] = $city;
+                }
+            }
+        }
+        print_r($rows);
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view);
     }

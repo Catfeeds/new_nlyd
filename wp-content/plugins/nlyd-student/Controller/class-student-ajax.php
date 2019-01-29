@@ -6409,7 +6409,7 @@ class Student_Ajax
         $row = $wpdb->get_row($sql,ARRAY_A);
         if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册','nlyd-student')));
         if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
-        wp_send_json_success(array('user_id'=>$row['ID']));
+        wp_send_json_success(array('user_id'=>$row['ID'],'user_name'=>$row['meta_value']));
     }
 
     /**
@@ -6883,7 +6883,7 @@ class Student_Ajax
                 from {$wpdb->prefix}order a 
                 left join {$wpdb->prefix}course b on a.match_id = b.id
                 LEFT JOIN {$wpdb->prefix}course_type c on b.course_type = c.id
-                WHERE a.user_id = {$current_user->ID} and a.pay_status in (2,3,4)
+                WHERE a.user_id = {$current_user->ID} and a.pay_status in (2,3,4) and b.id is not null
                 order by b.is_enable desc
                 limit $start,$pageSize
                 ";
