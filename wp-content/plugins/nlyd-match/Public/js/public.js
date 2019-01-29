@@ -11,6 +11,7 @@ jQuery(document).ready(function($) {
         $('#menu-users'),
         $('#toplevel_page_fission'),
         $('#toplevel_page_statistics'),
+        $('#toplevel_page_course'),
     ];
     $.each(parentArray,function (pi,pv) {
         $.each($(pv).find('a'), function (i,v) {
