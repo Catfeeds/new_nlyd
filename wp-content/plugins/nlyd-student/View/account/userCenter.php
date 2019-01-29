@@ -143,13 +143,12 @@
                         <div class="userCenter-detail-foot"><?=__('机构管理', 'nlyd-student')?></div>
                     </a>
                     <?php endif;?>
-                    <a class="c_black8" href="<?=home_url('/account/recentMatch');?>">
+                    <a class="c_black8"  href="<?=home_url('/account/course/');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper my-match">
+                            <div class="menuImg-wrapper my-course">
                             </div>
-
                         </div>
-                        <div class="userCenter-detail-foot"><?=__('我的比赛', 'nlyd-student')?></div>
+                        <div class="userCenter-detail-foot"><?=__('我的课程', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8"  href="<?=home_url('/trains/history_list/');?>">
                         <div class="userCenter-detail-head">
@@ -158,12 +157,20 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('训练记录', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8"  href="<?=home_url('/account/course/');?>">
+                    <a class="c_black8" href="<?=home_url('/account/recentMatch/type/2');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper my-course">
+                            <div class="menuImg-wrapper my-kaoji">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot"><?=__('我的课程', 'nlyd-student')?></div>
+                        <div class="userCenter-detail-foot"><?=__('我的考级', 'nlyd-student')?></div>
+                    </a>
+                    <a class="c_black8" href="<?=home_url('/account/recentMatch');?>">
+                        <div class="userCenter-detail-head">
+                            <div class="menuImg-wrapper my-match">
+                            </div>
+
+                        </div>
+                        <div class="userCenter-detail-foot"><?=__('我的比赛', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8" href="<?=home_url('/teams/myCoach');?>">
                         <div class="userCenter-detail-head">
@@ -172,6 +179,20 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的教练', 'nlyd-student')?></div>
                     </a>
+                    <a class="c_black8" href="<?=home_url('/zone/indexUser');?>">
+                        <div class="userCenter-detail-head">
+                            <div class="menuImg-wrapper my-tuiguang">
+                            </div>
+                        </div>
+                        <div class="userCenter-detail-foot"><?=__('我的推广', 'nlyd-student')?></div>
+                    </a>
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/teams/');?>">
+                        <div class="userCenter-detail-head">
+                            <div class="menuImg-wrapper my-wallet">
+                            </div>
+                        </div>
+                        <div class="userCenter-detail-foot"><?=__('我的钱包', 'nlyd-student')?></div>
+                    </a>
                     <a class="c_black8 disabled_a"  href="<?=home_url('/orders/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-order">
@@ -179,19 +200,12 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的订单', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8" href="<?=home_url('/account/recentMatch/type/2');?>">
+                    <a class="c_black8"  href="<?=home_url('/account/info/');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper my-kaoji">
+                            <div class="menuImg-wrapper edit-info">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot"><?=__('我的考级', 'nlyd-student')?></div>
-                    </a>
-                    <a class="c_black8" href="<?=home_url('/zone/indexUser');?>">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper my-tuiguang">
-                            </div>
-                        </div>
-                        <div class="userCenter-detail-foot"><?=__('我的推广', 'nlyd-student')?></div>
+                        <div class="userCenter-detail-foot"><?=__('基本信息', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8"  href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
@@ -206,20 +220,6 @@
                             </div>
                         </div>
                         <div class="userCenter-detail-foot"><?=__('其他设置', 'nlyd-student')?></div>
-                    </a>
-                    <a class="c_black8 disabled_a"  href="<?=home_url('/teams/');?>">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper my-wallet">
-                            </div>
-                        </div>
-                        <div class="userCenter-detail-foot"><?=__('我的钱包', 'nlyd-student')?></div>
-                    </a>
-                    <a class="c_black8"  href="<?=home_url('/account/info/');?>">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper edit-info">
-                            </div>
-                        </div>
-                        <div class="userCenter-detail-foot"><?=__('基本信息', 'nlyd-student')?></div>
                     </a>
                     <?php if(in_array($user_info['user_roles'],array('supervisor','administrator'))):?>
                     <a class="c_black8"  href="<?=home_url('/supervisor/logs/');?>">
