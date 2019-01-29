@@ -1806,7 +1806,7 @@ if(!class_exists('MatchController')){
                     admin_url('admin.php?page=fission-add-organize-coach'),
                     admin_url('admin.php?page=statistics-match-log'),
                     admin_url('admin.php?page=fission-organize-statistics'),
-                    admin_url('admin.php?page=fission-profit-match-log-detail'),
+                    admin_url('admin.php?page=course-student'),
                     admin_url('edit.php?post_type=grading&page=grading-edit_brainpower'),
                 ],
             ]);

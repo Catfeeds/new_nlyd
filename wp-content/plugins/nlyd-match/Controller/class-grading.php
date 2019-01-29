@@ -1217,12 +1217,13 @@ class Grading
         });
 
         $cate_type = isset($_GET['ctype']) ? trim($_GET['ctype']) : current($categoryList)['alis'];
+        $cate_type_sql = $cate_type == 'reading' ? 'read' : $cate_type;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
         $page < 1 && $page = 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS user_id,`{$cate_type}` AS skill_level,id FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `{$cate_type}`>0 LIMIT {$start},{$pageSize}", ARRAY_A);
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS user_id,`{$cate_type_sql}` AS skill_level,id FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `{$cate_type_sql}`>0 LIMIT {$start},{$pageSize}", ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -1305,7 +1306,7 @@ class Grading
                             <img alt="" src="<?=$row2['user_head']?>" class="avatar avatar-32 photo" height="32" width="32">
                             <strong><?=$row2['real_name']?></strong>
                            <div class="row-actions">
-                                <span class="view"><a href="<?=admin_url('edit.php?post_type=grading&page=grading-edit_brainpower&id='.$row['id'])?>" aria-label="">编辑</a></span>
+                                <span class="view"><a href="<?=admin_url('edit.php?post_type=grading&page=grading-edit_brainpower&id='.$row2['id'])?>" aria-label="">编辑</a></span>
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
@@ -1363,9 +1364,9 @@ class Grading
             $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
             $read = isset($_POST['read']) ? intval($_POST['read']) : 0;
             $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
-            if($read < 1 && $memory < 1 && $compute < 1){
-                $err_msg = '请至少输入一个类别的等级!';
-            }
+//            if($read < 1 && $memory < 1 && $compute < 1){
+//                $err_msg = '请至少输入一个类别的等级!';
+//            }
             if($user_id < 1) $err_msg .= '<br >user_id 参数错误!';
             if($err_msg == ''){
                 global $wpdb;

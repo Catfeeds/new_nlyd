@@ -20,8 +20,30 @@ class Student_Directory_S
     }
 
     public function index(){
-        $this->makStaticHtml('calculation_static.html', 'directory-calculation_pc.php', 'arithmetic', 'calculationRememberTime', function (){
-            global $wpdb;
+        global $wpdb;
+        $rows = [];
+        $redis = new Redis();
+        $redis->connect('127.0.0.1',6379,1);
+        $redis->auth('leo626');
+        $cate_id = 0;
+        $categoryArr = getCategory();
+        foreach ($categoryArr as $cv){
+            if($cv['alis'] == 'arithmetic'){
+                $cate_id = $cv['ID'];
+                break;
+            }
+        }
+        //查询最后一次过级时间
+        $last_time = $wpdb->get_var("SELECT MAX(gl.created_time) FROM {$wpdb->prefix}grading_logs AS gl
+                     LEFT JOIN {$wpdb->prefix}grading_meta AS gm ON gm.grading_id=gl.grading_id 
+                     WHERE gl.grading_result=1 AND gm.category_id='{$cate_id}'");
+        if(($data = $redis->get('arithmeticDirectory'))){
+            $data = json_decode($data, true);
+            if($data['last_time'] == $last_time){
+                $rows = $data['rows'];
+            }
+        }
+        if(empty($rows)){
             $res = $wpdb->get_results("SELECT user_id,`compute` FROM {$wpdb->prefix}user_skill_rank WHERE skill_type=1 AND `compute`>0", ARRAY_A);
             $rows = [];
             foreach ($res as $k => $row){
@@ -59,8 +81,9 @@ class Student_Directory_S
                     'user_nationality' => $mdv['user_nationality'],
                 ];
             }
-            return ['rows' => $rows];
-        });
+            $redis->setex('arithmeticDirectory', 3600*24*30,json_encode(['last_time'=>$last_time,'rows'=>$rows]));
+        }
+        load_view_template($this->template_dir.'directory-calculation_pc.php', ['rows'=>$rows]);
     }
 
     /**
