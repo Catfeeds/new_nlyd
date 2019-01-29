@@ -21,19 +21,60 @@
             <div class="layui-row nl-border nl-content">
                
                 <div class="apply width-padding layui-row layui-bg-white width-padding-pc" style="margin-top:0">
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/profit/');?>">
+                    <a class="apply_list c_black layui-row">
                         <div class="apply_list_line pull-left ">
+                            <div class="zone_bg bg_course"></div>
+                        </div>
+                        <div class="apply_list_line center"><?=__('课程管理', 'nlyd-student')?></div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                    </a>
+                    <a class="apply_list c_black layui-row">
+                        <div class="apply_list_line pull-left">
+                            <div class="zone_bg bg_coach"></div>
+                        </div>
+                        <div class="apply_list_line center"><?=__('教练管理', 'nlyd-student')?></div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                    </a>
+                    <a class="apply_list c_black layui-row">
+                        <div class="apply_list_line pull-left">
+                            <div class="zone_bg bg_student"></div>
+                        </div>
+                        <div class="apply_list_line center"><?=__('学员管理', 'nlyd-student')?></div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                    </a>
+                    <a class="apply_list c_black layui-row">
+                        <div class="apply_list_line pull-left">
+                            <div class="zone_bg bg_match"></div>
+                        </div>
+                        <div class="apply_list_line center"><?=__('比赛管理', 'nlyd-student')?></div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                    </a>
+                    <a class="apply_list c_black layui-row">
+                        <div class="apply_list_line pull-left">
+                            <div class="zone_bg bg_team"></div>
+                        </div>
+                        <div class="apply_list_line center"><?=__('战队管理', 'nlyd-student')?></div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                    </a>
+                    <a class="apply_list c_black layui-row">
+                        <div class="apply_list_line pull-left">
+                            <div class="zone_bg bg_level"></div>
+                        </div>
+                        <div class="apply_list_line center"><?=__('考级管理', 'nlyd-student')?></div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                    </a>
+                    <a class="apply_list c_black layui-row">
+                        <div class="apply_list_line pull-left">
                             <div class="zone_bg bg_money"></div>
                         </div>
-                        <div class="apply_list_line center"><?=__('收益管理', 'nlyd-student')?></div>
+                        <div class="apply_list_line center"><?=__('分配设置', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_black3 mr_10"><?=__('今日收入', 'nlyd-student')?><?=$stream > 0 ? $stream : number_format($stream,2)?></div>
                     </a>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/recommend/');?>">
+                    <a class="apply_list c_black layui-row">
                         <div class="apply_list_line pull-left">
-                            <div class="zone_bg bg_share"></div>
+                            <div class="zone_bg bg_data"></div>
                         </div>
-                        <div class="apply_list_line center"><?=__('我的推荐', 'nlyd-student')?></div>
+                        <div class="apply_list_line center"><?=__('数据统计', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                     </a>
                 </div>

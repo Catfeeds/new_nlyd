@@ -22,12 +22,16 @@ class Course{
             $role = 'add_course_type';//权限名
             $wp_roles->add_cap('administrator', $role);
 
+            $role = 'course_student';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
         }
 
         add_menu_page('课程管理', '课程管理', 'course', 'course',array($this,'index'),'dashicons-businessman',99);
         add_submenu_page('course','添加课程','添加课程','course_add_course','course-add-course',array($this,'addCourse'));
         add_submenu_page('course','课程类型','课程类型','course_type','course-type',array($this,'courseType'));
         add_submenu_page('course','添加课程类型','添加课程类型','add_course_type','add-course-type',array($this,'addCourseType'));
+        add_submenu_page('course','已抢占学员列表','已抢占学员列表','course_student','course-student',array($this,'courseStudentList'));
     }
 
     /**
@@ -199,7 +203,7 @@ class Course{
                         <td class="course_end_time column-course_end_time" data-colname="结课时间"><?=$row['course_end_time'] == '0000-00-00 00:00:00' ? '待定' : $row['course_end_time']?></td>
                         <td class="address column-address" data-colname="授课地址"><?=$row['province'].$row['city'].$row['area'].$row['address']?></td>
                         <td class="open_quota column-open_quota" data-colname="开放名额"><?=$row['open_quota']?></td>
-                        <td class="seize_quota column-seize_quota" data-colname="已抢占名额"><?=$seize_quota?></td>
+                        <td class="seize_quota column-seize_quota" data-colname="已抢占名额"><a href="<?=admin_url('admin.php?page=course-student&course_id='.$row['id'])?>"><?=$seize_quota?></a></td>
                         <td class="zone_user_id column-zone_user_id" data-colname="所属机构"><?=$zone_name?></td>
                         <td class="course_type column-course_type" data-colname="课程类型">
                             <?=$courseTypeList[$row['course_type']]['type_name']?>
@@ -245,6 +249,225 @@ class Course{
                     <th scope="col" class="manage-column column-is_enable">状态</th>
                     <th scope="col" class="manage-column column-created_time">创建时间</th>
                     <th scope="col" class="manage-column column-options1">操作</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                    <select name="action2" id="bulk-action-selector-bottom">
+                        <option value="-1">批量操作</option>
+                        <option value="1">启用</option>
+                        <option value="2">禁用</option>
+                    </select>
+                    <input type="button" id="doaction2 " class="button action all_options" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+
+            <br class="clear">
+            <script>
+                jQuery(document).ready(function($) {
+                    $('.all_options').on('click', function () {
+                        postAjax($(this),'all_options');
+                    });
+                    $('.enable-single').on('click', function () {
+                        postAjax($(this),'enable-single');
+                    });
+                    $('.disable-single').on('click', function () {
+                        postAjax($(this),'disable-single');
+                    });
+                    function postAjax(_this,type) {
+                        var status = 0;
+                        var _id = '';
+                        switch (type){
+                            case 'disable-single':
+                                status = 2;
+                                _id = _this.closest('tr').attr('data-id');
+                                break;
+                            case 'enable-single':
+                                status = 1;
+                                _id = _this.closest('tr').attr('data-id');
+                                break;
+                            case 'all_options':
+                                status = _this.prev().val();
+                                var idArr = [];
+                                $.each($('#the-list').find('.th-check:checked'),function (i,v) {
+                                    idArr.push($(v).val());
+                                });
+                                _id = idArr.join(',');
+                                break;
+                            default:
+                                return;
+                        }
+                        if((status != '1' && status != '2') || _id == '') return false;
+                        var data = {'action': 'ableCourse', 'status': status, 'id': _id}
+                        $.ajax({
+                            url: ajaxurl,
+                            data: data,
+                            dataType: 'json',
+                            type: 'post',
+                            success: function (response) {
+                                alert(response.data.info);
+                                if (response['success']) {
+                                    window.location.reload();
+                                }
+                            }, error: function () {
+                                alert('请求失败!');
+                            }
+                        });
+                    }
+
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        var _title = '';
+                        <?php foreach ($rows as $row){ ?>
+                        layer.photos({//图片预览
+                            photos: '#course_img_<?=$row['id']?>',
+                            move : false,
+                            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                        })
+                        <?php } ?>
+                    });
+                });
+
+            </script>
+        </div>
+        <?php
+    }
+
+    /**
+     * 已抢占学员列表
+     */
+    public function courseStudentList(){
+        $course_id = isset($_GET['course_id']) ? intval($_GET['course_id']) : 0;
+        $course_id < 1 && exit('参数错误!');
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $join = '';
+        $where = '';
+        global $wpdb;
+        $course = $wpdb->get_row("SELECT course_title FROM {$wpdb->prefix}course WHERE id='{$course_id}'");
+        if($searchStr != ''){
+            $join = "LEFT JOIN {$wpdb->usermeta} AS um ON um.meta_key='user_real_name' AND um.user_id=o.user_id
+                LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.meta_key='user_ID' AND um2.user_id=o.user_id";
+            $where = "AND (um.meta_value LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%')";
+        }
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS o.user_id,u.referee_id,o.created_time FROM {$wpdb->prefix}order AS o 
+                LEFT JOIN {$wpdb->users} AS u ON u.ID=o.user_id
+                {$join}
+                WHERE o.order_type=3 AND o.match_id='{$course_id}' AND o.pay_status IN(2,3,4)
+                {$where}
+                ORDER BY o.created_time DESC
+                LIMIT {$start},{$pageSize}", ARRAY_A);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page,
+            'add_fragment' => '&s='.$searchStr,
+        ));
+//        leo_dump($rows);die;
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline"><?=$course->course_title?>-抢占学员列表</h1>
+            <hr class="wp-header-end">
+            <h2 class="screen-reader-text">过滤抢占学员列表</h2>
+
+            <br class="clear">
+            <p class="search-box">
+                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                <input type="search" id="search_val" name="search_val" placeholder="姓名/ID" value="<?=$searchStr?>">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('page=course-student&course_id'.$course_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索">
+            </p>
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+            <div class="tablenav top">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
+                    <select name="action" id="bulk-action-selector-top">
+                        <option value="-1">批量操作</option>
+                        <option value="1">启用</option>
+                        <option value="2">禁用</option>
+                    </select>
+                    <input type="button" id="doaction" data-type="all_options" class="button action all_options" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+            <h2 class="screen-reader-text">机构列表</h2>
+            <table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名</th>
+                    <th scope="col" id="ID" class="manage-column column-ID">ID</th>
+                    <th scope="col" id="sex" class="manage-column column-sex">性别</th>
+                    <th scope="col" id="age" class="manage-column column-age">年龄</th>
+                    <th scope="col" id="created_time" class="manage-column column-created_time">报名时间</th>
+                    <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+
+                <?php
+                $organizeClass = new Organize();
+                foreach ($rows as $row){
+                    $user_meta = get_user_meta($row['user_id']);
+                    $real_name = unserialize($user_meta['user_real_name'][0])['real_name'];
+                    ?>
+                    <tr data-id="<?=$row['id']?>">
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text" for="cb-select-<?=$row['user_id']?>">选择<?=$real_name?></label>
+                            <input id="cb-select-<?=$row['user_id']?>" type="checkbox" class="th-check" name="post[]" value="<?=$row['user_id']?>">
+                            <div class="locked-indicator">
+                                <span class="locked-indicator-icon" aria-hidden="true"></span>
+                                <span class="screen-reader-text">“<?=$real_name?>”已被锁定</span>
+                            </div>
+                        </th>
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名">
+                            <?=$real_name?>
+                            <br>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+
+                        <td class="ID column-ID" data-colname="ID"><?=$row['course_start_time']?></td>
+                        <td class="sex column-sex" data-colname="性别"><?=$row['course_start_time']?></td>
+                        <td class="age column-age" data-colname="年龄"><?=$row['course_start_time']?></td>
+                        <td class="created_time column-created_time" data-colname="报名时间"><?=$row['created_time']?></td>
+                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=$row['created_time']?></td>
+
+                    </tr>
+                    <?php
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                    <th scope="col" class="manage-column column-real_name column-primary">姓名</th>
+                    <th scope="col" class="manage-column column-ID">ID</th>
+                    <th scope="col" class="manage-column column-sex">性别</th>
+                    <th scope="col" class="manage-column column-age">年龄</th>
+                    <th scope="col" class="manage-column column-created_time">报名时间</th>
+                    <th scope="col" class="manage-column column-referee_id">推荐人</th>
                 </tr>
                 </tfoot>
 

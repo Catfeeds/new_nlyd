@@ -3521,7 +3521,7 @@ class Student_Ajax
 //                }
 //            }
             $data = $totalRanking;
-            $redis->setex('team_ranking_'.$match_id, 300,json_encode($data));
+            $redis->setex('team_ranking_'.$match_id, 3600*24*7,json_encode($data));
         }
         else{
             $data = json_decode($data, true);

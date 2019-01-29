@@ -43,6 +43,7 @@ class Order {
         o.cost,
         um.meta_key,
         um.meta_value,
+        o.user_id,
         o.telephone,
         IFNULL(o.fullname,"-") AS fullname,
         IFNULL(o.address,"-") AS address,
@@ -234,7 +235,19 @@ class Order {
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
-                        <?php foreach($rows as $row){ ?>
+                        <?php foreach($rows as $row){
+                            if(!$row['fullname']){
+                                //获取默认收货地址
+                                $my_address = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}my_address WHERE user_id='{$row['user_id']}' AND is_default=1");
+                                $fullname = $my_address->fullname;
+                                $telephone = $my_address->telephone;
+                                $address = $my_address->country.$my_address->province.$my_address->city.$my_address->area.$my_address->address;
+                            }else{
+                                $fullname = $row['fullname'];
+                                $telephone = $row['telephone'];
+                                $address = $row['address'];
+                            }
+                            ?>
                             <tr class="order-tr" data-id="<?=$row['id']?>">
                                 <th scope="row" class="check-column">
                                     <label class="screen-reader-text" for="user_5"></label>
@@ -298,9 +311,9 @@ class Order {
                                         无
                                     <?php } ?>
                                 </td>
-                                <td class="role column-role" data-colname="收件人"><?=$row['fullname']?></td>
-                                <td class="posts column-telephone" data-colname="联系电话"><?=!empty($row['telephone']) ? $row['telephone'] : $row['user_mobile']?></td>
-                                <td class="posts column-address" data-colname="收货地址"><?=$row['address']?></td>
+                                <td class="role column-role" data-colname="收件人"><?=$fullname?></td>
+                                <td class="posts column-telephone" data-colname="联系电话"><?=$telephone?></td>
+                                <td class="posts column-address" data-colname="收货地址"><?=$address?></td>
                                 <td class="posts column-order_type" data-colname="订单类型"><?=$row['order_type_title']?></td>
                                 <td class="posts column-express_number" data-colname="快递单号"><?=$row['express_number']?></td>
                                 <td class="posts column-express_company" data-colname="快递公司"><?=$row['express_company']?></td>
