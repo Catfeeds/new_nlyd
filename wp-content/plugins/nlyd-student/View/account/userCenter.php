@@ -21,8 +21,16 @@
 <div class="layui-fluid">
     <div class="layui-row">
         <div class="nl-left-menu layui-col-sm12 layui-col-xs12 layui-col-md12 layui-bg-white have-footer">
+            <?php if(!empty($zones)):?>
+                <a class="c_black8 superAdmin" id="console">
+                    <div class="userCenter-detail-head">
+                        <div class="menuImg-wrapper my-console">
+                        </div>
+                    </div>
+                    <div class="userCenter-detail-foot"><?=__('机构管理', 'nlyd-student')?></div>
+                </a>
+            <?php endif;?>
             <div class="userCenter-info layui-row">
-                <!-- <div class="bg_gradient_blue"> -->
                     <?php if(is_user_logged_in()): ?>
                     <!-- 消息 -->
                     <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
@@ -126,7 +134,7 @@
                 <?php } ?>
                 <div class="userCenter-detail width-padding layui-row layui-bg-white width-margin-pc">
                     <?php if(in_array($user_info['user_roles'],array('president','administrator'))):?>
-                        <a class="c_black8"  href="<?=home_url('/controls/');?>">
+                        <a class="c_black8 superAdmin"  href="<?=home_url('/controls/');?>">
                             <div class="userCenter-detail-head">
                                 <div class="menuImg-wrapper my-console">
                                 </div>
@@ -134,15 +142,7 @@
                             <div class="userCenter-detail-foot"><?=__('超级控制台', 'nlyd-student')?></div>
                         </a>
                     <?php endif;?>
-                    <?php if(!empty($zones)):?>
-                    <a class="c_black8" id="console">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper my-console">
-                            </div>
-                        </div>
-                        <div class="userCenter-detail-foot"><?=__('机构管理', 'nlyd-student')?></div>
-                    </a>
-                    <?php endif;?>
+  
                     <a class="c_black8"  href="<?=home_url('/account/course/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-course">

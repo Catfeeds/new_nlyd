@@ -98,6 +98,9 @@
     background: #e7ebf1;
     color: rgba(38, 38, 38, 0.4);
 }
+.superAdmin{
+    display: none;
+}
 /* .apply{
     margin-top: 10px;
     margin-bottom: 10px;
@@ -437,7 +440,9 @@
     }
 }
 @media screen and (min-width: 375px) and (max-width: 1199px){
-    .userCenter-detail a{
+
+    .userCenter-detail a,
+    .superAdmin{
         position: relative;
         line-height: 50px;
         text-align: center;
@@ -449,6 +454,16 @@
         width: calc(25% - 0.75px);
         border-bottom: 1px solid rgba(38, 38, 38, 0.1);
         border-right: 1px solid rgba(38, 38, 38, 0.1);
+    }
+    .superAdmin{
+        position: fixed;
+        border-bottom: none;
+        border-right: none;
+        background: #fff;
+        top: 145px;
+        margin-top: -40px;
+        right: 0;
+        z-index: 9999;
     }
     .userCenter-detail a:nth-child(4n){
         border-right: none;
