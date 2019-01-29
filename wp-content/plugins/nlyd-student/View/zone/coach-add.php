@@ -19,8 +19,9 @@
                 <div class="width-padding width-padding-pc">
                     <form class="layui-form">
                         <div class="coach_add_row">
-                            <div>
+                            <div class="change_num_row">
                                 <input class="radius_input_row change_num nl-foucs" value="" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                                <a class="coach_add_btn c_blue">确认</a> 
                                 <input type="hidden" name="coach_id">
                             </div>
                             <input type="hidden" name="action" value="add_zone_coach">
@@ -34,30 +35,30 @@
 </div>
 <script>
 jQuery(function($) { 
-    $('body').on('change','.change_num',function(){
-            var _this=$(this);
-            var val=_this.val();
-            _this.next('input').val('');
-            $.ajax({
-                data: {
-                    mobile:val,
-                    action:'get_mobile_user',
-                },
-                success: function(res, textStatus, jqXHR){
-                    if(res.success){
-                        _this.next('input').val(res.data.user_id);
-                        _this.val(res.data.user_name)
-                    }else{
-                        $.alerts(res.data.info)
-                    }
-                },
-                complete: function(jqXHR, textStatus){
-                    if(textStatus=='timeout'){
-                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                    }
+    $('body').on('click','.coach_add_btn',function(){
+        var _this=$(this);
+        var val=_this.prev('input').val();
+        _this.next('input').val('');
+        $.ajax({
+            data: {
+                mobile:val,
+                action:'get_mobile_user',
+            },
+            success: function(res, textStatus, jqXHR){
+                if(res.success){
+                    _this.next('input').val(res.data.user_id);
+                    _this.prev('input').val(res.data.user_name)
+                }else{
+                    $.alerts(res.data.info)
                 }
-            })
+            },
+            complete: function(jqXHR, textStatus){
+                if(textStatus=='timeout'){
+                    $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                }
+            }
         })
+    })
     layui.use(['form'], function(){
         var form = layui.form
         form.render();

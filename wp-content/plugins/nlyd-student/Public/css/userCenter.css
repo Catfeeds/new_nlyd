@@ -42,6 +42,7 @@
     background-size: auto 100%;
     background-repeat: no-repeat
 }
+
 .my-match{
     width: 30px;
     background-position: -3px 3px;
@@ -309,7 +310,7 @@
         width: 100%;
         top: 0;
         left: 0;
-        z-index: 999;
+        z-index: 9;
         text-align: center;
     }
     .userCenter_bg{
@@ -441,8 +442,7 @@
 }
 @media screen and (min-width: 375px) and (max-width: 1199px){
 
-    .userCenter-detail a,
-    .superAdmin{
+    .userCenter-detail a{
         position: relative;
         line-height: 50px;
         text-align: center;
@@ -456,14 +456,30 @@
         border-right: 1px solid rgba(38, 38, 38, 0.1);
     }
     .superAdmin{
+        display: block;
         position: fixed;
-        border-bottom: none;
-        border-right: none;
-        background: #fff;
-        top: 145px;
-        margin-top: -40px;
+        width: 50px;
+        height: 70px;
+        top: 95px;
         right: 0;
-        z-index: 9999;
+        z-index: 10;
+        background-image: url(./image/userCenter/console.png);
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-position: 0 3px;
+    }
+    .vipAdmin{
+        display: block;
+        position: fixed;
+        width: 50px;
+        height: 37px;
+        top: 50px;
+        right: 0;
+        z-index: 10;
+        background-image: url(./image/userCenter/vipConsole.png);
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-position: 0 3px;
     }
     .userCenter-detail a:nth-child(4n){
         border-right: none;
@@ -486,5 +502,31 @@
     }
     .userCenter-detail a:nth-child(3n){
         border-right: none;
+    }
+    .vipAdmin{
+        display: block;
+        position: fixed;
+        width: 50px;
+        height: 37px;
+        top: 50px;
+        right: 0;
+        z-index: 10;
+        background-image: url(./image/userCenter/vipConsole.png);
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-position: 0 3px;
+    }
+    .superAdmin{
+        display: block;
+        position: fixed;
+        width: 50px;
+        height: 70px;
+        top: 95px;
+        right: 0;
+        z-index: 10;
+        background-image: url(./image/userCenter/console.png);
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-position: 0 3px;
     }
 }

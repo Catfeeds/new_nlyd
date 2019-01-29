@@ -59,9 +59,9 @@
                 })
             })
         })
-        $('body').on('change','.change_num',function(){
+        $('body').on('click','.coach_add_btn',function(){
             var _this=$(this);
-            var val=_this.val();
+            var val=_this.prev('input').val();
             _this.next('input').val('');
             $.ajax({
                 data: {
@@ -71,7 +71,7 @@
                 success: function(res, textStatus, jqXHR){
                     if(res.success){
                         _this.next('input').val(res.data.user_id);
-                        _this.val(res.data.user_name)
+                        _this.prev('input').val(res.data.user_name)
                     }else{
                         $.alerts(res.data.info)
                     }

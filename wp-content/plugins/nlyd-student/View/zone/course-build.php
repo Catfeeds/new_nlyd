@@ -50,8 +50,9 @@
                             <div class="lable_row"><span class="c_black">
                                 <?=__('授课教练', 'nlyd-student')?>：</span>
                             </div>
-                            <div class="input_row">
+                            <div class="input_row change_num_row">
                                 <input class="radius_input_row change_num nl-foucs" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_phone']?>">
+                                <a class="coach_add_btn c_blue">确认</a> 
                                 <input type="hidden" name="coach_phone">
                             </div>
                         </div>
@@ -116,9 +117,9 @@ jQuery(function($) {
     var posiotion_course_type1=[0];//初始化位置，高亮展示
     var posiotion_course_type2=[0];//初始化位置，高亮展示
     var posiotion_course_date=[0,0,0,0,0];//初始化位置，高亮展示
-    $('body').on('change','.change_num',function(){
+    $('body').on('click','.coach_add_btn',function(){
         var _this=$(this);
-        var val=_this.val();
+        var val=_this.prev('input').val();
         _this.next('input').val('');
         $.ajax({
             data: {
@@ -128,7 +129,7 @@ jQuery(function($) {
             success: function(res, textStatus, jqXHR){
                 if(res.success){
                     _this.next('input').val(res.data.user_id);
-                    _this.val(res.data.user_name)
+                    _this.prev('input').val(res.data.user_name)
                 }else{
                     $.alerts(res.data.info)
                 }
