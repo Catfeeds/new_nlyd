@@ -49,6 +49,7 @@ class Student_Courses
          $view = student_view_path.CONTROLLER.'/course-center.php';
          load_view_template($view,array('city'=>$city));
     }
+
     /**
      * 训练中心课程展示
      */
@@ -59,7 +60,6 @@ class Student_Courses
              $zone_nem = $wpdb->get_var("select zone_name from {$wpdb->prefix}zone_meta where user_id = {$_GET['id']} ");
             $data['zone_name'] = $zone_nem;
          }
-
          //判断课程状态
          global $wpdb,$current_user;
          $sql = "select a.id,count(c.id) entry_total,a.open_quota,a.is_enable,course_start_time,unix_timestamp(course_start_time) start_time,course_end_time,unix_timestamp(course_end_time) end_time
@@ -72,15 +72,19 @@ class Student_Courses
          //print_r($sql);
          if(!empty($rows)){
              $time = get_time('mysql');
+             $entry_is_true = 0;
+             $match_is_true = 0;
              foreach ($rows as $k => $v){
                  if($v['is_enable'] != -4){
                      $is_enable = '';
                      if($v['start_time'] > 0){
                          if($time < $v['course_start_time']){
                              $is_enable = 1; //报名中
+                             $entry_is_true += 1;
                          }
                          elseif ( $v['course_start_time'] <= $time && $time <= $v['course_end_time']){
                              $is_enable = 2; //授课中
+                             $match_is_true += 1;
                          }
                          else{
 
@@ -90,9 +94,11 @@ class Student_Courses
                      }else{
                          if($v['entry_total'] < $v['open_quota']){
                              $is_enable = 1;
+                             $entry_is_true += 1;
                          }
                          elseif ($v['entry_total'] >= $v['open_quota']){
                              $is_enable = -2;
+                             $match_is_true += 1;
                          }
                      }
                      //print_r($is_enable);
@@ -101,11 +107,21 @@ class Student_Courses
                      }
                  }
              }
+             if($entry_is_true>0){
+                 $data['anchor'] = 1;
+             }elseif ($match_is_true>0){
+                 $data['anchor'] = 2;
+             }else{
+                 $data['anchor'] = 3;
+             }
+             $data['match_is_true'] = $match_is_true;
+             $data['entry_is_true'] = $entry_is_true;
          }
 
         $view = student_view_path.CONTROLLER.'/course-center-list.php';
         load_view_template($view,$data);
     }
+
     /**
      * 课程详情
      */

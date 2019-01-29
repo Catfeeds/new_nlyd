@@ -18,9 +18,19 @@
                         <ul style="margin-left:0;padding:0" class="layui-tab-title">
                             <li class="layui-this" lay-id="1">
                                 <?=__('课程报名中', 'nlyd-student')?>
+                                <?php
+                                if($entry_is_true > 0){
+                                    echo '('.$entry_is_true.')';
+                                }
+                                ?>
                             </li>
                             <li lay-id="2">
                                 <?=__('课程进行中', 'nlyd-student')?>
+                                <?php
+                                if($match_is_true > 0){
+                                    echo '('.$match_is_true.')';
+                                }
+                                ?>
                             </li>
                             <li lay-id="-3"><?=__('已结课', 'nlyd-student')?></li>
                             <div class="nl-transform" data-y="-5"><?=__('已结课', 'nlyd-student')?></div>

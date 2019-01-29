@@ -130,10 +130,10 @@ return array(
             'url'=>'/course',
         ),
         array(
-            'post_title'=>'首页-课程',
-            'post_name'=>'courses',
-            'post_content'=>'[course-home]',
-            'url'=>'/course',
+            'post_title'=>'超级控制台',
+            'post_name'=>'controls',
+            'post_content'=>'[home-controls]',
+            'url'=>'/controls',
         ),
     ),
 );
