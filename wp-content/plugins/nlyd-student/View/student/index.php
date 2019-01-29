@@ -93,45 +93,65 @@ get_header(); ?>
                     </div>
                 </div> -->
                 <div class="layui-row width-padding width-padding-pc">
+                    <?php if(!empty($course_list)): ?>
                     <div class="layui-row index_row">
                         <div class="layui-row index_row_title">
                              <span class="bold c_black fs_16 mr_10 dis_inlineBlock"><?=__('推荐课程', 'nlyd-student')?></span>   
                              <a class="c_blue fs_12 dis_inlineBlock" href="<?=home_url('/courses/');?>"><?=__('查看更多', 'nlyd-student')?></a>   
                         </div>   
                         <div class="layui-row index_row_content">
+                            <?php foreach ($course_list as $v){?>
                             <div class="index_course_item">
-                                <div class="index_course_name">高效记忆术第一期</div>
-                                <div class="index_course_detail">温江训练中心（0001）</div>
+                                <div class="index_course_name"><?=$v['course_title']?></div>
+                                <div class="index_course_detail"><?=$v['zone_city']?>（<?=$v['zone_number']?>）</div>
                                 <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
                             </div>
-                            <div class="index_course_item">
+                            <?php } ?>
+                            <!--<div class="index_course_item">
                                 <div class="index_course_name">高效记忆术第一期</div>
                                 <div class="index_course_detail">温江训练中心（0001）</div>
-                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
+                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?/*=__('抢占课程', 'nlyd-student')*/?></div></a>
                             </div>    
                             <div class="index_course_item">
                                 <div class="index_course_name">高效记忆术第一期</div>
                                 <div class="index_course_detail">温江训练中心（0001）</div>
-                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
+                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?/*=__('抢占课程', 'nlyd-student')*/?></div></a>
                             </div>  
                             <div class="index_course_item">
                                 <div class="index_course_name">高效记忆术第一期</div>
                                 <div class="index_course_detail">温江训练中心（0001）</div>
-                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
-                            </div>    
+                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?/*=__('抢占课程', 'nlyd-student')*/?></div></a>
+                            </div>-->
                         </div>     
                     </div>
+                    <?php endif;?>
+                    <?php if(!empty($coach_list)): ?>
                     <div class="layui-row index_row">
                         <div class="layui-row index_row_title">
                              <span class="bold c_black fs_16 dis_inlineBlock"><?=__('教练体系', 'nlyd-student')?></span>  
                         </div>   
                         <div class="swiper-container layui-bg-white swiper-container3" style="margin-bottom:0">
                             <div class="swiper-wrapper" style="height:auto">
-                                <a class="swiper-slide">
+                                <?php foreach ($coach_list as $val){?>
+                                <a class="swiper-slide" href="<?=home_url('/teams/coachDetail/coach_id/'.$val['coach_id'])?>">
                                     <div class="swiper-course">
                                         <div class="swiper_course_img">
                                         <div class="item-img">
-                                            <img src="<?=student_css_url.'image/homePage/swiper1.png'?>">
+                                            <img src="<?=$val['work_photo']?>">
+                                        </div>
+                                        </div>
+                                        <div class="swiper_course_detail">
+                                            <div class="bold c_black fs_14"><?=$val['coach_name']?></div>
+                                            <div class="fs_14 c_black6">国际脑力运动委员会教练</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <?php } ?>
+                                <!--<a class="swiper-slide">
+                                    <div class="swiper-course">
+                                        <div class="swiper_course_img">
+                                        <div class="item-img">
+                                                <img src="<?/*=student_css_url.'image/homePage/concat-big.png'*/?>">
                                         </div>
                                         </div>
                                         <div class="swiper_course_detail">
@@ -139,25 +159,12 @@ get_header(); ?>
                                             <div class="fs_14 c_black6">国际脑力运动委员会教练</div>
                                         </div>
                                     </div>
-                                </a>
-                                <a class="swiper-slide">
-                                    <div class="swiper-course">
-                                        <div class="swiper_course_img">
-                                        <div class="item-img">
-                                                <img src="<?=student_css_url.'image/homePage/concat-big.png'?>">
-                                        </div>
-                                        </div>
-                                        <div class="swiper_course_detail">
-                                            <div class="bold c_black fs_14">程玮</div>
-                                            <div class="fs_14 c_black6">国际脑力运动委员会教练</div>
-                                        </div>
-                                    </div>
-                                </a>
+                                </a>-->
                             </div>
                             <div class="swiper-pagination"></div>
                         </div>
                     </div>
-
+                    <?php endif;?>
                     <div class="layui-row index_row">
                         <div class="layui-row index_row_title">
                              <span class="bold c_black fs_16 dis_inlineBlock"><?=__('赛事回顾', 'nlyd-student')?></span>  
