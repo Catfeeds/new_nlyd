@@ -1008,63 +1008,66 @@ class Student_Gradings extends Student_Home
         if($grading_result == 1){
             $grade_result = $lv.'级'.'已达标';
 
-            //获取收益配置
-            $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = 'course_grading' ";
-            $setting = $wpdb->get_row($set_sql,ARRAY_A);
-            if(!empty($setting)){
-                //准备对应的数据
-                $money1 = $setting['first_cause'];     //事业员
-                $money2 = $setting['second_cause'];    //事业部长
-                $money3 = $setting['coach'];        //教练
-                $money4 = $setting['sub_center'];   //办赛机构
-                $money5 = $setting['general_manager'];    //总经理
+            if($lv >= 2 ){
 
-                //查询当前发布机构
-                $zone_sql = "select b.user_id zone_id,b.center_manager_id,b.referee_id,c.referee_id as indirect_referee_id from {$wpdb->prefix}grading_meta a 
+                //获取收益配置
+                $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = 'course_grading' ";
+                $setting = $wpdb->get_row($set_sql,ARRAY_A);
+                if(!empty($setting)){
+                    //准备对应的数据
+                    $money1 = $setting['first_cause'];     //事业员
+                    $money2 = $setting['second_cause'];    //事业部长
+                    $money3 = $setting['coach'];        //教练
+                    $money4 = $setting['sub_center'];   //办赛机构
+                    $money5 = $setting['general_manager'];    //总经理
+
+                    //查询当前发布机构
+                    $zone_sql = "select b.user_id zone_id,b.center_manager_id,b.referee_id,c.referee_id as indirect_referee_id from {$wpdb->prefix}grading_meta a 
                           left join {$wpdb->prefix}zone_meta b on a.created_person = b.user_id 
                           left join {$wpdb->prefix}users c on b.referee_id = c.ID 
                           where a.grading_id = {$_GET['grad_id']} ";
-                $referee_ = $wpdb->get_row($zone_sql,ARRAY_A);
+                    $referee_ = $wpdb->get_row($zone_sql,ARRAY_A);
 
-                $wpdb->query('START TRANSACTION');
+                    $wpdb->query('START TRANSACTION');
 
-                $a = $b = $c = $d = $e = true;
-                if($referee_['referee_id'] > 0 && $money1 > 0){
-                    $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['referee_id']} and income_type = 'grading_qualified' ");
-                    if(empty($referee_income_id)){
-                        $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['referee_id'],'user_income'=>$money1,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                    $a = $b = $c = $d = $e = true;
+                    if($referee_['referee_id'] > 0 && $money1 > 0){
+                        $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['referee_id']} and income_type = 'grading_qualified' ");
+                        if(empty($referee_income_id)){
+                            $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['referee_id'],'user_income'=>$money1,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                        }
                     }
-                }
-                if($referee_['indirect_referee_id'] > 0 && $money2 > 0){
-                    $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['indirect_referee_id']} and income_type = 'grading_qualified' ");
-                    if(empty($referee_income_id)){
-                        $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['indirect_referee_id'],'user_income'=>$money2,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                    if($referee_['indirect_referee_id'] > 0 && $money2 > 0){
+                        $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['indirect_referee_id']} and income_type = 'grading_qualified' ");
+                        if(empty($referee_income_id)){
+                            $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['indirect_referee_id'],'user_income'=>$money2,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                        }
                     }
-                }
-                if($coach_id > 0 && $money3 > 0){
-                    $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$coach_id} and income_type = 'grading_qualified' ");
-                    if(empty($referee_income_id)){
-                        $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                    if($coach_id > 0 && $money3 > 0){
+                        $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$coach_id} and income_type = 'grading_qualified' ");
+                        if(empty($referee_income_id)){
+                            $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                        }
                     }
-                }
-                if($referee_['zone_id'] > 0 && $money4 > 0){
-                    $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['zone_id']} and income_type = 'grading_qualified' ");
-                    if(empty($referee_income_id)){
-                        $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['zone_id'],'user_income'=>$money4,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                    if($referee_['zone_id'] > 0 && $money4 > 0){
+                        $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['zone_id']} and income_type = 'grading_qualified' ");
+                        if(empty($referee_income_id)){
+                            $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['zone_id'],'user_income'=>$money4,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                        }
                     }
-                }
-                if($referee_['center_manager_id'] > 0 && $money5 > 0){
-                    $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['center_manager_id']} and income_type = 'grading_qualified' ");
-                    if(empty($referee_income_id)){
-                        $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['center_manager_id'],'user_income'=>$money4,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                    if($referee_['center_manager_id'] > 0 && $money5 > 0){
+                        $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['center_manager_id']} and income_type = 'grading_qualified' ");
+                        if(empty($referee_income_id)){
+                            $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['center_manager_id'],'user_income'=>$money4,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                        }
                     }
-                }
 
-                //print_r($a .'&&' .$b .'&&'. $c .'&&'. $d .'&&'. $e);die;
-                if( $a && $b && $c && $d && $e ){
-                    $wpdb->query('COMMIT');
-                }else{
-                    $wpdb->query('ROLLBACK');
+                    //print_r($a .'&&' .$b .'&&'. $c .'&&'. $d .'&&'. $e);die;
+                    if( $a && $b && $c && $d && $e ){
+                        $wpdb->query('COMMIT');
+                    }else{
+                        $wpdb->query('ROLLBACK');
+                    }
                 }
             }
 

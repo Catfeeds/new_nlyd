@@ -882,7 +882,7 @@ class Student_Payment {
         }*/
 
         /*****************收益分配end*******************/
-        //die;
+        // die;
         $this->payClass->pay($param);
         return;
     }
