@@ -77,10 +77,10 @@
                         </div>
                   
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('开课日期', 'nlyd-student')?>：</span></div>
+                            <div class="lable_row"><span class="c_black"><?=__('开课时间', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" readonly name="course_start_time" data-time="<?=$course['data_start_time']?>"  id="course_start_date" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="<?=$course['start_time']?>">
+                                <input class="radius_input_row nl-foucs" type="text" readonly name="course_start_time" data-time="<?=$course['data_start_time']?>"  id="course_start_date" autocomplete="off" placeholder="<?=__('选择开课时间', 'nlyd-student')?>" value="<?=$course['start_time']?>">
                             </div>
                         </div>
                         <div>
@@ -112,7 +112,7 @@
 jQuery(function($) { 
     var course_type1_Data=<?=$course_type?>;//课程类型
     var course_type2_Data=<?=$category_type?>;//教学类型
-    var course_date_Data=$.validationLayui.dates2;//开课日期
+    var course_date_Data=$.validationLayui.dates2;//开课时间
     var posiotion_course_type1=[0];//初始化位置，高亮展示
     var posiotion_course_type2=[0];//初始化位置，高亮展示
     var posiotion_course_date=[0,0,0,0,0];//初始化位置，高亮展示
@@ -211,7 +211,7 @@ jQuery(function($) {
         
         }
     });
-    //---------------------------开课日期------------------------------
+    //---------------------------开课时间------------------------------
     if($('#course_start_date').length>0 && $('#course_start_date').attr('data-time') && $('#course_start_date').attr('data-time').length>0){
         var timeValue=$('#course_start_date').attr('data-time').split('-');
         $.each(course_date_Data,function(index,value){
@@ -242,7 +242,7 @@ jQuery(function($) {
     }
     var mobileSelect3 = new MobileSelect({
         trigger: '#course_start_date',
-        title: "<?=__('开课日期', 'nlyd-student')?>",
+        title: "<?=__('开课时间', 'nlyd-student')?>",
         wheels: [
             {data: course_date_Data}
         ],
