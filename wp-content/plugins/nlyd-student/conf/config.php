@@ -129,5 +129,11 @@ return array(
             'post_content'=>'[course-home]',
             'url'=>'/course',
         ),
+        array(
+            'post_title'=>'超级控制台',
+            'post_name'=>'controls',
+            'post_content'=>'[home-controls]',
+            'url'=>'/controls',
+        ),
     ),
 );
