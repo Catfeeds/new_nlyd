@@ -40,6 +40,12 @@
     color: #fff;
     background: #23447a;
 }
+.dir_table{
+    margin-bottom: 10px;
+}
+.dir_nav_content .dir_table:last-child{
+    margin-bottom: 10px;
+}
 .dir_table_name{
     height: 50px;
     line-height: 50px;
