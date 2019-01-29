@@ -30,10 +30,8 @@
                                 <span class="c_black"><?=__('战队负责人', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row">
-                                <input class="radius_input_row change_num nl-foucs" name="team_director_phone" value="<?=$user_mobile?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
-                                <!-- <select class="js-data-select-ajax" name="team_director" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" >
-                                    <option value="<?=$team_director?>" selected><?=$real_name?></option>
-                                </select> -->
+                                <input class="radius_input_row change_num nl-foucs" value="<?=$user_mobile?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                                <input type="hidden" name="team_director_phone">
                             </div>
                         </div>
                  
@@ -61,24 +59,30 @@
 </div>
 <script>
 jQuery(function($) { 
-    // $('.js-data-select-ajax').each(function () {
-    //         var _this=$(this);
-    //         var _placeholder = _this.attr('data-placeholder');
-    //         _this.select2({
-    //             placeholder : _placeholder,
-    //             allowClear:true,
-    //             ajax: {
-    //                 url: admin_ajax +'?action=get_manage_user'  ,
-    //                 dataType: 'json',
-    //                 delay: 600, //wait 250 milliseconds before triggering the request
-    //                 processResults: function (res) {
-    //                     return {
-    //                         results: res.data
-    //                     };
-    //                 }
-    //             }
-    //         });
-    //     })
+    $('body').on('change','.change_num',function(){
+            var _this=$(this);
+            var val=_this.val();
+            _this.next('input').val('');
+            $.ajax({
+                data: {
+                    mobile:val,
+                    action:'get_mobile_user',
+                },
+                success: function(res, textStatus, jqXHR){
+                    if(res.success){
+                        _this.next('input').val(res.data.user_id);
+                        _this.val(res.data.user_name)
+                    }else{
+                        $.alerts(res.data.info)
+                    }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                    }
+                }
+            })
+        })
     layui.use(['form','layer'], function(){
         var form = layui.form
         form.render();

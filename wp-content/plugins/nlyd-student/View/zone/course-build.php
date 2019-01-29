@@ -51,8 +51,8 @@
                                 <?=__('授课教练', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" type="tel" lay-verify="required" autocomplete="off" name="coach_phone" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_phone']?>">
-                                <!--<select class="js-data-select-ajax" name="coach_id" style="width: 100%" data-action="get_manage_user" lay-verify="required"  data-placeholder="<?/*=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')*/?>" ></select>-->
+                                <input class="radius_input_row change_num nl-foucs" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_phone']?>">
+                                <input type="hidden" name="coach_phone">
                             </div>
                         </div>
                         <div>
@@ -116,6 +116,30 @@ jQuery(function($) {
     var posiotion_course_type1=[0];//初始化位置，高亮展示
     var posiotion_course_type2=[0];//初始化位置，高亮展示
     var posiotion_course_date=[0,0,0,0,0];//初始化位置，高亮展示
+    $('body').on('change','.change_num',function(){
+        var _this=$(this);
+        var val=_this.val();
+        _this.next('input').val('');
+        $.ajax({
+            data: {
+                mobile:val,
+                action:'get_mobile_user',
+            },
+            success: function(res, textStatus, jqXHR){
+                if(res.success){
+                    _this.next('input').val(res.data.user_id);
+                    _this.val(res.data.user_name)
+                }else{
+                    $.alerts(res.data.info)
+                }
+            },
+            complete: function(jqXHR, textStatus){
+                if(textStatus=='timeout'){
+                    $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                }
+            }
+        })
+    })
     function getcost(post_data) {
         $.ajax({
             data: post_data,

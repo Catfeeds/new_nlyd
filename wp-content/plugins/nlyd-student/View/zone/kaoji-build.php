@@ -21,10 +21,8 @@
                                 <span class="c_black"><?=__('考级责任人', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" name="person_liable" value="<?=$match['person_liable_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
-                                <!-- <select class="js-data-select-ajax" name="person_liable" style="width: 100%" data-action="get_manage_user" data-placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" >
-                                    <option value="<?=$match['person_liable']?>" selected><?=$match['person']?></option>
-                                </select> -->
+                                <input class="radius_input_row change_num nl-foucs" value="<?=$match['person_liable_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                                <input type="hidden" name="person_liable">
                             </div>
                         </div>
                         <div>
@@ -109,6 +107,30 @@ var posiotion_match_type2=[0];//初始化位置，高亮展示
 var posiotion_match_date=[0,0,0,0,0];//初始化位置，高亮展示
 var posiotion_gradeEnd_date=[0,0,0,0,0];
 var posiotion_gradeSign_date=[0,0,0,0,0];
+$('body').on('change','.change_num',function(){
+    var _this=$(this);
+    var val=_this.val();
+    _this.next('input').val('');
+    $.ajax({
+        data: {
+            mobile:val,
+            action:'get_mobile_user',
+        },
+        success: function(res, textStatus, jqXHR){
+            if(res.success){
+                _this.next('input').val(res.data.user_id);
+                _this.val(res.data.user_name)
+            }else{
+                $.alerts(res.data.info)
+            }
+        },
+        complete: function(jqXHR, textStatus){
+            if(textStatus=='timeout'){
+                $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+            }
+        }
+    })
+})
 //---------------------------考级类别------------------------------
 if($('#match_type1').val().length>0 && $('#match_type1').val()){
     $.each(match_type1_Data,function(index,value){

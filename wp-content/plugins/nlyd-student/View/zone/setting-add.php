@@ -23,7 +23,8 @@
                                 <span class="c_black"><?=__('关联账号', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row">
-                            <input class="radius_input_row nl-foucs" name="user_phone" value="" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                            <input class="radius_input_row change_num nl-foucs" value="" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                            <input type="hidden" name="user_phone">
                             </div>
                         </div>
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('添加关联账号', 'nlyd-student')?></div></a>
@@ -35,6 +36,30 @@
 </div>
 <script>
     jQuery(function($) {
+        $('body').on('change','.change_num',function(){
+            var _this=$(this);
+            var val=_this.val();
+            _this.next('input').val('');
+            $.ajax({
+                data: {
+                    mobile:val,
+                    action:'get_mobile_user',
+                },
+                success: function(res, textStatus, jqXHR){
+                    if(res.success){
+                        _this.next('input').val(res.data.user_id);
+                        _this.val(res.data.user_name)
+                    }else{
+                        $.alerts(res.data.info)
+                    }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                    }
+                }
+            })
+        })
         layui.use(['form'], function(){
             var form = layui.form
             form.render();
