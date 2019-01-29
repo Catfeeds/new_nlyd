@@ -168,7 +168,7 @@ class Course{
                 $organizeClass = new Organize();
                 foreach ($rows as $row){
                     $seize_quota = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}order WHERE order_type=3 AND match_id='{$row['id']}' AND pay_status IN(2,3,4)");
-                    $zone_name = $row['zone_id'] > 0 ? $organizeClass->echoZoneName($row['zone_type_alias'],$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row,['zone_number'],'get') : '平台';
+                    $zone_name = $row['zone_id'] > 0 ? $organizeClass->echoZoneName($row['zone_type_alias'],$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'],'get') : '平台';
                     ?>
                     <tr data-id="<?=$row['id']?>">
                         <th scope="row" class="check-column">
