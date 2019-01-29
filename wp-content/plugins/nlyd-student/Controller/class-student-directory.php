@@ -36,6 +36,10 @@ class Student_Directory
         $view = student_view_path.CONTROLLER.'/directory.php';
         load_view_template($view);
     }
+    public function directoryZone(){
+        $view = student_view_path.CONTROLLER.'/directory-zone.php';
+        load_view_template($view);
+    }
     /**
      * 2019赛区名录
      */
