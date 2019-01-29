@@ -131,6 +131,24 @@
                             </div>  
                         </a>
                     </li>
+                    <li>
+                        <a  class="system-list system-match small" href="<?=home_url('directory/directoryZone');?>">
+                            <div class="item-wrapper">
+                                <div class="left-font">
+                                    07
+                                </div>
+                                <div class="center-detail">
+                                    <div class="system-font">
+                                        <p><?=__('赛区授权信息', 'nlyd-student')?></p>
+                                        <p>AUTHORITY</p> 
+                                    </div>
+                                </div>
+                                <div class="right-icon">
+                                    <i class="iconfont">&#xe640;</i>
+                                </div>
+                            </div>  
+                        </a>
+                    </li>
                 </ul>
                 </div>
 
