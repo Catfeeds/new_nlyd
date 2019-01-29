@@ -35,12 +35,9 @@ class Student_Student
         if(!empty($rows)){
             foreach ($rows as $k => $val){
 
-                $user_real_name = get_user_meta($val['coach_id'],'user_real_name')[0];
-                $rows[$k]['real_name'] = !empty($user_real_name) ? $user_real_name['real_name'] : '-';
-                if(isset($_POST['id'])){
+                if(!empty($val['zone_city'])){
                     //获取城市
-                    $zone_city = $wpdb->get_var("select zone_city from {$wpdb->prefix}zone_meta where user_id = {$zone_user_id} ");
-                    $city_arr = str2arr($zone_city,'-');
+                    $city_arr = str2arr($val['zone_city'],'-');
                     if(!empty($city_arr[2])){
                         $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
                     }elseif ($city_arr[1] != '市辖区'){
@@ -51,10 +48,11 @@ class Student_Student
                     $rows[$k]['zone_city'] = $city;
                 }
             }
+            $data['course_list'] = $rows;
         }
-        print_r($rows);
+
         $view = student_view_path.CONTROLLER.'/index.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
 
     public function scripts_default(){
