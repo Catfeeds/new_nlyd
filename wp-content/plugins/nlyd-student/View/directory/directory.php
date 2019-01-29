@@ -13,6 +13,7 @@
                 <div class="layui-row width-padding">
                     <div class="top-nav">
                         <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/student/index');?>"><?=__('首 页', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('我们', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn active"><a class="fs_16 c_blue"  href="<?=home_url('/directory/');?>"><?=__('名 录', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6"  href="<?=home_url('/courses/');?>"><?=__('课 程', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('shops');?>"><?=__('商 城', 'nlyd-student')?></a></div>
@@ -122,6 +123,24 @@
                                     <div class="system-font">
                                         <p><?=__('心算水平认证名录', 'nlyd-student')?></p>
                                         <p>MENTAL LEVEL</p> 
+                                    </div>
+                                </div>
+                                <div class="right-icon">
+                                    <i class="iconfont">&#xe640;</i>
+                                </div>
+                            </div>  
+                        </a>
+                    </li>
+                    <li>
+                        <a  class="system-list system-match small" href="<?=home_url('directory/directoryZone');?>">
+                            <div class="item-wrapper">
+                                <div class="left-font">
+                                    07
+                                </div>
+                                <div class="center-detail">
+                                    <div class="system-font">
+                                        <p><?=__('赛区授权信息', 'nlyd-student')?></p>
+                                        <p>AUTHORITY</p> 
                                     </div>
                                 </div>
                                 <div class="right-icon">

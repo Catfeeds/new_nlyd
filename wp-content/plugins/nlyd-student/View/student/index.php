@@ -44,40 +44,27 @@ get_header(); ?>
                 <div class="layui-row width-padding">
                     <div class="top-nav">
                         <div class="top-nav-btn active"><a class="fs_16 c_blue" href="<?=home_url('/student/index');?>"><?=__('首 页', 'nlyd-student')?></a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6"  href="<?=home_url('/directory/');?>"><?=__('名 录', 'nlyd-student')?></a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6"  href="<?=home_url('/courses/');?>"><?=__('课 程', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('我们', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/directory/');?>"><?=__('名 录', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/courses/');?>"><?=__('课 程', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('shops');?>"><?=__('商 城', 'nlyd-student')?></a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('公 益', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('system/concatUs');?>"><?=__('合 作', 'nlyd-student')?></a></div>
                     </div>
                 </div>
                 <!-- 轮播 -->
-                <div class="swiper-container layui-bg-white">
-                    <div class="swiper-wrapper">
+                <div class="swiper-container layui-bg-white swiper-container1" style="margin-bottom:0">
+                    <div class="swiper-wrapper" style="height:auto">
                         <div class="swiper-slide">
-                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad1.png'?>"></div>
+                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/swiper1.png'?>"></div>
                         </div>
                         <div class="swiper-slide">
-                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad2.png'?>"></div>
+                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/swiper2.png'?>"></div>
                         </div>
-                        <div class="swiper-slide">
-                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad3.png'?>"></div>
-                        </div>
-                        <?php
-                        //if($banners) {
-                            //foreach ($banners as $banner) {
-                        ?>
-                                <!-- <div class="swiper-slide"> -->
-                                    <!-- <div class="swiper-content img-box"><img src="<?=$banner?>"></div> -->
-                                <!-- </div> -->
-                        <?php
-                            // }
-                        // }
-                        ?>
                     </div>
                     <div class="swiper-pagination"></div>
                 </div>
                 <!-- 入口 -->
-                <div class="layui-row width-padding  layui-bg-white">
+                <!-- <div class="layui-row width-padding  layui-bg-white">
                     <div class="entrance flex-h">
                         <div class="entrance-wrap flex1">
                             <a class="index-btn">
@@ -104,13 +91,117 @@ get_header(); ?>
                             </a>
                         </div>
                     </div>
+                </div> -->
+                <div class="layui-row width-padding width-padding-pc">
+                    <div class="layui-row index_row">
+                        <div class="layui-row index_row_title">
+                             <span class="bold c_black fs_16 mr_10 dis_inlineBlock"><?=__('推荐课程', 'nlyd-student')?></span>   
+                             <a class="c_blue fs_12 dis_inlineBlock" href="<?=home_url('/courses/');?>"><?=__('查看更多', 'nlyd-student')?></a>   
+                        </div>   
+                        <div class="layui-row index_row_content">
+                            <div class="index_course_item">
+                                <div class="index_course_name">高效记忆术第一期</div>
+                                <div class="index_course_detail">温江训练中心（0001）</div>
+                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
+                            </div>
+                            <div class="index_course_item">
+                                <div class="index_course_name">高效记忆术第一期</div>
+                                <div class="index_course_detail">温江训练中心（0001）</div>
+                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
+                            </div>    
+                            <div class="index_course_item">
+                                <div class="index_course_name">高效记忆术第一期</div>
+                                <div class="index_course_detail">温江训练中心（0001）</div>
+                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
+                            </div>  
+                            <div class="index_course_item">
+                                <div class="index_course_name">高效记忆术第一期</div>
+                                <div class="index_course_detail">温江训练中心（0001）</div>
+                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
+                            </div>    
+                        </div>     
+                    </div>
+                    <div class="layui-row index_row">
+                        <div class="layui-row index_row_title">
+                             <span class="bold c_black fs_16 dis_inlineBlock"><?=__('教练体系', 'nlyd-student')?></span>  
+                        </div>   
+                        <div class="swiper-container layui-bg-white swiper-container3" style="margin-bottom:0">
+                            <div class="swiper-wrapper" style="height:auto">
+                                <a class="swiper-slide">
+                                    <div class="swiper-course">
+                                        <div class="swiper_course_img">
+                                        <div class="item-img">
+                                            <img src="<?=student_css_url.'image/homePage/swiper1.png'?>">
+                                        </div>
+                                        </div>
+                                        <div class="swiper_course_detail">
+                                            <div class="bold c_black fs_14">程玮</div>
+                                            <div class="fs_14 c_black6">国际脑力运动委员会教练</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="swiper-slide">
+                                    <div class="swiper-course">
+                                        <div class="swiper_course_img">
+                                        <div class="item-img">
+                                                <img src="<?=student_css_url.'image/homePage/concat-big.png'?>">
+                                        </div>
+                                        </div>
+                                        <div class="swiper_course_detail">
+                                            <div class="bold c_black fs_14">程玮</div>
+                                            <div class="fs_14 c_black6">国际脑力运动委员会教练</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row index_row">
+                        <div class="layui-row index_row_title">
+                             <span class="bold c_black fs_16 dis_inlineBlock"><?=__('赛事回顾', 'nlyd-student')?></span>  
+                        </div>   
+                        <div class="swiper-container swiper-container2" style="margin-bottom:0">
+                            <div class="swiper-wrapper" style="height:auto">
+                                <a class="swiper-slide">
+                                    <div class="swiper_news_wrap">
+                                        <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/swiper1.png'?>"></div>
+                                        <div class="swiper_news_title">全球首批“国际脑力健将诞生”</div>
+                                    </div>
+                                </a>
+                                <a class="swiper-slide">
+                                    <div class="swiper_news_wrap">
+                                        <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/swiper1.png'?>"></div>
+                                        <div class="swiper_news_title">全球首批“国际脑力健将诞生1”</div>
+                                    </div>
+                                </a>
+                                <a class="swiper-slide">
+                                    <div class="swiper_news_wrap">
+                                        <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/swiper1.png'?>"></div>
+                                        <div class="swiper_news_title">全球首批“国际脑力健将诞生2”</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="swiper-button-prev"></div><!--左箭头-->
+                            <div class="swiper-button-next"></div><!--右箭头-->
+                        </div>
+                    </div>
+
+                    <div class="layui-row index_row">
+                        <div class="layui-row index_row_title">  
+                             <span class="bold c_black fs_16 mr_10 dis_inlineBlock"><?=__('推荐资讯', 'nlyd-student')?></span>   
+                             <a class="c_blue fs_12 dis_inlineBlock"><?=__('查看更多', 'nlyd-student')?></a> 
+                        </div>   
+                        <div class="swiper-container swiper-container2" style="margin-bottom:0">
+                            <a class="swiper_news_wrap">
+                                <div class="img-box"><img src="<?=student_css_url.'image/homePage/swiper1.png'?>"></div>
+                                <div class="swiper_news_title">全球首批“国际脑力健将诞生”</div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div class="layui-row pt-10 layui-bg-gray">
-                    <!-- 广告 -->
-                    <a class="nl-ad layui-row img-box layui-bg-white">
-                        <img src="<?=student_css_url.'image/homePage/ad-big.png'?>">
-                    </a>
-                    <!-- 课程 资讯 -->
+                <!-- <div class="layui-row pt-10 layui-bg-gray">
                     <div class="layui-row">
                         <div class="head-info layui-row width-padding">
                             <span class="pull-left  c_blue fs_14"><?=__('推荐课程', 'nlyd-student')?></span>
@@ -127,12 +218,6 @@ get_header(); ?>
                                     <div class="fs_12 c_black6 text_2 nl-ad-detail"><?=__('这里是课程介绍摘要，截取课程简要介绍，不超过30个字符', 'nlyd-student')?></div>
                                 </div>
                             </div>
-                        </div>
-
-
-                        <!-- <div class="head-info layui-row  width-padding">
-                            <span class="pull-left c_blue fs_14">最新资讯</span>
-                            <span class="pull-right fs_14" onclick="window.location.href='<?= home_url('category/new-news/'); ?>'">全部资讯 <i class="iconfont">&#xe640;</i></span>
                         </div>
                         <?php
                         if(!empty($cat_query)) {
@@ -152,23 +237,16 @@ get_header(); ?>
                         <?php
                                 }
                             }
-                        ?> -->
+                        ?>
                     </div>
-                </div>
-                <!-- 视频 -->
-                <div class="layui-row">
-                    <a class="img-box">
-                        <img src="<?=student_css_url.'image/homePage/sp.png'?>">
-                    </a>
-                </div>
-
+                </div> -->
             </div>
         </div>
     </div>
 </div>
 <script>
 jQuery(function($) {   
-    var mySwiper = new Swiper('.swiper-container', {
+    var mySwiper1 = new Swiper('.swiper-container1', {//乐学乐
         loop : true,
         autoplay:{
             disableOnInteraction:false
@@ -178,10 +256,45 @@ jQuery(function($) {
         pagination: {
             el: '.swiper-pagination',
             dynamicBullets: true,
-            dynamicMainBullets: 2,
+            dynamicMainBullets: 1,
             clickable :true,
+            // bulletActiveClass:'layui-bg-white',//分页器active
         },
+       
     }); 
+    var mySwiper2 = new Swiper('.swiper-container2', {//赛事回顾
+        loop : true,
+        autoplay:{
+            disableOnInteraction:false
+        },//可选选项，自动滑动
+        autoplayDisableOnInteraction : false, 
+        initialSlide :0,//初始展示页
+        navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+        },
+  });
+  var mySwiper3 = new Swiper('.swiper-container3', {//教练
+        loop : true,
+        autoplay:{
+            disableOnInteraction:false
+        },//可选选项，自动滑动
+        autoplayDisableOnInteraction : true,    /* 注意此参数，默认为true */ 
+        initialSlide :0,//初始展示页
+        pagination: {
+            el: '.swiper-pagination',
+            // dynamicBullets: true,
+            dynamicMainBullets: 1,
+            clickable :true,
+            bulletActiveClass:'yellowActive',//分页器active
+        },
+        // pagination:{
+        //     el: '.swiper-pagination',
+        //     bulletActiveClass: 'yellowActive',
+        // },
+    }); 
+    console.log('.swiper-container3 .'+mySwiper3.params.pagination.bulletClass)
+    $('.swiper-container3 .'+mySwiper3.params.pagination.bulletClass).addClass('yellow_circle'); //为分页器增加样式
 })
 </script>
 
