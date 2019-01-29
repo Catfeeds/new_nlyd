@@ -68,7 +68,43 @@ class Student_Student
         }
 
         //获取赛事回顾
+        $cat=get_category_by_slug('games-or-news');
+        if($cat->cat_ID > 0){
+            $args = array(
+                'numberposts'     => 10,
+                'offset'          => 0,
+                'category'        =>$cat->cat_ID ,
+                'orderby'         => 'post_date',
+                'order'           => 'DESC',
+                'post_type'       => 'post',
+                'post_status'     => 'publish'
+            );
+            $posts_array = get_posts( $args );
+            if(!empty($posts_array)){
+                $data['post_list'] = $posts_array;
+            }
+        }
 
+        //推荐资讯
+        $term_id = $wpdb->get_results("select term_id from {$wpdb->prefix}terms where slug in ('intelligence-science','default-classification','industry-information','events') ",ARRAY_A);
+
+        if(!empty($term_id)){
+            $post_id = array_column($term_id,'term_id');
+
+            $news_args = array(
+                'numberposts'     => 1,
+                'offset'          => 0,
+                'category'        =>$post_id,
+                'orderby'         => 'rand',
+                'order'           => 'DESC',
+                'post_type'       => 'post',
+                'post_status'     => 'publish'
+            );
+            $posts_news = get_posts( $news_args );
+            if(!empty($posts_array)){
+                $data['news'] = $posts_news[0];
+            }
+        }
 
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view,$data);

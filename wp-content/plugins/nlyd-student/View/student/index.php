@@ -165,48 +165,60 @@ get_header(); ?>
                         </div>
                     </div>
                     <?php endif;?>
+                    <?php if(!empty($post_list)):?>
                     <div class="layui-row index_row">
                         <div class="layui-row index_row_title">
                              <span class="bold c_black fs_16 dis_inlineBlock"><?=__('赛事回顾', 'nlyd-student')?></span>  
                         </div>   
                         <div class="swiper-container swiper-container2" style="margin-bottom:0">
                             <div class="swiper-wrapper" style="height:auto">
-                                <a class="swiper-slide">
+                                <?php foreach ($post_list as $post_){
+                                    $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post_->ID), 'thumbnail');
+                                    $thumbnail_image = !empty($thumbnail_image_url[0]) ? $thumbnail_image_url[0] : student_css_url.'image/homePage/swiper1.png';
+                                ?>
+                                <a class="swiper-slide" href="<?=home_url('/'.$post_->post_title)?>">
                                     <div class="swiper_news_wrap">
-                                        <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/swiper1.png'?>"></div>
-                                        <div class="swiper_news_title">全球首批“国际脑力健将诞生”</div>
+                                        <div class="swiper-content img-box"><img src="<?=$thumbnail_image?>"></div>
+                                        <div class="swiper_news_title"><?=$post_->post_title?></div>
                                     </div>
                                 </a>
-                                <a class="swiper-slide">
+                                <?php } ?>
+                                <!--<a class="swiper-slide">
                                     <div class="swiper_news_wrap">
-                                        <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/swiper1.png'?>"></div>
+                                        <div class="swiper-content img-box"><img src="<?/*=student_css_url.'image/homePage/swiper1.png'*/?>"></div>
                                         <div class="swiper_news_title">全球首批“国际脑力健将诞生1”</div>
                                     </div>
                                 </a>
                                 <a class="swiper-slide">
                                     <div class="swiper_news_wrap">
-                                        <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/swiper1.png'?>"></div>
+                                        <div class="swiper-content img-box"><img src="<?/*=student_css_url.'image/homePage/swiper1.png'*/?>"></div>
                                         <div class="swiper_news_title">全球首批“国际脑力健将诞生2”</div>
                                     </div>
-                                </a>
+                                </a>-->
                             </div>
                             <div class="swiper-button-prev"></div><!--左箭头-->
                             <div class="swiper-button-next"></div><!--右箭头-->
                         </div>
                     </div>
+                    <?php endif;?>
+                    <?php if(!empty($news)):
 
+                        $news_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($news->ID), 'thumbnail');
+                        $new_image = !empty($news_image_url[0]) ? $news_image_url[0] : student_css_url.'image/homePage/swiper1.png';
+                    ?>
                     <div class="layui-row index_row">
                         <div class="layui-row index_row_title">  
                              <span class="bold c_black fs_16 mr_10 dis_inlineBlock"><?=__('推荐资讯', 'nlyd-student')?></span>   
-                             <a class="c_blue fs_12 dis_inlineBlock"><?=__('查看更多', 'nlyd-student')?></a> 
+                             <a class="c_blue fs_12 dis_inlineBlock" href="<?=home_url('/news/')?>"><?=__('查看更多', 'nlyd-student')?></a>
                         </div>   
                         <div class="swiper-container swiper-container2" style="margin-bottom:0">
                             <a class="swiper_news_wrap">
-                                <div class="img-box"><img src="<?=student_css_url.'image/homePage/swiper1.png'?>"></div>
-                                <div class="swiper_news_title">全球首批“国际脑力健将诞生”</div>
+                                <div class="img-box"><img src="<?=$new_image?>"></div>
+                                <div class="swiper_news_title"><?=$news->post_title?></div>
                             </a>
                         </div>
                     </div>
+                    <?php endif;?>
                 </div>
                 <!-- <div class="layui-row pt-10 layui-bg-gray">
                     <div class="layui-row">
