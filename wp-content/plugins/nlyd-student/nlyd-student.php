@@ -295,17 +295,20 @@ if(!class_exists('StudentController')){
                 wp_register_style( 'my-student-mobile', student_css_url.'index_mobile.css',array('style'), leo_student_version);
                 wp_enqueue_style( 'my-student-mobile' );
             }else{
-                if (CONTROLLER == 'news' || CONTROLLER == 'class' || CONTROLLER == 'shizitixi'|| CONTROLLER == '国际脑力水平测试评价体系' || CONTROLLER == '国际脑力运动推广大使名录') {
-                    wp_register_style( 'my-student', student_css_url.'index_self.css',array('style'),leo_student_version);
-                    wp_enqueue_style( 'my-student' );
-                }
-                if(CONTROLLER == 'directory_brain' || CONTROLLER == 'directory_j' || CONTROLLER == 'directory_d' || CONTROLLER == 'directory_s'|| CONTROLLER == 'directory_zone_match' ){//名录
-                    wp_register_style( 'my-layui-css-home', student_css_url.'layui.css',array('style'),leo_student_version);
-                    wp_enqueue_style( 'my-layui-css-home' );
-                    wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
-                    wp_enqueue_style( 'my-student' );
-                    wp_register_style( 'my-student', student_css_url.'index_self.css',array('style'),leo_student_version);
-                    wp_enqueue_style( 'my-student' );
+                if(defined('CONTROLLER')){
+
+                    if (CONTROLLER == 'news' || CONTROLLER == 'class' || CONTROLLER == 'shizitixi'|| CONTROLLER == '国际脑力水平测试评价体系' || CONTROLLER == '国际脑力运动推广大使名录') {
+                        wp_register_style( 'my-student', student_css_url.'index_self.css',array('style'),leo_student_version);
+                        wp_enqueue_style( 'my-student' );
+                    }
+                    if(CONTROLLER == 'directory_brain' || CONTROLLER == 'directory_j' || CONTROLLER == 'directory_d' || CONTROLLER == 'directory_s'|| CONTROLLER == 'directory_zone_match' ){//名录
+                        wp_register_style( 'my-layui-css-home', student_css_url.'layui.css',array('style'),leo_student_version);
+                        wp_enqueue_style( 'my-layui-css-home' );
+                        wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
+                        wp_enqueue_style( 'my-student' );
+                        wp_register_style( 'my-student', student_css_url.'index_self.css',array('style'),leo_student_version);
+                        wp_enqueue_style( 'my-student' );
+                    }
                 }
             }
 

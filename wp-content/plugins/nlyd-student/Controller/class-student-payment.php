@@ -433,7 +433,7 @@ class Student_Payment {
                             }else{
                                 $referee_id = $row['zone_id'];
                             }
-                            $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$referee_id,'user_income'=>$money1,'income_type'=>$referee_type,'created_time'=>get_time('mysql')));
+                            $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$referee_id,'user_income'=>$money1,'income_type'=>$referee_type,'created_time'=>get_time('mysql')));
 
                         }else{
                             $a = true;
@@ -441,21 +441,21 @@ class Student_Payment {
 
                         if($user['indirect_referee_id'] > 0 && $money2 > 0){
                             $indirect_referee_type = 'recommend_'.$income_type;
-                            $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$user['referee_id'],'user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'created_time'=>get_time('mysql')));
+                            $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$user['referee_id'],'match_id'=>$order['match_id'],'user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'created_time'=>get_time('mysql')));
 
                         }else{
                             $b = true;
                         }
                         if($person_liable_id > 0 && $money3 > 0){
                             $person_liable_type = 'director_'.$income_type;
-                            $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'created_time'=>get_time('mysql')));
+                            $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'created_time'=>get_time('mysql')));
                         }else{
                             $c = true;
                         }
 
                         if($sponsor_id > 0 && $money4 > 0){
                             $sponsor_type = 'open_'.$income_type;
-                            $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>$sponsor_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                            $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>$sponsor_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                         }else{
                             $d = true;
                         }
@@ -471,7 +471,7 @@ class Student_Payment {
                             //print_r($coach_id);die;
                             //教练收益
                             if($total < 4 && $coach_id > 0){
-                                $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'recommend_qualified_coach','created_time'=>get_time('mysql')));
+                                $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'recommend_qualified_coach','created_time'=>get_time('mysql')));
 
                             }else{
                                 $e = true;
@@ -479,7 +479,7 @@ class Student_Payment {
 
                             //print_r($total_);die;
                             if($total < 4 ){
-                                $f = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$row['zone_id'],'user_income'=>$money4,'income_type'=>'recommend_qualified_zone','created_time'=>get_time('mysql')));
+                                $f = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$row['zone_id'],'user_income'=>$money4,'income_type'=>'recommend_qualified_zone','created_time'=>get_time('mysql')));
 
                             }else{
                                 $f = true;
@@ -1054,7 +1054,7 @@ class Student_Payment {
                                 }else{
                                     $referee_id = $row['zone_id'];
                                 }
-                                $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$referee_id,'user_income'=>$money1,'income_type'=>$referee_type,'created_time'=>get_time('mysql')));
+                                $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$referee_id,'user_income'=>$money1,'income_type'=>$referee_type,'created_time'=>get_time('mysql')));
 
                             }else{
                                 $a = true;
@@ -1062,21 +1062,21 @@ class Student_Payment {
 
                             if($user['indirect_referee_id'] > 0 && $money2 > 0){
                                 $indirect_referee_type = 'recommend_'.$income_type;
-                                $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$user['referee_id'],'user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'created_time'=>get_time('mysql')));
+                                $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$user['user_id'],'match_id'=>$order['match_id'],'user_id'=>$user['indirect_referee_id'],'user_income'=>$money2,'income_type'=>$indirect_referee_type,'created_time'=>get_time('mysql')));
 
                             }else{
                                 $b = true;
                             }
                             if($person_liable_id > 0 && $money3 > 0){
                                 $person_liable_type = 'director_'.$income_type;
-                                $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'created_time'=>get_time('mysql')));
+                                $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$insert['person_liable_id'],'user_income'=>$money3,'income_type'=>$person_liable_type,'created_time'=>get_time('mysql')));
                             }else{
                                 $c = true;
                             }
 
                             if($sponsor_id > 0 && $money4 > 0){
                                 $sponsor_type = 'open_'.$income_type;
-                                $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>$sponsor_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                                $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$insert['sponsor_id'],'user_income'=>$money4,'income_type'=>$sponsor_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
                             }else{
                                 $d = true;
                             }
@@ -1092,7 +1092,7 @@ class Student_Payment {
                                 //print_r($coach_id);die;
                                 //教练收益
                                 if($total < 4 && $coach_id > 0){
-                                    $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'recommend_qualified_coach','created_time'=>get_time('mysql')));
+                                    $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'recommend_qualified_coach','created_time'=>get_time('mysql')));
 
                                 }else{
                                     $e = true;
@@ -1100,7 +1100,7 @@ class Student_Payment {
 
                                 //print_r($total_);die;
                                 if($total < 4 ){
-                                    $f = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'user_id'=>$row['zone_id'],'user_income'=>$money4,'income_type'=>'recommend_qualified_zone','created_time'=>get_time('mysql')));
+                                    $f = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$order['user_id'],'match_id'=>$order['match_id'],'user_id'=>$row['zone_id'],'user_income'=>$money4,'income_type'=>'recommend_qualified_zone','created_time'=>get_time('mysql')));
 
                                 }else{
                                     $f = true;

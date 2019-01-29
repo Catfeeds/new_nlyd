@@ -129,5 +129,11 @@ return array(
             'post_content'=>'[course-home]',
             'url'=>'/course',
         ),
+        array(
+            'post_title'=>'首页-课程',
+            'post_name'=>'courses',
+            'post_content'=>'[course-home]',
+            'url'=>'/course',
+        ),
     ),
 );
