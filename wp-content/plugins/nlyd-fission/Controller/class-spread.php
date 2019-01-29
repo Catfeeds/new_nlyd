@@ -147,6 +147,9 @@ class Spread{
                             <td class="mechanism column-mechanism" data-colname="参赛机构">
                                 <?=$row['mechanism']?>
                             </td>
+                            <td class="sub_center column-sub_center" data-colname="训练中心总经理">
+                                <?=$row['general_manager']?>
+                            </td>
                             <td class="spread_status column-spread_status" data-colname="状态">
                                 <?php
                                     switch ($row['spread_status']){
@@ -236,6 +239,7 @@ class Spread{
         $success_msg = '';
         if(is_post()){
             $spread_type = isset($_POST['spread_type']) ? trim($_POST['spread_type']) : '';
+            $general_manager = isset($_POST['general_manager']) ? trim($_POST['general_manager']) : '';
             $direct_superior = isset($_POST['direct_superior']) ? trim($_POST['direct_superior']) : '';
             $indirect_superior = isset($_POST['indirect_superior']) ? trim($_POST['indirect_superior']) : '';
             $first_cause = isset($_POST['first_cause']) ? trim($_POST['first_cause']) : '';
@@ -268,6 +272,7 @@ class Spread{
                     'pay_amount' => $pay_amount,
                     'spread_name' => $spread_name,
                     'spread_type' => $spread_type,
+                    'general_manager' => $general_manager,
                     'direct_superior' => $direct_superior,
                     'indirect_superior' => $indirect_superior,
                     'first_cause' => $first_cause,
@@ -428,6 +433,12 @@ class Spread{
                         <th scope="row"><label for="sub_center">赛区/分中心/考级中心</label></th>
                         <td>
                             <input type="text" name="sub_center" value="<?=isset($row)?$row['sub_center']:''?>" id="sub_center" maxlength="60"><span>元/百分比</span>
+                        </td>
+                    </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="sub_center">训练中心总经理</label></th>
+                        <td>
+                            <input type="text" name="general_manager" value="<?=isset($row)?$row['general_manager']:''?>" id="general_manager" maxlength="60"><span>元/百分比</span>
                         </td>
                     </tr>
                     <tr class="">
