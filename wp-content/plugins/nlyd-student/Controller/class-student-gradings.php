@@ -123,7 +123,7 @@ class Student_Gradings extends Student_Home
         $data['total'] = $total > 0 ? $total : 0;
 
         //获取订单
-        $data['memory_lv'] = $wpdb->get_var("select memory_lv from {$wpdb->prefix}order where match_id = {$match['grading_id']} and user_id = {$current_user->ID}");
+        $data['memory_lv'] = $wpdb->get_var("select memory_lv from {$wpdb->prefix}order where match_id = {$match['grading_id']} and user_id = {$current_user->ID} ");
 
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
@@ -286,6 +286,11 @@ class Student_Gradings extends Student_Home
 
         if($row['user_id'] != $current_user->ID){
             $this->get_404(array('message'=>__('未查询到报名信息', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+
+        if(!in_array($row['pay_status'],array(2,3,4))){
+            $this->get_404(__('订单未付款', 'nlyd-student'));
             return;
         }
 
@@ -916,12 +921,20 @@ class Student_Gradings extends Student_Home
                 $wpdb->query('START TRANSACTION');
 
                 $id = $wpdb->get_var("select id from {$wpdb->prefix}grading_logs where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} ");
+
+                //获取本次考级类别的教练
+                $coach_sql = "select b.coach_id from {$wpdb->prefix}grading_meta a 
+                          left join {$wpdb->prefix}my_coach b on a.category_id = b.category_id 
+                          where a.grading_id = {$_GET['grad_id']} and b.user_id = {$current_user->ID} and b.apply_status = 2
+                          ";
+                $coach_id = $wpdb->get_var($coach_sql);
                 if(empty($id)){
                     $insert = array(
                         'user_id'=>$current_user->ID,
                         'grading_id'=>$_GET['grad_id'],
                         'grading_result'=>$grading_result,
                         'grading_lv'=> $lv > 0 ? $lv : '',
+                        'grading_coach_id'=> $coach_id > 0 ? $coach_id : '',
                         'created_time'=>get_time('mysql'),
                     );
                     $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
@@ -929,7 +942,7 @@ class Student_Gradings extends Student_Home
                 }
                 else{
                     if($grading_result == 1){
-                        $a = $wpdb->update($wpdb->prefix.'grading_logs',array('grading_result'=>1,'grading_lv'=>$lv),array('id'=>$id));
+                        $a = $wpdb->update($wpdb->prefix.'grading_logs',array('grading_coach_id'=>$coach_id,'grading_result'=>1,'grading_lv'=>$lv),array('id'=>$id));
                     }else{
                         $a = true;
                     }
@@ -994,6 +1007,67 @@ class Student_Gradings extends Student_Home
 
         if($grading_result == 1){
             $grade_result = $lv.'级'.'已达标';
+
+            //获取收益配置
+            $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = 'course_grading' ";
+            $setting = $wpdb->get_row($set_sql,ARRAY_A);
+            if(!empty($setting)){
+                //准备对应的数据
+                $money1 = $setting['first_cause'];     //事业员
+                $money2 = $setting['second_cause'];    //事业部长
+                $money3 = $setting['coach'];        //教练
+                $money4 = $setting['sub_center'];   //办赛机构
+                $money5 = $setting['general_manager'];    //总经理
+
+                //查询当前发布机构
+                $zone_sql = "select b.user_id zone_id,b.center_manager_id,b.referee_id,c.referee_id as indirect_referee_id from {$wpdb->prefix}grading_meta a 
+                          left join {$wpdb->prefix}zone_meta b on a.created_person = b.user_id 
+                          left join {$wpdb->prefix}users c on b.referee_id = c.ID 
+                          where a.grading_id = {$_GET['grad_id']} ";
+                $referee_ = $wpdb->get_row($zone_sql,ARRAY_A);
+
+                $wpdb->query('START TRANSACTION');
+
+                $a = $b = $c = $d = $e = true;
+                if($referee_['referee_id'] > 0 && $money1 > 0){
+                    $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['referee_id']} and income_type = 'grading_qualified' ");
+                    if(empty($referee_income_id)){
+                        $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['referee_id'],'user_income'=>$money1,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                    }
+                }
+                if($referee_['indirect_referee_id'] > 0 && $money2 > 0){
+                    $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['indirect_referee_id']} and income_type = 'grading_qualified' ");
+                    if(empty($referee_income_id)){
+                        $b = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['indirect_referee_id'],'user_income'=>$money2,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                    }
+                }
+                if($coach_id > 0 && $money3 > 0){
+                    $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$coach_id} and income_type = 'grading_qualified' ");
+                    if(empty($referee_income_id)){
+                        $c = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$coach_id,'user_income'=>$money3,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                    }
+                }
+                if($referee_['zone_id'] > 0 && $money4 > 0){
+                    $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['zone_id']} and income_type = 'grading_qualified' ");
+                    if(empty($referee_income_id)){
+                        $d = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['zone_id'],'user_income'=>$money4,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                    }
+                }
+                if($referee_['center_manager_id'] > 0 && $money5 > 0){
+                    $referee_income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where 'provide_id' = {$current_user->ID} and user_id = {$referee_['center_manager_id']} and income_type = 'grading_qualified' ");
+                    if(empty($referee_income_id)){
+                        $e = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('provide_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'user_id'=>$referee_['center_manager_id'],'user_income'=>$money4,'income_type'=>'grading_qualified','created_time'=>get_time('mysql')));
+                    }
+                }
+
+                //print_r($a .'&&' .$b .'&&'. $c .'&&'. $d .'&&'. $e);die;
+                if( $a && $b && $c && $d && $e ){
+                    $wpdb->query('COMMIT');
+                }else{
+                    $wpdb->query('ROLLBACK');
+                }
+            }
+
         }else{
             $grade_result = '未达标';
             if($row['grading_type'] == 'memory'){
@@ -1424,7 +1498,7 @@ class Student_Gradings extends Student_Home
     public function get_grading($grad_id,$user_id){
         global $wpdb;
         $sql = "select a.*,b.post_title grading_title,b.post_content,
-                c.post_title grading_type,if(d.id>0,'y','') is_me,
+                c.post_title grading_type,if(d.id>0,'y','') is_me,d.pay_status,
                 DATE_FORMAT(a.start_time,'%Y-%m-%d %H:%i') start_time,
                 DATE_FORMAT(a.end_time,'%Y-%m-%d %H:%i') end_time,d.id order_id,d.user_id,
                 case a.status
