@@ -48,7 +48,10 @@
                         <a class="addres c_blue mr_10" id="areaSelect"><?=__($city, 'nlyd-student')?></a>
                     </div>
                     <div id="flowMyAdress">
-                    
+
+                    </div>
+                    <div id="flowAllAdress">
+
                     </div>
                 </div>
 
@@ -83,6 +86,42 @@ jQuery(function($) {
                 clickable :true,
             },
         });
+        function select(id,address) {
+            var postData={
+                action:'get_course_zone',
+                page:1,
+            }
+            if(address && address.length>0 && address!="<?=__('请选择', 'nlyd-student')?>"){
+                postData.city=address;
+            }
+            var lis = [];
+            $.ajax({
+                data: postData,
+                success:function(res,ajaxStatu,xhr){
+                    if(res.success){
+                        $.each(res.data.info,function(i,v){
+                            var dom= '<a class="course_row width-padding width-padding-pc c_black6" href="'+window.home_url+'/courses/cenerCourse/id/'+v.user_id+'/">'
+                                        +'<div class="course_city_icon c_blue"><i class="iconfont">&#xe659;</i></div>'
+                                        +'<div class="course_info">'
+                                            +'<div class="course_info_row fs_16 c_black">IISC脑力训练中心'+v.content+'</div>'
+                                            +'<div class="course_info_row fs_14"><?=__("所在地", "nlyd-student")?>：'+v.zone_city+'</div>'
+                                            +'<div class="course_info_row fs_12 c_orange">'+v.course_total+'个课程抢占名额中</div>'
+                                        +'</div>'
+                                        +'<div class="course_right_icon c_black">'
+                                            +'<i class="iconfont">&#xe727;</i>'
+                                        +'</div>'
+                                    +'</a>'
+                                    $('#'+id).append(dom)
+                        })
+                    }
+                },
+                complete:function(XMLHttpRequest, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差,请重试', 'nlyd-student')?>")
+                    }
+                }
+            })
+        }
         function pagation(id,_page,address){
             flow.load({
                 elem: '#'+id //流加载容器
@@ -93,10 +132,11 @@ jQuery(function($) {
                     var postData={
                         action:'get_course_zone',
                         page:_page,
+                        city:address,
                     }
-                    if(address && address.length>0 && address!="<?=__('请选择', 'nlyd-student')?>"){
-                        postData.city=address;
-                    }
+                    // if(address && address.length>0 && address!="<?=__('请选择', 'nlyd-student')?>"){
+                    //     postData.city=address;
+                    // }
                     var lis = [];
                     $.ajax({
                         data: postData,
@@ -142,7 +182,11 @@ jQuery(function($) {
             });
         }
         //初始化
-        pagation('flowMyAdress',1,initAddress)
+        if(initAddress && initAddress.length>0 && initAddress!="<?=__('请选择', 'nlyd-student')?>"){
+            select('flowMyAdress',initAddress)
+        }
+        
+        pagation('flowAllAdress',1,'')
 
         var area=$.validationLayui.allArea.area;//省市区三级联动
         var posiotionarea=[0,0,0];//初始化位置，高亮展示
@@ -192,11 +236,10 @@ jQuery(function($) {
                     var text=data[0]['value']+'-'+data[1]['value']+three;
                     var dataText=data[0]['value']+data[1]['value']+data[2]['value'];
                     $('#areaSelect').text(text);
-                    if(old!==text){
+                    if(text && text.length>0 && text!="<?=__('请选择', 'nlyd-student')?>" && old!==text){
                         $('#flowMyAdress').empty()
-                        pagation('flowMyAdress',1,text)
+                        select('flowMyAdress',text)
                     }
-                    
                 }
             });
         }

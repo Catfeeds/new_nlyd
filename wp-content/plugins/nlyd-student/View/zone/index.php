@@ -148,8 +148,8 @@ jQuery(function($) {
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
                         $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                        _this.removeClass('disabled');
                     }
-                    _this.removeClass('disabled');
                 }
             })
         }
