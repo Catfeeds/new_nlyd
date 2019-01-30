@@ -2297,7 +2297,7 @@ class Match_Ajax
     public function delImagesColor(){
         $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
         $k = isset($_POST['k']) ? intval($_POST['k']) : 0;
-        if($user_id < 1 || $k < 1) wp_send_json_error(['info' => '参数错误']);
+        if($user_id < 1 || $k < 0) wp_send_json_error(['info' => '参数错误']);
         $cardOldImg = get_user_meta($user_id, 'user_images_color', true);
         $old = $cardOldImg[$k];
         unset($cardOldImg[$k]);
