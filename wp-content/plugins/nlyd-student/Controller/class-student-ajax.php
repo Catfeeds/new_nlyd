@@ -4673,7 +4673,9 @@ class Student_Ajax
         }else{
             $business_licence_url = $_POST['business_licence_url'];
         }
+        if($_POST['type_id'] == 1 ){
 
+        }
         $manager = $_POST['zone_type_alias'] == 'match' ? '中心负责人' : '总经理';
         if(empty($_POST['center_manager'])) wp_send_json_error(array('info'=>__($manager.'未进行确认')));
         $sql1 = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
@@ -4741,8 +4743,8 @@ class Student_Ajax
             'opening_bank'=>$_POST['opening_bank'],
             'opening_bank_address'=>!empty($_POST['opening_bank_address']) ? $_POST['opening_bank_address'] : '',
             'bank_card_num'=>$_POST['bank_card_num'],
-            'chairman_id'=>!empty($chairman_id) ? $chairman_id['ID'] : '',
-            'secretary_id'=>!empty($secretary_id) ? $secretary_id['ID'] : '',
+            'chairman_id'=>!empty($chairman) ? $chairman['ID'] : '',
+            'secretary_id'=>!empty($secretary) ? $secretary['ID'] : '',
             'center_manager_id'=>!empty($center_manager) ? $center_manager['ID'] : '',
             'referee_id'=>$current_user->data->referee_id,
             'user_status'=>-1,
