@@ -1395,7 +1395,7 @@ class Spread{
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
                 usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,zm.id AS zone_id,usl.user_type,usl.income_status,
-                zm.zone_name,zm.zone_city,zm.zone_match_type,zm.type_id as zone_type_id,zm.zone_number,
+                zm.zone_name,zm.zone_city,zm.zone_match_type,zm.type_id as zone_type_id,zm.zone_number,usl.provide_id,
                 um.meta_value AS user_real_name 
                 FROM {$wpdb->prefix}user_stream_logs AS usl 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=usl.user_id AND um.meta_key='user_real_name' AND um.user_id!=''
@@ -1466,6 +1466,7 @@ class Spread{
                 <tr>
                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/用户名(机构名称)</th>
                     <th scope="col" id="role" class="manage-column column-role">角色</th>
+                    <th scope="col" id="provide_id" class="manage-column column-provide_id">付款人</th>
                     <th scope="col" id="income_type" class="manage-column column-income_type">类型</th>
 <!--                    <th scope="col" id="match_id" class="manage-column column-match_id">项目</th>-->
                     <th scope="col" id="user_income" class="manage-column column-user_income">数额</th>
@@ -1478,14 +1479,15 @@ class Spread{
 
                 <?php
                 $income_stream_array = $this->getIncomeTypeArr();
+                $organizeClass = new Organize();
                 foreach ($rows as $row){
 
                     //主体或机构
                     $type_name = '';
                     if($row['zone_id'] > 0){
                         $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$row['zone_type_id']}");
-                        $organizeClass = new Organize();
-                        $real_name = $organizeClass->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'],'get');
+
+                        $real_name = $organizeClass->echoZoneName($type_alias,$row['zone_city'],$row['zone_name'],$row['zone_match_type'],$row['zone_number'],'get','#c4671e');
                         $type_name = '机构';
                     }else{
                         if(empty($row['user_real_name'])){
@@ -1494,6 +1496,17 @@ class Spread{
                             $real_name = unserialize($row['user_real_name'])['real_name'];
                         }
                         $type_name = '个人';
+                    }
+                    //付款人
+                    if($row['provide_id'] > 0){
+                        if(($zone_meta = $wpdb->get_row("SELECT zone_city,type_id,zone_name,zone_match_type,zone_number FROM {$wpdb->prefix}zone_meta WHERE user_id='{$row['provide_id']}'"))){
+                            $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$zone_meta->zone_type_id}");
+                            $provide_name = $organizeClass->echoZoneName($type_alias,$zone_meta->zone_city,$zone_meta->zone_name,$zone_meta->zone_match_type,$zone_meta->zone_number,'get','#c4671e');
+                        }else{
+                            $provide_name = get_user_meta($row['provide_id'],'user_real_name',true)['real_name'];
+                        }
+                    }else{
+                        $provide_name = '';
                     }
                     ?>
                     <tr data-id="<?=$row['id']?>">
@@ -1511,6 +1524,9 @@ class Spread{
                         <td class="role column-role" data-colname="角色">
                             <?=$type_name?>
 
+                        </td>
+                        <td class="provide_id column-provide_id" data-colname="付款人">
+                            <?=$provide_name?>
                         </td>
                         <td class="income_type column-income_type" data-colname="类型">
                             <?php
@@ -1557,6 +1573,7 @@ class Spread{
                 <tr>
                     <th scope="col" class="manage-column column-real_name column-primary">姓名/用户名(机构名称)</th>
                     <th scope="col" class="manage-column column-role">角色</th>
+                    <th scope="col" class="manage-column column-provide_id">付款人</th>
                     <th scope="col" class="manage-column column-income_type">类型</th>
 <!--                    <th scope="col" class="manage-column column-match_id">项目</th>-->
                     <th scope="col" class="manage-column column-user_income">数额</th>

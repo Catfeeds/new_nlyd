@@ -1267,7 +1267,7 @@ class Organize{
                 }
                 $wpdb->query('START TRANSACTION');
                 if($old_zm_id>0){
-                    $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id,center_manager_id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND (user_status='-1' OR user_status='-2')",ARRAY_A);
+                    $zmv = $wpdb->get_row("SELECT user_id,type_id,id,apply_id,center_manager_id,zone_name FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}' AND (user_status='-1' OR user_status='-2')",ARRAY_A);
                     $bool = $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['id'=>$old_zm_id]);
                 }else{
                     $insertData['created_time'] = get_time('mysql');
@@ -1280,6 +1280,7 @@ class Organize{
                         'type_id' => $insertData['type_id'],
                         'id' =>$wpdb->insert_id,
                         'apply_id' =>$apply_id,
+                        'zone_name' =>$zone_title,
                         'center_manager_id' =>$center_manager_id,
                     ];
                 }
@@ -1336,7 +1337,8 @@ class Organize{
                                         $city = $city_arr[0];
                                     }
                                 }
-                                $team_title = date_i18n('Y',get_time()).'脑力世界杯'.$city.'战队';
+                                $team_title = $zmv['zone_name'].$city.'战队';
+//                                $team_title = date_i18n('Y',get_time()).'脑力世界杯'.$city.'战队';
                                 $team_id = wp_insert_post(['post_title' => $team_title,'post_status' => 'publish', 'comment_status' => 'close', 'ping_status' => 'close','post_type' => 'team']);
 
                                 if($team_id > 0){
@@ -1417,6 +1419,7 @@ class Organize{
                                                          //添加一级上级收益流水
                                                          $insertData1 = [
                                                              'user_id' => $referee_id1,
+                                                             'provide_id' => $user_id,
                                                              'user_type' => $zone_type,
                                                              'match_id' => 0,
                                                              'income_type' => $stream_type,
@@ -1434,6 +1437,7 @@ class Organize{
                                                                  //添加二级上级收益流水
                                                                  $insertData2 = [
                                                                      'user_id' => $referee_id2,
+                                                                     'provide_id' => $user_id,
                                                                      'user_type' => $zone_type,
                                                                      'match_id' => 0,
                                                                      'income_type' => $stream_type,
@@ -3691,7 +3695,8 @@ class Organize{
                 }else{
                     $city = $city_arr[0];
                 }
-                $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
+                $name = $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
+//                $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
                 break;
             case 'trains':
                 $name = $span1 .$zone_name.$span2.'训练中心 ('.$zone_number.')';

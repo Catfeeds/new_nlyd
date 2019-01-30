@@ -26,11 +26,27 @@
                             </div>
                         </div>
                         <div>
+                            <div class="lable_row"><span class="c_black"><?=__('战队所在地', 'nlyd-student')?>：</span></div>
+                            <div class="input_row">
+                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
+                                <input
+                                        class="radius_input_row nl-foucs"
+                                        type="text"
+                                        readonly
+                                        id="areaSelect"
+                                        name="zone_match_address"
+                                        lay-verify="required"
+                                        autocomplete="off"
+                                        placeholder="<?=__('战队所在地', 'nlyd-student')?>"
+                                        value="<?=$row['zone_city']?>">
+                            </div>
+                        </div>
+                        <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('战队负责人', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row change_num_row">
-                                <input class="radius_input_row change_num nl-foucs" value="<?=$user_mobile?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                                <input class="radius_input_row change_num nl-foucs" value="<?=$user_mobile?>" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                                 <a class="coach_add_btn c_blue">确认</a> 
                                 <input type="hidden" name="team_director_phone">
                             </div>
@@ -88,6 +104,46 @@ jQuery(function($) {
             }
         })
     })
+    var area=$.validationLayui.allArea.area;//省市区三级联动
+    var posiotionarea=[0,0,0];//初始化位置，高亮展示
+    if($('#areaSelect').length>0){
+            if($('#areaSelect').val().length>0 && $('#areaSelect').val()){
+                var areaValue=$('#areaSelect').val().split('-');
+                $.each(area,function(index,value){
+                    if(areaValue[0]==value.value){
+                        // console.log(value)
+                        posiotionarea=[index,0,0];
+                        $.each(value.childs,function(i,v){
+                            if(areaValue[1]==v.value){
+                                posiotionarea=[index,i,0];
+                                $.each(v.childs,function(j,val){
+                                    if(areaValue[2] && areaValue[2]==val.value){
+                                        posiotionarea=[index,i,j];
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+            // console.log(JSON.stringify(area))
+            var mobileSelect3 = new MobileSelect({
+                trigger: '#areaSelect',
+                title: "<?=__('战队所在地', 'nlyd-student')?>",
+                wheels: [
+                    {data: area},
+                ],
+                position:posiotionarea, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+                transitionEnd:function(indexArr, data){
+
+                },
+                callback:function(indexArr, data){
+                    var three=data[2]['value'].length==0 ? '' : '-'+data[2]['value']
+                    var text=data[0]['value']+'-'+data[1]['value']+three;
+                    $('#areaSelect').val(text);
+                }
+            });
+        }
     layui.use(['form','layer'], function(){
         var form = layui.form
         form.render();
