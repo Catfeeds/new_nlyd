@@ -74,11 +74,11 @@
                             <div class="data_detail fs_13"><?=__('考级累计收益', 'nlyd-student')?></div>
                         </div>
                         <div class="data_item">
-                            <div class="data_num fs_22 "><span class="fs_12">￥</span>10000.00</div>
+                            <div class="data_num fs_22 "><span class="fs_12">￥</span>-------</div>
                             <div class="data_detail fs_13"><?=__('推荐收益', 'nlyd-student')?></div>
                         </div>
                         <div class="data_item">
-                            <div class="data_num fs_22 "><span class="fs_12">￥</span>10.00</div>
+                            <div class="data_num fs_22 "><span class="fs_12">￥</span>-------</div>
                             <div class="data_detail fs_13"><?=__('课程收益', 'nlyd-student')?></div>
                         </div>
                     </div>
