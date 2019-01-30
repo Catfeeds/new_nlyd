@@ -44,7 +44,7 @@ get_header(); ?>
                 <div class="layui-row width-padding">
                     <div class="top-nav">
                         <div class="top-nav-btn active"><a class="fs_16 c_blue" href="<?=home_url('/student/index');?>"><?=__('首 页', 'nlyd-student')?></a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('我们', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('我 们', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/directory/');?>"><?=__('名 录', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/courses/');?>"><?=__('课 程', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('shops');?>"><?=__('商 城', 'nlyd-student')?></a></div>
@@ -113,7 +113,7 @@ get_header(); ?>
                     <?php if(!empty($coach_list)): ?>
                     <div class="layui-row index_row">
                         <div class="layui-row index_row_title">
-                             <span class="bold c_black fs_16 dis_inlineBlock"><?=__('教练体系', 'nlyd-student')?></span>  
+                             <span class="bold c_black fs_16 dis_inlineBlock"><?=__('教练', 'nlyd-student')?></span>
                         </div>   
                         <div class="swiper-container layui-bg-white swiper-container3" style="margin-bottom:0">
                             <div class="swiper-wrapper" style="height:auto">

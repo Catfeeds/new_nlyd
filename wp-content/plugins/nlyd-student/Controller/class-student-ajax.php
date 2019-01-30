@@ -1077,7 +1077,7 @@ class Student_Ajax
         if(!empty($rows)){
             foreach ($rows as $k=>$val){
                 //获取教练信息
-                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_ID','user_head','user_gender','user_coach_level','user_real_name') and user_id = {$val['coach_id']} ";
+                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_ID','user_images_color','user_gender','user_coach_level','user_real_name') and user_id = {$val['coach_id']} ";
                 $meta = $wpdb->get_results($sql1,ARRAY_A);
                 //print_r($sql1);
                 //print_r($meta);
@@ -1088,7 +1088,7 @@ class Student_Ajax
                 $rows[$k]['display_name'] = !empty($user_meta['user_real_name']) ? unserialize($user_meta['user_real_name'])['real_name'] : '';
                 $rows[$k]['user_gender'] = !empty($user_meta['user_gender']) ? $user_meta['user_gender'] : '-';
                 $rows[$k]['user_ID'] = !empty($user_meta['user_ID']) ? $user_meta['user_ID'] : '-';
-                $rows[$k]['user_head'] = !empty($user_meta['user_head']) ? $user_meta['user_head'] : student_css_url.'image/nlyd.png';
+                $rows[$k]['user_head'] = !empty($user_meta['user_images_color']) ? unserialize($user_meta['user_images_color'])[0] : student_css_url.'image/nlyd.png';
                 $rows[$k]['user_coach_level'] = !empty($user_meta['user_coach_level']) ? $user_meta['user_coach_level'] : '高级教练';
 
                 //判断是否为我的教练/主训

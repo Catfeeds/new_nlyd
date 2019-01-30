@@ -20,7 +20,7 @@
                 <div class="layui-row width-padding layui-bg-white">
                     <div class="top-nav">
                         <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/student/index');?>"><?=__('首 页', 'nlyd-student')?></a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('我们', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('我 们', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_blue c_black6"  href="<?=home_url('/directory/');?>"><?=__('名 录', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn active"><a class="fs_16 c_blue"  href="<?=home_url('/course/');?>"><?=__('课 程', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('/shops/');?>"><?=__('商 城', 'nlyd-student')?></a></div>
@@ -54,14 +54,6 @@
 
                     </div>
                 </div>
-
-                <!-- <div>
-                    <div class="course_city width-padding width-padding-pc">
-                        <span class="c_black"><?=__('所有城市', 'nlyd-student')?>：</span>
-                    </div>
-                    <div id="flowAllAdress">
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
