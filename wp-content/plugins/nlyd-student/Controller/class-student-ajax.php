@@ -4653,11 +4653,12 @@ class Student_Ajax
         }
         if($_POST['zone_type_alias'] == 'match'){
             if(empty($_POST['zone_match_type'])) wp_send_json_error(array('info'=>'赛区类型必选'));
-            /*if($_POST['zone_match_type'] == 1){
+
+            if($_POST['zone_match_type'] == 1){
                 $zone_match_type = 1;
             }else{
                 $zone_match_type = 2;
-            }*/
+            }
             if($_POST['zone_match_type'] == 2){ //单区
                 $is_double = 2;
             }
@@ -4673,19 +4674,19 @@ class Student_Ajax
         }else{
             $business_licence_url = $_POST['business_licence_url'];
         }
-        if($_POST['type_id'] == 1 ){
+        if($_POST['type_id'] == 2 || $_POST['type_id'] == 3 ){
 
-        }
-        $manager = $_POST['zone_type_alias'] == 'match' ? '中心负责人' : '总经理';
-        if(empty($_POST['center_manager'])) wp_send_json_error(array('info'=>__($manager.'未进行确认')));
-        $sql1 = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+            $manager = $_POST['zone_type_alias'] == 'match' ? '中心负责人' : '总经理';
+            if(empty($_POST['center_manager'])) wp_send_json_error(array('info'=>__($manager.'未进行确认')));
+            $sql1 = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
                 where a.ID = '{$_POST['center_manager']}'
                 ";
-        $center_manager = $wpdb->get_row($sql1,ARRAY_A);
-        if(empty($center_manager)) wp_send_json_error(array('info'=>__('该'.$manager.'未注册')));
-        $manager_real_name = unserialize($center_manager['meta_value']);
-        if(empty($manager_real_name['real_name'])) wp_send_json_error(array('info'=>__('该'.$manager.'未实名认证')));
+            $center_manager = $wpdb->get_row($sql1,ARRAY_A);
+            if(empty($center_manager)) wp_send_json_error(array('info'=>__('该'.$manager.'未注册')));
+            $manager_real_name = unserialize($center_manager['meta_value']);
+            if(empty($manager_real_name['real_name'])) wp_send_json_error(array('info'=>__('该'.$manager.'未实名认证')));
+        }
 
         if($_POST['type_id'] == 3 && $_POST['zone_type_alias'] == 'match'){    //赛区
             if(empty($_POST['chairman_phone']) || empty($_POST['secretary_phone'])){
@@ -4732,7 +4733,7 @@ class Student_Ajax
         $data = array(
             'apply_id'=>$current_user->ID,
             'type_id'=>$_POST['type_id'],
-            'zone_match_type'=>!empty($_POST['zone_match_type']) ? $_POST['zone_match_type'] : '',
+            'zone_match_type'=>!empty($zone_match_type) ? $zone_match_type : '',
             'is_double'=>!empty($is_double) ? $is_double : '',
             'zone_address'=>$_POST['zone_address'],
             'business_licence_url'=>$business_licence_url,
@@ -6930,14 +6931,14 @@ class Student_Ajax
         if(empty($zone_id)) wp_send_json_error(array('info'=>__('机构信息错误')));
         if($_POST['type'] == 'set'){
 
-            if(reg_match('m',$_POST['user_phone'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
             $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['user_phone']}'
+                where a.ID = '{$_POST['user_phone']}'
                 ";
             $manager = $wpdb->get_row($sql,ARRAY_A);
             if(empty($manager)) wp_send_json_error(array('info'=>__('该用户未注册','nlyd-student')));
-            if(empty($manager['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
+            $real_name = unserialize($manager['meta_value']);
+            if(empty($real_name['real_name'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
 
             $manager_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_manager where zone_id = {$current_user->ID} and user_id = {$manager['ID']}");
             if($manager_id){
