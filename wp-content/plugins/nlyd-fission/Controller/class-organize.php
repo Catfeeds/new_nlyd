@@ -3694,24 +3694,31 @@ class Organize{
             $span1 = '<span style="color: '.$color.'">';
             $span2 = '</span>';
         }
+        $city_arr = str2arr($zone_city,'-');
+        if(!empty($city_arr[2])){
+            $city = $city_arr[2];
+        }elseif ($city_arr[1] != '市辖区'){
+            $city = $city_arr[1];
+        }else{
+            $city = $city_arr[0];
+        }
         switch ($alias){
             case 'match':
-                $city_arr = str2arr($zone_city,'-');
-                if(!empty($city_arr[2])){
-                    $city = $city_arr[2];
-                }elseif ($city_arr[1] != '市辖区'){
-                    $city = $city_arr[1];
-                }else{
-                    $city = $city_arr[0];
-                }
 //                $name = $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
-                $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
+                if($zone_match_type == '1'){
+                    $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
+                }else{
+                    $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
+                }
+//                $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
                 break;
             case 'trains':
-                $name = $span1 .$zone_name.$span2.'训练中心 ('.$zone_number.')';
+                $name = $span1 .$zone_name.$span2.'训练中心 · '.$city;
+//                $name = $span1 .$zone_name.$span2.'训练中心 ('.$zone_number.')';
                 break;
             case 'test':
-                $name = $span1 .$zone_name.$span2.'测评中心 ('.$zone_number.')';
+                $name = $span1 .$zone_name.$span2.'测评中心 · '.$city;
+//                $name = $span1 .$zone_name.$span2.'测评中心 ('.$zone_number.')';
                 break;
             default:
                 $name = '';
