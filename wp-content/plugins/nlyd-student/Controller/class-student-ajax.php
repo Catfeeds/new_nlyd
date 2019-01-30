@@ -5051,14 +5051,14 @@ class Student_Ajax
         if($_POST['start_time'] >= $_POST['end_time'] )wp_send_json_error(array('info'=>'结束时间必须大于开始时间'));
         if($_POST['entry_end_time'] >= $_POST['start_time'] )wp_send_json_error(array('info'=>'报名结束时间必须大于开始时间'));
         global $wpdb,$current_user;
-        if(reg_match('m',$_POST['person_liable'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['person_liable']}'
+                where a.ID = '{$_POST['person_liable']}'
                 ";
         $person_liable = $wpdb->get_row($sql,ARRAY_A);
         if(empty($person_liable)) wp_send_json_error(array('info'=>__('该责任人未注册','nlyd-student')));
-        if(empty($person_liable['meta_value'])) wp_send_json_error(array('info'=>__('该责任人未实名认证','nlyd-student')));
+        $real_name = unserialize($person_liable['meta_value']);
+        if(empty($real_name['real_name'])) wp_send_json_error(array('info'=>__('该责任人未实名认证','nlyd-student')));
 
         /***********************准备数据**********************************/
         $arr = array(
@@ -6031,14 +6031,14 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         //判断战队负责人
-        if(reg_match('m',$_POST['team_director_phone'])) wp_send_json_error(array(__('负责人手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['team_director_phone']}'
+                where a.ID = '{$_POST['team_director_phone']}'
                 ";
         $team_director = $wpdb->get_row($sql,ARRAY_A);
         if(empty($team_director)) wp_send_json_error(array('info'=>__('该负责人未注册','nlyd-student')));
-        if(empty($team_director['meta_value'])) wp_send_json_error(array('info'=>__('该负责人未实名认证','nlyd-student')));
+        $real_name = unserialize($team_director['meta_value']);
+        if(empty($real_name['real_name'])) wp_send_json_error(array('info'=>__('该负责人未实名认证','nlyd-student')));
 
         //开启事务
         $wpdb->query('START TRANSACTION');
