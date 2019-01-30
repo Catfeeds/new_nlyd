@@ -5886,29 +5886,49 @@ class Student_Ajax
         }
         global $wpdb,$current_user;
 
-        if(reg_match('m',$_POST['coach_id'])) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['coach_id']}'
+                where a.ID = '{$_POST['coach_id']}'
                 ";
         $coach = $wpdb->get_row($sql,ARRAY_A);
         if(empty($coach)) wp_send_json_error(array('info'=>__('该教练未注册','nlyd-student')));
-        if(empty($coach['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证','nlyd-student')));
-
-        /*******教练资格认证********/
-        /*$user = new WP_User( $coach['ID'] );
-        if(!$user->has_cap( 'coach' )){
-            wp_send_json_error(array('info'=>__('该教练未取得平台认证,请核实','nlyd-student')));
-        }*/
-        /**********end************/
+        $real_name = unserialize($coach['meta_value']);
+        if(empty($real_name['real_name'])) wp_send_json_error(array('info'=>__('该教练未实名认证','nlyd-student')));
 
         //判断该教练是否被占用
-        $id = $wpdb->get_var("select id from {$wpdb->prefix}zone_join_coach where coach_id = {$coach['ID']} ");
-        if(!empty($id)) wp_send_json_error(array('info'=>__('该教练已绑定,请核实信息','nlyd-student')));
-        $result = $wpdb->insert($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$coach['ID']));
-        if($result){
+        $row = $wpdb->get_row("select a.zone_id,b.id,b.is_assign from {$wpdb->prefix}zone_join_coach a 
+                                      left join {$wpdb->prefix}coach_skill b on a.coach_id = b.coach_id
+                                      where a.coach_id = {$coach['ID']} ",ARRAY_A);
+
+        if(!empty($row['id'])){
+
+            if($row['is_assign'] != 1){
+                wp_send_json_error(array('info'=>__('该教练已绑定,请核实信息','nlyd-student')));
+            }
+            if($row['zone_id'] == $current_user->ID){
+                wp_send_json_error(array('info'=>__('该教练已绑定,请核实信息','nlyd-student')));
+            }
+        }
+
+        $wpdb->query('START TRANSACTION');
+
+        $a = $wpdb->insert($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$coach['ID']));
+
+        if(!$wpdb->get_var("select id from {$wpdb->prefix}coach_skill where coach_id = {$coach['ID']} ")){
+            $b = $wpdb->insert($wpdb->prefix.'coach_skill',array('coach_id'=>$coach['ID'],'read'=>'','memory'=>'','compute'=>''));
+        }else{
+            $b =true;
+        }
+        //print_r($a.'--'.$b);die;
+        if($b && $a){
+            $wpdb->query('COMMIT');
+
+            $user = new WP_User( $coach['ID'] );
+            if(!$user->has_cap( 'coach' )) $user->add_role( 'coach' );
+
             wp_send_json_success(array('info'=>__('添加成功','nlyd-student'),'url'=>home_url('/zone/coach/')));
         }else{
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>__('添加失败','nlyd-student')));
         }
     }
@@ -6400,7 +6420,7 @@ class Student_Ajax
      */
     public function get_mobile_user(){
 
-        global $wpdb;
+        global $wpdb,$current_user;
         if(reg_match('m',$_POST['mobile'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
@@ -6411,6 +6431,13 @@ class Student_Ajax
         if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册','nlyd-student')));
         $real_name = unserialize($row['meta_value']);
         if(empty($real_name['real_name'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
+        if($_POST['type'] == 'course'){
+            $user = new WP_User( $row['ID'] );
+            $id = $wpdb->get_var("select id from {$wpdb->prefix}zone_join_coach where coach_id = {$row['ID']} and zone_id = {$current_user->ID}");
+            if(!$user->has_cap( 'coach' ) || empty($id)){
+                wp_send_json_error(array('info'=>__('该教练不是该机构教练,请先添加为机构教练','nlyd-student')));
+            }
+        }
 
         wp_send_json_success(array('user_id'=>$row['ID'],'user_name'=>$real_name['real_name']));
     }
@@ -6476,22 +6503,23 @@ class Student_Ajax
 
         global $wpdb,$current_user;
         if(!empty($_POST['coach_phone'])){
-            if(reg_match('m',$_POST['coach_phone'])) wp_send_json_error(array(__('授课教练手机格式不正确', 'nlyd-student')));
+
             $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['coach_phone']}'
+                where a.ID = '{$_POST['coach_phone']}'
                 ";
             $coach = $wpdb->get_row($sql,ARRAY_A);
             if(empty($coach)) wp_send_json_error(array('info'=>__('该教练未注册','nlyd-student')));
-            if(empty($coach['meta_value'])) wp_send_json_error(array('info'=>__('该教练未实名认证','nlyd-student')));
+            $real_name = unserialize($coach['meta_value']);
+            if(empty($real_name['real_name'])) wp_send_json_error(array('info'=>__('该教练未实名认证','nlyd-student')));
 
             //判断教练是否有机构或者教练是否是特派教练
-            $coach_zone_id = $wpdb->get_var("select zone_id from {$wpdb->prefix}zone_join_coach where coach_id = {$coach['ID']}");
-            if(!empty($coach_zone_id) && $coach_zone_id != $current_user->ID){
-                wp_send_json_error(array('info'=>__('该教练已有机构','nlyd-student')));
+            $user = new WP_User( $coach['ID'] );
+            $id = $wpdb->get_var("select id from {$wpdb->prefix}zone_join_coach where coach_id = {$coach['ID']} and zone_id = {$current_user->ID}");
+            if(!$user->has_cap( 'coach' ) || empty($id)){
+                wp_send_json_error(array('info'=>__('该教练不是该机构教练,请先添加为机构教练','nlyd-student')));
             }
         }
-
         $data = array(
             'course_title'=>$_POST['course_title'],
             'course_details'=>!empty($_POST['course_details']) ? $_POST['course_details'] : '',
@@ -6507,7 +6535,6 @@ class Student_Ajax
             'duration'=>$_POST['duration'],
             'course_category_id'=>$_POST['course_category_id'],
         );
-
         if($_POST['id'] > 0){
             $a = $wpdb->update($wpdb->prefix.'course',$data,array('id'=>$_POST['id'],'zone_id'=>$current_user->ID));
         }else{
@@ -6515,10 +6542,28 @@ class Student_Ajax
             $a = $wpdb->insert($wpdb->prefix.'course',$data);
 
         }
-        if(empty($coach_zone_id)){
-            //添加教练
-            $wpdb->insert($wpdb->prefix.'zone_join_coach',array('zone_id'=>$current_user->ID,'coach_id'=>$coach['ID']));
+        //更新教练技能
+        $alias = get_post_meta($_POST['course_category_id'],'project_alias')[0];
+        if(!empty($alias)){
+            switch ($alias){
+                case 'memory':
+                    $array['memory'] = $_POST['course_category_id'];
+                    break;
+                case 'reading':
+                    $array['read'] = $_POST['course_category_id'];
+                    break;
+                case 'arithmetic':
+                    $array['compute'] = $_POST['course_category_id'];
+                    break;
+                default:
+                    $array = '';
+                    break;
+            }
+            if(!empty($array)){
+                $wpdb->update($wpdb->prefix.'coach_skill',$array,array('coach_id'=>$coach['ID']));
+            }
         }
+
         if($a){
             wp_send_json_success(array('info'=>__('操作完成','nlyd-student'),'url'=>home_url('/zone/course/')));
         }else{
@@ -6633,14 +6678,14 @@ class Student_Ajax
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $sql = "select a.match_id,a.user_id,b.course_category_id from {$wpdb->prefix}order a 
+        $sql = "select a.match_id,a.user_id,c.user_mobile,c.referee_id,b.course_category_id from {$wpdb->prefix}order a 
                 left join {$wpdb->prefix}course b on a.match_id = b.id
                 left join {$wpdb->prefix}users c on a.user_id = c.ID
                 where b.zone_id = {$current_user->ID} and a.match_id = {$_POST['id']} 
                 and a.order_type = 3 and pay_status in (2,3,4)
                 limit $start,$pageSize";
         $rows = $wpdb->get_results($sql,ARRAY_A);
-        //print_r($sql);
+
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
@@ -6659,8 +6704,8 @@ class Student_Ajax
                 $user_real_name = unserialize($user_info['user_real_name']);
                 $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
                 $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
-                $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$v['user_id']} ");
-                $rows[$k]['referee_id'] = !empty($referee_id > 0 ) ? $referee_id+10000000 : '-' ;
+                //$referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$v['user_id']} ");
+                $rows[$k]['referee_id'] = !empty($v['referee_id'] > 0 ) ? $v['referee_id']+10000000 : '-' ;
                 //获取考级是否达标
                 $project_alias = get_post_meta($v['course_category_id'],'project_alias');
                 if($project_alias == 'reading'){
@@ -6939,8 +6984,7 @@ class Student_Ajax
             if(empty($manager)) wp_send_json_error(array('info'=>__('该用户未注册','nlyd-student')));
             $real_name = unserialize($manager['meta_value']);
             if(empty($real_name['real_name'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
-
-            $manager_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_manager where zone_id = {$current_user->ID} and user_id = {$manager['ID']}");
+            $manager_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_manager where zone_id = {$zone_id} and user_id = {$manager['ID']}");
             if($manager_id){
                 wp_send_json_error(array('info'=>__('该用户已是该机构管理员')));
             }
@@ -6948,6 +6992,11 @@ class Student_Ajax
         }else{
             if(empty($_POST['id'])){
                 wp_send_json_error(array('info'=>__('id不能为空')));
+            }
+            $total = $wpdb->get_var("select count(*) from {$wpdb->prefix}zone_manager where zone_id = {$zone_id} ");
+
+            if($total < 2 ){
+                wp_send_json_error(array('info'=>__('禁止删除所有管理员')));
             }
             $a = $wpdb->delete($wpdb->prefix.'zone_manager',array('id'=>$_POST['id'],'zone_id'=>$zone_id));
         }
