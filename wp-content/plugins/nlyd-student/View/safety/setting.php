@@ -50,31 +50,34 @@
 </div>
 <script>
     jQuery(document).ready(function($) {
-        sendloginAjax=function(url,formData){
-            //type:确定回调函数
-            //url:ajax地址
-            //formData:ajax传递的参数
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: formData,
-                dataType:'json',
-                timeout:3000,
-                success: function(data, textStatus, jqXHR){
-                    $.alerts(data.data.info)
-                    if(data.success){
-                        if(data.data.url){
-                            setTimeout(function(){
-                                window.location.href=data.data.url
-                            }, 1600);
-                        }
-                    }
-                    return false;
-                }
-            });
-        }
         $('#loginOut').click(function(){//登出
-            sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),{action:'user_logout'})
+            var _this=$(this);
+            if(!_this.hasClass('disabled')){
+                $.ajax({
+                    data: {action:'user_logout'},
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success: function(res, textStatus, jqXHR){
+                        $.alerts(res.data.info)
+                        if(res.success){
+                            if(res.data.url){
+                                setTimeout(function(){
+                                    window.location.href=res.data.url
+                                }, 1000);
+                            }
+                        }
+                        return false;
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                            _this.removeClass('disabled');
+                        }
+                        
+                    }
+                })
+            }
         })
     })
 </script>
