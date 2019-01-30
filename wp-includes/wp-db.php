@@ -2201,7 +2201,7 @@ class wpdb {
 		$conditions = implode( ' AND ', $conditions );
 
 		$sql = "UPDATE `$table` SET $fields WHERE $conditions";
-		/*if($table == 'wp_course'){
+		/*if($table == 'wp_coach_skill'){
             print_r($this->prepare( $sql, $values ));die;
         }*/
         //print_r($this->prepare( $sql, $values ));die;

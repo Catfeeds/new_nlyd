@@ -65,7 +65,7 @@ class Student_Account extends Student_Home
             if(!$brainpower) $brainpower = $wpdb->get_row("SELECT type_name,MAX(`level`) AS `level`,`range`,`category_name` FROM {$wpdb->prefix}directories WHERE `range`=1 AND user_id={$user_info['user_id']} GROUP BY user_id", ARRAY_A);
 
             //获取是否存在管理机构
-            $sql_ = "select b.id ,c.zone_type_alias,c.zone_type_name,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type,b.is_double,b.zone_city,b.zone_name 
+            $sql_ = "select b.id ,b.zone_number,c.zone_type_alias,c.zone_type_name,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type,b.is_double,b.zone_city,b.zone_name 
                     from {$wpdb->prefix}zone_manager a 
                     left join {$wpdb->prefix}zone_meta b on a.zone_id = b.id 
                     left join {$wpdb->prefix}zone_type c on b.type_id = c.id 
@@ -81,7 +81,7 @@ class Student_Account extends Student_Home
 
                         $city_arr = str2arr($value['zone_city'],'-');
                         if(!empty($city_arr[2])){
-                            $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
+                            $city = rtrim($city_arr[1],'市').preg_replace('/市|区|县/','',$city_arr[2]);
                         }elseif ($city_arr[1] != '市辖区'){
                             $city = rtrim($city_arr[1],'市');
                         }else{
@@ -96,12 +96,8 @@ class Student_Account extends Student_Home
                         $arr[$key]['value'] = $value['zone_name'].$city.$value['match_type'].'组委会';
                     }
                     else{
-                        $title = 'IISC脑力';
-                        if($value['zone_type_alias'] == 'test'){
-                            $title .= '水平';
-                        }
-
-                        $arr[$key]['value'] = $title.$value['zone_type_name'].' • '.$city;
+                        $arr[$key]['value'] = $value['zone_name'].$value['zone_type_name']."({$value['zone_number']})";
+                        //$arr[$key]['value'] = $value['zone_name'].$value['zone_type_name'].' • '.$city;
                     }
                     $arr[$key]['id'] = $value['id'];
                 }

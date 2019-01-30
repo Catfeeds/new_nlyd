@@ -16,7 +16,7 @@
                             lay-verify="required"
                             autocomplete="off"
                             placeholder="<?=__('请按照合同约定的区域如实选择', 'nlyd-student')?>"
-                            value="">
+                            value="<?=$row['zone_city']?>">
                 </div>
             </div>
             <div>
@@ -89,7 +89,7 @@
                 <div class="input_row change_num_row">
                     <input class="radius_input_row change_num nl-foucs" value="<?=$row['center_manager']?>" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                     <a class="coach_add_btn c_blue">确认</a>    
-                    <input type="hidden" name="center_manager"  value="">    
+                    <input type="hidden" name="center_manager"  value="<?=$row['center_manager_id']?>">
                 </div>
             </div>
             <?php if(!empty($referee_name)):?>
