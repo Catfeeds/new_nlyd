@@ -59,6 +59,10 @@
                 })
             })
         })
+        $('body').on('change','.change_num',function(){
+            var _this=$(this);
+            _this.next().next('input').val('')
+        })
         $('body').on('click','.coach_add_btn',function(){
             var _this=$(this);
             var val=_this.prev('input').val();
@@ -275,13 +279,14 @@
             // 监听提交
             form.on('submit(layform)', function(data){//实名认证提交
                 var _this=$(this);
+                console.log(data.field['chairman_phone']=="")
                 if(!_this.hasClass('disabled')){
                     var fd = new FormData();
                     fd.append('action','zone_apply_submit');
                     fd.append('zone_address',data.field['zone_address']);//营业地址
                     fd.append('legal_person',data.field['legal_person']);//法定代表人姓名
                     fd.append('opening_bank',data.field['opening_bank']);//对公账户开户行
-                    fd.append('opening_bank_address',data.field['opening_bank_address']);//对公账户开户详细地址
+                    // fd.append('opening_bank_address',data.field['opening_bank_address']);//对公账户开户详细地址
                     fd.append('bank_card_num',data.field['bank_card_num']);//对公账户开户号码
                     fd.append('bank_card_name',data.field['bank_card_name']);//对公账户开户名称
                     fd.append('zone_match_address',data.field['zone_match_address']);//中心所在地
@@ -309,11 +314,32 @@
                     }else{
                         fd.append('zone_type_alias','');
                     }
+                    if(data.field['center_manager']){//训练中心（分中心总经理）
+                        fd.append('center_manager',data.field['center_manager']);
+                    }else{
+                        if(data.field['center_manager']==""){
+                            $.alerts("<?=__('请确认中心负责人或分中心总经理', 'nlyd-student')?>")
+                            $('.change_num').eq(0).focus().addClass('layui-form-danger')
+                            return false;
+                        } 
+                    }
                     if(data.field['chairman_phone']){//赛事组委会主席(赛区)
                         fd.append('chairman_phone',data.field['chairman_phone']);
+                    }else{
+                        if(data.field['chairman_phone']==""){
+                            $.alerts("<?=__('请确认赛事组委会主席', 'nlyd-student')?>")
+                            $('.change_num').eq(1).focus().addClass('layui-form-danger')
+                            return false;
+                        } 
                     }
                     if(data.field['secretary_phone']){//赛事组委会秘书长(赛区)
                         fd.append('secretary_phone',data.field['secretary_phone']);
+                    }else{
+                        if(data.field['secretary_phone']==""){
+                            $.alerts("<?=__('请确认赛事组委会秘书长', 'nlyd-student')?>")
+                            $('.change_num').eq(2).focus().addClass('layui-form-danger')
+                            return false;
+                        } 
                     }
                     if(data.field['zone_match_type']){//赛区
                         fd.append('zone_match_type',data.field['zone_match_type']);
@@ -324,12 +350,10 @@
                     }else{//训练中心、测评中心字号
                         // fd.append('zone_name',data.field['zone_name']);
                     }
-                    if(data.field['center_manager']){//训练中心（分中心总经理）
-                        fd.append('center_manager',data.field['center_manager']);
-                    }
-                    if($.Request('zone_id')){//训练中心（分中心总经理）
+                    if($.Request('zone_id')){
                         fd.append('zone_id',$.Request('zone_id'));
                     }
+                    
                     $.ajax({
                         data: fd,
                         contentType : false,
