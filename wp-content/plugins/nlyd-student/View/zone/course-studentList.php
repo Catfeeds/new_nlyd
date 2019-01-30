@@ -61,7 +61,7 @@ jQuery(function($) {
                                 $.each(res.data.info,function(i,v){
                                     var dom= '<tr>'+
                                                 '<td><div class="table_content"><div class="c_black ta_c">'+v.real_name+'</div><div class="ff_num fs_12 ta_c">'+v.user_ID+'</div></div></td>'+
-                                                '<td><div class="table_content">'+v.user_phone+'</div></td>'+
+                                                '<td><div class="table_content">'+v.user_mobile+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_age+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.referee_id+'</div></td>'+
