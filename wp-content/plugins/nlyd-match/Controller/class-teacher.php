@@ -71,13 +71,11 @@ class Teacher
 
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,b.ID AS coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID,zm.zone_city,zm.zone_match_type,zm.type_id,zm.zone_name 
+        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,b.ID AS coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID
                     FROM {$wpdb->prefix}users b
                     LEFT JOIN {$wpdb->usermeta} AS uml ON uml.user_id = b.ID AND uml.meta_key='{$wpdb->prefix}capabilities'
                     LEFT JOIN {$wpdb->prefix}coach_skill a  ON a.coach_id = b.ID 
                     LEFT JOIN {$wpdb->usermeta} AS um_id ON um_id.user_id = a.coach_id AND um_id.meta_key='user_ID' 
-                    LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id=a.coach_id 
-                    LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=zjc.zone_id 
                     {$join} 
                     WHERE uml.meta_value LIKE '%{$this->coachRole}%' AND b.ID !='' {$serachWhere} 
                     LIMIT {$start},{$pageSize}";
@@ -148,6 +146,7 @@ class Teacher
 
                     <tbody id="the-list" data-wp-lists="list:user">
                     <?php
+                    $organizeClass = new Organize();
                     foreach ($rows as $row){
                         //有多少学员
                         $studentNumArr = $this->getStudentNum($row['coach_id']);
@@ -162,7 +161,21 @@ class Teacher
                          if($row['memory']) $categoryArr[]='记忆';
                          if($row['compute']) $categoryArr[]='心算';
                          //课程数量
-                        $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE coach_id='{$row['coach_id']}'")
+                        $course_num = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}course WHERE coach_id='{$row['coach_id']}'");
+                        //所属机构
+                        $zone_meta = $wpdb->get_results("SELECT zm.zone_city,zm.zone_match_type,zm.type_id,zm.zone_name,zm.zone_number,zjc.zone_id FROM {$wpdb->prefix}zone_join_coach AS zjc
+                                     LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=zjc.zone_id
+                                     WHERE zjc.coach_id='{$row['coach_id']}'", ARRAY_A);
+                        $zone_name_arr = [];
+                        foreach ($zone_meta as $zmv){
+                            if($zmv['zone_id'] < 1) {
+                                $zone_name_arr[] = '平台';
+                                continue;
+                            }
+                            $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$zmv['type_id']}");
+                            $zone_name_arr[] = $organizeClass->echoZoneName($type_alias,$zmv['zone_city'],$zmv['zone_name'],$zmv['zone_match_type'],$zmv['zone_number'],'get','#c47c27');
+                        }
+                        $zone_name = join('<br />', $zone_name_arr);
                         ?>
                         <tr>
                             <th scope="row" class="check-column">
@@ -191,7 +204,7 @@ class Teacher
                                 <span class="screen-reader-text">未知</span>
                             </td>
                             <td class="image column-image" data-colname="教练照片" id="cardImg-<?=$row['coach_id']?>">
-                                <img src="<?=isset($usermeta['user_head'])?$usermeta['user_head'][0]:''?>" style="height: 60px;" alt="">
+                                <img src="<?=isset($usermeta['user_images_color'])?unserialize($usermeta['user_images_color'][0])[0]:''?>" style="height: 60px;" alt="">
                             </td>
                             <td class="category column-category" data-colname="教学类别">
                                 <?=join('/',$categoryArr)?>
@@ -207,20 +220,7 @@ class Teacher
                             </td>
                             <td class="outfit column-outfit" data-colname="所属机构">
 
-                                <?php
-                                $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$row['type_id']}");
-                                switch ($type_alias){
-                                    case 'match':
-                                        echo date('Y').'脑力世界杯'. '<span style="color: #c40c0f">' .$row['zone_city'].'</span>'.($row['zone_match_type']=='1'?'战队精英赛':'城市赛');
-                                        break;
-                                    case 'trains':
-                                        echo 'IISC'. '<span style="color: #c40c0f">' .$row['zone_name'].'</span>'.'国际脑力训练中心';
-                                        break;
-                                    case 'test':
-                                        echo 'IISC'. '<span style="color: #c40c0f">' .$row['zone_name'].'</span>'.'国际脑力测评中心';
-                                        break;
-                                }
-                                ?>
+                                <?=$zone_name?>
                             </td>
                             <td class="option column-option" data-colname="操作">
                                 <a style="color: #00aff9" href="<?php echo '?page=teacher-datum&id='.$row['coach_id'] ?>">编辑</a>
@@ -321,8 +321,10 @@ class Teacher
                 }
                 if($err_msg == ''){
                     //是否已有所属机构
-                    $zone_id = $wpdb->get_var("SELECT zone_id FROM {$wpdb->prefix}zone_join_coach WHERE coach_id='{$coach_id}'");
-                    if($zone_id){
+                    $zone_coach = $wpdb->get_row("SELECT id,zone_id FROM {$wpdb->prefix}zone_join_coach WHERE coach_id='{$coach_id}' AND zone_id='{$zone_user_id}'",ARRAY_A);
+                    $zone_coach_id = $zone_coach['id'];
+                    $zone_id = $zone_coach['zone_id'];
+                    if($zone_coach_id){
                         if($zone_user_id != $zone_id){
                             //是否有学员
                             $coach_student_val = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}my_coach WHERE coach_id='{$coach_id}'");
@@ -331,7 +333,7 @@ class Teacher
                             }
                         }
                         if($err_msg == '') {
-                            $zone_bool = $wpdb->update("{$wpdb->prefix}zone_join_coach", ['zone_id' => $zone_user_id], ['coach_id' => $coach_id]) || $zone_user_id == $zone_id;
+                            $zone_bool = $wpdb->update("{$wpdb->prefix}zone_join_coach", ['zone_id' => $zone_user_id], ['id' => $zone_coach_id]) || $zone_user_id == $zone_id;
                         }else{
                             $zone_bool = false;
                         }
