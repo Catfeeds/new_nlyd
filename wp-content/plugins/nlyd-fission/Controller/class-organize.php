@@ -1417,6 +1417,7 @@ class Organize{
                                                          //添加一级上级收益流水
                                                          $insertData1 = [
                                                              'user_id' => $referee_id1,
+                                                             'provide_id' => $zmv['apply_id'],
                                                              'user_type' => $zone_type,
                                                              'match_id' => 0,
                                                              'income_type' => $stream_type,
@@ -1434,6 +1435,7 @@ class Organize{
                                                                  //添加二级上级收益流水
                                                                  $insertData2 = [
                                                                      'user_id' => $referee_id2,
+                                                                     'provide_id' => $zmv['apply_id'],
                                                                      'user_type' => $zone_type,
                                                                      'match_id' => 0,
                                                                      'income_type' => $stream_type,
