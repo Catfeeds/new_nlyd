@@ -330,6 +330,7 @@ textarea.radius_input_row{
 }
 .img-zoos.upload_qr_code .img-zoo{
     width: 160px; 
+    height: 160px;
 }
 
 .nl-badge{
@@ -752,7 +753,9 @@ textarea.radius_input_row{
     margin-left:5px; 
 }
 .detail_detail_img{
+    font-size: 0;
     display: inline-block;
+    text-align: center;
     vertical-align: middle;
     width: 70px;
     height: 50px;
@@ -762,8 +765,8 @@ textarea.radius_input_row{
     overflow: hidden;
 }
 .detail_detail_img img{
-    width: 100%;
-    height: auto;
+    max-width: 100%;
+    max-height: 100%;
 }
 .detail_detail_img:last-child{
     margin-right: 0;
@@ -918,6 +921,7 @@ input[type="text"].coach_form_input{
     margin-top: -5px;
 }
 .qr_code_img{
+    display: block;
     width: 150px;
     height: 150px;
     margin: auto;

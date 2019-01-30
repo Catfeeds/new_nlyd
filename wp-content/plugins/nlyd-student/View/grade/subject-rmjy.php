@@ -34,7 +34,7 @@
 </div>
 <script>
     jQuery(function($) { 
-                var width=$('._img').width()
-            $('._img').height(width)
+        var width=$('.matching-card').width()
+        $('._img').height(width).width(width)
     })
 </script>
