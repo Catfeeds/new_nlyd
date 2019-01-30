@@ -49,24 +49,23 @@ if(!class_exists('StudentController')){
         }
 
         public function admin_in_english_locale($locale){
-
             if ( !is_admin() ) {
                 global $current_user;
-
                 if(!empty($current_user)){
-                    return get_user_meta($current_user->ID,'locale',true);
-                }else{
+                    $locales = get_user_meta($current_user->ID,'locale',true);
+                }
+                if(!$locales){
                     if($_COOKIE['user_language']){
-                        $cookie = $_COOKIE['user_language'];
+                        $locales = $_COOKIE['user_language'];
 //                        setcookie('user_language', $cookie, time()+3600*24*30,'/');
-                        return $cookie;
+//                        return $cookie;
                     }else{
-                        return 'zh_CN';
+                        $locales = 'zh_CN';
                     }
                 }
-
             }
-            return $locale;
+            if(!$locales) $locales = $locale;
+            return $locales;
         }
 
 

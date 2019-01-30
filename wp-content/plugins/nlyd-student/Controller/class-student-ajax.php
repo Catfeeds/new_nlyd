@@ -4713,7 +4713,7 @@ class Student_Ajax
             $secretary_id = $secretary['ID'];
 
         }
-
+        print_r($_POST);die;
         if(!empty($_POST['business_licence'])){
 
             $upload_dir = wp_upload_dir();
