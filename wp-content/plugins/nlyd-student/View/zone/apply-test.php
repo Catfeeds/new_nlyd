@@ -19,6 +19,17 @@
                 </div>
             </div>
             <div>
+                <div class="lable_row">
+                    <span class="c_black"><?=__('字号', 'nlyd-student')?>：</span>
+                    <span class="c_black3"><?=__('示例：', 'nlyd-student')?>
+                        大爱长情<span class="c_green">xxx</span><?=__('（成都）训练中心', 'nlyd-student')?>
+                    </span>
+                </div>
+                <div class="input_row">
+                    <input class="radius_input_row nl-foucs" type="text" name="zone_name" autocomplete="off" placeholder="<?=__('绿色示例部分即为字号，最多5字', 'nlyd-student')?>" value="<?=$row['zone_name']?>">
+                </div>
+            </div>
+            <div>
                 <div class="lable_row"><span class="c_black"><?=__('测评中心营业地址', 'nlyd-student')?>：</span></div>
                 <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
             </div>

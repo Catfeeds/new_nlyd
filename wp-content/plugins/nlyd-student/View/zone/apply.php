@@ -348,7 +348,7 @@
                             fd.append('zone_name',data.field['zone_name']);
                         }
                     }else{//训练中心、测评中心字号
-                        // fd.append('zone_name',data.field['zone_name']);
+                        fd.append('zone_name',data.field['zone_name']);
                     }
                     if($.Request('zone_id')){
                         fd.append('zone_id',$.Request('zone_id'));

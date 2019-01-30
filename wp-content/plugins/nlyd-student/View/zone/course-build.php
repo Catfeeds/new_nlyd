@@ -117,6 +117,10 @@ jQuery(function($) {
     var posiotion_course_type1=[0];//初始化位置，高亮展示
     var posiotion_course_type2=[0];//初始化位置，高亮展示
     var posiotion_course_date=[0,0,0,0,0];//初始化位置，高亮展示
+    $('body').on('change','.change_num',function(){
+        var _this=$(this);
+        _this.next().next('input').val('')
+    })
     $('body').on('click','.coach_add_btn',function(){
         var _this=$(this);
         var val=_this.prev('input').val();
@@ -346,6 +350,11 @@ jQuery(function($) {
         form.on('submit(layform)', function(data){//实名认证提交
             console.log(data.field)
             var _this=$(this);
+            if(data.field['coach_phone']==""){
+                $.alerts("<?=__('请确教练后再添加教练', 'nlyd-student')?>")
+                $('.change_num').focus().addClass('layui-form-danger')
+                return false;
+            }
             if(!_this.hasClass('disabled')){
                 $.ajax({
                     data: data.field,

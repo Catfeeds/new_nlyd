@@ -108,6 +108,10 @@ var posiotion_match_type2=[0];//初始化位置，高亮展示
 var posiotion_match_date=[0,0,0,0,0];//初始化位置，高亮展示
 var posiotion_gradeEnd_date=[0,0,0,0,0];
 var posiotion_gradeSign_date=[0,0,0,0,0];
+$('body').on('change','.change_num',function(){
+        var _this=$(this);
+        _this.next().next('input').val('')
+    })
 $('body').on('click','.coach_add_btn',function(){
         var _this=$(this);
         var val=_this.prev('input').val();
@@ -336,25 +340,6 @@ var mobileSelect5 = new MobileSelect({
        
     }
 });
-    // $('.js-data-select-ajax').each(function () {
-    //     var _this=$(this);
-    //     var _placeholder = _this.attr('data-placeholder');
-    //     _this.select2({
-    //         placeholder : _placeholder,
-    //         allowClear:true,
-    //         ajax: {
-    //             url: admin_ajax +'?action=get_manage_user'  ,
-    //             dataType: 'json',
-    //             delay: 600, //wait 250 milliseconds before triggering the request
-    //             processResults: function (res) {
-    //                 return {
-    //                     results: res.data
-    //                 };
-    //             }
-    //         }
-    //     });
-    // })
-   
     layui.use(['form'], function(){
         var form = layui.form
         form.render();
@@ -364,6 +349,11 @@ var mobileSelect5 = new MobileSelect({
         form.on('submit(layform)', function(data){//实名认证提交
             var _this=$(this);
             console.log(data.field)
+            if(data.field['person_liable']==""){
+                $.alerts("<?=__('请确考级责任人', 'nlyd-student')?>")
+                $('.change_num').focus().addClass('layui-form-danger')
+                return false;
+            }
             if(!_this.hasClass('disabled')){
                 $.ajax({
                     data: data.field,

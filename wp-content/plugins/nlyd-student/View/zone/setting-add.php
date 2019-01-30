@@ -37,6 +37,10 @@
 </div>
 <script>
     jQuery(function($) {
+        $('body').on('change','.change_num',function(){
+        var _this=$(this);
+        _this.next().next('input').val('')
+    })
         $('body').on('click','.coach_add_btn',function(){
             var _this=$(this);
             var val=_this.prev('input').val();
@@ -69,6 +73,11 @@
             // 监听提交
             form.on('submit(layform)', function(data){
                 var _this=$(this);
+                if(data.field['user_phone']==""){
+                    $.alerts("<?=__('请确认关联账号', 'nlyd-student')?>")
+                    $('.change_num').focus().addClass('layui-form-danger')
+                    return false;
+                }
                 if(!_this.hasClass('disabled')){
                     $.ajax({
                         data: data.field,

@@ -288,6 +288,7 @@ input[type="tel"].radius_input_row
     border-radius: 6px;
     height: 45px;
     padding-left: 20px;
+    margin-bottom: 0;
 }
 textarea.radius_input_row{
     border-radius: 6px;

@@ -36,6 +36,10 @@
 </div>
 <script>
 jQuery(function($) { 
+    $('body').on('change','.change_num',function(){
+        var _this=$(this);
+        _this.next().next('input').val('')
+    })
     $('body').on('click','.coach_add_btn',function(){
         var _this=$(this);
         var val=_this.prev('input').val();
@@ -68,6 +72,11 @@ jQuery(function($) {
         // 监听提交
         form.on('submit(layform)', function(data){//实名认证提交
             var _this=$(this);
+            if(data.field['user_phone']==""){
+                $.alerts("<?=__('请确认战队成员后再添加', 'nlyd-student')?>")
+                $('.change_num').focus().addClass('layui-form-danger')
+                return false;
+            }
             if(!_this.hasClass('disabled')){
                 $.ajax({
                     data: data.field,
