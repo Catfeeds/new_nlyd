@@ -20,8 +20,8 @@
                     <table class="nl-table">
                         <tbody id="course_row">
                             <tr class='table-head'>
-                                <td><?=__('序 号', 'nlyd-student')?></td>
                                 <td><?=__('姓名/编号', 'nlyd-student')?></td>
+                                <td><?=__('电话号码', 'nlyd-student')?></td>
                                 <td><?=__('年 龄', 'nlyd-student')?></td>
                                 <td><?=__('性 别', 'nlyd-student')?></td>
                                 <td><?=__('推荐用户', 'nlyd-student')?></td>
@@ -60,8 +60,8 @@ jQuery(function($) {
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var dom= '<tr>'+
-                                                '<td><div class="table_content">'+v.order+'</div></td>'+
                                                 '<td><div class="table_content"><div class="c_black ta_c">'+v.real_name+'</div><div class="ff_num fs_12 ta_c">'+v.user_ID+'</div></div></td>'+
+                                                '<td><div class="table_content">'+v.user_phone+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_age+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.user_gender+'</div></td>'+
                                                 '<td><div class="table_content c_black">'+v.referee_id+'</div></td>'+
