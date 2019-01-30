@@ -51,7 +51,7 @@
                                 <?=__('授课教练', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row change_num_row">
-                                <input class="radius_input_row change_num nl-foucs" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_phone']?>">
+                                <input class="radius_input_row change_num nl-foucs" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_phone']?>">
                                 <a class="coach_add_btn c_blue">确认</a> 
                                 <input type="hidden" name="coach_phone">
                             </div>

@@ -21,7 +21,7 @@
                                 <span class="c_black"><?=__('考级责任人', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row change_num_row">
-                                <input class="radius_input_row change_num nl-foucs" value="<?=$match['person_liable_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                                <input class="radius_input_row change_num nl-foucs" value="<?=$match['person_liable_phone']?>" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                                 <a class="coach_add_btn c_blue">确认</a> 
                                 <input type="hidden" name="person_liable">
                             </div>
