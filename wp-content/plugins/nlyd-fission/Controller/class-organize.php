@@ -1364,12 +1364,19 @@ class Organize{
                             //============
                             if($error_msg == '' && $zmv['apply_id'] > 0){
                                 $orgType = $wpdb->get_row("SELECT zone_type_alias,zone_type_name FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'", ARRAY_A);
-                                if($orgType['zone_type_alias'] == 'match') $orgType['zone_type_name'] = '赛区';
-                                $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType['zone_type_alias']}' AND spread_status=1", ARRAY_A);
-                                //更新新账号推荐人和推荐时间
-                                $apply_user = $wpdb->get_row("SELECT referee_id,user_mobile FROM {$wpdb->users} WHERE ID='{$zmv['apply_id']}'", ARRAY_A);
-                                $referee_id = $apply_user['referee_id'];
-                                if($referee_id > 0){
+                                if(!$orgType){
+                                    $error_msg = '<br />获取机构类型失败!';
+                                }
+                                if($error_msg == ''){
+                                    if($orgType['zone_type_alias'] == 'match') $orgType['zone_type_name'] = '赛区';
+                                    $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType['zone_type_alias']}' AND spread_status=1", ARRAY_A);
+                                    //更新新账号推荐人和推荐时间
+                                    $apply_user = $wpdb->get_row("SELECT referee_id,user_mobile FROM {$wpdb->users} WHERE ID='{$zmv['apply_id']}'", ARRAY_A);
+                                    if(!$apply_user) $error_msg = '<br />查询申请人信息失败';
+                                    $referee_id = $apply_user['referee_id'];
+                                }
+
+                                if($error_msg == '' && $referee_id > 0){
                                     if(!$wpdb->update($wpdb->users,['referee_id' => $referee_id,'referee_time'=>get_time('mysql')],['ID' => $user_id])){
                                         $error_msg = '更新机构推荐人失败!';
                                     }
@@ -1463,8 +1470,9 @@ class Organize{
                             if($error_msg == ''){
                                 $wpdb->query('COMMIT');
                                 $ali = new AliSms();
-                                $ali->sendSms($apply_user['user_mobile'], 6, array('type_name'=>$orgType['zone_type_name'], 'user_login' => $user_email, 'password' => $user_password));
+                                $msg_bool = $ali->sendSms($apply_user['user_mobile'], 6, array('type_name'=>$orgType['zone_type_name'], 'user_login' => $user_email, 'password' => $user_password));
                                 $success_msg = '操作成功';
+                                if(!$msg_bool) $send_msg = '<br />短信发送失败!';
                             }else{
                                 $wpdb->query('ROLLBACK');
                                 is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
@@ -1532,6 +1540,7 @@ class Organize{
             <div id="ajax-response">
                 <span style="color: #2bc422"><?=$success_msg?></span>
                 <span style="color: #c44e00"><?=$error_msg?></span>
+                <span style="color: #c44e00"><?=isset($send_msg) ? $send_msg : ''?></span>
             </div>
 
             <style type="text/css">
@@ -3695,8 +3704,8 @@ class Organize{
                 }else{
                     $city = $city_arr[0];
                 }
-                $name = $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
-//                $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
+//                $name = $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
+                $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
                 break;
             case 'trains':
                 $name = $span1 .$zone_name.$span2.'训练中心 ('.$zone_number.')';
