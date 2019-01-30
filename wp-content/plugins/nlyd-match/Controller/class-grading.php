@@ -1860,7 +1860,13 @@ class Grading
                     <?php foreach ($rows as $row){
                         $user_meta = get_user_meta($row['user_id']);
                         $coach_name = get_user_meta($row['grading_coach_id'],'user_real_name',true)['real_name'];
-
+                        if($row['fullname']){
+                            $address = $row['fullname'].'&nbsp;'.$row['telephone'].'&nbsp;'.$row['province'].$row['city'].$row['area'].$row['address'];
+                        }else{
+                            $my_address = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}my_address WHERE user_id='{$row['user_id']}' AND is_default=1");
+                            if(!$my_address) $my_address = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}my_address WHERE user_id='{$row['user_id']}'");
+                            $address = $my_address->fullname.'&nbsp;'.$my_address->telephone.'&nbsp;'.$my_address->country.$my_address->province.$my_address->city.$my_address->area.$my_address->address;
+                        }
                     ?>
                     <tr id="user-<?=$row['user_id']?>">
                         <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/ID">
@@ -1877,7 +1883,7 @@ class Grading
                         <td class="grading_level column-grading_level" data-colname="考级类别"><?=$categoryArr[$row['category_id']]['post_title'].'<span style="color: #3573c4">'.$row['grading_lv'].'</span>'?>级</td>
                         <td class="coach column-coach" data-colname="教练"><?=$coach_name?></td>
                         <td class="created_time column-created_time" data-colname="过级时间"><?=$row['created_time']?></td>
-                        <td class="address column-address" data-colname="收件地址"><?=$row['fullname'].'&nbsp;'.$row['telephone'].'&nbsp;'.$row['province'].$row['city'].$row['area'].$row['address']?></td>
+                        <td class="address column-address" data-colname="收件地址"><?=$address?></td>
                         <td class="prove column-prove" data-colname="证书">
                         <?php if($row['prove_grant_status'] == '2'){ ?>
                             <?=$row['prove_number']?><br />
