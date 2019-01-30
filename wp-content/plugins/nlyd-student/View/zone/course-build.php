@@ -51,9 +51,9 @@
                                 <?=__('授课教练', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row change_num_row">
-                                <input class="radius_input_row change_num nl-foucs" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_phone']?>">
+                                <input class="radius_input_row change_num nl-foucs" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_name']?>">
                                 <a class="coach_add_btn c_blue">确认</a> 
-                                <input type="hidden" name="coach_phone">
+                                <input type="hidden" name="coach_phone" value="<?=$course['coach_id']?>">
                             </div>
                         </div>
                         <div>
@@ -128,6 +128,7 @@ jQuery(function($) {
         $.ajax({
             data: {
                 mobile:val,
+                type:'course',
                 action:'get_mobile_user',
             },
             success: function(res, textStatus, jqXHR){
