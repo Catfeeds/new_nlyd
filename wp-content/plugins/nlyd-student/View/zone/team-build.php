@@ -30,7 +30,7 @@
                                 <span class="c_black"><?=__('战队负责人', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row change_num_row">
-                                <input class="radius_input_row change_num nl-foucs" value="<?=$user_mobile?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                                <input class="radius_input_row change_num nl-foucs" value="<?=$user_mobile?>" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                                 <a class="coach_add_btn c_blue">确认</a> 
                                 <input type="hidden" name="team_director_phone">
                             </div>

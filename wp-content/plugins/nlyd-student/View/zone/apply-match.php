@@ -106,7 +106,7 @@
                     <span class="c_black"><?=__('中心负责人', 'nlyd-student')?>：</span>
                 </div>
                 <div class="input_row change_num_row">
-                    <input class="radius_input_row change_num nl-foucs" value="<?=$row['center_manager']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                    <input class="radius_input_row change_num nl-foucs" value="<?=$row['center_manager']?>" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                     <a class="coach_add_btn c_blue">确认</a> 
                     <input type="hidden" name="center_manager" value="">
                 </div>
@@ -117,7 +117,7 @@
                     <span class="c_black"><?=__('赛事组委会主席', 'nlyd-student')?>：</span>
                 </div>
                 <div class="input_row change_num_row">
-                    <input class="radius_input_row change_num nl-foucs" value="<?=$row['chairman_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                    <input class="radius_input_row change_num nl-foucs" value="<?=$row['chairman_phone']?>" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                     <a class="coach_add_btn c_blue">确认</a> 
                     <input type="hidden" name="chairman_phone" value="">    
                 </div>
@@ -127,7 +127,7 @@
                     <span class="c_black"><?=__('赛事组委会秘书长', 'nlyd-student')?>：</span>
                 </div>
                 <div class="input_row change_num_row">
-                    <input class="radius_input_row change_num nl-foucs" value="<?=$row['secretary_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                    <input class="radius_input_row change_num nl-foucs" value="<?=$row['secretary_phone']?>" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                     <a class="coach_add_btn c_blue">确认</a> 
                     <input type="hidden" name="secretary_phone" value="">  
                 </div>
