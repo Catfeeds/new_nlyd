@@ -1207,7 +1207,7 @@ class Organize{
             if($legal_person == '') $error_msg = $error_msg==''?'请填写法人':$error_msg.'<br >请填写法人';
             if($zone_city == '' && $zone_match_type == 2 && $user_status != -2) $error_msg = $error_msg==''?'请选择机构城市':$error_msg.'<br >请选择机构城市';
             if($opening_bank == '') $error_msg = $error_msg==''?'请填写开户行':$error_msg.'<br >请填写开户行';
-            if($opening_bank_address == '') $error_msg = $error_msg==''?'请填写开户行地址':$error_msg.'<br >请填写开户行地址';
+           // if($opening_bank_address == '') $error_msg = $error_msg==''?'请填写开户行地址':$error_msg.'<br >请填写开户行地址';
             if($bank_card_num == '') $error_msg = $error_msg==''?'请填写银行卡号':$error_msg.'<br >请填写银行卡号';
 //            if($chairman_id < 1) $error_msg = $error_msg==''?'请选择组委会主席':$error_msg.'<br >请选择组委会主席';
             if($zone_number == '' && ($user_status == 1 || $user_status == 99)) $error_msg = $error_msg==''?'机构编号不能为空':$error_msg.'<br >机构编号不能为空';
@@ -1764,12 +1764,12 @@ class Organize{
                             <input type="text" name="bank_card_name" value="<?=$row['bank_card_name']?>">
                         </td>
                     </tr>
-                    <tr class="">
+                    <!--<tr class="">
                         <th scope="row"><label for="opening_bank_address">开户行地址 </label></th>
                         <td>
-                            <input type="text" name="opening_bank_address" value="<?=$row['opening_bank_address']?>">
+                            <input type="text" name="opening_bank_address" value="<?/*=$row['opening_bank_address']*/?>">
                         </td>
-                    </tr>
+                    </tr>-->
                     <tr class="">
                         <th scope="row"><label for="bank_card_num">银行卡号 </label></th>
                         <td>
