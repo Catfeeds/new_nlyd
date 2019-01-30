@@ -89,9 +89,15 @@
 
 .order-img{
     width: 80px;
-    min-height: 80px;
+    height: 80px;
     border: 1px solid #e1e1e1;
     border-radius: 6px;
+}
+.order-img:after{
+    clear:both;content:'';display:block;width:0;height:0;visibility:hidden;
+}
+.order-img:before{
+    clear:both;content:'';display:block;width:0;height:0;visibility:hidden;
 }
 .order-detail{
     width: -webkit-calc(100% - 142px);

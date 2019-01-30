@@ -248,14 +248,15 @@ a.c_black3:hover{
 }
 /* 图片 */
 .img-box{
-    min-height: 1px;
-    display: flex;
-    align-items: center;
+    font-size: 0;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
     overflow: hidden;
 }
 .img-box img{
-    width: 100%;
-    height: auto;
+    max-width: 100%;
+    max-height: 100%;
     margin :auto;
 }
 /* 省略 */

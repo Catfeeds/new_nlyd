@@ -1,14 +1,14 @@
 <?php
 
 /**
- * 首页-名录
+ * 课程
  * Created by PhpStorm.
  * User: Administrator
  * Date: 2018/7/16
  * Time: 14:38
  */
-use library\IpLocation;
-class Student_Courses
+
+class Student_Courses extends Student_Home
 {
 
     public $ajaxControll;
@@ -128,7 +128,7 @@ class Student_Courses
      public function courseDetail(){
 
          global $wpdb,$current_user;
-         $sql = "select a.id,a.course_title,a.coach_id,a.course_start_time,a.open_quota,a.course_details,if(a.address != '',a.address,'-') address,a.const,b.zone_name,b.zone_city,c.zone_type_name,
+         $sql = "select a.id,a.course_title,a.coach_id,a.course_start_time,a.open_quota,a.course_details,if(a.address != '',a.address,'-') address,a.const,b.zone_name,b.zone_number,b.zone_city,c.zone_type_name,
                  c.zone_type_alias,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type,d.post_title category_title
                  from {$wpdb->prefix}course a 
                  left join {$wpdb->prefix}zone_meta b on a.zone_id = b.user_id 
@@ -153,12 +153,7 @@ class Student_Courses
                  $zone_title = $row['zone_name'].$city.$row['match_type'].'组委会';
              }
              else{
-                 $title = 'IISC';
-                 if($row['zone_type_alias'] == 'test'){
-                     $title .= '水平';
-                 }
-
-                 $zone_title = $title.$city.$row['zone_type_name'];
+                 $zone_title = $row['zone_name'].$row['zone_type_name']."({$row['zone_number']})";
              }
              $row['zone_title'] = $zone_title;
          }

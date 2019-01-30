@@ -171,7 +171,7 @@ p.content-p{
 .player-img{
     width: 30px;
     height: 30px;
-    border: 1px solid rgba(236, 236, 236, 1);
+    /* border: 1px solid rgba(236, 236, 236, 1); */
     border-radius: 50%;
     margin: auto;
     overflow: hidden;

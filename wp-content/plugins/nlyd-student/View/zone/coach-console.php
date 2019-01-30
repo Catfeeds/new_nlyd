@@ -20,94 +20,70 @@
             <div class="layui-row nl-border nl-content">
                 <div class="zone_user width-padding layui-row layui-bg-white width-padding-pc">
                     <div class="img-box zone_user_img pull-left">
-                        <?php if($row['zone_type_alias'] == 'match'){ ?>
-                        <!-- 赛区展示 -->
-                            <img src="<?=student_css_url.'image/zone/match_head.png'?>">
-                        <?php }else{ ?>
-                            <img src="<?=student_css_url.'image/zone/head.png'?>">
-                        <?php } ?>
+                        <img src="<?=student_css_url.'image/zone/head.png'?>"> 
                     </div>    
                     <div class="zone_user_detail pull-left">
-
-                        <!-- 审核通过 -->
-                        <div class="zone_title_row  <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?>">
+                        <div class="zone_title_row  c_black" style="margin-bottom:9px;">
                             <span class="bold fs_16 zone_title_name">
-                               <?= $row['zone_title'];?>
+                               陈卫东
                             </span>
-                            <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
+                            <!-- <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span> -->
                         </div>
-
+                        <div class="c_black" style="margin-bottom:9px;"><?=__('IISC教练', 'nlyd-student')?></div>
                         <div class="c_black">
-                            <?=__('编 号', 'nlyd-student')?>：<?=!empty($row['legal_person']) ? $row['zone_number'] : $row['user_ID']?>
-                            <?php if($row['user_status'] == 1){ ?>
-                                <div class="img-box zone_pass mr_10"><img src="<?=student_css_url.'image/pass.png'?>" alt="<?=__('已认证', 'nlyd-student')?>"></div>
-                                <a class=" c_blue" href="<?=home_url('/zone/apply/zone_id/'.$row['id'].'/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('更多资料', 'nlyd-student')?></a>
-                            <?php } ?>
-                        </div>
-
-                        <div class="c_black">
-                            <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=empty($row['referee_user_ID'])? '无' : $row['referee_user_ID'];?></span>
+                            <span class="c_blue">xxx温江训练中心（001）</span>
                             <span class="pull-right">
-                                <?php if ($row['user_status'] == 1 && $_SESSION['manager_id'] > 0){ ?>
-                                    <a class="back_user c_orange"><?=__('返回个人账号', 'nlyd-student')?></a>
-                                <?php } ?>
-                                <?php if ($row['user_status'] == -1){ ?>
-                                    <span class=" c_orange mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
-                                <?php } ?>
-                                <?php if(!empty($row['id']) && $row['user_status'] == -2):?>
-                                    <a class=" c_blue" href="<?=home_url('/zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
-                                <?php endif;?>
+                            <a class="back_user c_orange"><?=__('返回个人账号', 'nlyd-student')?></a>
                             </span>
                         </div>
-
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-padding-pc">
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/profit/');?>">
-                        <div class="apply_list_line pull-left ">
-                            <div class="zone_bg bg_money"></div>
-                        </div>
-                        <div class="apply_list_line center"><?=__('收益管理', 'nlyd-student')?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_black3 mr_10"><?=__('今日收入', 'nlyd-student')?><?=$stream > 0 ? $stream : number_format($stream,2)?></div>
-                    </a>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/recommend/');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/coachUpload');?>">
                         <div class="apply_list_line pull-left">
-                            <div class="zone_bg bg_share"></div>
+                            <div class="zone_bg bg_upload"></div>
                         </div>
-                        <div class="apply_list_line center"><?=__('我的推荐', 'nlyd-student')?></div>
+                        <div class="apply_list_line center"><?=__('教练证书', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                        <div class="apply_list_line pull-right c_black3 mr_10"><?=__('未上传', 'nlyd-student')?></div>
                     </a>
-                </div>
-                <!-- 训练中心(控制台)-->
-                <div class="apply width-padding layui-row layui-bg-white width-padding-pc">
-                    <?php if(!empty($role_list)):?>
-                    <?php foreach ($role_list as $x){
-                            //$thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');
-                    ?>
-                    <a class="apply_list <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?> layui-row" <?php if($row['user_status'] == 1){echo "href=".home_url('/zone/'.$x['role_action']);} ?> >
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/coachIntroduction');?>">
                         <div class="apply_list_line pull-left">
-                            <div class="zone_bg <?=$x['role_back']?>"></div>
+                            <div class="zone_bg bg_introduction"></div>
                         </div>
-                        <div class="apply_list_line center"><?=__($x['role_name'], 'nlyd-student')?></div>
+                        <div class="apply_list_line center"><?=__('教练简介', 'nlyd-student')?></div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                        <div class="apply_list_line pull-right c_black3 mr_10"><?=__('未填写', 'nlyd-student')?></div>
+                    </a>
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/course');?>">
+                        <div class="apply_list_line pull-left">
+                            <div class="zone_bg bg_course"></div>
+                        </div>
+                        <div class="apply_list_line center"><?=__('课程管理', 'nlyd-student')?></div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                        <div class="apply_list_line pull-right mr_10"></div>
+                    </a>
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/student');?>">
+                        <div class="apply_list_line pull-left">
+                            <div class="zone_bg bg_student"></div>
+                        </div>
+                        <div class="apply_list_line center"><?=__('学员管理', 'nlyd-student')?></div>
+                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
+                        <div class="apply_list_line pull-right c_orange mr_10">1<?=__('个新申请', 'nlyd-student')?></div>
+                    </a>
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/match');?>">
+                        <div class="apply_list_line pull-left">
+                            <div class="zone_bg bg_match"></div>
+                        </div>
+                        <div class="apply_list_line center"><?=__('比赛管理', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
-                    <?php } ?>
-                    <?php endif;?>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/data');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/grading');?>">
                         <div class="apply_list_line pull-left">
-                            <div class="zone_bg bg_data"></div>
+                            <div class="zone_bg bg_level"></div>
                         </div>
-                        <div class="apply_list_line center"><?=__('数据统计', 'nlyd-student')?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/setting');?>">
-                        <div class="apply_list_line pull-left">
-                            <div class="zone_bg bg_setting"></div>
-                        </div>
-                        <div class="apply_list_line center"><?=__('其他设置', 'nlyd-student')?></div>
+                        <div class="apply_list_line center"><?=__('考级管理', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
@@ -148,8 +124,8 @@ jQuery(function($) {
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
                         $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                        _this.removeClass('disabled');
                     }
+                    _this.removeClass('disabled');
                 }
             })
         }

@@ -573,8 +573,8 @@ class Student_Zone
             if(!empty($match['entry_end_time'])){
                 $match['data_entry_end_time'] = preg_replace('/\s|:/','-',$match['entry_end_time']);
             }
-            if($match['person_liable']){
-                $match['person_liable_phone'] = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$match['person_liable']}");
+            if($match['person_liable'] > 0){
+                $match['person_liable_name'] = get_user_meta($match['person_liable'],'user_real_name')[0]['real_name'];
             }
 
             //print_r($match);
@@ -685,8 +685,7 @@ class Student_Zone
                 $row['data_end_time'] = preg_replace('/\s|:/','-',$row['end_time']);
             }
             //获取授课教练
-            $row['coach_phone'] = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['coach_id']}");
-            //print_r($row);
+            $row['coach_name'] = get_user_meta($row['coach_id'],'user_real_name')[0]['real_name'];
             $data['course'] = $row;
         }
 
@@ -822,12 +821,13 @@ class Student_Zone
             return;
         }
         $user_info = array_column($rows,'meta_value','meta_key');
+        //print_r($user_info);
         $coach_work_photo = !empty($user_info['user_images_color']) ? unserialize($user_info['user_images_color'])[0] : $user_info['user_head'] ;
         $coach['work_photo'] = !empty($coach_work_photo) ? $coach_work_photo : student_css_url.'image/nlyd.png';
         $coach['real_name'] = unserialize($user_info['user_real_name'])['real_name'];
         $coach['coach_ID'] = !empty($user_info['coach_ID']) ? $user_info['coach_ID'] : $user_info['user_ID'];
         $coach['user_gender'] = !empty($user_info['user_gender']) ? $user_info['user_gender'] : '-';
-        $coach['real_ID'] = !empty($user_info['real_ID']) ? hideStar($user_info['real_ID']) : '-';
+        $coach['real_ID'] = !empty($user_info['user_real_name']) ? hideStar(unserialize($user_info['user_real_name'])['real_ID']) : '-';
         $coach['user_ID_Card'] = unserialize($user_info['user_ID_Card']);
         $coach['coach_brief'] = !empty($user_info['coach_brief']) ? hideStar($user_info['coach_brief']) : '暂无';
 
@@ -905,9 +905,10 @@ class Student_Zone
                 $this->get_404(array('message'=>__('战队信息错误', 'nlyd-student'),'return_url'=>home_url('/zone/team/')));
                 return;
             }
+
             if(!empty($row['team_director'])){
-                $user_mobile = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['team_director']}");
-                $row['user_mobile'] = $user_mobile;
+
+                $row['director_name'] = get_user_meta($row['team_director'],'user_real_name')[0]['real_name'];
             }
 
             if($row['user_id'] == $current_user->ID){
@@ -1181,7 +1182,7 @@ class Student_Zone
 
             $city_arr = str2arr($row['zone_city'],'-');
             if(!empty($city_arr[2])){
-                $city = rtrim($city_arr[1],'市').preg_replace('/区|县/','',$city_arr[2]);
+                $city = rtrim($city_arr[1],'市').preg_replace('/市|区|县/','',$city_arr[2]);
             }elseif ($city_arr[1] != '市辖区'){
                 $city = rtrim($city_arr[1],'市');
             }else{
@@ -1193,10 +1194,14 @@ class Student_Zone
                 $row['zone_title'] = $city.$row['zone_type_name'];
             }
         }
-        //获取负责人
-        if(!empty($row['center_manager_id'])){
-            $row['center_manager'] = $wpdb->get_var("select user_mobile from {$wpdb->prefix}users where ID = {$row['center_manager_id']} ");
-        }
+
+        //获取负责人/主席/秘书长
+        $center_manager = get_user_meta($row['center_manager_id'],'user_real_name')[0];
+        $chairman = get_user_meta($row['chairman_id'],'user_real_name')[0];
+        $secretary = get_user_meta($row['secretary_id'],'user_real_name')[0];
+        $row['center_manager'] = $center_manager['real_name'];
+        $row['chairman_name'] = $chairman['real_name'];
+        $row['secretary_name'] = $secretary['real_name'];
 
         //获取推荐人
         $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$row['referee_id']} and meta_key in ('user_real_name','user_ID') ";
@@ -1223,6 +1228,14 @@ class Student_Zone
         global $wpdb,$current_user,$user_info;
 
         $row = $this->get_zone_row($_GET['zone_id']);
+        if($row['zone_match_type'] == 2){
+            if($row['is_double'] == 1){
+                $row['zone_match_type_cn'] .= '(多)';
+            }
+            elseif($row['is_double'] == 2){
+                $row['zone_match_type_cn'] .= '(单)';
+            }
+        }
         //print_r($row);
         if(!empty($row)){
             //获取主席
@@ -1241,6 +1254,7 @@ class Student_Zone
         if(!empty($user_real_name)){
             $data['referee_name'] = $user_real_name['real_name'];
         }
+
         //print_r($row);
         $view = student_view_path.CONTROLLER.'/apply.php';
         load_view_template($view,$data);
@@ -1280,7 +1294,27 @@ class Student_Zone
         $row = $wpdb->get_row("select * from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}",ARRAY_A);
         return $row;
     }
-
+    /**
+     * 教练控制台
+     */
+     public function coachConsole(){
+        $view = student_view_path.CONTROLLER.'/coach-console.php';
+        load_view_template($view);
+    }
+    /**
+     * 上传教练证书
+     */
+     public function coachUpload(){
+        $view = student_view_path.CONTROLLER.'/coach-upload.php';
+        load_view_template($view);
+    }
+    /**
+     * 教练简介
+     */
+     public function coachIntroduction(){
+        $view = student_view_path.CONTROLLER.'/coach-introduction.php';
+        load_view_template($view);
+    }
     /**
      * 默认公用js/css引入
      */

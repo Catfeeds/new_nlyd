@@ -661,6 +661,7 @@ function the_table_install () {
           `read` int(20) DEFAULT NULL COMMENT '速读类',
           `memory` int(20) DEFAULT NULL COMMENT '速记类',
           `compute` int(20) DEFAULT NULL COMMENT '速算类',
+          `is_assign` tinyint(2) DEFAULT NULL COMMENT '是否指派 1:指派 ',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);

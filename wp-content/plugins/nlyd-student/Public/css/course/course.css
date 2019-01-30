@@ -11,7 +11,7 @@
     font-size: 0;
     background: #fff;
 }
-.layui-row .course_row:last-child{
+#flowAllAdress .course_row:last-child{
     margin-bottom: 0;
 }
 .course_city_icon .iconfont{

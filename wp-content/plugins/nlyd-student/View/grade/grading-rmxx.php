@@ -159,8 +159,8 @@ jQuery(function($) {
                 $('.ready_zoo').append(dom)
                 $('.match_zoo').append(dom1)
             })
-            var width=$('._img').width()
-            $('._img').height(width)
+            var width=$('.matching-card').width()
+            $('._img').height(width).width(width)
         }else{
             for (var index = 0; index < que_len; index++) {
                 var first_len=first_name.length;//姓

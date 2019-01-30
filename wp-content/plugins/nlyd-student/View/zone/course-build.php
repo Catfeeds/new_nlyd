@@ -51,9 +51,9 @@
                                 <?=__('授课教练', 'nlyd-student')?>：</span>
                             </div>
                             <div class="input_row change_num_row">
-                                <input class="radius_input_row change_num nl-foucs" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_phone']?>">
+                                <input class="radius_input_row change_num nl-foucs" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_name']?>">
                                 <a class="coach_add_btn c_blue">确认</a> 
-                                <input type="hidden" name="coach_phone">
+                                <input type="hidden" name="coach_phone" value="<?=$course['coach_id']?>">
                             </div>
                         </div>
                         <div>
@@ -101,7 +101,7 @@
                                 <textarea class="radius_input_row nl-foucs" type="text" name="course_details" placeholder="<?=__('课程简介', 'nlyd-student')?>"></textarea>
                             </div>
                         </div>
-                        <a class="a-btn a-btn-table" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><div><?=__($_GET['id'] > 0 ? '确认修改':'发 布', 'nlyd-student')?></div></a>
+                        <a class="a-btn a-btn-table" lay-filter='layform' lay-submit=""><div><?=__($_GET['id'] > 0 ? '确认修改':'发 布', 'nlyd-student')?></div></a>
                     </form>
                     
                 </div>
@@ -128,6 +128,7 @@ jQuery(function($) {
         $.ajax({
             data: {
                 mobile:val,
+                type:'course',
                 action:'get_mobile_user',
             },
             success: function(res, textStatus, jqXHR){

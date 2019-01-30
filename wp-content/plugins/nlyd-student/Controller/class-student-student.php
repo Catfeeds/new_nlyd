@@ -22,14 +22,15 @@ class Student_Student
     public function index(){
         global $wpdb;
         //获取推荐课程
-        $course_sql = "select a.id,a.course_title,c.zone_city,zone_number
+        $course_sql = "select a.id,a.course_title,c.zone_city,c.zone_number,c.user_id
                 from {$wpdb->prefix}course a 
                 left join {$wpdb->prefix}course_type b on a.course_type = b.id
                 left join {$wpdb->prefix}zone_meta c on a.zone_id = c.user_id
-                where a.is_enable = 1 
+                where a.is_enable = 1 and c.user_id is not null
                 order by a.id desc 
                 limit 4
                ";
+
         $course_rows = $wpdb->get_results($course_sql,ARRAY_A);
         if(!empty($course_rows)){
             foreach ($course_rows as $k => $val){
