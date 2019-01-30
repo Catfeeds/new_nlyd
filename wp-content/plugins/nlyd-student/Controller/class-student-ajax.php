@@ -488,11 +488,11 @@ class Student_Ajax
 
         global $wpdb,$current_user;
         if($current_user->ID < 1 || !$current_user->ID){
-            wp_send_json_error(array('info'=>__('请登录', 'nlyd-student')));
+            wp_send_json_error(array('info'=>__('请先登录', 'nlyd-student'),'url'=>home_url('/logins/')));
         }
 
         if(empty(get_user_meta($current_user->ID,'user_real_name'))){
-            wp_send_json_error(array('info'=>__('请先实名认证', 'nlyd-student')));
+            wp_send_json_error(array('info'=>__('请先实名认证', 'nlyd-student'),'url'=>home_url('/account/info/')));
         }
 
         //if(count($_POST['project_id']) != count($_POST['major_coach'])) wp_send_json_error(array('info'=>'主训教练未设置齐全'));
@@ -6603,8 +6603,8 @@ class Student_Ajax
         $start = ($page-1)*$pageSize;
 
         $sql = "select a.id,a.course_title,a.const,count(c.id) entry_total,b.type_name,a.open_quota,a.is_enable,a.coach_id,
-                if(unix_timestamp(course_start_time)>0,date_format(course_start_time,'%Y-%m-%d %H:%i'),'待确认') start_time,
-                if(unix_timestamp(course_end_time)>0,date_format(course_end_time,'%Y-%m-%d %H:%i'),'待确认') end_time,d.post_title category_title,
+                if(unix_timestamp(course_start_time)>0,date_format(course_start_time,'%Y-%m-%d %H:%i'),'待定') start_time,
+                if(unix_timestamp(course_end_time)>0,date_format(course_end_time,'%Y-%m-%d %H:%i'),'待定') end_time,d.post_title category_title,
                 case a.is_enable
                 when '-3' then '已结课'
                 when '-2' then '等待开课'

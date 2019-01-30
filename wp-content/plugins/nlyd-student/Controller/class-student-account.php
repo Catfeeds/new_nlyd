@@ -73,7 +73,7 @@ class Student_Account extends Student_Home
                     order by id desc";
 
             $zones = $wpdb->get_results($sql_,ARRAY_A);
-            //print_r($zones);
+            //print_r($sql_);
             if(!empty($zones)){
                 $arr = array();
                 foreach ($zones as $key => $value) {
@@ -96,8 +96,7 @@ class Student_Account extends Student_Home
                         $arr[$key]['value'] = $value['zone_name'].$city.$value['match_type'].'组委会';
                     }
                     else{
-                        $arr[$key]['value'] = $value['zone_name'].$value['zone_type_name']."({$value['zone_number']})";
-                        //$arr[$key]['value'] = $value['zone_name'].$value['zone_type_name'].' • '.$city;
+                        $arr[$key]['value'] = $value['zone_name'].$value['zone_type_name'].' • '.$city;
                     }
                     $arr[$key]['id'] = $value['id'];
                 }

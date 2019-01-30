@@ -27,7 +27,6 @@ class Student_Student
                 left join {$wpdb->prefix}course_type b on a.course_type = b.id
                 left join {$wpdb->prefix}zone_meta c on a.zone_id = c.user_id
                 where a.is_enable = 1 and c.user_id is not null
-                order by a.id desc 
                 limit 4
                ";
 

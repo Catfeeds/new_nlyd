@@ -1191,7 +1191,7 @@ class Student_Zone
             if(!empty($row['zone_match_type_cn'])){
                 $row['zone_title'] = $row['zone_name'].$city.$row['zone_match_type_cn'].'组委会';
             }else{
-                $row['zone_title'] = $city.$row['zone_type_name'];
+                $row['zone_title'] = $row['zone_name'].$row['zone_type_name'].' • '.$city;
             }
         }
 
