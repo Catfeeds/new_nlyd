@@ -4648,7 +4648,7 @@ class Student_Ajax
                 wp_send_json_error(array('info'=>'审核已通过,资料禁止修改'));
             }
         }
-        if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_address']) || empty($_POST['bank_card_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) ||  empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
+        if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_address']) || empty($_POST['bank_card_name']) || empty($_POST['legal_person']) ||  empty($_POST['opening_bank']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
         }
         if($_POST['zone_type_alias'] == 'match'){
@@ -4682,7 +4682,8 @@ class Student_Ajax
                 ";
         $center_manager = $wpdb->get_row($sql1,ARRAY_A);
         if(empty($center_manager)) wp_send_json_error(array('info'=>__('该'.$manager.'未注册')));
-        if(empty($center_manager['meta_value'])) wp_send_json_error(array('info'=>__('该'.$manager.'未实名认证')));
+        $manager_real_name = unserialize($center_manager['meta_value']);
+        if(empty($manager_real_name['real_name'])) wp_send_json_error(array('info'=>__('该'.$manager.'未实名认证')));
 
         if($_POST['type_id'] == 3 && $_POST['zone_type_alias'] == 'match'){    //赛区
             if(empty($_POST['chairman_phone']) || empty($_POST['secretary_phone'])){
@@ -4695,7 +4696,8 @@ class Student_Ajax
                 ";
             $chairman = $wpdb->get_row($sql,ARRAY_A);
             if(empty($chairman)) wp_send_json_error(array('info'=>__('该组委会主席未注册')));
-            if(empty($chairman['meta_value'])) wp_send_json_error(array('info'=>__('该组委会主席未实名认证')));
+            $chairman_real_name = unserialize($chairman['meta_value']);
+            if(empty($chairman_real_name['real_name'])) wp_send_json_error(array('info'=>__('该组委会主席未实名认证')));
 
             $sql_ = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
@@ -4703,10 +4705,11 @@ class Student_Ajax
                 ";
             $secretary = $wpdb->get_row($sql_,ARRAY_A);
             if(empty($secretary)) wp_send_json_error(array('info'=>__('该秘书长未注册')));
-            if(empty($secretary['meta_value'])) wp_send_json_error(array('info'=>__('该秘书长未实名认证')));
+            $secretary_real_name = unserialize($secretary['meta_value']);
+            if(empty($secretary_real_name['real_name'])) wp_send_json_error(array('info'=>__('该秘书长未实名认证')));
 
         }
-        print_r($_POST);die;
+        //print_r($_POST);die;
         if(!empty($_POST['business_licence'])){
 
             $upload_dir = wp_upload_dir();
@@ -4736,7 +4739,7 @@ class Student_Ajax
             'zone_name'=>!empty($_POST['zone_name']) ? $_POST['zone_name']:'',
             'bank_card_name'=>$_POST['bank_card_name'],
             'opening_bank'=>$_POST['opening_bank'],
-            'opening_bank_address'=>$_POST['opening_bank_address'],
+            'opening_bank_address'=>!empty($_POST['opening_bank_address']) ? $_POST['opening_bank_address'] : '',
             'bank_card_num'=>$_POST['bank_card_num'],
             'chairman_id'=>!empty($chairman_id) ? $chairman_id['ID'] : '',
             'secretary_id'=>!empty($secretary_id) ? $secretary_id['ID'] : '',
@@ -6401,9 +6404,10 @@ class Student_Ajax
                 where a.user_mobile = '{$_POST['mobile']}'
                 ";
         $row = $wpdb->get_row($sql,ARRAY_A);
+
         if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册','nlyd-student')));
-        if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
         $real_name = unserialize($row['meta_value']);
+        if(empty($real_name['real_name'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
 
         wp_send_json_success(array('user_id'=>$row['ID'],'user_name'=>$real_name['real_name']));
     }
