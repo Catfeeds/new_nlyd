@@ -173,7 +173,7 @@ get_header(); ?>
                         </div>   
                         <div class="swiper-container swiper-container2" style="margin-bottom:0">
                             <a class="swiper_news_wrap">
-                                <div class="img-box"><img src="<?=$new_image?>"></div>
+                                <div class="swiper-content img-box"><img src="<?=$new_image?>"></div>
                                 <div class="swiper_news_title"><?=$news->post_title?></div>
                             </a>
                         </div>

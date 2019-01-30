@@ -25,7 +25,13 @@
     line-height: 45px;
     text-align: center;
 }
-
+.swiper-content{
+    width: 100%;
+    display:block;
+}
+.swiper-content.img-box img{
+    width:100%;
+}
 .top-nav-btn.active a:after{
     position: absolute;
     left: 0;
