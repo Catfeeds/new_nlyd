@@ -54,14 +54,6 @@
 
                     </div>
                 </div>
-
-                <!-- <div>
-                    <div class="course_city width-padding width-padding-pc">
-                        <span class="c_black"><?=__('所有城市', 'nlyd-student')?>：</span>
-                    </div>
-                    <div id="flowAllAdress">
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
