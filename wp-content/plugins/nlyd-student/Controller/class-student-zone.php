@@ -1280,7 +1280,27 @@ class Student_Zone
         $row = $wpdb->get_row("select * from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}",ARRAY_A);
         return $row;
     }
-
+    /**
+     * 教练控制台
+     */
+     public function coachConsole(){
+        $view = student_view_path.CONTROLLER.'/coach-console.php';
+        load_view_template($view);
+    }
+    /**
+     * 上传教练证书
+     */
+     public function coachUpload(){
+        $view = student_view_path.CONTROLLER.'/coach-upload.php';
+        load_view_template($view);
+    }
+    /**
+     * 教练简介
+     */
+     public function coachIntroduction(){
+        $view = student_view_path.CONTROLLER.'/coach-introduction.php';
+        load_view_template($view);
+    }
     /**
      * 默认公用js/css引入
      */

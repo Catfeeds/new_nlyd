@@ -48,51 +48,6 @@
                     </div>
                 </div>
             <?php } ?>
-
-<!---->
-<!--                <div class="dir_zone_list width-padding width-padding-pc">-->
-<!--                    <div class="dir_table_name">2019脑力世界杯<span class="c_blue">成都</span>城市赛</div>-->
-<!--                    <div class="dir_tab_wap">-->
-<!--                        <div class="dir_tab_row">-->
-<!--                            <div class="dir_tab_label">--><?//=__('编 号', 'nlyd-student')?><!--：</div>-->
-<!--                            <div class="dir_tab_info">111</div>-->
-<!--                        </div>-->
-<!--                        <div class="dir_tab_row">-->
-<!--                            <div class="dir_tab_label">--><?//=__('承办单位', 'nlyd-student')?><!--：</div>-->
-<!--                            <div class="dir_tab_info">士大夫</div>-->
-<!--                        </div>-->
-<!--                        <div class="dir_tab_row">-->
-<!--                            <div class="dir_tab_label">--><?//=__('主 席', 'nlyd-student')?><!--：</div>-->
-<!--                            <div class="dir_tab_info">风格的风格</div>-->
-<!--                        </div>-->
-<!--                        <div class="dir_tab_row">-->
-<!--                            <div class="dir_tab_label">--><?//=__('秘书长', 'nlyd-student')?><!--：</div>-->
-<!--                            <div class="dir_tab_info">士大夫</div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!---->
-<!--                <div class="dir_zone_list width-padding width-padding-pc">-->
-<!--                    <div class="dir_table_name">2019脑力世界杯<span class="c_blue">成都</span>城市赛</div>-->
-<!--                    <div class="dir_tab_wap">-->
-<!--                        <div class="dir_tab_row">-->
-<!--                            <div class="dir_tab_label">--><?//=__('编 号', 'nlyd-student')?><!--：</div>-->
-<!--                            <div class="dir_tab_info">111</div>-->
-<!--                        </div>-->
-<!--                        <div class="dir_tab_row">-->
-<!--                            <div class="dir_tab_label">--><?//=__('承办单位', 'nlyd-student')?><!--：</div>-->
-<!--                            <div class="dir_tab_info">士大夫</div>-->
-<!--                        </div>-->
-<!--                        <div class="dir_tab_row">-->
-<!--                            <div class="dir_tab_label">--><?//=__('主 席', 'nlyd-student')?><!--：</div>-->
-<!--                            <div class="dir_tab_info">风格的风格</div>-->
-<!--                        </div>-->
-<!--                        <div class="dir_tab_row">-->
-<!--                            <div class="dir_tab_label">--><?//=__('秘书长', 'nlyd-student')?><!--：</div>-->
-<!--                            <div class="dir_tab_info">士大夫</div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
         </div>
     </div>

@@ -237,6 +237,12 @@
 .bg_edit{
     background-position: -501px 1px;
 }
+.bg_upload{
+    background-position: -529px 1px;
+}
+.bg_introduction{
+    background-position: -553px 1px;
+}
 .select_box{
     position: absolute;
     width: 100%;

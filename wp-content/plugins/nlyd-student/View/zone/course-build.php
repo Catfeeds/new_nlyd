@@ -101,7 +101,7 @@
                                 <textarea class="radius_input_row nl-foucs" type="text" name="course_details" placeholder="<?=__('课程简介', 'nlyd-student')?>"></textarea>
                             </div>
                         </div>
-                        <a class="a-btn a-btn-table" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><div><?=__($_GET['id'] > 0 ? '确认修改':'发 布', 'nlyd-student')?></div></a>
+                        <a class="a-btn a-btn-table" lay-filter='layform' lay-submit=""><div><?=__($_GET['id'] > 0 ? '确认修改':'发 布', 'nlyd-student')?></div></a>
                     </form>
                     
                 </div>
