@@ -107,21 +107,6 @@ get_header(); ?>
                                 <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
                             </div>
                             <?php } ?>
-                            <!--<div class="index_course_item">
-                                <div class="index_course_name">高效记忆术第一期</div>
-                                <div class="index_course_detail">温江训练中心（0001）</div>
-                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?/*=__('抢占课程', 'nlyd-student')*/?></div></a>
-                            </div>    
-                            <div class="index_course_item">
-                                <div class="index_course_name">高效记忆术第一期</div>
-                                <div class="index_course_detail">温江训练中心（0001）</div>
-                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?/*=__('抢占课程', 'nlyd-student')*/?></div></a>
-                            </div>  
-                            <div class="index_course_item">
-                                <div class="index_course_name">高效记忆术第一期</div>
-                                <div class="index_course_detail">温江训练中心（0001）</div>
-                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?/*=__('抢占课程', 'nlyd-student')*/?></div></a>
-                            </div>-->
                         </div>     
                     </div>
                     <?php endif;?>
@@ -142,24 +127,11 @@ get_header(); ?>
                                         </div>
                                         <div class="swiper_course_detail">
                                             <div class="bold c_black fs_14"><?=$val['coach_name']?></div>
-                                            <div class="fs_14 c_black6">国际脑力运动委员会教练</div>
+                                            <div class="fs_14 c_black6"><?=__('国际脑力运动委员会教练', 'nlyd-student')?></div>
                                         </div>
                                     </div>
                                 </a>
                                 <?php } ?>
-                                <!--<a class="swiper-slide">
-                                    <div class="swiper-course">
-                                        <div class="swiper_course_img">
-                                        <div class="item-img">
-                                                <img src="<?/*=student_css_url.'image/homePage/concat-big.png'*/?>">
-                                        </div>
-                                        </div>
-                                        <div class="swiper_course_detail">
-                                            <div class="bold c_black fs_14">程玮</div>
-                                            <div class="fs_14 c_black6">国际脑力运动委员会教练</div>
-                                        </div>
-                                    </div>
-                                </a>-->
                             </div>
                             <div class="swiper-pagination"></div>
                         </div>
@@ -183,21 +155,9 @@ get_header(); ?>
                                     </div>
                                 </a>
                                 <?php } ?>
-                                <!--<a class="swiper-slide">
-                                    <div class="swiper_news_wrap">
-                                        <div class="swiper-content img-box"><img src="<?/*=student_css_url.'image/homePage/swiper1.png'*/?>"></div>
-                                        <div class="swiper_news_title">全球首批“国际脑力健将诞生1”</div>
-                                    </div>
-                                </a>
-                                <a class="swiper-slide">
-                                    <div class="swiper_news_wrap">
-                                        <div class="swiper-content img-box"><img src="<?/*=student_css_url.'image/homePage/swiper1.png'*/?>"></div>
-                                        <div class="swiper_news_title">全球首批“国际脑力健将诞生2”</div>
-                                    </div>
-                                </a>-->
                             </div>
-                            <div class="swiper-button-prev"></div><!--左箭头-->
-                            <div class="swiper-button-next"></div><!--右箭头-->
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
                         </div>
                     </div>
                     <?php endif;?>
@@ -220,45 +180,6 @@ get_header(); ?>
                     </div>
                     <?php endif;?>
                 </div>
-                <!-- <div class="layui-row pt-10 layui-bg-gray">
-                    <div class="layui-row">
-                        <div class="head-info layui-row width-padding">
-                            <span class="pull-left  c_blue fs_14"><?=__('推荐课程', 'nlyd-student')?></span>
-                            <span class="pull-right fs_14"><?=__('推荐课程', 'nlyd-student')?> <i class="iconfont">&#xe640;</i></span>
-                        </div>
-                        <div class="nl-ad-row layui-bg-white  width-padding">
-                            <div class="layui-row foot-info">
-                                <div class="layui-col-lg5 layui-col-md5 layui-col-sm5 layui-col-xs5 img-box">
-                                    <img src="<?=student_css_url.'image/homePage/course1.png'?>">
-                                </div>
-                                <div class="layui-col-lg7 layui-col-md7 layui-col-sm7 layui-col-xs7">
-                                    <p class="text_1 c_black"><?=__('课程名称', 'nlyd-student')?></p>
-                                    <p class="fs_12 c_orange"><?=__('抢占名额中', 'nlyd-student')?>(2/18)</p>
-                                    <div class="fs_12 c_black6 text_2 nl-ad-detail"><?=__('这里是课程介绍摘要，截取课程简要介绍，不超过30个字符', 'nlyd-student')?></div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php
-                        if(!empty($cat_query)) {
-                            foreach ($cat_query as $cat){
-                        ?>
-                        <div class="nl-ad-row layui-bg-white  width-padding" onclick="window.location.href='<?= $cat->guid ?>'">
-                            <div class="layui-row foot-info">
-                                <div class="layui-col-lg5 layui-col-md5 layui-col-sm5 layui-col-xs5 img-box">
-                                    <img src="<?= wp_get_attachment_image_src(get_post_thumbnail_id($cat->ID), 'thumbnail')[0] ?>">
-                                </div>
-                                <div class="layui-col-lg7 layui-col-md7 layui-col-sm7 layui-col-xs7">
-                                    <p class="text_1 c_black"><?= $cat->post_title ?></p>
-                                    <div class="fs_12 c_black6 text_2 nl-ad-detail"><?= msubstr(strip_tags($cat->post_content),0,35) ?></div>
-                                </div>
-                            </div>
-                        </div>                
-                        <?php
-                                }
-                            }
-                        ?>
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
