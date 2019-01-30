@@ -118,7 +118,7 @@
                                 <ul style="margin-left: 0" class="layui-tab-title">
                                     <li data-id="1" class="layui-this"><?=__('学员列表', 'nlyd-student')?></li>
                                     <li data-id="2"><?=__('课程列表', 'nlyd-student')?></li>
-                                    <div class="nl-transform"><?=__('学员列表', 'nlyd-student')?></div>
+                                    <div class="nl-transform" data-y="-5"><?=__('学员列表', 'nlyd-student')?></div>
                                 </ul>
                                 <div class="layui-tab-content width-margin width-margin-pc" style="padding: 0;">
                                     <!-- 普通队员 -->

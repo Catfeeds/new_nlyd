@@ -102,6 +102,8 @@ jQuery(function($) {
                                         }
                                     }
                                     var category_title=v.category_title ? '（'+v.category_title+'）' : '';
+                                    var join=parseInt(v.open_quota) - parseInt(v.entry_total);
+                                    var canJoin=join>=0 ? join : '0';
                                     var dom='<li class="match_row">'
                                                 +'<div class="match_header mt_10"><span class="bold c_black f_16">'+v.course_title+category_title+'</span><br><span class="c_black8 f_12">'+v.type_name+'</span></div>'
                                                 +'<div class="match_body">'
@@ -119,7 +121,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__("剩余名额：", "nlyd-student")?></div>'
-                                                        +'<div class="match_body_info c_black"><span class="c_blue">'+(parseInt(v.open_quota) - parseInt(v.entry_total))+'</span>'
+                                                        +'<div class="match_body_info c_black"><span class="c_blue">'+canJoin+'</span>'
                                                         // +'<a href="'+window.home_url+'/courses/courseStudent/id/'+v.id+'/center_id/'+$.Request('id')+'" class="c_blue ml_10">查看</a>'
                                                         +'</div>'
                                                     +'</div>'
