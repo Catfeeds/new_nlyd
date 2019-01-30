@@ -470,9 +470,11 @@ a.form-input-row:hover{
     top: 0;
 }
 .img-zoo{
-    position: absolute;
-    left: 0;
-    top: 0;
+    /* position: absolute; */
+    width: 62px;
+    height: 62px;
+    /* left: 0;
+    top: 0; */
 }
 .img-zoo img{
     z-index: 2;

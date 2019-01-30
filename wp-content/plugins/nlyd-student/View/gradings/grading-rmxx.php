@@ -216,8 +216,8 @@ jQuery(function($) {
                 questions_answer:questions_answer
             }
             $.SetSession('grade_question',sessionData)
-            var width=$('._img').width()
-            $('._img').height(width)
+            var width=$('.matching-card').width()
+            $('._img').height(width).width(width)
         }
         $('.complete_zoo').hide();
         $('.complete_zoo').eq(_show-1).show();

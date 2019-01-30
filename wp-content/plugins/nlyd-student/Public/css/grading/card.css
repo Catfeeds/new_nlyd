@@ -15,9 +15,8 @@
 }
 .card_img{
     border-radius: 50%;
-    width: -webkit-calc(100% - 10px);
-    width: calc(100% - 10px);
-    margin:5px auto;
+    /* width: -webkit-calc(100% - 10px);
+    width: calc(100% - 10px); */
     overflow: hidden;
 }
 .card_img img{

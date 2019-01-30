@@ -1,6 +1,7 @@
 <style>
 .ready_img{
     width:30px;
+    height:30px;
     display:inline-block;
     vertical-align: middle;
 }
