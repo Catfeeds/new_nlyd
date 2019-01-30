@@ -1008,7 +1008,7 @@ class Student_Gradings extends Student_Home
         if($grading_result == 1){
             $grade_result = $lv.'级'.'已达标';
 
-            if($lv >= 2 ){
+            if($lv >= 2 && $_GET['grad_type']== 'memory'){
 
                 //获取收益配置
                 $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = 'course_grading' ";

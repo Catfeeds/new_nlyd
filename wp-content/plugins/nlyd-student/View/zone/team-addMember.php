@@ -19,8 +19,10 @@
                 <div class="width-padding width-padding-pc">
                     <form class="layui-form">
                         <div class="coach_add_row">
-                            <div>
-                                <input class="radius_input_row nl-foucs" name="user_phone" value="<?=$row['user_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                            <div class="change_num_row">
+                                <input class="radius_input_row change_num nl-foucs" value="<?=$row['user_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                                <a class="coach_add_btn c_blue">确认</a> 
+                                <input type="hidden" name="user_phone">
                             </div>
                             <input type="hidden" name="action" value="add_team_personnel">
                             <input type="hidden" name="team_id" value="<?=$_GET['team_id']?>">
@@ -34,6 +36,30 @@
 </div>
 <script>
 jQuery(function($) { 
+    $('body').on('click','.coach_add_btn',function(){
+        var _this=$(this);
+        var val=_this.prev('input').val();
+        _this.next('input').val('');
+        $.ajax({
+            data: {
+                mobile:val,
+                action:'get_mobile_user',
+            },
+            success: function(res, textStatus, jqXHR){
+                if(res.success){
+                    _this.next('input').val(res.data.user_id);
+                    _this.prev('input').val(res.data.user_name)
+                }else{
+                    $.alerts(res.data.info)
+                }
+            },
+            complete: function(jqXHR, textStatus){
+                if(textStatus=='timeout'){
+                    $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                }
+            }
+        })
+    })
     layui.use(['form'], function(){
         var form = layui.form
         form.render();

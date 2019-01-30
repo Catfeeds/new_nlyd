@@ -24,12 +24,16 @@
                     <div class="mt_10"><?=__('数据更新于', 'nlyd-student')?>：<?=date_i18n('Y/m/d',get_time())?></div>
                     <div class="mt_10 data_item_wrapper layui-row">
                         <div class="data_item">
-                            <div class="data_num fs_22 "><?=$match_total > 0 ? $match_total : 0;?></div>
-                            <div class="data_detail fs_13"><?=__('累计开设比赛次数', 'nlyd-student')?></div>
+                            <div class="data_num fs_22 "><span class="fs_12">￥</span><?=$extract_income > 0 ? $extract_income : number_format(0,2);?></div>
+                            <div class="data_detail fs_13"><?=__('累计提现', 'nlyd-student')?></div>
+                        </div>
+                        <div class="data_item active">
+                            <div class="data_num fs_22 "><span class="fs_12">￥</span><?=$user_income > 0 ? $user_income : number_format(0,2);?></div>
+                            <div class="data_detail fs_13"><?=__('累计收益', 'nlyd-student')?></div>
                         </div>
                         <div class="data_item">
-                            <div class="data_num fs_22 "><?=$grading_total > 0 ? $grading_total : 0;?></div>
-                            <div class="data_detail fs_13"><?=__('累计开设考级次数', 'nlyd-student')?></div>
+                            <div class="data_num fs_22 "><?=$match_total > 0 ? $match_total : 0;?></div>
+                            <div class="data_detail fs_13"><?=__('累计开设比赛次数', 'nlyd-student')?></div>
                         </div>
                         <div class="data_item">
                             <?php if($is_standard == 'y'): ?>
@@ -42,8 +46,24 @@
                             <div class="data_detail fs_13"><?=__('累计参与比赛人次', 'nlyd-student')?></div>
                         </div>
                         <div class="data_item">
+                            <div class="data_num fs_22 "><?=$grading_total > 0 ? $grading_total : 0;?></div>
+                            <div class="data_detail fs_13"><?=__('累计开设考级次数', 'nlyd-student')?></div>
+                        </div>
+                        <div class="data_item">
                             <div class="data_num fs_22 "><?=$grading_order > 0 ? $grading_order : 0;?></div>
                             <div class="data_detail fs_13"><?=__('累计参与考级人次', 'nlyd-student')?></div>
+                        </div>
+                        <div class="data_item">
+                            <div class="data_num fs_22 ">-------</div>
+                            <div class="data_detail fs_13"><?=__('累计开设课程', 'nlyd-student')?></div>
+                        </div>
+                        <div class="data_item">
+                            <div class="data_num fs_22 ">-------</div>
+                            <div class="data_detail fs_13"><?=__('累计推荐机构', 'nlyd-student')?></div>
+                        </div>
+                        <div class="data_item">
+                            <div class="data_num fs_22 ">-------</div>
+                            <div class="data_detail fs_13"><?=__('累计推荐用户', 'nlyd-student')?></div>
                         </div>
                         <div class="data_item">
                             <div class="data_num fs_22 "><span class="fs_12">￥</span><?=$match_income > 0 ? $match_income : number_format(0,2);?></div>
@@ -53,13 +73,13 @@
                             <div class="data_num fs_22 "><span class="fs_12">￥</span><?=$grading_income > 0 ? $grading_income : number_format(0,2);?></div>
                             <div class="data_detail fs_13"><?=__('考级累计收益', 'nlyd-student')?></div>
                         </div>
-                        <div class="data_item active">
-                            <div class="data_num fs_22 "><span class="fs_12">￥</span><?=$user_income > 0 ? $user_income : number_format(0,2);?></div>
-                            <div class="data_detail fs_13"><?=__('累计收益', 'nlyd-student')?></div>
+                        <div class="data_item">
+                            <div class="data_num fs_22 "><span class="fs_12">￥</span>10000.00</div>
+                            <div class="data_detail fs_13"><?=__('推荐收益', 'nlyd-student')?></div>
                         </div>
                         <div class="data_item">
-                            <div class="data_num fs_22 "><span class="fs_12">￥</span><?=$extract_income > 0 ? $extract_income : number_format(0,2);?></div>
-                            <div class="data_detail fs_13"><?=__('累计提现', 'nlyd-student')?></div>
+                            <div class="data_num fs_22 "><span class="fs_12">￥</span>10.00</div>
+                            <div class="data_detail fs_13"><?=__('课程收益', 'nlyd-student')?></div>
                         </div>
                     </div>
                 </div>

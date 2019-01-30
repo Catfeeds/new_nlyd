@@ -940,6 +940,7 @@ function the_table_install () {
           `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
           `pay_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '支付金额',
           `spread_type` varchar(64) NOT NULL DEFAULT '' COMMENT 'match(比赛),grading(考级),course(购买课程),course_grading(课程2级达标),course_recommend(课程推荐满3人),stock(股权出售),profit_bonus(分中心收益分红)',
+          `general_manager` varchar(32) DEFAULT NULL COMMENT '总经理收益(元/百分比)',
           `direct_superior` varchar(32) DEFAULT NULL COMMENT '直接上级获取收益(元/百分比)',
           `indirect_superior` varchar(32) DEFAULT NULL COMMENT '间接上级收益(元/百分比)',
           `first_cause` varchar(32) DEFAULT NULL COMMENT '一级事业管理员收益(元/百分比)',

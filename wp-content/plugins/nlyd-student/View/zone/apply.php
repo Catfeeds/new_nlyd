@@ -59,6 +59,30 @@
                 })
             })
         })
+        $('body').on('click','.coach_add_btn',function(){
+            var _this=$(this);
+            var val=_this.prev('input').val();
+            _this.next('input').val('');
+            $.ajax({
+                data: {
+                    mobile:val,
+                    action:'get_mobile_user',
+                },
+                success: function(res, textStatus, jqXHR){
+                    if(res.success){
+                        _this.next('input').val(res.data.user_id);
+                        _this.prev('input').val(res.data.user_name)
+                    }else{
+                        $.alerts(res.data.info)
+                    }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                    }
+                }
+            })
+        })
         if($('#areaSelect').length>0){
             if($('#areaSelect').val().length>0 && $('#areaSelect').val()){
                 var areaValue=$('#areaSelect').val().split('-');
@@ -329,7 +353,6 @@
                                 $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
                                 _this.removeClass('disabled');
                             }
-                            
                         }
                     })
                 }else{

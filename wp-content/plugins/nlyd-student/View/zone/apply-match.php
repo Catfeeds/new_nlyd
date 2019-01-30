@@ -88,25 +88,27 @@
                     <input class="radius_input_row nl-foucs" type="text" readonly id="opening_bank" name="opening_bank"  lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank'] :''?>">
                 </div>
             </div>
-            <div>
+            <!-- <div>
                 <div class="lable_row"><span class="c_black"><?=__('对公账户开户详细地址', 'nlyd-student')?>：</span></div>
                 <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank_address'] :''?>"></div>
+            </div> -->
+            <div>
+                <div class="lable_row"><span class="c_black"><?=__('对公账户名称', 'nlyd-student')?>：</span></div>
+                <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户名称', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_name'] :''?>"></div>
             </div>
             <div>
-                <div class="lable_row"><span class="c_black"><?=__('对公账户开户名称', 'nlyd-student')?>：</span></div>
-                <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户开户名称', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_name'] :''?>"></div>
-            </div>
-            <div>
-                <div class="lable_row"><span class="c_black"><?=__('对公账户开户号码', 'nlyd-student')?>：</span></div>
-                <div class="input_row"><input class="radius_input_row nl-foucs" type="tel" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户号码', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
+                <div class="lable_row"><span class="c_black"><?=__('对公账号', 'nlyd-student')?>：</span></div>
+                <div class="input_row"><input class="radius_input_row nl-foucs" type="tel" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账号', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
             </div>
 
             <div>
                 <div class="lable_row">
                     <span class="c_black"><?=__('中心负责人', 'nlyd-student')?>：</span>
                 </div>
-                <div class="input_row">
-                    <input class="radius_input_row change_num nl-foucs" name="center_manager" value="<?=$row['center_manager']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                <div class="input_row change_num_row">
+                    <input class="radius_input_row change_num nl-foucs" value="<?=$row['center_manager']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                    <a class="coach_add_btn c_blue">确认</a> 
+                    <input type="hidden" name="center_manager">
                 </div>
             </div>
 
@@ -114,16 +116,20 @@
                 <div class="lable_row">
                     <span class="c_black"><?=__('赛事组委会主席', 'nlyd-student')?>：</span>
                 </div>
-                <div class="input_row">
-                    <input class="radius_input_row change_num nl-foucs" name="chairman_phone" value="<?=$row['chairman_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                <div class="input_row change_num_row">
+                    <input class="radius_input_row change_num nl-foucs" value="<?=$row['chairman_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                    <a class="coach_add_btn c_blue">确认</a> 
+                    <input type="hidden" name="chairman_phone">    
                 </div>
             </div>
             <div>
                 <div class="lable_row">
                     <span class="c_black"><?=__('赛事组委会秘书长', 'nlyd-student')?>：</span>
                 </div>
-                <div class="input_row">
-                    <input class="radius_input_row change_num nl-foucs" name="secretary_phone" value="<?=$row['secretary_phone']?>" type="tel" lay-verify="phone" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                <div class="input_row change_num_row">
+                    <input class="radius_input_row change_num nl-foucs" value="<?=$row['secretary_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
+                    <a class="coach_add_btn c_blue">确认</a> 
+                    <input type="hidden" name="secretary_phone">  
                 </div>
             </div>
             <?php if($row['user_status'] != 1):?>

@@ -50,9 +50,10 @@
                             <div class="lable_row"><span class="c_black">
                                 <?=__('授课教练', 'nlyd-student')?>：</span>
                             </div>
-                            <div class="input_row">
-                                <input class="radius_input_row nl-foucs" type="tel" lay-verify="required" autocomplete="off" name="coach_phone" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_phone']?>">
-                                <!--<select class="js-data-select-ajax" name="coach_id" style="width: 100%" data-action="get_manage_user" lay-verify="required"  data-placeholder="<?/*=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')*/?>" ></select>-->
+                            <div class="input_row change_num_row">
+                                <input class="radius_input_row change_num nl-foucs" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_phone']?>">
+                                <a class="coach_add_btn c_blue">确认</a> 
+                                <input type="hidden" name="coach_phone">
                             </div>
                         </div>
                         <div>
@@ -77,10 +78,10 @@
                         </div>
                   
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('开课日期', 'nlyd-student')?>：</span></div>
+                            <div class="lable_row"><span class="c_black"><?=__('开课时间', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" readonly name="course_start_time" data-time="<?=$course['data_start_time']?>"  id="course_start_date" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="<?=$course['start_time']?>">
+                                <input class="radius_input_row nl-foucs" type="text" readonly name="course_start_time" data-time="<?=$course['data_start_time']?>"  id="course_start_date" autocomplete="off" placeholder="<?=__('选择开课时间', 'nlyd-student')?>" value="<?=$course['start_time']?>">
                             </div>
                         </div>
                         <div>
@@ -112,10 +113,34 @@
 jQuery(function($) { 
     var course_type1_Data=<?=$course_type?>;//课程类型
     var course_type2_Data=<?=$category_type?>;//教学类型
-    var course_date_Data=$.validationLayui.dates2;//开课日期
+    var course_date_Data=$.validationLayui.dates2;//开课时间
     var posiotion_course_type1=[0];//初始化位置，高亮展示
     var posiotion_course_type2=[0];//初始化位置，高亮展示
     var posiotion_course_date=[0,0,0,0,0];//初始化位置，高亮展示
+    $('body').on('click','.coach_add_btn',function(){
+        var _this=$(this);
+        var val=_this.prev('input').val();
+        _this.next('input').val('');
+        $.ajax({
+            data: {
+                mobile:val,
+                action:'get_mobile_user',
+            },
+            success: function(res, textStatus, jqXHR){
+                if(res.success){
+                    _this.next('input').val(res.data.user_id);
+                    _this.prev('input').val(res.data.user_name)
+                }else{
+                    $.alerts(res.data.info)
+                }
+            },
+            complete: function(jqXHR, textStatus){
+                if(textStatus=='timeout'){
+                    $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                }
+            }
+        })
+    })
     function getcost(post_data) {
         $.ajax({
             data: post_data,
@@ -211,7 +236,7 @@ jQuery(function($) {
         
         }
     });
-    //---------------------------开课日期------------------------------
+    //---------------------------开课时间------------------------------
     if($('#course_start_date').length>0 && $('#course_start_date').attr('data-time') && $('#course_start_date').attr('data-time').length>0){
         var timeValue=$('#course_start_date').attr('data-time').split('-');
         $.each(course_date_Data,function(index,value){
@@ -242,7 +267,7 @@ jQuery(function($) {
     }
     var mobileSelect3 = new MobileSelect({
         trigger: '#course_start_date',
-        title: "<?=__('开课日期', 'nlyd-student')?>",
+        title: "<?=__('开课时间', 'nlyd-student')?>",
         wheels: [
             {data: course_date_Data}
         ],

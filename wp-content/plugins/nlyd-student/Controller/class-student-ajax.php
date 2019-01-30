@@ -4713,7 +4713,7 @@ class Student_Ajax
             $secretary_id = $secretary['ID'];
 
         }
-
+        print_r($_POST);die;
         if(!empty($_POST['business_licence'])){
 
             $upload_dir = wp_upload_dir();
@@ -6400,6 +6400,7 @@ class Student_Ajax
      * 通过手机获取用户
      */
     public function get_mobile_user(){
+
         global $wpdb;
         if(reg_match('m',$_POST['mobile'])) wp_send_json_error(array(__('手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
@@ -6409,7 +6410,9 @@ class Student_Ajax
         $row = $wpdb->get_row($sql,ARRAY_A);
         if(empty($row)) wp_send_json_error(array('info'=>__('该用户未注册','nlyd-student')));
         if(empty($row['meta_value'])) wp_send_json_error(array('info'=>__('该用户未实名认证','nlyd-student')));
-        wp_send_json_success(array('user_id'=>$row['ID']));
+        $real_name = unserialize($row['meta_value']);
+
+        wp_send_json_success(array('user_id'=>$row['ID'],'user_name'=>$real_name['real_name']));
     }
 
     /**
@@ -6883,7 +6886,7 @@ class Student_Ajax
                 from {$wpdb->prefix}order a 
                 left join {$wpdb->prefix}course b on a.match_id = b.id
                 LEFT JOIN {$wpdb->prefix}course_type c on b.course_type = c.id
-                WHERE a.user_id = {$current_user->ID} and a.pay_status in (2,3,4)
+                WHERE a.user_id = {$current_user->ID} and a.pay_status in (2,3,4) and b.id is not null
                 order by b.is_enable desc
                 limit $start,$pageSize
                 ";
