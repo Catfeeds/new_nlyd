@@ -4674,28 +4674,24 @@ class Student_Ajax
             $business_licence_url = $_POST['business_licence_url'];
         }
 
-        if(!empty($_POST['center_manager'])){
-            $manager = $_POST['zone_type_alias'] == 'match' ? '中心负责人' : '总经理';
-            if(reg_match('m',$_POST['center_manager'])) wp_send_json_error(array('info'=>__($manager.'手机格式不正确', 'nlyd-student')));
-            $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
+        $manager = $_POST['zone_type_alias'] == 'match' ? '中心负责人' : '总经理';
+        if(empty($_POST['center_manager'])) wp_send_json_error(array('info'=>__($manager.'未进行确认')));
+        $sql1 = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['center_manager']}'
+                where a.ID = '{$_POST['center_manager']}'
                 ";
-            $center_manager = $wpdb->get_row($sql,ARRAY_A);
-            if(empty($center_manager)) wp_send_json_error(array('info'=>__('该'.$manager.'未注册')));
-            if(empty($center_manager['meta_value'])) wp_send_json_error(array('info'=>__('该'.$manager.'未实名认证')));
-        }
-        //print_r($_POST);die;
+        $center_manager = $wpdb->get_row($sql1,ARRAY_A);
+        if(empty($center_manager)) wp_send_json_error(array('info'=>__('该'.$manager.'未注册')));
+        if(empty($center_manager['meta_value'])) wp_send_json_error(array('info'=>__('该'.$manager.'未实名认证')));
+
         if($_POST['type_id'] == 3 && $_POST['zone_type_alias'] == 'match'){    //赛区
             if(empty($_POST['chairman_phone']) || empty($_POST['secretary_phone'])){
-                wp_send_json_error(array('info'=>'组委会主席或者秘书长为必选项'));
+                wp_send_json_error(array('info'=>'组委会主席或者秘书长未进行确认'));
             }
 
-            if(reg_match('m',$_POST['chairman_phone'])) wp_send_json_error(array('info'=>__('组委会主席手机格式不正确', 'nlyd-student')));
-            if(reg_match('m',$_POST['secretary_phone'])) wp_send_json_error(array('info'=>__('秘书长手机格式不正确', 'nlyd-student')));
             $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['chairman_phone']}'
+                where a.ID = '{$_POST['chairman_phone']}'
                 ";
             $chairman = $wpdb->get_row($sql,ARRAY_A);
             if(empty($chairman)) wp_send_json_error(array('info'=>__('该组委会主席未注册')));
@@ -4703,14 +4699,11 @@ class Student_Ajax
 
             $sql_ = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['secretary_phone']}'
+                where a.ID = '{$_POST['secretary_phone']}'
                 ";
             $secretary = $wpdb->get_row($sql_,ARRAY_A);
             if(empty($secretary)) wp_send_json_error(array('info'=>__('该秘书长未注册')));
             if(empty($secretary['meta_value'])) wp_send_json_error(array('info'=>__('该秘书长未实名认证')));
-
-            $chairman_id = $chairman['ID'];
-            $secretary_id = $secretary['ID'];
 
         }
         print_r($_POST);die;
@@ -4745,8 +4738,8 @@ class Student_Ajax
             'opening_bank'=>$_POST['opening_bank'],
             'opening_bank_address'=>$_POST['opening_bank_address'],
             'bank_card_num'=>$_POST['bank_card_num'],
-            'chairman_id'=>!empty($chairman_id) ? $chairman_id : '',
-            'secretary_id'=>!empty($secretary_id) ? $secretary_id : '',
+            'chairman_id'=>!empty($chairman_id) ? $chairman_id['ID'] : '',
+            'secretary_id'=>!empty($secretary_id) ? $secretary_id['ID'] : '',
             'center_manager_id'=>!empty($center_manager) ? $center_manager['ID'] : '',
             'referee_id'=>$current_user->data->referee_id,
             'user_status'=>-1,
