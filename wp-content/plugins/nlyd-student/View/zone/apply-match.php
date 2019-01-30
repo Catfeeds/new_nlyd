@@ -108,7 +108,7 @@
                 <div class="input_row change_num_row">
                     <input class="radius_input_row change_num nl-foucs" value="<?=$row['center_manager']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                     <a class="coach_add_btn c_blue">确认</a> 
-                    <input type="hidden" name="center_manager">
+                    <input type="hidden" name="center_manager" value="">
                 </div>
             </div>
 
@@ -119,7 +119,7 @@
                 <div class="input_row change_num_row">
                     <input class="radius_input_row change_num nl-foucs" value="<?=$row['chairman_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                     <a class="coach_add_btn c_blue">确认</a> 
-                    <input type="hidden" name="chairman_phone">    
+                    <input type="hidden" name="chairman_phone" value="">    
                 </div>
             </div>
             <div>
@@ -129,7 +129,7 @@
                 <div class="input_row change_num_row">
                     <input class="radius_input_row change_num nl-foucs" value="<?=$row['secretary_phone']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>">
                     <a class="coach_add_btn c_blue">确认</a> 
-                    <input type="hidden" name="secretary_phone">  
+                    <input type="hidden" name="secretary_phone" value="">  
                 </div>
             </div>
             <?php if($row['user_status'] != 1):?>
