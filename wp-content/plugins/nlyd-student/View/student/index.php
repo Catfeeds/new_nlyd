@@ -104,7 +104,7 @@ get_header(); ?>
                             <div class="index_course_item">
                                 <div class="index_course_name"><?=$v['course_title']?></div>
                                 <div class="index_course_detail"><?=$v['zone_city']?>（<?=$v['zone_number']?>）</div>
-                                <a class="index_course_btn dis_table c_black"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
+                                <a class="index_course_btn dis_table c_black" href="<?=home_url('/courses/courseDetail/center_id/38/id/9/');?>"><div class="dis_cell"><?=__('抢占课程', 'nlyd-student')?></div></a>
                             </div>
                             <?php } ?>
                         </div>     
