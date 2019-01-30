@@ -6272,6 +6272,7 @@ class Student_Ajax
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
+
         $sql = "select b.user_id from {$wpdb->prefix}zone_join_coach a 
                 left join {$wpdb->prefix}my_coach b on a.coach_id = b.coach_id
                 left join {$wpdb->prefix}users c on b.user_id = c.ID
