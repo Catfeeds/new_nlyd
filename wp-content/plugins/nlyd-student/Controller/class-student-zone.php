@@ -786,7 +786,7 @@ class Student_Zone
         }
         //print_r($coach);
         $row = $wpdb->get_row("select user_mobile,referee_id from {$wpdb->prefix}users where ID = {$_GET['student_id']} ",ARRAY_A);
-        $student['user_mobile'] = !empty($row['user_mobile']) ? hideStar($row['user_mobile']) : '-';
+        $student['user_mobile'] = !empty($row['user_mobile']) ? $row['user_mobile'] : '-';
         $student['referee_id'] = !empty($row['referee_id']) ? $row['referee_id']+10000000 : '-';
         $view = student_view_path.CONTROLLER.'/student-detail.php';
         load_view_template($view,$student);
@@ -1084,34 +1084,51 @@ class Student_Zone
         load_view_template($view,$data);
     }
 
+
+
     /**
      * 推荐管理
      */
     public function data(){
         global $wpdb,$current_user;
 
-        if($_SESSION['statistics'] && $_SESSION['statistics']['overdue_time'] > get_time()){
+        /*if($_SESSION['statistics'] && $_SESSION['statistics']['overdue_time'] > get_time()){
             $data = unserialize($_COOKIE['user_statistics']);
-        }else{
+        }else{*/
 
             //获取开设比赛/考级次数
-            $data['match_total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}match_meta_new where created_id = {$current_user->ID} ");
-            $data['grading_total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}grading_meta where created_person = {$current_user->ID} ");
+            $data['match_total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}match_meta_new where created_id = {$current_user->ID} and match_scene = 1");
+            $data['grading_total'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}grading_meta where created_person = {$current_user->ID} and b.scene = 1 ");
             //参与比赛/考级人数
             $data['match_order'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order a 
                                                          left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
-                                                         where a.order_type = 1 and b.created_id = {$current_user->ID} ");
+                                                         where a.order_type = 1 and b.created_id = {$current_user->ID} and b.match_scene = 1 ");
             $data['grading_order'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order a 
                                                             left join {$wpdb->prefix}grading_meta b on a.match_id = b.grading_id
-                                                            where a.order_type = 2 and b.created_person = {$current_user->ID} ");
+                                                            where a.order_type = 2 and b.created_person = {$current_user->ID} and b.scene = 1  ");
             //获取考级/比赛收益
-            $data['match_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and (income_type = 'open_match' or income_type = 'recommend_match') ");
-            $data['grading_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and (income_type = 'open_grading' or income_type = 'recommend_grading') ");
+            $data['match_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and (income_type = 'open_match' or income_type = 'recommend_match' or income_type = 'director_match') ");
+            $data['grading_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and (income_type = 'open_grading' or income_type = 'recommend_grading' or income_type = 'director_grading') ");
 
             //获取累计收益/提现
             $data['user_income'] = $wpdb->get_var("select sum(user_income) from {$wpdb->prefix}user_stream_logs where  user_id = {$current_user->ID} and user_income > 0 ");
             $data['extract_income'] = $wpdb->get_var("select sum(user_income) from {$wpdb->prefix}user_stream_logs where  user_id = {$current_user->ID} and user_income < 0 ");
 
+            //获取开设课程
+            $data['course_order'] = $wpdb->get_var("select count(*) from {$wpdb->prefix}course where zone_id = {$current_user->ID} ");
+
+            //获取推荐机构/获取推荐用户
+            $sql_ = "select count(*) from {$wpdb->prefix}zone_meta where referee_id = {$current_user->ID} and user_id > 0";
+            $data['zone_total'] = $wpdb->get_var($sql_);
+            $sql = "select count(*) total
+                     from {$wpdb->prefix}users a 
+                     left join {$wpdb->prefix}zone_meta b on a.ID = b.user_id 
+                     where a.referee_id = {$current_user->ID} and b.id is null ";
+            $data['user_total'] = $wpdb->get_var($sql);
+
+            //推荐收益/课程收益
+            $data['recommend_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and (income_type = 'recommend_match_zone' or income_type = 'recommend_trains_zone' or income_type = 'recommend_test_zone') ");
+            $data['course_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and (income_type = 'recommend_course' or income_type = 'recommend_trains_zone' or income_type = 'recommend_test_zone') ");
 
             //获取机构赛区类型
             $zone_meta = $wpdb->get_row("select zone_match_type,is_double,audit_time,term_time from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}",ARRAY_A);
@@ -1131,7 +1148,7 @@ class Student_Zone
             $data['is_standard'] = $standard_total > $standard ? 'y' : 'n';
 
             $_SESSION['user_statistics'] = array('data'=>$data,'overdue_time'=>get_time()+1800);
-        }
+        //}
 
         $view = student_view_path.CONTROLLER.'/data-statistics.php';
         load_view_template($view,$data);
