@@ -74,8 +74,34 @@ class Student_System
      * 合作联系
      */
     public function concatUs(){
+        global $wpdb,$current_user;
+        //获取所有机构列表
+        $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1 order by zone_sort asc",ARRAY_A);
+        if(!empty($rows)){
+            foreach ($rows as $k => $v){
+                //获取是否有
+                $result = $wpdb->get_results("select id,user_status from {$wpdb->prefix}zone_meta where apply_id = {$current_user->ID} and type_id = {$v['id']} and user_status in (-1,-2) ",ARRAY_A);
+                if(!empty($result)){
+                    foreach ($result as $x){
+                        if($x['user_status'] == -1){
+                            $rows[$k]['user_status'] = $x['user_status'];
+                            $rows[$k]['zone_id'] = $x['id'];
+                            break;
+                        }
+                        if($x['user_status'] == -2){
+                            $rows[$k]['user_status'] = $x['user_status'];
+                            $rows[$k]['zone_id'] = $x['id'];
+                            continue;
+                        }
+                    }
+                }
+                //print_r($result);
+            }
+        }
+        $row['list'] = $rows;
+
         $view = student_view_path.CONTROLLER.'/concatUS.php';
-        load_view_template($view);
+        load_view_template($view,$row);
     }
     /**
      * 默认公用js/css引入
