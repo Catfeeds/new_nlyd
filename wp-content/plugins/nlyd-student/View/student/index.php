@@ -48,7 +48,7 @@ get_header(); ?>
                         <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/directory/');?>"><?=__('名 录', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/courses/');?>"><?=__('课 程', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('shops');?>"><?=__('商 城', 'nlyd-student')?></a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('system/concatUs');?>"><?=__('合 作', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('system/concatUs');?>"><?=__('合 作', 'nlyd-student')?></a></div>
                     </div>
                 </div>
                 <!-- 轮播 -->
