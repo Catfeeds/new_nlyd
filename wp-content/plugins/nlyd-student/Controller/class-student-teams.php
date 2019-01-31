@@ -56,10 +56,11 @@ class Student_Teams
             }
         }
         $user_info['user_head'] = !empty($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
-        $user_info['user_coach_level'] = !empty($user_meta['user_coach_level']) ? $user_meta['user_coach_level'] : '高级教练';
+        $user_info['user_coach_level'] = '教练';
+//        $user_info['user_coach_level'] = !empty($user_meta['user_coach_level']) ? $user_meta['user_coach_level'] : '高级教练';
         //获取教练技能
 
-        $sql = "select `read`,memory,compute,coach_detail,read_level,memory_level,compute_level from {$wpdb->prefix}coach_skill where coach_id = {$_GET['coach_id']}";
+        $sql = "select `read`,memory,compute,coach_detail,read_level,memory_level,compute_level,coach_book from {$wpdb->prefix}coach_skill where coach_id = {$_GET['coach_id']}";
         $rows = $wpdb->get_row($sql,ARRAY_A);
 
         $arr = ['read' => '速读类', 'memory' => '速记类', 'compute' => '速算类'];

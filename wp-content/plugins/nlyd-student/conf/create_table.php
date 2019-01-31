@@ -666,6 +666,7 @@ function the_table_install () {
           `read_level` VARCHAR(128) DEFAULT '' COMMENT '速读教学职称',
           `memory_level` VARCHAR(128) DEFAULT '' COMMENT '记忆教学职称',
           `compute_level` VARCHAR(128) DEFAULT '' COMMENT '心算教学职称',
+          `coach_book` VARCHAR(255) DEFAULT '' COMMENT '教练证书',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
