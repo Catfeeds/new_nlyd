@@ -25,7 +25,7 @@ if(!class_exists('StudentController')){
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );
-            define( 'leo_student_version','V2.1.7.5' );
+            define( 'leo_student_version','V2.1.7.4' );
 
             define( 'student_css_url', leo_student_url.'/Public/css/' );
             define( 'student_js_url', leo_student_url.'/Public/js/' );
@@ -214,7 +214,7 @@ if(!class_exists('StudentController')){
                     $row = $wpdb->get_row($sql,ARRAY_A);
                 }
 
-                if(!empty($row)){   
+                if(!empty($row)){
                     $this->wait_match['match_start_time'] = strtotime($row['match_start_time'])-get_time();
                     $this->wait_match['match_url'] = home_url('matchs/matching/match_id/'.$row['match_id']);
                     $this->wait_match['waiting_url'] = home_url('matchs/matchWaitting/match_id/'.$row['match_id']);
@@ -240,9 +240,78 @@ if(!class_exists('StudentController')){
         /**
          * 默认公用js/css引入
          */
-         public function scripts_default(){
+        public function scripts_default(){
 
-            if (!is_front_page() && !is_single() && CONTROLLER != 'news' && CONTROLLER != 'class' && CONTROLLER != '国际脑力运动推广大使名录' && CONTROLLER != 'shizitixi' && CONTROLLER != 'directory_brain' && CONTROLLER != 'directory_j' && CONTROLLER != 'directory_d' && CONTROLLER != 'directory_s' && CONTROLLER != 'directory_zone_match' && CONTROLLER != '国际脑力水平测试评价体系') {
+            $config = include_once(leo_student_path.'conf/config.php');
+            $personal_page = array_column($config['page'],'post_name');
+
+            if(in_array(CONTROLLER,$personal_page)){
+
+                if (in_array(CONTROLLER,array('directory_brain','directory_j','directory_d','directory_s','directory_zone_match'))) {//名录
+                    wp_register_style('my-layui-css-home', student_css_url . 'layui.css', array('style'), leo_student_version);
+                    wp_enqueue_style('my-layui-css-home');
+                    wp_register_style('my-student', student_css_url . 'index.css', array('style'), leo_student_version);
+                    wp_enqueue_style('my-student');
+                    // wp_register_style('my-student-self', student_css_url . 'index_self.css', array('style'), leo_student_version);
+                    // wp_enqueue_style('my-student-self');
+                }else{
+
+                    wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
+                    wp_enqueue_script( 'student-cookie' );
+                    //序列化form表单Json对象
+                    wp_register_script( 'student-serialize-object',student_js_url.'jquery.serialize-object.js',array('jquery'), leo_student_version  );
+                    wp_enqueue_script( 'student-serialize-object' );
+                    //手势操作
+                    wp_register_script( 'student-alloy_finger',student_js_url.'Mobile/alloy_finger.js',array('jquery'), leo_student_version  );
+                    wp_enqueue_script( 'student-alloy_finger' );
+                    //引入layui
+                    wp_register_script( 'student-layui-home',student_js_url.'layui/layui.js',array('jquery'), leo_student_version  );
+                    wp_enqueue_script( 'student-layui-home' );
+                    wp_localize_script('student-layui-home','layUI',[
+                        'complete'=>__('已加载全部数据','nlyd-student'),
+                        'more'=>__('加载更多','nlyd-student'),
+                    ]);
+                    // 表单验证语言包
+
+                    wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
+                    wp_enqueue_script( 'student-languages' );
+                    wp_localize_script('student-languages','verify_ZH',[
+                        'required'=>__('必填项不能为空','nlyd-student'),
+                        'phone'=>__('手机号格式不正确','nlyd-student'),
+                        'email'=>__('邮箱格式不正确','nlyd-student'),
+                        'url'=>__('链接格式不正确','nlyd-student'),
+                        'number'=>__('只能填写数字','nlyd-student'),
+                        'date'=>__('日期格式不正确','nlyd-student'),
+                        'identity'=>__('请输入正确的身份证号','nlyd-student'),
+                        'phoneOrEmail'=>__('手机号或邮箱格式不正确','nlyd-student'),
+                        'password'=>__('密码必须是6位以上含字母及数字','nlyd-student'),
+                        'differPass'=>__('两次输入密码不一致','nlyd-student'),
+                        'chineseName'=>__('姓名格式不正确','nlyd-student'),
+                        'filterSqlStr'=>__('含有非法字符','nlyd-student'),
+                    ]);
+
+                    wp_register_script( 'student-common',student_js_url.'studentCommon.js',array('jquery'), leo_student_version  );
+                    wp_enqueue_script( 'student-common' );
+                    wp_localize_script('student-common','common',[
+                        'disabled'=>__('当前功能暂未开放，敬请期待','nlyd-student'),
+                        'share'=>__('请使用浏览器自带分享功能','nlyd-student'),
+                        'click'=>__('点击右上角分享给好友或朋友圈','nlyd-student'),
+                        'slow'=>__('网络质量差,请重试','nlyd-student'),
+                    ]);
+                    //引入layui
+                    wp_register_style( 'my-layui-css-home', student_css_url.'layui.css',array('style'),leo_student_version);
+                    wp_enqueue_style( 'my-layui-css-home' );
+
+                    wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
+                    wp_enqueue_style( 'my-student' );
+                    wp_register_style( 'my-student-mobile', student_css_url.'index_mobile.css',array('style'), leo_student_version);
+                    wp_enqueue_style( 'my-student-mobile' );
+                }
+
+            }
+
+
+            /*if (!is_front_page() && !is_single() && CONTROLLER != 'news' && CONTROLLER != 'class' && CONTROLLER != '国际脑力运动推广大使名录' && CONTROLLER != 'shizitixi' && CONTROLLER != 'directory_brain' && CONTROLLER != 'directory_j' && CONTROLLER != 'directory_d' && CONTROLLER != 'directory_s' && CONTROLLER != 'directory_zone_match' && CONTROLLER != '国际脑力水平测试评价体系') {
                 wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-cookie' );
                 //序列化form表单Json对象
@@ -308,7 +377,7 @@ if(!class_exists('StudentController')){
                         // wp_enqueue_style('my-student-self');
                     }
                 }
-            }
+            }*/
 
 
             $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
@@ -343,7 +412,7 @@ if(!class_exists('StudentController')){
                 </script>
 
 
-            <?php
+                <?php
             }
             elseif(strpos($agent, 'android'))
             { ?>

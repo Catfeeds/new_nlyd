@@ -44,13 +44,9 @@
                         <div class="detail_detail c_blue fs_14"><?=$user_name?></div>
                     </div>
                     <div class="detail_table_row">
-                        <div class="detail_label c_black6 fs_14"><?=__('抢占名额：', 'nlyd-student')?></div>
+                        <div class="detail_label c_black6 fs_14"><?=__('剩余名额：', 'nlyd-student')?></div>
                         <div class="detail_detail c_black fs_14">
-                            <?php if($open_quota > 0){ ?>
-                            <span class="c_blue"><?=$order_total?></span>/<?=$open_quota?>
-                            <?php }else{ ?>
-                            无限制
-                            <?php } ?>
+                            <span class="c_blue"><?=$surplus?></span>
                         </div>
                     </div>
                     <div class="detail_table_row">

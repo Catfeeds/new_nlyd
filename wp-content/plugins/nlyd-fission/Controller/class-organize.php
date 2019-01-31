@@ -1495,6 +1495,13 @@ class Organize{
                     }
                 }
             }
+            if($success_msg != ''){
+                //修改缓存时间
+                $redis = new Redis();
+                $redis->connect('127.0.0.1',6379,1);
+                $redis->auth('leo626');
+                $redis->setex('zone_match_directory', 3600*24*30,json_encode(['last_time'=>get_time('mysql'),'rows'=>[]]));
+            }
         }
         //类型列表
         $typeList = $this->getOrganizeTypeList();
