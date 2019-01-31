@@ -24,6 +24,7 @@ class Student_Directory_Zone_Match
         global $wpdb;
         $view = $this->template_dir.'/directory-zone_pc.php';
         $type_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_type WHERE zone_type_alias='match'");
+        $type_id2 = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_type WHERE zone_type_alias='trains'");
         $current_time = get_time('mysql');
         $last_time = $wpdb->get_var("SELECT MAX(audit_time) FROM {$wpdb->prefix}zone_meta WHERE type_id='{$type_id}' AND user_id>0 AND user_status=1 AND is_able=1 AND (term_time>'{$current_time}' OR term_time='')");
         $redis = new Redis();
