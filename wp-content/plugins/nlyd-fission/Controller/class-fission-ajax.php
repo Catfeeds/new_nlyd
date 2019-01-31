@@ -199,9 +199,9 @@ class Fission_Ajax
         if($id < 1 || $status < 1) wp_send_json_error(['info' => '参数错误!']);
         global $wpdb,$current_user;
         $wpdb->query('START TRANSACTION');
+        $user_extract_logs = $wpdb->get_row("SELECT extract_id,extract_amount,extract_type,stream_log_id FROM {$wpdb->prefix}user_extract_logs WHERE id='{$id}'", ARRAY_A);
         if($status === 2){
             //查询当前提现记录
-            $user_extract_logs = $wpdb->get_row("SELECT extract_id,extract_amount,extract_type,stream_log_id FROM {$wpdb->prefix}user_extract_logs WHERE id='{$id}'", ARRAY_A);
             //判断金额是否足够
             $money = $wpdb->get_var("SELECT SUM(user_income) FROM {$wpdb->prefix}user_stream_logs WHERE user_id='{$user_extract_logs['extract_id']}' AND id != '{$user_extract_logs['stream_log_id']}'");
             if($money < $user_extract_logs['extract_amount']) wp_send_json_error(['info' => '用户余额不足!']);
@@ -219,6 +219,12 @@ class Fission_Ajax
             $bool = $wpdb->update($wpdb->prefix.'user_stream_logs',['income_status' => 2], ['id' => $user_extract_logs['stream_log_id']]);
 //            leo_dump($wpdb->last_query);die;
 //            leo_dump($wpdb->last_query);die;
+            if(!$bool){
+                $wpdb->query('ROLLBACK');
+                wp_send_json_error(['info' => '修改流水记录失败!']);
+            }
+        }else{
+            $bool = $wpdb->update($wpdb->prefix.'user_stream_logs',['income_status' => 3], ['id' => $user_extract_logs['stream_log_id']]);
             if(!$bool){
                 $wpdb->query('ROLLBACK');
                 wp_send_json_error(['info' => '修改流水记录失败!']);

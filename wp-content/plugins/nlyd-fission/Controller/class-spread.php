@@ -1500,8 +1500,9 @@ class Spread{
                     //付款人
                     if($row['provide_id'] > 0){
                         if(($zone_meta = $wpdb->get_row("SELECT zone_city,type_id,zone_name,zone_match_type,zone_number FROM {$wpdb->prefix}zone_meta WHERE user_id='{$row['provide_id']}'"))){
-                            $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$zone_meta->zone_type_id}");
+                            $type_alias = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id={$zone_meta->type_id}");
                             $provide_name = $organizeClass->echoZoneName($type_alias,$zone_meta->zone_city,$zone_meta->zone_name,$zone_meta->zone_match_type,$zone_meta->zone_number,'get','#c4671e');
+
                         }else{
                             $provide_name = get_user_meta($row['provide_id'],'user_real_name',true)['real_name'];
                         }
@@ -1830,7 +1831,7 @@ class Spread{
 //                                    echo '<a href="javascript:;" class="option-a" data-status="1">改为审核中</a> | <a href="javascript:;" class="option-a" data-status="3">改为未通过</a>';
                                     break;
                                 case '3':
-                                    echo '<a href="javascript:;" class="option-a" data-status="2">确认</a>';
+//                                    echo '<a href="javascript:;" class="option-a" data-status="2">确认</a>';
                                     break;
                             }
                             ?>

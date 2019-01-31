@@ -1274,6 +1274,13 @@ class Organize{
                     $insertData['center_manager_id'] = $center_manager_id;
                     $insertData['apply_id'] = $apply_id;
                     $insertData['audit_time'] = get_time('mysql');
+                    if($apply_id > 0){
+                        //查找上级
+                        $zone_referee_id = $wpdb->get_var("SELECT referee_id FROM {$wpdb->users} WHERE ID='{$apply_id}'");
+                        if($zone_referee_id > 0){
+                            $insertData['referee_id'] = $zone_referee_id;
+                        }
+                    }
                     $bool = $wpdb->insert($wpdb->prefix.'zone_meta',$insertData);
                     $zmv = [
                         'user_id' => 0,
