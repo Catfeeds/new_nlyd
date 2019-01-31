@@ -19,7 +19,7 @@
                     <div class="layui-tab layui-tab-brief width-margin width-margin-pc" lay-filter="tabs">
                         <div class="layui-tab-content" style="padding: 0;">
                             <div class="layui-tab-item layui-show">
-                                <ul class="flow-default layui-row layui-col-space20" id="flow-list">
+                                <ul class="flow-default grid" id="flow-list">
 
                                 </ul>
                             </div>

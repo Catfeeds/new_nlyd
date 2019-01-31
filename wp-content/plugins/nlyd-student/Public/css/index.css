@@ -820,6 +820,14 @@ p.share-font{
     -ms-flex: 1;              /* IE 10 */
     flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
+.grid{
+    display: grid;
+    display: -ms-grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-template-rows: auto;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
 @media screen and (min-width: 1200px){
     .no-header{
         border-top: 1px solid #f2f2f2;
@@ -918,6 +926,9 @@ p.share-font{
     }
 }
 @media screen and (max-width: 1199px){
+    .grid{
+        grid-template-columns: repeat(1,1fr);
+    }
     .mui-pull-left.nl-goback{
         height: 44px;
         color: #2484FE;

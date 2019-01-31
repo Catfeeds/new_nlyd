@@ -24,23 +24,23 @@
                         <li lay-id="3"><div><?=__('往期考级', 'nlyd-student')?></div></li>
                         <div class="nl-transform"><div><?=__('全部考级', 'nlyd-student')?></div></div>
                     </ul>
-                    <div class="layui-tab-content">
+                    <div class="layui-tab-content" style="margin-top:20px;padding-bottom:80px">
                         <!-- 全部考级 -->
                         <div class="layui-tab-item layui-show">
-                            <ul class="flow-default layui-row" id="1" style="margin:0">
+                            <ul class="flow-default grid" id="1" style="margin:0">
                                 
                                 
                             </ul>
                         </div>
                         <!-- 近期考级 -->
                         <div class="layui-tab-item">
-                            <ul class="flow-default layui-row" id="2" style="margin:0">
+                            <ul class="flow-default grid" id="2" style="margin:0">
                             
                             </ul>
                         </div>
                         <!-- 往期考级 -->
                         <div class="layui-tab-item">
-                            <ul class="flow-default layui-row" id="3" style="margin:0">
+                            <ul class="flow-default grid" id="3" style="margin:0">
                                 
                             </ul>
                         </div>

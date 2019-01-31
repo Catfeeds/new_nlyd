@@ -109,7 +109,7 @@
 .match_row{
     display: block;
     padding: 0 20px;
-    margin-top: 20px;
+    /* margin-top: 20px; */
     position: relative;
     border-radius: 6px;
     border: 1px solid #EEEEEE;
