@@ -309,6 +309,9 @@ class Teacher
             $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
             $new_coach_id = isset($_POST['new_coach_id']) ? intval($_POST['new_coach_id']) : 0;
             $coach_detail = isset($_POST['coach_detail']) ? trim($_POST['coach_detail']) : '';
+            $read_level = isset($_POST['read_level']) ? trim($_POST['read_level']) : '';
+            $memory_level = isset($_POST['memory_level']) ? trim($_POST['memory_level']) : '';
+            $compute_level = isset($_POST['compute_level']) ? trim($_POST['compute_level']) : '';
 //            $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
 //            if($zone_user_id < 1) $err_msg .= '请选择所属主体机构';
             if($err_msg == ''){
@@ -388,7 +391,15 @@ class Teacher
                         }
                     }
                     if($err_msg == ''){
-                        $coach_skill_bool = $wpdb->update($wpdb->prefix.'coach_skill',['read'=>$reading_value,'memory'=>$memory_value,'compute'=>$arithmetic_value,'coach_detail'=>$coach_detail],['coach_id'=>$coach_id]);
+                        $coach_skill_bool = $wpdb->update($wpdb->prefix.'coach_skill',[
+                            'read'=>$reading_value,
+                            'memory'=>$memory_value,
+                            'compute'=>$arithmetic_value,
+                            'coach_detail'=>$coach_detail,
+                            'read_level'=>$read_level,
+                            'memory_level'=>$memory_level,
+                            'compute_level'=>$compute_level,
+                        ],['coach_id'=>$coach_id]);
                         if(!$coach_skill_bool) {
                             $coach_skill_row = $wpdb->get_row("SELECT `read`,`memory`,`compute` FROM {$wpdb->prefix}coach_skill WHERE coach_id='{$coach_id}'");
                             if($coach_skill_row->read != $reading_value || $coach_skill_row->memory != $memory_value || $coach_skill_row->compute != $arithmetic_value) $err_msg .= '更新教学类别失败!';
@@ -408,7 +419,7 @@ class Teacher
             }
         }
 
-        $sql = "SELECT b.user_mobile,b.ID AS user_id,a.read,a.memory,a.compute,zm.zone_name,zjc.zone_id,a.is_assign,a.coach_detail
+        $sql = "SELECT b.user_mobile,b.ID AS user_id,a.read,a.memory,a.compute,zm.zone_name,zjc.zone_id,a.is_assign,a.coach_detail,a.read_level,a.memory_level,a.compute_level
                     FROM {$wpdb->users} AS  b  
                     LEFT JOIN {$wpdb->prefix}coach_skill AS  a ON a.coach_id = b.ID 
                     LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id = a.coach_id 
@@ -501,12 +512,21 @@ class Teacher
                                         <label for="category_<?=$prv['ID']?>"><?=$prv['post_title']?></label>
                                         <input name="categorys[]" type="checkbox" <?=in_array($prv['ID'],[$row['read'],$row['memory'],$row['compute']])?'checked="checked"':''?> id="category_<?=$prv['ID']?>" value="<?=$prv['ID'].'_'.$prv['alis']?>">
                                     <?php } ?>
+                                    <span style="color: #c4330a;font-weight: bold">取消时请慎重, 一旦取消,将会清除此类别已有学员关系,无法恢复</span>
                                 </td>
                             </tr>
-<!--                            <tr class="user-last-name-wrap">-->
-<!--                                <th><label for="surname">教练职称</label></th>-->
-<!--                                <td><input type="text" name="surname" id="surname" value="--><?//=explode(', ',$row['display_name'])[0]?><!--" class="regular-text"></td>-->
-<!--                            </tr>-->
+                            <tr class="user-last-name-wrap">
+                                <th><label for="memory_level">记忆类教练职称</label></th>
+                                <td><input type="text" name="memory_level" id="memory_level" value="<?=isset($row['memory_level']) ? $row['memory_level']: ''?>" class="regular-text"></td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="read_level">速读类教练职称</label></th>
+                                <td><input type="text" name="read_level" id="read_level" value="<?=isset($row['read_level']) ? $row['read_level']: ''?>" class="regular-text"></td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="compute_level">心算类教练职称</label></th>
+                                <td><input type="text" name="compute_level" id="compute_level" value="<?=isset($row['compute_level']) ? $row['compute_level']: ''?>" class="regular-text"></td>
+                            </tr>
 <!--                            <tr class="user-last-name-wrap">-->
 <!--                                <th><label for="surname">教练证书</label></th>-->
 <!--                                <td><input type="text" name="surname" id="surname" value="--><?//=explode(', ',$row['display_name'])[0]?><!--" class="regular-text"></td>-->

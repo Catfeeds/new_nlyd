@@ -400,6 +400,7 @@ if(!function_exists('getSpreadCategory')){
 //                'course_recommend' => '课程推荐',
                 'stock' => '股权出售',
                 'profit_bonus' => '分中心收益分红',
+                'share_qualified' => '乐学乐分享活动达标',
             );
         if(!empty($key)){
             return $arr[$key];
