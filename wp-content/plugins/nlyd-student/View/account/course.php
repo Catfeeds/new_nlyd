@@ -18,8 +18,8 @@
             <div class="layui-row nl-border nl-content have-bottom">
                 <div class="layui-tab layui-tab-brief width-margin width-margin-pc" lay-filter="tabs">
                     <div class="layui-tab-content" style="padding: 0;">
-                        <div class="layui-tab-item layui-show" style="padding-bottom:80px">
-                            <ul class="flow-default grid" id="flow-list">
+                        <div class="layui-tab-item layui-show">
+                            <ul class="flow-default layui-row layui-col-space20" id="flow-list">
 
                             </ul>
                         </div>
@@ -64,17 +64,11 @@ jQuery(function($) {
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>';//标签
-                                    var is_enable='';
                                     var rightBtn=rightBtn='<button type="button" class="bg_gradient_grey"><?=__("您已抢占名额", "nlyd-student")?></button>';
-                                    if(v.is_enable==1){//报名中
-                                        is_enable="<?=__('报名中', 'nlyd-student')?>"
-                                    }else if(v.is_enable==2){//进行
-                                        is_enable="<?=__('进行中', 'nlyd-student')?>"
-                                    }else if(v.is_enable==-3){//结课
-                                        is_enable="<?=__('已结课', 'nlyd-student')?>"
+                                    if(v.is_enable==-3){
                                         rightBtn='<button type="button" class="bg_gradient_blue" href="'+window.home_url+'/courses/courseEnd/center_id/'+v.zone_id+'/id/'+v.course_id+'"><?=__("结课成绩", "nlyd-student")?></button>'
                                     }
-                                    var dom='<li>'
+                                    var dom='<li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">'
                                                 +'<div class="nl-match">'
                                                     +'<div class="nl-match-header">'
                                                         +'<span class="nl-match-name  fs_16 c_blue">'+(v.course_title || '-')+'</span>'
@@ -86,7 +80,7 @@ jQuery(function($) {
                                                             +'<div class="nl-match-label"><div><?=__('开课日期', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<div class="c_black">'+(v.start_time || '-')+'</div>'
-                                                                +'<span class="nl-match-type c_blue">'+is_enable+'</span>'
+                                                                +'<span class="nl-match-type c_blue">'+v.status_cn+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
