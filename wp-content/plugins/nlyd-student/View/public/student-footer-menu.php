@@ -9,7 +9,8 @@
 ?>
 
 <div class="nl-foot-nav flex-h">
-    <a class="nl-foot-item flex1 <?=CONTROLLER == 'student' ? 'active':'';?>" href="<?=home_url('/student/index');?>">
+<!-- /student/index -->
+    <a class="nl-foot-item flex1 <?=CONTROLLER == 'student' ? 'active':'';?>" href="<?=home_url('');?>">
         <div class="nl-foot-icon">
             <div class="footer-home"></div>
         </div>

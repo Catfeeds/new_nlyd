@@ -233,8 +233,7 @@ jQuery(function($) {
         //     el: '.swiper-pagination',
         //     bulletActiveClass: 'yellowActive',
         // },
-    }); 
-    console.log('.swiper-container3 .'+mySwiper3.params.pagination.bulletClass)
+    });
     $('.swiper-container3 .'+mySwiper3.params.pagination.bulletClass).addClass('yellow_circle'); //为分页器增加样式
 })
 </script>
