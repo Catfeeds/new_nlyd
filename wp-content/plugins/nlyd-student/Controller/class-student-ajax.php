@@ -6281,11 +6281,13 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
-        $sql = "select b.user_id from {$wpdb->prefix}zone_join_coach a 
-                left join {$wpdb->prefix}my_coach b on a.coach_id = b.coach_id
-                left join {$wpdb->prefix}users c on b.user_id = c.ID
-                where a.zone_id = {$current_user->ID} and c.ID is not null
-                GROUP by b.user_id limit $start,$pageSize";
+        $sql = "select a.zone_id,b.user_id,c.referee_id from {$wpdb->prefix}course a 
+                left join {$wpdb->prefix}order b on a.id = b.match_id 
+                left join {$wpdb->prefix}users c on b.user_id = c.ID 
+                where a.zone_id = {$current_user->ID} and order_type = 3 and pay_status in (2,3,4) 
+                and c.ID is not null  GROUP BY user_id
+                limit $start,$pageSize
+                ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
         //print_r($sql);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -6310,8 +6312,7 @@ class Student_Ajax
                 $user_real_name = unserialize($user_info['user_real_name']);
                 $rows[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-' ;
                 $rows[$k]['user_age'] = !empty($user_real_name['real_age']) ? $user_real_name['real_age'] : '-' ;
-                $referee_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$v['user_id']} ");
-                $rows[$k]['referee_id'] = !empty($referee_id > 0 ) ? $referee_id+10000000 : '-' ;
+                $rows[$k]['referee_id'] = !empty($v['referee_id'] > 0 ) ? $v['referee_id']+10000000 : '-' ;
             }
         }
         //print_r($rows);

@@ -82,6 +82,48 @@ return array(
             'url'=>'/directory',
         ),
         array(
+            'post_title'=>'国际速读水平等级名录',
+            'post_name'=>'directory_d',
+            'post_content'=>'[directory_d-home]',
+            'url'=>'/directory_d',
+        ),
+        array(
+            'post_title'=>'国际记忆水平等级名录',
+            'post_name'=>'directory_j',
+            'post_content'=>'[directory_j-home]',
+            'url'=>'/directory_j',
+        ),
+        array(
+            'post_title'=>'国际心算水平等级名录',
+            'post_name'=>'directory_s',
+            'post_content'=>'[directory_s-home]',
+            'url'=>'/directory_s',
+        ),
+        array(
+            'post_title'=>'国际脑力健将名录',
+            'post_name'=>'directory_brain',
+            'post_content'=>'[directory_brain-home]',
+            'url'=>'/directory_brain',
+        ),
+        array(
+            'post_title'=>'赛区授权信息',
+            'post_name'=>'directory_zone_match',
+            'post_content'=>'[directory_zone_match-home]',
+            'url'=>'/directory_zone_match',
+        ),
+        /*array(
+            'post_title'=>'测评中心名录',
+            'post_name'=>'directory_brain',
+            'post_content'=>'[directory_brain-home]',
+            'url'=>'/directory_brain',
+        ),
+        array(
+            'post_title'=>'训练中心名录',
+            'post_name'=>'directory_brain',
+            'post_content'=>'[directory_brain-home]',
+            'url'=>'/directory_brain',
+        ),*/
+        array(
             'post_title'=>'Timer定时器',
             'post_name'=>'timer',
             'post_content'=>'[timer-index]',
@@ -130,10 +172,35 @@ return array(
             'url'=>'/course',
         ),
         array(
+            'post_title'=>'支付中心',
+            'post_name'=>'payment',
+            'post_content'=>'[payment-home]',
+            'url'=>'/payment',
+        ),
+        array(
+            'post_title'=>'订单中心',
+            'post_name'=>'orders',
+            'post_content'=>'[order-home]',
+            'url'=>'/orders',
+        ),
+        array(
+            'post_title'=>'签到中心',
+            'post_name'=>'signs',
+            'post_content'=>'[student-signs]',
+            'url'=>'/signs',
+        ),
+        array(
+            'post_title'=>'监赛中心',
+            'post_name'=>'supervisor',
+            'post_content'=>'[supervisor-home]',
+            'url'=>'/supervisor',
+        ),
+        array(
             'post_title'=>'超级控制台',
             'post_name'=>'controls',
             'post_content'=>'[home-controls]',
             'url'=>'/controls',
         ),
+
     ),
 );
