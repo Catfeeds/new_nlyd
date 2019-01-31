@@ -6650,6 +6650,12 @@ class Student_Ajax
                 if($val['open_quota'] <= $val['entry_total']){
                     $rows[$k]['is_full'] = 'y';
                 }
+                //判断剩余名额
+                if($val['open_quota'] > 0){
+                    $rows[$k]['surplus'] = $val['entry_total'] - $val['open_quota'] >= 0 ? 0 :$val['open_quota'] - $val['entry_total'];
+                }else{
+                    $rows[$k]['surplus'] = '无限制';
+                }
             }
         }
         wp_send_json_success(array('info'=>$rows));
