@@ -69,7 +69,7 @@ jQuery(function($) {
                                     if(v.is_enable==1){//报名中
                                         is_enable="<?=__('报名中', 'nlyd-student')?>"
                                     }else if(v.is_enable==2){//进行
-                                        is_enable="<?=__('中', 'nlyd-student')?>"
+                                        is_enable="<?=__('进行中', 'nlyd-student')?>"
                                     }else if(v.is_enable==-3){//结课
                                         is_enable="<?=__('已结课', 'nlyd-student')?>"
                                         rightBtn='<button type="button" class="bg_gradient_blue" href="'+window.home_url+'/courses/courseEnd/center_id/'+v.zone_id+'/id/'+v.course_id+'"><?=__("结课成绩", "nlyd-student")?></button>'
