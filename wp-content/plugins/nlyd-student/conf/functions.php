@@ -530,6 +530,8 @@ function set_user_income($order){
                             }
                         }
                     }
+                }else{
+                    $h = true;
                 }
                 //print_r($coach_id);die;
             }else{
@@ -560,6 +562,6 @@ function set_user_income($order){
             }
         }
     }
-
+    //die;
     /*****************收益分配end*******************/
 }

@@ -91,6 +91,7 @@ function the_table_install () {
           `user_type` int(10) DEFAULT NULL COMMENT '推荐机构时的机构类型id',
           `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 match grading extract subject undertake',
           `user_income` decimal(10,2) DEFAULT NULL COMMENT '收益+ 收益- 两情况',
+          `income_rank` tinyint(2) DEFAULT NULL COMMENT '收益等级 1 直接推荐 2 间接推荐',
           `income_status` tinyint(1) unsigned DEFAULT 1 COMMENT '1待确认,2已确认',
           `created_time` datetime DEFAULT NULL ,
           PRIMARY KEY (`id`)
