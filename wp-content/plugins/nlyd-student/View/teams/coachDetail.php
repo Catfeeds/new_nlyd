@@ -44,11 +44,16 @@
                     <div class="coachDetail-row have-metal width-padding width-margin-pc">
                         <div class="width-padding-pc">
                             <div class="coachDetail-metal"><?=__('简 介', 'nlyd-student')?></div>
-                            <p>国际一级脑力健将（记忆类）</p>
-                            <p>成都电视台《超越梦想·脑力世界杯》栏目选手导师 </p>
-                            <p>2017脑力世界杯全球总决赛记忆类总亚军 </p>
-                            <p>2017脑力世界杯中国赛、全球总决赛优秀教练 </p>
-                            <p>国际脑力运动推广大使</p>
+                            <?php if($skill['coach_detail']){
+                                echo $skill['coach_detail'];
+                            }else { ?>
+                                <p>国际一级脑力健将（记忆类）</p>
+                                <p>成都电视台《超越梦想·脑力世界杯》栏目选手导师 </p>
+                                <p>2017脑力世界杯全球总决赛记忆类总亚军 </p>
+                                <p>2017脑力世界杯中国赛、全球总决赛优秀教练 </p>
+                                <p>国际脑力运动推广大使</p>
+                            <?php } ?>
+
                         </div>
                     </div>
 <!--                        <div class="coachDetail-row have-metal width-padding width-margin-pc">-->
@@ -172,17 +177,21 @@ jQuery(function($) {
             anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
         })  
         $('#see').click(function(){
+            var _src = '<?=$skill['coach_book']?>';
+            if(_src == false) return false;
             var json={
                 "title": "<?=__('教练证书', 'nlyd-student')?>", //相册标题
                 "id": "coach_see", //相册id
                 "start": 0, //初始显示的图片序号，默认0
                 "data": [   //相册包含的图片，数组格式
-                    // {
-                    // "alt": "",
-                    // "pid": 1, //图片id
+                    {
+                    "alt": "",
+                    "pid": 1, //图片id
+                    "src":_src, //原图地址
+                    "thumb": _src, //缩略图地址
                     // "src":window.plugins_url+'/nlyd-student/Public/css/image/loading.gif', //原图地址
                     // "thumb": window.plugins_url+'/nlyd-student/Public/css/image/loading.gif', //缩略图地址
-                    // }
+                    }
                 ]
             }
             if(json['data'].length==0){
