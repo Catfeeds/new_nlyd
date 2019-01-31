@@ -50,6 +50,7 @@ function income_stream_array(){
         'recommend_qualified_coach'=>array('title'=>'学员分享-教练'),
         'recommend_qualified_zone'=>array('title'=>'学员分享-机构'),
         'grading_qualified'=>array('title'=>'考级达标'),
+        'share_qualified'=>array('title'=>'乐学乐分享活动达标'),
         'cause_manager'=>array('title'=>'事业管理员'),
         'cause_minister'=>array('title'=>'事业部长'),
         'extract'=>array('title'=>'提现'),
