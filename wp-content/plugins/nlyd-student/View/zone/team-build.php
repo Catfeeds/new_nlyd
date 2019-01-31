@@ -214,7 +214,6 @@ jQuery(function($) {
                 ,btn2: function(index, layero){
                     if(!_this.hasClass('disabled')){
                         var memberGo=$('#checkForm').serializeObject().memberGo;
-                        console.log(memberGo)
                         var data={
                             action:'team_disband',
                             type:memberGo,
@@ -232,6 +231,7 @@ jQuery(function($) {
                                         window.location.href=res.data.url
                                     }
                                 }else{
+                                    $.alerts(res.data.info)
                                     _this.removeClass('disabled');
                                 }
                             },
