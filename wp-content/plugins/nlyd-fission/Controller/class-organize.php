@@ -1295,7 +1295,7 @@ class Organize{
                             //不存在user_id,创建新用户和战队以及收益,如果已经存在user_Id,不再创建用户和收益战队
 
                             //创建新账号
-                            $user_email = $zmv['apply_id'].rand(000,999).date('is', get_time()).'@gjnlyd.com';
+                            $user_email = rand(0000,9999).date('is', get_time()).'@gjnlyd.com';
                             $user_password = '123456';
                             $user_id = wp_create_user($user_email,$user_password,$user_email);
                             if($user_id < 1) {
@@ -3702,15 +3702,18 @@ class Organize{
         }else{
             $city = $city_arr[0];
         }
+        $b = mb_substr($city,-1,1);
+        if($b == '市') $city = substr($city,0,strlen($city)-3);
+
         switch ($alias){
             case 'match':
 //                $name = $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
                 if($zone_match_type == '1'){
-                    $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
+                    $name = date('Y').'脑力世界杯'. $span1 .$zone_name.'（'.$city.'）'.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
                 }else{
                     $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
                 }
-//                $name = date('Y').'脑力世界杯'. $span1 .$zone_name.$city.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
+//                $name = date('Y').'脑力世界杯'. $span1 .$zone_name.'（'.$city.'）'.$span2.($zone_match_type=='1'?'战队精英赛':'城市赛');
                 break;
             case 'trains':
                 $name = $span1 .$zone_name.$span2.'训练中心 · '.$city;
@@ -3734,7 +3737,6 @@ class Organize{
      * 引入当前页面css/js
      */
     public function register_scripts(){
-
         switch ($_GET['page']){
             case 'fission-organize-statistics':
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
