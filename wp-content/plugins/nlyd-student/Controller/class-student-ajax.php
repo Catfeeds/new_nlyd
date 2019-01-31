@@ -1104,7 +1104,8 @@ class Student_Ajax
                 $rows[$k]['user_gender'] = !empty($user_meta['user_gender']) ? $user_meta['user_gender'] : '-';
                 $rows[$k]['user_ID'] = !empty($user_meta['user_ID']) ? $user_meta['user_ID'] : '-';
                 $rows[$k]['user_head'] = !empty($user_meta['user_images_color']) ? unserialize($user_meta['user_images_color'])[0] : student_css_url.'image/nlyd.png';
-                $rows[$k]['user_coach_level'] = !empty($val['level_name']) ? $val['level_name'] : '高级教练';
+                $rows[$k]['user_coach_level'] = '教练';
+//                $rows[$k]['user_coach_level'] = !empty($val['level_name']) ? $val['level_name'] : '高级教练';
 
                 //判断是否为我的教练/主训
                 $sql2 = "select apply_status from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id}";

@@ -314,6 +314,19 @@ class Teacher
             $compute_level = isset($_POST['compute_level']) ? trim($_POST['compute_level']) : '';
 //            $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
 //            if($zone_user_id < 1) $err_msg .= '请选择所属主体机构';
+
+            if(isset($_FILES['coach_book'])){
+                //教练证书
+                $coach_book_tmp = $_FILES['coach_book'];
+                if($coach_book_tmp['error'] == 0 && $coach_book_tmp['size'] > 0){
+                    $upload_dir = wp_upload_dir();
+                    $dir = '/user/'.$coach_id.'/';
+                    $file = saveIosFile($coach_book_tmp['tmp_name'],$upload_dir['basedir'].$dir);
+                    if($file){
+                        $coach_book = $upload_dir['baseurl'].$dir.$file;
+                    }
+                }
+            }
             if($err_msg == ''){
                 $wpdb->query('START TRANSACTION');
                 //移动学员
@@ -390,16 +403,18 @@ class Teacher
                             $wpdb->delete($wpdb->prefix.'my_coach',['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>1]);
                         }
                     }
+                    $updateData = [
+                        'read'=>$reading_value,
+                        'memory'=>$memory_value,
+                        'compute'=>$arithmetic_value,
+                        'coach_detail'=>$coach_detail,
+                        'read_level'=>$read_level,
+                        'memory_level'=>$memory_level,
+                        'compute_level'=>$compute_level,
+                    ];
+                    if(isset($coach_book)) $updateData['coach_book'] = $coach_book;
                     if($err_msg == ''){
-                        $coach_skill_bool = $wpdb->update($wpdb->prefix.'coach_skill',[
-                            'read'=>$reading_value,
-                            'memory'=>$memory_value,
-                            'compute'=>$arithmetic_value,
-                            'coach_detail'=>$coach_detail,
-                            'read_level'=>$read_level,
-                            'memory_level'=>$memory_level,
-                            'compute_level'=>$compute_level,
-                        ],['coach_id'=>$coach_id]);
+                        $coach_skill_bool = $wpdb->update($wpdb->prefix.'coach_skill',$updateData,['coach_id'=>$coach_id]);
                         if(!$coach_skill_bool) {
                             $coach_skill_row = $wpdb->get_row("SELECT `read`,`memory`,`compute` FROM {$wpdb->prefix}coach_skill WHERE coach_id='{$coach_id}'");
                             if($coach_skill_row->read != $reading_value || $coach_skill_row->memory != $memory_value || $coach_skill_row->compute != $arithmetic_value) $err_msg .= '更新教学类别失败!';
@@ -419,7 +434,7 @@ class Teacher
             }
         }
 
-        $sql = "SELECT b.user_mobile,b.ID AS user_id,a.read,a.memory,a.compute,zm.zone_name,zjc.zone_id,a.is_assign,a.coach_detail,a.read_level,a.memory_level,a.compute_level
+        $sql = "SELECT b.user_mobile,b.ID AS user_id,a.read,a.memory,a.compute,zm.zone_name,zjc.zone_id,a.is_assign,a.coach_detail,a.read_level,a.memory_level,a.compute_level,a.coach_book
                     FROM {$wpdb->users} AS  b  
                     LEFT JOIN {$wpdb->prefix}coach_skill AS  a ON a.coach_id = b.ID 
                     LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id = a.coach_id 
@@ -458,7 +473,7 @@ class Teacher
                 <div class="wrap" id="profile-page">
                     <h1 class="wp-heading-inline">教练详情</h1>
 
-                    <form id="" action="" method="post" novalidate="novalidate">
+                    <form id="" action="" method="post" novalidate="novalidate" enctype="multipart/form-data">
                         <input type="hidden" id="_wpnonce" name="_wpnonce" value="5fcd054cd3"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">	<input type="hidden" name="wp_http_referer" value="/nlyd/wp-admin/users.php">
                         <p>
                             <input type="hidden" name="from" value="profile">
@@ -552,6 +567,18 @@ class Teacher
                                 <th><label for="surname">相关课程</label></th>
                                 <td><?=$course_num?>个      <a style="color: #c4071c;text-decoration: none;font-weight: 600" href="<?=admin_url('admin.php?page=course&coach_id='.$row['user_id'])?>">(点击进入课程列表)</a></td>
                             </tr>
+                            
+                            <tr class="user-last-name-wrap">
+                                <th><label for="coach_book">教练证书</label></th>
+                                <td id="coach_book_img">
+
+                                    <label style="font-weight: bold" class="ui_button ui_button_primary" for="xFileaaaa">上传证书</label>
+                                    <br>
+                                    <img src="<?=$row['coach_book']?>" style="height: 80px;" alt="">
+                                    <input type="file" id="xFileaaaa" name="coach_book" style="position:absolute;clip:rect(0 0 0 0);">
+                                </td>
+                            </tr>
+                            
                             <tr class="user-last-name-wrap">
                                 <th><label for="coach_detail">教练简介</label></th>
                                 <td> <?php wp_editor( isset($row['coach_detail']) ? $row['coach_detail'] : '', 'coach_detail', $settings = array() ); ?></td>
@@ -601,10 +628,25 @@ class Teacher
                     if (window.location.hash == '#password') {
                         document.getElementById('pass1').focus();
                     }
+                    jQuery(document).ready(function($) {
+                        layui.use('layer', function(){
+                            var layer = layui.layer;
+                            var _title = '';
+                            layer.photos({//图片预览
+                                photos: '#coach_book_img',
+                                move : false,
+                                title : '',
+                                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                            })
+                        });
+                    });
                 </script>
 
-                <div class="clear"></div></div><!-- wpbody-content -->
-            <div class="clear"></div></div>
+                <div class="clear"></div>
+            </div><!-- wpbody-content -->
+            <div class="clear"></div>
+
+        </div>
 
         <?php
     }
@@ -1180,6 +1222,8 @@ class Teacher
                 wp_enqueue_style( 'datum-css' );
                 wp_register_script('datum-js',match_js_url.'teacher-datum.js');
                 wp_enqueue_script( 'datum-js' );
+                wp_register_script('layui-js',match_js_url.'layui/layui.js');
+                wp_enqueue_script( 'layui-js' );
                 break;
             case 'teacher-student':
                 wp_register_style('list-css',match_css_url.'teacher-list.css');
