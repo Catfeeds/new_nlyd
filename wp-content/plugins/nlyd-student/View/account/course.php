@@ -25,8 +25,7 @@
                         </div>
                     </div>
                 </div>
-                <a class="a-btn a-btn-table" href="<?=home_url('/courses/');?>"><div><?=__('看看最近课程', 'nlyd-student')?></div></a>
-                <!-- <a href="<?=home_url('/courses/')?>" class="a-btn a-btn-table"><div></div><?=__('前往课程中心', 'nlyd-student')?></a> -->
+                <!-- <a class="a-btn a-btn-table" href="<?=home_url('/courses/');?>"><div><?=__('看看最近课程', 'nlyd-student')?></div></a> -->
             </div>
         </div>
     </div>
