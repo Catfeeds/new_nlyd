@@ -279,7 +279,6 @@
             // 监听提交
             form.on('submit(layform)', function(data){//实名认证提交
                 var _this=$(this);
-                console.log(data.field['chairman_phone']=="")
                 if(!_this.hasClass('disabled')){
                     var fd = new FormData();
                     fd.append('action','zone_apply_submit');
@@ -314,9 +313,11 @@
                     }else{
                         fd.append('zone_type_alias','');
                     }
+                    console.log(data.field['center_manager'])
                     if(data.field['center_manager']){//训练中心（分中心总经理）
                         fd.append('center_manager',data.field['center_manager']);
                     }else{
+
                         if(data.field['center_manager']==""){
                             $.alerts("<?=__('请确认中心负责人或分中心总经理', 'nlyd-student')?>")
                             $('.change_num').eq(0).focus().addClass('layui-form-danger')
