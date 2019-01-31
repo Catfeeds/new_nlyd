@@ -52,7 +52,7 @@
                             </div>
                             <div class="input_row change_num_row">
                                 <input class="radius_input_row change_num nl-foucs" type="tel" lay-verify="required" autocomplete="off" placeholder="<?=__('输入任职人员注册手机号查询，未注册无法选择', 'nlyd-student')?>" value="<?=$course['coach_name']?>">
-                                <a class="coach_add_btn c_blue">确认</a> 
+                                <a class="coach_add_btn c_blue"><?=__('确认', 'nlyd-student')?></a> 
                                 <input type="hidden" name="coach_phone" value="<?=$course['coach_id']?>">
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('开放名额', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" type="tel" name="open_quota" lay-verify="required" autocomplete="off" placeholder="<?=__('输入开放名额', 'nlyd-student')?>" value="<?=$course['open_quota']?>">
+                                <input class="radius_input_row nl-foucs" type="tel" name="open_quota" lay-verify="number" autocomplete="off" placeholder="<?=__('输入开放名额', 'nlyd-student')?>" value="<?=$course['open_quota']?>">
                             </div>
                         </div>
                   
