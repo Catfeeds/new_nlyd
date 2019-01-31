@@ -662,8 +662,10 @@ function the_table_install () {
           `memory` int(20) DEFAULT NULL COMMENT '速记类',
           `compute` int(20) DEFAULT NULL COMMENT '速算类',
           `is_assign` tinyint(2) DEFAULT NULL COMMENT '是否指派 1:指派 ',
-          `coach_level` tinyint(3) DEFAULT 0 COMMENT '教练等级',
           `coach_detail` text DEFAULT NULL COMMENT '教练简介',
+          `read_level` tinyint(3) unsigned DEFAULT 0 COMMENT '速读教学等级',
+          `memory_level` tinyint(3) unsigned DEFAULT 0 COMMENT '记忆教学等级',
+          `compute_level` tinyint(3) unsigned DEFAULT 0 COMMENT '心算教学等级',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);

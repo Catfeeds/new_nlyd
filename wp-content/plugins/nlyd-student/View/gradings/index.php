@@ -36,7 +36,7 @@
                         <div class="layui-tab-content width-margin width-margin-pc">
                             <!-- 近期考级测评 -->
                             <div class="layui-tab-item layui-show">
-                                <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
+                                <ul class="flow-default grid" id="1" style="margin:0">
                                 </ul>
                             </div>
                             <!-- 考级中 -->
@@ -46,13 +46,13 @@
                                         <span class="getTime count_down" data-seconds="<?=$new_grading_time?>"><?=__('初始中', 'nlyd-student')?>...</span>
                                     </div>
                                 <?php endif;?>
-                                <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
+                                <ul class="flow-default grid" id="2" style="margin:0">
 
                                 </ul>
                             </div>
                             <!-- 往期考级测评 -->
                             <div class="layui-tab-item">
-                                <ul class="flow-default layui-row layui-col-space20" id="3" style="margin:0">
+                                <ul class="flow-default grid" id="3" style="margin:0">
 
                                 </ul>
                             </div>
@@ -213,7 +213,7 @@ jQuery(function($) {
                                                                                     +'<span class="c_black">'+v.zone+'</span>'
                                                                                 +'</div>'
                                                                             +'</div>' : '';
-                                    var dom='<li class="layui-col-lg4 layui-col-sm12 layui-col-xs12 layui-col-md12">'
+                                    var dom='<li>'
                                                 +'<div class="nl-match">'
                                                     +'<div class="nl-match-header">'
                                                         +'<span class="nl-match-name fs_16 c_blue">'+v.post_title+'</span>'

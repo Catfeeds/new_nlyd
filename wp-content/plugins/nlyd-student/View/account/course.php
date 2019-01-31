@@ -18,8 +18,8 @@
             <div class="layui-row nl-border nl-content have-bottom">
                 <div class="layui-tab layui-tab-brief width-margin width-margin-pc" lay-filter="tabs">
                     <div class="layui-tab-content" style="padding: 0;">
-                        <div class="layui-tab-item layui-show">
-                            <ul class="flow-default layui-row layui-col-space20" id="flow-list">
+                        <div class="layui-tab-item layui-show" style="padding-bottom:80px">
+                            <ul class="flow-default grid" id="flow-list">
 
                             </ul>
                         </div>
@@ -74,7 +74,7 @@ jQuery(function($) {
                                         is_enable="<?=__('已结课', 'nlyd-student')?>"
                                         rightBtn='<button type="button" class="bg_gradient_blue" href="'+window.home_url+'/courses/courseEnd/center_id/'+v.zone_id+'/id/'+v.course_id+'"><?=__("结课成绩", "nlyd-student")?></button>'
                                     }
-                                    var dom='<li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">'
+                                    var dom='<li>'
                                                 +'<div class="nl-match">'
                                                     +'<div class="nl-match-header">'
                                                         +'<span class="nl-match-name  fs_16 c_blue">'+(v.course_title || '-')+'</span>'

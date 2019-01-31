@@ -305,21 +305,23 @@ class Teacher
         global $wpdb;
         $coach_id = $_GET['id'];
         if(is_post()){
+            $is_assign = $wpdb->get_var("SELECT is_assign FROM {$wpdb->prefix}coach_skill WHERE coach_id='{$coach_id}'");
             $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
             $new_coach_id = isset($_POST['new_coach_id']) ? intval($_POST['new_coach_id']) : 0;
+            $coach_detail = isset($_POST['coach_detail']) ? trim($_POST['coach_detail']) : '';
 //            $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
 //            if($zone_user_id < 1) $err_msg .= '请选择所属主体机构';
             if($err_msg == ''){
                 $wpdb->query('START TRANSACTION');
                 //移动学员
-                if($new_coach_id > 0 && $new_coach_id != $coach_id){
+                if($new_coach_id > 0 && $new_coach_id != $coach_id && $is_assign != '1'){
                     $move_bool = $wpdb->update($wpdb->prefix.'my_coach', ['coach_id' => $new_coach_id], ['coach_id' => $coach_id]);
                     if(!$move_bool) {
                         $var = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}my_coach WHERE coach_id='{$coach_id}'");
                         if($var) $err_msg.= '<br />.移动学员失败';
                     }
                 }
-                if($err_msg == ''){
+                if($err_msg == '' && $is_assign != '1'){
                     //是否已有所属机构
                     $zone_coach = $wpdb->get_row("SELECT id,zone_id FROM {$wpdb->prefix}zone_join_coach WHERE coach_id='{$coach_id}' AND zone_id='{$zone_user_id}'",ARRAY_A);
                     $zone_coach_id = $zone_coach['id'];
@@ -386,7 +388,7 @@ class Teacher
                         }
                     }
                     if($err_msg == ''){
-                        $coach_skill_bool = $wpdb->update($wpdb->prefix.'coach_skill',['read'=>$reading_value,'memory'=>$memory_value,'compute'=>$arithmetic_value],['coach_id'=>$coach_id]);
+                        $coach_skill_bool = $wpdb->update($wpdb->prefix.'coach_skill',['read'=>$reading_value,'memory'=>$memory_value,'compute'=>$arithmetic_value,'coach_detail'=>$coach_detail],['coach_id'=>$coach_id]);
                         if(!$coach_skill_bool) {
                             $coach_skill_row = $wpdb->get_row("SELECT `read`,`memory`,`compute` FROM {$wpdb->prefix}coach_skill WHERE coach_id='{$coach_id}'");
                             if($coach_skill_row->read != $reading_value || $coach_skill_row->memory != $memory_value || $coach_skill_row->compute != $arithmetic_value) $err_msg .= '更新教学类别失败!';
@@ -406,7 +408,7 @@ class Teacher
             }
         }
 
-        $sql = "SELECT b.user_mobile,b.ID AS user_id,a.read,a.memory,a.compute,zm.zone_name,zjc.zone_id
+        $sql = "SELECT b.user_mobile,b.ID AS user_id,a.read,a.memory,a.compute,zm.zone_name,zjc.zone_id,a.is_assign,a.coach_detail
                     FROM {$wpdb->users} AS  b  
                     LEFT JOIN {$wpdb->prefix}coach_skill AS  a ON a.coach_id = b.ID 
                     LEFT JOIN {$wpdb->prefix}zone_join_coach AS zjc ON zjc.coach_id = a.coach_id 
@@ -417,7 +419,9 @@ class Teacher
         if(!$row) {
             //查询是否有user数据
             $var = $wpdb->get_var("SELECT user_id FROM {$wpdb->usermeta} WHERE user_id='{$coach_id}' AND meta_key='{$wpdb->prefix}capabilities' AND meta_value LIKE '%{$this->coachRole}%'");
-            if($var){
+            //查询是否有coach_skill数据
+            $covar = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}coach WHERE coach_id='{$coach_id}'");
+            if($var && !$covar ){
                 //添加教练技能表记录
                 $bool = $wpdb->insert($wpdb->prefix.'coach_skill', ['coach_id' => $coach_id]);
                 if(!$bool) exit('未找到用户数据,插入教练技能失败!');
@@ -529,34 +533,41 @@ class Teacher
                                 <td><?=$course_num?>个      <a style="color: #c4071c;text-decoration: none;font-weight: 600" href="<?=admin_url('admin.php?page=course&coach_id='.$row['user_id'])?>">(点击进入课程列表)</a></td>
                             </tr>
                             <tr class="user-last-name-wrap">
-                                <th><label for="zone_user_id">所属机构</label></th>
-                                <td>
-                                    <select class="js-data-select-ajax" name="zone_user_id" style="width: 50%" data-action="get_base_zone_list" data-type="all_base">
-                                        <?php if($row['zone_id'] > 0){
-                                            ?>
-                                            <option value="<?=$row['zone_id']?>" selected="selected">
-                                                <?=$row['zone_name']?>
-                                            </option>
-                                            <?php
-                                        }else{
-                                            ?>
-                                            <option value="0" selected="selected">
-                                                平台
-                                            </option>
-                                            <?php
-                                        } ?>
-
-                                    </select>
-                                </td>
+                                <th><label for="coach_detail">教练简介</label></th>
+                                <td> <?php wp_editor( isset($row['coach_detail']) ? $row['coach_detail'] : '', 'coach_detail', $settings = array() ); ?></td>
                             </tr>
-                            <tr class="user-last-name-wrap">
-                                <th><label for="zone_user_id">移动学员</label></th>
-                                <td>
-                                    <select class="js-data-select-ajax" name="new_coach_id" style="width: 50%" data-action="get_zone_coach" data-type="<?=$row['zone_id']?>">
+                            <?php if($row['is_assign'] != '1'){ ?>
+                                <tr class="user-last-name-wrap">
+                                    <th><label for="zone_user_id">所属机构</label></th>
+                                    <td>
+                                        <select class="js-data-select-ajax" name="zone_user_id" style="width: 50%" data-action="get_base_zone_list" data-type="all_base">
+                                            <?php if($row['zone_id'] > 0){
+                                                ?>
+                                                <option value="<?=$row['zone_id']?>" selected="selected">
+                                                    <?=$row['zone_name']?>
+                                                </option>
+                                                <?php
+                                            }else{
+                                                ?>
+                                                <option value="0" selected="selected">
+                                                    平台
+                                                </option>
+                                                <?php
+                                            } ?>
 
-                                    </select>
-                                </td>
-                            </tr>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="user-last-name-wrap">
+                                    <th><label for="zone_user_id">移动学员</label></th>
+                                    <td>
+                                        <select class="js-data-select-ajax" name="new_coach_id" style="width: 50%" data-action="get_zone_coach" data-type="<?=$row['zone_id']?>">
+
+                                        </select>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+
 
                             </tbody>
                         </table>
