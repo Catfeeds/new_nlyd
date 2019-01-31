@@ -86,7 +86,7 @@ jQuery(function($) {
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    var rightBtn='<a href="'+window.home_url+'/courses/courseSign/center_id/'+$.Request('id')+'/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("剩余名额", "nlyd-student")?></span></a>'
+                                    var rightBtn='<a href="'+window.home_url+'/courses/courseSign/center_id/'+$.Request('id')+'/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("抢占名额", "nlyd-student")?></span></a>'
                                     if(id=="-3"){//课程报名中
                                         rightBtn='<a href="'+window.home_url+'/courses/courseEnd/center_id/'+$.Request('id')+'/id/'+v.id+'" class="dis_table c_white bg_gradient_blue"><span class="dis_cell"><?=__("结课成绩", "nlyd-student")?></span></a>'
                                     }else{
@@ -96,14 +96,14 @@ jQuery(function($) {
                                         if (v.order_id) {//已报名
                                             rightBtn='<a class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__("您已报名", "nlyd-student")?></span></a>'
                                         }else{
-                                            if(parseInt(v.open_quota)<=parseInt(v.entry_total)){
+                                            if(v.surplus<=0){
                                                 rightBtn='<a class="dis_table c_white bg_gradient_grey"><span class="dis_cell"><?=__("名额已抢光", "nlyd-student")?></span></a>'
                                             }
                                         }
                                     }
                                     var category_title=v.category_title ? '（'+v.category_title+'）' : '';
-                                    var join=parseInt(v.open_quota) - parseInt(v.entry_total);
-                                    var canJoin=join>=0 ? join : '0';
+                                    // var join=parseInt(v.open_quota) - parseInt(v.entry_total);
+                                    // var canJoin=join>=0 ? join : '0';
                                     var dom='<li class="match_row">'
                                                 +'<div class="match_header mt_10"><span class="bold c_black f_16">'+v.course_title+category_title+'</span><br><span class="c_black8 f_12">'+v.type_name+'</span></div>'
                                                 +'<div class="match_body">'
@@ -121,7 +121,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__("剩余名额：", "nlyd-student")?></div>'
-                                                        +'<div class="match_body_info c_black"><span class="c_blue">'+canJoin+'</span>'
+                                                        +'<div class="match_body_info c_black"><span class="c_blue">'+v.surplus+'</span>'
                                                         // +'<a href="'+window.home_url+'/courses/courseStudent/id/'+v.id+'/center_id/'+$.Request('id')+'" class="c_blue ml_10">查看</a>'
                                                         +'</div>'
                                                     +'</div>'
