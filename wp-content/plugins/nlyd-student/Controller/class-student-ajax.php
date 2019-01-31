@@ -4674,7 +4674,7 @@ class Student_Ajax
         }else{
             $business_licence_url = $_POST['business_licence_url'];
         }
-        if($_POST['type_id'] == 2 || $_POST['type_id'] == 3 ){
+        if($_POST['type_id'] == 1 || $_POST['type_id'] == 3 ){
 
             $manager = $_POST['zone_type_alias'] == 'match' ? '中心负责人' : '总经理';
             if(empty($_POST['center_manager'])) wp_send_json_error(array('info'=>__($manager.'未进行确认')));
