@@ -57,7 +57,7 @@
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                     </a>-->
                 </div>
-                <div class="layui-row width-padding ">
+                <div class="layui-row width-padding width-padding-pc">
                     <div class="concat-wrap">
                         <div class="concat-row blue-b">
                             <p class="concat-info">
