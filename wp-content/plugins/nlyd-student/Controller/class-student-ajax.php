@@ -505,7 +505,7 @@ class Student_Ajax
 
             $title = '比赛';
             $info_url = home_url('matchs/info/match_id/'.$_POST['match_id']);
-            $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ";
+            $sql = "select match_id,match_scene,match_status,match_max_number from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ";
             $match_meta = $wpdb->get_row($sql,ARRAY_A);
             if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
             if($match_meta['match_status'] != 1) wp_send_json_error(array('info'=>__('当前比赛已禁止报名', 'nlyd-student')));
@@ -521,7 +521,7 @@ class Student_Ajax
 
             $title = '考级';
             $info_url = home_url('gradings/info/grad_id/'.$_POST['match_id']);
-            $sql = "select grading_id,status from {$wpdb->prefix}grading_meta where grading_id = {$_POST['match_id']} ";
+            $sql = "select grading_id,scene,status from {$wpdb->prefix}grading_meta where grading_id = {$_POST['match_id']} ";
             $match_meta = $wpdb->get_row($sql,ARRAY_A);
             if(empty($match_meta)) wp_send_json_error(array('info'=>__('考级信息错误', 'nlyd-student')));
             if($match_meta['status'] != 1) wp_send_json_error(array('info'=>__('当前考级已禁止报名', 'nlyd-student')));
@@ -541,7 +541,6 @@ class Student_Ajax
             $match_meta = $wpdb->get_row($sql,ARRAY_A);
             if(empty($match_meta)) wp_send_json_error(array('info'=>__('课程信息错误', 'nlyd-student')));
             if($match_meta['is_enable'] != 1) wp_send_json_error(array('info'=>__('当前课程已禁止报名', 'nlyd-student')));
-
             //获取当前类课程是否有教练
             /*$sql_ = "select b.coach_id from {$wpdb->prefix}course a left join {$wpdb->prefix}my_coach b on a.course_category_id = b.category_id where a.id = {$_POST['match_id']} and b.user_id = {$current_user->ID} and b.apply_status = 2";
             $coach_id = $wpdb->get_var($sql_);
@@ -593,10 +592,23 @@ class Student_Ajax
         //生成流水号
         $serialnumber = createNumber($current_user->ID,$wpdb->insert_id);
         $b = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
-
         //print_r($a.'---'.$b);die;
         if($b && $a ){
             $wpdb->query('COMMIT');
+
+            if($_POST['cost'] == 0 || $_POST['cost'] < 0.01){
+                if($_POST['order_type'] == 2 || $_POST['order_type'] == 1){
+                    $type_id = $_POST['order_type'] == 2 ? $match_meta['scene'] : $match_meta['match_scene'];
+                    $role_alias = $wpdb->get_var("select role_alias from {$wpdb->prefix}zone_match_role where id = {$type_id}");
+                    if(in_array($role_alias,array('official-grading','official-match'))){
+                        /*****************收益分配start*******************/
+                        $order = $wpdb->get_row('SELECT match_id,user_id,sub_centres_id,order_type FROM '.$wpdb->prefix.'order WHERE serialnumber='.$serialnumber, ARRAY_A);
+                        set_user_income($order);
+                        /*****************收益分配end*******************/
+                    }
+                }
+            }
+            
             if($data['pay_status'] == 2 || $data['pay_status'] == 4){
                 wp_send_json_success(array('info' => __('报名成功', 'nlyd-student'),'serialnumber'=>$serialnumber, 'is_pay' => 0, 'url' => home_url('payment/success/serialnumber/'.$serialnumber)));
             }
