@@ -6134,14 +6134,15 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         //判断成员
-        if(reg_match('m',$_POST['user_phone'])) wp_send_json_error(array(__('学员手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['user_phone']}'
+                where a.ID = '{$_POST['user_phone']}'
                 ";
+
         $user = $wpdb->get_row($sql,ARRAY_A);
         if(empty($user)) wp_send_json_error(array('info'=>__('该学员未注册','nlyd-student')));
-        if(empty($user['meta_value'])) wp_send_json_error(array('info'=>__('该学员未实名认证','nlyd-student')));
+        $real_name = unserialize($user['meta_value']);
+        if(empty($real_name['real_name'])) wp_send_json_error(array('info'=>__('该学员未实名认证','nlyd-student')));
 
 
         $result = $wpdb->get_var("select id from {$wpdb->prefix}match_team where user_id = {$user['ID']} and user_type = 1 and status > -2");
@@ -6243,12 +6244,19 @@ class Student_Ajax
         //获取默认战队
         $team_id = $wpdb->get_var("select team_id from {$wpdb->prefix}team_meta where user_id = {$current_user->ID}");
         if($team_id == $_POST['team_id']) wp_send_json_error(array('info'=>__('默认战队禁止删除','nlyd-student')));
-        $wpdb->query('START TRANSACTION');
-        if($_POST['type']==2){
-            $a = $wpdb->update($wpdb->prefix.'match_team',array('team_id'=>$team_id),array('team_id'=>$_POST['team_id']));
-        }else{
 
-            $a = $wpdb->delete($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id']));
+        $wpdb->query('START TRANSACTION');
+
+        $total = $wpdb->get_var("select count(*) from {$wpdb->prefix} where team_id = {$_POST['team_id']} ");
+        if($total > 0){
+
+            if($_POST['type']==2){
+                $a = $wpdb->update($wpdb->prefix.'match_team',array('team_id'=>$team_id),array('team_id'=>$_POST['team_id']));
+            }else{
+                $a = $wpdb->delete($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id']));
+            }
+        }else{
+            $a = true;
         }
         $b = $wpdb->delete($wpdb->prefix.'team_meta',array('team_id'=>$_POST['team_id']));
         $c = $wpdb->delete($wpdb->prefix.'posts',array('ID'=>$_POST['team_id']));
