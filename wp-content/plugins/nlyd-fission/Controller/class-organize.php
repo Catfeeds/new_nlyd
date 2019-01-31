@@ -3704,15 +3704,40 @@ class Organize{
             $span2 = '</span>';
         }
         $city_arr = str2arr($zone_city,'-');
+
+        if(!empty($city_arr[0])){
+            $b = mb_substr($city_arr[0],-1,1);
+            if($b == '市' || $b == '省') $city_arr[0] = substr($city_arr[0],0,strlen($city_arr[0])-3);
+        }
+        if(!empty($city_arr[1])){
+            $b = mb_substr($city_arr[1],-1,1);
+            if($b == '市') $city_arr[1] = substr($city_arr[1],0,strlen($city_arr[1])-3);
+        }
+//        if(!empty($city_arr[2])){
+//            $b = mb_substr($city_arr[2],-1,1);
+//            if($b == '市' || $b == '县' || $b == '区') {
+//                $a = mb_substr($city_arr[2],-2,2);
+//                if($a == '新区'){
+//                    $city_arr[2] = substr($city_arr[2],0,strlen($city_arr[2])-6);
+//                }else{
+//                    $city_arr[2] = substr($city_arr[2],0,strlen($city_arr[2])-3);
+//                }
+//            }
+//        }
+
+
         if(!empty($city_arr[2])){
-            $city = $city_arr[2];
+            if($city_arr[1] != '市辖区'){
+                $city = $city_arr[1].$city_arr[2];
+            }else{
+                $city = $city_arr[0].$city_arr[2];
+            }
         }elseif ($city_arr[1] != '市辖区'){
             $city = $city_arr[1];
         }else{
             $city = $city_arr[0];
         }
-        $b = mb_substr($city,-1,1);
-        if($b == '市') $city = substr($city,0,strlen($city)-3);
+
 
         switch ($alias){
             case 'match':
