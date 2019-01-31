@@ -99,7 +99,7 @@ get_header(); ?>
                              <span class="bold c_black fs_16 mr_10 dis_inlineBlock"><?=__('推荐课程', 'nlyd-student')?></span>   
                              <a class="c_blue fs_12 dis_inlineBlock" href="<?=home_url('/courses/');?>"><?=__('查看更多', 'nlyd-student')?></a>   
                         </div>   
-                        <div class="layui-row index_row_content">
+                        <div class="grid_course">
                             <?php foreach ($course_list as $v){?>
                             <div class="index_course_item">
                                 <div class="index_course_name"><?=$v['course_title']?></div>
@@ -172,7 +172,7 @@ get_header(); ?>
                              <span class="bold c_black fs_16 mr_10 dis_inlineBlock"><?=__('推荐资讯', 'nlyd-student')?></span>   
                              <a class="c_blue fs_12 dis_inlineBlock" href="<?=home_url('/news/')?>"><?=__('查看更多', 'nlyd-student')?></a>
                         </div>   
-                        <div class="swiper-container swiper-container2" style="margin-bottom:0">
+                        <div class="swiper-container" style="margin-bottom:0">
                             <a class="swiper_news_wrap" href="<?=get_permalink($news->ID)?>">
                                 <div class="swiper-content img-box"><img src="<?=$new_image?>"></div>
                                 <div class="swiper_news_title"><?=$news->post_title?></div>
