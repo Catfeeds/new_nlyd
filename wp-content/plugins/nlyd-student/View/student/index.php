@@ -145,7 +145,7 @@ get_header(); ?>
                         <div class="swiper-container swiper-container2" style="margin-bottom:0">
                             <div class="swiper-wrapper" style="height:auto">
                                 <?php foreach ($post_list as $post_){
-                                    $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post_->ID), 'thumbnail');
+                                    $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post_->ID), 'full');
                                     $thumbnail_image = !empty($thumbnail_image_url[0]) ? $thumbnail_image_url[0] : student_css_url.'image/homePage/swiper1.png';
                                 ?>
                                 <a class="swiper-slide" href="<?=get_permalink($post_->ID)?>">
@@ -163,7 +163,7 @@ get_header(); ?>
                     <?php endif;?>
                     <?php if(!empty($news)):
 
-                        $news_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($news->ID), 'thumbnail');
+                        $news_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($news->ID), 'full');
                         $new_image = !empty($news_image_url[0]) ? $news_image_url[0] : student_css_url.'image/homePage/swiper1.png';
 
                     ?>

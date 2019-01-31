@@ -27,7 +27,7 @@ class Student_Student
                 left join {$wpdb->prefix}course_type b on a.course_type = b.id
                 left join {$wpdb->prefix}zone_meta c on a.zone_id = c.user_id
                 where a.is_enable = 1 and c.user_id is not null
-                order by a.id asc 
+                order by a.id desc 
                 limit 4
                ";
 
@@ -55,7 +55,7 @@ class Student_Student
         $coach_sql = "select a.id,a.coach_id,b.meta_value from {$wpdb->prefix}coach_skill a 
                       left join {$wpdb->prefix}usermeta b on a.coach_id = b.user_id and meta_key = 'user_real_name' 
                       where b.meta_value is not null
-                      order by a.id desc limit 5 ";
+                      order by a.id asc limit 5 ";
         $coach_rows = $wpdb->get_results($coach_sql,ARRAY_A);
         if(!empty($coach_rows)){
             foreach ($coach_rows as $key => $v){
