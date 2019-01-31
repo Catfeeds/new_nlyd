@@ -488,11 +488,11 @@ class Student_Ajax
 
         global $wpdb,$current_user;
         if($current_user->ID < 1 || !$current_user->ID){
-            wp_send_json_error(array('info'=>__('请登录', 'nlyd-student')));
+            wp_send_json_error(array('info'=>__('请先登录', 'nlyd-student'),'url'=>home_url('/logins/')));
         }
 
         if(empty(get_user_meta($current_user->ID,'user_real_name'))){
-            wp_send_json_error(array('info'=>__('请先实名认证', 'nlyd-student')));
+            wp_send_json_error(array('info'=>__('请先实名认证', 'nlyd-student'),'url'=>home_url('/account/info/')));
         }
 
         //if(count($_POST['project_id']) != count($_POST['major_coach'])) wp_send_json_error(array('info'=>'主训教练未设置齐全'));
@@ -4674,7 +4674,7 @@ class Student_Ajax
         }else{
             $business_licence_url = $_POST['business_licence_url'];
         }
-        if($_POST['type_id'] == 2 || $_POST['type_id'] == 3 ){
+        if($_POST['type_id'] == 1 || $_POST['type_id'] == 3 ){
 
             $manager = $_POST['zone_type_alias'] == 'match' ? '中心负责人' : '总经理';
             if(empty($_POST['center_manager'])) wp_send_json_error(array('info'=>__($manager.'未进行确认')));
@@ -6134,14 +6134,15 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         //判断成员
-        if(reg_match('m',$_POST['user_phone'])) wp_send_json_error(array(__('学员手机格式不正确', 'nlyd-student')));
         $sql = "select a.ID,b.meta_value from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and b.meta_key = 'user_real_name'
-                where a.user_mobile = '{$_POST['user_phone']}'
+                where a.ID = '{$_POST['user_phone']}'
                 ";
+
         $user = $wpdb->get_row($sql,ARRAY_A);
         if(empty($user)) wp_send_json_error(array('info'=>__('该学员未注册','nlyd-student')));
-        if(empty($user['meta_value'])) wp_send_json_error(array('info'=>__('该学员未实名认证','nlyd-student')));
+        $real_name = unserialize($user['meta_value']);
+        if(empty($real_name['real_name'])) wp_send_json_error(array('info'=>__('该学员未实名认证','nlyd-student')));
 
 
         $result = $wpdb->get_var("select id from {$wpdb->prefix}match_team where user_id = {$user['ID']} and user_type = 1 and status > -2");
@@ -6243,12 +6244,19 @@ class Student_Ajax
         //获取默认战队
         $team_id = $wpdb->get_var("select team_id from {$wpdb->prefix}team_meta where user_id = {$current_user->ID}");
         if($team_id == $_POST['team_id']) wp_send_json_error(array('info'=>__('默认战队禁止删除','nlyd-student')));
-        $wpdb->query('START TRANSACTION');
-        if($_POST['type']==2){
-            $a = $wpdb->update($wpdb->prefix.'match_team',array('team_id'=>$team_id),array('team_id'=>$_POST['team_id']));
-        }else{
 
-            $a = $wpdb->delete($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id']));
+        $wpdb->query('START TRANSACTION');
+
+        $total = $wpdb->get_var("select count(*) from {$wpdb->prefix} where team_id = {$_POST['team_id']} ");
+        if($total > 0){
+
+            if($_POST['type']==2){
+                $a = $wpdb->update($wpdb->prefix.'match_team',array('team_id'=>$team_id),array('team_id'=>$_POST['team_id']));
+            }else{
+                $a = $wpdb->delete($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id']));
+            }
+        }else{
+            $a = true;
         }
         $b = $wpdb->delete($wpdb->prefix.'team_meta',array('team_id'=>$_POST['team_id']));
         $c = $wpdb->delete($wpdb->prefix.'posts',array('ID'=>$_POST['team_id']));
@@ -6603,8 +6611,8 @@ class Student_Ajax
         $start = ($page-1)*$pageSize;
 
         $sql = "select a.id,a.course_title,a.const,count(c.id) entry_total,b.type_name,a.open_quota,a.is_enable,a.coach_id,
-                if(unix_timestamp(course_start_time)>0,date_format(course_start_time,'%Y-%m-%d %H:%i'),'待确认') start_time,
-                if(unix_timestamp(course_end_time)>0,date_format(course_end_time,'%Y-%m-%d %H:%i'),'待确认') end_time,d.post_title category_title,
+                if(unix_timestamp(course_start_time)>0,date_format(course_start_time,'%Y-%m-%d %H:%i'),'待定') start_time,
+                if(unix_timestamp(course_end_time)>0,date_format(course_end_time,'%Y-%m-%d %H:%i'),'待定') end_time,d.post_title category_title,
                 case a.is_enable
                 when '-3' then '已结课'
                 when '-2' then '等待开课'
@@ -6649,6 +6657,12 @@ class Student_Ajax
                 $rows[$k]['order_id'] = $order_id;
                 if($val['open_quota'] <= $val['entry_total']){
                     $rows[$k]['is_full'] = 'y';
+                }
+                //判断剩余名额
+                if($val['open_quota'] > 0){
+                    $rows[$k]['surplus'] = $val['entry_total'] - $val['open_quota'] >= 0 ? 0 :$val['open_quota'] - $val['entry_total'];
+                }else{
+                    $rows[$k]['surplus'] = '无限制';
                 }
             }
         }

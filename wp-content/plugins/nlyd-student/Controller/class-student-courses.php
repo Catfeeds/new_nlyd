@@ -8,21 +8,15 @@
  * Time: 14:38
  */
 
-class Student_Courses extends Student_Home
+class Student_Courses
 {
 
     public $ajaxControll;
     public function __construct($action)
     {
+
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
-
-        
-        if(isset($_GET['action'])){
-            $function = $_GET['action'];
-        }else {
-            $function = $_GET['action'] = 'index';
-        }
 
         //添加短标签
         add_shortcode('course-home',array($this,$action));
@@ -128,7 +122,9 @@ class Student_Courses extends Student_Home
      public function courseDetail(){
 
          global $wpdb,$current_user;
-         $sql = "select a.id,a.course_title,a.coach_id,a.course_start_time,a.open_quota,a.course_details,if(a.address != '',a.address,'-') address,a.const,b.zone_name,b.zone_number,b.zone_city,c.zone_type_name,
+         $sql = "select a.id,a.course_title,a.coach_id,
+                if(unix_timestamp(a.course_start_time)>0,date_format(a.course_start_time,'%Y-%m-%d %H:%i'),'待定') course_start_time,
+                 a.open_quota,a.course_details,if(a.address != '',a.address,'-') address,a.const,b.zone_name,b.zone_number,b.zone_city,c.zone_type_name,
                  c.zone_type_alias,if(b.zone_match_type=1,'战队精英赛','城市赛') as match_type,d.post_title category_title
                  from {$wpdb->prefix}course a 
                  left join {$wpdb->prefix}zone_meta b on a.zone_id = b.user_id 
@@ -168,8 +164,10 @@ class Student_Courses extends Student_Home
          if($current_user->ID){
              $row['is_entered'] = $wpdb->get_var("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_GET['id']} and order_type = 3 and pay_status in(2,3,4) ");
          }
-         if($row['open_quota'] <= $row['order_total'] ){
-             $row['is_full'] = 'y';
+         if($row['open_quota'] > 0 ){
+             if($row['open_quota'] <= $row['order_total'] ){
+                 $row['is_full'] = 'y';
+             }
          }
          //print_r($row);
          $view = student_view_path.CONTROLLER.'/course-detail.php';

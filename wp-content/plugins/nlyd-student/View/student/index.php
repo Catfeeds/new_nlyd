@@ -44,7 +44,7 @@ get_header(); ?>
                 <div class="layui-row width-padding">
                     <div class="top-nav">
                         <div class="top-nav-btn active"><a class="fs_16 c_blue" href="<?=home_url('/student/index');?>"><?=__('首 页', 'nlyd-student')?></a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('我们', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('我 们', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/directory/');?>"><?=__('名 录', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/courses/');?>"><?=__('课 程', 'nlyd-student')?></a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('shops');?>"><?=__('商 城', 'nlyd-student')?></a></div>
@@ -113,7 +113,7 @@ get_header(); ?>
                     <?php if(!empty($coach_list)): ?>
                     <div class="layui-row index_row">
                         <div class="layui-row index_row_title">
-                             <span class="bold c_black fs_16 dis_inlineBlock"><?=__('教练体系', 'nlyd-student')?></span>  
+                             <span class="bold c_black fs_16 dis_inlineBlock"><?=__('教练', 'nlyd-student')?></span>
                         </div>   
                         <div class="swiper-container layui-bg-white swiper-container3" style="margin-bottom:0">
                             <div class="swiper-wrapper" style="height:auto">
@@ -145,10 +145,10 @@ get_header(); ?>
                         <div class="swiper-container swiper-container2" style="margin-bottom:0">
                             <div class="swiper-wrapper" style="height:auto">
                                 <?php foreach ($post_list as $post_){
-                                    $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post_->ID), 'thumbnail');
+                                    $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post_->ID), 'full');
                                     $thumbnail_image = !empty($thumbnail_image_url[0]) ? $thumbnail_image_url[0] : student_css_url.'image/homePage/swiper1.png';
                                 ?>
-                                <a class="swiper-slide" href="<?=home_url('/'.$post_->post_title)?>">
+                                <a class="swiper-slide" href="<?=get_permalink($post_->ID)?>">
                                     <div class="swiper_news_wrap">
                                         <div class="swiper-content img-box"><img src="<?=$thumbnail_image?>"></div>
                                         <div class="swiper_news_title"><?=$post_->post_title?></div>
@@ -163,8 +163,9 @@ get_header(); ?>
                     <?php endif;?>
                     <?php if(!empty($news)):
 
-                        $news_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($news->ID), 'thumbnail');
+                        $news_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($news->ID), 'full');
                         $new_image = !empty($news_image_url[0]) ? $news_image_url[0] : student_css_url.'image/homePage/swiper1.png';
+
                     ?>
                     <div class="layui-row index_row">
                         <div class="layui-row index_row_title">  
@@ -172,7 +173,7 @@ get_header(); ?>
                              <a class="c_blue fs_12 dis_inlineBlock" href="<?=home_url('/news/')?>"><?=__('查看更多', 'nlyd-student')?></a>
                         </div>   
                         <div class="swiper-container swiper-container2" style="margin-bottom:0">
-                            <a class="swiper_news_wrap">
+                            <a class="swiper_news_wrap" href="<?=get_permalink($news->ID)?>">
                                 <div class="swiper-content img-box"><img src="<?=$new_image?>"></div>
                                 <div class="swiper_news_title"><?=$news->post_title?></div>
                             </a>
@@ -232,8 +233,7 @@ jQuery(function($) {
         //     el: '.swiper-pagination',
         //     bulletActiveClass: 'yellowActive',
         // },
-    }); 
-    console.log('.swiper-container3 .'+mySwiper3.params.pagination.bulletClass)
+    });
     $('.swiper-container3 .'+mySwiper3.params.pagination.bulletClass).addClass('yellow_circle'); //为分页器增加样式
 })
 </script>

@@ -48,6 +48,7 @@
                         <div class="detail_detail c_blue fs_14">￥ <?=$const?></div>
                     </div>
                 </div>
+                <?php if($user_ID > 0):?>
                 <div class="course_detail_row width-padding width-padding-pc">
                     <div class="detail_table_row"><span class="c_blue bold fs_16">学员信息</span></div>
                     <div class="detail_table_row">
@@ -64,6 +65,7 @@
                         </div>
                     </div>
                 </div>
+                <?php endif;?>
             </div>
             <input type="hidden" id="cost" value="<?=$const?>">
             <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('确认支付'.$const, 'nlyd-student')?></div></a>
