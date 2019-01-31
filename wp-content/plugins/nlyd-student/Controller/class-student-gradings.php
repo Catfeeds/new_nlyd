@@ -1004,11 +1004,25 @@ class Student_Gradings extends Student_Home
             'next_project_url'=>$next_project_url,
             'match_row'=>$row,
         );
-
+        $grading_result = 1;
+        $lv = 999;
         if($grading_result == 1){
             $grade_result = $lv.'级'.'已达标';
 
-            if($lv >= 2 && $_GET['grad_type']== 'memory'){
+            if($lv >= 2 && $_GET['grad_type']== 'memory' && $role_alias == 'official-grading'){
+
+                //判断分享是否达标
+                $share_total = $wpdb->get_var("select count(*) from {$wpdb->prefix}users where referee_id = {$current_user->ID}");
+                $share_total = 4;
+                if($share_total >= 3){
+                    //判断是否已经拿回学费补贴
+                    $income_id = $wpdb->get_var("select id from {$wpdb->prefix}user_stream_logs where income_type = 'share_qualified' and user_id = {$current_user->ID} ");
+                    print_r($order);
+                    if(empty($income_id)){
+                        $x = $wpdb->insert($wpdb->prefix.'user_stream_logs',array('user_id'=>$current_user->ID,'match_id'=>$_GET['grad_id'],'income_type'=>'share_qualified','created_time'=>get_time('mysql')));
+                    }
+                }
+                var_dump($x);die;
 
                 //获取收益配置
                 $set_sql = "select * from {$wpdb->prefix}spread_set where spread_type = 'course_grading' ";
@@ -1538,7 +1552,7 @@ class Student_Gradings extends Student_Home
      */
     public function get_match_order($user_id,$match_id){
         global $wpdb;
-        $sql = "select id,pay_status,memory_lv from {$wpdb->prefix}order where user_id = {$user_id} and match_id = {$match_id} ";
+        $sql = "select id,pay_status,memory_lv,cost from {$wpdb->prefix}order where user_id = {$user_id} and match_id = {$match_id} ";
         //print_r($sql);
         return $wpdb->get_row($sql);
     }

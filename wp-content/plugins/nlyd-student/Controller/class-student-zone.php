@@ -1102,10 +1102,12 @@ class Student_Zone
             //参与比赛/考级人数
             $data['match_order'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order a 
                                                          left join {$wpdb->prefix}match_meta_new b on a.match_id = b.match_id
-                                                         where a.order_type = 1 and b.created_id = {$current_user->ID} and b.match_scene = 1 ");
+                                                         left join {$wpdb->prefix}zone_match_role c on b.match_scene = c.id
+                                                         where a.order_type = 1 and b.created_id = {$current_user->ID} and c.role_alias = 'official-grading' ");
             $data['grading_order'] = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order a 
                                                             left join {$wpdb->prefix}grading_meta b on a.match_id = b.grading_id
-                                                            where a.order_type = 2 and b.created_person = {$current_user->ID} and b.scene = 1  ");
+                                                            left join {$wpdb->prefix}zone_match_role c on on b.scene = c.id
+                                                            where a.order_type = 2 and b.created_person = {$current_user->ID} and c.role_alias = 'official-match'  ");
             //获取考级/比赛收益
             $data['match_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and (income_type = 'open_match' or income_type = 'recommend_match' or income_type = 'director_match') ");
             $data['grading_income'] = $wpdb->get_var("select sum(user_income) total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} and (income_type = 'open_grading' or income_type = 'recommend_grading' or income_type = 'director_grading') ");

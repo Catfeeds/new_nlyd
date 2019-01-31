@@ -34,7 +34,7 @@
                         <div class="layui-tab-content width-margin width-margin-pc">
                             <!-- 报名中 -->
                             <div class="layui-tab-item layui-show">
-                                <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
+                                <ul class="flow-default grid" id="1" style="margin:0">
                                     
                                 </ul>
                             </div>
@@ -43,13 +43,14 @@
                                 <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;<?=__('最新比赛倒计时', 'nlyd-student')?>
                                     <span class="getTime" id="getTimes">00:00:00</span>        
                                 </div>
-                                <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
+                                <ul class="flow-default grid" id="2" style="margin:0">
 
                                 </ul>
                             </div>
                             <!-- 往期比赛 -->
                             <div class="layui-tab-item">
-                                <ul class="flow-default layui-row layui-col-space20" id="3" style="margin:0">
+                            <!-- layui-col-space20 -->
+                                <ul class="flow-default grid" id="3" style="margin:0">
 
                                 </ul>
                             </div>
@@ -211,7 +212,8 @@ jQuery(function($) {
                                                                                     +'<span class="c_black">'+v.zone+'</span>'
                                                                                 +'</div>'
                                                                             +'</div>' : '';
-                                    var dom='<li class="layui-col-lg4 layui-col-sm12 layui-col-xs12 layui-col-md12">'
+                                    // var dom='<li class="layui-col-lg4 layui-col-sm12 layui-col-xs12 layui-col-md12">'
+                                    var dom='<li>'
                                                 +'<div class="nl-match">'
                                                     +'<div class="nl-match-header">'
                                                         +'<span class="nl-match-name fs_16 c_blue">'+v.post_title+'</span>'

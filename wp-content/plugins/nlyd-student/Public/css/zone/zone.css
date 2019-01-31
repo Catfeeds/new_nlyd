@@ -541,7 +541,7 @@ textarea.radius_input_row{
     min-width: 65px;
     text-align: center;
     cursor: pointer;
-    border: 0.5px solid rgba(116, 116, 116, 1);
+    border: 1px solid rgba(116, 116, 116, 1);
     border-radius: 6px;
     font-size: 0.14rem;
 }
@@ -588,7 +588,7 @@ textarea.radius_input_row{
 .match_row{
     display: block;
     padding: 0 20px;
-    margin-top: 20px;
+    /* margin-top: 20px; */
     position: relative;
     border-radius: 6px;
     border: 1px solid #EEEEEE;

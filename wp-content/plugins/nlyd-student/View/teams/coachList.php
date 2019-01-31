@@ -82,7 +82,7 @@
                         <div class="layui-tab-content" style="padding:0">
                             <?php foreach ($category as $k => $val){ ?>
                                 <div data-id="<?=$val['ID']?>" class="layui-tab-item <?=$val['ID'] == $_GET['category_id'] || (!isset($_GET['category_id']) && $k==0) ? 'layui-show' : '';?>">
-                                    <ul class="flow-default layui-row layui-col-space20" id="<?=$val['ID']?>" style="margin:0">
+                                    <ul class="flow-default grid" id="<?=$val['ID']?>" style="margin:0">
                                     
                                     </ul>
                                 </div>
@@ -343,7 +343,7 @@ layui.use(['element','flow','layer','form'], function(){
                                         coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn bg_gradient_blue text_1 setTeacher c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'"><?=__('请TA当教练', 'nlyd-student')?></button></div>';//不是我的教练
                                         // isLeft="ta_l"
                                     }
-                                    var dom='<li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">'
+                                    var dom='<li>'
                                                 +'<div class="coach-row">'
                                                     +'<div class="coach-row-top">'
                                                         +'<div class="coach-picture img-box">'

@@ -19,9 +19,9 @@
                     <div class="layui-tab layui-tab-brief width-margin  width-margin-pc" lay-filter="tabs">
 
                         <div data-id="1">
-                            <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
+                            <ul class="flow-default grid" id="1" style="margin:0">
                                <?php foreach ($rows as $row1){ ?>
-                                   <li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                   <li>
                                        <div class="coach-row mt_10">
                                            <div class="coach-row-top">
                                                <div class="coach-picture img-box">

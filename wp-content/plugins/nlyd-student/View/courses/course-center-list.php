@@ -38,19 +38,19 @@
                         <div class="layui-tab-content width-margin width-margin-pc">
                             <!-- 课程报名中 -->
                             <div class="layui-tab-item layui-show">
-                                <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
+                                <ul class="flow-default grid" id="1" style="margin:0">
                                     
                                 </ul>
                             </div>
                             <!-- 课程进行中 -->
                             <div class="layui-tab-item">
-                                <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
+                                <ul class="flow-default grid" id="2" style="margin:0">
                                     
                                 </ul>
                             </div>
                             <!-- 已结课 -->
                             <div class="layui-tab-item">
-                                <ul class="flow-default layui-row layui-col-space20" id="-3" style="margin:0">
+                                <ul class="flow-default grid" id="-3" style="margin:0">
                                 </ul>
                             </div>
                         </div>

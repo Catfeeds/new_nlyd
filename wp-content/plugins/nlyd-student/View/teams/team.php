@@ -27,13 +27,13 @@
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
-                                <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad1.png'?>"></div>
+                                <div class="swiper-content img-box" style="display:block"><img src="<?=student_css_url.'image/homePage/ad1.png'?>"></div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad2.png'?>"></div>
+                                <div class="swiper-content img-box" style="display:block"><img src="<?=student_css_url.'image/homePage/ad2.png'?>"></div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad3.png'?>"></div>
+                                <div class="swiper-content img-box" style="display:block"><img src="<?=student_css_url.'image/homePage/ad3.png'?>"></div>
                             </div>
                         </div>
                         <div class="swiper-pagination"></div>
@@ -46,7 +46,7 @@
                             <input type="text" class="serach-Input nl-foucs" placeholder="<?=__('搜索战队', 'nlyd-student')?>">
                         </div>
                     </div>
-                    <div class="width-margin width-margin-pc layui-row flow-default" id="team-flow">
+                    <div class="width-margin width-margin-pc grid flow-default" id="team-flow">
                         
                     </div>
                 <?php }else{ ?>

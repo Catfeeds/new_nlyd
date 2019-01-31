@@ -63,20 +63,15 @@
 .team-row{
     position: relative;
     display: block;
-    margin-bottom: 10px;
-    float: left;
-    width: -webkit-calc(50% - 7px);
-    width: calc(50% - 7px);
-    margin-left:0;
     border: 1px solid rgba(220, 220, 220, 1);
     border-radius: 5px;
     background-color: #fff;
     padding-top: 10px;
     padding-bottom: 10px;
 }
-#team-flow .team-row:nth-child(even){
+/* #team-flow .team-row:nth-child(even){
     margin-left: 10px;
-}
+} */
 .team-tips{
     font-size: 0.12rem;
     line-height: 0.18rem
@@ -208,7 +203,7 @@
 }
 
 @media screen and (max-width: 1199px){
-    .team-row{
+    /* .team-row{
         width: -webkit-calc(100% - 2px);
         width: calc(100% - 2px);
     }
@@ -217,5 +212,5 @@
     }
     #team-flow .team-row:nth-child(even){
         margin-left: 0;
-    }
+    } */
 }

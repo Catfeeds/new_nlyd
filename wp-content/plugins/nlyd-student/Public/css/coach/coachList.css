@@ -31,7 +31,7 @@
     min-width: 65px;
     text-align: center;
     cursor: pointer;
-    border: 0.5px solid rgba(38, 38, 38, 0.15);
+    border: 1px solid rgba(38, 38, 38, 0.15);
     border-radius: 6px;
     font-size: 0.16rem;
     transition: none;
@@ -107,9 +107,9 @@
 }
 
 
-.layui-tab-item .coach-row:nth-child(odd){
+/* .layui-tab-item .coach-row:nth-child(odd){
     margin-left: 0;
-}
+} */
 .coach-row-top{
     overflow: hidden;
     border-bottom: 1px solid #eeeeee;
@@ -174,23 +174,13 @@
 .coach-detail-footer{
     margin-top: 6px;
 }
-/* .coach-detail-footer .coach-type:last-child{
-    border-right: none;
-} */
 .coach-row-footer{
     padding-top: 15px;
-    /* display: flex; */
 }
-/* .left_c,.right_c{
-    flex: 1;
-} */
 .left_c{
     height: 40px;
     line-height: 40px;
 }
-/* .fl_1{
-    flex: 1;
-} */
 .ta_l{
     text-align: left;
     display: inline-block;
@@ -208,31 +198,16 @@
 .layui-form-checkbox{
     vertical-align: text-top;
 }
-/* .layui-form-checked[lay-skin=primary] i{
-    border-color: #FB8E8E;
-    background-color: #FB8E8E;
-} */
-/* .layui-form-checkbox[lay-skin=primary]{
-    height: 18px!important;
-} */
-/* .layui-form-checkbox[lay-skin=primary]:hover i{
-    border-color: #FB8E8E;
-} */
 @media screen and (min-width: 1200px){
     .coach-row{
         display: block;
         padding: 15px;
-        margin-bottom: 10px;
+        /* margin-bottom: 10px; */
         overflow: hidden;
         border-radius: 5px;
         border: 1px solid #EEEEEE;
         background-color: #fff;
     }
-    /* .layui-tab-title li{
-        margin-left: 12px;
-        width: -webkit-calc(100%/9 - 10px);
-        width: calc(100%/9 - 10px);
-    } */
     .content ul.layui-tab-title{
         margin-bottom: 10px;
     }
@@ -241,7 +216,7 @@
     .coach-row{
         display: block;
         padding: 15px;
-        margin-bottom: 10px;
+        /* margin-bottom: 10px; */
         overflow: hidden;
         border-radius: 5px;
         border: 1px solid #EEEEEE;
